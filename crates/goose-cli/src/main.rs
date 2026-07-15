@@ -35,19 +35,5 @@ fn main() -> Result<()> {
     #[cfg(windows)]
     enable_windows_vt_processing();
 
-    let handle = std::thread::Builder::new()
-        .name("goose-cli-main".to_string())
-        .stack_size(8 * 1024 * 1024)
-        .spawn(|| {
-            let runtime = tokio::runtime::Builder::new_multi_thread()
-                .enable_all()
-                .build()
-                .expect("Failed to build Tokio runtime");
-            runtime.block_on(run())
-        })
-        .map_err(|e| anyhow::anyhow!("Failed to spawn goose-cli main thread: {}", e))?;
-
-    handle
-        .join()
-        .map_err(|_| anyhow::anyhow!("goose-cli main thread panicked"))?
+    goose::codex::run(run)
 }

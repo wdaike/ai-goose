@@ -39,17 +39,8 @@ impl GooseAcpAgent {
             .get_session(session_id, false)
             .await
             .internal_err_ctx("Failed to reload session")?;
-
         let agent = self.get_session_agent(session_id).await?;
-        agent
-            .restore_provider_from_session(&session)
-            .await
-            .internal_err_ctx("Failed to refresh provider from session")?;
-
-        agent
-            .extension_manager
-            .update_working_dir(&session.working_dir)
-            .await;
+        agent.invalidate_codex_session(&session).await;
 
         Ok(EmptyResponse {})
     }
@@ -91,6 +82,12 @@ impl GooseAcpAgent {
                 }
             }
         }
+        let session = self
+            .session_manager
+            .get_session(session_id, false)
+            .await
+            .internal_err_ctx("Failed to reload session")?;
+        agent.invalidate_codex_session(&session).await;
 
         Ok(EmptyResponse {})
     }
@@ -99,6 +96,13 @@ impl GooseAcpAgent {
         &self,
         req: DeleteSessionRequest,
     ) -> Result<EmptyResponse, agent_client_protocol::Error> {
+        let session = self
+            .session_manager
+            .get_session(&req.session_id, false)
+            .await
+            .internal_err()?;
+        let agent = self.get_session_agent(&req.session_id).await?;
+        agent.invalidate_codex_session(&session).await;
         self.session_manager
             .delete_session(&req.session_id)
             .await

@@ -17,25 +17,6 @@ use crate::session::{EnabledExtensionsState, ExtensionState, Session};
 use super::pairing::PairingStore;
 use super::{Gateway, GatewayConfig, IncomingMessage, OutgoingMessage, PairingState, PlatformUser};
 
-/// Conservative default cap on tool-calling loops for gateway sessions.
-///
-/// Chat platforms like Telegram favor short, snappy replies, so the gateway
-/// keeps a stricter default than the global `GOOSE_MAX_TURNS` ceiling.  Users
-/// can override this through `GOOSE_GATEWAY_MAX_TURNS` (gateway-specific) or
-/// `GOOSE_MAX_TURNS` (applies globally).
-const DEFAULT_GATEWAY_MAX_TURNS: u32 = 5;
-
-/// Resolve the max turns to use for a gateway session.
-///
-/// Precedence: `GOOSE_GATEWAY_MAX_TURNS` -> `GOOSE_MAX_TURNS` ->
-/// `DEFAULT_GATEWAY_MAX_TURNS`.  Extracted as a pure function so the
-/// precedence rules can be unit-tested without touching the global config.
-fn resolve_gateway_max_turns(gateway_override: Option<u32>, global_max_turns: Option<u32>) -> u32 {
-    gateway_override
-        .or(global_max_turns)
-        .unwrap_or(DEFAULT_GATEWAY_MAX_TURNS)
-}
-
 #[derive(Clone)]
 pub struct GatewayHandler {
     agent_manager: Arc<AgentManager>,
@@ -160,22 +141,8 @@ impl GatewayHandler {
 
         let manager = self.agent_manager.session_manager();
 
-        // Store the current provider and model config on the session so the agent
-        // can be restored after LRU eviction, matching the start_agent flow.
         let mut update = manager.update(&session.id);
-        let provider = config.get_goose_provider().ok();
-        if let Some(ref provider) = provider {
-            update = update.provider_name(provider);
-        }
-        if let (Some(ref provider), Ok(model_name)) = (&provider, config.get_goose_model()) {
-            if let Ok(model_config) =
-                crate::model_config::model_config_from_user_config(provider, &model_name)
-            {
-                update = update.model_config(model_config);
-            }
-        }
 
-        // Store default extensions so load_extensions_from_session works.
         let mut extensions = get_enabled_extensions();
         extensions.extend(crate::plugins::mcp_servers::enabled_plugin_mcp_servers(
             Some(&session.working_dir),
@@ -213,62 +180,37 @@ impl GatewayHandler {
         Ok(())
     }
 
-    /// Sync the session's provider, model, and extensions with the current
-    /// global config so gateway sessions always reflect what the user has
-    /// configured in the desktop app.  Returns `true` if extensions changed
-    /// (which means the caller must recreate the agent so stale extension
-    /// processes are torn down).
+    /// Sync settings consumed by Codex with the current desktop configuration.
     async fn sync_session_config(&self, session: &Session) -> anyhow::Result<bool> {
         let config = Config::global();
         let manager = self.agent_manager.session_manager();
 
-        // --- current global config ---
-        let current_provider = config.get_goose_provider().ok();
-        let current_model_name = config.get_goose_model().ok();
         let mut current_extensions = get_enabled_extensions();
         current_extensions.extend(crate::plugins::mcp_servers::enabled_plugin_mcp_servers(
             Some(&session.working_dir),
         ));
         let current_mode = config.get_goose_mode().unwrap_or_default();
 
-        // --- what the session has ---
         let session_extensions: Vec<ExtensionConfig> =
             EnabledExtensionsState::from_extension_data(&session.extension_data)
                 .map(|s| s.extensions)
                 .unwrap_or_default();
 
-        let provider_changed = current_provider.as_deref() != session.provider_name.as_deref();
-        let model_changed = current_model_name.as_deref()
-            != session.model_config.as_ref().map(|m| m.model_name.as_str());
         let extensions_changed = current_extensions != session_extensions;
         let mode_changed = current_mode != session.goose_mode;
 
-        if !provider_changed && !model_changed && !extensions_changed && !mode_changed {
+        if !extensions_changed && !mode_changed {
             return Ok(false);
         }
 
         tracing::info!(
             session_id = %session.id,
-            provider_changed,
-            model_changed,
             extensions_changed,
             mode_changed,
             "syncing gateway session with current config"
         );
 
         let mut update = manager.update(&session.id);
-
-        if let Some(ref provider) = current_provider {
-            update = update.provider_name(provider);
-        }
-        if let (Some(ref provider), Some(ref model_name)) = (&current_provider, &current_model_name)
-        {
-            if let Ok(model_config) =
-                crate::model_config::model_config_from_user_config(provider, model_name)
-            {
-                update = update.model_config(model_config);
-            }
-        }
 
         if extensions_changed {
             let extensions_state = EnabledExtensionsState::new(current_extensions);
@@ -285,7 +227,7 @@ impl GatewayHandler {
         }
 
         update.apply().await?;
-        Ok(extensions_changed)
+        Ok(true)
     }
 
     async fn relay_to_session(
@@ -303,65 +245,23 @@ impl GatewayHandler {
             .get_session(session_id, false)
             .await?;
 
-        // Sync provider/model/extensions with the user's current desktop config.
-        // If extensions changed we must tear down the old agent so stale
-        // extension processes don't linger.
-        let extensions_changed = self.sync_session_config(&session).await?;
-        if extensions_changed {
-            self.agent_manager
-                .remove_session_if_loaded(session_id)
-                .await?;
-        }
+        let config_changed = self.sync_session_config(&session).await?;
 
         let agent = self
             .agent_manager
             .get_or_create_agent(session_id.to_string())
             .await?;
-
-        // Re-read the session after sync so restore picks up the new values.
-        let session = self
-            .agent_manager
-            .session_manager()
-            .get_session(session_id, false)
-            .await?;
-
-        // Ensure provider is configured (handles first use and LRU eviction).
-        if let Err(e) = agent.restore_provider_from_session(&session).await {
-            self.gateway
-                .send_message(
-                    &message.user,
-                    OutgoingMessage::Text {
-                        body: format!("⚠️ Failed to configure provider: {e}"),
-                    },
-                )
-                .await?;
-            return Ok(());
+        if config_changed {
+            agent.invalidate_codex_session(&session).await;
         }
-
-        // Load extensions (skips any already loaded on the agent).
-        agent.load_extensions_from_session(&session).await;
 
         let cancel = CancellationToken::new();
         let user_message = Message::user().with_text(&message.text);
 
-        // Cap tool-calling loops so the agent doesn't run away doing
-        // dozens of tool calls before responding.  After this many
-        // LLM→tool round-trips the agent will stop and reply with
-        // whatever it has.
-        //
-        // Honors `GOOSE_GATEWAY_MAX_TURNS` (gateway-specific override) and
-        // `GOOSE_MAX_TURNS` (global), falling back to a conservative default
-        // so the limit is configurable without editing the source.
-        let config = Config::global();
-        let max_turns = resolve_gateway_max_turns(
-            config.get_param::<u32>("GOOSE_GATEWAY_MAX_TURNS").ok(),
-            config.get_param::<u32>("GOOSE_MAX_TURNS").ok(),
-        );
-
         let session_config = SessionConfig {
             id: session_id.to_string(),
             schedule_id: None,
-            max_turns: Some(max_turns),
+            max_turns: None,
             retry_config: None,
         };
 
@@ -550,32 +450,4 @@ fn gateway_working_dir(platform: &str, user_id: &str) -> PathBuf {
         .join("gateway")
         .join(platform)
         .join(user_id)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn defaults_when_no_overrides() {
-        assert_eq!(
-            resolve_gateway_max_turns(None, None),
-            DEFAULT_GATEWAY_MAX_TURNS
-        );
-    }
-
-    #[test]
-    fn uses_global_max_turns_when_gateway_unset() {
-        assert_eq!(resolve_gateway_max_turns(None, Some(42)), 42);
-    }
-
-    #[test]
-    fn gateway_override_wins_over_global() {
-        assert_eq!(resolve_gateway_max_turns(Some(10), Some(42)), 10);
-    }
-
-    #[test]
-    fn gateway_override_used_when_global_unset() {
-        assert_eq!(resolve_gateway_max_turns(Some(25), None), 25);
-    }
 }

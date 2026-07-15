@@ -15,17 +15,16 @@ use tokio_util::sync::CancellationToken;
 use crate::agents::AgentEvent;
 use crate::agents::{Agent, SessionConfig};
 use crate::config::paths::Paths;
-use crate::config::{resolve_extensions_for_new_session, Config};
+use crate::config::resolve_extensions_for_new_session;
 use crate::conversation::message::Message;
 use crate::conversation::Conversation;
 #[cfg(feature = "telemetry")]
 use crate::posthog;
-use crate::providers::create;
 use crate::recipe::build_recipe::build_recipe_from_template;
 use crate::recipe::Recipe;
 use crate::scheduler_trait::SchedulerTrait;
 use crate::session::session_manager::SessionType;
-use crate::session::{Session, SessionManager};
+use crate::session::{EnabledExtensionsState, ExtensionState, Session, SessionManager};
 
 type RunningTasksMap = HashMap<String, CancellationToken>;
 type JobsMap = HashMap<String, (JobId, ScheduledJob)>;
@@ -875,12 +874,6 @@ async fn execute_job(
 
     let agent = Agent::new();
 
-    let config = Config::global();
-    let provider_name = config.get_goose_provider()?;
-    let model_name = config.get_goose_model()?;
-    let model_config =
-        crate::model_config::model_config_from_user_config(&provider_name, &model_name)?;
-
     let session = agent
         .config
         .session_manager
@@ -898,13 +891,14 @@ async fn execute_job(
             std::env::current_dir().ok().as_deref(),
         ));
     }
-    for ext in &extensions {
-        agent.add_extension(ext.clone(), &session.id).await?;
-    }
-
-    let agent_provider = create(&provider_name, extensions).await?;
+    let mut extension_data = session.extension_data.clone();
+    EnabledExtensionsState::new(extensions).to_extension_data(&mut extension_data)?;
     agent
-        .update_provider(agent_provider, model_config, &session.id)
+        .config
+        .session_manager
+        .update(&session.id)
+        .extension_data(extension_data)
+        .apply()
         .await?;
 
     let mut jobs_guard = jobs.lock().await;

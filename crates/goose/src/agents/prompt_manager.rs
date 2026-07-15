@@ -43,7 +43,6 @@ struct SystemPromptContext {
     enable_subagents: bool,
     max_extensions: usize,
     max_tools: usize,
-    code_execution_mode: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     moim_system_prompt_block: Option<String>,
 }
@@ -56,7 +55,6 @@ pub struct SystemPromptBuilder<'a, M> {
     extension_tool_count: Option<(usize, usize)>,
     subagents_enabled: bool,
     hints: Option<String>,
-    code_execution_mode: bool,
     goose_mode: Option<GooseMode>,
 }
 
@@ -84,11 +82,6 @@ impl<'a> SystemPromptBuilder<'a, PromptManager> {
         tool_count: usize,
     ) -> Self {
         self.extension_tool_count = Some((extension_count, tool_count));
-        self
-    }
-
-    pub fn with_code_execution_mode(mut self, enabled: bool) -> Self {
-        self.code_execution_mode = enabled;
         self
     }
 
@@ -153,7 +146,6 @@ impl<'a> SystemPromptBuilder<'a, PromptManager> {
             enable_subagents: self.subagents_enabled,
             max_extensions: MAX_EXTENSIONS,
             max_tools: MAX_TOOLS,
-            code_execution_mode: self.code_execution_mode,
             moim_system_prompt_block: moim::system_prompt_block(),
         };
 
@@ -258,6 +250,21 @@ impl PromptManager {
         self.system_prompt_override = None;
     }
 
+    pub fn codex_instructions(&self) -> (Option<String>, Option<String>) {
+        let base = self
+            .system_prompt_override
+            .as_deref()
+            .map(sanitize_unicode_tags);
+        let developer = (!self.system_prompt_extras.is_empty()).then(|| {
+            self.system_prompt_extras
+                .values()
+                .map(|instruction| sanitize_unicode_tags(instruction))
+                .collect::<Vec<_>>()
+                .join("\n\n")
+        });
+        (base, developer)
+    }
+
     pub fn builder<'a>(&'a self) -> SystemPromptBuilder<'a, Self> {
         SystemPromptBuilder {
             manager: self,
@@ -267,7 +274,6 @@ impl PromptManager {
             extension_tool_count: None,
             subagents_enabled: false,
             hints: None,
-            code_execution_mode: false,
             goose_mode: None,
         }
     }

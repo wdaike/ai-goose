@@ -2602,7 +2602,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_mcp_app_tools_identified_for_code_mode_exclusion() {
+    async fn test_mcp_app_tools_identified_when_filtering_tools() {
         let temp_dir = tempfile::tempdir().unwrap();
         let extension_manager =
             ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
@@ -2612,7 +2612,7 @@ mod tests {
             .await;
 
         let tools = extension_manager
-            .get_prefixed_tools_excluding("test-session-id", "code_execution")
+            .get_prefixed_tools_excluding("test-session-id", "missing")
             .await
             .unwrap();
 

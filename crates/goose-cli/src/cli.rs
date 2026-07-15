@@ -324,24 +324,14 @@ impl Default for OutputOptions {
     }
 }
 
-/// Model/provider override options for the run command
+/// Model override options for the run command
 #[derive(Args, Debug, Clone, Default)]
 pub struct ModelOptions {
-    /// Provider to use for this run (overrides environment variable)
-    #[arg(
-        long = "provider",
-        value_name = "PROVIDER",
-        help = "Specify the LLM provider to use (e.g., 'openai', 'anthropic')",
-        long_help = "Override the GOOSE_PROVIDER environment variable for this run. Available providers include openai, anthropic, ollama, databricks, gemini-cli, claude-code, and others."
-    )]
-    pub provider: Option<String>,
-
-    /// Model to use for this run (overrides environment variable)
+    /// Codex model to use for this run
     #[arg(
         long = "model",
         value_name = "MODEL",
-        help = "Specify the model to use (e.g., 'gpt-4o', 'claude-sonnet-4-20250514')",
-        long_help = "Override the GOOSE_MODEL environment variable for this run. The model must be supported by the specified provider."
+        help = "Override the model from the Codex configuration for this run"
     )]
     pub model: Option<String>,
 }
@@ -1896,7 +1886,7 @@ async fn handle_run_command(
         no_profile: extension_opts.no_profile,
         recipe: recipe.clone(),
         additional_system_prompt: input_config.additional_system_prompt,
-        provider: model_opts.provider,
+        provider: None,
         model: model_opts.model,
         debug: session_opts.debug,
         max_tool_repetitions: session_opts.max_tool_repetitions,

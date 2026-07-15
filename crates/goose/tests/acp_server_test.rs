@@ -9,8 +9,6 @@ use agent_client_protocol::schema::v1::{
 use agent_client_protocol::ErrorCode;
 use common_tests::fixtures::server::AcpServerConnection;
 use common_tests::fixtures::{run_test, Connection, OpenAiFixture, Session, TestConnectionConfig};
-#[cfg(feature = "code-mode")]
-use common_tests::run_prompt_codemode;
 use common_tests::{
     run_close_session, run_config_mcp, run_config_option_mode_set, run_config_option_model_set,
     run_delete_session, run_fs_read_text_file_true, run_fs_write_text_file_false,
@@ -645,7 +643,7 @@ fn test_new_session_honors_recipe_model_without_recipe_provider() {
         );
         assert_eq!(
             meta.get("providerId").and_then(|v| v.as_str()),
-            Some("openai")
+            Some("codex")
         );
     });
 }
@@ -698,12 +696,6 @@ fn test_permission_persistence() {
 #[test]
 fn test_prompt_basic() {
     run_test(async { run_prompt_basic::<AcpServerConnection>().await });
-}
-
-#[test]
-#[cfg(feature = "code-mode")]
-fn test_prompt_codemode() {
-    run_test(async { run_prompt_codemode::<AcpServerConnection>().await });
 }
 
 #[test]

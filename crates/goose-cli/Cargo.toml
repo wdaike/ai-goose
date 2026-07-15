@@ -48,7 +48,7 @@ shlex = { version = "2.0", default-features = false, features = ["std"] }
 async-trait = { workspace = true }
 base64 = { workspace = true }
 regex = { workspace = true }
-tar = { version = "0.4.46", default-features = false }
+tar = { version = "=0.4.45", default-features = false }
 reqwest = { workspace = true, features = ["blocking"] }
 zip = { workspace = true }
 bzip2 = { version = "0.6", default-features = false, features = ["default"] }
@@ -78,7 +78,6 @@ winapi = { workspace = true, features = [
 
 [features]
 default = [
-    "code-mode",
     "local-inference",
     "tui",
     "aws-providers",
@@ -89,7 +88,6 @@ default = [
     "system-keyring",
     "update",
 ]
-code-mode = ["goose/code-mode"]
 local-inference = ["goose/local-inference"]
 aws-providers = ["goose/aws-providers"]
 cuda = ["goose/cuda", "local-inference"]

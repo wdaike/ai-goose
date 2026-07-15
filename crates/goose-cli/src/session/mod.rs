@@ -705,8 +705,6 @@ impl CliSession {
                     );
                 }
 
-                let _provider = self.agent.provider().await?;
-
                 println!();
                 output::run_status_hook("thinking");
                 output::show_thinking();
@@ -808,19 +806,20 @@ impl CliSession {
     }
 
     async fn handle_model(&self, model: Option<&str>) -> Result<()> {
-        let provider = self.agent.provider().await?;
-        let current_provider_name = provider.get_name().to_string();
-        let current_model_config = self
+        let session = self
             .agent
-            .model_config_for_session(&self.session_id)
+            .config
+            .session_manager
+            .get_session(&self.session_id, false)
             .await?;
-        let current_model_name = current_model_config.model_name.clone();
+        let current_model = session
+            .model_config
+            .as_ref()
+            .map(|config| config.model_name.as_str())
+            .unwrap_or("Codex default");
 
         if model.is_none() {
-            output::goose_mode_message(&format!(
-                "Current session model: '{}' (provider '{}')",
-                current_model_name, current_provider_name
-            ));
+            output::goose_mode_message(&format!("Current session model: '{current_model}'"));
             return Ok(());
         }
 
@@ -830,51 +829,22 @@ impl CliSession {
             return Ok(());
         }
 
-        if current_provider_name.ends_with("-acp") {
-            output::render_error(
-                "Session model switching is not supported for ACP providers in the CLI.",
-            );
+        if model_name == current_model {
+            output::goose_mode_message(&format!("Session already using model '{model_name}'"));
             return Ok(());
         }
 
-        if provider.manages_own_context() {
-            output::render_error(&format!(
-                "Session model switching is not supported for provider '{}' because it manages its own conversation context.",
-                current_provider_name
-            ));
-            return Ok(());
-        }
-
-        let new_model_config =
-            build_switched_model_config(&current_provider_name, model_name, &current_model_config)?;
-
-        let configured_effort = Config::global().get_goose_thinking_effort();
-        let new_effort = new_model_config.thinking_effort().or(configured_effort);
-        let current_effort = current_model_config.thinking_effort().or(configured_effort);
-        if new_model_config.model_name == current_model_config.model_name
-            && new_effort == current_effort
-        {
-            output::goose_mode_message(&format!(
-                "Session already using model '{}' for provider '{}'",
-                current_model_name, current_provider_name
-            ));
-            return Ok(());
-        }
-
-        let extensions = self.agent.get_extension_configs().await;
-        let new_provider = goose::providers::create(&current_provider_name, extensions)
-            .await
-            .map_err(|e| anyhow::anyhow!("Failed to create provider: {e}"))?;
-
+        self.agent.invalidate_codex_session(&session).await;
         self.agent
-            .update_provider(new_provider, new_model_config, &self.session_id)
+            .config
+            .session_manager
+            .update(&self.session_id)
+            .provider_name("codex")
+            .model_config(goose_providers::model::ModelConfig::new(model_name))
+            .apply()
             .await?;
-
-        let mode = self.agent.goose_mode().await;
-        self.agent.update_goose_mode(mode, &self.session_id).await?;
         output::goose_mode_message(&format!(
-            "Session model switched from '{}' to '{}' for provider '{}'",
-            current_model_name, model_name, current_provider_name
+            "Session model switched from '{current_model}' to '{model_name}'"
         ));
         Ok(())
     }
@@ -896,6 +866,13 @@ impl CliSession {
     }
 
     async fn handle_clear(&mut self) -> Result<()> {
+        let session = self
+            .agent
+            .config
+            .session_manager
+            .get_session(&self.session_id, false)
+            .await?;
+        self.agent.invalidate_codex_session(&session).await;
         if let Err(e) = self
             .agent
             .config
@@ -2303,21 +2280,6 @@ fn format_elapsed_time(duration: std::time::Duration) -> String {
     }
 }
 
-fn build_switched_model_config(
-    provider_name: &str,
-    model_name: &str,
-    current_model_config: &goose_providers::model::ModelConfig,
-) -> Result<goose_providers::model::ModelConfig> {
-    goose::model_config::model_config_from_user_config(provider_name, model_name)
-        .map(|config| {
-            config
-                .with_temperature(current_model_config.temperature)
-                .with_toolshim(current_model_config.toolshim)
-                .with_toolshim_model(current_model_config.toolshim_model.clone())
-        })
-        .map_err(|e| anyhow::anyhow!("Failed to create model configuration: {e}"))
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -2448,73 +2410,6 @@ mod tests {
     #[test]
     fn test_parse_stdio_extension_no_command() {
         assert!(CliSession::parse_stdio_extension("").is_err());
-    }
-
-    #[test]
-    fn test_build_switched_model_config_rebuilds_target_model_settings() {
-        let _guard = env_lock::lock_env([
-            ("GOOSE_MAX_TOKENS", None::<&str>),
-            ("GOOSE_TEMPERATURE", None::<&str>),
-            ("GOOSE_CONTEXT_LIMIT", None::<&str>),
-            ("GOOSE_TOOLSHIM", None::<&str>),
-            ("GOOSE_TOOLSHIM_OLLAMA_MODEL", None::<&str>),
-        ]);
-
-        let current_model_config = goose_providers::model::ModelConfig {
-            model_name: "gpt-4o".to_string(),
-            context_limit: Some(128_000),
-            temperature: Some(0.25),
-            max_tokens: Some(16_384),
-            toolshim: true,
-            toolshim_model: Some("qwen2.5-coder".to_string()),
-            request_params: Some(HashMap::from([(
-                "anthropic_beta".to_string(),
-                serde_json::json!(["output-128k-2025-02-19"]),
-            )])),
-            reasoning: Some(false),
-        };
-
-        let switched =
-            build_switched_model_config("openai", "gpt-5.4", &current_model_config).unwrap();
-        let expected = goose_providers::model::ModelConfig::new("gpt-5.4")
-            .with_canonical_limits("openai")
-            .with_temperature(Some(0.25))
-            .with_toolshim(true)
-            .with_toolshim_model(Some("qwen2.5-coder".to_string()));
-
-        assert_eq!(switched.model_name, expected.model_name);
-        assert_eq!(switched.context_limit, expected.context_limit);
-        assert_eq!(switched.max_tokens, expected.max_tokens);
-        assert_eq!(switched.request_params, expected.request_params);
-        assert_eq!(switched.reasoning, expected.reasoning);
-        assert_eq!(switched.temperature, Some(0.25));
-        assert!(switched.toolshim);
-        assert_eq!(switched.toolshim_model.as_deref(), Some("qwen2.5-coder"));
-    }
-
-    #[test]
-    fn test_build_switched_model_config_detects_effort_suffix_change() {
-        let _guard = env_lock::lock_env([
-            ("GOOSE_MAX_TOKENS", None::<&str>),
-            ("GOOSE_TEMPERATURE", None::<&str>),
-            ("GOOSE_CONTEXT_LIMIT", None::<&str>),
-            ("GOOSE_TOOLSHIM", None::<&str>),
-            ("GOOSE_TOOLSHIM_OLLAMA_MODEL", None::<&str>),
-            ("GOOSE_THINKING_EFFORT", None::<&str>),
-        ]);
-
-        let current = goose_providers::model::ModelConfig::new("gpt-5.4-high")
-            .with_canonical_limits("openai");
-        assert_eq!(current.model_name, "gpt-5.4");
-        assert_eq!(
-            current.thinking_effort(),
-            Some(goose_providers::thinking::ThinkingEffort::High)
-        );
-
-        let switched = build_switched_model_config("openai", "gpt-5.4", &current).unwrap();
-
-        assert_eq!(switched.model_name, current.model_name);
-        assert_ne!(switched.thinking_effort(), current.thinking_effort());
     }
 
     #[test]

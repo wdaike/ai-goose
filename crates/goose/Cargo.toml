@@ -19,7 +19,6 @@ otel = [
     "dep:opentelemetry-otlp",
     "dep:opentelemetry-stdout",
 ]
-code-mode = ["dep:pctx_code_mode"]
 local-inference = [
     "dep:candle-core",
     "dep:candle-nn",
@@ -51,7 +50,7 @@ rustls-tls = [
     "reqwest/rustls",
     "rmcp/reqwest",
     "smithy-transport-reqwest?/rustls",
-    "sqlx/runtime-tokio-rustls",
+    "sqlx/tls-rustls-aws-lc-rs",
     "jsonwebtoken/aws_lc_rs",
     "oauth2/reqwest",
     "oauth2/rustls-tls",
@@ -69,7 +68,7 @@ native-tls = [
     "reqwest/native-tls",
     "rmcp/reqwest-native-tls",
     "smithy-transport-reqwest?/native-tls",
-    "sqlx/runtime-tokio-native-tls",
+    "sqlx/tls-native-tls",
     "jsonwebtoken/rust_crypto",
     "oauth2/reqwest",
     "oauth2/native-tls",
@@ -143,14 +142,7 @@ utoipa = { workspace = true, features = ["chrono"] }
 tokio-cron-scheduler = { version = "0.15", default-features = false }
 urlencoding = { workspace = true }
 v_htmlescape = { version = "0.17", default-features = false, features = ["std"] }
-sqlx = { version = "0.8.5", default-features = false, features = [
-    "runtime-tokio",
-    "sqlite",
-    "chrono",
-    "json",
-    "macros",
-    "migrate",
-] }
+sqlx = { version = "0.9.0", default-features = false, features = ["runtime-tokio", "sqlite", "chrono", "json", "macros", "migrate"] }
 
 # For Bedrock provider (optional, behind "aws-providers" feature)
 aws-config = { version = "1.8", default-features = false, features = ["credentials-process", "rt-tokio", "sso", "behavior-version-latest"], optional = true }
@@ -218,16 +210,11 @@ aws-lc-rs = { version = "1.17", default-features = false, optional = true }
 openssl = { version = "0.10.66", default-features = false, optional = true }
 pem = { version = "3.0.2", default-features = false, features = ["std"], optional = true }
 
-pctx_code_mode = { version = "0.3", default-features = false, optional = true }
-
-# These are needed because temporal_rs 0.1 (a transitive dep via PCTX) enables unstable features on icu_calendar without pinning the dependency version
-# A fix is available in temporal_rs 0.2 but PCTX has not updated
-# They are just here to pin the version, and can be removed if PCTX updates temporal_rs
-icu_calendar = { version = "=2.1.1", default-features = false }
-icu_locale = { version = "=2.1.1", default-features = false }
 image = { version = "0.24.9", default-features = false, features = ["png", "jpeg", "gif", "webp"] }
 subtle = { version = "2.5", default-features = false, features = ["std"] }
 gethostname = "1.1.0"
+codex-core-api = { git = "https://github.com/openai/codex", version = "0.144.4", tag = "rust-v0.144.4" }
+toml = "0.9.5"
 
 [target.'cfg(target_os = "windows")'.dependencies]
 winapi = { workspace = true }
@@ -292,8 +279,4 @@ path = "src/bin/generate_acp_schema.rs"
 ignored = [
     # Used only on windows
     "winapi",
-
-    # Included only to pin version
-    "icu_calendar",
-    "icu_locale",
 ]

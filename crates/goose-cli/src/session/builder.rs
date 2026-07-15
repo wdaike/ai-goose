@@ -6,42 +6,23 @@ use console::style;
 use goose::agents::{Agent, Container, ExtensionError};
 use goose::config::resolve_extensions_for_new_session;
 use goose::config::{Config, ExtensionConfig, GooseMode};
-use goose::model_config::model_config_from_user_config;
-use goose::providers::create;
 use goose::recipe::Recipe;
 use goose::session::session_manager::SessionType;
-use goose::session::EnabledExtensionsState;
+use goose::session::{EnabledExtensionsState, ExtensionState};
 use rustyline::EditMode;
-use std::collections::BTreeSet;
 use std::process;
 use std::sync::Arc;
-use tokio::task::JoinSet;
-
-const EXTENSION_HINT_MAX_LEN: usize = 5;
-
-fn truncate_with_ellipsis(s: &str, max_len: usize) -> String {
-    let truncated: String = s.chars().take(max_len).collect();
-    if s.chars().count() > max_len {
-        format!("{}…", truncated)
-    } else {
-        truncated
-    }
-}
 
 fn parse_cli_flag_extensions(
     extensions: &[String],
     streamable_http_extensions: &[StreamableHttpOptions],
     builtins: &[String],
-) -> Vec<(String, ExtensionConfig)> {
+) -> Vec<ExtensionConfig> {
     let mut extensions_to_load = Vec::new();
 
-    for (idx, ext_str) in extensions.iter().enumerate() {
+    for ext_str in extensions {
         match CliSession::parse_stdio_extension(ext_str) {
-            Ok(config) => {
-                let hint = truncate_with_ellipsis(ext_str, EXTENSION_HINT_MAX_LEN);
-                let label = format!("stdio #{}({})", idx + 1, hint);
-                extensions_to_load.push((label, config));
-            }
+            Ok(config) => extensions_to_load.push(config),
             Err(e) => {
                 eprintln!(
                     "{}",
@@ -55,18 +36,14 @@ fn parse_cli_flag_extensions(
         }
     }
 
-    for (idx, opts) in streamable_http_extensions.iter().enumerate() {
+    for opts in streamable_http_extensions {
         let config = CliSession::parse_streamable_http_extension(&opts.url, opts.timeout);
-        let hint = truncate_with_ellipsis(&opts.url, EXTENSION_HINT_MAX_LEN);
-        let label = format!("http #{}({})", idx + 1, hint);
-        extensions_to_load.push((label, config));
+        extensions_to_load.push(config);
     }
 
     for builtin_str in builtins {
         let configs = CliSession::parse_builtin_extensions(builtin_str);
-        for config in configs {
-            extensions_to_load.push((config.name(), config));
-        }
+        extensions_to_load.extend(configs);
     }
 
     extensions_to_load
@@ -151,150 +128,39 @@ impl Default for SessionBuilderConfig {
     }
 }
 
-async fn load_extensions(
+async fn store_extensions(
     agent: Agent,
-    extensions_to_load: Vec<(String, ExtensionConfig)>,
+    extensions: Vec<ExtensionConfig>,
     session_id: &str,
 ) -> Arc<Agent> {
-    let mut set = JoinSet::new();
-    let agent_ptr = Arc::new(agent);
-
-    let mut waiting_ids: BTreeSet<usize> = (0..extensions_to_load.len()).collect();
-    for (id, (_label, extension)) in extensions_to_load.iter().enumerate() {
-        let agent_ptr = agent_ptr.clone();
-        let cfg = extension.clone();
-        let sid = session_id.to_string();
-        set.spawn(async move { (id, agent_ptr.add_extension(cfg, &sid).await) });
-    }
-
-    let get_message = |waiting_ids: &BTreeSet<usize>| {
-        let labels: Vec<String> = waiting_ids
-            .iter()
-            .map(|id| {
-                extensions_to_load
-                    .get(*id)
-                    .map(|e| e.0.clone())
-                    .unwrap_or_default()
-            })
-            .collect();
-        format!(
-            "starting {} extensions: {}",
-            waiting_ids.len(),
-            labels.join(", ")
-        )
-    };
-
-    let spinner = cliclack::spinner();
-    spinner.start(get_message(&waiting_ids));
-
-    let mut failed: Vec<(usize, anyhow::Error)> = Vec::new();
-    while let Some(result) = set.join_next().await {
-        match result {
-            Ok((id, Ok(_))) => {
-                waiting_ids.remove(&id);
-                spinner.set_message(get_message(&waiting_ids));
-            }
-            Ok((id, Err(e))) => failed.push((id, e.into())),
-            Err(e) => tracing::error!("failed to add extension: {}", e),
-        }
-    }
-
-    spinner.clear();
-
-    for (id, err) in failed {
-        let label = extensions_to_load
-            .get(id)
-            .map(|e| e.0.clone())
-            .unwrap_or_default();
-        eprintln!(
-            "{}",
-            style(format!(
-                "Warning: Failed to start extension '{}' ({}), continuing without it",
-                label, err
-            ))
-            .yellow()
-        );
-        eprintln!(
-            "{}",
-            style(format!(
-                "  Hint: once the session starts, ask goose to help debug the '{}' extension",
-                label
-            ))
-            .dim()
-        );
-    }
-
-    agent_ptr
-}
-
-struct ResolvedProviderConfig {
-    provider_name: String,
-    model_name: String,
-    model_config: goose_providers::model::ModelConfig,
-}
-
-fn resolve_provider_and_model(
-    session_config: &SessionBuilderConfig,
-    config: &Config,
-    saved_provider: Option<String>,
-    saved_model_config: Option<goose_providers::model::ModelConfig>,
-) -> ResolvedProviderConfig {
-    let recipe_settings = session_config
-        .recipe
-        .as_ref()
-        .and_then(|r| r.settings.as_ref());
-
-    let provider_name = session_config
-        .provider
-        .clone()
-        .or(saved_provider)
-        .or_else(|| recipe_settings.and_then(|s| s.goose_provider.clone()))
-        .or_else(|| config.get_goose_provider().ok())
-        .unwrap_or_else(|| {
-            output::render_error("No provider configured. Run 'goose configure' first.");
+    let session = agent
+        .config
+        .session_manager
+        .get_session(session_id, false)
+        .await
+        .unwrap_or_else(|error| {
+            output::render_error(&format!("Failed to read session metadata: {error}"));
             process::exit(1);
         });
-
-    let model_name = session_config
-        .model
-        .clone()
-        .or_else(|| saved_model_config.as_ref().map(|mc| mc.model_name.clone()))
-        .or_else(|| recipe_settings.and_then(|s| s.goose_model.clone()))
-        .or_else(|| config.get_goose_model().ok())
-        .unwrap_or_else(|| {
-            output::render_error("No model configured. Run 'goose configure' first.");
+    let mut extension_data = session.extension_data;
+    EnabledExtensionsState::new(extensions)
+        .to_extension_data(&mut extension_data)
+        .unwrap_or_else(|error| {
+            output::render_error(&format!("Failed to save extensions: {error}"));
             process::exit(1);
         });
-
-    let model_config = if session_config.resume
-        && saved_model_config
-            .as_ref()
-            .is_some_and(|mc| mc.model_name == model_name)
-    {
-        let mut config = saved_model_config.unwrap();
-        config.normalize_effort_suffix();
-        if let Some(temp) = recipe_settings.and_then(|s| s.temperature) {
-            config = config.with_temperature(Some(temp));
-        }
-        config
-    } else {
-        let mut config =
-            goose::model_config::model_config_from_user_config(&provider_name, &model_name)
-                .unwrap_or_else(|e| {
-                    output::render_error(&format!("Failed to create model configuration: {}", e));
-                    process::exit(1);
-                });
-        if let Some(temp) = recipe_settings.and_then(|s| s.temperature) {
-            config = config.with_temperature(Some(temp));
-        }
-        config
-    };
-
-    ResolvedProviderConfig {
-        provider_name,
-        model_name,
-        model_config,
-    }
+    agent
+        .config
+        .session_manager
+        .update(session_id)
+        .extension_data(extension_data)
+        .apply()
+        .await
+        .unwrap_or_else(|error| {
+            output::render_error(&format!("Failed to update session: {error}"));
+            process::exit(1);
+        });
+    Arc::new(agent)
 }
 
 async fn resolve_session_id(
@@ -444,12 +310,12 @@ async fn collect_extension_configs(
             project_root.as_deref(),
         ));
     }
-    all.extend(cli_flag_extensions.into_iter().map(|(_, cfg)| cfg));
+    all.extend(cli_flag_extensions);
 
     Ok(all)
 }
 
-async fn resolve_and_load_extensions(
+async fn store_session_extensions(
     agent: Agent,
     extensions: Vec<ExtensionConfig>,
     session_id: &str,
@@ -458,24 +324,14 @@ async fn resolve_and_load_extensions(
         eprintln!("{}", style(format!("Warning: {}", warning)).yellow());
     }
 
-    let extensions_to_load: Vec<(String, ExtensionConfig)> = extensions
-        .into_iter()
-        .map(|cfg| (cfg.name(), cfg))
-        .collect();
-
-    load_extensions(agent, extensions_to_load, session_id).await
+    store_extensions(agent, extensions, session_id).await
 }
 
 async fn configure_session_prompts(
     session: &CliSession,
     config: &Config,
     session_config: &SessionBuilderConfig,
-    session_id: &str,
 ) {
-    if let Err(e) = session.agent.persist_extension_state(session_id).await {
-        tracing::warn!("Failed to save extension state: {}", e);
-    }
-
     if let Some(ref additional_prompt) = session_config.additional_system_prompt {
         session
             .agent
@@ -509,22 +365,6 @@ pub async fn build_session(session_config: SessionBuilderConfig) -> CliSession {
 
     let session_manager = agent.config.session_manager.clone();
 
-    let (saved_provider, saved_model_config) = if session_config.resume {
-        if let Some(ref session_id) = session_config.session_id {
-            match session_manager.get_session(session_id, false).await {
-                Ok(session_data) => (session_data.provider_name, session_data.model_config),
-                Err(_) => (None, None),
-            }
-        } else {
-            (None, None)
-        }
-    } else {
-        (None, None)
-    };
-
-    let resolved =
-        resolve_provider_and_model(&session_config, config, saved_provider, saved_model_config);
-
     let recipe = session_config.recipe.as_ref();
 
     agent
@@ -538,7 +378,7 @@ pub async fn build_session(session_config: SessionBuilderConfig) -> CliSession {
         handle_resumed_session_workdir(&agent, &session_id, session_config.interactive).await;
     }
 
-    let extensions_for_provider =
+    let extensions =
         match collect_extension_configs(&agent, &session_config, recipe, &session_id).await {
             Ok(exts) => exts,
             Err(e) => {
@@ -547,84 +387,38 @@ pub async fn build_session(session_config: SessionBuilderConfig) -> CliSession {
             }
         };
 
-    let (new_provider, effective_provider_name, effective_model_name, effective_model_config) =
-        match create(&resolved.provider_name, extensions_for_provider.clone()).await {
-            Ok(provider) => (
-                provider,
-                resolved.provider_name.clone(),
-                resolved.model_name.clone(),
-                resolved.model_config.clone(),
-            ),
-            Err(e)
-                if session_config.resume
-                    && session_config.provider.is_none()
-                    && is_provider_unavailable_error(&e) =>
-            {
-                let fallback_provider = config.get_goose_provider().unwrap_or_else(|_| {
-                    output::render_error("No provider configured. Run 'goose configure' first.");
-                    process::exit(1);
-                });
-                let fallback_model = config.get_goose_model().unwrap_or_else(|_| {
-                    output::render_error("No model configured. Run 'goose configure' first.");
-                    process::exit(1);
-                });
-                eprintln!(
-                    "{}",
-                    style(format!(
-                        "Warning: Could not create the session's original provider '{}' ({}). \
-                    Falling back to the default provider '{}'.",
-                        resolved.provider_name, e, fallback_provider
-                    ))
-                    .yellow()
-                );
-                let fallback_model_config =
-                    model_config_from_user_config(fallback_provider.as_str(), &fallback_model)
-                        .unwrap_or_else(|e| {
-                            output::render_error(&format!(
-                                "Failed to create model configuration: {}",
-                                e
-                            ));
-                            process::exit(1);
-                        });
-                match create(&fallback_provider, extensions_for_provider.clone()).await {
-                    Ok(provider) => (
-                        provider,
-                        fallback_provider,
-                        fallback_model,
-                        fallback_model_config,
-                    ),
-                    Err(e2) => {
-                        output::render_error(&format!(
-                        "Error {}.\n\
-                        Please check your system keychain and run 'goose configure' again.\n\
-                        If your system is unable to use the keyring, please try setting secret key(s) via environment variables.\n\
-                        For more info, see: https://goose-docs.ai/docs/troubleshooting/#keychainkeyring-errors",
-                        e2
-                    ));
-                        process::exit(1);
-                    }
-                }
-            }
-            Err(e) => {
-                output::render_error(&format!(
-                "Error {}.\n\
-                Please check your system keychain and run 'goose configure' again.\n\
-                If your system is unable to use the keyring, please try setting secret key(s) via environment variables.\n\
-                For more info, see: https://goose-docs.ai/docs/troubleshooting/#keychainkeyring-errors",
-                e
-            ));
-                process::exit(1);
-            }
-        };
-    tracing::info!("🤖 Using model: {}", effective_model_name);
+    if session_config.provider.as_deref().is_some_and(|provider| {
+        !provider.eq_ignore_ascii_case("codex") && !provider.eq_ignore_ascii_case("openai")
+    }) {
+        eprintln!(
+            "{}",
+            style("Warning: --provider is ignored; Codex manages authentication.").yellow()
+        );
+    }
 
-    agent
-        .update_provider(new_provider, effective_model_config, &session_id)
+    let requested_model = session_config.model.clone().or_else(|| {
+        recipe
+            .and_then(|recipe| recipe.settings.as_ref())
+            .and_then(|settings| settings.goose_model.clone())
+    });
+    let previous_provider = session_manager
+        .get_session(&session_id, false)
         .await
-        .unwrap_or_else(|e| {
-            output::render_error(&format!("Failed to initialize agent: {}", e));
-            process::exit(1);
-        });
+        .ok()
+        .and_then(|session| session.provider_name);
+    let mut update = session_manager.update(&session_id).provider_name("codex");
+    if let Some(model) = requested_model {
+        update = update.model_config(goose_providers::model::ModelConfig::new(model));
+    } else if previous_provider.as_deref() != Some("codex") {
+        update = update.clear_model_config();
+    }
+    if let Some(recipe) = session_config.recipe.clone() {
+        update = update.recipe(Some(recipe));
+    }
+    update.apply().await.unwrap_or_else(|error| {
+        output::render_error(&format!("Failed to update session: {error}"));
+        process::exit(1);
+    });
 
     agent
         .update_goose_mode(agent.config.goose_mode, &session_id)
@@ -634,19 +428,7 @@ pub async fn build_session(session_config: SessionBuilderConfig) -> CliSession {
             process::exit(1);
         });
 
-    if let Some(recipe) = session_config.recipe.clone() {
-        if let Err(e) = session_manager
-            .update(&session_id)
-            .recipe(Some(recipe))
-            .apply()
-            .await
-        {
-            tracing::warn!("Failed to store recipe on session: {}", e);
-        }
-    }
-
-    // Extensions are loaded after session creation because we may change directory when resuming
-    let agent_ptr = resolve_and_load_extensions(agent, extensions_for_provider, &session_id).await;
+    let agent_ptr = store_session_extensions(agent, extensions, &session_id).await;
 
     let edit_mode = config
         .get_param::<String>("EDIT_MODE")
@@ -675,24 +457,22 @@ pub async fn build_session(session_config: SessionBuilderConfig) -> CliSession {
     )
     .await;
 
-    configure_session_prompts(&session, config, &session_config, &session_id).await;
+    configure_session_prompts(&session, config, &session_config).await;
 
     if !session_config.quiet {
-        output::display_session_info(
-            session_config.resume,
-            &effective_provider_name,
-            &effective_model_name,
-            &Some(session_id),
-        );
+        let model = session
+            .agent
+            .config
+            .session_manager
+            .get_session(&session_id, false)
+            .await
+            .ok()
+            .and_then(|session| session.model_config)
+            .map(|model| model.model_name)
+            .unwrap_or_else(|| "Codex default".to_string());
+        output::display_session_info(session_config.resume, "codex", &model, &Some(session_id));
     }
     session
-}
-
-fn is_provider_unavailable_error(e: &anyhow::Error) -> bool {
-    let msg = e.to_string();
-    msg.contains("is not set")
-        || msg.contains("not configured")
-        || msg.contains("Configuration value not found")
 }
 
 #[cfg(test)]
@@ -799,17 +579,5 @@ mod tests {
         .await;
 
         assert_eq!(resolved, user_session.id);
-    }
-
-    #[test]
-    fn test_truncate_with_ellipsis() {
-        assert_eq!(truncate_with_ellipsis("abc", 5), "abc");
-
-        assert_eq!(truncate_with_ellipsis("abcde", 5), "abcde");
-
-        assert_eq!(truncate_with_ellipsis("abcdef", 5), "abcde…");
-        assert_eq!(truncate_with_ellipsis("hello world", 5), "hello…");
-
-        assert_eq!(truncate_with_ellipsis("", 5), "");
     }
 }

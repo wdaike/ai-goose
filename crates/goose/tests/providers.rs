@@ -269,12 +269,15 @@ impl ProviderFixture {
         agent
             .update_provider(provider.clone(), model_config.clone(), &session_id)
             .await?;
+        let working_dir = Some(std::env::current_dir()?);
         agent
-            .add_extension(mcp_extension, &session_id)
+            .extension_manager
+            .add_extension(mcp_extension, working_dir.clone(), None, Some(&session_id))
             .await
             .map_err(|e| anyhow::anyhow!("{}", e))?;
         agent
-            .add_extension(developer_extension, &session_id)
+            .extension_manager
+            .add_extension(developer_extension, working_dir, None, Some(&session_id))
             .await
             .map_err(|e| anyhow::anyhow!("{}", e))?;
 
