@@ -2588,6 +2588,12 @@
   "progressiveMessageList.searchHint": {
     "defaultMessage": "Tekan Cmd/Ctrl+F untuk memuatkan semua mesej dengan serta-merta untuk carian"
   },
+  "progressiveMessageList.workedFor": {
+    "defaultMessage": "Selesai dalam {duration}"
+  },
+  "progressiveMessageList.working": {
+    "defaultMessage": "Sedang diproses…"
+  },
   "promptsSettings.allPromptsReset": {
     "defaultMessage": "Semua gesaan ditetapkan semula kepada lalai"
   },

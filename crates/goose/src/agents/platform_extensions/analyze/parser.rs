@@ -120,7 +120,7 @@ fn collect_init_deinit(
     symbols: &mut Vec<Symbol>,
 ) {
     for i in 0..node.child_count() as u32 {
-        if let Some(child) = node.child(i) {
+        if let Some(child) = node.child(i as usize) {
             match child.kind() {
                 "init_declaration" => {
                     symbols.push(Symbol {
@@ -240,7 +240,7 @@ fn extract_inheritance(lang_name: &str, class_node: &tree_sitter::Node, source: 
             if let Some(heritage) = find_child_by_kind(class_node, "class_heritage") {
                 // Get the full extends expression (could be identifier, member_expression, etc.)
                 for i in 0..heritage.child_count() as u32 {
-                    if let Some(child) = heritage.child(i) {
+                    if let Some(child) = heritage.child(i as usize) {
                         let text = node_text(source, &child).trim();
                         if !text.is_empty() && text != "extends" {
                             return text.to_string();
@@ -337,7 +337,7 @@ fn extract_inheritance(lang_name: &str, class_node: &tree_sitter::Node, source: 
             }
             let mut has_for = false;
             for i in 0..class_node.child_count() as u32 {
-                if let Some(child) = class_node.child(i) {
+                if let Some(child) = class_node.child(i as usize) {
                     if node_text(source, &child) == "for" {
                         has_for = true;
                         break;
@@ -351,7 +351,7 @@ fn extract_inheritance(lang_name: &str, class_node: &tree_sitter::Node, source: 
             let mut trait_name = String::new();
             let mut found_for = false;
             for i in 0..class_node.child_count() as u32 {
-                if let Some(child) = class_node.child(i) {
+                if let Some(child) = class_node.child(i as usize) {
                     if node_text(source, &child) == "for" {
                         found_for = true;
                     } else if !found_for
@@ -382,7 +382,7 @@ fn find_enclosing_class(node: tree_sitter::Node, source: &str, info: &LangInfo) 
                 // For trait impls (impl Trait for Type), get the type after "for"
                 let mut found_for = false;
                 for i in 0..parent.child_count() as u32 {
-                    if let Some(child) = parent.child(i) {
+                    if let Some(child) = parent.child(i as usize) {
                         if node_text(source, &child) == "for" {
                             found_for = true;
                         } else if found_for
@@ -410,7 +410,7 @@ fn find_enclosing_class(node: tree_sitter::Node, source: &str, info: &LangInfo) 
             // For Go type_declaration, look inside type_spec
             if parent.kind() == "type_declaration" {
                 for i in 0..parent.child_count() as u32 {
-                    if let Some(child) = parent.child(i) {
+                    if let Some(child) = parent.child(i as usize) {
                         if child.kind() == "type_spec" {
                             return find_child_by_kind(&child, "type_identifier")
                                 .map(|n| node_text(source, &n).to_string());
@@ -477,7 +477,7 @@ fn extract_fn_signature_from_node(fn_node: tree_sitter::Node, source: &str) -> O
     // For Python: look for "return_type" or "type" child
     // Generic approach: scan children for return type indicators
     for i in 0..fn_node.child_count() as u32 {
-        if let Some(child) = fn_node.child(i) {
+        if let Some(child) = fn_node.child(i as usize) {
             if ret_kinds.contains(&child.kind()) {
                 let ret_text = node_text(source, &child).trim().to_string();
                 if !ret_text.is_empty() {
@@ -494,7 +494,7 @@ fn extract_fn_signature_from_node(fn_node: tree_sitter::Node, source: &str) -> O
             }
             // Rust uses "->" as a literal anonymous child, then a type child follows
             if node_text(source, &child) == "->" {
-                if let Some(type_child) = fn_node.child(i + 1) {
+                if let Some(type_child) = fn_node.child((i + 1) as usize) {
                     let ret_text = node_text(source, &type_child).trim();
                     if !ret_text.is_empty() {
                         parts.push_str("->");
@@ -555,7 +555,7 @@ fn collect_field_names(
     out: &mut Vec<String>,
 ) {
     for i in 0..node.child_count() as u32 {
-        if let Some(child) = node.child(i) {
+        if let Some(child) = node.child(i as usize) {
             if field_kinds.contains(&child.kind()) {
                 // Java/Kotlin: field name is inside variable_declarator, not a direct child.
                 // e.g. (field_declaration type: (type_identifier) declarator: (variable_declarator name: (identifier)))
@@ -583,7 +583,7 @@ fn find_child_by_kind<'a>(
     kind: &str,
 ) -> Option<tree_sitter::Node<'a>> {
     (0..node.child_count() as u32)
-        .filter_map(|i| node.child(i))
+        .filter_map(|i| node.child(i as usize))
         .find(|c| c.kind() == kind)
 }
 
@@ -595,7 +595,7 @@ fn find_descendant_by_kind<'a>(
         return Some(*node);
     }
     for i in 0..node.child_count() as u32 {
-        if let Some(child) = node.child(i) {
+        if let Some(child) = node.child(i as usize) {
             if let Some(found) = find_descendant_by_kind(&child, kind) {
                 return Some(found);
             }
@@ -733,7 +733,7 @@ fn find_enclosing_fn(node: tree_sitter::Node, source: &str, info: &LangInfo) -> 
 
 fn find_child_text(node: &tree_sitter::Node, kinds: &[&str], source: &str) -> Option<String> {
     (0..node.child_count() as u32)
-        .filter_map(|i| node.child(i))
+        .filter_map(|i| node.child(i as usize))
         .find(|c| kinds.contains(&c.kind()))
         .map(|c| node_text(source, &c).to_string())
 }

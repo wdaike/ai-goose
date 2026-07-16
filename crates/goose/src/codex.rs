@@ -89,7 +89,7 @@ impl CodexAgentCore {
                 None,
             )
             .await
-            .map_err(|error| anyhow!(error.to_string()))?;
+            .map_err(|error| anyhow!("{error:?}"))?;
         Ok(true)
     }
 

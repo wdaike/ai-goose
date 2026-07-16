@@ -2588,6 +2588,12 @@
   "progressiveMessageList.searchHint": {
     "defaultMessage": "Arama amacıyla tüm mesajları anında yüklemek için Cmd/Ctrl+F tuşlarına basın"
   },
+  "progressiveMessageList.workedFor": {
+    "defaultMessage": "{duration} çalıştı"
+  },
+  "progressiveMessageList.working": {
+    "defaultMessage": "Çalışıyor…"
+  },
   "promptsSettings.allPromptsReset": {
     "defaultMessage": "Tüm istemler varsayılanlara sıfırlandı"
   },

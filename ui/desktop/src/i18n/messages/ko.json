@@ -2588,6 +2588,12 @@
   "progressiveMessageList.searchHint": {
     "defaultMessage": "검색을 위해 모든 메시지를 즉시 로드하려면 Cmd/Ctrl+F를 누르세요."
   },
+  "progressiveMessageList.workedFor": {
+    "defaultMessage": "{duration} 동안 작업함"
+  },
+  "progressiveMessageList.working": {
+    "defaultMessage": "작업 중…"
+  },
   "promptsSettings.allPromptsReset": {
     "defaultMessage": "모든 프롬프트가 기본값으로 재설정됩니다."
   },

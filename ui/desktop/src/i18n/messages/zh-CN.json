@@ -2588,6 +2588,12 @@
   "progressiveMessageList.searchHint": {
     "defaultMessage": "按 Cmd/Ctrl+F 立即加载全部消息以便搜索"
   },
+  "progressiveMessageList.workedFor": {
+    "defaultMessage": "已处理 {duration}"
+  },
+  "progressiveMessageList.working": {
+    "defaultMessage": "正在处理…"
+  },
   "promptsSettings.allPromptsReset": {
     "defaultMessage": "所有提示词已重置为默认"
   },

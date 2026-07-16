@@ -32,6 +32,7 @@ interface GooseMessageProps {
   toolCallNotifications: Map<string, NotificationEvent[]>;
   append: (value: string) => void;
   isStreaming: boolean;
+  isInToolCallGroup?: boolean;
   submitElicitationResponse?: (
     elicitationId: string,
     userData: Record<string, unknown>
@@ -45,6 +46,7 @@ export default function GooseMessage({
   toolCallNotifications,
   append,
   isStreaming,
+  isInToolCallGroup = false,
   submitElicitationResponse,
 }: GooseMessageProps) {
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -71,8 +73,8 @@ export default function GooseMessage({
   };
   const toolCallChains = useMemo(() => identifyConsecutiveToolCalls(messages), [messages]);
   const hideTimestamp = useMemo(
-    () => shouldHideTimestamp(messageIndex, toolCallChains),
-    [messageIndex, toolCallChains]
+    () => isInToolCallGroup || shouldHideTimestamp(messageIndex, toolCallChains),
+    [isInToolCallGroup, messageIndex, toolCallChains]
   );
   const hasToolConfirmation = toolConfirmationContent !== undefined;
   const hasElicitation = elicitationContent !== undefined;
@@ -120,7 +122,12 @@ export default function GooseMessage({
   const pendingConfirmationIds = getPendingToolConfirmationIds(messages);
 
   return (
-    <div className="goose-message flex w-[90%] justify-start min-w-0">
+    <div
+      className={cn(
+        'goose-message flex justify-start min-w-0',
+        isInToolCallGroup ? 'w-full' : 'w-[90%]'
+      )}
+    >
       <div className="flex flex-col w-full min-w-0">
         {thinkingContent && (
           <ThinkingContent

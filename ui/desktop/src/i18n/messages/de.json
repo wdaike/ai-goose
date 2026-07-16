@@ -2588,6 +2588,12 @@
   "progressiveMessageList.searchHint": {
     "defaultMessage": "Drücken Sie Cmd/Ctrl+F, um alle Nachrichten sofort für die Suche zu laden"
   },
+  "progressiveMessageList.workedFor": {
+    "defaultMessage": "Dauer: {duration}"
+  },
+  "progressiveMessageList.working": {
+    "defaultMessage": "Wird ausgeführt…"
+  },
   "promptsSettings.allPromptsReset": {
     "defaultMessage": "Alle Prompts auf die Standardwerte zurückgesetzt"
   },

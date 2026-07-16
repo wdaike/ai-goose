@@ -2588,6 +2588,12 @@
   "progressiveMessageList.searchHint": {
     "defaultMessage": "検索のためにすべてのメッセージをすぐ読み込むには Cmd/Ctrl+F を押してください"
   },
+  "progressiveMessageList.workedFor": {
+    "defaultMessage": "{duration} 作業しました"
+  },
+  "progressiveMessageList.working": {
+    "defaultMessage": "作業中…"
+  },
   "promptsSettings.allPromptsReset": {
     "defaultMessage": "すべてのプロンプトをデフォルトにリセットしました"
   },

@@ -51,6 +51,37 @@ export function identifyConsecutiveToolCalls(messages: Message[]): number[][] {
   return chains;
 }
 
+export function identifyToolCallGroups(messages: Message[]): number[][] {
+  const groups: number[][] = [];
+  let currentGroup: number[] = [];
+
+  const finishGroup = () => {
+    if (currentGroup.length > 0) {
+      groups.push(currentGroup);
+      currentGroup = [];
+    }
+  };
+
+  for (let i = 0; i < messages.length; i++) {
+    const message = messages[i];
+    const toolRequests = getToolRequests(message);
+    const toolResponses = getToolResponses(message);
+
+    if (toolResponses.length > 0 && toolRequests.length === 0) {
+      continue;
+    }
+
+    if (toolRequests.length > 0) {
+      currentGroup.push(i);
+    } else {
+      finishGroup();
+    }
+  }
+
+  finishGroup();
+  return groups;
+}
+
 export function shouldHideTimestamp(messageIndex: number, chains: number[][]): boolean {
   for (const chain of chains) {
     if (chain.includes(messageIndex)) {

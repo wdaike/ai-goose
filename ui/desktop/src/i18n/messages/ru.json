@@ -2588,6 +2588,12 @@
   "progressiveMessageList.searchHint": {
     "defaultMessage": "Нажмите Cmd/Ctrl+F, чтобы сразу загрузить все сообщения для поиска"
   },
+  "progressiveMessageList.workedFor": {
+    "defaultMessage": "Выполнено за {duration}"
+  },
+  "progressiveMessageList.working": {
+    "defaultMessage": "Выполняется…"
+  },
   "promptsSettings.allPromptsReset": {
     "defaultMessage": "Все промпты сброшены к значениям по умолчанию"
   },

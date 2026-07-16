@@ -2588,6 +2588,12 @@
   "progressiveMessageList.searchHint": {
     "defaultMessage": "खोज के लिए सभी संदेशों को तुरंत लोड करने के लिए Cmd/Ctrl+F दबाएँ"
   },
+  "progressiveMessageList.workedFor": {
+    "defaultMessage": "{duration} तक काम किया"
+  },
+  "progressiveMessageList.working": {
+    "defaultMessage": "काम जारी है…"
+  },
   "promptsSettings.allPromptsReset": {
     "defaultMessage": "सभी संकेत डिफ़ॉल्ट पर रीसेट हो गए"
   },

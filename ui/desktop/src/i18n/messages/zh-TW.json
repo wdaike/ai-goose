@@ -2588,6 +2588,12 @@
   "progressiveMessageList.searchHint": {
     "defaultMessage": "按 Cmd/Ctrl+F 立即載入所有訊息以進行搜尋"
   },
+  "progressiveMessageList.workedFor": {
+    "defaultMessage": "已處理 {duration}"
+  },
+  "progressiveMessageList.working": {
+    "defaultMessage": "正在處理…"
+  },
   "promptsSettings.allPromptsReset": {
     "defaultMessage": "所有提示已重設為預設值"
   },

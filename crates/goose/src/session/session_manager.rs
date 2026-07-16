@@ -1449,9 +1449,11 @@ impl SessionStorage {
                     .await?
                         > 0;
                     if !has_column {
-                        sqlx::query(&format!("ALTER TABLE sessions ADD COLUMN {column} INTEGER"))
-                            .execute(&mut **tx)
-                            .await?;
+                        sqlx::query(sqlx::AssertSqlSafe(format!(
+                            "ALTER TABLE sessions ADD COLUMN {column} INTEGER"
+                        )))
+                        .execute(&mut **tx)
+                        .await?;
                     }
                 }
             }
@@ -1588,10 +1590,11 @@ impl SessionStorage {
                 "SELECT COUNT(*), MAX({}) FROM messages WHERE session_id = ?",
                 normalized_message_timestamp_sql("created_timestamp")
             );
-            let (count, last_message_timestamp): (i64, Option<i64>) = sqlx::query_as(&sql)
-                .bind(&session.id)
-                .fetch_one(pool)
-                .await?;
+            let (count, last_message_timestamp): (i64, Option<i64>) =
+                sqlx::query_as(sqlx::AssertSqlSafe(sql))
+                    .bind(&session.id)
+                    .fetch_one(pool)
+                    .await?;
             session.message_count = count as usize;
             session.last_message_at =
                 last_message_timestamp.and_then(message_timestamp_to_datetime);
@@ -1652,7 +1655,7 @@ impl SessionStorage {
         query.push_str(", ");
         query.push_str("updated_at = datetime('now') WHERE id = ?");
 
-        let mut q = sqlx::query(&query);
+        let mut q = sqlx::query(sqlx::AssertSqlSafe(query));
 
         if let Some(name) = builder.name {
             q = q.bind(name);
@@ -1936,7 +1939,7 @@ impl SessionStorage {
             limit_clause
         );
 
-        let mut q = sqlx::query_as::<_, Session>(&sql);
+        let mut q = sqlx::query_as::<_, Session>(sqlx::AssertSqlSafe(sql));
         if let Some(types) = filters.types {
             for session_type in types {
                 q = q.bind(session_type.to_string());
@@ -2075,7 +2078,7 @@ impl SessionStorage {
         );
 
         let pool = self.pool().await?;
-        let mut q = sqlx::query_as::<_, (i64, Option<i64>)>(&query);
+        let mut q = sqlx::query_as::<_, (i64, Option<i64>)>(sqlx::AssertSqlSafe(query));
         for t in types {
             q = q.bind(t.to_string());
         }
@@ -3935,10 +3938,12 @@ mod tests {
             "accumulated_cache_read_tokens",
             "accumulated_cache_write_tokens",
         ] {
-            sqlx::query(&format!("ALTER TABLE sessions DROP COLUMN {column}"))
-                .execute(&pool)
-                .await
-                .unwrap();
+            sqlx::query(sqlx::AssertSqlSafe(format!(
+                "ALTER TABLE sessions DROP COLUMN {column}"
+            )))
+            .execute(&pool)
+            .await
+            .unwrap();
         }
         sqlx::query("UPDATE schema_version SET version = 13")
             .execute(&pool)

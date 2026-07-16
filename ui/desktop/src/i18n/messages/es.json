@@ -2588,6 +2588,12 @@
   "progressiveMessageList.searchHint": {
     "defaultMessage": "Pulsa Cmd/Ctrl+F para cargar todos los mensajes de inmediato y buscar"
   },
+  "progressiveMessageList.workedFor": {
+    "defaultMessage": "Trabajó durante {duration}"
+  },
+  "progressiveMessageList.working": {
+    "defaultMessage": "Trabajando…"
+  },
   "promptsSettings.allPromptsReset": {
     "defaultMessage": "Todos los prompts se restablecieron a sus valores por defecto"
   },

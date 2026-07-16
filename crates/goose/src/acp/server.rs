@@ -39,13 +39,14 @@ use crate::session::{
 use crate::source_roots::SourceRoot;
 use crate::utils::sanitize_unicode_tags;
 use agent_client_protocol::schema::v1::{
-    AgentCapabilities, Annotations, BlobResourceContents, CancelNotification, CloseSessionRequest,
-    CloseSessionResponse, ConfigOptionUpdate, Content, ContentBlock, ContentChunk, Cost,
-    CurrentModeUpdate, EmbeddedResource, EmbeddedResourceResource, FileSystemCapabilities,
-    ForkSessionRequest, ForkSessionResponse, ImageContent, Implementation, InitializeRequest,
-    InitializeResponse, ListSessionsRequest, ListSessionsResponse, LoadSessionRequest,
-    LoadSessionResponse, McpCapabilities, McpServer, Meta, NewSessionRequest, NewSessionResponse,
-    PermissionOption, PermissionOptionKind, PromptCapabilities, PromptRequest, PromptResponse,
+    AgentCapabilities, Annotations, AuthenticateRequest, AuthenticateResponse,
+    BlobResourceContents, CancelNotification, CloseSessionRequest, CloseSessionResponse,
+    ConfigOptionUpdate, Content, ContentBlock, ContentChunk, Cost, CurrentModeUpdate,
+    EmbeddedResource, EmbeddedResourceResource, FileSystemCapabilities, ForkSessionRequest,
+    ForkSessionResponse, ImageContent, Implementation, InitializeRequest, InitializeResponse,
+    ListSessionsRequest, ListSessionsResponse, LoadSessionRequest, LoadSessionResponse,
+    McpCapabilities, McpServer, Meta, NewSessionRequest, NewSessionResponse, PermissionOption,
+    PermissionOptionKind, PromptCapabilities, PromptRequest, PromptResponse,
     RequestPermissionOutcome, RequestPermissionRequest, ResourceLink, SessionCapabilities,
     SessionCloseCapabilities, SessionConfigOption, SessionId, SessionInfoUpdate,
     SessionListCapabilities, SessionNotification, SessionUpdate, SetSessionConfigOptionRequest,
@@ -624,6 +625,28 @@ fn tool_call_identity_meta(tool_request: &ToolRequest) -> Option<Meta> {
 
     let mut meta = serde_json::Map::new();
     meta.insert("goose".to_string(), serde_json::Value::Object(goose_meta));
+    Some(meta)
+}
+
+fn with_tool_chain_summary_meta(base: Option<Meta>, summary: &str, count: usize) -> Option<Meta> {
+    let mut meta = base.unwrap_or_default();
+    let goose_entry = meta
+        .entry("goose".to_string())
+        .or_insert_with(|| serde_json::Value::Object(serde_json::Map::new()));
+    let goose_obj = match goose_entry {
+        serde_json::Value::Object(obj) => obj,
+        other => {
+            *other = serde_json::Value::Object(serde_json::Map::new());
+            match other {
+                serde_json::Value::Object(obj) => obj,
+                _ => unreachable!(),
+            }
+        }
+    };
+    goose_obj.insert(
+        "toolChainSummary".to_string(),
+        serde_json::json!({ "summary": summary, "count": count }),
+    );
     Some(meta)
 }
 

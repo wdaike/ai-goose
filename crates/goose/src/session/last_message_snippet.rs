@@ -78,7 +78,7 @@ async fn recent_message_rows(
         .collect::<Vec<_>>()
         .join(" UNION ALL ");
 
-    let mut query = sqlx::query_as::<_, RecentMessageRow>(&sql);
+    let mut query = sqlx::query_as::<_, RecentMessageRow>(sqlx::AssertSqlSafe(sql));
     for session_id in session_ids {
         query = query
             .bind(session_id)

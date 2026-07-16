@@ -6,7 +6,7 @@ use std::sync::Arc;
 
 use anyhow::{anyhow, Context, Result};
 use futures::stream::BoxStream;
-use futures::{stream, Stream};
+use futures::{FutureExt, Stream, StreamExt};
 
 use super::container::Container;
 use super::final_output_tool::FinalOutputTool;
@@ -25,7 +25,7 @@ use crate::agents::types::{FrontendTool, SessionConfig, SharedProvider, ToolResu
 use crate::config::extensions::name_to_key;
 use crate::config::permission::PermissionManager;
 use crate::config::{get_enabled_extensions, Config, GooseMode};
-use crate::conversation::message::{Message, MessageContent, MessageUsage};
+use crate::conversation::message::{Message, MessageUsage};
 use crate::conversation::{fix_conversation, Conversation};
 use crate::mcp_utils::ToolResult;
 use crate::permission::permission_inspector::PermissionInspector;
@@ -49,7 +49,7 @@ use rmcp::model::{
 use serde_json::Value;
 use tokio::sync::{mpsc, Mutex};
 use tokio_util::sync::CancellationToken;
-use tracing::{debug, error, info, instrument, warn};
+use tracing::{debug, error, instrument};
 
 const DEFAULT_FRONTEND_INSTRUCTIONS: &str = "The following tools are provided directly by the frontend and will be executed by the frontend when called.";
 
