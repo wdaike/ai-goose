@@ -505,6 +505,7 @@ impl CodexRuntime {
             Arc::clone(&auth_manager),
             |config: &Config| Some(config.codex_home.clone()),
         );
+        codex_web_search_extension::install(&mut extensions, Arc::clone(&auth_manager));
         let thread_manager = ThreadManager::new(
             &config,
             Arc::clone(&auth_manager),

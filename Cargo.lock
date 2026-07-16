@@ -4030,6 +4030,26 @@ version = "0.144.4"
 source = "git+https://github.com/openai/codex?tag=rust-v0.144.4#8c68d4c87dc54d38861f5114e920c3de2efa5876"
 
 [[package]]
+name = "codex-web-search-extension"
+version = "0.144.4"
+source = "git+https://github.com/openai/codex?tag=rust-v0.144.4#8c68d4c87dc54d38861f5114e920c3de2efa5876"
+dependencies = [
+ "codex-api",
+ "codex-core",
+ "codex-extension-api",
+ "codex-extension-items",
+ "codex-login",
+ "codex-model-provider",
+ "codex-model-provider-info",
+ "codex-protocol",
+ "codex-tools",
+ "http 1.4.2",
+ "schemars 0.8.22",
+ "serde_json",
+ "url",
+]
+
+[[package]]
 name = "codex-websocket-client"
 version = "0.144.4"
 source = "git+https://github.com/openai/codex?tag=rust-v0.144.4#8c68d4c87dc54d38861f5114e920c3de2efa5876"
@@ -7462,6 +7482,7 @@ dependencies = [
  "chrono",
  "clap",
  "codex-core-api",
+ "codex-web-search-extension",
  "ctor 0.2.9",
  "dirs",
  "dotenvy",
