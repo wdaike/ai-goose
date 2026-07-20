@@ -5,7 +5,6 @@ pub(super) use crate::acp::response_builder::{
     build_session_info, build_session_setup_config, send_session_setup_notifications, session_meta,
     session_provider_selection, session_response_meta,
 };
-use crate::acp::tools::AcpAwareToolMeta;
 use crate::acp::{PermissionDecision, ACP_CURRENT_MODEL};
 use crate::agents::extension::{Envs, PLATFORM_EXTENSIONS};
 use crate::agents::extension_manager::TRUSTED_TOOL_UPDATE_META_KEY;
@@ -1253,24 +1252,18 @@ impl GooseAcpAgent {
         if let Some(raw_output) = extract_tool_raw_output(&tool_response.tool_result) {
             fields = fields.raw_output(raw_output);
         }
-        if !tool_response
-            .tool_result
-            .as_ref()
-            .is_ok_and(|r| r.is_acp_aware())
-        {
-            let content = build_tool_call_content(&tool_response.tool_result);
-            fields = fields.content(content);
+        let content = build_tool_call_content(&tool_response.tool_result);
+        fields = fields.content(content);
 
-            let locations = extract_locations_from_meta(tool_response).unwrap_or_else(|| {
-                if let Some(tool_request) = session.tool_requests.get(&tool_response.id) {
-                    extract_tool_locations(tool_request, tool_response)
-                } else {
-                    Vec::new()
-                }
-            });
-            if !locations.is_empty() {
-                fields = fields.locations(locations);
+        let locations = extract_locations_from_meta(tool_response).unwrap_or_else(|| {
+            if let Some(tool_request) = session.tool_requests.get(&tool_response.id) {
+                extract_tool_locations(tool_request, tool_response)
+            } else {
+                Vec::new()
             }
+        });
+        if !locations.is_empty() {
+            fields = fields.locations(locations);
         }
 
         let update = ToolCallUpdate::new(ToolCallId::new(tool_response.id.clone()), fields)
@@ -1448,23 +1441,6 @@ fn send_status_message_update(
                 update: GooseSessionUpdate::StatusMessage(StatusMessageUpdate { status }),
             })?;
         }
-    }
-    Ok(())
-}
-
-fn send_progress_message_update(
-    cx: &ConnectionTo<Client>,
-    supports_goose_custom_notifications: bool,
-    session_id: &str,
-    message: String,
-) -> Result<(), agent_client_protocol::Error> {
-    if supports_goose_custom_notifications {
-        cx.send_notification(GooseSessionNotification {
-            session_id: session_id.to_string(),
-            update: GooseSessionUpdate::StatusMessage(StatusMessageUpdate {
-                status: StatusMessage::Progress { message },
-            }),
-        })?;
     }
     Ok(())
 }
@@ -1772,14 +1748,6 @@ impl GooseAcpAgent {
 
             active_prompt_runs.remove(session_id);
         }
-
-        let agent = {
-            let sessions = self.sessions.lock().await;
-            sessions
-                .get(session_id)
-                .map(|session| session.agent.clone())
-        };
-        if let Some(agent) = agent {}
 
         if self.closed_session_ids.lock().await.contains(session_id) {
             self.sessions.lock().await.remove(session_id);

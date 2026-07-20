@@ -240,11 +240,6 @@ impl HookManager {
         Self::from_plugins(plugins, use_login_shell_path)
     }
 
-    #[cfg(test)]
-    pub(crate) fn from_plugins_for_test(plugins: Vec<DiscoveredPlugin>) -> Self {
-        Self::from_plugins(plugins, false)
-    }
-
     fn from_plugins(plugins: Vec<DiscoveredPlugin>, use_login_shell_path: bool) -> Self {
         let mut rules: HashMap<HookEvent, Vec<LoadedRule>> = HashMap::new();
         let mut total = 0usize;

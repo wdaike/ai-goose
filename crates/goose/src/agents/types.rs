@@ -1,22 +1,11 @@
-use crate::mcp_utils::ToolResult;
 use crate::providers::base::Provider;
-use rmcp::model::{CallToolResult, Tool};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
-use tokio::sync::{mpsc, Mutex};
+use tokio::sync::Mutex;
 use utoipa::ToSchema;
-
-/// Type alias for the tool result channel receiver
-pub type ToolResultReceiver = Arc<Mutex<mpsc::Receiver<(String, ToolResult<CallToolResult>)>>>;
 
 // We use double Arc here to allow easy provider swaps while sharing concurrent access
 pub type SharedProvider = Arc<Mutex<Option<Arc<dyn Provider>>>>;
-
-/// Default timeout for retry operations (5 minutes)
-pub const DEFAULT_RETRY_TIMEOUT_SECONDS: u64 = 300;
-
-/// Default timeout for on_failure operations (10 minutes - longer for on_failure tasks)
-pub const DEFAULT_ON_FAILURE_TIMEOUT_SECONDS: u64 = 600;
 
 /// Configuration for retry logic in recipe execution
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
@@ -71,13 +60,6 @@ pub enum SuccessCheck {
         /// The shell command to execute
         command: String,
     },
-}
-
-/// A frontend tool that will be executed by the frontend rather than an extension
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FrontendTool {
-    pub name: String,
-    pub tool: Tool,
 }
 
 /// Session configuration for an agent

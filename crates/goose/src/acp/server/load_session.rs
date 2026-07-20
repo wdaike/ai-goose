@@ -110,27 +110,20 @@ fn replay_conversation_to_client(
                     if let Some(raw_output) = extract_tool_raw_output(&tool_response.tool_result) {
                         fields = fields.raw_output(raw_output);
                     }
-                    if !tool_response
-                        .tool_result
-                        .as_ref()
-                        .is_ok_and(|r| r.is_acp_aware())
-                    {
-                        let content = build_tool_call_content(&tool_response.tool_result);
-                        fields = fields.content(content);
+                    let content = build_tool_call_content(&tool_response.tool_result);
+                    fields = fields.content(content);
 
-                        let locations =
-                            extract_locations_from_meta(tool_response).unwrap_or_else(|| {
-                                if let Some(tool_request) =
-                                    replay_tool_requests.get(&tool_response.id)
-                                {
-                                    extract_tool_locations(tool_request, tool_response)
-                                } else {
-                                    Vec::new()
-                                }
-                            });
-                        if !locations.is_empty() {
-                            fields = fields.locations(locations);
-                        }
+                    let locations =
+                        extract_locations_from_meta(tool_response).unwrap_or_else(|| {
+                            if let Some(tool_request) = replay_tool_requests.get(&tool_response.id)
+                            {
+                                extract_tool_locations(tool_request, tool_response)
+                            } else {
+                                Vec::new()
+                            }
+                        });
+                    if !locations.is_empty() {
+                        fields = fields.locations(locations);
                     }
 
                     let update =

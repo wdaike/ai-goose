@@ -128,18 +128,16 @@ impl Agent {
 }
 
 pub fn is_tool_visible_to_app(tool: &Tool) -> bool {
-    visibility(tool).is_none_or(|visibility| visibility.iter().any(|value| *value == "app"))
+    visibility(tool).is_none_or(|visibility| visibility.contains(&"app"))
 }
 
 pub fn is_tool_visible_to_model(tool: &Tool) -> bool {
-    visibility(tool).is_none_or(|visibility| visibility.iter().any(|value| *value == "model"))
+    visibility(tool).is_none_or(|visibility| visibility.contains(&"model"))
 }
 
 fn visibility(tool: &Tool) -> Option<Vec<&str>> {
     let visibility = tool.meta.as_ref()?.0.get("ui")?.get("visibility")?;
-    let Some(values) = visibility.as_array() else {
-        return None;
-    };
+    let values = visibility.as_array()?;
     Some(values.iter().filter_map(Value::as_str).collect())
 }
 

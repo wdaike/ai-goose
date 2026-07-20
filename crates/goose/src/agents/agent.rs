@@ -1,12 +1,10 @@
 use std::collections::HashMap;
 use std::fmt;
-use std::future::Future;
-use std::pin::Pin;
 use std::sync::Arc;
 
 use anyhow::{anyhow, Context, Result};
 use futures::stream::BoxStream;
-use futures::{FutureExt, Stream, StreamExt};
+use futures::FutureExt;
 
 use super::container::Container;
 use super::final_output_tool::FinalOutputTool;
@@ -21,25 +19,17 @@ use crate::agents::extension_manager::{
 use crate::agents::final_output_tool::FINAL_OUTPUT_TOOL_NAME;
 use crate::agents::platform_tools::PLATFORM_MANAGE_SCHEDULE_TOOL_NAME;
 use crate::agents::prompt_manager::PromptManager;
-use crate::agents::types::{FrontendTool, SessionConfig, SharedProvider, ToolResultReceiver};
-use crate::config::extensions::name_to_key;
+use crate::agents::types::{SessionConfig, SharedProvider};
 use crate::config::permission::PermissionManager;
 use crate::config::{get_enabled_extensions, Config, GooseMode};
 use crate::conversation::message::{Message, MessageUsage};
 use crate::conversation::{fix_conversation, Conversation};
-use crate::mcp_utils::ToolResult;
-use crate::permission::permission_inspector::PermissionInspector;
 use crate::permission::PermissionConfirmation;
 use crate::providers::base::{PermissionRouting, Provider};
 use crate::recipe::{Author, Recipe, Response, Settings};
 use crate::scheduler_trait::SchedulerTrait;
-use crate::security::adversary_inspector::AdversaryInspector;
-use crate::security::egress_inspector::EgressInspector;
-use crate::security::security_inspector::SecurityInspector;
 use crate::session::extension_data::{EnabledExtensionsState, ExtensionState};
 use crate::session::{Session, SessionManager, SessionNameUpdate};
-use crate::tool_inspection::ToolInspectionManager;
-use crate::tool_monitor::RepetitionInspector;
 use goose_providers::thinking::ThinkingEffort;
 use regex::Regex;
 use rmcp::model::{
@@ -50,8 +40,6 @@ use serde_json::Value;
 use tokio::sync::{mpsc, Mutex};
 use tokio_util::sync::CancellationToken;
 use tracing::{debug, error, instrument};
-
-const DEFAULT_FRONTEND_INSTRUCTIONS: &str = "The following tools are provided directly by the frontend and will be executed by the frontend when called.";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum ToolCategory {
@@ -179,15 +167,8 @@ pub struct Agent {
 
     pub extension_manager: Arc<ExtensionManager>,
     pub(super) final_output_tool: Arc<Mutex<Option<FinalOutputTool>>>,
-    pub(super) frontend_extensions: Mutex<HashMap<String, ExtensionConfig>>,
-    pub(super) frontend_tools: Mutex<HashMap<String, FrontendTool>>,
-    pub(super) frontend_instructions: Mutex<Option<String>>,
     pub(super) prompt_manager: Mutex<PromptManager>,
     pub tool_confirmation_router: ToolConfirmationRouter,
-    pub(super) tool_result_tx: mpsc::Sender<(String, ToolResult<CallToolResult>)>,
-    pub(super) tool_result_rx: ToolResultReceiver,
-
-    pub(super) tool_inspection_manager: ToolInspectionManager,
     pub(super) hook_manager: crate::hooks::HookManager,
     container: Mutex<Option<Container>>,
     goal: Mutex<Option<String>>,
@@ -212,47 +193,6 @@ impl Default for Agent {
     }
 }
 
-pub enum ToolStreamItem<T> {
-    ActionRequired(Message),
-    Message(ServerNotification),
-    Result(T),
-}
-
-pub type ToolStream =
-    Pin<Box<dyn Stream<Item = ToolStreamItem<ToolResult<CallToolResult>>> + Send>>;
-
-// tool_stream combines a stream of ServerNotifications with a future representing the
-// final result of the tool call. MCP notifications are not request-scoped, but
-// this lets us capture all notifications emitted during the tool call for
-// simpler consumption
-pub fn tool_stream<S, A, F>(rx: S, action_required_rx: A, done: F) -> ToolStream
-where
-    S: Stream<Item = ServerNotification> + Send + Unpin + 'static,
-    A: Stream<Item = Message> + Send + Unpin + 'static,
-    F: Future<Output = ToolResult<CallToolResult>> + Send + 'static,
-{
-    Box::pin(async_stream::stream! {
-        tokio::pin!(done);
-        let mut rx = rx;
-        let mut action_required_rx = action_required_rx;
-
-        loop {
-            tokio::select! {
-                Some(msg) = action_required_rx.next() => {
-                    yield ToolStreamItem::ActionRequired(msg);
-                }
-                Some(msg) = rx.next() => {
-                    yield ToolStreamItem::Message(msg);
-                }
-                r = &mut done => {
-                    yield ToolStreamItem::Result(r);
-                    break;
-                }
-            }
-        }
-    })
-}
-
 impl Agent {
     pub fn new() -> Self {
         let config = Config::global();
@@ -267,7 +207,6 @@ impl Agent {
     }
 
     pub fn with_config(config: AgentConfig) -> Self {
-        let (tool_tx, tool_rx) = mpsc::channel(32);
         let provider = Arc::new(Mutex::new(None));
 
         let goose_platform = config.goose_platform.clone();
@@ -290,8 +229,6 @@ impl Agent {
             .and_then(|host_info| host_info.client_name.clone())
             .unwrap_or_else(|| goose_platform.to_string());
         let session_manager = Arc::clone(&config.session_manager);
-        let inspection_session_manager = Arc::clone(&config.session_manager);
-        let permission_manager = Arc::clone(&config.permission_manager);
         let codex_runtime = Arc::clone(&config.codex_runtime);
         let use_login_shell_path = config.resolve_use_login_shell_path();
         Self {
@@ -307,18 +244,8 @@ impl Agent {
                 use_login_shell_path,
             )),
             final_output_tool: Arc::new(Mutex::new(None)),
-            frontend_extensions: Mutex::new(HashMap::new()),
-            frontend_tools: Mutex::new(HashMap::new()),
-            frontend_instructions: Mutex::new(None),
             prompt_manager: Mutex::new(PromptManager::new()),
             tool_confirmation_router: ToolConfirmationRouter::new(),
-            tool_result_tx: tool_tx,
-            tool_result_rx: Arc::new(Mutex::new(tool_rx)),
-            tool_inspection_manager: Self::create_tool_inspection_manager(
-                permission_manager,
-                provider.clone(),
-                inspection_session_manager,
-            ),
             hook_manager: crate::hooks::HookManager::load(
                 std::env::current_dir().ok().as_deref(),
                 use_login_shell_path,
@@ -486,37 +413,6 @@ impl Agent {
         }
     }
 
-    /// Create a tool inspection manager with default inspectors
-    fn create_tool_inspection_manager(
-        permission_manager: Arc<PermissionManager>,
-        provider: SharedProvider,
-        session_manager: Arc<SessionManager>,
-    ) -> ToolInspectionManager {
-        let mut tool_inspection_manager = ToolInspectionManager::new();
-
-        // Add security inspector (highest priority - runs first)
-        tool_inspection_manager.add_inspector(Box::new(SecurityInspector::new()));
-        tool_inspection_manager.add_inspector(Box::new(EgressInspector::new()));
-
-        // Add adversary inspector (LLM-based review, enabled by ~/.config/goose/adversary.md)
-        tool_inspection_manager.add_inspector(Box::new(AdversaryInspector::new(
-            provider.clone(),
-            session_manager.clone(),
-        )));
-
-        // Add permission inspector (medium-high priority)
-        tool_inspection_manager.add_inspector(Box::new(PermissionInspector::new(
-            permission_manager,
-            provider,
-            session_manager,
-        )));
-
-        // Add repetition inspector (lower priority - basic repetition checking)
-        tool_inspection_manager.add_inspector(Box::new(RepetitionInspector::new(None)));
-
-        tool_inspection_manager
-    }
-
     /// Reset the retry attempts counter to 0
     pub async fn provider(&self) -> Result<Arc<dyn Provider>, anyhow::Error> {
         match &*self.provider.lock().await {
@@ -566,119 +462,10 @@ impl Agent {
         self.container.lock().await.clone()
     }
 
-    /// Check if a tool is a frontend tool
-    pub async fn is_frontend_tool(&self, name: &str) -> bool {
-        self.frontend_tools.lock().await.contains_key(name)
-    }
-
-    /// Get a reference to a frontend tool
-    pub async fn get_frontend_tool(&self, name: &str) -> Option<FrontendTool> {
-        self.frontend_tools.lock().await.get(name).cloned()
-    }
-
-    async fn frontend_extension_configs(&self) -> Vec<ExtensionConfig> {
-        let mut configs = self
-            .frontend_extensions
-            .lock()
-            .await
-            .values()
-            .cloned()
-            .collect::<Vec<_>>();
-        configs.sort_by_key(|config| config.key());
-        configs
-    }
-
-    async fn frontend_tools_for_extension(&self, extension_name: Option<&str>) -> Vec<Tool> {
-        let requested_extension = extension_name.map(name_to_key);
-
-        self.frontend_extension_configs()
-            .await
-            .into_iter()
-            .filter_map(|config| {
-                let include = requested_extension
-                    .as_ref()
-                    .is_none_or(|name| *name == config.key());
-
-                match config {
-                    ExtensionConfig::Frontend { tools, .. } if include => Some(tools),
-                    _ => None,
-                }
-            })
-            .flatten()
-            .collect()
-    }
-
-    async fn rebuild_frontend_derived_state(&self, extensions: &HashMap<String, ExtensionConfig>) {
-        let multiple = extensions.len() > 1;
-        let mut tools = HashMap::new();
-        let mut instructions = Vec::new();
-
-        for config in extensions.values() {
-            if let ExtensionConfig::Frontend {
-                name,
-                tools: ext_tools,
-                instructions: ext_instructions,
-                ..
-            } = config
-            {
-                for tool in ext_tools {
-                    let tool_name = tool.name.to_string();
-                    tools.insert(
-                        tool_name.clone(),
-                        FrontendTool {
-                            name: tool_name,
-                            tool: tool.clone(),
-                        },
-                    );
-                }
-
-                let text = ext_instructions
-                    .clone()
-                    .unwrap_or_else(|| DEFAULT_FRONTEND_INSTRUCTIONS.to_string());
-                instructions.push(if multiple {
-                    format!("{name}: {text}")
-                } else {
-                    text
-                });
-            }
-        }
-
-        *self.frontend_tools.lock().await = tools;
-        *self.frontend_instructions.lock().await = if instructions.is_empty() {
-            None
-        } else {
-            Some(instructions.join("\n\n"))
-        };
-    }
-
-    async fn insert_frontend_extension(&self, extension: ExtensionConfig) {
-        let mut extensions = self.frontend_extensions.lock().await;
-        extensions.insert(extension.key(), extension);
-        self.rebuild_frontend_derived_state(&extensions).await;
-    }
-
-    async fn remove_frontend_extension(&self, name: &str) {
-        let mut extensions = self.frontend_extensions.lock().await;
-        extensions.remove(&name_to_key(name));
-        self.rebuild_frontend_derived_state(&extensions).await;
-    }
-
-    async fn extension_configs_for_persistence(&self) -> Vec<ExtensionConfig> {
-        let mut extension_configs = self.extension_manager.get_extension_configs().await;
-        extension_configs.extend(self.frontend_extension_configs().await);
-        extension_configs
-    }
-
     pub(crate) async fn total_extension_and_tool_counts(&self, session_id: &str) -> (usize, usize) {
-        let (extension_count, tool_count) = self
-            .extension_manager
+        self.extension_manager
             .get_extension_and_tool_counts(session_id)
-            .await;
-
-        (
-            extension_count + self.frontend_extensions.lock().await.len(),
-            tool_count + self.frontend_tools.lock().await.len(),
-        )
+            .await
     }
 
     pub async fn add_final_output_tool(&self, response: Response) {
@@ -808,22 +595,15 @@ impl Agent {
         );
 
         debug!("WAITING_TOOL_START: {}", tool_call.name);
-        let result: ToolCallResult = if self.is_frontend_tool(&tool_call.name).await {
-            ToolCallResult::from(Err(ErrorData::new(
-                ErrorCode::INTERNAL_ERROR,
-                "Frontend tool execution required".to_string(),
-                None,
-            )))
-        } else {
-            let result = self
-                .extension_manager
-                .dispatch_tool_call(
-                    &ctx,
-                    tool_call.clone(),
-                    cancellation_token.unwrap_or_default(),
-                )
-                .await;
-            result.unwrap_or_else(|e| {
+        let result: ToolCallResult = self
+            .extension_manager
+            .dispatch_tool_call(
+                &ctx,
+                tool_call.clone(),
+                cancellation_token.unwrap_or_default(),
+            )
+            .await
+            .unwrap_or_else(|e| {
                 #[cfg(feature = "telemetry")]
                 crate::posthog::emit_error(
                     "tool_execution_failed",
@@ -833,8 +613,7 @@ impl Agent {
                     ErrorData::new(ErrorCode::INTERNAL_ERROR, e.to_string(), None)
                 });
                 ToolCallResult::from(Err(error_data))
-            })
-        };
+            });
 
         debug!("WAITING_TOOL_END: {}", tool_call.name);
 
@@ -927,11 +706,6 @@ impl Agent {
             .await
             .unwrap_or_default();
 
-        prefixed_tools.extend(
-            self.frontend_tools_for_extension(extension_name.as_deref())
-                .await,
-        );
-
         if (extension_name.is_none() || extension_name.as_deref() == Some("platform"))
             && self.config.scheduler_service.is_some()
         {
@@ -970,22 +744,14 @@ impl Agent {
     }
 
     pub async fn list_extensions(&self) -> Vec<String> {
-        let mut extensions = self
-            .extension_manager
+        self.extension_manager
             .list_extensions()
             .await
-            .expect("Failed to list extensions");
-        extensions.extend(
-            self.frontend_extension_configs()
-                .await
-                .into_iter()
-                .map(|config| config.name()),
-        );
-        extensions
+            .expect("Failed to list extensions")
     }
 
     pub async fn get_extension_configs(&self) -> Vec<ExtensionConfig> {
-        self.extension_configs_for_persistence().await
+        self.extension_manager.get_extension_configs().await
     }
 
     /// Handle a confirmation response for a tool request
@@ -1259,12 +1025,6 @@ impl Agent {
         Ok(plan_prompt)
     }
 
-    pub async fn handle_tool_result(&self, id: String, result: ToolResult<CallToolResult>) {
-        if let Err(e) = self.tool_result_tx.send((id, result)).await {
-            error!("Failed to send tool result: {}", e);
-        }
-    }
-
     pub async fn create_recipe(
         &self,
         session_id: &str,
@@ -1293,7 +1053,6 @@ impl Agent {
         let system_prompt = prompt_manager
             .builder()
             .with_extensions(extensions_info.into_iter())
-            .with_frontend_instructions(self.frontend_instructions.lock().await.clone())
             .with_extension_and_tool_counts(extension_count, tool_count)
             .with_goose_mode(goose_mode)
             .build();
@@ -1657,33 +1416,6 @@ mod tests {
             .as_ref()
             .and_then(|tool| tool.response.json_schema.as_ref())
             .is_some());
-        Ok(())
-    }
-
-    #[tokio::test]
-    async fn test_tool_inspection_manager_has_all_inspectors() -> Result<()> {
-        let agent = Agent::new();
-
-        // Verify that the tool inspection manager has all expected inspectors
-        let inspector_names = agent.tool_inspection_manager.inspector_names();
-
-        assert!(
-            inspector_names.contains(&"repetition"),
-            "Tool inspection manager should contain repetition inspector"
-        );
-        assert!(
-            inspector_names.contains(&"permission"),
-            "Tool inspection manager should contain permission inspector"
-        );
-        assert!(
-            inspector_names.contains(&"security"),
-            "Tool inspection manager should contain security inspector"
-        );
-        assert!(
-            inspector_names.contains(&"adversary"),
-            "Tool inspection manager should contain adversary inspector"
-        );
-
         Ok(())
     }
 

@@ -76,6 +76,7 @@ struct CodexSessionState {
 }
 
 #[derive(Clone)]
+#[allow(clippy::large_enum_variant)]
 enum CodexRuntimeEvent {
     Notification(ServerNotification),
     TransportError(String),
@@ -140,6 +141,7 @@ impl CodexAgentCore {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub(crate) async fn reply(
         &self,
         session_manager: Arc<SessionManager>,

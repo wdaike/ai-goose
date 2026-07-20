@@ -207,12 +207,6 @@ pub(super) async fn build_provider_options(
         .collect()
 }
 
-pub(super) fn should_refresh_inventory_for_session_init(entry: &ProviderInventoryEntry) -> bool {
-    entry.configured
-        && entry.supports_refresh
-        && (entry.last_updated_at.is_none() || ProviderInventoryService::is_stale(entry))
-}
-
 pub(super) fn build_mode_state(
     current_mode: GooseMode,
 ) -> Result<SessionModeState, agent_client_protocol::Error> {
