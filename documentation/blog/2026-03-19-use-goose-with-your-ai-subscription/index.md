@@ -41,11 +41,11 @@ goose passes your MCP extensions through to Claude via ACP, so any custom MCP se
 
 ## ChatGPT — sign in with your account
 
-If you have ChatGPT Plus or Pro, the `chatgpt_codex` provider lets you use goose with your existing account. Just pick ChatGPT when you are setting up the goose app for the first time (or changing to that provider)
+If you have ChatGPT Plus or Pro, goose's native Codex runtime lets you use your existing account. Pick OpenAI Codex when setting up goose.
 
-The first time you run it, goose will open a browser window for you to sign in with your ChatGPT account. After that, your session is cached locally.
+Codex handles authentication and session state directly.
 
-The recommended model is `gpt-5.3-codex`, which is the default. You can also select `gpt-5.4` (OpenAI's latest omni model) or `gpt-5.2-codex` from the model picker.
+Models are discovered and managed by Codex.
 
 ## Gemini — via OAuth
 
@@ -55,14 +55,14 @@ The first time you run it, goose will open a browser window for you to sign in w
 
 ## What about the old CLI providers?
 
-Goose previously supported `claude-code`, `codex`, and `gemini-cli` as "pass-through" CLI providers. These will be removed soon as ACP is the future! 
+Goose previously supported several pass-through CLI providers. Codex now runs through the native embedded App Server instead.
 
 ## Quick reference
 
 | Subscription | Provider | Install | Extensions |
 |---|---|---|---|
 | Claude Code | `claude-acp` | `npm install -g @zed-industries/claude-agent-acp` | ✅ via MCP |
-| ChatGPT Plus/Pro | `chatgpt_codex` | Nothing — OAuth sign-in | ✅ via MCP |
+| ChatGPT Plus/Pro | `codex` | Built into goose | ✅ native |
 | Gemini | `gemini_oauth` | Nothing — OAuth sign-in | ✅ native |
 
 Pick the one that matches what you're already paying for, and you're good to go.

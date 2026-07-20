@@ -115,12 +115,6 @@ const PROVIDER_CACHE_SECRET_DEFINITIONS: &[ProviderCacheSecretDefinition] = &[
         is_directory: false,
     },
     ProviderCacheSecretDefinition {
-        provider: "chatgpt_codex",
-        name: "OAuth token",
-        path: "chatgpt_codex/tokens.json",
-        is_directory: false,
-    },
-    ProviderCacheSecretDefinition {
         provider: "kimi_code",
         name: "OAuth token",
         path: "kimicode/token.json",

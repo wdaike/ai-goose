@@ -141,13 +141,6 @@ function getProviders(): ProviderConfig[] {
         hasFile(path.join(os.homedir(), '.config/goose/github_copilot_token.json')),
     },
     {
-      provider: 'chatgpt_codex',
-      models: ['gpt-5.4'],
-      available: () =>
-        hasEnv('CHATGPT_CODEX_TOKEN') ||
-        hasFile(path.join(os.homedir(), '.config/goose/chatgpt_codex/tokens.json')),
-    },
-    {
       provider: 'claude-code',
       models: ['default'],
       agentic: true,

@@ -12,11 +12,9 @@ use super::{
     avian::AvianProvider,
     azure::AzureProvider,
     base::{Provider, ProviderMetadata},
-    chatgpt_codex::ChatGptCodexProvider,
     claude_acp::ClaudeAcpProvider,
     claude_code::ClaudeCodeProvider,
     codex::CodexProvider,
-    codex_acp::CodexAcpProvider,
     copilot_acp::CopilotAcpProvider,
     cursor_agent::CursorAgentProvider,
     gcpvertexai::GcpVertexAIProvider,
@@ -73,19 +71,11 @@ async fn init_registry() -> RwLock<ProviderRegistry> {
         registry.register::<BedrockProvider>(false);
         #[cfg(feature = "local-inference")]
         registry.register::<LocalInferenceProvider>(false);
-        registry.register_with_inventory::<ChatGptCodexProvider>(
-            true,
-            Some(registrations::chatgpt_codex_inventory()),
-        );
         registry.register_with_inventory::<ClaudeAcpProvider>(
             false,
             Some(registrations::claude_acp_inventory()),
         );
         registry.register::<ClaudeCodeProvider>(true);
-        registry.register_with_inventory::<CodexAcpProvider>(
-            false,
-            Some(registrations::codex_acp_inventory()),
-        );
         registry.register_with_inventory::<CopilotAcpProvider>(
             false,
             Some(registrations::copilot_acp_inventory()),
@@ -157,10 +147,6 @@ async fn init_registry() -> RwLock<ProviderRegistry> {
     registry.set_cleanup(
         "kimi_code",
         Arc::new(|| Box::pin(KimiCodeProvider::cleanup())),
-    );
-    registry.set_cleanup(
-        "chatgpt_codex",
-        Arc::new(|| Box::pin(ChatGptCodexProvider::cleanup())),
     );
     registry.set_cleanup(
         "gemini_oauth",

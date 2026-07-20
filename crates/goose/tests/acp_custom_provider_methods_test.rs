@@ -88,7 +88,7 @@ fn acp_catalog_and_custom_provider_methods_use_core_provider_store() {
             "anthropic",
             "openai",
             "claude-acp",
-            "codex-acp",
+            "codex",
             "copilot-acp",
             "amp-acp",
             "cursor-agent",
@@ -102,7 +102,7 @@ fn acp_catalog_and_custom_provider_methods_use_core_provider_store() {
                 "setup catalog should include {provider_id}"
             );
         }
-        for provider_id in ["codex", "claude_code", "gemini_cli"] {
+        for provider_id in ["codex-acp", "claude_code", "gemini_cli"] {
             assert!(
                 setup_providers
                     .iter()
@@ -113,27 +113,21 @@ fn acp_catalog_and_custom_provider_methods_use_core_provider_store() {
         }
         let codex_setup = setup_providers
             .iter()
-            .find(|provider| provider.get("providerId") == Some(&serde_json::json!("codex-acp")))
-            .expect("setup catalog should include codex-acp");
+            .find(|provider| provider.get("providerId") == Some(&serde_json::json!("codex")))
+            .expect("setup catalog should include codex");
         assert_eq!(
             codex_setup.get("category"),
             Some(&serde_json::json!("agent"))
         );
         assert_eq!(
             codex_setup.get("setupMethod"),
-            Some(&serde_json::json!("cli_auth"))
+            Some(&serde_json::json!("none"))
         );
         assert_eq!(
             codex_setup.get("supportsInstall"),
-            Some(&serde_json::json!(true))
+            Some(&serde_json::json!(false))
         );
-        assert!(
-            codex_setup
-                .get("aliases")
-                .and_then(|aliases| aliases.as_array())
-                .is_some_and(|aliases| aliases.contains(&serde_json::json!("codex"))),
-            "codex-acp setup aliases should include codex"
-        );
+        assert_eq!(codex_setup.get("aliases"), Some(&serde_json::json!([])));
 
         let template = send_custom(
             conn.cx(),

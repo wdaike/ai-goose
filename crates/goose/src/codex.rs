@@ -1,23 +1,33 @@
 use std::collections::HashMap;
 use std::future::Future;
-use std::path::PathBuf;
+use std::sync::atomic::{AtomicI64, Ordering};
 use std::sync::{Arc, OnceLock};
 
 use anyhow::{anyhow, Result};
-use codex_core_api::{
-    init_state_db, install_image_generation_extension, local_agent_graph_store_from_state_db,
-    resolve_installation_id, set_default_originator, thread_store_from_config, AbsolutePathBuf,
-    Arg0DispatchPaths, AskForApproval, AuthManager, CodexHomeUserInstructionsProvider, CodexThread,
-    Config, Constrained, EnvironmentManager, EventMsg, ExecServerRuntimePaths,
-    ExtensionRegistryBuilder, NewThread, Op, PermissionProfile, Permissions, SessionSource,
-    ThreadId, ThreadManager, UserInput,
+use codex_app_server_client::{
+    EnvironmentManager, ExecServerRuntimePaths, InProcessAppServerClient,
+    InProcessAppServerRequestHandle, InProcessClientStartArgs, InProcessServerEvent,
+    DEFAULT_IN_PROCESS_CHANNEL_CAPACITY,
 };
-use codex_protocol::parse_command::ParsedCommand;
+use codex_app_server_protocol::{
+    AskForApproval, ClientRequest, CommandAction, CommandExecutionStatus,
+    ConfigWarningNotification, JSONRPCErrorError, PatchApplyStatus, RequestId, SandboxMode,
+    ServerNotification, ThreadItem, ThreadResumeParams, ThreadResumeResponse, ThreadStartParams,
+    ThreadStartResponse, ThreadUnsubscribeParams, ThreadUnsubscribeResponse, TurnInterruptParams,
+    TurnInterruptResponse, TurnStartParams, TurnStartResponse, TurnStatus, TurnSteerParams,
+    TurnSteerResponse, UserInput,
+};
+use codex_config::{CloudConfigBundleLoader, LoaderOverrides};
+use codex_core_api::{
+    init_state_db, set_default_originator, AbsolutePathBuf, Arg0DispatchPaths, Config,
+    SessionSource,
+};
+use codex_feedback::CodexFeedback;
 use futures::stream::BoxStream;
 use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
 use rmcp::model::{CallToolRequestParams, CallToolResult, Content};
 use serde::{Deserialize, Serialize};
-use tokio::sync::{Mutex, OnceCell};
+use tokio::sync::{broadcast, Mutex, OnceCell};
 use tokio_util::sync::CancellationToken;
 use toml::Value as TomlValue;
 
@@ -31,6 +41,11 @@ use crate::session::extension_data::{EnabledExtensionsState, ExtensionState};
 use crate::session::{Session, SessionManager};
 
 static RUNTIME_PATHS: OnceLock<Arg0DispatchPaths> = OnceLock::new();
+static NEXT_REQUEST_ID: AtomicI64 = AtomicI64::new(1);
+
+fn next_request_id() -> RequestId {
+    RequestId::Integer(NEXT_REQUEST_ID.fetch_add(1, Ordering::Relaxed))
+}
 
 pub fn run<F, Fut>(main_fn: F) -> Result<()>
 where
@@ -50,15 +65,20 @@ pub(crate) struct CodexAgentCore {
 
 #[derive(Clone)]
 struct ActiveThread {
-    thread: Arc<CodexThread>,
+    thread_id: String,
     model: String,
+    active_turn_id: Arc<Mutex<Option<String>>>,
 }
 
 #[derive(Clone, Deserialize, Serialize)]
 struct CodexSessionState {
     thread_id: String,
-    model: String,
-    rollout_path: PathBuf,
+}
+
+#[derive(Clone)]
+enum CodexRuntimeEvent {
+    Notification(ServerNotification),
+    TransportError(String),
 }
 
 impl ExtensionState for CodexSessionState {
@@ -79,33 +99,44 @@ impl CodexAgentCore {
         let Some(active_thread) = active_thread else {
             return Ok(false);
         };
+        let Some(expected_turn_id) = active_thread.active_turn_id.lock().await.clone() else {
+            return Ok(false);
+        };
+        let Some(runtime) = self.runtime.get() else {
+            return Ok(false);
+        };
 
-        active_thread
-            .thread
-            .steer_input(
-                message_to_codex_input(message),
-                Default::default(),
-                None,
-                message.id.clone(),
-                None,
-            )
+        runtime
+            .request
+            .request_typed::<TurnSteerResponse>(ClientRequest::TurnSteer {
+                request_id: next_request_id(),
+                params: TurnSteerParams {
+                    thread_id: active_thread.thread_id,
+                    client_user_message_id: message.id.clone(),
+                    input: message_to_codex_input(message),
+                    expected_turn_id,
+                    ..Default::default()
+                },
+            })
             .await
-            .map_err(|error| anyhow!("{error:?}"))?;
+            .map_err(|error| anyhow!(error.to_string()))?;
         Ok(true)
     }
 
     pub(crate) async fn invalidate_session(&self, session: &Session) {
         let active_thread = self.threads.lock().await.remove(&session.id);
-        let thread_id = active_thread
-            .map(|active| active.thread.session_configured().thread_id)
-            .or_else(|| {
-                CodexSessionState::from_extension_data(&session.extension_data)
-                    .and_then(|state| ThreadId::try_from(state.thread_id.as_str()).ok())
-            });
+        let thread_id = active_thread.map(|active| active.thread_id).or_else(|| {
+            CodexSessionState::from_extension_data(&session.extension_data)
+                .map(|state| state.thread_id)
+        });
         if let (Some(runtime), Some(thread_id)) = (self.runtime.get(), thread_id) {
-            if let Some(thread) = runtime.thread_manager.remove_thread(&thread_id).await {
-                let _ = thread.shutdown_and_wait().await;
-            }
+            let _ = runtime
+                .request
+                .request_typed::<ThreadUnsubscribeResponse>(ClientRequest::ThreadUnsubscribe {
+                    request_id: next_request_id(),
+                    params: ThreadUnsubscribeParams { thread_id },
+                })
+                .await;
         }
     }
 
@@ -130,226 +161,143 @@ impl CodexAgentCore {
                 developer_instructions,
             )
             .await?;
-        let thread = active_thread.thread;
+        let runtime = self
+            .runtime
+            .get()
+            .ok_or_else(|| anyhow!("Codex runtime was not initialized"))?;
+        let mut events = runtime.events.subscribe();
         let input = message_to_codex_input(&user_message);
 
         session_manager
             .add_message(&session_config.id, &user_message)
             .await?;
-        thread
-            .submit(Op::UserInput {
-                items: input,
-                final_output_json_schema,
-                responsesapi_client_metadata: None,
-                additional_context: Default::default(),
-                thread_settings: Default::default(),
+        let response = runtime
+            .request
+            .request_typed::<TurnStartResponse>(ClientRequest::TurnStart {
+                request_id: next_request_id(),
+                params: TurnStartParams {
+                    thread_id: active_thread.thread_id.clone(),
+                    client_user_message_id: user_message.id.clone(),
+                    input,
+                    output_schema: final_output_json_schema,
+                    ..Default::default()
+                },
             })
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
 
         let session_id = session_config.id;
-        let model = active_thread.model;
+        let model = active_thread.model.clone();
+        let thread_id = active_thread.thread_id.clone();
+        let turn_id = response.turn.id;
+        let active_turn_id = active_thread.active_turn_id.clone();
+        *active_turn_id.lock().await = Some(turn_id.clone());
+        let request = runtime.request.clone();
 
         Ok(Box::pin(async_stream::try_stream! {
             let mut streamed_agent_text = false;
             let mut agent_text = String::new();
+            let mut completed_agent_text = None;
             loop {
                 let event = if let Some(cancel_token) = cancel_token.as_ref() {
                     tokio::select! {
                         _ = cancel_token.cancelled() => {
-                            let _ = thread.submit(Op::Interrupt).await;
-                            while let Ok(event) = thread.next_event().await {
-                                if matches!(event.msg, EventMsg::TurnAborted(_) | EventMsg::TurnComplete(_)) {
-                                    break;
-                                }
-                            }
+                            let _ = request
+                                .request_typed::<TurnInterruptResponse>(ClientRequest::TurnInterrupt {
+                                    request_id: next_request_id(),
+                                    params: TurnInterruptParams {
+                                        thread_id: thread_id.clone(),
+                                        turn_id: turn_id.clone(),
+                                    },
+                                })
+                                .await;
                             break;
                         }
-                        event = thread.next_event() => event,
+                        event = events.recv() => event,
                     }
                 } else {
-                    thread.next_event().await
+                    events.recv().await
                 }
-                .map_err(|error| anyhow!(error.to_string()))?;
+                .map_err(|error| anyhow!("Codex event stream closed: {error}"))?;
 
-                match event.msg {
-                    EventMsg::AgentMessageContentDelta(event) => {
+                match event {
+                    CodexRuntimeEvent::TransportError(message) => {
+                        *active_turn_id.lock().await = None;
+                        Err(anyhow!(message))?;
+                    }
+                    CodexRuntimeEvent::Notification(ServerNotification::AgentMessageDelta(event))
+                        if event.thread_id == thread_id && event.turn_id == turn_id =>
+                    {
                         streamed_agent_text = true;
                         agent_text.push_str(&event.delta);
                         yield AgentEvent::Message(Message::assistant().with_text(event.delta));
                     }
-                    EventMsg::ReasoningContentDelta(event) => {
+                    CodexRuntimeEvent::Notification(
+                        ServerNotification::ReasoningSummaryTextDelta(event),
+                    ) if event.thread_id == thread_id && event.turn_id == turn_id => {
                         yield AgentEvent::Message(
                             Message::assistant().with_thinking(event.delta, ""),
                         );
                     }
-                    EventMsg::ExecCommandBegin(event) => {
-                        let command = event.command.join(" ");
-                        let tool_name = codex_exec_tool_name(&event.parsed_cmd);
-                        let message = tool_request_message(
-                            event.call_id,
-                            tool_name,
-                            serde_json::json!({
-                                "command": command,
-                                "cwd": event.cwd.to_string(),
-                                "command_actions": event.parsed_cmd,
-                            }),
+                    CodexRuntimeEvent::Notification(ServerNotification::ReasoningTextDelta(event))
+                        if event.thread_id == thread_id && event.turn_id == turn_id =>
+                    {
+                        yield AgentEvent::Message(
+                            Message::assistant().with_thinking(event.delta, ""),
                         );
-                        session_manager.add_message(&session_id, &message).await?;
-                        yield AgentEvent::Message(message);
                     }
-                    EventMsg::ExecCommandEnd(event) => {
-                        let output = if event.aggregated_output.is_empty() {
-                            format!("{}{}", event.stdout, event.stderr)
-                        } else {
-                            event.aggregated_output
-                        };
-                        let message = tool_response_message(
-                            event.call_id,
-                            output,
-                            event.exit_code != 0,
-                        );
-                        session_manager.add_message(&session_id, &message).await?;
-                        yield AgentEvent::Message(message);
-                    }
-                    EventMsg::PatchApplyBegin(event) => {
-                        let message = tool_request_message(
-                            event.call_id,
-                            "apply_patch",
-                            serde_json::json!({ "changes": event.changes }),
-                        );
-                        session_manager.add_message(&session_id, &message).await?;
-                        yield AgentEvent::Message(message);
-                    }
-                    EventMsg::PatchApplyEnd(event) => {
-                        let output = if event.stdout.is_empty() {
-                            event.stderr
-                        } else if event.stderr.is_empty() {
-                            event.stdout
-                        } else {
-                            format!("{}\n{}", event.stdout, event.stderr)
-                        };
-                        let message = tool_response_message(event.call_id, output, !event.success);
-                        session_manager.add_message(&session_id, &message).await?;
-                        yield AgentEvent::Message(message);
-                    }
-                    EventMsg::McpToolCallBegin(event) => {
-                        let name = format!("{}__{}", event.invocation.server, event.invocation.tool);
-                        let message = tool_request_message(
-                            event.call_id,
-                            name,
-                            event.invocation.arguments.unwrap_or_else(|| serde_json::json!({})),
-                        );
-                        session_manager.add_message(&session_id, &message).await?;
-                        yield AgentEvent::Message(message);
-                    }
-                    EventMsg::McpToolCallEnd(event) => {
-                        let result = match event.result {
-                            Ok(result) => serde_json::from_value(serde_json::to_value(result)?)
-                                .unwrap_or_else(|error| {
-                                    CallToolResult::error(vec![Content::text(error.to_string())])
-                                }),
-                            Err(error) => CallToolResult::error(vec![Content::text(error)]),
-                        };
-                        let message = Message::user()
-                            .with_generated_id()
-                            .with_tool_response(event.call_id, Ok(result));
-                        session_manager.add_message(&session_id, &message).await?;
-                        yield AgentEvent::Message(message);
-                    }
-                    EventMsg::WebSearchBegin(event) => {
-                        let message = tool_request_message(
-                            event.call_id,
-                            "web_search",
-                            serde_json::json!({}),
-                        );
-                        session_manager.add_message(&session_id, &message).await?;
-                        yield AgentEvent::Message(message);
-                    }
-                    EventMsg::WebSearchEnd(event) => {
-                        let message = tool_response_message(
-                            event.call_id,
-                            serde_json::to_string(&serde_json::json!({
-                                "query": event.query,
-                                "action": event.action,
-                            }))?,
-                            false,
-                        );
-                        session_manager.add_message(&session_id, &message).await?;
-                        yield AgentEvent::Message(message);
-                    }
-                    EventMsg::ImageGenerationBegin(event) => {
-                        let message = tool_request_message(
-                            event.call_id,
-                            "image_generation",
-                            serde_json::json!({}),
-                        );
-                        session_manager.add_message(&session_id, &message).await?;
-                        yield AgentEvent::Message(message);
-                    }
-                    EventMsg::ImageGenerationEnd(event) => {
-                        let message = tool_response_message(
-                            event.call_id,
-                            serde_json::to_string(&serde_json::json!({
-                                "status": event.status,
-                                "revised_prompt": event.revised_prompt,
-                                "result": event.result,
-                                "saved_path": event.saved_path,
-                            }))?,
-                            false,
-                        );
-                        session_manager.add_message(&session_id, &message).await?;
-                        yield AgentEvent::Message(message);
-                    }
-                    EventMsg::ViewImageToolCall(event) => {
-                        let call_id = event.call_id;
-                        let path = event.path.to_string();
-                        let request = tool_request_message(
-                            call_id.clone(),
-                            "view_image",
-                            serde_json::json!({ "path": path }),
-                        );
-                        session_manager.add_message(&session_id, &request).await?;
-                        yield AgentEvent::Message(request);
-                        let response = tool_response_message(call_id, String::new(), false);
-                        session_manager.add_message(&session_id, &response).await?;
-                        yield AgentEvent::Message(response);
-                    }
-                    EventMsg::TokenCount(event) => {
-                        if let Some(info) = event.info {
-                            let last = info.last_token_usage;
-                            let usage = Usage::new(
-                                Some(saturating_i32(last.input_tokens)),
-                                Some(saturating_i32(last.output_tokens)),
-                                Some(saturating_i32(last.total_tokens)),
-                            )
-                            .with_cache_tokens(
-                                Some(saturating_i32(last.cached_input_tokens)),
-                                None,
-                            );
-                            let total = info.total_token_usage;
-                            let accumulated_usage = Usage::new(
-                                Some(saturating_i32(total.input_tokens)),
-                                Some(saturating_i32(total.output_tokens)),
-                                Some(saturating_i32(total.total_tokens)),
-                            )
-                            .with_cache_tokens(
-                                Some(saturating_i32(total.cached_input_tokens)),
-                                None,
-                            );
-                            session_manager
-                                .update(&session_id)
-                                .usage(usage)
-                                .accumulated_usage(accumulated_usage)
-                                .apply()
-                                .await?;
-                            yield AgentEvent::Usage(ProviderUsage::new(
-                                model.clone(),
-                                usage,
-                            ));
+                    CodexRuntimeEvent::Notification(ServerNotification::ItemStarted(event))
+                        if event.thread_id == thread_id && event.turn_id == turn_id =>
+                    {
+                        if let Some(message) = tool_request_from_item(&event.item)? {
+                            session_manager.add_message(&session_id, &message).await?;
+                            yield AgentEvent::Message(message);
                         }
                     }
-                    EventMsg::Warning(event) => {
+                    CodexRuntimeEvent::Notification(ServerNotification::ItemCompleted(event))
+                        if event.thread_id == thread_id && event.turn_id == turn_id =>
+                    {
+                        if let ThreadItem::AgentMessage { text, .. } = &event.item {
+                            completed_agent_text = Some(text.clone());
+                        } else if let Some(message) = tool_response_from_item(&event.item)? {
+                            session_manager.add_message(&session_id, &message).await?;
+                            yield AgentEvent::Message(message);
+                        }
+                    }
+                    CodexRuntimeEvent::Notification(
+                        ServerNotification::ThreadTokenUsageUpdated(event),
+                    ) if event.thread_id == thread_id && event.turn_id == turn_id => {
+                        let last = event.token_usage.last;
+                        let usage = Usage::new(
+                            Some(saturating_i32(last.input_tokens)),
+                            Some(saturating_i32(last.output_tokens)),
+                            Some(saturating_i32(last.total_tokens)),
+                        )
+                        .with_cache_tokens(
+                            Some(saturating_i32(last.cached_input_tokens)),
+                            None,
+                        );
+                        let total = event.token_usage.total;
+                        let accumulated_usage = Usage::new(
+                            Some(saturating_i32(total.input_tokens)),
+                            Some(saturating_i32(total.output_tokens)),
+                            Some(saturating_i32(total.total_tokens)),
+                        )
+                        .with_cache_tokens(
+                            Some(saturating_i32(total.cached_input_tokens)),
+                            None,
+                        );
+                        session_manager
+                            .update(&session_id)
+                            .usage(usage)
+                            .accumulated_usage(accumulated_usage)
+                            .apply()
+                            .await?;
+                        yield AgentEvent::Usage(ProviderUsage::new(model.clone(), usage));
+                    }
+                    CodexRuntimeEvent::Notification(ServerNotification::Warning(event))
+                        if event.thread_id.as_ref().is_none_or(|id| id == &thread_id) =>
+                    {
                         yield AgentEvent::Message(
                             Message::assistant().with_system_notification(
                                 SystemNotificationType::InlineMessage,
@@ -357,10 +305,19 @@ impl CodexAgentCore {
                             ),
                         );
                     }
-                    EventMsg::TurnComplete(event) => {
-                        let text = event
-                            .last_agent_message
-                            .filter(|text| !text.is_empty())
+                    CodexRuntimeEvent::Notification(ServerNotification::Error(event))
+                        if event.thread_id == thread_id
+                            && event.turn_id == turn_id
+                            && !event.will_retry =>
+                    {
+                        *active_turn_id.lock().await = None;
+                        Err(anyhow!(event.error.message))?;
+                    }
+                    CodexRuntimeEvent::Notification(ServerNotification::TurnCompleted(event))
+                        if event.thread_id == thread_id && event.turn.id == turn_id =>
+                    {
+                        let text = completed_agent_text
+                            .filter(|text: &String| !text.is_empty())
                             .or_else(|| (!agent_text.is_empty()).then_some(agent_text));
                         if let Some(text) = text {
                             let message = Message::assistant().with_generated_id().with_text(text);
@@ -369,27 +326,27 @@ impl CodexAgentCore {
                                 yield AgentEvent::Message(message);
                             }
                         }
-                        break;
-                    }
-                    EventMsg::Error(event) => Err(anyhow!(event.message))?,
-                    EventMsg::TurnAborted(_) => {
-                        if cancel_token.as_ref().is_none_or(|token| !token.is_cancelled()) {
-                            Err(anyhow!("Codex turn aborted"))?;
+                        if matches!(event.turn.status, TurnStatus::Failed) {
+                            let message = event
+                                .turn
+                                .error
+                                .map(|error| error.message)
+                                .unwrap_or_else(|| "Codex turn failed".to_string());
+                            *active_turn_id.lock().await = None;
+                            Err(anyhow!(message))?;
+                        }
+                        if matches!(event.turn.status, TurnStatus::Interrupted)
+                            && cancel_token.as_ref().is_none_or(|token| !token.is_cancelled())
+                        {
+                            *active_turn_id.lock().await = None;
+                            Err(anyhow!("Codex turn interrupted"))?;
                         }
                         break;
-                    }
-                    EventMsg::ExecApprovalRequest(_)
-                    | EventMsg::ApplyPatchApprovalRequest(_)
-                    | EventMsg::RequestPermissions(_)
-                    | EventMsg::RequestUserInput(_)
-                    | EventMsg::DynamicToolCallRequest(_)
-                    | EventMsg::ElicitationRequest(_) => {
-                        let _ = thread.submit(Op::Interrupt).await;
-                        Err(anyhow!("Codex requested an interaction that this frontend does not support"))?;
                     }
                     _ => {}
                 }
             }
+            *active_turn_id.lock().await = None;
         }))
     }
 
@@ -411,60 +368,65 @@ impl CodexAgentCore {
         }
 
         let state = CodexSessionState::from_extension_data(&session.extension_data);
-        if let Some(state) = state.as_ref() {
-            let thread_id = ThreadId::try_from(state.thread_id.as_str())
-                .map_err(|error| anyhow!(error.to_string()))?;
-            if let Ok(thread) = runtime.thread_manager.get_thread(thread_id).await {
-                let active_thread = ActiveThread {
-                    thread,
-                    model: state.model.clone(),
-                };
-                threads.insert(session.id.clone(), active_thread.clone());
-                return Ok(active_thread);
-            }
-        }
-
-        let config = runtime
-            .config_for_session(session, base_instructions, developer_instructions)
-            .await?;
-        let new_thread = if let Some(state) = state {
-            runtime
-                .thread_manager
-                .resume_thread_from_rollout(
-                    config,
-                    state.rollout_path,
-                    Arc::clone(&runtime.auth_manager),
-                    None,
-                    false,
-                )
+        let config = thread_config(session).await?;
+        let (thread_id, model) = if let Some(state) = state {
+            let response = runtime
+                .request
+                .request_typed::<ThreadResumeResponse>(ClientRequest::ThreadResume {
+                    request_id: next_request_id(),
+                    params: ThreadResumeParams {
+                        thread_id: state.thread_id,
+                        model: config.model,
+                        cwd: config.cwd,
+                        runtime_workspace_roots: config.runtime_workspace_roots,
+                        approval_policy: config.approval_policy,
+                        sandbox: config.sandbox,
+                        config: config.config,
+                        base_instructions,
+                        developer_instructions,
+                        exclude_turns: true,
+                        ..Default::default()
+                    },
+                })
                 .await
+                .map_err(|error| anyhow!(error.to_string()))?;
+            (response.thread.id, response.model)
         } else {
-            runtime.thread_manager.start_thread(config).await
-        }
-        .map_err(|error| anyhow!(error.to_string()))?;
+            let response = runtime
+                .request
+                .request_typed::<ThreadStartResponse>(ClientRequest::ThreadStart {
+                    request_id: next_request_id(),
+                    params: ThreadStartParams {
+                        model: config.model,
+                        cwd: config.cwd,
+                        runtime_workspace_roots: config.runtime_workspace_roots,
+                        approval_policy: config.approval_policy,
+                        sandbox: config.sandbox,
+                        config: config.config,
+                        base_instructions,
+                        developer_instructions,
+                        ..Default::default()
+                    },
+                })
+                .await
+                .map_err(|error| anyhow!(error.to_string()))?;
+            (response.thread.id, response.model)
+        };
 
-        let NewThread {
-            thread,
-            session_configured,
-            ..
-        } = new_thread;
-        if let Some(rollout_path) = session_configured.rollout_path.clone() {
-            let mut extension_data = session.extension_data.clone();
-            CodexSessionState {
-                thread_id: session_configured.thread_id.to_string(),
-                model: session_configured.model.clone(),
-                rollout_path,
-            }
-            .to_extension_data(&mut extension_data)?;
-            session_manager
-                .update(&session.id)
-                .extension_data(extension_data)
-                .apply()
-                .await?;
+        let mut extension_data = session.extension_data.clone();
+        CodexSessionState {
+            thread_id: thread_id.clone(),
         }
+        .to_extension_data(&mut extension_data)?;
+        session_manager
+            .update(&session.id)
+            .extension_data(extension_data)
+            .apply()
+            .await?;
         let active_thread = ActiveThread {
-            thread,
-            model: session_configured.model,
+            thread_id,
+            model,
+            active_turn_id: Arc::new(Mutex::new(None)),
         };
         threads.insert(session.id.clone(), active_thread.clone());
         Ok(active_thread)
@@ -472,9 +434,15 @@ impl CodexAgentCore {
 }
 
 pub(crate) struct CodexRuntime {
-    thread_manager: ThreadManager,
-    auth_manager: Arc<AuthManager>,
-    paths: Arg0DispatchPaths,
+    request: InProcessAppServerRequestHandle,
+    events: broadcast::Sender<CodexRuntimeEvent>,
+    shutdown: CancellationToken,
+}
+
+impl Drop for CodexRuntime {
+    fn drop(&mut self) {
+        self.shutdown.cancel();
+    }
 }
 
 impl CodexRuntime {
@@ -485,12 +453,10 @@ impl CodexRuntime {
         apply_runtime_paths(&mut config, &paths);
 
         let state_db = init_state_db(&config).await;
-        let auth_manager = AuthManager::shared_from_config(&config, true).await;
         let local_runtime_paths = ExecServerRuntimePaths::from_optional_paths(
             config.codex_self_exe.clone(),
             config.codex_linux_sandbox_exe.clone(),
         )?;
-        let thread_store = thread_store_from_config(&config, state_db.clone());
         let environment_manager = Arc::new(
             EnvironmentManager::from_codex_home(
                 config.codex_home.clone(),
@@ -498,76 +464,88 @@ impl CodexRuntime {
             )
             .await?,
         );
-        let user_instructions_provider = Arc::new(CodexHomeUserInstructionsProvider::new(
-            config.codex_home.clone(),
-        ));
-        let installation_id = resolve_installation_id(&config.codex_home).await?;
-        let mut extensions = ExtensionRegistryBuilder::<Config>::new();
-        install_image_generation_extension(
-            &mut extensions,
-            Arc::clone(&auth_manager),
-            |config: &Config| Some(config.codex_home.clone()),
-        );
-        codex_web_search_extension::install(&mut extensions, Arc::clone(&auth_manager));
-        let thread_manager = ThreadManager::new(
-            &config,
-            Arc::clone(&auth_manager),
-            SessionSource::Custom("goose".to_string()),
+        let config_warnings = config
+            .startup_warnings
+            .iter()
+            .map(|warning| ConfigWarningNotification {
+                summary: warning.clone(),
+                details: None,
+                path: None,
+                range: None,
+            })
+            .collect();
+        let mut client = InProcessAppServerClient::start(InProcessClientStartArgs {
+            arg0_paths: paths,
+            config: Arc::new(config),
+            cli_overrides: Vec::new(),
+            loader_overrides: LoaderOverrides::default(),
+            strict_config: false,
+            cloud_config_bundle: CloudConfigBundleLoader::default(),
+            feedback: CodexFeedback::new(),
+            log_db: None,
+            state_db,
             environment_manager,
-            Arc::new(extensions.build()),
-            user_instructions_provider,
-            None,
-            Arc::clone(&thread_store),
-            local_agent_graph_store_from_state_db(state_db.as_ref()),
-            installation_id,
-            None,
-            None,
-        );
+            config_warnings,
+            session_source: SessionSource::Custom("goose".to_string()),
+            enable_codex_api_key_env: true,
+            client_name: "goose".to_string(),
+            client_version: env!("CARGO_PKG_VERSION").to_string(),
+            experimental_api: true,
+            mcp_server_openai_form_elicitation: false,
+            opt_out_notification_methods: Vec::new(),
+            channel_capacity: DEFAULT_IN_PROCESS_CHANNEL_CAPACITY,
+        })
+        .await?;
+        let request = client.request_handle();
+        let (events, _) = broadcast::channel(DEFAULT_IN_PROCESS_CHANNEL_CAPACITY);
+        let event_sender = events.clone();
+        let shutdown = CancellationToken::new();
+        let router_shutdown = shutdown.clone();
+        tokio::spawn(async move {
+            loop {
+                let event = tokio::select! {
+                    _ = router_shutdown.cancelled() => break,
+                    event = client.next_event() => event,
+                };
+                let Some(event) = event else {
+                    break;
+                };
+                match event {
+                    InProcessServerEvent::ServerNotification(notification) => {
+                        let _ = event_sender.send(CodexRuntimeEvent::Notification(notification));
+                    }
+                    InProcessServerEvent::ServerRequest(request) => {
+                        let _ = client
+                            .reject_server_request(
+                                request.id().clone(),
+                                JSONRPCErrorError {
+                                    code: -32000,
+                                    message:
+                                        "Goose does not support interactive Codex server requests"
+                                            .to_string(),
+                                    data: None,
+                                },
+                            )
+                            .await;
+                    }
+                    InProcessServerEvent::Lagged { skipped } => {
+                        let _ = event_sender.send(CodexRuntimeEvent::TransportError(format!(
+                            "Codex event stream lagged and skipped {skipped} events"
+                        )));
+                    }
+                }
+            }
+            let _ = client.shutdown().await;
+            let _ = event_sender.send(CodexRuntimeEvent::TransportError(
+                "Codex app server disconnected".to_string(),
+            ));
+        });
 
         Ok(Self {
-            thread_manager,
-            auth_manager,
-            paths,
+            request,
+            events,
+            shutdown,
         })
-    }
-
-    async fn config_for_session(
-        &self,
-        session: &Session,
-        base_instructions: Option<String>,
-        developer_instructions: Option<String>,
-    ) -> Result<Config> {
-        let mut config = Config::load_with_cli_overrides(mcp_overrides(session).await?).await?;
-        apply_runtime_paths(&mut config, &self.paths);
-
-        let cwd = AbsolutePathBuf::from_absolute_path(&session.working_dir)?;
-        let profile = match session.goose_mode {
-            GooseMode::Auto => PermissionProfile::Disabled,
-            GooseMode::SmartApprove => PermissionProfile::workspace_write(),
-            GooseMode::Approve | GooseMode::Chat => PermissionProfile::read_only(),
-        };
-        let mut permissions = Permissions::from_approval_and_profile(
-            Constrained::allow_any(AskForApproval::Never),
-            Constrained::allow_any(profile),
-        )?;
-        permissions.set_workspace_roots(vec![cwd.clone()]);
-
-        config.cwd = cwd.clone();
-        config.workspace_roots = vec![cwd];
-        config.workspace_roots_explicit = true;
-        config.permissions = permissions;
-        if session
-            .provider_name
-            .as_deref()
-            .is_none_or(|name| name == "codex")
-        {
-            if let Some(model_config) = session.model_config.as_ref() {
-                config.model = Some(model_config.model_name.clone());
-            }
-        }
-        config.base_instructions = base_instructions;
-        config.developer_instructions = developer_instructions;
-        Ok(config)
     }
 }
 
@@ -588,6 +566,44 @@ fn apply_runtime_paths(config: &mut Config, paths: &Arg0DispatchPaths) {
     config.main_execve_wrapper_exe = paths.main_execve_wrapper_exe.clone();
 }
 
+async fn thread_config(session: &Session) -> Result<ThreadStartParams> {
+    let cwd = AbsolutePathBuf::from_absolute_path(&session.working_dir)?;
+    let model = if session
+        .provider_name
+        .as_deref()
+        .is_none_or(|name| name == "codex")
+    {
+        session
+            .model_config
+            .as_ref()
+            .map(|config| config.model_name.as_str())
+            .filter(|model| *model != "current")
+            .map(str::to_string)
+    } else {
+        None
+    };
+    let sandbox = match session.goose_mode {
+        GooseMode::Auto => SandboxMode::DangerFullAccess,
+        GooseMode::SmartApprove => SandboxMode::WorkspaceWrite,
+        GooseMode::Approve | GooseMode::Chat => SandboxMode::ReadOnly,
+    };
+    let config = mcp_overrides(session)
+        .await?
+        .into_iter()
+        .map(|(key, value)| Ok((key, serde_json::to_value(value)?)))
+        .collect::<Result<HashMap<_, _>>>()?;
+
+    Ok(ThreadStartParams {
+        model,
+        cwd: Some(session.working_dir.to_string_lossy().into_owned()),
+        runtime_workspace_roots: Some(vec![cwd]),
+        approval_policy: Some(AskForApproval::Never),
+        sandbox: Some(sandbox),
+        config: (!config.is_empty()).then_some(config),
+        ..Default::default()
+    })
+}
+
 fn message_to_codex_input(message: &Message) -> Vec<UserInput> {
     let mut input = Vec::new();
     for content in &message.content {
@@ -597,7 +613,7 @@ fn message_to_codex_input(message: &Message) -> Vec<UserInput> {
                 text_elements: Vec::new(),
             }),
             MessageContent::Image(image) => input.push(UserInput::Image {
-                image_url: format!("data:{};base64,{}", image.mime_type, image.data),
+                url: format!("data:{};base64,{}", image.mime_type, image.data),
                 detail: None,
             }),
             _ => {}
@@ -625,24 +641,127 @@ fn tool_request_message(
         )
 }
 
-fn codex_exec_tool_name(parsed_commands: &[ParsedCommand]) -> &'static str {
-    if parsed_commands.is_empty() {
+fn tool_request_from_item(item: &ThreadItem) -> Result<Option<Message>> {
+    let message = match item {
+        ThreadItem::CommandExecution {
+            id,
+            command,
+            cwd,
+            command_actions,
+            ..
+        } => tool_request_message(
+            id.clone(),
+            codex_exec_tool_name(command_actions),
+            serde_json::json!({
+                "command": command,
+                "cwd": cwd,
+                "command_actions": command_actions,
+            }),
+        ),
+        ThreadItem::FileChange { id, changes, .. } => tool_request_message(
+            id.clone(),
+            "apply_patch",
+            serde_json::json!({ "changes": changes }),
+        ),
+        ThreadItem::McpToolCall {
+            id,
+            server,
+            tool,
+            arguments,
+            ..
+        } => tool_request_message(id.clone(), format!("{server}__{tool}"), arguments.clone()),
+        ThreadItem::WebSearch(item) => tool_request_message(
+            item.id.clone(),
+            "web_search",
+            serde_json::json!({ "query": item.query, "action": item.action }),
+        ),
+        ThreadItem::ImageView { id, path } => tool_request_message(
+            id.clone(),
+            "view_image",
+            serde_json::json!({ "path": path }),
+        ),
+        ThreadItem::ImageGeneration(item) => {
+            tool_request_message(item.id.clone(), "image_generation", serde_json::json!({}))
+        }
+        _ => return Ok(None),
+    };
+    Ok(Some(message))
+}
+
+fn tool_response_from_item(item: &ThreadItem) -> Result<Option<Message>> {
+    let message = match item {
+        ThreadItem::CommandExecution {
+            id,
+            status,
+            aggregated_output,
+            exit_code,
+            ..
+        } => tool_response_message(
+            id.clone(),
+            aggregated_output.clone().unwrap_or_default(),
+            !matches!(status, CommandExecutionStatus::Completed)
+                || exit_code.is_some_and(|code| code != 0),
+        ),
+        ThreadItem::FileChange {
+            id,
+            changes,
+            status,
+        } => tool_response_message(
+            id.clone(),
+            serde_json::to_string(changes)?,
+            !matches!(status, PatchApplyStatus::Completed),
+        ),
+        ThreadItem::McpToolCall {
+            id, result, error, ..
+        } => {
+            let result = if let Some(error) = error {
+                CallToolResult::error(vec![Content::text(error.message.clone())])
+            } else if let Some(result) = result {
+                serde_json::from_value(serde_json::to_value(result)?).unwrap_or_else(|error| {
+                    CallToolResult::error(vec![Content::text(error.to_string())])
+                })
+            } else {
+                CallToolResult::success(Vec::new())
+            };
+            Message::user()
+                .with_generated_id()
+                .with_tool_response(id.clone(), Ok(result))
+        }
+        ThreadItem::WebSearch(item) => tool_response_message(
+            item.id.clone(),
+            serde_json::to_string(&serde_json::json!({
+                "query": item.query,
+                "action": item.action,
+            }))?,
+            false,
+        ),
+        ThreadItem::ImageView { id, .. } => tool_response_message(id.clone(), String::new(), false),
+        ThreadItem::ImageGeneration(item) => {
+            tool_response_message(item.id.clone(), serde_json::to_string(item)?, false)
+        }
+        _ => return Ok(None),
+    };
+    Ok(Some(message))
+}
+
+fn codex_exec_tool_name(command_actions: &[CommandAction]) -> &'static str {
+    if command_actions.is_empty() {
         return "shell";
     }
 
-    if parsed_commands
+    if command_actions
         .iter()
-        .all(|command| matches!(command, ParsedCommand::ListFiles { .. }))
+        .all(|command| matches!(command, CommandAction::ListFiles { .. }))
     {
         "list_files"
-    } else if parsed_commands
+    } else if command_actions
         .iter()
-        .all(|command| matches!(command, ParsedCommand::Read { .. }))
+        .all(|command| matches!(command, CommandAction::Read { .. }))
     {
         "read_files"
-    } else if parsed_commands
+    } else if command_actions
         .iter()
-        .all(|command| matches!(command, ParsedCommand::Search { .. }))
+        .all(|command| matches!(command, CommandAction::Search { .. }))
     {
         "search_files"
     } else {
@@ -769,8 +888,8 @@ mod tests {
 
     #[test]
     fn codex_exec_tool_name_uses_list_files_semantics() {
-        let commands = vec![ParsedCommand::ListFiles {
-            cmd: "ls -la".to_string(),
+        let commands = vec![CommandAction::ListFiles {
+            command: "ls -la".to_string(),
             path: None,
         }];
 
@@ -780,12 +899,12 @@ mod tests {
     #[test]
     fn codex_exec_tool_name_keeps_mixed_commands_as_shell() {
         let commands = vec![
-            ParsedCommand::ListFiles {
-                cmd: "ls".to_string(),
+            CommandAction::ListFiles {
+                command: "ls".to_string(),
                 path: None,
             },
-            ParsedCommand::Unknown {
-                cmd: "touch marker".to_string(),
+            CommandAction::Unknown {
+                command: "touch marker".to_string(),
             },
         ];
 

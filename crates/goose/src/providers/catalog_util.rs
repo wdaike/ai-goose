@@ -196,10 +196,10 @@ mod tests {
             .collect::<std::collections::HashSet<_>>();
 
         assert!(provider_ids.contains("claude-acp"));
-        assert!(provider_ids.contains("codex-acp"));
+        assert!(provider_ids.contains("codex"));
         assert!(provider_ids.contains("atomic_chat"));
         assert!(!provider_ids.contains("claude_code"));
-        assert!(!provider_ids.contains("codex"));
+        assert!(!provider_ids.contains("codex-acp"));
         assert!(!provider_ids.contains("gemini_cli"));
     }
 }

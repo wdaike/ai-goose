@@ -15,6 +15,7 @@
     "clean-vite-cache": "node scripts/clean-vite-cache.js",
     "start-gui": "pnpm run build-goose-sdk && pnpm run i18n:compile && electron-forge start",
     "start-gui-debug": "pnpm run build-goose-sdk && pnpm run i18n:compile && electron-forge start -- --inspect=9229",
+    "start-web": "pnpm run build-goose-sdk && pnpm run i18n:compile && vite --config vite.renderer.config.mts --host 127.0.0.1 --port ${GOOSE_WEB_PORT:-5173} --strictPort",
     "start": "cd ../.. && just run-ui",
     "start:test-error": "GOOSE_TEST_ERROR=true electron-forge start",
     "package": "pnpm run build-goose-sdk && pnpm run i18n:compile && electron-forge package",

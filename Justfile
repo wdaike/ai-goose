@@ -98,6 +98,9 @@ run-ui-only:
     @echo "Running UI..."
     cd ui/desktop && pnpm install && pnpm run start-gui
 
+run-web:
+    ./scripts/start-web.sh
+
 debug-ui:
     @echo "🚀 Starting goose frontend in external ACP backend mode"
     cd ui/desktop && \

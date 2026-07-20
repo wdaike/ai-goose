@@ -38,12 +38,12 @@ function parseLocalStorageValue<K extends SettingKey>(
   }
 }
 
-interface NotificationData {
+export interface NotificationData {
   title: string;
   body: string;
 }
 
-interface MessageBoxOptions {
+export interface MessageBoxOptions {
   type?: 'none' | 'info' | 'error' | 'question' | 'warning';
   buttons?: string[];
   defaultId?: number;
@@ -52,12 +52,12 @@ interface MessageBoxOptions {
   detail?: string;
 }
 
-interface MessageBoxResponse {
+export interface MessageBoxResponse {
   response: number;
   checkboxChecked?: boolean;
 }
 
-interface SaveDialogOptions {
+export interface SaveDialogOptions {
   title?: string;
   defaultPath?: string;
   buttonLabel?: string;
@@ -67,12 +67,12 @@ interface SaveDialogOptions {
   showsTagField?: boolean;
 }
 
-interface SaveDialogResponse {
+export interface SaveDialogResponse {
   canceled: boolean;
   filePath?: string;
 }
 
-interface FileResponse {
+export interface FileResponse {
   file: string;
   filePath: string;
   error: string | null;
@@ -81,7 +81,7 @@ interface FileResponse {
 
 const config = JSON.parse(process.argv.find((arg) => arg.startsWith('{')) || '{}');
 
-interface UpdaterEvent {
+export interface UpdaterEvent {
   event: string;
   data?: unknown;
 }
@@ -96,7 +96,7 @@ export interface CreateChatWindowOptions {
 }
 
 // Define the API types in a single place
-type ElectronAPI = {
+export type ElectronAPI = {
   platform: string;
   arch: string;
   reactReady: () => void;
@@ -180,7 +180,7 @@ type ElectronAPI = {
   listGitWorktreeDirs: (dir: string) => Promise<string[]>;
 };
 
-type AppConfigAPI = {
+export type AppConfigAPI = {
   get: (key: string) => unknown;
   getAll: () => Record<string, unknown>;
 };

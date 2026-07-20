@@ -214,9 +214,11 @@ image = { version = "0.24.9", default-features = false, features = ["png", "jpeg
 subtle = { version = "2.5", default-features = false, features = ["std"] }
 gethostname = "1.1.0"
 codex-core-api = { git = "https://github.com/openai/codex", version = "0.144.4", tag = "rust-v0.144.4" }
-codex-web-search-extension = { git = "https://github.com/openai/codex", tag = "rust-v0.144.4", version = "0.144.4" }
 toml = "0.9.5"
-codex-protocol = { git = "https://github.com/openai/codex", tag = "rust-v0.144.4", version = "0.144.4" }
+codex-app-server-client = { git = "https://github.com/openai/codex", tag = "rust-v0.144.4", version = "0.144.4" }
+codex-app-server-protocol = { git = "https://github.com/openai/codex", tag = "rust-v0.144.4", version = "0.144.4" }
+codex-config = { git = "https://github.com/openai/codex", tag = "rust-v0.144.4", version = "0.144.4" }
+codex-feedback = { git = "https://github.com/openai/codex", tag = "rust-v0.144.4", version = "0.144.4" }
 
 [target.'cfg(target_os = "windows")'.dependencies]
 winapi = { workspace = true }

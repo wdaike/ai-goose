@@ -161,7 +161,7 @@ goose works with [supported LLM providers](/docs/getting-started/providers) that
    │  ○ Amazon SageMaker TGI 
    │  ○ Anthropic 
    │  ○ Azure OpenAI 
-   │  ○ ChatGPT Codex 
+   │  ○ Codex
    │  ○ Claude Code CLI 
    │  ○ ...
    |  ● Tetrate Agent Router Service (Enterprise router for AI models)

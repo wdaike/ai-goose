@@ -633,11 +633,6 @@ mod tests {
                 .expect("gpt-5.6-sol should have canonical metadata");
             assert_eq!(canonical.temperature, Some(false));
 
-            let config = ModelConfig::new("gpt-5.6-sol").with_canonical_limits("chatgpt_codex");
-            assert_eq!(config.context_limit, Some(1_050_000));
-            assert_eq!(config.max_tokens, Some(128_000));
-            assert_eq!(config.reasoning, Some(true));
-
             // "gpt-5.4-nano-low" should resolve via "gpt-5.4-nano"
             let config = ModelConfig::new("gpt-5.4-nano-low").with_canonical_limits("openai");
             assert_eq!(config.context_limit, Some(400_000));

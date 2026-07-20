@@ -41,7 +41,7 @@ See the [ACP clients guide](/docs/guides/acp-clients) for more.
 
 ## Use Any Agent with Goose
 
-Goose also speaks ACP as a client. It can orchestrate other agents as ACP providers. You keep goose's UI and extensions, but the underlying LLM and MCP calls go through the other agent. Today that includes [Claude Code](https://github.com/zed-industries/claude-agent-acp), [Codex](https://github.com/zed-industries/codex-acp), [Copilot](https://docs.github.com/en/copilot/reference/copilot-cli-reference/acp-server), [Gemini](https://github.com/google-gemini/gemini-cli), [Amp](https://www.npmjs.com/package/amp-acp), and [Pi](https://github.com/svkozak/pi-acp).
+Goose also speaks ACP as a client. It can orchestrate other agents as ACP providers. You keep goose's UI and extensions, but the underlying LLM and MCP calls go through the other agent. Today that includes [Claude Code](https://github.com/zed-industries/claude-agent-acp), [Copilot](https://docs.github.com/en/copilot/reference/copilot-cli-reference/acp-server), [Gemini](https://github.com/google-gemini/gemini-cli), [Amp](https://www.npmjs.com/package/amp-acp), and [Pi](https://github.com/svkozak/pi-acp). Codex uses goose's embedded native App Server runtime instead.
 
 Some agents like Gemini and Copilot speak ACP natively. Others like Claude need a small adapter installed first:
 
