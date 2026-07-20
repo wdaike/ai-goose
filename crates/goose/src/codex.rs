@@ -12,6 +12,7 @@ use codex_core_api::{
     ExtensionRegistryBuilder, NewThread, Op, PermissionProfile, Permissions, SessionSource,
     ThreadId, ThreadManager, UserInput,
 };
+use codex_protocol::parse_command::ParsedCommand;
 use futures::stream::BoxStream;
 use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
 use rmcp::model::{CallToolRequestParams, CallToolResult, Content};
@@ -184,12 +185,14 @@ impl CodexAgentCore {
                     }
                     EventMsg::ExecCommandBegin(event) => {
                         let command = event.command.join(" ");
+                        let tool_name = codex_exec_tool_name(&event.parsed_cmd);
                         let message = tool_request_message(
                             event.call_id,
-                            "shell",
+                            tool_name,
                             serde_json::json!({
                                 "command": command,
                                 "cwd": event.cwd.to_string(),
+                                "command_actions": event.parsed_cmd,
                             }),
                         );
                         session_manager.add_message(&session_id, &message).await?;
@@ -622,6 +625,31 @@ fn tool_request_message(
         )
 }
 
+fn codex_exec_tool_name(parsed_commands: &[ParsedCommand]) -> &'static str {
+    if parsed_commands.is_empty() {
+        return "shell";
+    }
+
+    if parsed_commands
+        .iter()
+        .all(|command| matches!(command, ParsedCommand::ListFiles { .. }))
+    {
+        "list_files"
+    } else if parsed_commands
+        .iter()
+        .all(|command| matches!(command, ParsedCommand::Read { .. }))
+    {
+        "read_files"
+    } else if parsed_commands
+        .iter()
+        .all(|command| matches!(command, ParsedCommand::Search { .. }))
+    {
+        "search_files"
+    } else {
+        "shell"
+    }
+}
+
 fn tool_response_message(call_id: String, output: String, is_error: bool) -> Message {
     let content = vec![Content::text(output)];
     let result = if is_error {
@@ -733,4 +761,34 @@ async fn mcp_overrides(session: &Session) -> Result<Vec<(String, TomlValue)>> {
 
 fn saturating_i32(value: i64) -> i32 {
     value.clamp(i32::MIN as i64, i32::MAX as i64) as i32
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn codex_exec_tool_name_uses_list_files_semantics() {
+        let commands = vec![ParsedCommand::ListFiles {
+            cmd: "ls -la".to_string(),
+            path: None,
+        }];
+
+        assert_eq!(codex_exec_tool_name(&commands), "list_files");
+    }
+
+    #[test]
+    fn codex_exec_tool_name_keeps_mixed_commands_as_shell() {
+        let commands = vec![
+            ParsedCommand::ListFiles {
+                cmd: "ls".to_string(),
+                path: None,
+            },
+            ParsedCommand::Unknown {
+                cmd: "touch marker".to_string(),
+            },
+        ];
+
+        assert_eq!(codex_exec_tool_name(&commands), "shell");
+    }
 }

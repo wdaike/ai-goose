@@ -569,6 +569,56 @@ function ToolCallView({
         }
         break;
 
+      case 'list_files': {
+        const actions = Array.isArray(args.command_actions) ? args.command_actions : [];
+        const path = actions.find(
+          (action): action is { type: string; path?: string | null } =>
+            typeof action === 'object' &&
+            action !== null &&
+            'type' in action &&
+            action.type === 'list_files'
+        )?.path;
+        const cwd = typeof args.cwd === 'string' ? args.cwd : undefined;
+        const target = !path || path === '.' ? cwd : path;
+        if (target) {
+          const normalized = target.replace(/[\\/]+$/, '');
+          const name = normalized.split(/[\\/]/).pop() || target;
+          return `listing files in ${name}`;
+        }
+        return 'listing files';
+      }
+
+      case 'read_files': {
+        const actions = Array.isArray(args.command_actions) ? args.command_actions : [];
+        const names = actions.flatMap((action) => {
+          if (typeof action !== 'object' || action === null || !('type' in action)) return [];
+          if (action.type !== 'read' || !('name' in action) || typeof action.name !== 'string') {
+            return [];
+          }
+          return [action.name];
+        });
+        if (names.length === 1) return `reading ${names[0]}`;
+        if (names.length > 1) return `reading ${names.length} files`;
+        return 'reading files';
+      }
+
+      case 'search_files': {
+        const actions = Array.isArray(args.command_actions) ? args.command_actions : [];
+        const action = actions.find(
+          (candidate): candidate is { type: string; query?: string | null; path?: string | null } =>
+            typeof candidate === 'object' &&
+            candidate !== null &&
+            'type' in candidate &&
+            candidate.type === 'search'
+        );
+        if (action?.query && action.path) {
+          return `searching for "${action.query}" in ${action.path}`;
+        }
+        if (action?.query) return `searching for "${action.query}"`;
+        if (action?.path) return `searching files in ${action.path}`;
+        return 'searching files';
+      }
+
       case 'search':
         if (args.name) {
           return `searching for "${getStringValue(args.name)}"`;

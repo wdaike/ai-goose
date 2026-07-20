@@ -7,6 +7,7 @@ export { Eye } from './Eye';
 export { FileEdit } from './FileEdit';
 export { FilePlus } from './FilePlus';
 export { FileText } from './FileText';
+export { Folder } from './Folder';
 export { Globe } from './Globe';
 export { Harddrive } from './Harddrive';
 export { Monitor } from './Monitor';

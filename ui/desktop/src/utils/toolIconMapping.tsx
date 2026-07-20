@@ -9,6 +9,7 @@ import {
   FileEdit,
   FilePlus,
   FileText,
+  Folder,
   Globe,
   Monitor,
   Numbers,
@@ -35,6 +36,12 @@ export const getToolIcon = (toolName: string): React.ComponentType<ToolIconProps
       return FileEdit;
     case 'shell':
       return Terminal;
+    case 'list_files':
+      return Folder;
+    case 'read_files':
+      return Eye;
+    case 'search_files':
+      return Search;
 
     // Memory Extension Tools
     case 'remember_memory':
