@@ -3,8 +3,8 @@ use crate::agents::mcp_client::{Error, McpClientTrait};
 use crate::agents::tool_execution::ToolCallContext;
 use crate::agents::{AgentEvent, SessionConfig};
 use crate::config::{Config, ExtensionConfig, GooseMode};
-use crate::context_mgmt::format_message_for_compacting;
 use crate::conversation::message::Message;
+use crate::conversation_format::format_message_for_transcript;
 use crate::execution::manager::AgentManager;
 use crate::providers;
 use crate::providers::base::Provider;
@@ -287,13 +287,13 @@ impl OrchestratorClient {
                         output.push("No messages in this session.".to_string());
                     } else {
                         output.push("## First message\n".to_string());
-                        output.push(format_message_for_compacting(&messages[0]));
+                        output.push(format_message_for_transcript(&messages[0]));
 
                         if messages.len() > 1 {
                             output.push(format!("\n*({} messages omitted)*\n", messages.len() - 2));
                             output.push("## Last message\n".to_string());
                             output
-                                .push(format_message_for_compacting(&messages[messages.len() - 1]));
+                                .push(format_message_for_transcript(&messages[messages.len() - 1]));
                         }
                     }
                 } else {
@@ -338,7 +338,7 @@ impl OrchestratorClient {
         let conversation_text = messages
             .iter()
             .filter(|m| m.is_agent_visible())
-            .map(format_message_for_compacting)
+            .map(format_message_for_transcript)
             .collect::<Vec<_>>()
             .join("\n");
 

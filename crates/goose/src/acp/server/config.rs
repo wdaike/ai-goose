@@ -286,21 +286,6 @@ const PREFERENCE_DEFS: &[PreferenceDef] = &[
         config_key: "GOOSE_THINKING_EFFORT",
         prepare: prepare_thinking_effort,
     },
-    PreferenceDef {
-        key: PreferenceKey::VoiceAutoSubmitPhrases,
-        config_key: "VOICE_AUTO_SUBMIT_PHRASES",
-        prepare: prepare_voice_auto_submit_phrases,
-    },
-    PreferenceDef {
-        key: PreferenceKey::VoiceDictationProvider,
-        config_key: "VOICE_DICTATION_PROVIDER",
-        prepare: prepare_voice_dictation_provider,
-    },
-    PreferenceDef {
-        key: PreferenceKey::VoiceDictationPreferredMic,
-        config_key: "VOICE_DICTATION_PREFERRED_MIC",
-        prepare: prepare_voice_dictation_preferred_mic,
-    },
 ];
 
 fn preference_def(
@@ -343,58 +328,4 @@ fn prepare_thinking_effort(
     })?;
 
     Ok(serde_json::Value::String(effort.to_string()))
-}
-
-fn prepare_voice_auto_submit_phrases(
-    value: &serde_json::Value,
-) -> Result<serde_json::Value, agent_client_protocol::Error> {
-    if !value.is_string() {
-        return Err(agent_client_protocol::Error::invalid_params()
-            .data("voiceAutoSubmitPhrases must be a string"));
-    }
-
-    Ok(value.clone())
-}
-
-fn prepare_voice_dictation_provider(
-    value: &serde_json::Value,
-) -> Result<serde_json::Value, agent_client_protocol::Error> {
-    let Some(value) = value.as_str() else {
-        return Err(agent_client_protocol::Error::invalid_params()
-            .data("voiceDictationProvider must be a string"));
-    };
-    if !is_supported_voice_dictation_provider(value) {
-        return Err(agent_client_protocol::Error::invalid_params()
-            .data("voiceDictationProvider is not supported"));
-    }
-
-    Ok(serde_json::Value::String(value.to_string()))
-}
-
-fn prepare_voice_dictation_preferred_mic(
-    value: &serde_json::Value,
-) -> Result<serde_json::Value, agent_client_protocol::Error> {
-    let Some(value) = value.as_str() else {
-        return Err(agent_client_protocol::Error::invalid_params()
-            .data("voiceDictationPreferredMic must be a string"));
-    };
-    if value.is_empty() {
-        return Err(agent_client_protocol::Error::invalid_params()
-            .data("voiceDictationPreferredMic must be non-empty"));
-    }
-
-    Ok(serde_json::Value::String(value.to_string()))
-}
-
-fn is_supported_voice_dictation_provider(value: &str) -> bool {
-    matches!(value, "openai" | "groq" | "elevenlabs" | "__disabled__") || {
-        #[cfg(feature = "local-inference")]
-        {
-            value == "local"
-        }
-        #[cfg(not(feature = "local-inference"))]
-        {
-            false
-        }
-    }
 }

@@ -1,10 +1,5 @@
-use anyhow::Result;
-use goose_providers::conversation::token_usage::{CostSource, ProviderUsage, Usage};
 use rmcp::model::Tool;
 use serde_json::{json, Value};
-
-use crate::agents::Agent;
-use crate::conversation::message::MessageUsage;
 
 fn coerce_value(value: &str, schema: &Value) -> Value {
     match schema.get("type") {
@@ -69,62 +64,6 @@ pub(crate) fn coerce_tool_arguments(
             })
             .collect(),
     )
-}
-
-impl Agent {
-    pub(crate) async fn update_session_metrics(
-        &self,
-        session_id: &str,
-        schedule_id: Option<String>,
-        usage: &ProviderUsage,
-        is_compaction_usage: bool,
-    ) -> Result<ProviderUsage> {
-        let manager = self.config.session_manager.clone();
-        let session = manager.get_session(session_id, false).await?;
-        let (chunk_cost, cost_source) =
-            self.resolve_chunk_cost(usage, session.provider_name.as_deref());
-
-        let mut enriched = usage.clone();
-        enriched.cost = chunk_cost;
-        enriched.cost_source = cost_source;
-        let ledger = MessageUsage::from_provider_usage(&enriched, is_compaction_usage);
-        let current_usage = if is_compaction_usage {
-            let new_input = usage.usage.output_tokens;
-            Usage::new(new_input, None, new_input)
-        } else {
-            usage.usage
-        };
-
-        manager
-            .record_usage_metrics(
-                session_id,
-                schedule_id,
-                current_usage,
-                &usage.model,
-                &ledger,
-            )
-            .await?;
-        Ok(enriched)
-    }
-
-    fn resolve_chunk_cost(
-        &self,
-        usage: &ProviderUsage,
-        provider_name: Option<&str>,
-    ) -> (Option<f64>, Option<CostSource>) {
-        if let Some(cost) = usage.cost {
-            return (Some(cost), Some(CostSource::ProviderReported));
-        }
-        match provider_name
-            .and_then(|name| {
-                crate::providers::canonical::maybe_get_canonical_model(name, &usage.model)
-            })
-            .and_then(|model| model.cost.estimate_cost(&usage.usage))
-        {
-            Some(cost) => (Some(cost), Some(CostSource::Estimated)),
-            None => (None, None),
-        }
-    }
 }
 
 pub fn is_tool_visible_to_app(tool: &Tool) -> bool {

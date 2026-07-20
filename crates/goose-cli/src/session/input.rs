@@ -463,7 +463,7 @@ fn help_text() -> String {
 /recipe [filepath] - Generate a recipe from the current conversation and save it to the specified filepath (must end with .yaml).
                        If no filepath is provided, it will be saved to ./recipe.yaml.
 /compact - Compact the current conversation to reduce context length while preserving key information.
-{additional_builtin_help}/status - Show session status: model, provider, mode, and token usage.
+{additional_builtin_help}
 /edit [text] - Open your prompt editor to compose a message. Optionally pre-fill with text.
                Uses $GOOSE_PROMPT_EDITOR, $VISUAL, or $EDITOR (in that order).
 /skills - List available skills or enable skills by name (usage: /skills [<name>...])
@@ -479,10 +479,9 @@ Up/Down arrows - Navigate through command history"
 }
 
 fn additional_builtin_help() -> String {
-    const DOCUMENTED_BUILTINS: &[&str] =
-        &["prompts", "prompt", "compact", "clear", "skills", "status"];
+    const DOCUMENTED_BUILTINS: &[&str] = &["prompts", "prompt", "compact", "clear", "skills"];
 
-    goose::agents::execute_commands::list_commands()
+    goose::slash_commands::slash_command::list_commands()
         .iter()
         .filter(|command| !DOCUMENTED_BUILTINS.contains(&command.name))
         .map(|command| format!("/{} - {}", command.name, command.description))
@@ -594,7 +593,7 @@ mod tests {
     fn help_lists_builtin_agent_commands() {
         let help = help_text();
 
-        for command in goose::agents::execute_commands::list_commands() {
+        for command in goose::slash_commands::slash_command::list_commands() {
             assert!(
                 help.contains(&format!("/{}", command.name)),
                 "help output should list /{}",

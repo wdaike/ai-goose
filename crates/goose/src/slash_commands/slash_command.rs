@@ -4,8 +4,68 @@ use std::path::Path;
 use super::types::{SlashCommandEntry, SlashCommandSource};
 use super::util::normalize_command_name;
 
+pub const COMPACT_TRIGGERS: &[&str] =
+    &["/compact", "Please compact this conversation", "/summarize"];
+
+pub struct CommandDef {
+    pub name: &'static str,
+    pub description: &'static str,
+}
+
+static COMMANDS: &[CommandDef] = &[
+    CommandDef {
+        name: "prompts",
+        description: "List available prompts, optionally filtered by extension",
+    },
+    CommandDef {
+        name: "prompt",
+        description: "Execute a prompt or show its info with --info",
+    },
+    CommandDef {
+        name: "compact",
+        description: "Compact the conversation history",
+    },
+    CommandDef {
+        name: "clear",
+        description: "Clear the conversation history",
+    },
+    CommandDef {
+        name: "skills",
+        description: "List installed skills and other available sources",
+    },
+];
+
+pub struct ParsedSlashCommand<'a> {
+    pub command: &'a str,
+    pub params_str: &'a str,
+}
+
+pub fn parse_slash_command(message_text: &str) -> Option<ParsedSlashCommand<'_>> {
+    let mut trimmed = message_text.trim();
+    if COMPACT_TRIGGERS.contains(&trimmed) {
+        trimmed = COMPACT_TRIGGERS[0];
+    }
+    if !trimmed.starts_with('/') {
+        return None;
+    }
+
+    let command_str = trimmed.strip_prefix('/').unwrap_or(trimmed);
+    let (command, params_str) = command_str
+        .split_once(' ')
+        .map(|(command, params)| (command, params.trim()))
+        .unwrap_or((command_str, ""));
+    Some(ParsedSlashCommand {
+        command,
+        params_str,
+    })
+}
+
+pub fn list_commands() -> &'static [CommandDef] {
+    COMMANDS
+}
+
 pub fn list_builtin_commands() -> Vec<SlashCommandEntry> {
-    crate::agents::execute_commands::list_commands()
+    list_commands()
         .iter()
         .map(|command| SlashCommandEntry {
             name: command.name.to_string(),
@@ -66,14 +126,18 @@ mod tests {
 
         assert_eq!(
             names,
-            vec![
-                "prompts", "prompt", "compact", "clear", "skills", "doctor", "goal", "grind",
-                "status"
-            ]
+            vec!["prompts", "prompt", "compact", "clear", "skills"]
         );
         assert!(commands
             .iter()
             .all(|command| command.source == SlashCommandSource::Builtin));
+    }
+
+    #[test]
+    fn parse_command_and_params() {
+        let parsed = parse_slash_command("/speckit.plan hello world").unwrap();
+        assert_eq!(parsed.command, "speckit.plan");
+        assert_eq!(parsed.params_str, "hello world");
     }
 
     fn entry(name: &str, source: SlashCommandSource) -> SlashCommandEntry {

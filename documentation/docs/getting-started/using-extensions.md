@@ -40,7 +40,6 @@ Platform extensions are built-in extensions that provide global features like co
 - [Extension Manager](/docs/mcp/extension-manager-mcp): Discover, enable, and disable extensions dynamically during sessions (enabled by default)
 - [Summon](/docs/mcp/summon-mcp): Load skills and recipes, and delegate tasks to subagents (enabled by default)
 - [Todo](/docs/mcp/todo-mcp): Manage task lists and track progress across sessions (enabled by default)
-- [Top of Mind](/docs/mcp/tom-mcp): Inject persistent instructions into goose's working memory every turn
 
 ### Toggling Built-in Extensions
 
@@ -666,10 +665,6 @@ For example, to start a session with a Streamable HTTP extension, you'd run:
 ```bash
 goose session --with-streamable-http-extension "https://example.com/streamable"
 ```
-
-### Extensions in Containers
-
-goose can use the `--container` flag to run extensions inside your Docker containers for devcontainer workflows. See [Running Extensions in Docker Containers](/docs/tutorials/goose-in-docker#running-extensions-in-docker-containers) for details.
 
 ## Developing Extensions
 

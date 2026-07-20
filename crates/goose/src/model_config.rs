@@ -78,8 +78,8 @@ fn configured_fast_model_name() -> Option<String> {
         .filter(|v| !v.is_empty())
 }
 
-/// Resolve the model config to use for lightweight "fast" tasks (session
-/// naming, compaction, summarization). Resolution order:
+/// Resolve the model config to use for lightweight "fast" tasks such as
+/// session naming and auxiliary summaries. Resolution order:
 ///   1. `GOOSE_FAST_MODEL` (user override)
 ///   2. the provider's declared default fast model
 ///   3. the supplied `model_config` (i.e. the main model)
@@ -103,8 +103,8 @@ pub async fn get_fast_model(
     }
 }
 
-/// Run a completion for a lightweight "fast" task (session naming, compaction,
-/// summarization) using the provider's fast model, falling back to the supplied
+/// Run a completion for a lightweight "fast" task using the provider's fast
+/// model, falling back to the supplied
 /// main `model_config` if the fast model errors.
 pub async fn complete_fast(
     provider: &dyn Provider,
@@ -147,10 +147,6 @@ pub async fn complete_fast(
 }
 
 async fn provider_default_fast_model(provider_name: &str) -> Option<String> {
-    if provider_name == goose_providers::openai::OPEN_AI_PROVIDER_NAME {
-        return crate::providers::openai_def::live_fast_model();
-    }
-
     crate::providers::get_from_registry(provider_name)
         .await
         .ok()

@@ -1,5 +1,5 @@
-use goose::agents::execute_commands::list_commands;
 use goose::config::GooseMode;
+use goose::slash_commands::slash_command::list_commands;
 use rustyline::completion::{Completer, FilenameCompleter, Pair};
 use rustyline::highlight::{CmdKind, Highlighter};
 use rustyline::hint::Hinter;

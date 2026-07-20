@@ -11,12 +11,10 @@ pub mod builtin_extension;
 pub mod checks;
 pub mod codex;
 pub mod config;
-pub mod context_mgmt;
+pub mod conversation_format;
 pub mod conversation {
     pub use goose_providers::conversation::*;
 }
-pub mod dictation;
-pub mod doctor;
 pub mod download_manager;
 pub mod elicitation;
 pub mod execution;

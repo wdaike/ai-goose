@@ -1,4 +1,3 @@
-pub mod registrations;
 mod resolver;
 
 pub use resolver::{
@@ -9,7 +8,6 @@ pub use resolver::{
 use super::base::{ConfigKey, ModelInfo, ProviderType};
 use super::canonical::{map_provider_name, map_to_canonical_model, CanonicalModelRegistry};
 use super::catalog::ProviderSetupCategory;
-use crate::config::declarative_providers::{DeclarativeProviderConfig, ProviderEngine};
 use crate::config::Config;
 use crate::session::session_manager::SessionStorage;
 use crate::utils::bytes_to_hex;
@@ -790,74 +788,6 @@ pub fn default_inventory_configured(config_keys: &[ConfigKey], config: &Config) 
             config.get_param::<serde_json::Value>(&key.name).is_ok()
         }
     })
-}
-
-pub fn declarative_inventory_identity(
-    config: &DeclarativeProviderConfig,
-) -> Result<InventoryIdentityInput> {
-    let global = Config::global();
-    let mut identity = InventoryIdentityInput::new(
-        config.name.clone(),
-        config
-            .catalog_provider_id
-            .clone()
-            .unwrap_or_else(|| match config.engine {
-                ProviderEngine::OpenAI => "openai".to_string(),
-                ProviderEngine::Anthropic => "anthropic".to_string(),
-                ProviderEngine::Ollama => "ollama".to_string(),
-            }),
-    );
-
-    identity
-        .public_inputs
-        .insert("base_url".to_string(), config.base_url.clone());
-
-    if let Some(base_path) = &config.base_path {
-        identity
-            .public_inputs
-            .insert("base_path".to_string(), base_path.clone());
-    }
-    if let Some(catalog_provider_id) = &config.catalog_provider_id {
-        identity.public_inputs.insert(
-            "catalog_provider_id".to_string(),
-            catalog_provider_id.clone(),
-        );
-    }
-    if let Some(dynamic_models) = config.dynamic_models {
-        identity
-            .public_inputs
-            .insert("dynamic_models".to_string(), dynamic_models.to_string());
-    }
-    identity.public_inputs.insert(
-        "skip_canonical_filtering".to_string(),
-        config.skip_canonical_filtering.to_string(),
-    );
-    if !config.models.is_empty() {
-        identity.public_inputs.insert(
-            "models".to_string(),
-            serde_json::to_string(
-                &config
-                    .models
-                    .iter()
-                    .map(|model| &model.name)
-                    .collect::<Vec<_>>(),
-            )?,
-        );
-    }
-    if let Some(headers) = &config.headers {
-        identity
-            .public_inputs
-            .insert("headers".to_string(), serialize_string_map(headers)?);
-    }
-    if !config.api_key_env.is_empty() {
-        if let Some(value) = config_secret_value(global, &config.api_key_env) {
-            identity
-                .secret_inputs
-                .insert(config.api_key_env.clone(), value);
-        }
-    }
-
-    Ok(identity)
 }
 
 pub fn config_param_value(config: &Config, key: &str) -> Option<String> {

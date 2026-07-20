@@ -12,10 +12,6 @@ static TEMPLATE_REGISTRY: &[(&str, &str)] = &[
         "Main system prompt that defines goose's personality and behavior",
     ),
     (
-        "compaction.md",
-        "Prompt for summarizing conversation history when context limits are reached",
-    ),
-    (
         "subagent_system.md",
         "System prompt for subagents spawned to handle specific tasks",
     ),
@@ -30,10 +26,6 @@ static TEMPLATE_REGISTRY: &[(&str, &str)] = &[
     (
         "apps_iterate.md",
         "Prompt for updating existing Goose apps based on feedback",
-    ),
-    (
-        "permission_judge.md",
-        "Prompt for analyzing tool operations for read-only detection",
     ),
     (
         "plan.md",

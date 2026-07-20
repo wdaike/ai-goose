@@ -267,38 +267,6 @@ impl GooseAcpAgent {
         self.on_get_provider_catalog_template(req).await
     }
 
-    #[custom_method(CustomProviderCreateRequest)]
-    async fn dispatch_create_custom_provider(
-        &self,
-        req: CustomProviderCreateRequest,
-    ) -> Result<CustomProviderCreateResponse, agent_client_protocol::Error> {
-        self.on_create_custom_provider(req).await
-    }
-
-    #[custom_method(CustomProviderReadRequest)]
-    async fn dispatch_read_custom_provider(
-        &self,
-        req: CustomProviderReadRequest,
-    ) -> Result<CustomProviderReadResponse, agent_client_protocol::Error> {
-        self.on_read_custom_provider(req).await
-    }
-
-    #[custom_method(CustomProviderUpdateRequest)]
-    async fn dispatch_update_custom_provider(
-        &self,
-        req: CustomProviderUpdateRequest,
-    ) -> Result<CustomProviderUpdateResponse, agent_client_protocol::Error> {
-        self.on_update_custom_provider(req).await
-    }
-
-    #[custom_method(CustomProviderDeleteRequest)]
-    async fn dispatch_delete_custom_provider(
-        &self,
-        req: CustomProviderDeleteRequest,
-    ) -> Result<CustomProviderDeleteResponse, agent_client_protocol::Error> {
-        self.on_delete_custom_provider(req).await
-    }
-
     #[custom_method(RefreshProviderInventoryRequest)]
     async fn dispatch_refresh_provider_inventory(
         &self,
@@ -761,86 +729,6 @@ impl GooseAcpAgent {
         req: ImportSourcesRequest,
     ) -> Result<ImportSourcesResponse, agent_client_protocol::Error> {
         self.on_import_sources(req).await
-    }
-
-    #[custom_method(DictationTranscribeRequest)]
-    async fn dispatch_dictation_transcribe(
-        &self,
-        req: DictationTranscribeRequest,
-    ) -> Result<DictationTranscribeResponse, agent_client_protocol::Error> {
-        self.on_dictation_transcribe(req).await
-    }
-
-    #[custom_method(DictationConfigRequest)]
-    async fn dispatch_dictation_config(
-        &self,
-        _req: DictationConfigRequest,
-    ) -> Result<DictationConfigResponse, agent_client_protocol::Error> {
-        self.on_dictation_config(_req).await
-    }
-
-    #[custom_method(DictationSecretSaveRequest)]
-    async fn dispatch_dictation_secret_save(
-        &self,
-        req: DictationSecretSaveRequest,
-    ) -> Result<EmptyResponse, agent_client_protocol::Error> {
-        self.on_dictation_secret_save(req).await
-    }
-
-    #[custom_method(DictationSecretDeleteRequest)]
-    async fn dispatch_dictation_secret_delete(
-        &self,
-        req: DictationSecretDeleteRequest,
-    ) -> Result<EmptyResponse, agent_client_protocol::Error> {
-        self.on_dictation_secret_delete(req).await
-    }
-
-    #[custom_method(DictationModelsListRequest)]
-    async fn dispatch_dictation_models_list(
-        &self,
-        _req: DictationModelsListRequest,
-    ) -> Result<DictationModelsListResponse, agent_client_protocol::Error> {
-        self.on_dictation_models_list(_req).await
-    }
-
-    #[custom_method(DictationModelDownloadRequest)]
-    async fn dispatch_dictation_model_download(
-        &self,
-        _req: DictationModelDownloadRequest,
-    ) -> Result<EmptyResponse, agent_client_protocol::Error> {
-        self.on_dictation_model_download(_req).await
-    }
-
-    #[custom_method(DictationModelDownloadProgressRequest)]
-    async fn dispatch_dictation_model_download_progress(
-        &self,
-        _req: DictationModelDownloadProgressRequest,
-    ) -> Result<DictationModelDownloadProgressResponse, agent_client_protocol::Error> {
-        self.on_dictation_model_download_progress(_req).await
-    }
-
-    #[custom_method(DictationModelCancelRequest)]
-    async fn dispatch_dictation_model_cancel(
-        &self,
-        _req: DictationModelCancelRequest,
-    ) -> Result<EmptyResponse, agent_client_protocol::Error> {
-        self.on_dictation_model_cancel(_req).await
-    }
-
-    #[custom_method(DictationModelDeleteRequest)]
-    async fn dispatch_dictation_model_delete(
-        &self,
-        _req: DictationModelDeleteRequest,
-    ) -> Result<EmptyResponse, agent_client_protocol::Error> {
-        self.on_dictation_model_delete(_req).await
-    }
-
-    #[custom_method(DictationModelSelectRequest)]
-    async fn dispatch_dictation_model_select(
-        &self,
-        req: DictationModelSelectRequest,
-    ) -> Result<EmptyResponse, agent_client_protocol::Error> {
-        self.on_dictation_model_select(req).await
     }
 
     #[custom_method(LocalInferenceModelsListRequest)]

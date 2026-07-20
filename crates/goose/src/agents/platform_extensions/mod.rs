@@ -7,7 +7,6 @@ pub mod orchestrator;
 pub mod summarize;
 pub mod summon;
 pub mod todo;
-pub mod tom;
 
 use std::collections::HashMap;
 
@@ -147,20 +146,6 @@ pub static PLATFORM_EXTENSIONS: Lazy<HashMap<&'static str, PlatformExtensionDef>
                 unprefixed_tools: false,
                 hidden: true,
                 client_factory: |ctx| Box::new(orchestrator::OrchestratorClient::new(ctx).unwrap()),
-            },
-        );
-
-        map.insert(
-            tom::EXTENSION_NAME,
-            PlatformExtensionDef {
-                name: tom::EXTENSION_NAME,
-                display_name: "Top Of Mind",
-                description:
-                    "Inject custom context into every turn via GOOSE_MOIM_MESSAGE_TEXT and GOOSE_MOIM_MESSAGE_FILE environment variables",
-                default_enabled: true,
-                unprefixed_tools: false,
-                hidden: false,
-                client_factory: |ctx| Box::new(tom::TomClient::new(ctx).unwrap()),
             },
         );
 

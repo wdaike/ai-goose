@@ -6,9 +6,9 @@ use serde::Serialize;
 use serde_json::Value;
 use std::collections::HashMap;
 
-use crate::agents::{extension::ExtensionInfo, moim};
+use crate::agents::extension::ExtensionInfo;
 use crate::hints::load_hints::build_gitignore;
-use crate::hints::{get_context_filenames, load_hint_files, SubdirectoryHintTracker};
+use crate::hints::{get_context_filenames, load_hint_files};
 use crate::{
     config::{Config, GooseMode},
     prompt_template,
@@ -23,7 +23,6 @@ pub struct PromptManager {
     system_prompt_override: Option<String>,
     system_prompt_extras: IndexMap<String, String>,
     current_date_timestamp: String,
-    subdirectory_hint_tracker: SubdirectoryHintTracker,
 }
 
 impl Default for PromptManager {
@@ -43,8 +42,6 @@ struct SystemPromptContext {
     enable_subagents: bool,
     max_extensions: usize,
     max_tools: usize,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    moim_system_prompt_block: Option<String>,
 }
 
 pub struct SystemPromptBuilder<'a, M> {
@@ -146,7 +143,6 @@ impl<'a> SystemPromptBuilder<'a, PromptManager> {
             enable_subagents: self.subagents_enabled,
             max_extensions: MAX_EXTENSIONS,
             max_tools: MAX_TOOLS,
-            moim_system_prompt_block: moim::system_prompt_block(),
         };
 
         let base_prompt = if let Some(override_prompt) = &self.manager.system_prompt_override {
@@ -199,7 +195,6 @@ impl PromptManager {
             // Use the fixed current date time so that prompt cache can be used.
             // Filtering to an hour to balance user time accuracy and multi session prompt cache hits.
             current_date_timestamp: Utc::now().format("%Y-%m-%d %H:00 %:z").to_string(),
-            subdirectory_hint_tracker: SubdirectoryHintTracker::new(),
         }
     }
 
@@ -209,7 +204,6 @@ impl PromptManager {
             system_prompt_override: None,
             system_prompt_extras: IndexMap::new(),
             current_date_timestamp: dt.format("%Y-%m-%d %H:%M:%S %:z").to_string(),
-            subdirectory_hint_tracker: SubdirectoryHintTracker::new(),
         }
     }
 
@@ -221,24 +215,6 @@ impl PromptManager {
 
     pub fn remove_system_prompt_extra(&mut self, key: &str) {
         self.system_prompt_extras.shift_remove(key);
-    }
-
-    pub fn record_tool_arguments(
-        &mut self,
-        arguments: &Option<serde_json::Map<String, serde_json::Value>>,
-        working_dir: &Path,
-    ) {
-        self.subdirectory_hint_tracker
-            .record_tool_arguments(arguments, working_dir);
-    }
-
-    pub fn load_subdirectory_hints(&mut self, working_dir: &Path) -> bool {
-        let new_hints = self.subdirectory_hint_tracker.load_new_hints(working_dir);
-        let has_new = !new_hints.is_empty();
-        for (key, content) in new_hints {
-            self.system_prompt_extras.insert(key, content);
-        }
-        has_new
     }
 
     /// Override the system prompt with custom text

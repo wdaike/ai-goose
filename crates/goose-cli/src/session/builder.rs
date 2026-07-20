@@ -3,7 +3,7 @@ use crate::cli::StreamableHttpOptions;
 use super::output;
 use super::CliSession;
 use console::style;
-use goose::agents::{Agent, Container, ExtensionError};
+use goose::agents::{Agent, ExtensionError};
 use goose::config::resolve_extensions_for_new_session;
 use goose::config::{Config, ExtensionConfig, GooseMode};
 use goose::recipe::Recipe;
@@ -92,8 +92,6 @@ pub struct SessionBuilderConfig {
     pub quiet: bool,
     /// Output format (text, json)
     pub output_format: String,
-    /// Docker container to run stdio extensions inside
-    pub container: Option<Container>,
     /// Print generation statistics after headless runs.
     pub stats: bool,
 }
@@ -122,7 +120,6 @@ impl Default for SessionBuilderConfig {
             interactive: false,
             quiet: false,
             output_format: "text".to_string(),
-            container: None,
             stats: false,
         }
     }
@@ -359,10 +356,6 @@ pub async fn build_session(session_config: SessionBuilderConfig) -> CliSession {
     let config = Config::global();
     let agent: Agent = Agent::new();
 
-    if session_config.container.is_some() {
-        agent.set_container(session_config.container.clone()).await;
-    }
-
     let session_manager = agent.config.session_manager.clone();
 
     let recipe = session_config.recipe.as_ref();
@@ -506,7 +499,6 @@ mod tests {
             interactive: true,
             quiet: false,
             output_format: "text".to_string(),
-            container: None,
             stats: false,
         };
 

@@ -1,8 +1,6 @@
 use super::*;
-use crate::config::declarative_providers;
 use crate::providers::inventory::ensure_refresh_identity_current;
 use crate::providers::provider_secrets;
-use std::str::FromStr;
 
 fn provider_secret_to_dto(secret: provider_secrets::ProviderSecret) -> ProviderSecretDto {
     let storage = match secret.storage {
@@ -270,162 +268,6 @@ fn provider_template_to_dto(
     }
 }
 
-fn custom_provider_engine_to_dto(engine: &declarative_providers::ProviderEngine) -> &'static str {
-    match engine {
-        declarative_providers::ProviderEngine::OpenAI => "openai_compatible",
-        declarative_providers::ProviderEngine::Anthropic => "anthropic_compatible",
-        declarative_providers::ProviderEngine::Ollama => "ollama_compatible",
-    }
-}
-
-fn normalize_custom_provider_engine(engine: &str) -> Result<String, agent_client_protocol::Error> {
-    let engine = engine.trim().to_lowercase();
-    if declarative_providers::ProviderEngine::from_str(&engine).is_err() {
-        return Err(agent_client_protocol::Error::invalid_params()
-            .data(format!("Unsupported custom provider engine: {engine}")));
-    }
-
-    match engine.as_str() {
-        "openai" | "openai_compatible" => Ok("openai_compatible".to_string()),
-        "anthropic" | "anthropic_compatible" => Ok("anthropic_compatible".to_string()),
-        "ollama" | "ollama_compatible" => Ok("ollama_compatible".to_string()),
-        _ => unreachable!("provider engine was validated above"),
-    }
-}
-
-fn non_empty_trimmed(value: String, field: &str) -> Result<String, agent_client_protocol::Error> {
-    let value = value.trim().to_string();
-    if value.is_empty() {
-        return Err(
-            agent_client_protocol::Error::invalid_params().data(format!("{field} cannot be empty"))
-        );
-    }
-    Ok(value)
-}
-
-fn normalize_optional_string(value: Option<String>) -> Option<String> {
-    value.and_then(|value| {
-        let value = value.trim().to_string();
-        (!value.is_empty()).then_some(value)
-    })
-}
-
-fn normalize_custom_provider_upsert(
-    mut provider: CustomProviderUpsertDto,
-    require_api_key: bool,
-) -> Result<CustomProviderUpsertDto, agent_client_protocol::Error> {
-    provider.engine = normalize_custom_provider_engine(&provider.engine)?;
-    provider.display_name = non_empty_trimmed(provider.display_name, "displayName")?;
-    provider.api_url = non_empty_trimmed(provider.api_url, "apiUrl")?;
-    let url = url::Url::parse(&provider.api_url).map_err(|_| {
-        agent_client_protocol::Error::invalid_params().data("apiUrl must be a valid URL")
-    })?;
-    if !matches!(url.scheme(), "http" | "https") {
-        return Err(
-            agent_client_protocol::Error::invalid_params().data("apiUrl must use HTTP or HTTPS")
-        );
-    }
-
-    provider.api_key = provider.api_key.and_then(|api_key| {
-        let api_key = api_key.trim().to_string();
-        (!api_key.is_empty()).then_some(api_key)
-    });
-    if require_api_key && provider.requires_auth && provider.api_key.is_none() {
-        return Err(agent_client_protocol::Error::invalid_params().data("apiKey cannot be empty"));
-    }
-    provider.models = provider
-        .models
-        .into_iter()
-        .filter_map(|model| {
-            let model = model.trim().to_string();
-            (!model.is_empty()).then_some(model)
-        })
-        .collect();
-    if provider.models.is_empty() {
-        return Err(agent_client_protocol::Error::invalid_params().data("models cannot be empty"));
-    }
-
-    provider.headers = provider
-        .headers
-        .into_iter()
-        .map(|(key, value)| {
-            let key = key.trim().to_string();
-            let value = value.trim().to_string();
-            if key.is_empty() {
-                return Ok(None);
-            }
-            reqwest::header::HeaderName::from_bytes(key.as_bytes()).map_err(|_| {
-                agent_client_protocol::Error::invalid_params()
-                    .data(format!("Invalid header name: {key}"))
-            })?;
-            reqwest::header::HeaderValue::from_str(&value).map_err(|_| {
-                agent_client_protocol::Error::invalid_params()
-                    .data(format!("Invalid header value for: {key}"))
-            })?;
-            Ok(Some((key, value)))
-        })
-        .collect::<Result<Vec<_>, agent_client_protocol::Error>>()?
-        .into_iter()
-        .flatten()
-        .collect();
-    provider.catalog_provider_id = normalize_optional_string(provider.catalog_provider_id);
-    provider.base_path = normalize_optional_string(provider.base_path);
-    Ok(provider)
-}
-
-fn custom_provider_headers(headers: HashMap<String, String>) -> Option<HashMap<String, String>> {
-    (!headers.is_empty()).then_some(headers)
-}
-
-fn load_declarative_provider_for_client(
-    provider_id: &str,
-) -> Result<declarative_providers::LoadedProvider, agent_client_protocol::Error> {
-    declarative_providers::load_provider(provider_id).map_err(|error| {
-        if error.to_string().contains("Provider not found") {
-            agent_client_protocol::Error::invalid_params()
-                .data(format!("Unknown provider: {provider_id}"))
-        } else if error.to_string().contains("Invalid provider id") {
-            agent_client_protocol::Error::invalid_params().data(error.to_string())
-        } else {
-            agent_client_protocol::Error::internal_error().data(error.to_string())
-        }
-    })
-}
-
-fn custom_provider_config_to_dto(
-    config: &declarative_providers::DeclarativeProviderConfig,
-) -> CustomProviderConfigDto {
-    let api_key_env = normalize_optional_string(Some(config.api_key_env.clone()));
-    let api_key_set = api_key_env
-        .as_ref()
-        .map(|key| {
-            Config::global()
-                .get_secret::<serde_json::Value>(key)
-                .is_ok()
-        })
-        .unwrap_or(false);
-
-    CustomProviderConfigDto {
-        provider_id: config.name.clone(),
-        engine: custom_provider_engine_to_dto(&config.engine).to_string(),
-        display_name: config.display_name.clone(),
-        api_url: config.base_url.clone(),
-        models: config
-            .models
-            .iter()
-            .map(|model| model.name.clone())
-            .collect(),
-        supports_streaming: config.supports_streaming,
-        headers: config.headers.clone().unwrap_or_default(),
-        requires_auth: config.requires_auth,
-        catalog_provider_id: config.catalog_provider_id.clone(),
-        base_path: config.base_path.clone(),
-        api_key_env,
-        api_key_set,
-        preserves_thinking: config.preserves_thinking,
-    }
-}
-
 fn refresh_skip_reason_to_dto(reason: RefreshSkipReason) -> RefreshProviderInventorySkipReasonDto {
     match reason {
         RefreshSkipReason::UnknownProvider => {
@@ -545,146 +387,6 @@ impl GooseAcpAgent {
             })?;
         Ok(ProviderCatalogTemplateResponse {
             template: provider_template_to_dto(template),
-        })
-    }
-
-    pub(super) async fn on_create_custom_provider(
-        &self,
-        req: CustomProviderCreateRequest,
-    ) -> Result<CustomProviderCreateResponse, agent_client_protocol::Error> {
-        let provider = normalize_custom_provider_upsert(req.provider, true)?;
-        let config = declarative_providers::create_custom_provider(
-            declarative_providers::CreateCustomProviderParams {
-                engine: provider.engine,
-                display_name: provider.display_name,
-                api_url: provider.api_url,
-                api_key: provider.api_key,
-                models: provider.models,
-                supports_streaming: provider.supports_streaming,
-                headers: custom_provider_headers(provider.headers),
-                requires_auth: provider.requires_auth,
-                catalog_provider_id: provider.catalog_provider_id,
-                base_path: provider.base_path,
-                preserves_thinking: provider.preserves_thinking,
-            },
-        )
-        .internal_err_ctx("Failed to create custom provider")?;
-
-        Config::global().invalidate_secrets_cache();
-        crate::providers::refresh_custom_providers()
-            .await
-            .internal_err_ctx("Failed to refresh custom providers")?;
-
-        let provider_id = config.name;
-        let provider_ids = [provider_id.clone()];
-        let status = Self::provider_config_status(provider_id.clone()).await;
-        let refresh = self.start_provider_inventory_refresh(&provider_ids).await?;
-        Ok(CustomProviderCreateResponse {
-            provider_id,
-            status,
-            refresh,
-        })
-    }
-
-    pub(super) async fn on_read_custom_provider(
-        &self,
-        req: CustomProviderReadRequest,
-    ) -> Result<CustomProviderReadResponse, agent_client_protocol::Error> {
-        let loaded = load_declarative_provider_for_client(&req.provider_id)?;
-        let status = Self::provider_config_status(req.provider_id).await;
-        Ok(CustomProviderReadResponse {
-            provider: custom_provider_config_to_dto(&loaded.config),
-            editable: loaded.is_editable,
-            status,
-        })
-    }
-
-    pub(super) async fn on_update_custom_provider(
-        &self,
-        req: CustomProviderUpdateRequest,
-    ) -> Result<CustomProviderUpdateResponse, agent_client_protocol::Error> {
-        let loaded = load_declarative_provider_for_client(&req.provider_id)?;
-        if !loaded.is_editable {
-            return Err(agent_client_protocol::Error::invalid_params()
-                .data(format!("Provider is not editable: {}", req.provider_id)));
-        }
-
-        let provider = normalize_custom_provider_upsert(req.provider, false)?;
-        if provider.requires_auth && provider.api_key.is_none() {
-            let api_key_env = if loaded.config.api_key_env.is_empty() {
-                declarative_providers::generate_api_key_name(&req.provider_id)
-            } else {
-                loaded.config.api_key_env.clone()
-            };
-            if Config::global().get_secret::<String>(&api_key_env).is_err() {
-                return Err(agent_client_protocol::Error::invalid_params()
-                    .data("apiKey is required when auth is enabled and no secret is stored"));
-            }
-        }
-        declarative_providers::update_custom_provider(
-            declarative_providers::UpdateCustomProviderParams {
-                id: req.provider_id.clone(),
-                engine: provider.engine,
-                display_name: provider.display_name,
-                api_url: provider.api_url,
-                api_key: provider.api_key,
-                models: provider.models,
-                supports_streaming: provider.supports_streaming,
-                headers: Some(provider.headers),
-                requires_auth: provider.requires_auth,
-                catalog_provider_id: provider.catalog_provider_id,
-                base_path: provider.base_path,
-                preserves_thinking: provider.preserves_thinking,
-            },
-        )
-        .internal_err_ctx("Failed to update custom provider")?;
-
-        Config::global().invalidate_secrets_cache();
-        crate::providers::refresh_custom_providers()
-            .await
-            .internal_err_ctx("Failed to refresh custom providers")?;
-
-        let provider_ids = [req.provider_id.clone()];
-        let status = Self::provider_config_status(req.provider_id.clone()).await;
-        let refresh = self.start_provider_inventory_refresh(&provider_ids).await?;
-        Ok(CustomProviderUpdateResponse {
-            provider_id: req.provider_id,
-            status,
-            refresh,
-        })
-    }
-
-    pub(super) async fn on_delete_custom_provider(
-        &self,
-        req: CustomProviderDeleteRequest,
-    ) -> Result<CustomProviderDeleteResponse, agent_client_protocol::Error> {
-        let loaded = load_declarative_provider_for_client(&req.provider_id)?;
-        if !loaded.is_editable {
-            return Err(agent_client_protocol::Error::invalid_params()
-                .data(format!("Provider is not editable: {}", req.provider_id)));
-        }
-
-        if Config::global().get_goose_provider().ok().as_deref() == Some(req.provider_id.as_str()) {
-            return Err(agent_client_protocol::Error::invalid_params().data(format!(
-                "Cannot delete active provider: {}",
-                req.provider_id
-            )));
-        }
-
-        declarative_providers::remove_custom_provider(&req.provider_id)
-            .internal_err_ctx("Failed to delete custom provider")?;
-
-        Config::global().invalidate_secrets_cache();
-        crate::providers::refresh_custom_providers()
-            .await
-            .internal_err_ctx("Failed to refresh custom providers")?;
-
-        Ok(CustomProviderDeleteResponse {
-            provider_id: req.provider_id,
-            refresh: RefreshProviderInventoryResponse {
-                started: Vec::new(),
-                skipped: Vec::new(),
-            },
         })
     }
 
@@ -959,28 +661,22 @@ impl GooseAcpAgent {
             .await
             .invalid_params_err_ctx("Unknown provider")?;
 
-        if req.provider_id == crate::providers::huggingface_auth::HUGGINGFACE_PROVIDER_NAME {
-            crate::providers::huggingface_auth::configure_oauth()
-                .await
-                .internal_err_ctx("Failed to authenticate provider")?;
-        } else {
-            let metadata = entry.metadata().clone();
-            if !metadata.config_keys.iter().any(|key| key.oauth_flow) {
-                return Err(agent_client_protocol::Error::invalid_params().data(format!(
-                    "Provider does not support native authentication: {}",
-                    req.provider_id
-                )));
-            }
-
-            let provider = entry
-                .create_with_default_model(Vec::new())
-                .await
-                .internal_err_ctx("Failed to initialize provider")?;
-            provider
-                .configure_oauth()
-                .await
-                .internal_err_ctx("Failed to authenticate provider")?;
+        let metadata = entry.metadata().clone();
+        if !metadata.config_keys.iter().any(|key| key.oauth_flow) {
+            return Err(agent_client_protocol::Error::invalid_params().data(format!(
+                "Provider does not support native authentication: {}",
+                req.provider_id
+            )));
         }
+
+        let provider = entry
+            .create_with_default_model(Vec::new())
+            .await
+            .internal_err_ctx("Failed to initialize provider")?;
+        provider
+            .configure_oauth()
+            .await
+            .internal_err_ctx("Failed to authenticate provider")?;
         Config::global().invalidate_secrets_cache();
 
         let provider_ids = [req.provider_id.clone()];

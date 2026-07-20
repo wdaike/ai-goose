@@ -117,13 +117,12 @@ goose run -t "Review the failed tests in tests/integration/, identify why the au
 Set up your environment variables to avoid some of the repetitive runtime decisions.
 
 ```bash
-export GOOSE_CONTEXT_STRATEGY=summarize
 export GOOSE_MAX_TURNS=50
 export GOOSE_MODE=auto
 export GOOSE_DISABLE_SESSION_NAMING=true
 ```
 
-The `CONTEXT_STRATEGY` and `MAX_TURNS` settings help manage conversation limits, while `GOOSE_MODE` set to `auto` allows for non-interactive execution. `GOOSE_DISABLE_SESSION_NAMING` avoids the extra background model call used to generate a session name and keeps the default "CLI Session" name.
+`GOOSE_MAX_TURNS` limits unattended actions, while `GOOSE_MODE` set to `auto` allows for non-interactive execution. Codex manages context compaction automatically. `GOOSE_DISABLE_SESSION_NAMING` avoids the extra background model call used to generate a session name and keeps the default "CLI Session" name.
 
 ### 3. **Implement Robust Error Handling**
 
@@ -251,14 +250,14 @@ export GOOSE_MODE=auto  # Automatically approve safe operations
 
 ### 4. Context Decision Automation
 
-**What this means**: When conversation context limits are reached, goose automatically applies the configured strategy without user input.
+**What this means**: Codex automatically compacts the thread when it approaches the model context limit.
 
-**Impact**: Important context might be lost if summarization isn't perfect, or execution might be interrupted if context clearing is too aggressive.
+**Impact**: Compaction preserves the important working context but may omit older detail.
 
-**Mitigation**: Configure appropriate context strategies and monitor token usage:
+**Mitigation**: Monitor token usage and set an explicit compaction threshold when needed:
 
 ```bash
-export GOOSE_CONTEXT_STRATEGY=summarize  # Usually the best choice for automation
+export GOOSE_AUTO_COMPACT_THRESHOLD=0.8
 export GOOSE_MAX_TURNS=100  # Prevent runaway execution
 ```
 
@@ -285,7 +284,7 @@ fi
 
 ```bash
 # Context management
-export GOOSE_CONTEXT_STRATEGY=summarize
+export GOOSE_AUTO_COMPACT_THRESHOLD=0.8
 export GOOSE_MAX_TURNS=50
 
 # Tool behavior

@@ -1277,7 +1277,6 @@ impl SummonClient {
         let agent_config = AgentConfig::new(
             self.context.session_manager.clone(),
             crate::config::permission::PermissionManager::instance(),
-            None,
             GooseMode::Auto,
             true, // disable session naming for subagents
             crate::agents::GoosePlatform::GooseCli,
@@ -1819,7 +1818,6 @@ impl SummonClient {
         let agent_config = AgentConfig::new(
             self.context.session_manager.clone(),
             crate::config::permission::PermissionManager::instance(),
-            None,
             GooseMode::Auto,
             true, // disable session naming for subagents
             crate::agents::GoosePlatform::GooseCli,
@@ -1977,66 +1975,6 @@ impl McpClientTrait for SummonClient {
         let (tx, rx) = mpsc::channel(16);
         self.notification_subscribers.lock().await.push(tx);
         rx
-    }
-
-    async fn get_moim(&self, _session_id: &str) -> Option<String> {
-        self.cleanup_completed_tasks().await;
-
-        let running = self.background_tasks.lock().await;
-        let completed = self.completed_tasks.lock().await;
-
-        if running.is_empty() && completed.is_empty() {
-            return None;
-        }
-
-        let mut lines = vec!["Background tasks:".to_string()];
-        let now = current_epoch_millis();
-
-        let mut sorted_running: Vec<_> = running.values().collect();
-        sorted_running.sort_by_key(|t| &t.id);
-
-        for task in sorted_running {
-            let elapsed = task.started_at.elapsed();
-            let idle_ms = now.saturating_sub(task.last_activity.load(Ordering::Relaxed));
-
-            lines.push(format!(
-                "• {}: \"{}\" - running {}, {} turns, idle {}",
-                task.id,
-                task.description,
-                round_duration(elapsed),
-                task.turns.load(Ordering::Relaxed),
-                round_duration(Duration::from_millis(idle_ms)),
-            ));
-        }
-
-        let mut sorted_completed: Vec<_> = completed.values().collect();
-        sorted_completed.sort_by_key(|t| &t.id);
-
-        for task in sorted_completed {
-            let status = if task.result.is_ok() {
-                "completed"
-            } else {
-                "failed"
-            };
-            lines.push(format!(
-                "• {}: \"{}\" - {} in {} ({} turns) - use load(\"{}\") to get result",
-                task.id,
-                task.description,
-                status,
-                round_duration(task.duration),
-                task.turns_taken,
-                task.id
-            ));
-        }
-
-        if !running.is_empty() {
-            lines.push(
-                "\n→ Use load(source: \"<id>\") to wait for a task, or load(source: \"<id>\", cancel: true) to stop it"
-                    .to_string(),
-            );
-        }
-
-        Some(lines.join("\n"))
     }
 }
 
@@ -2388,7 +2326,7 @@ You review code."#;
     }
 
     #[test]
-    fn test_duration_rounding_for_moim() {
+    fn test_duration_rounding() {
         assert_eq!(round_duration(Duration::from_secs(5)), "0s");
         assert_eq!(round_duration(Duration::from_secs(15)), "10s");
         assert_eq!(round_duration(Duration::from_secs(59)), "50s");
@@ -2828,12 +2766,6 @@ You review code."#;
             );
         }
 
-        let moim = client.get_moim("test").await.unwrap();
-        assert!(moim.contains("20260204_2"));
-        assert!(moim.contains("20260204_3"));
-        assert!(moim.contains(r#"use load("20260204_2") to get result"#));
-        assert!(moim.contains(r#"use load("20260204_3") to get result"#));
-
         let discovery = client
             .handle_load_discovery("test", temp_dir.path())
             .await
@@ -2877,9 +2809,6 @@ You review code."#;
             .await;
         assert!(result.is_err());
         assert!(result.unwrap_err().contains("not found"));
-
-        // All tasks consumed -- moim should be empty
-        assert!(client.get_moim("test").await.is_none());
     }
 
     #[tokio::test]

@@ -78,9 +78,7 @@ winapi = { workspace = true, features = [
 
 [features]
 default = [
-    "local-inference",
     "tui",
-    "aws-providers",
     "telemetry",
     "nostr",
     "otel",
@@ -88,18 +86,16 @@ default = [
     "system-keyring",
     "update",
 ]
-local-inference = ["goose/local-inference"]
-aws-providers = ["goose/aws-providers"]
-cuda = ["goose/cuda", "local-inference"]
-vulkan = ["goose/vulkan", "local-inference"]
-mlx = ["goose/mlx", "local-inference"]
+cuda = []
+vulkan = []
+mlx = []
 telemetry = ["goose/telemetry"]
 nostr = ["goose/nostr"]
 otel = ["goose/otel"]
 system-keyring = ["goose/system-keyring"]
 tui = []
 update = ["dep:sigstore-verify"]
-portable-default = ["rustls-tls", "aws-providers", "telemetry", "otel", "tui"]
+portable-default = ["rustls-tls", "telemetry", "otel", "tui"]
 # disables the update command
 disable-update = []
 rustls-tls = [

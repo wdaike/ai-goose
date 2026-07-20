@@ -84,7 +84,6 @@ mod apps;
 mod config;
 mod custom_dispatch;
 mod diagnostics;
-mod dictation;
 mod dispatch;
 mod elicitation;
 mod extensions;
@@ -830,12 +829,12 @@ impl GooseAcpAgent {
         let agent_config = AgentConfig::new(
             Arc::clone(&session_manager),
             Arc::clone(&permission_manager),
-            Some(options.scheduler),
             Config::global().get_goose_mode().unwrap_or_default(),
             options.disable_session_naming,
             options.goose_platform.clone(),
         );
-        let agent_manager = Arc::new(AgentManager::new(agent_config, None).await?);
+        let agent_manager =
+            Arc::new(AgentManager::new(agent_config, Some(options.scheduler), None).await?);
 
         Ok(Self {
             sessions: Arc::new(Mutex::new(HashMap::new())),
@@ -1357,10 +1356,10 @@ impl GooseAcpAgent {
     fn is_builtin_agent_command(command: &str) -> bool {
         let normalized = command.trim_start_matches('/');
 
-        crate::agents::execute_commands::list_commands()
+        crate::slash_commands::slash_command::list_commands()
             .iter()
             .any(|cmd| cmd.name == normalized)
-            || crate::agents::execute_commands::COMPACT_TRIGGERS
+            || crate::slash_commands::slash_command::COMPACT_TRIGGERS
                 .iter()
                 .filter_map(|trigger| trigger.strip_prefix('/'))
                 .any(|trigger| trigger == normalized)
@@ -1889,7 +1888,39 @@ impl GooseAcpAgent {
         let user_message = Self::convert_acp_prompt_to_message(&args.prompt);
 
         let message_text = user_message.as_concat_text();
-        if let Some(parsed) = crate::agents::execute_commands::parse_slash_command(&message_text) {
+        if let Some(parsed) =
+            crate::slash_commands::slash_command::parse_slash_command(&message_text)
+        {
+            let local_result = match (parsed.command, parsed.params_str.is_empty()) {
+                ("compact", true) => Some(
+                    agent
+                        .compact_session(&session_id)
+                        .await
+                        .map(|()| "Compaction complete"),
+                ),
+                ("clear", true) => Some(
+                    agent
+                        .clear_session(&session_id)
+                        .await
+                        .map(|()| "Conversation cleared"),
+                ),
+                _ => None,
+            };
+            if let Some(result) = local_result {
+                self.clear_active_run(&session_id, &run_id).await;
+                Self::send_active_run_update(cx, &args.session_id, None)?;
+                let message = result.map_err(|error| {
+                    agent_client_protocol::Error::internal_error().data(error.to_string())
+                })?;
+                cx.send_notification(SessionNotification::new(
+                    args.session_id.clone(),
+                    SessionUpdate::AgentMessageChunk(ContentChunk::new(ContentBlock::Text(
+                        TextContent::new(message),
+                    ))),
+                ))?;
+                return Ok(PromptResponse::new(StopReason::EndTurn));
+            }
+
             let full_command = format!("/{}", parsed.command);
 
             if !Self::is_builtin_agent_command(parsed.command) {

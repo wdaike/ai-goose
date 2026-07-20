@@ -1,239 +1,243 @@
 # goose 系统架构
 
-## 架构定位
+## 一句话定位
 
-goose 当前采用“产品壳与接入层由 goose 负责，Agent Runtime 复用 Codex”的架构。
+goose 负责产品壳（UI、接入、会话、Recipe、扩展选择），Agent Runtime 完全复用 Codex。`crates/goose/src/codex.rs` 是两者之间唯一的薄适配层，goose 不再自己实现 Agent 循环。
 
-- goose 聚焦 Electron / Browser / CLI 用户体验、ACP 接入、产品会话、Recipes、扩展选择和事件展示。
-- Codex App Server 负责线程与 Turn、模型交互、上下文管理、工具执行、沙箱和运行时状态。
-- `crates/goose/src/codex.rs` 是两者之间的薄适配层，不再自行实现一套 Agent 循环。
-
-Codex 以 Rust 依赖嵌入 goose 进程，通过 `codex-app-server-client` 的 in-process transport 调用。主对话路径不启动 `codex exec` 子进程，也不经过外部 `codex-acp` 进程。
+Codex 以 Rust 依赖嵌入 goose 进程，通过 `codex-app-server-client` 的 in-process transport 调用，不启动子进程。
 
 ```mermaid
 flowchart TB
-    User["用户"]
+    Clients["客户端<br/>Desktop / Browser / Text UI / CLI / ACP / Gateway"]
+    Access["接入层 ACP + Gateway<br/>crates/goose/src/acp, gateway"]
+    Agent["产品协调 Agent<br/>crates/goose/src/agents"]
+    Adapter["CodexAgentCore 薄适配层<br/>crates/goose/src/codex.rs"]
+    Runtime["内嵌 Codex App Server<br/>Thread / Turn / 模型 / 工具 / 沙箱"]
+    GooseDB[("goose SQLite<br/>产品会话与消息")]
+    CodexHome[("Codex Home / State DB<br/>认证、配置、线程状态")]
 
-    subgraph Clients["客户端"]
-        Desktop["Electron + React Desktop<br/>ui/desktop"]
-        Browser["Web Browser<br/>BrowserHost + React Renderer"]
-        TextUI["Ink Text UI<br/>ui/text"]
-        CLI["Rust CLI<br/>crates/goose-cli"]
-        ThirdParty["IDE / 第三方 ACP 客户端"]
-        Gateway["消息网关<br/>crates/goose/src/gateway"]
-    end
-
-    subgraph Goose["goose 产品与协调层"]
-        Access["ACP / CLI 接入<br/>crates/goose/src/acp"]
-        Agent["Agent 产品协调<br/>crates/goose/src/agents"]
-        Session["会话与配置<br/>crates/goose/src/session<br/>crates/goose/src/config"]
-        Prompt["Prompt / Recipe / Output Schema"]
-        Extension["扩展选择与 MCP 配置"]
-        Adapter["CodexAgentCore 薄适配层<br/>crates/goose/src/codex.rs"]
-    end
-
-    subgraph Codex["内嵌 Codex Runtime"]
-        Client["InProcessAppServerClient"]
-        AppServer["Codex App Server"]
-        Thread["Thread / Turn / Context"]
-        RuntimeTools["Shell / Files / Patch / Web / MCP"]
-        Sandbox["Sandbox Enforcement"]
-    end
-
-    subgraph External["外部资源"]
-        Model["Codex 模型服务"]
-        MCP["MCP Server / 第三方服务"]
-        LocalSystem["工作区与本地系统"]
-    end
-
-    subgraph Storage["持久化"]
-        GooseDB[("goose SQLite<br/>产品会话与消息")]
-        CodexHome[("Codex Home / State DB<br/>认证、配置与线程状态")]
-    end
-
-    User --> Desktop
-    User --> Browser
-    User --> TextUI
-    User --> CLI
-    User --> ThirdParty
-    User --> Gateway
-    Desktop <--> Access
-    Browser <--> Access
-    TextUI <--> Access
-    CLI <--> Access
-    ThirdParty <--> Access
-    Gateway <--> Access
-    Access --> Agent --> Adapter --> Client --> AppServer
-    Session --> Agent
-    Prompt --> Agent
-    Extension -->|"转换为 mcp_servers override"| Adapter
-    AppServer --> Thread
-    Thread --> Model
-    Thread --> RuntimeTools
-    Sandbox --> RuntimeTools
-    RuntimeTools --> MCP
-    RuntimeTools --> LocalSystem
-    AppServer -->|"通知与结果"| Adapter
-    Adapter -->|"AgentEvent"| Agent
-    Agent --> Access
-    Session <--> GooseDB
-    AppServer <--> CodexHome
+    Clients <--> Access --> Agent --> Adapter <--> Runtime
+    Agent <--> GooseDB
+    Runtime <--> CodexHome
 ```
 
-## 模块与职责
+## 模块职责
 
-| 层次 | 主要位置 | 当前职责 |
+| 层次 | 位置 | 职责 |
 | --- | --- | --- |
-| 客户端 | `ui/desktop`、`ui/text`、`crates/goose-cli` | Electron 与浏览器共用 React renderer；负责交互、进程启动、请求发起和流式结果展示 |
-| 接入层 | `crates/goose/src/acp`、`crates/goose/src/gateway` | ACP、CLI 和外部消息入口，将请求绑定到 goose 会话 |
-| 产品协调层 | `crates/goose/src/agents` | Prompt、Recipe、扩展、输出 Schema、会话操作和 `AgentEvent` 接口 |
-| Codex 适配层 | `crates/goose/src/codex.rs` | App Server 生命周期、Thread 映射、请求转换、事件转换、用量同步和中断控制 |
-| Codex Runtime | `codex-app-server-client`、`codex-app-server-protocol`、`codex-core-api`、`codex-config` | 原生 Agent 循环、认证与配置、模型、上下文、工具、沙箱和线程状态 |
-| Provider 兼容层 | `crates/goose/src/providers`、`crates/goose-providers`、`crates/goose-provider-types` | Provider 元数据、配置兼容和少量辅助调用；不承载 Codex 主对话循环 |
-| 扩展层 | `crates/goose-mcp`、`crates/goose/src/agents/extension_*` | 管理 goose 扩展，并将启用的 MCP Server 投影到 Codex Thread 配置 |
-| 持久化 | `crates/goose/src/session`、Codex Home / State DB | 分别保存产品会话与 Codex 原生线程状态 |
+| 客户端 | `ui/desktop`、`ui/text`、`crates/goose-cli` | 交互、请求发起、流式展示；Electron 与浏览器共用同一 React renderer |
+| 接入层 | `crates/goose/src/acp`、`gateway` | ACP / CLI / 外部消息入口，绑定 goose 会话 |
+| 产品协调 | `crates/goose/src/agents` | Prompt、Recipe、扩展、输出 Schema、`AgentEvent` 接口 |
+| Codex 适配 | `crates/goose/src/codex.rs` | Runtime 生命周期、Thread 映射、请求/事件转换、用量同步、中断 |
+| Codex Runtime | `codex-*` 依赖 | Agent 循环、认证配置、模型、上下文、工具执行、沙箱、线程状态 |
+| Provider 兼容 | `crates/goose/src/providers` 等 | 元数据与辅助调用（如会话命名）；不承载主对话循环 |
+| 扩展 | `crates/goose-mcp`、`agents/extension_*` | 管理 goose 扩展，投影为 Codex 的 `mcp_servers` 配置 |
 
 ## 主请求链路
 
+下列时序图把 Codex 视为黑盒：goose 只关心发出的协议请求（`thread/*`、`turn/*`）和收到的通知流，不关心其内部的模型调用与工具执行。
+
+### 一次完整回复
+
 ```mermaid
 sequenceDiagram
-    participant UI as Desktop / CLI / ACP Client
-    participant Agent as goose Agent
-    participant Session as SessionManager
-    participant Bridge as CodexAgentCore
-    participant Runtime as InProcess App Server
+    participant UI as 客户端<br/>Desktop / CLI / ACP
+    participant Agent as Agent
+    participant Bridge as codex.rs
+    participant DB as goose SQLite
+    participant Codex as Codex（黑盒）
 
-    UI->>Agent: reply(Message, SessionConfig)
-    Agent->>Agent: 合并 base/developer instructions 与 output schema
-    Agent->>Bridge: reply(...)
-    Bridge->>Session: 读取 goose Session
-    Bridge->>Runtime: 首次使用时惰性初始化
-    alt extension_data 中存在 thread_id
-        Bridge->>Runtime: thread/resume
+    UI->>Agent: reply(用户消息, 会话)
+    Agent->>Bridge: reply(+instructions +output schema)
+    Note over Bridge,Codex: 首次调用时惰性启动<br/>in-process App Server
+    alt 会话已有 thread_id
+        Bridge->>Codex: thread/resume（携带最新配置）
     else 新会话
-        Bridge->>Runtime: thread/start
-        Bridge->>Session: 保存 Codex thread_id
+        Bridge->>Codex: thread/start
+        Bridge->>DB: 回写 thread_id
     end
-    Bridge->>Session: 保存用户消息
-    Bridge->>Runtime: turn/start
-    loop 当前 Thread + Turn 的通知
-        Runtime-->>Bridge: message / reasoning / item / usage / warning / error
-        Bridge->>Session: 保存消息、工具结果与用量
-        Bridge-->>Agent: AgentEvent
-        Agent-->>UI: 流式展示
+    Bridge->>DB: 保存用户消息
+    Bridge->>Codex: turn/start
+    loop 通知流（按 thread_id + turn_id 过滤）
+        Codex-->>Bridge: 文本 / 思考 delta
+        Bridge-->>UI: 流式 assistant / thinking
+        Codex-->>Bridge: 工具条目开始 / 完成
+        Bridge->>DB: 保存工具请求 / 结果
+        Bridge-->>UI: 工具事件
+        Codex-->>Bridge: 用量更新
+        Bridge->>DB: 同步用量
+        Bridge-->>UI: AgentEvent::Usage
     end
-    Runtime-->>Bridge: turn/completed
+    Codex-->>Bridge: turn/completed
+    Bridge->>DB: 保存最终 assistant 消息
+    Bridge-->>UI: 流结束
 ```
 
-`CodexRuntime` 在首次请求时通过 `OnceCell` 初始化。后台事件路由器消费 `InProcessServerEvent`，再通过 broadcast channel 分发；每个回复流只处理与自身 `thread_id` 和 `turn_id` 匹配的通知，避免并发会话串流。
+### Turn 进行中的控制
 
-除普通回复外，适配层还直接映射以下生命周期操作：
+```mermaid
+sequenceDiagram
+    participant UI as 客户端
+    participant Agent as Agent
+    participant Bridge as codex.rs
+    participant DB as goose SQLite
+    participant Codex as Codex（黑盒）
 
-- 用户追加输入：`turn/steer`
-- 用户取消：`turn/interrupt`
-- 会话失效或切换：`thread/unsubscribe`
-- 应用重启后继续会话：`thread/resume`
+    Note over UI,Codex: 前提：某个 Turn 正在流式进行
+    alt 追加输入
+        UI->>Agent: steer(消息)
+        Agent->>Bridge: steer
+        Bridge->>Codex: turn/steer（校验活动 turn_id）
+        Codex-->>Bridge: 确认
+        Agent->>DB: 保存追加消息
+        Note over Codex: 后续输出并入当前 Turn 的通知流
+    else 取消
+        UI->>Agent: 触发 cancel token
+        Bridge->>Codex: turn/interrupt
+        Bridge-->>UI: 回复流结束
+        Note over Bridge: 清除活动 turn_id
+    end
+```
 
-所有 App Server 请求都携带唯一 JSON-RPC `RequestId`。
+### 配置变更与会话续接
 
-## 职责边界
+```mermaid
+sequenceDiagram
+    participant UI as 客户端
+    participant Agent as Agent
+    participant Bridge as codex.rs
+    participant DB as goose SQLite
+    participant Codex as Codex（黑盒）
 
-### goose 拥有
+    UI->>Agent: 启停扩展 / 切换 GooseMode
+    Agent->>DB: 更新会话配置
+    Agent->>Bridge: invalidate_session
+    Bridge->>Codex: thread/unsubscribe
+    Note over Bridge: 丢弃内存中的<br/>session → thread 映射
+    UI->>Agent: 下一次 reply
+    Agent->>Bridge: reply(...)
+    Bridge->>DB: 读取 thread_id
+    Bridge->>Codex: thread/resume（新沙箱 / 新 mcp_servers）
+    Note over UI,Codex: 应用重启后的会话恢复走同一条路径
+```
 
-- Desktop、Web Browser、Text UI、CLI 和 ACP 产品接口
-- 产品会话元数据、展示消息和累计用量
-- 工作目录、GooseMode、Recipe、Prompt 扩展和最终输出 Schema
-- 启用哪些 goose 扩展，以及如何把扩展配置转换成 Codex MCP 配置
-- 将 Codex 通知转换为现有 `Message` / `AgentEvent`，保持 UI 协议稳定
+### 压缩与清空
 
-### Codex 拥有
+- `/compact` 不再调用 goose Provider 生成摘要，而是直接发 `thread/compact/start`，等待 Codex 的 compaction Turn 完成并同步用量。
+- 清空会话时先 `thread/unsubscribe`，删除 `extension_data.codex.thread_id`，再清空 goose 展示消息；下一次回复会创建全新的 Codex Thread，旧上下文不会残留。
+- goose SQLite 保留完整产品展示记录直至用户清空；模型上下文的压缩表示只由 Codex rollout/state 管理。
 
-- ChatGPT / API Key 认证和 Codex 配置加载
-- 模型默认值、Thread / Turn 生命周期与上下文管理
-- 模型调用、重试和原生工具循环
-- Shell、文件读取、搜索、补丁、Web、图片及 MCP 工具执行
-- 沙箱实际执行与 Codex State DB / Thread 状态
+## codex.rs 接口与实现
 
-### 薄适配层拥有
+### 对外接口
 
-- `goose session id ↔ Codex thread id` 映射
-- goose `Message` 与 Codex `UserInput` 的转换
-- App Server notification 与 goose 消息、工具事件、用量的转换
-- Codex Runtime 的惰性启动、事件路由、取消、续接与清理
+| 接口 | 调用方 | 作用 |
+| --- | --- | --- |
+| `codex::run(main_fn)` | `goose-cli` main | 进程入口包装：调用 `codex_core_api::arg0_dispatch_or_else` 处理 arg0 分发（sandbox 辅助进程复用同一 binary），并保存 `Arg0DispatchPaths` 供 Runtime 启动使用 |
+| `CodexAgentCore::new(runtime)` | `Agent::with_config` | 每个 Agent 持有一个实例；`Arc<OnceCell<CodexRuntime>>` 来自 `AgentConfig`，因此多个 Agent 共享同一 Runtime |
+| `reply(...)` | `Agent::reply` | 发起一个 Turn，返回 `BoxStream<AgentEvent>`；入参含用户消息、instructions、output schema 和取消 token |
+| `steer(session_id, message)` | `Agent::steer` | 当前有活动 Turn 时追加输入（`turn/steer`），返回是否已投递 |
+| `compact(...)` | CLI / ACP `/compact` | 调用 `thread/compact/start` 并等待原生压缩 Turn 完成 |
+| `invalidate_session(session)` | 扩展或 GooseMode 变更时 | `thread/unsubscribe` 并丢弃内存映射，下次 reply 会用新配置 `thread/resume` |
+| `reset_session(...)` | 清空会话 | unsubscribe 后删除持久化的 `thread_id`，保证下一次创建新 Thread |
 
-适配层不解析 Codex CLI JSONL、不创建临时 `codex exec` 进程，也不复制 Codex 的认证、Thread 存储或工具执行逻辑。
+### CodexRuntime（进程级单例）
+
+首次 `reply` 时经 `OnceCell::get_or_try_init` 惰性创建，之后所有会话共享：
+
+1. `set_default_originator("goose")`，用 Codex 自己的加载器读取配置（`Config::load_with_cli_overrides`），注入 arg0 路径。
+2. 初始化 Codex State DB 与 `EnvironmentManager`，然后 `InProcessAppServerClient::start(...)` 在进程内启动 App Server（`session_source`、`client_name` 均标记为 goose）。
+3. 启动一个后台事件路由任务，把 `InProcessServerEvent` 分发到 `broadcast` channel：
+   - `ServerNotification` → 原样广播，由各回复流自行过滤；
+   - `ServerRequest`（交互式审批等）→ 直接以 JSON-RPC error 拒绝（goose 未接入审批 UI，安全靠沙箱模式）；
+   - `Lagged` / 断连 → 广播为传输错误，使进行中的 Turn 以错误结束。
+4. `Drop` 时通过 `CancellationToken` 停止路由任务并关闭 client。
+
+所有请求用进程级 `AtomicI64` 生成唯一 JSON-RPC `RequestId`（与 codex 自家 exec/TUI 的做法一致）。
+
+### reply 的执行流程
+
+1. **会话 → 线程映射**：查内存 `threads: HashMap<session_id, ActiveThread>`；未命中时按 `extension_data.codex.thread_id` 决定 `thread/resume`（带 `exclude_turns: true`，不回放历史）或 `thread/start`，并把新 `thread_id` 写回 session。两次加锁间做 double-check 防并发重复建线程。
+2. **构造线程配置**：`working_dir` → `cwd` / `runtime_workspace_roots`；`GooseMode` → `SandboxMode`；启用的扩展（Stdio / StreamableHttp）转换为 `mcp_servers` TOML override 传给 Codex 的 MCP 客户端。
+3. **发起 Turn**：先订阅 broadcast（保证不漏事件），保存用户消息，再 `turn/start`（携带 output schema），记录活动 `turn_id`。
+4. **事件循环**（`async_stream` 生成 `AgentEvent` 流）：只处理 `thread_id` + `turn_id` 匹配的通知；`tokio::select!` 同时监听取消 token，取消时发 `turn/interrupt` 退出。文本 delta 直接流式转发；`ItemStarted` / `ItemCompleted` 转换为工具请求 / 结果消息并落库；用量事件同步到 session 并产出 `AgentEvent::Usage`；`TurnCompleted` 时若从未流式输出过文本则补发最终 assistant 消息，随后按状态正常结束或报错。
+
+### 消息与工具事件转换
+
+- goose `Message` → Codex `UserInput`：仅转换 Text 与 Image（data URL），其余内容忽略。
+- Codex `ThreadItem` → goose 工具消息：`CommandExecution` / `FileChange`(apply_patch) / `McpToolCall`(`server__tool`) / `WebSearch` / `ImageView` / `ImageGeneration`；均标记 `TOOL_META_EXTERNAL_DISPATCH_KEY`，告知 UI 这些工具由 Codex 执行、goose 不会二次调度。
+- 命令类条目按 `CommandAction` 全为同类时映射为 `list_files` / `read_files` / `search_files`，否则归为 `shell`（仅影响展示名）。
 
 ## 配置与权限映射
 
-创建或恢复 Thread 时，goose 将产品会话中的动态配置作为 App Server 参数传入：
+创建 / 恢复 Thread 时，goose 会话配置转换为 App Server 参数：
 
-| goose 输入 | Codex 参数 / 行为 |
+| goose 输入 | Codex 参数 |
 | --- | --- |
-| `working_dir` | `cwd`，同时作为 `runtime_workspace_roots` |
-| 显式模型 | `model`；模型名为 `current` 或未指定时交给 Codex 选择默认值 |
-| `PromptManager` | `base_instructions` 和 `developer_instructions` |
-| Final Output Tool | `turn/start.output_schema` |
-| 已启用扩展 | Thread config 中的 `mcp_servers` override |
-| `GooseMode` | `SandboxMode`，由 Codex 执行沙箱限制 |
-
-当前模式映射如下：
+| `working_dir` | `cwd` + `runtime_workspace_roots` |
+| 显式模型（非 `current`） | `model`，否则由 Codex 选默认值 |
+| `PromptManager` | `base_instructions` / `developer_instructions` |
+| Recipe `response.json_schema` | `turn/start.output_schema` |
+| 已启用扩展 | `mcp_servers` override |
+| `GOOSE_AUTO_COMPACT_THRESHOLD` + 模型 context limit | Codex `model_auto_compact_token_limit` |
+| `GooseMode` | `SandboxMode`（见下表） |
 
 | GooseMode | Codex SandboxMode |
 | --- | --- |
 | `Auto` | `DangerFullAccess` |
 | `SmartApprove` | `WorkspaceWrite` |
-| `Approve` | `ReadOnly` |
-| `Chat` | `ReadOnly` |
+| `Approve` / `Chat` | `ReadOnly` |
 
-当前 Thread 使用 `AskForApproval::Never`。goose 尚未把 Codex 的交互式 server request 接入现有审批 UI，因此运行时收到此类请求会明确拒绝；安全边界由启动 Turn 前选定的沙箱模式提供。
-
-Codex Runtime 使用 Codex 自身的配置加载器和 Codex Home。Goose CLI 会把会话 provider 规范化为 `codex`；其他 `--provider` 值当前会提示被忽略。`codex` provider 文件仅保留目录展示和兼容所需的元数据壳，主对话始终进入 `CodexAgentCore`。
+Thread 固定使用 `AskForApproval::Never`：goose 未接入 Codex 交互式审批请求，收到会直接拒绝；安全边界由沙箱模式提供。goose 侧旧的工具审批与安全检查子系统（inspectors、frontend tools、confirmation 循环）已随迁移删除。
 
 ## 状态所有权
 
-goose 与 Codex 各自保存自己负责的状态，通过最小引用关联，避免双写完整运行时状态。
-
-| 状态 | 所有者 | 存储位置 |
+| 状态 | 所有者 | 位置 |
 | --- | --- | --- |
-| 会话名称、工作目录、Recipe、GooseMode | goose | goose SQLite |
-| UI 展示消息、工具事件、用量 | goose | goose SQLite |
-| Codex 关联键 | goose | Session `extension_data.codex`，仅保存 `thread_id` |
-| 当前进程活动状态 | goose 适配层 | 内存中的 `session_id → ActiveThread`，包含模型和活动 `turn_id` |
-| 原生 Thread、Turn、rollout 和上下文 | Codex | Codex Home / State DB |
-| 认证与 Codex 全局配置 | Codex | Codex Home 及受支持的环境配置 |
+| 会话元数据、展示消息、用量 | goose | goose SQLite |
+| Codex 关联键（仅 `thread_id`） | goose | Session `extension_data.codex` |
+| 进程内活动状态（模型、活动 `turn_id`） | 适配层 | 内存 `session_id → ActiveThread` |
+| Thread / Turn / rollout / 上下文 / 认证 | Codex | Codex Home / State DB |
 
-恢复会话时，goose 从 `extension_data` 读取 `thread_id` 并调用 `thread/resume`。goose 不保存 Codex rollout 路径，也不重建 Codex 上下文。
+恢复会话 = 读取 `thread_id` + `thread/resume`；goose 不复制 Codex 的上下文或线程存储。
 
-## 事件语义适配
+## 事件语义映射
 
-Codex 负责实际执行，goose 只为现有 UI 恢复语义化展示：
-
-| Codex notification / item | goose 输出 |
+| Codex notification | goose 输出 |
 | --- | --- |
 | `AgentMessageDelta` | 流式 assistant 文本 |
-| `ReasoningSummaryTextDelta` / `ReasoningTextDelta` | thinking 消息 |
-| `ItemStarted` | 工具请求消息 |
-| `ItemCompleted` | 工具结果消息 |
+| `Reasoning*TextDelta` | thinking 消息 |
+| `ItemStarted` / `ItemCompleted` | 工具请求 / 结果消息 |
 | `ThreadTokenUsageUpdated` | 会话用量与 `AgentEvent::Usage` |
-| `Warning` / 非重试 `Error` | 系统提示或流错误 |
-| `TurnCompleted` | 最终 assistant 消息与 Turn 状态 |
+| `Warning` / 非重试 `Error` | 系统提示 / 流错误 |
+| `TurnCompleted` | 最终 assistant 消息与回合状态 |
 
-命令类工具会依据 Codex `CommandAction` 映射为 `list_files`、`read_files`、`search_files` 或通用 `shell`。这个映射只影响 UI 展示名称，命令仍由 Codex Runtime 执行。
+命令类工具按 `CommandAction` 映射为 `list_files` / `read_files` / `search_files` / `shell`，仅影响 UI 展示名称。
 
-## 兼容层与演进原则
+## 演进原则
 
-- `chatgpt_codex` 的独立 OAuth / API 实现和 `codex_acp` 外部进程实现已经删除。
-- `crates/goose/src/providers/codex.rs` 仅保留 provider identity、模型占位和会话标题辅助逻辑。
-- 其他 Provider、旧工具调度和审批相关模块仍可能被非主路径或兼容接口引用；删除前应先从调用链确认，而不是仅凭模块名称判断。
-- 新的 Codex 能力优先通过 App Server protocol 暴露，再在 `codex.rs` 中做最小事件适配，避免在 goose 中重新实现。
-- UI 应依赖 goose 的 `Message` / `AgentEvent` 或 ACP 类型，不直接绑定 Codex protocol 类型，从而允许 Runtime 升级而不扩散到界面层。
+- 新的 Codex 能力优先通过 App Server protocol 暴露，`codex.rs` 只做最小事件适配，不在 goose 中重新实现。
+- UI 依赖 goose `Message` / `AgentEvent` 或 ACP 类型，不直接绑定 Codex protocol 类型。
+- `providers/codex.rs` 仅是元数据壳；`chatgpt_codex`、`codex_acp`、`FinalOutputTool` 及旧的工具调度 / 审批 / 安全检查模块均已删除。
+
+## Desktop / Browser 共享前端
+
+Electron 与浏览器共用 `index.html`、React renderer、ACP SDK 和全部样式，仅在宿主能力注入处分支：`renderer-bootstrap.ts` 检测 `window.electron`，存在则用 Electron preload，否则安装 `browserHost.ts`（同一 `ElectronAPI` 接口的浏览器实现，Electron 专属能力显式降级）。
+
+| 能力 | Electron | BrowserHost |
+| --- | --- | --- |
+| ACP 地址与 token | preload / 主进程配置 | URL 参数或 `VITE_GOOSE_*` |
+| 设置与本地记录 | Electron 持久化 | `localStorage` |
+| 文件访问 | 原生对话框、任意路径 | 仅用户选择的文件；任意路径读写不支持 |
+| 通知 / 外链 | Electron 原生 | Web Notification / `window.open` |
+| Dock、自动更新等 | 支持 | 不支持 |
+
+Shell、文件和工具能力始终在 `goose serve` / Codex Runtime 中执行，不下放到浏览器。样式必须由 `renderer.tsx` 模块导入（Vite 要求）；生产 CSP 不含 `unsafe-eval`，仅开发服务器临时放开。
 
 ## 浏览器开发入口
 
-浏览器与 Electron 共用 `index.html`、React renderer、路由、ACP SDK 和所有聊天组件。`renderer-bootstrap.ts` 在页面启动时选择宿主实现：Electron 使用 preload 注入的 API，普通浏览器安装 `BrowserHost`。后者负责提供 ACP 地址、浏览器设置和事件桥接；窗口管理、Dock、自动更新和任意本地文件路径等 Electron 专属能力会安全降级。
-
 ```bash
-./scripts/start-web.sh
+./scripts/start-web.sh   # 或 just run-web
 ```
 
-该入口会构建 goose、在 `127.0.0.1:3284` 启动带随机 token 的 `goose serve`，并在 `127.0.0.1:5173` 启动 Vite。两个端口可以分别通过 `GOOSE_SERVER_PORT` 和 `GOOSE_WEB_PORT` 覆盖。前后端均只监听 loopback，避免将本地 Shell 和文件能力暴露到局域网。
+脚本构建 release binary，生成随机 `SERVER_SECRET`，在 `127.0.0.1:3284` 启动 `goose serve`（校验 token 与 Origin），再在 `127.0.0.1:5173` 启动 Vite 加载共享 renderer，通过 `ws://127.0.0.1:3284/acp` 连接。端口由 `GOOSE_WEB_PORT` / `GOOSE_SERVER_PORT` 覆盖，固定 token 用 `GOOSE_SERVER__SECRET_KEY`。前后端均只监听 loopback，定位为本机开发调试。

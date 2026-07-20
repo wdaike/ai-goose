@@ -33,8 +33,8 @@ use tokio_util::compat::{TokioAsyncReadCompatExt as _, TokioAsyncWriteCompatExt 
 
 use crate::acp::{map_permission_response, PermissionDecision};
 use crate::config::{ExtensionConfig, GooseMode};
-use crate::context_mgmt::format_message_for_compacting;
 use crate::conversation::message::{Message, MessageContent, TOOL_META_EXTERNAL_DISPATCH_KEY};
+use crate::conversation_format::format_message_for_transcript;
 use crate::permission::permission_confirmation::PrincipalType;
 use crate::permission::{Permission, PermissionConfirmation};
 use crate::providers::base::{MessageStream, PermissionRouting, Provider};
@@ -1402,7 +1402,7 @@ fn build_handoff_context_memo(prior_messages: &[Message]) -> Option<String> {
     let formatted_messages: Vec<String> = prior_messages
         .iter()
         .filter(|message| message.is_agent_visible())
-        .map(format_message_for_compacting)
+        .map(format_message_for_transcript)
         .collect();
 
     if formatted_messages.is_empty() {

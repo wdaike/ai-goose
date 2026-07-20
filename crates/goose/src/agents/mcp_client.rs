@@ -141,10 +141,6 @@ pub trait McpClientTrait: Send + Sync {
         mpsc::channel(1).1
     }
 
-    async fn get_moim(&self, _session_id: &str) -> Option<String> {
-        None
-    }
-
     async fn update_working_dir(&self, _new_dir: PathBuf) -> Result<(), Error> {
         Ok(())
     }
@@ -556,7 +552,6 @@ pub struct McpClient {
     notification_subscribers: Arc<Mutex<Vec<mpsc::Sender<ServerNotification>>>>,
     server_info: Option<InitializeResult>,
     timeout: std::time::Duration,
-    docker_container: Option<String>,
 }
 
 impl McpClient {
@@ -564,31 +559,6 @@ impl McpClient {
         transport: T,
         timeout: std::time::Duration,
         provider: SharedProvider,
-        client_name: String,
-        capabilities: GooseMcpClientCapabilities,
-        working_dir: PathBuf,
-    ) -> Result<Self, ClientInitializeError>
-    where
-        T: IntoTransport<RoleClient, E, A>,
-        E: std::error::Error + From<std::io::Error> + Send + Sync + 'static,
-    {
-        Self::connect_with_container(
-            transport,
-            timeout,
-            provider,
-            None,
-            client_name,
-            capabilities,
-            working_dir,
-        )
-        .await
-    }
-
-    pub async fn connect_with_container<T, E, A>(
-        transport: T,
-        timeout: std::time::Duration,
-        provider: SharedProvider,
-        docker_container: Option<String>,
         client_name: String,
         capabilities: GooseMcpClientCapabilities,
         working_dir: PathBuf,
@@ -616,12 +586,7 @@ impl McpClient {
             notification_subscribers,
             server_info,
             timeout,
-            docker_container,
         })
-    }
-
-    pub fn docker_container(&self) -> Option<&str> {
-        self.docker_container.as_deref()
     }
 
     async fn do_update_working_dir(&self, new_dir: PathBuf) -> Result<(), Error> {

@@ -4,20 +4,12 @@ use std::sync::Arc;
 
 use anyhow::{anyhow, Context, Result};
 use futures::stream::BoxStream;
-use futures::FutureExt;
 
-use super::container::Container;
-use super::final_output_tool::FinalOutputTool;
 use super::mcp_client::GooseMcpHostInfo;
-use super::platform_tools;
-use super::tool_confirmation_router::ToolConfirmationRouter;
-use super::tool_execution::ToolCallResult;
 use crate::agents::extension::{ExtensionConfig, ExtensionResult, ToolInfo};
 use crate::agents::extension_manager::{
     get_parameter_names, ExtensionManager, ExtensionManagerCapabilities,
 };
-use crate::agents::final_output_tool::FINAL_OUTPUT_TOOL_NAME;
-use crate::agents::platform_tools::PLATFORM_MANAGE_SCHEDULE_TOOL_NAME;
 use crate::agents::prompt_manager::PromptManager;
 use crate::agents::types::{SessionConfig, SharedProvider};
 use crate::config::permission::PermissionManager;
@@ -27,49 +19,15 @@ use crate::conversation::{fix_conversation, Conversation};
 use crate::permission::PermissionConfirmation;
 use crate::providers::base::{PermissionRouting, Provider};
 use crate::recipe::{Author, Recipe, Response, Settings};
-use crate::scheduler_trait::SchedulerTrait;
 use crate::session::extension_data::{EnabledExtensionsState, ExtensionState};
 use crate::session::{Session, SessionManager, SessionNameUpdate};
 use goose_providers::thinking::ThinkingEffort;
 use regex::Regex;
-use rmcp::model::{
-    CallToolRequestParams, CallToolResult, ErrorCode, ErrorData, GetPromptResult, Prompt,
-    ServerNotification, Tool,
-};
+use rmcp::model::{GetPromptResult, Prompt, ServerNotification, Tool};
 use serde_json::Value;
 use tokio::sync::{mpsc, Mutex};
 use tokio_util::sync::CancellationToken;
-use tracing::{debug, error, instrument};
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum ToolCategory {
-    Shell,
-    Read,
-    Write,
-    Other,
-}
-
-fn categorize_tool(tool_name: &str) -> ToolCategory {
-    let local = tool_name.rsplit("__").next().unwrap_or(tool_name);
-    match local {
-        "shell" | "bash" | "exec" | "run" => ToolCategory::Shell,
-        "read" | "view" | "cat" | "read_file" => ToolCategory::Read,
-        "write" | "edit" | "patch" | "write_file" | "edit_file" => ToolCategory::Write,
-        _ => ToolCategory::Other,
-    }
-}
-
-fn extract_string_arg(input: &Value, keys: &[&str]) -> Option<String> {
-    let obj = input.as_object()?;
-    for k in keys {
-        if let Some(s) = obj.get(*k).and_then(|v| v.as_str()) {
-            if !s.is_empty() {
-                return Some(s.to_string());
-            }
-        }
-    }
-    None
-}
+use tracing::instrument;
 
 #[derive(Debug, Clone, serde::Serialize, utoipa::ToSchema)]
 pub struct ExtensionLoadResult {
@@ -98,7 +56,6 @@ impl fmt::Display for GoosePlatform {
 pub struct AgentConfig {
     pub session_manager: Arc<SessionManager>,
     pub permission_manager: Arc<PermissionManager>,
-    pub scheduler_service: Option<Arc<dyn SchedulerTrait>>,
     pub goose_mode: GooseMode,
     pub disable_session_naming: bool,
     pub goose_platform: GoosePlatform,
@@ -112,7 +69,6 @@ impl AgentConfig {
     pub fn new(
         session_manager: Arc<SessionManager>,
         permission_manager: Arc<PermissionManager>,
-        scheduler_service: Option<Arc<dyn SchedulerTrait>>,
         goose_mode: GooseMode,
         disable_session_naming: bool,
         goose_platform: GoosePlatform,
@@ -120,7 +76,6 @@ impl AgentConfig {
         Self {
             session_manager,
             permission_manager,
-            scheduler_service,
             goose_mode,
             disable_session_naming,
             goose_platform,
@@ -166,13 +121,9 @@ pub struct Agent {
     codex_core: crate::codex::CodexAgentCore,
 
     pub extension_manager: Arc<ExtensionManager>,
-    pub(super) final_output_tool: Arc<Mutex<Option<FinalOutputTool>>>,
+    final_output_json_schema: Mutex<Option<Value>>,
     pub(super) prompt_manager: Mutex<PromptManager>,
-    pub tool_confirmation_router: ToolConfirmationRouter,
     pub(super) hook_manager: crate::hooks::HookManager,
-    container: Mutex<Option<Container>>,
-    goal: Mutex<Option<String>>,
-    grind: Mutex<Option<String>>,
 }
 
 #[derive(Clone, Debug)]
@@ -199,7 +150,6 @@ impl Agent {
         Self::with_config(AgentConfig::new(
             Arc::new(SessionManager::instance()),
             PermissionManager::instance(),
-            None,
             config.get_goose_mode().unwrap_or_default(),
             config.get_goose_disable_session_naming().unwrap_or(false),
             GoosePlatform::GooseCli,
@@ -243,16 +193,12 @@ impl Agent {
                 capabilities,
                 use_login_shell_path,
             )),
-            final_output_tool: Arc::new(Mutex::new(None)),
+            final_output_json_schema: Mutex::new(None),
             prompt_manager: Mutex::new(PromptManager::new()),
-            tool_confirmation_router: ToolConfirmationRouter::new(),
             hook_manager: crate::hooks::HookManager::load(
                 std::env::current_dir().ok().as_deref(),
                 use_login_shell_path,
             ),
-            container: Mutex::new(None),
-            goal: Mutex::new(None),
-            grind: Mutex::new(None),
         }
     }
 
@@ -284,136 +230,49 @@ impl Agent {
         self.codex_core.invalidate_session(session).await;
     }
 
-    async fn emit_pre_tool_extended_hooks(
-        &self,
-        tool_name: &str,
-        tool_input: Option<&Value>,
-        session: &Session,
-    ) {
-        let working_dir = session.working_dir.to_string_lossy().to_string();
-        match categorize_tool(tool_name) {
-            ToolCategory::Shell => {
-                if let Some(cmd) = tool_input.and_then(|v| extract_string_arg(v, &["command"])) {
-                    self.emit_with_matcher(
-                        crate::hooks::HookEvent::BeforeShellExecution,
-                        &session.id,
-                        &cmd,
-                        tool_name,
-                        tool_input.cloned(),
-                        &working_dir,
-                    )
-                    .await;
-                }
-            }
-            ToolCategory::Read => {
-                if let Some(path) =
-                    tool_input.and_then(|v| extract_string_arg(v, &["path", "file", "file_path"]))
-                {
-                    self.emit_with_matcher(
-                        crate::hooks::HookEvent::BeforeReadFile,
-                        &session.id,
-                        &path,
-                        tool_name,
-                        tool_input.cloned(),
-                        &working_dir,
-                    )
-                    .await;
-                }
-            }
-            ToolCategory::Write | ToolCategory::Other => {}
-        }
+    pub async fn compact_session(&self, session_id: &str) -> Result<()> {
+        let session = self
+            .config
+            .session_manager
+            .get_session(session_id, false)
+            .await?;
+        let (base_instructions, developer_instructions) =
+            self.prompt_manager.lock().await.codex_instructions();
+        self.codex_core
+            .compact(
+                &self.config.session_manager,
+                &session,
+                base_instructions,
+                developer_instructions,
+            )
+            .await
     }
 
-    async fn emit_with_matcher(
-        &self,
-        event: crate::hooks::HookEvent,
-        session_id: &str,
-        matcher_context: &str,
-        tool_name: &str,
-        tool_input: Option<Value>,
-        working_dir: &str,
-    ) {
-        if !self.hook_manager.has_hooks(event) {
-            return;
-        }
-        let mut ctx = crate::hooks::HookContext::new(event, session_id)
-            .with_tool(tool_name.to_string(), tool_input)
-            .with_working_dir(working_dir.to_string());
-        ctx.matcher_context = Some(matcher_context.to_string());
-        self.hook_manager.emit(event, ctx).await;
+    pub async fn clear_session(&self, session_id: &str) -> Result<()> {
+        let session = self
+            .config
+            .session_manager
+            .get_session(session_id, false)
+            .await?;
+        self.codex_core
+            .reset_session(&self.config.session_manager, &session)
+            .await?;
+        self.config
+            .session_manager
+            .replace_conversation(session_id, &Conversation::default())
+            .await?;
+        self.config
+            .session_manager
+            .update(session_id)
+            .usage(goose_providers::conversation::token_usage::Usage::new(
+                Some(0),
+                Some(0),
+                Some(0),
+            ))
+            .apply()
+            .await
     }
 
-    fn with_post_tool_hook(
-        &self,
-        result: ToolCallResult,
-        tool_call: &CallToolRequestParams,
-        session: &Session,
-    ) -> ToolCallResult {
-        let hook_manager = self.hook_manager.clone();
-        let session_id = session.id.clone();
-        let working_dir = session.working_dir.to_string_lossy().to_string();
-        let tool_name = tool_call.name.to_string();
-        let tool_input = tool_call
-            .arguments
-            .as_ref()
-            .map(|a| serde_json::Value::Object(a.clone()));
-        let category = categorize_tool(&tool_name);
-
-        let fut = async move {
-            let processed_result =
-                super::large_response_handler::process_tool_response(result.result.await);
-            let event = match &processed_result {
-                Ok(call_result) if call_result.is_error != Some(true) => {
-                    crate::hooks::HookEvent::PostToolUse
-                }
-                _ => crate::hooks::HookEvent::PostToolUseFailure,
-            };
-
-            if hook_manager.has_hooks(event) {
-                let ctx = crate::hooks::HookContext::new(event, &session_id)
-                    .with_tool(tool_name.clone(), tool_input.clone())
-                    .with_working_dir(working_dir.clone());
-                hook_manager.emit(event, ctx).await;
-            }
-
-            if event == crate::hooks::HookEvent::PostToolUse {
-                let extended = match category {
-                    ToolCategory::Shell => Some((
-                        crate::hooks::HookEvent::AfterShellExecution,
-                        tool_input
-                            .as_ref()
-                            .and_then(|v| extract_string_arg(v, &["command"])),
-                    )),
-                    ToolCategory::Write => Some((
-                        crate::hooks::HookEvent::AfterFileEdit,
-                        tool_input
-                            .as_ref()
-                            .and_then(|v| extract_string_arg(v, &["path", "file", "file_path"])),
-                    )),
-                    _ => None,
-                };
-                if let Some((ext_event, Some(matcher))) = extended {
-                    if hook_manager.has_hooks(ext_event) {
-                        let mut ctx = crate::hooks::HookContext::new(ext_event, &session_id)
-                            .with_tool(tool_name, tool_input)
-                            .with_working_dir(working_dir);
-                        ctx.matcher_context = Some(matcher);
-                        hook_manager.emit(ext_event, ctx).await;
-                    }
-                }
-            }
-
-            processed_result
-        };
-
-        ToolCallResult {
-            notification_stream: result.notification_stream,
-            action_required_stream: result.action_required_stream,
-            result: Box::new(fut.boxed()),
-        }
-    }
-
-    /// Reset the retry attempts counter to 0
     pub async fn provider(&self) -> Result<Arc<dyn Provider>, anyhow::Error> {
         match &*self.provider.lock().await {
             Some(provider) => Ok(Arc::clone(provider)),
@@ -453,24 +312,10 @@ impl Agent {
             .map_err(|e| anyhow!("Could not resolve model config: {e}"))
     }
 
-    /// When set, all stdio extensions will be started via `docker exec` in the specified container.
-    pub async fn set_container(&self, container: Option<Container>) {
-        *self.container.lock().await = container.clone();
-    }
-
-    pub async fn container(&self) -> Option<Container> {
-        self.container.lock().await.clone()
-    }
-
     pub(crate) async fn total_extension_and_tool_counts(&self, session_id: &str) -> (usize, usize) {
         self.extension_manager
             .get_extension_and_tool_counts(session_id)
             .await
-    }
-
-    pub async fn add_final_output_tool(&self, response: Response) {
-        let mut final_output_tool = self.final_output_tool.lock().await;
-        *final_output_tool = Some(FinalOutputTool::new(response));
     }
 
     pub async fn apply_recipe_components(
@@ -479,148 +324,9 @@ impl Agent {
         include_final_output: bool,
     ) {
         if include_final_output {
-            if let Some(response) = response {
-                self.add_final_output_tool(response).await;
-            }
+            *self.final_output_json_schema.lock().await =
+                response.and_then(|response| response.json_schema);
         }
-    }
-
-    /// Dispatch a single tool call to the appropriate client
-    #[instrument(skip(self, tool_call, request_id, cancellation_token, session), fields(input, output, session.id = %session.id))]
-    pub async fn dispatch_tool_call(
-        &self,
-        tool_call: CallToolRequestParams,
-        request_id: String,
-        cancellation_token: Option<CancellationToken>,
-        session: &Session,
-    ) -> (String, Result<ToolCallResult, ErrorData>) {
-        let input_summary = serde_json::json!({
-            "tool": tool_call.name,
-            "arguments": tool_call.arguments,
-        });
-        tracing::Span::current().record("input", tracing::field::display(&input_summary));
-
-        self.prompt_manager
-            .lock()
-            .await
-            .record_tool_arguments(&tool_call.arguments, &session.working_dir);
-
-        if self
-            .hook_manager
-            .has_hooks(crate::hooks::HookEvent::PreToolUse)
-        {
-            let ctx =
-                crate::hooks::HookContext::new(crate::hooks::HookEvent::PreToolUse, &session.id)
-                    .with_tool(
-                        tool_call.name.to_string(),
-                        tool_call
-                            .arguments
-                            .as_ref()
-                            .map(|a| serde_json::Value::Object(a.clone())),
-                    )
-                    .with_working_dir(session.working_dir.to_string_lossy().to_string());
-            if let crate::hooks::HookDecision::Deny { reason, plugin } = self
-                .hook_manager
-                .emit_blocking(crate::hooks::HookEvent::PreToolUse, ctx)
-                .await
-            {
-                return (
-                    request_id,
-                    Err(ErrorData::new(
-                        ErrorCode::INTERNAL_ERROR,
-                        format!(
-                            "Tool call denied by policy hook `{plugin}`: {reason}. \
-                             Do not retry; this is a policy denial, not a transient failure."
-                        ),
-                        None,
-                    )),
-                );
-            }
-        }
-
-        let tool_input_for_extended = tool_call
-            .arguments
-            .as_ref()
-            .map(|a| serde_json::Value::Object(a.clone()));
-        self.emit_pre_tool_extended_hooks(
-            &tool_call.name,
-            tool_input_for_extended.as_ref(),
-            session,
-        )
-        .await;
-
-        if tool_call.name == PLATFORM_MANAGE_SCHEDULE_TOOL_NAME {
-            let arguments = tool_call
-                .arguments
-                .clone()
-                .map(Value::Object)
-                .unwrap_or(Value::Object(serde_json::Map::new()));
-            let result = self
-                .handle_schedule_management(arguments, request_id.clone())
-                .await;
-            let wrapped_result = result.map(CallToolResult::success);
-            return (
-                request_id,
-                Ok(self.with_post_tool_hook(
-                    ToolCallResult::from(wrapped_result),
-                    &tool_call,
-                    session,
-                )),
-            );
-        }
-
-        if tool_call.name == FINAL_OUTPUT_TOOL_NAME {
-            return if let Some(final_output_tool) = self.final_output_tool.lock().await.as_mut() {
-                let result = final_output_tool.execute_tool_call(tool_call.clone()).await;
-                (
-                    request_id,
-                    Ok(self.with_post_tool_hook(result, &tool_call, session)),
-                )
-            } else {
-                (
-                    request_id,
-                    Err(ErrorData::new(
-                        ErrorCode::INTERNAL_ERROR,
-                        "Final output tool not defined".to_string(),
-                        None,
-                    )),
-                )
-            };
-        }
-
-        let ctx = super::tool_execution::ToolCallContext::new(
-            session.id.clone(),
-            Some(session.working_dir.clone()),
-            Some(request_id.clone()),
-        );
-
-        debug!("WAITING_TOOL_START: {}", tool_call.name);
-        let result: ToolCallResult = self
-            .extension_manager
-            .dispatch_tool_call(
-                &ctx,
-                tool_call.clone(),
-                cancellation_token.unwrap_or_default(),
-            )
-            .await
-            .unwrap_or_else(|e| {
-                #[cfg(feature = "telemetry")]
-                crate::posthog::emit_error(
-                    "tool_execution_failed",
-                    &format!("{}: {}", tool_call.name, e),
-                );
-                let error_data = e.downcast::<ErrorData>().unwrap_or_else(|e| {
-                    ErrorData::new(ErrorCode::INTERNAL_ERROR, e.to_string(), None)
-                });
-                ToolCallResult::from(Err(error_data))
-            });
-
-        debug!("WAITING_TOOL_END: {}", tool_call.name);
-
-        (
-            request_id,
-            Ok(self.with_post_tool_hook(result, &tool_call, session)),
-        )
     }
 
     pub async fn add_extension(
@@ -700,25 +406,10 @@ impl Agent {
     }
 
     pub async fn list_tools(&self, session_id: &str, extension_name: Option<String>) -> Vec<Tool> {
-        let mut prefixed_tools = self
-            .extension_manager
-            .get_prefixed_tools(session_id, extension_name.clone())
+        self.extension_manager
+            .get_prefixed_tools(session_id, extension_name)
             .await
-            .unwrap_or_default();
-
-        if (extension_name.is_none() || extension_name.as_deref() == Some("platform"))
-            && self.config.scheduler_service.is_some()
-        {
-            prefixed_tools.push(platform_tools::manage_schedule_tool());
-        }
-
-        if extension_name.is_none() {
-            if let Some(final_output_tool) = self.final_output_tool.lock().await.as_ref() {
-                prefixed_tools.push(final_output_tool.tool());
-            }
-        }
-
-        prefixed_tools
+            .unwrap_or_default()
     }
 
     pub async fn remove_extension(&self, name: &str, session_id: &str) -> Result<()> {
@@ -754,7 +445,6 @@ impl Agent {
         self.extension_manager.get_extension_configs().await
     }
 
-    /// Handle a confirmation response for a tool request
     pub async fn handle_confirmation(
         &self,
         request_id: String,
@@ -762,20 +452,11 @@ impl Agent {
     ) {
         let provider = self.provider.lock().await.clone();
         if let Some(provider) = provider.as_ref() {
-            if provider.permission_routing() == PermissionRouting::ActionRequired
-                && provider
+            if provider.permission_routing() == PermissionRouting::ActionRequired {
+                provider
                     .handle_permission_confirmation(&request_id, &confirmation)
-                    .await
-            {
-                return;
+                    .await;
             }
-        }
-        if !self
-            .tool_confirmation_router
-            .deliver(request_id, confirmation)
-            .await
-        {
-            error!("Failed to deliver confirmation");
         }
     }
 
@@ -797,12 +478,7 @@ impl Agent {
 
         let (base_instructions, developer_instructions) =
             self.prompt_manager.lock().await.codex_instructions();
-        let final_output_json_schema = self
-            .final_output_tool
-            .lock()
-            .await
-            .as_ref()
-            .and_then(|tool| tool.response.json_schema.clone());
+        let final_output_json_schema = self.final_output_json_schema.lock().await.clone();
 
         self.codex_core
             .reply(
@@ -825,22 +501,6 @@ impl Agent {
     pub async fn remove_system_prompt_extra(&self, key: &str) {
         let mut prompt_manager = self.prompt_manager.lock().await;
         prompt_manager.remove_system_prompt_extra(key);
-    }
-
-    pub async fn set_goal(&self, goal: Option<String>) {
-        *self.goal.lock().await = goal;
-    }
-
-    pub async fn get_goal(&self) -> Option<String> {
-        self.goal.lock().await.clone()
-    }
-
-    pub async fn set_grind(&self, goal: Option<String>) {
-        *self.grind.lock().await = goal;
-    }
-
-    pub async fn get_grind(&self) -> Option<String> {
-        self.grind.lock().await.clone()
     }
 
     pub async fn update_provider(
@@ -1330,7 +990,6 @@ mod tests {
         *agent.provider.lock().await =
             Some(provider.clone() as Arc<dyn crate::providers::base::Provider>);
 
-        // Known request_id → provider handles it, confirmation_router NOT called
         agent
             .handle_confirmation(
                 "known".to_string(),
@@ -1342,12 +1001,6 @@ mod tests {
             .await;
         assert_eq!(provider.handled.lock().await.len(), 1);
 
-        // Unknown request_id → provider returns false, falls through to confirmation_router
-        // Register first so deliver() has somewhere to send
-        let rx = agent
-            .tool_confirmation_router
-            .register("unknown".to_string())
-            .await;
         agent
             .handle_confirmation(
                 "unknown".to_string(),
@@ -1358,94 +1011,26 @@ mod tests {
             )
             .await;
         assert_eq!(provider.handled.lock().await.len(), 2);
-        // Verify the fallthrough went to confirmation_router
-        let conf = rx.await.unwrap();
-        assert_eq!(conf.permission, crate::permission::Permission::DenyOnce);
     }
 
     #[tokio::test]
-    async fn test_handle_confirmation_noop_provider() {
+    async fn recipe_response_is_forwarded_as_codex_output_schema() -> Result<()> {
         let agent = Agent::new();
-        // No provider set → Noop routing, goes straight to confirmation_router
-        // Register first so deliver() has somewhere to send
-        let rx = agent
-            .tool_confirmation_router
-            .register("any".to_string())
-            .await;
+
+        let schema = serde_json::json!({
+            "type": "object",
+            "properties": {"result": {"type": "string"}}
+        });
         agent
-            .handle_confirmation(
-                "any".to_string(),
-                PermissionConfirmation {
-                    principal_type: PrincipalType::Tool,
-                    permission: crate::permission::Permission::AllowOnce,
-                },
+            .apply_recipe_components(
+                Some(Response {
+                    json_schema: Some(schema.clone()),
+                }),
+                true,
             )
             .await;
 
-        let conf = rx.await.unwrap();
-        assert_eq!(conf.permission, crate::permission::Permission::AllowOnce);
-    }
-
-    #[tokio::test]
-    async fn test_add_final_output_tool() -> Result<()> {
-        let agent = Agent::new();
-
-        let response = Response {
-            json_schema: Some(serde_json::json!({
-                "type": "object",
-                "properties": {
-                    "result": {"type": "string"}
-                }
-            })),
-        };
-
-        agent.add_final_output_tool(response).await;
-
-        let tools = agent.list_tools("test-session-id", None).await;
-        let final_output_tool = tools
-            .iter()
-            .find(|tool| tool.name == FINAL_OUTPUT_TOOL_NAME);
-
-        assert!(
-            final_output_tool.is_some(),
-            "Final output tool should be present after adding"
-        );
-
-        let final_output_tool_ref = agent.final_output_tool.lock().await;
-        assert!(final_output_tool_ref
-            .as_ref()
-            .and_then(|tool| tool.response.json_schema.as_ref())
-            .is_some());
+        assert_eq!(*agent.final_output_json_schema.lock().await, Some(schema));
         Ok(())
-    }
-
-    #[test]
-    fn categorize_tool_recognizes_conventional_names() {
-        assert_eq!(categorize_tool("developer__shell"), ToolCategory::Shell);
-        assert_eq!(categorize_tool("filesystem__write"), ToolCategory::Write);
-        assert_eq!(categorize_tool("filesystem__edit"), ToolCategory::Write);
-        assert_eq!(categorize_tool("filesystem__read"), ToolCategory::Read);
-        assert_eq!(categorize_tool("filesystem__view"), ToolCategory::Read);
-        assert_eq!(categorize_tool("filesystem__cat"), ToolCategory::Read);
-        assert_eq!(categorize_tool("scheduler__list"), ToolCategory::Other);
-        assert_eq!(categorize_tool("shell"), ToolCategory::Shell);
-    }
-
-    #[test]
-    fn extract_string_arg_picks_first_present_key() {
-        let input = serde_json::json!({ "file_path": "/tmp/a.txt", "path": "/tmp/b.txt" });
-        assert_eq!(
-            extract_string_arg(&input, &["path", "file", "file_path"]).as_deref(),
-            Some("/tmp/b.txt")
-        );
-        let input = serde_json::json!({ "file_path": "/tmp/a.txt" });
-        assert_eq!(
-            extract_string_arg(&input, &["path", "file", "file_path"]).as_deref(),
-            Some("/tmp/a.txt")
-        );
-        let input = serde_json::json!({ "other": 1 });
-        assert!(extract_string_arg(&input, &["path"]).is_none());
-        let input = serde_json::json!({ "path": "" });
-        assert!(extract_string_arg(&input, &["path"]).is_none());
     }
 }

@@ -142,8 +142,6 @@ where
 {
     use goose::config::ExtensionConfig;
 
-    goose::agents::moim::SKIP.with(|f| f.set(true));
-
     if let Ok(path) = dotenv() {
         println!("Loaded environment from {:?}", path);
     }
@@ -205,7 +203,6 @@ where
     let agent_config = AgentConfig::new(
         session_manager,
         permission_manager,
-        None,
         GooseMode::Auto,
         true,
         GoosePlatform::GooseCli,

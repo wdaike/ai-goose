@@ -36,7 +36,7 @@ use anyhow::{Context, Result};
 use completion::GooseCompleter;
 use goose::agents::extension::{Envs, ExtensionConfig, PLATFORM_EXTENSIONS};
 use goose::agents::types::RetryConfig;
-use goose::agents::{Agent, SessionConfig, COMPACT_TRIGGERS};
+use goose::agents::{Agent, SessionConfig};
 use goose::config::extensions::name_to_key;
 use goose::config::{Config, GooseMode};
 use input::InputResult;
@@ -866,38 +866,8 @@ impl CliSession {
     }
 
     async fn handle_clear(&mut self) -> Result<()> {
-        let session = self
-            .agent
-            .config
-            .session_manager
-            .get_session(&self.session_id, false)
-            .await?;
-        self.agent.invalidate_codex_session(&session).await;
-        if let Err(e) = self
-            .agent
-            .config
-            .session_manager
-            .replace_conversation(&self.session_id, &Conversation::default())
-            .await
-        {
+        if let Err(e) = self.agent.clear_session(&self.session_id).await {
             output::render_error(&format!("Failed to clear session: {}", e));
-            return Ok(());
-        }
-
-        if let Err(e) = self
-            .agent
-            .config
-            .session_manager
-            .update(&self.session_id)
-            .usage(goose_providers::conversation::token_usage::Usage::new(
-                Some(0),
-                Some(0),
-                Some(0),
-            ))
-            .apply()
-            .await
-        {
-            output::render_error(&format!("Failed to reset token counts: {}", e));
             return Ok(());
         }
 
@@ -1016,11 +986,11 @@ impl CliSession {
         };
 
         if should_summarize {
-            self.push_message(Message::user().with_text(COMPACT_TRIGGERS[0]));
             output::show_thinking();
-            self.process_agent_response(true, CancellationToken::default())
-                .await?;
+            let result = self.agent.compact_session(&self.session_id).await;
             output::hide_thinking();
+            result?;
+            println!("{}", console::style("Compaction complete.").green());
         } else {
             println!("{}", console::style("Compaction cancelled.").yellow());
         }

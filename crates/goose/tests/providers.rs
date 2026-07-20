@@ -7,23 +7,10 @@ use goose::config::{ExtensionConfig, GooseMode, PermissionManager};
 use goose::conversation::message::{ActionRequiredData, Message, MessageContent};
 use goose::permission::permission_confirmation::PrincipalType;
 use goose::permission::{Permission, PermissionConfirmation};
-use goose::providers::anthropic::ANTHROPIC_DEFAULT_MODEL;
-use goose::providers::azure::AZURE_DEFAULT_MODEL;
 use goose::providers::base::Provider;
-#[cfg(feature = "aws-providers")]
-use goose::providers::bedrock::BEDROCK_DEFAULT_MODEL;
-use goose::providers::claude_code::CLAUDE_CODE_DEFAULT_MODEL;
 use goose::providers::codex::CODEX_DEFAULT_MODEL;
 use goose::providers::create_with_named_model;
-use goose::providers::google::GOOGLE_DEFAULT_MODEL;
-use goose::providers::litellm::LITELLM_DEFAULT_MODEL;
-use goose::providers::openai::OPEN_AI_DEFAULT_MODEL;
-#[cfg(feature = "aws-providers")]
-use goose::providers::sagemaker_tgi::SAGEMAKER_TGI_DEFAULT_MODEL;
-use goose::providers::snowflake::SNOWFLAKE_DEFAULT_MODEL;
-use goose::providers::xai::XAI_DEFAULT_MODEL;
 use goose::session::{SessionManager, SessionType};
-use goose_providers::databricks::DATABRICKS_DEFAULT_MODEL;
 use goose_providers::errors::ProviderError;
 use goose_test_support::{
     EnforceSessionId, ExpectedSessionId, IgnoreSessionId, McpFixture, FAKE_CODE,
@@ -251,7 +238,6 @@ impl ProviderFixture {
         let agent = Agent::with_config(AgentConfig::new(
             session_manager.clone(),
             permission_manager,
-            None,
             mode,
             true,
             GoosePlatform::GooseCli,
@@ -272,12 +258,12 @@ impl ProviderFixture {
         let working_dir = Some(std::env::current_dir()?);
         agent
             .extension_manager
-            .add_extension(mcp_extension, working_dir.clone(), None, Some(&session_id))
+            .add_extension(mcp_extension, working_dir.clone(), Some(&session_id))
             .await
             .map_err(|e| anyhow::anyhow!("{}", e))?;
         agent
             .extension_manager
-            .add_extension(developer_extension, working_dir, None, Some(&session_id))
+            .add_extension(developer_extension, working_dir, Some(&session_id))
             .await
             .map_err(|e| anyhow::anyhow!("{}", e))?;
 
@@ -730,185 +716,9 @@ async fn test_provider(config: ProviderTestConfig) -> Result<()> {
 }
 
 #[tokio::test]
-async fn test_openai_provider() -> Result<()> {
-    ProviderTestConfig::with_llm_provider("openai", OPEN_AI_DEFAULT_MODEL, &["OPENAI_API_KEY"])
-        .run()
-        .await
-}
-
-#[tokio::test]
-async fn test_azure_provider() -> Result<()> {
-    ProviderTestConfig::with_llm_provider(
-        "Azure",
-        AZURE_DEFAULT_MODEL,
-        &[
-            "AZURE_OPENAI_API_KEY",
-            "AZURE_OPENAI_ENDPOINT",
-            "AZURE_OPENAI_DEPLOYMENT_NAME",
-        ],
-    )
-    .run()
-    .await
-}
-
-#[cfg(feature = "aws-providers")]
-#[tokio::test]
-async fn test_bedrock_provider_long_term_credentials() -> Result<()> {
-    ProviderTestConfig::with_llm_provider(
-        "aws_bedrock",
-        BEDROCK_DEFAULT_MODEL,
-        &["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY"],
-    )
-    .run()
-    .await
-}
-
-#[cfg(feature = "aws-providers")]
-#[tokio::test]
-async fn test_bedrock_provider_aws_profile_credentials() -> Result<()> {
-    ProviderTestConfig::with_llm_provider("aws_bedrock", BEDROCK_DEFAULT_MODEL, &["AWS_PROFILE"])
-        .clear_env(&["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY"])
-        .run()
-        .await
-}
-
-#[cfg(feature = "aws-providers")]
-#[tokio::test]
-async fn test_bedrock_provider_bearer_token() -> Result<()> {
-    ProviderTestConfig::with_llm_provider(
-        "aws_bedrock",
-        BEDROCK_DEFAULT_MODEL,
-        &["AWS_BEARER_TOKEN_BEDROCK", "AWS_REGION"],
-    )
-    .clear_env(&["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_PROFILE"])
-    .run()
-    .await
-}
-
-#[tokio::test]
-async fn test_databricks_provider() -> Result<()> {
-    ProviderTestConfig::with_llm_provider(
-        "Databricks",
-        DATABRICKS_DEFAULT_MODEL,
-        &["DATABRICKS_HOST", "DATABRICKS_TOKEN"],
-    )
-    .run()
-    .await
-}
-
-#[tokio::test]
-async fn test_ollama_provider() -> Result<()> {
-    ProviderTestConfig::with_llm_provider("Ollama", "qwen3", &["OLLAMA_HOST"])
-        .image_model("qwen3-vl")
-        // Above qwen3's 40960 context_length but small enough for Ollama's 600s timeout
-        .context_length_exceeded(50_000)
-        .expect_context_length_exceeded(false)
-        .test_smart_approve(false)
-        .run()
-        .await
-}
-
-#[tokio::test]
-async fn test_anthropic_provider() -> Result<()> {
-    ProviderTestConfig::with_llm_provider(
-        "Anthropic",
-        ANTHROPIC_DEFAULT_MODEL,
-        &["ANTHROPIC_API_KEY"],
-    )
-    .run()
-    .await
-}
-
-#[tokio::test]
-async fn test_openrouter_provider() -> Result<()> {
-    ProviderTestConfig::with_llm_provider(
-        "OpenRouter",
-        OPEN_AI_DEFAULT_MODEL,
-        &["OPENROUTER_API_KEY"],
-    )
-    .expect_context_length_exceeded(false)
-    .run()
-    .await
-}
-
-#[tokio::test]
-async fn test_google_provider() -> Result<()> {
-    ProviderTestConfig::with_llm_provider("Google", GOOGLE_DEFAULT_MODEL, &["GOOGLE_API_KEY"])
-        .context_length_exceeded(2_600_000)
-        .run()
-        .await
-}
-
-#[tokio::test]
-async fn test_snowflake_provider() -> Result<()> {
-    ProviderTestConfig::with_llm_provider(
-        "Snowflake",
-        SNOWFLAKE_DEFAULT_MODEL,
-        &["SNOWFLAKE_HOST", "SNOWFLAKE_TOKEN"],
-    )
-    .run()
-    .await
-}
-
-#[cfg(feature = "aws-providers")]
-#[tokio::test]
-async fn test_sagemaker_tgi_provider() -> Result<()> {
-    ProviderTestConfig::with_llm_provider(
-        "SageMakerTgi",
-        SAGEMAKER_TGI_DEFAULT_MODEL,
-        &["SAGEMAKER_ENDPOINT_NAME"],
-    )
-    .run()
-    .await
-}
-
-#[tokio::test]
-async fn test_litellm_provider() -> Result<()> {
-    ProviderTestConfig::with_llm_provider("LiteLLM", LITELLM_DEFAULT_MODEL, &["LITELLM_HOST"])
-        .run()
-        .await
-}
-
-#[tokio::test]
-async fn test_xai_provider() -> Result<()> {
-    ProviderTestConfig::with_llm_provider("Xai", XAI_DEFAULT_MODEL, &["XAI_API_KEY"])
-        .run()
-        .await
-}
-
-#[tokio::test]
-async fn test_claude_code_provider() -> Result<()> {
-    ProviderTestConfig::with_agentic_provider("claude-code", CLAUDE_CODE_DEFAULT_MODEL, "claude")
-        .model_switch_name("sonnet")
-        .run()
-        .await
-}
-
-#[tokio::test]
 async fn test_codex_provider() -> Result<()> {
     ProviderTestConfig::with_agentic_provider("codex", CODEX_DEFAULT_MODEL, "codex")
         .test_permissions(false)
-        .run()
-        .await
-}
-
-// Requires: npm install -g @agentclientprotocol/claude-agent-acp
-#[tokio::test]
-async fn test_claude_acp_provider() -> Result<()> {
-    ProviderTestConfig::with_agentic_provider("claude-acp", ACP_CURRENT_MODEL, "claude-agent-acp")
-        .model_switch_name("sonnet")
-        .run()
-        .await
-}
-
-// Requires: npm install -g @github/copilot
-#[tokio::test]
-async fn test_copilot_acp_provider() -> Result<()> {
-    ProviderTestConfig::with_agentic_provider("copilot-acp", ACP_CURRENT_MODEL, "copilot")
-        .model_switch_name("gpt-4.1")
-        // Copilot ignores mcpServers passed via session/new
-        // https://github.com/github/copilot-cli/issues/1040
-        .test_mcp_tools(false)
         .run()
         .await
 }

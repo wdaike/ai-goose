@@ -31,8 +31,7 @@ pub struct SubagentPromptContext {
     pub available_tools: String,
 }
 
-type AgentMessagesFuture =
-    Pin<Box<dyn Future<Output = Result<(Conversation, Option<String>)>> + Send>>;
+type AgentMessagesFuture = Pin<Box<dyn Future<Output = Result<Conversation>> + Send>>;
 
 pub struct SubagentRunParams {
     pub config: AgentConfig,
@@ -47,17 +46,13 @@ pub struct SubagentRunParams {
 
 pub async fn run_subagent_task(params: SubagentRunParams) -> Result<String, anyhow::Error> {
     let return_last_only = params.return_last_only;
-    let (messages, final_output) = get_agent_messages(params).await.map_err(|e| {
+    let messages = get_agent_messages(params).await.map_err(|e| {
         ErrorData::new(
             ErrorCode::INTERNAL_ERROR,
             format!("Failed to execute task: {}", e),
             None,
         )
     })?;
-
-    if let Some(output) = final_output {
-        return Ok(output);
-    }
 
     Ok(extract_response_text(&messages, return_last_only))
 }
@@ -159,7 +154,6 @@ fn get_agent_messages(params: SubagentRunParams) -> AgentMessagesFuture {
             }
         }
 
-        let has_response_schema = recipe.response.is_some();
         agent
             .apply_recipe_components(recipe.response.clone(), true)
             .await;
@@ -225,9 +219,7 @@ fn get_agent_messages(params: SubagentRunParams) -> AgentMessagesFuture {
             }
         }
 
-        let final_output = get_final_output(&agent, has_response_schema).await;
-
-        Ok((conversation, final_output))
+        Ok(conversation)
     })
 }
 
@@ -260,19 +252,6 @@ async fn build_subagent_prompt(
         },
     )
     .map_err(|e| anyhow!("Failed to render subagent system prompt: {}", e))
-}
-
-async fn get_final_output(agent: &Agent, has_response_schema: bool) -> Option<String> {
-    if has_response_schema {
-        agent
-            .final_output_tool
-            .lock()
-            .await
-            .as_ref()
-            .and_then(|tool| tool.final_output.clone())
-    } else {
-        None
-    }
 }
 
 pub fn create_tool_notification(

@@ -35,6 +35,7 @@ pub struct AgentManagerGetResult {
 pub struct AgentManager {
     sessions: Arc<RwLock<LruCache<String, Arc<Agent>>>>,
     agent_config: AgentConfig,
+    scheduler: Option<Arc<dyn SchedulerTrait>>,
     cancel_tokens: Arc<RwLock<HashMap<String, CancellationToken>>>,
     /// Per-session creation locks.  When `get_or_create_agent` misses the
     /// `sessions` cache it serializes creation for that session. Entries are
@@ -43,13 +44,18 @@ pub struct AgentManager {
 }
 
 impl AgentManager {
-    pub async fn new(agent_config: AgentConfig, max_sessions: Option<usize>) -> Result<Self> {
+    pub async fn new(
+        agent_config: AgentConfig,
+        scheduler: Option<Arc<dyn SchedulerTrait>>,
+        max_sessions: Option<usize>,
+    ) -> Result<Self> {
         let capacity = NonZeroUsize::new(max_sessions.unwrap_or(DEFAULT_MAX_SESSION))
             .unwrap_or_else(|| NonZeroUsize::new(100).unwrap());
 
         let manager = Self {
             sessions: Arc::new(RwLock::new(LruCache::new(capacity))),
             agent_config,
+            scheduler,
             cancel_tokens: Arc::new(RwLock::new(HashMap::new())),
             creation_locks: Arc::new(Mutex::new(HashMap::new())),
         };
@@ -73,12 +79,11 @@ impl AgentManager {
                 let agent_config = AgentConfig::new(
                     session_manager,
                     PermissionManager::instance(),
-                    Some(scheduler),
                     default_mode,
                     config.get_goose_disable_session_naming().unwrap_or(false),
                     GoosePlatform::GooseDesktop,
                 );
-                let manager = Self::new(agent_config, Some(max_sessions)).await?;
+                let manager = Self::new(agent_config, Some(scheduler), Some(max_sessions)).await?;
                 Ok(Arc::new(manager))
             })
             .await
@@ -87,8 +92,7 @@ impl AgentManager {
 
     pub fn scheduler(&self) -> Arc<dyn SchedulerTrait> {
         Arc::clone(
-            self.agent_config
-                .scheduler_service
+            self.scheduler
                 .as_ref()
                 .expect("AgentManager scheduler is not configured"),
         )
@@ -382,12 +386,13 @@ mod tests {
         let agent_config = AgentConfig::new(
             session_manager,
             PermissionManager::instance(),
-            None,
             GooseMode::default(),
             false,
             GoosePlatform::GooseDesktop,
         );
-        AgentManager::new(agent_config, Some(100)).await.unwrap()
+        AgentManager::new(agent_config, None, Some(100))
+            .await
+            .unwrap()
     }
 
     #[test]
@@ -616,12 +621,13 @@ mod tests {
         let agent_config = AgentConfig::new(
             session_manager,
             PermissionManager::instance(),
-            None,
             GooseMode::default(),
             false,
             GoosePlatform::GooseDesktop,
         );
-        let manager = AgentManager::new(agent_config, Some(2)).await.unwrap();
+        let manager = AgentManager::new(agent_config, None, Some(2))
+            .await
+            .unwrap();
 
         manager.get_or_create_agent("a".into()).await.unwrap();
         manager.get_or_create_agent("b".into()).await.unwrap();

@@ -1,12 +1,8 @@
 ---
 title: goose in Docker
 sidebar_label: goose in Docker
-description: Run goose inside Docker containers, or run extensions in existing containers for devcontainer workflows
+description: Run goose inside Docker containers
 ---
-
-This guide covers two Docker-related scenarios:
-1. **Running goose inside Docker** - Build and run the goose process itself in a container
-2. **Running extensions in Docker** - Run goose on your host but execute extensions inside a container
 
 ## Running goose Inside Docker
 
@@ -53,36 +49,3 @@ goose session
 ```
 
 You should now be able to connect to goose with your configured extensions enabled.
-
-## Running Extensions in Docker Containers
-
-The `--container` flag allows you to run goose extensions inside your Docker containers.
-
-### Usage
-
-```bash
-goose session --container <container-id-or-name>
-```
-
-Extensions configured in your `config.yaml` will automatically run inside the specified container. Find your container ID or name with `docker ps`.
-
-### Requirements
-
-- Extensions must exist in the container and be accessible via the same paths used in your extension config
-- To run built-in extensions, the goose CLI must be [installed](/docs/getting-started/installation) inside the container
-
-### Examples
-
-```bash
-# Start an interactive session with extensions from config.yaml
-goose session --container my-dev-container
-
-# Start a non-interactive session with instructions
-goose run --container my-dev-container --text "your instructions here"
-
-# Specify an extension to run in the container
-goose session --container 4c76a1beed85 --with-extension "uvx mcp-server-fetch"
-
-# Workaround: Use full path if container can't find the command
-goose session --container 4c76a1beed85 --with-extension "/root/.local/bin/uvx mcp-server-fetch"
-```

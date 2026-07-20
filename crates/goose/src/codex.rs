@@ -12,8 +12,9 @@ use codex_app_server_client::{
 use codex_app_server_protocol::{
     AskForApproval, ClientRequest, CommandAction, CommandExecutionStatus,
     ConfigWarningNotification, JSONRPCErrorError, PatchApplyStatus, RequestId, SandboxMode,
-    ServerNotification, ThreadItem, ThreadResumeParams, ThreadResumeResponse, ThreadStartParams,
-    ThreadStartResponse, ThreadUnsubscribeParams, ThreadUnsubscribeResponse, TurnInterruptParams,
+    ServerNotification, ThreadCompactStartParams, ThreadCompactStartResponse, ThreadItem,
+    ThreadResumeParams, ThreadResumeResponse, ThreadStartParams, ThreadStartResponse,
+    ThreadTokenUsage, ThreadUnsubscribeParams, ThreadUnsubscribeResponse, TurnInterruptParams,
     TurnInterruptResponse, TurnStartParams, TurnStartResponse, TurnStatus, TurnSteerParams,
     TurnSteerResponse, UserInput,
 };
@@ -139,6 +140,117 @@ impl CodexAgentCore {
                 })
                 .await;
         }
+    }
+
+    pub(crate) async fn reset_session(
+        &self,
+        session_manager: &SessionManager,
+        session: &Session,
+    ) -> Result<()> {
+        self.invalidate_session(session).await;
+        let mut extension_data = session.extension_data.clone();
+        CodexSessionState::remove_from_extension_data(&mut extension_data);
+        session_manager
+            .update(&session.id)
+            .extension_data(extension_data)
+            .apply()
+            .await
+    }
+
+    pub(crate) async fn compact(
+        &self,
+        session_manager: &SessionManager,
+        session: &Session,
+        base_instructions: Option<String>,
+        developer_instructions: Option<String>,
+    ) -> Result<()> {
+        let active_thread = self
+            .thread_for_session(
+                session_manager,
+                session,
+                base_instructions,
+                developer_instructions,
+            )
+            .await?;
+        if active_thread.active_turn_id.lock().await.is_some() {
+            return Err(anyhow!("Cannot compact while a Codex turn is active"));
+        }
+        let runtime = self
+            .runtime
+            .get()
+            .ok_or_else(|| anyhow!("Codex runtime was not initialized"))?;
+        let mut events = runtime.events.subscribe();
+        runtime
+            .request
+            .request_typed::<ThreadCompactStartResponse>(ClientRequest::ThreadCompactStart {
+                request_id: next_request_id(),
+                params: ThreadCompactStartParams {
+                    thread_id: active_thread.thread_id.clone(),
+                },
+            })
+            .await
+            .map_err(|error| anyhow!(error.to_string()))?;
+
+        let thread_id = active_thread.thread_id;
+        let active_turn_id = active_thread.active_turn_id;
+        let mut compact_turn_id = None;
+        let result = loop {
+            let event = match events.recv().await {
+                Ok(event) => event,
+                Err(error) => break Err(anyhow!("Codex event stream closed: {error}")),
+            };
+            match event {
+                CodexRuntimeEvent::TransportError(message) => {
+                    break Err(anyhow!(message));
+                }
+                CodexRuntimeEvent::Notification(ServerNotification::TurnStarted(event))
+                    if event.thread_id == thread_id && compact_turn_id.is_none() =>
+                {
+                    compact_turn_id = Some(event.turn.id.clone());
+                    *active_turn_id.lock().await = Some(event.turn.id);
+                }
+                CodexRuntimeEvent::Notification(ServerNotification::ThreadTokenUsageUpdated(
+                    event,
+                )) if event.thread_id == thread_id
+                    && compact_turn_id.as_ref() == Some(&event.turn_id) =>
+                {
+                    let (usage, accumulated_usage) = usage_from_codex(event.token_usage);
+                    if let Err(error) = session_manager
+                        .update(&session.id)
+                        .usage(usage)
+                        .accumulated_usage(accumulated_usage)
+                        .apply()
+                        .await
+                    {
+                        break Err(error);
+                    }
+                }
+                CodexRuntimeEvent::Notification(ServerNotification::Error(event))
+                    if event.thread_id == thread_id
+                        && compact_turn_id.as_ref() == Some(&event.turn_id)
+                        && !event.will_retry =>
+                {
+                    break Err(anyhow!(event.error.message));
+                }
+                CodexRuntimeEvent::Notification(ServerNotification::TurnCompleted(event))
+                    if event.thread_id == thread_id
+                        && compact_turn_id.as_ref() == Some(&event.turn.id) =>
+                {
+                    if matches!(event.turn.status, TurnStatus::Completed) {
+                        break Ok(());
+                    }
+                    let message = event
+                        .turn
+                        .error
+                        .map(|error| error.message)
+                        .unwrap_or_else(|| format!("Codex compaction {:?}", event.turn.status));
+                    break Err(anyhow!(message));
+                }
+                _ => {}
+            }
+        };
+        *active_turn_id.lock().await = None;
+        result
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -269,26 +381,7 @@ impl CodexAgentCore {
                     CodexRuntimeEvent::Notification(
                         ServerNotification::ThreadTokenUsageUpdated(event),
                     ) if event.thread_id == thread_id && event.turn_id == turn_id => {
-                        let last = event.token_usage.last;
-                        let usage = Usage::new(
-                            Some(saturating_i32(last.input_tokens)),
-                            Some(saturating_i32(last.output_tokens)),
-                            Some(saturating_i32(last.total_tokens)),
-                        )
-                        .with_cache_tokens(
-                            Some(saturating_i32(last.cached_input_tokens)),
-                            None,
-                        );
-                        let total = event.token_usage.total;
-                        let accumulated_usage = Usage::new(
-                            Some(saturating_i32(total.input_tokens)),
-                            Some(saturating_i32(total.output_tokens)),
-                            Some(saturating_i32(total.total_tokens)),
-                        )
-                        .with_cache_tokens(
-                            Some(saturating_i32(total.cached_input_tokens)),
-                            None,
-                        );
+                        let (usage, accumulated_usage) = usage_from_codex(event.token_usage);
                         session_manager
                             .update(&session_id)
                             .usage(usage)
@@ -589,11 +682,26 @@ async fn thread_config(session: &Session) -> Result<ThreadStartParams> {
         GooseMode::SmartApprove => SandboxMode::WorkspaceWrite,
         GooseMode::Approve | GooseMode::Chat => SandboxMode::ReadOnly,
     };
-    let config = mcp_overrides(session)
+    let mut config = mcp_overrides(session)
         .await?
         .into_iter()
         .map(|(key, value)| Ok((key, serde_json::to_value(value)?)))
         .collect::<Result<HashMap<_, _>>>()?;
+    if let (Ok(threshold), Some(context_limit)) = (
+        crate::config::Config::global().get_param::<f64>("GOOSE_AUTO_COMPACT_THRESHOLD"),
+        session
+            .model_config
+            .as_ref()
+            .and_then(|model| model.context_limit),
+    ) {
+        if threshold.is_finite() && threshold > 0.0 && threshold <= 1.0 {
+            let token_limit = ((context_limit as f64) * threshold).round() as i64;
+            config.insert(
+                "model_auto_compact_token_limit".to_string(),
+                serde_json::json!(token_limit.max(1)),
+            );
+        }
+    }
 
     Ok(ThreadStartParams {
         model,
@@ -882,6 +990,24 @@ async fn mcp_overrides(session: &Session) -> Result<Vec<(String, TomlValue)>> {
 
 fn saturating_i32(value: i64) -> i32 {
     value.clamp(i32::MIN as i64, i32::MAX as i64) as i32
+}
+
+fn usage_from_codex(token_usage: ThreadTokenUsage) -> (Usage, Usage) {
+    let last = token_usage.last;
+    let usage = Usage::new(
+        Some(saturating_i32(last.input_tokens)),
+        Some(saturating_i32(last.output_tokens)),
+        Some(saturating_i32(last.total_tokens)),
+    )
+    .with_cache_tokens(Some(saturating_i32(last.cached_input_tokens)), None);
+    let total = token_usage.total;
+    let accumulated_usage = Usage::new(
+        Some(saturating_i32(total.input_tokens)),
+        Some(saturating_i32(total.output_tokens)),
+        Some(saturating_i32(total.total_tokens)),
+    )
+    .with_cache_tokens(Some(saturating_i32(total.cached_input_tokens)), None);
+    (usage, accumulated_usage)
 }
 
 #[cfg(test)]

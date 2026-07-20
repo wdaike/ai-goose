@@ -1,4 +1,3 @@
-pub mod permission_judge;
 pub mod permission_store;
 
 pub use goose_providers::permission::{Permission, PermissionConfirmation};

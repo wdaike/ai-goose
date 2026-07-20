@@ -28,7 +28,6 @@ use tokio_stream::wrappers::ReceiverStream;
 use tokio_util::sync::CancellationToken;
 use tracing::{error, warn};
 
-use super::container::Container;
 use super::extension::{
     ExtensionConfig, ExtensionError, ExtensionInfo, ExtensionResult, PlatformExtensionContext,
     ToolInfo, PLATFORM_EXTENSIONS,
@@ -407,7 +406,6 @@ async fn child_process_client(
     timeout: &Option<u64>,
     provider: SharedProvider,
     working_dir: &PathBuf,
-    docker_container: Option<String>,
     client_name: String,
     capabilities: GooseMcpClientCapabilities,
 ) -> ExtensionResult<McpClient> {
@@ -440,11 +438,10 @@ async fn child_process_client(
         Ok::<String, std::io::Error>(String::from_utf8_lossy(&all_stderr).into())
     });
 
-    let client_result = McpClient::connect_with_container(
+    let client_result = McpClient::connect(
         transport,
         Duration::from_secs(resolve_timeout(*timeout)),
         provider,
-        docker_container,
         client_name,
         capabilities,
         working_dir.clone(),
@@ -930,7 +927,6 @@ impl ExtensionManager {
         self: &Arc<Self>,
         config: ExtensionConfig,
         working_dir: Option<PathBuf>,
-        container: Option<&Container>,
         session_id: Option<&str>,
     ) -> ExtensionResult<()> {
         let sanitized_name = config.key();
@@ -1025,51 +1021,21 @@ impl ExtensionManager {
                             ExtensionError::ConfigError(format!("Unknown extension: {}", name))
                         })?;
 
-                    if let Some(container) = container {
-                        let container_id = container.id();
-                        tracing::info!(
-                            container = %container_id,
-                            builtin = %name,
-                            "Starting builtin extension inside Docker container"
-                        );
-                        let command = Command::new("docker").configure(|command| {
-                            command
-                                .arg("exec")
-                                .arg("-i")
-                                .arg(container_id)
-                                .arg("goose")
-                                .arg("mcp")
-                                .arg(&normalized_name);
-                        });
+                    let (server_read, client_write) = tokio::io::duplex(65536);
+                    let (client_read, server_write) = tokio::io::duplex(65536);
+                    extension_fn(server_read, server_write);
 
-                        let client = child_process_client(
-                            command,
-                            &Some(timeout_secs),
+                    Box::new(
+                        McpClient::connect(
+                            (client_read, client_write),
+                            Duration::from_secs(timeout_secs),
                             self.provider.clone(),
-                            &effective_working_dir,
-                            Some(container_id.to_string()),
                             self.client_name.clone(),
                             self.mcp_client_capabilities(),
+                            effective_working_dir.clone(),
                         )
-                        .await?;
-                        Box::new(client)
-                    } else {
-                        let (server_read, client_write) = tokio::io::duplex(65536);
-                        let (client_read, server_write) = tokio::io::duplex(65536);
-                        extension_fn(server_read, server_write);
-
-                        Box::new(
-                            McpClient::connect(
-                                (client_read, client_write),
-                                Duration::from_secs(timeout_secs),
-                                self.provider.clone(),
-                                self.client_name.clone(),
-                                self.mcp_client_capabilities(),
-                                effective_working_dir.clone(),
-                            )
-                            .await?,
-                        )
-                    }
+                        .await?,
+                    )
                 }
             }
             ExtensionConfig::Stdio {
@@ -1096,35 +1062,16 @@ impl ExtensionManager {
                 // Check for malicious packages before launching the process
                 extension_malware_check::deny_if_malicious_cmd_args(cmd, args).await?;
 
-                let command = if let Some(container) = container {
-                    let container_id = container.id();
-                    tracing::info!(
-                        container = %container_id,
-                        cmd = %cmd,
-                        "Starting stdio extension inside Docker container"
-                    );
-                    Command::new("docker").configure(|command| {
-                        command.arg("exec").arg("-i");
-                        for (key, value) in &all_envs {
-                            command.arg("-e").arg(format!("{}={}", key, value));
-                        }
-                        command.arg(container_id);
-                        command.arg(cmd);
-                        command.args(args);
-                    })
-                } else {
-                    let cmd = resolve_command(cmd);
-                    Command::new(cmd).configure(|command| {
-                        command.args(args).envs(all_envs);
-                    })
-                };
+                let cmd = resolve_command(cmd);
+                let command = Command::new(cmd).configure(|command| {
+                    command.args(args).envs(all_envs);
+                });
 
                 let client = child_process_client(
                     command,
                     timeout,
                     self.provider.clone(),
                     &process_working_dir,
-                    container.map(|c| c.id().to_string()),
                     self.client_name.clone(),
                     self.mcp_client_capabilities(),
                 )
@@ -1156,7 +1103,6 @@ impl ExtensionManager {
                     timeout,
                     self.provider.clone(),
                     &effective_working_dir,
-                    container.map(|c| c.id().to_string()),
                     self.client_name.clone(),
                     self.mcp_client_capabilities(),
                 )
@@ -2070,38 +2016,6 @@ impl ExtensionManager {
             .get(&normalized)
             .map(|ext| ext.get_client())
     }
-
-    pub async fn collect_moim_parts(&self, session_id: &str) -> Vec<String> {
-        let platform_clients: Vec<(String, McpClientBox)> = {
-            let extensions = self.extensions.lock().await;
-            extensions
-                .iter()
-                .filter_map(|(name, extension)| {
-                    let is_platform = match &extension.config {
-                        ExtensionConfig::Platform { .. } => true,
-                        ExtensionConfig::Builtin { name: ext_name, .. } => {
-                            PLATFORM_EXTENSIONS.contains_key(name_to_key(ext_name).as_str())
-                        }
-                        _ => false,
-                    };
-                    if is_platform {
-                        Some((name.clone(), extension.get_client()))
-                    } else {
-                        None
-                    }
-                })
-                .collect()
-        };
-
-        let mut parts = Vec::new();
-        for (name, client) in platform_clients {
-            if let Some(moim_content) = client.get_moim(session_id).await {
-                tracing::debug!("MOIM content from {}: {} chars", name, moim_content.len());
-                parts.push(moim_content);
-            }
-        }
-        parts
-    }
 }
 
 #[cfg(test)]
@@ -2980,7 +2894,7 @@ mod tests {
         assert_eq!(em.extensions.lock().await.len(), 1);
 
         // Calling add_extension with the same config must be a no-op (Ok, count unchanged).
-        let result = em.add_extension(config, None, None, None).await;
+        let result = em.add_extension(config, None, None).await;
         assert!(result.is_ok(), "identical config should be a no-op");
         assert_eq!(
             em.extensions.lock().await.len(),
@@ -3028,7 +2942,7 @@ mod tests {
         // add_extension with changed config attempts to create a new client (fails here
         // because Frontend configs cannot be added as server extensions), but must preserve
         // the old extension so the session isn't left without it.
-        let result = em.add_extension(config_b, None, None, None).await;
+        let result = em.add_extension(config_b, None, None).await;
         assert!(result.is_err(), "Frontend add_extension must return Err");
         assert_eq!(
             em.extensions.lock().await.len(),

@@ -79,6 +79,11 @@ pub trait ExtensionState: Sized + Serialize + for<'de> Deserialize<'de> {
         extension_data.set_extension_state(Self::EXTENSION_NAME, Self::VERSION, value);
         Ok(())
     }
+
+    fn remove_from_extension_data(extension_data: &mut ExtensionData) {
+        let key = format!("{}.{}", Self::EXTENSION_NAME, Self::VERSION);
+        extension_data.extension_states.remove(&key);
+    }
 }
 
 /// TODO extension state implementation
@@ -239,6 +244,9 @@ mod tests {
         let retrieved = TodoState::from_extension_data(&extension_data);
         assert!(retrieved.is_some());
         assert_eq!(retrieved.unwrap().content, "- Task 1\n- Task 2");
+
+        TodoState::remove_from_extension_data(&mut extension_data);
+        assert!(TodoState::from_extension_data(&extension_data).is_none());
     }
 
     #[test]

@@ -2328,9 +2328,8 @@ mod tests {
             ]
         }
 
-        /// A realistic multi-turn conversation. `inject_moim` prepends the
-        /// turn-context block to the latest genuine user message, so it sits as
-        /// the first text block of the final user message here.
+        /// A realistic multi-turn conversation with turn context in the latest
+        /// genuine user message.
         fn conversation(turn_context_block: &str) -> Vec<Message> {
             vec![
                 Message::user().with_text("What does the main entrypoint do?"),
@@ -2411,11 +2410,10 @@ mod tests {
             .to_string()
         }
 
-        /// The production tool-loop case: `inject_moim` prepends turn-context to
-        /// the latest *genuine* user message, but the request then ends with a
-        /// later `tool_result` message. The block must be relocated *across*
-        /// messages to land after the trailing breakpoint, not merely reordered
-        /// within its own message.
+        /// A tool-loop case where turn context belongs to the latest genuine user
+        /// message but the request ends with a later `tool_result` message. The
+        /// block must be relocated across messages to land after the trailing
+        /// breakpoint.
         fn tool_loop_conversation(turn_context_block: &str) -> Vec<Message> {
             vec![
                 Message::user().with_text("What does the main entrypoint do?"),
