@@ -3,9 +3,6 @@ pub mod apps;
 pub mod chatrecall;
 pub mod developer;
 pub mod ext_manager;
-pub mod orchestrator;
-pub mod summarize;
-pub mod summon;
 pub mod todo;
 
 use std::collections::HashMap;
@@ -97,32 +94,6 @@ pub static PLATFORM_EXTENSIONS: Lazy<HashMap<&'static str, PlatformExtensionDef>
         );
 
         map.insert(
-            summon::EXTENSION_NAME,
-            PlatformExtensionDef {
-                name: summon::EXTENSION_NAME,
-                display_name: "Summon",
-                description: "Load knowledge and delegate tasks to subagents",
-                default_enabled: true,
-                unprefixed_tools: true,
-                hidden: false,
-                client_factory: |ctx| Box::new(summon::SummonClient::new(ctx).unwrap()),
-            },
-        );
-
-        map.insert(
-            summarize::EXTENSION_NAME,
-            PlatformExtensionDef {
-                name: summarize::EXTENSION_NAME,
-                display_name: "Summarize",
-                description: "Load files/directories and get an LLM summary in a single call",
-                default_enabled: false,
-                unprefixed_tools: false,
-                hidden: false,
-                client_factory: |ctx| Box::new(summarize::SummarizeClient::new(ctx).unwrap()),
-            },
-        );
-
-        map.insert(
             developer::EXTENSION_NAME,
             PlatformExtensionDef {
                 name: developer::EXTENSION_NAME,
@@ -132,20 +103,6 @@ pub static PLATFORM_EXTENSIONS: Lazy<HashMap<&'static str, PlatformExtensionDef>
                 unprefixed_tools: true,
                 hidden: false,
                 client_factory: |ctx| Box::new(developer::DeveloperClient::new(ctx).unwrap()),
-            },
-        );
-
-        map.insert(
-            orchestrator::EXTENSION_NAME,
-            PlatformExtensionDef {
-                name: orchestrator::EXTENSION_NAME,
-                display_name: "Orchestrator",
-                description:
-                    "Manage agent sessions: list, view, start, send messages, interrupt, and stop agents",
-                default_enabled: false,
-                unprefixed_tools: false,
-                hidden: true,
-                client_factory: |ctx| Box::new(orchestrator::OrchestratorClient::new(ctx).unwrap()),
             },
         );
 

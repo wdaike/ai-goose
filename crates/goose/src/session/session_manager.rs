@@ -3,7 +3,7 @@ use crate::config::GooseMode;
 use crate::conversation::message::{Message, MessageUsage, TokenState};
 use crate::conversation::Conversation;
 use crate::providers::base::CostSource;
-use crate::providers::base::Provider;
+
 use crate::recipe::Recipe;
 use crate::session::extension_data::ExtensionData;
 use crate::session::session_naming::{
@@ -542,11 +542,7 @@ impl SessionManager {
         })
     }
 
-    pub async fn maybe_update_name(
-        &self,
-        id: &str,
-        provider: Arc<dyn Provider>,
-    ) -> Result<Option<SessionNameUpdate>> {
+    pub async fn maybe_update_name(&self, id: &str) -> Result<Option<SessionNameUpdate>> {
         let session = self.get_session(id, true).await?;
 
         if session.user_set_name {
@@ -566,18 +562,6 @@ impl SessionManager {
             return Ok(Some(self.system_generated_name_update(id, name).await?));
         }
 
-        let model_config = match session.model_config.clone() {
-            Some(model_config) => model_config,
-            None => {
-                let model_name =
-                    crate::config::Config::global()
-                        .get_goose_model()
-                        .map_err(|_| {
-                            anyhow::anyhow!("Could not resolve model config: missing model")
-                        })?;
-                crate::model_config::model_config_from_user_config(&model_name)?
-            }
-        };
         let conversation = session
             .conversation
             .ok_or_else(|| anyhow::anyhow!("No messages found"))?;
@@ -589,8 +573,7 @@ impl SessionManager {
             .count();
 
         if user_message_count <= MSG_COUNT_FOR_SESSION_NAME_GENERATION {
-            let name =
-                generate_session_name(provider.as_ref(), &model_config, id, &conversation).await?;
+            let name = generate_session_name(&conversation);
             return Ok(Some(self.system_generated_name_update(id, name).await?));
         }
         Ok(None)
@@ -2545,51 +2528,12 @@ fn merge_tool_meta(
 mod tests {
     use super::*;
     use crate::conversation::message::{Message, MessageContent};
-    use crate::providers::base::MessageStream;
-    use goose_providers::conversation::token_usage::{CostSource, ProviderUsage};
-    use goose_providers::errors::ProviderError;
-    use rmcp::model::Tool;
+    use goose_providers::conversation::token_usage::CostSource;
     use tempfile::TempDir;
     use test_case::test_case;
 
     const NUM_CONCURRENT_SESSIONS: i32 = 10;
-    const GENERATED_SESSION_NAME: &str = "Generated session name";
-
-    struct NamingTestProvider;
-
-    #[async_trait::async_trait]
-    impl Provider for NamingTestProvider {
-        fn get_name(&self) -> &str {
-            "naming-test"
-        }
-
-        async fn stream(
-            &self,
-            _model_config: &ModelConfig,
-            _system: &str,
-            _messages: &[Message],
-            _tools: &[rmcp::model::Tool],
-        ) -> std::result::Result<MessageStream, goose_providers::errors::ProviderError> {
-            unimplemented!("session naming calls complete")
-        }
-
-        async fn complete(
-            &self,
-            _model_config: &ModelConfig,
-            _system: &str,
-            _messages: &[Message],
-            _tools: &[Tool],
-        ) -> Result<(Message, ProviderUsage), ProviderError> {
-            Ok((
-                Message::assistant().with_text(GENERATED_SESSION_NAME),
-                ProviderUsage::new("test".to_string(), Default::default()),
-            ))
-        }
-    }
-
-    fn naming_test_provider() -> Arc<dyn Provider> {
-        Arc::new(NamingTestProvider)
-    }
+    const GENERATED_SESSION_NAME: &str = "hello world";
 
     fn test_recipe(title: &str) -> Recipe {
         Recipe::builder()
@@ -2841,10 +2785,7 @@ mod tests {
 
         add_user_message(&sm, &session.id).await;
 
-        let update = sm
-            .maybe_update_name(&session.id, naming_test_provider())
-            .await
-            .unwrap();
+        let update = sm.maybe_update_name(&session.id).await.unwrap();
         assert_eq!(
             update.as_ref().map(|update| update.name.as_str()),
             Some(GENERATED_SESSION_NAME)
@@ -2877,10 +2818,7 @@ mod tests {
             .unwrap();
         add_user_message(&sm, &session.id).await;
 
-        let update = sm
-            .maybe_update_name(&session.id, naming_test_provider())
-            .await
-            .unwrap();
+        let update = sm.maybe_update_name(&session.id).await.unwrap();
         assert!(update.is_none());
 
         let reloaded = sm.get_session(&session.id, false).await.unwrap();
@@ -2910,10 +2848,7 @@ mod tests {
             .unwrap();
         add_user_message(&sm, &session.id).await;
 
-        let update = sm
-            .maybe_update_name(&session.id, naming_test_provider())
-            .await
-            .unwrap();
+        let update = sm.maybe_update_name(&session.id).await.unwrap();
         assert_eq!(
             update.as_ref().map(|update| update.name.as_str()),
             Some("Recipe title")
@@ -2923,10 +2858,7 @@ mod tests {
         assert_eq!(reloaded.name, "Recipe title");
         assert!(!reloaded.user_set_name);
 
-        let update = sm
-            .maybe_update_name(&session.id, naming_test_provider())
-            .await
-            .unwrap();
+        let update = sm.maybe_update_name(&session.id).await.unwrap();
         assert!(update.is_none());
     }
 
@@ -2948,10 +2880,7 @@ mod tests {
 
         add_user_message(&sm, &session.id).await;
 
-        let update = sm
-            .maybe_update_name(&session.id, naming_test_provider())
-            .await
-            .unwrap();
+        let update = sm.maybe_update_name(&session.id).await.unwrap();
         assert!(update.is_none());
 
         let reloaded = sm.get_session(&session.id, false).await.unwrap();

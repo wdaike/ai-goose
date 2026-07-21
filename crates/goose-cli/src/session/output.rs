@@ -776,34 +776,6 @@ fn split_tool_name(tool_name: &str) -> (String, String) {
     (tool.to_string(), extension)
 }
 
-pub fn format_subagent_tool_call_message(subagent_id: &str, tool_name: &str) -> String {
-    let short_id = subagent_id.rsplit('_').next().unwrap_or(subagent_id);
-    let (tool, extension) = split_tool_name(tool_name);
-
-    if extension.is_empty() {
-        format!("[subagent:{}] {}", short_id, tool)
-    } else {
-        format!("[subagent:{}] {} | {}", short_id, tool, extension)
-    }
-}
-
-pub fn render_subagent_tool_call(
-    subagent_id: &str,
-    tool_name: &str,
-    arguments: Option<&JsonObject>,
-    debug: bool,
-) {
-    let tool_header = format!(
-        "  {} {}",
-        style("▸").dim(),
-        style(format_subagent_tool_call_message(subagent_id, tool_name)).dim(),
-    );
-    println!();
-    println!("{}", tool_header);
-    print_params(&arguments.cloned(), 1, debug);
-    println!();
-}
-
 // Helper functions
 
 fn print_tool_header(call: &CallToolRequestParams) {

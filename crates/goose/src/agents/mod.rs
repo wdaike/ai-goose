@@ -6,9 +6,6 @@ pub mod mcp_client;
 pub mod platform_extensions;
 pub mod prompt_manager;
 pub mod reply_parts;
-pub mod subagent_execution_tool;
-pub(crate) mod subagent_handler;
-pub(crate) mod subagent_task_config;
 mod tool_execution;
 pub mod types;
 pub mod validate_extensions;
@@ -17,7 +14,5 @@ pub use agent::{Agent, AgentConfig, AgentEvent, ExtensionLoadResult, GoosePlatfo
 pub use extension::{ExtensionConfig, ExtensionError};
 pub use extension_manager::ExtensionManager;
 pub use prompt_manager::PromptManager;
-pub use subagent_handler::SUBAGENT_TOOL_REQUEST_TYPE;
-pub use subagent_task_config::TaskConfig;
 pub use tool_execution::ToolCallContext;
 pub use types::{RetryConfig, SessionConfig, SuccessCheck};

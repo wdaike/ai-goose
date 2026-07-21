@@ -76,8 +76,7 @@ impl GooseAcpAgent {
                 .data("Either cwd or sessionId is required"));
         };
 
-        let filesystem_sources =
-            crate::agents::platform_extensions::summon::discover_filesystem_sources(&cwd);
+        let filesystem_sources = crate::sources::discover_filesystem_sources(&cwd);
         let mut sources = Vec::new();
         let mut seen = HashSet::new();
 

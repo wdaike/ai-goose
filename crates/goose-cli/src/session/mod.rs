@@ -7,15 +7,10 @@ mod input;
 mod output;
 mod paste;
 pub mod streaming_buffer;
-mod task_execution_display;
 mod thinking;
 
-use crate::session::task_execution_display::{
-    format_task_execution_notification, TASK_EXECUTION_NOTIFICATION_TYPE,
-};
 use goose::conversation::Conversation;
 use std::env;
-use std::io::Write;
 use std::str::FromStr;
 use tokio::signal::ctrl_c;
 use tokio_util::task::AbortOnDropHandle;
@@ -24,13 +19,11 @@ pub use self::export::message_to_markdown;
 pub use builder::{build_session, SessionBuilderConfig};
 use console::Color;
 use goose::agents::AgentEvent;
-use goose::agents::SUBAGENT_TOOL_REQUEST_TYPE;
 use goose::permission::permission_confirmation::PrincipalType;
 use goose::permission::Permission;
 use goose::permission::PermissionConfirmation;
 use goose::providers::base::Provider;
 use goose::providers::base::ProviderUsage;
-use goose::utils::safe_truncate;
 
 use anyhow::{Context, Result};
 use completion::GooseCompleter;
@@ -1283,7 +1276,6 @@ impl CliSession {
                                 is_stream_json_mode,
                                 interactive,
                                 is_json_mode,
-                                self.debug,
                             );
                         }
                         Some(Ok(AgentEvent::HistoryReplaced(updated_conversation))) => {
@@ -1895,55 +1887,10 @@ fn handle_mcp_notification(
     is_stream_json_mode: bool,
     interactive: bool,
     is_json_mode: bool,
-    debug: bool,
 ) {
     match notification {
         ServerNotification::LoggingMessageNotification(log_notif) => {
-            if let Some(obj) = log_notif.params.data.as_object() {
-                if obj.get("type").and_then(|v| v.as_str()) == Some(SUBAGENT_TOOL_REQUEST_TYPE) {
-                    if let (Some(subagent_id), Some(tool_call)) = (
-                        obj.get("subagent_id").and_then(|v| v.as_str()),
-                        obj.get("tool_call").and_then(|v| v.as_object()),
-                    ) {
-                        let tool_name = tool_call
-                            .get("name")
-                            .and_then(|v| v.as_str())
-                            .unwrap_or("unknown");
-                        let arguments = tool_call
-                            .get("arguments")
-                            .and_then(|v| v.as_object())
-                            .cloned();
-
-                        if interactive {
-                            let _ = progress_bars.hide();
-                        }
-                        if is_stream_json_mode {
-                            emit_stream_event(&StreamEvent::Notification {
-                                extension_id: extension_id.to_string(),
-                                data: NotificationData::Log {
-                                    message: output::format_subagent_tool_call_message(
-                                        subagent_id,
-                                        tool_name,
-                                    ),
-                                },
-                            });
-                            return;
-                        }
-                        if !is_json_mode {
-                            output::render_subagent_tool_call(
-                                subagent_id,
-                                tool_name,
-                                arguments.as_ref(),
-                                debug,
-                            );
-                            return;
-                        }
-                    }
-                }
-            }
-
-            let (formatted, subagent_id, notif_type) =
-                format_logging_notification(&log_notif.params.data, debug);
+            let (formatted, notif_type) = format_logging_notification(&log_notif.params.data);
 
             if is_stream_json_mode {
                 emit_stream_event(&StreamEvent::Notification {
@@ -1955,7 +1902,6 @@ fn handle_mcp_notification(
             } else {
                 display_log_notification(
                     &formatted,
-                    subagent_id.as_deref(),
                     notif_type.as_deref(),
                     progress_bars,
                     interactive,
@@ -1986,108 +1932,45 @@ fn handle_mcp_notification(
     }
 }
 
-/// Format a logging notification from MCP, returns (formatted_message, subagent_id, notification_type)
-fn format_logging_notification(
-    data: &Value,
-    debug: bool,
-) -> (String, Option<String>, Option<String>) {
+/// Format a logging notification from MCP, returns (formatted_message, notification_type)
+fn format_logging_notification(data: &Value) -> (String, Option<String>) {
     match data {
-        Value::String(s) => (s.clone(), None, None),
+        Value::String(s) => (s.clone(), None),
         Value::Object(o) => {
+            let notification_type = o.get("type").and_then(|v| v.as_str()).map(str::to_string);
             if let Some(Value::String(msg)) = o.get("message") {
-                let subagent_id = o.get("subagent_id").and_then(|v| v.as_str());
-                let notification_type = o.get("type").and_then(|v| v.as_str());
-
-                let formatted = match notification_type {
-                    Some("subagent_created") | Some("completed") | Some("terminated") => {
-                        format!("🤖 {}", msg)
-                    }
-                    Some("tool_usage") | Some("tool_completed") | Some("tool_error") => {
-                        format!("🔧 {}", msg)
-                    }
-                    Some("message_processing") | Some("turn_progress") => {
-                        format!("💭 {}", msg)
-                    }
-                    Some("response_generated") => {
-                        let config = Config::global();
-                        let min_priority = config
-                            .get_param::<f32>("GOOSE_CLI_MIN_PRIORITY")
-                            .ok()
-                            .unwrap_or(output::DEFAULT_MIN_PRIORITY);
-
-                        if min_priority > 0.1 && !debug {
-                            if let Some(response_content) = msg.strip_prefix("Responded: ") {
-                                format!("🤖 Responded: {}", safe_truncate(response_content, 100))
-                            } else {
-                                format!("🤖 {}", msg)
-                            }
-                        } else {
-                            format!("🤖 {}", msg)
-                        }
-                    }
-                    _ => msg.to_string(),
-                };
-                (
-                    formatted,
-                    subagent_id.map(str::to_string),
-                    notification_type.map(str::to_string),
-                )
+                (msg.to_owned(), notification_type)
             } else if let Some(Value::String(output)) = o.get("output") {
-                let notification_type = o.get("type").and_then(|v| v.as_str()).map(str::to_string);
-                (output.to_owned(), None, notification_type)
-            } else if let Some(result) = format_task_execution_notification(data) {
-                result
+                (output.to_owned(), notification_type)
             } else {
-                (data.to_string(), None, None)
+                (data.to_string(), None)
             }
         }
-        v => (v.to_string(), None, None),
+        v => (v.to_string(), None),
     }
 }
 
 /// Display a logging notification based on its type and context
 fn display_log_notification(
     formatted_message: &str,
-    subagent_id: Option<&str>,
     notification_type: Option<&str>,
     progress_bars: &mut output::McpSpinners,
     interactive: bool,
     is_json_mode: bool,
 ) {
-    if subagent_id.is_some() {
-        if interactive {
-            let _ = progress_bars.hide();
-            if !is_json_mode {
-                println!("{}", console::style(formatted_message).green().dim());
-            }
-        } else if !is_json_mode {
-            progress_bars.log(formatted_message);
-        }
-    } else if let Some(ntype) = notification_type {
-        if ntype == TASK_EXECUTION_NOTIFICATION_TYPE {
+    if notification_type == Some("shell_output") {
+        let config = Config::global();
+        let min_priority = config
+            .get_param::<f32>("GOOSE_CLI_MIN_PRIORITY")
+            .ok()
+            .unwrap_or(output::DEFAULT_MIN_PRIORITY);
+
+        if min_priority < 0.1 {
             if interactive {
                 let _ = progress_bars.hide();
             }
             if !is_json_mode {
-                for line in formatted_message.lines() {
-                    println!("    {}", console::style(line).dim());
-                }
-                std::io::stdout().flush().unwrap();
-            }
-        } else if ntype == "shell_output" {
-            let config = Config::global();
-            let min_priority = config
-                .get_param::<f32>("GOOSE_CLI_MIN_PRIORITY")
-                .ok()
-                .unwrap_or(output::DEFAULT_MIN_PRIORITY);
-
-            if min_priority < 0.1 {
-                if interactive {
-                    let _ = progress_bars.hide();
-                }
-                if !is_json_mode {
-                    println!("    {}", console::style(formatted_message).dim());
-                }
+                println!("    {}", console::style(formatted_message).dim());
             }
         }
     } else if output::is_showing_thinking() {

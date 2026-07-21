@@ -3,6 +3,7 @@
 //! `<project>/.agents/skills/`). Projects live in `<dataDir>/projects/<slug>.md`.
 
 use crate::config::paths::Paths;
+use crate::recipe::{Recipe, RECIPE_FILE_EXTENSIONS};
 use crate::skills::{
     build_skill_md, discover_skills, infer_skill_name, is_global_skill_dir,
     parse_skill_frontmatter, resolve_discoverable_skill_dir, resolve_skill_dir, skill_base_dir,
@@ -1847,4 +1848,223 @@ mod tests {
         .unwrap_err();
         assert!(format!("{:?}", err).contains("not found"));
     }
+}
+
+#[derive(Debug, Deserialize)]
+struct AgentMetadata {
+    name: String,
+    #[serde(default)]
+    description: Option<String>,
+    #[serde(default)]
+    model: Option<String>,
+}
+
+fn parse_agent_content(content: &str, path: &Path) -> Option<SourceEntry> {
+    let (metadata, body): (AgentMetadata, String) = match parse_frontmatter(content) {
+        Ok(Some(parsed)) => parsed,
+        Ok(None) => return None,
+        Err(e) => {
+            // Missing fields means this file has valid YAML but isn't an agent — skip silently.
+            // Only warn on actual YAML syntax errors.
+            if e.to_string().contains("missing field") {
+                return None;
+            }
+            warn!("Failed to parse agent file {}: {}", path.display(), e);
+            return None;
+        }
+    };
+
+    let description = metadata.description.unwrap_or_else(|| {
+        let model_info = metadata
+            .model
+            .as_ref()
+            .map(|m| format!(" ({})", m))
+            .unwrap_or_default();
+        format!("Agent{}", model_info)
+    });
+
+    Some(SourceEntry {
+        source_type: SourceType::Agent,
+        name: metadata.name,
+        description,
+        content: body,
+        path: path.to_string_lossy().into_owned(),
+        global: false,
+        writable: true,
+        supporting_files: Vec::new(),
+        properties: std::collections::HashMap::new(),
+    })
+}
+
+fn scan_recipes_from_dir(
+    dir: &Path,
+    kind: SourceType,
+    suppress_config_warnings: bool,
+    sources: &mut Vec<SourceEntry>,
+    seen: &mut std::collections::HashSet<String>,
+) {
+    let entries = match std::fs::read_dir(dir) {
+        Ok(e) => e,
+        Err(_) => return,
+    };
+
+    for entry in entries.flatten() {
+        let path = entry.path();
+        if !path.is_file() {
+            continue;
+        }
+
+        let ext = path.extension().and_then(|e| e.to_str()).unwrap_or("");
+        if !RECIPE_FILE_EXTENSIONS.contains(&ext) {
+            continue;
+        }
+
+        let name = path
+            .file_stem()
+            .and_then(|s| s.to_str())
+            .unwrap_or("")
+            .to_string();
+
+        if name.is_empty() || seen.contains(&name) {
+            continue;
+        }
+
+        match Recipe::from_file_path(&path) {
+            Ok(recipe) => {
+                seen.insert(name.clone());
+                sources.push(SourceEntry {
+                    source_type: kind,
+                    name,
+                    description: recipe.description.clone(),
+                    content: recipe.instructions.clone().unwrap_or_default(),
+                    path: path.to_string_lossy().into_owned(),
+                    global: false,
+                    writable: true,
+                    supporting_files: Vec::new(),
+                    properties: std::collections::HashMap::new(),
+                });
+            }
+            Err(e) => {
+                // The working directory commonly contains project config like package.json
+                // and tsconfig.json, which parse as valid JSON but lack Recipe fields. In that
+                // case treat them as "not a recipe" rather than warning. Dedicated recipe
+                // directories still warn so a real recipe with a typo is not silently dropped.
+                if suppress_config_warnings && e.to_string().contains("missing field") {
+                    continue;
+                }
+                warn!("Failed to parse recipe {}: {}", path.display(), e);
+            }
+        }
+    }
+}
+
+fn scan_agents_from_dir(
+    dir: &Path,
+    sources: &mut Vec<SourceEntry>,
+    seen: &mut std::collections::HashSet<String>,
+) {
+    let entries = match std::fs::read_dir(dir) {
+        Ok(e) => e,
+        Err(_) => return,
+    };
+
+    for entry in entries.flatten() {
+        let path = entry.path();
+        if !path.is_file() {
+            continue;
+        }
+
+        let ext = path.extension().and_then(|e| e.to_str()).unwrap_or("");
+        if ext != "md" {
+            continue;
+        }
+
+        let content = match std::fs::read_to_string(&path) {
+            Ok(c) => c,
+            Err(e) => {
+                warn!("Failed to read agent file {}: {}", path.display(), e);
+                continue;
+            }
+        };
+
+        if let Some(source) = parse_agent_content(&content, &path) {
+            if !seen.contains(&source.name) {
+                seen.insert(source.name.clone());
+                sources.push(source);
+            }
+        }
+    }
+}
+
+pub fn discover_filesystem_sources(working_dir: &Path) -> Vec<SourceEntry> {
+    let mut sources: Vec<SourceEntry> = Vec::new();
+    let mut seen: std::collections::HashSet<String> = std::collections::HashSet::new();
+
+    let home = dirs::home_dir();
+    let config = Paths::config_dir();
+
+    let local_recipe_dirs: Vec<PathBuf> = vec![
+        working_dir.join(".goose/recipes"),
+        working_dir.join(".agents/recipes"),
+    ];
+
+    let global_recipe_dirs: Vec<PathBuf> = std::env::var("GOOSE_RECIPE_PATH")
+        .ok()
+        .into_iter()
+        .flat_map(|p| {
+            let sep = if cfg!(windows) { ';' } else { ':' };
+            p.split(sep).map(PathBuf::from).collect::<Vec<_>>()
+        })
+        .chain(
+            [
+                home.as_ref().map(|h| h.join(".goose/recipes")),
+                Some(config.join("recipes")),
+                home.as_ref().map(|h| h.join(".agents/recipes")),
+            ]
+            .into_iter()
+            .flatten(),
+        )
+        .collect();
+
+    let local_agent_dirs: Vec<PathBuf> = vec![
+        working_dir.join(".goose/agents"),
+        working_dir.join(".claude/agents"),
+        working_dir.join(".agents/agents"),
+    ];
+
+    let global_agent_dirs: Vec<PathBuf> = [
+        home.as_ref().map(|h| h.join(".goose/agents")),
+        home.as_ref().map(|h| h.join(".agents/agents")),
+        Some(config.join("agents")),
+        home.as_ref().map(|h| h.join(".claude/agents")),
+    ]
+    .into_iter()
+    .flatten()
+    .collect();
+
+    scan_recipes_from_dir(
+        working_dir,
+        SourceType::Recipe,
+        true,
+        &mut sources,
+        &mut seen,
+    );
+
+    for dir in local_recipe_dirs {
+        scan_recipes_from_dir(&dir, SourceType::Recipe, false, &mut sources, &mut seen);
+    }
+
+    for dir in local_agent_dirs {
+        scan_agents_from_dir(&dir, &mut sources, &mut seen);
+    }
+
+    for dir in global_recipe_dirs {
+        scan_recipes_from_dir(&dir, SourceType::Recipe, false, &mut sources, &mut seen);
+    }
+
+    for dir in global_agent_dirs {
+        scan_agents_from_dir(&dir, &mut sources, &mut seen);
+    }
+
+    sources
 }
