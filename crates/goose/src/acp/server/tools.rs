@@ -1,9 +1,8 @@
 use super::*;
-use crate::agents::extension_manager::get_parameter_names;
+use crate::agents::extension::get_parameter_names;
 use crate::agents::reply_parts::is_tool_visible_to_app;
 use crate::config::permission::PermissionLevel;
 use goose_sdk_types::custom_requests::{ToolListItem, ToolPermissionLevel};
-use rmcp::model::CallToolRequestParams;
 
 impl GooseAcpAgent {
     pub(super) async fn on_get_tools(
@@ -75,46 +74,24 @@ impl GooseAcpAgent {
         }
 
         let arguments = match req.arguments {
-            serde_json::Value::Object(map) => Some(map),
-            serde_json::Value::Null => None,
+            serde_json::Value::Object(_) => req.arguments,
+            serde_json::Value::Null => serde_json::Value::Object(Default::default()),
             _ => {
                 return Err(agent_client_protocol::Error::invalid_params()
                     .data("tool arguments must be an object"));
             }
         };
 
-        let tool_call = {
-            let mut params = CallToolRequestParams::new(req.name);
-            if let Some(args) = arguments {
-                params = params.with_arguments(args);
-            }
-            params
-        };
-
-        let ctx = crate::agents::ToolCallContext::new(session_id.clone(), None, None);
-        let tool_result = agent
-            .extension_manager
-            .dispatch_tool_call(&ctx, tool_call, CancellationToken::new())
+        let result = agent
+            .call_tool(session_id, &req.name, arguments)
             .await
-            .map_err(|e| agent_client_protocol::Error::internal_error().data(e.to_string()))?;
-
-        let result = tool_result
-            .result
-            .await
-            .map_err(|e| agent_client_protocol::Error::internal_error().data(e.to_string()))?;
-
-        let content = result
-            .content
-            .into_iter()
-            .map(serde_json::to_value)
-            .collect::<Result<Vec<_>, _>>()
             .map_err(|e| agent_client_protocol::Error::internal_error().data(e.to_string()))?;
 
         Ok(GooseToolCallResponse {
-            content,
+            content: result.content,
             structured_content: result.structured_content,
             is_error: result.is_error.unwrap_or(false),
-            meta: result.meta.and_then(|m| serde_json::to_value(m).ok()),
+            meta: result.meta,
         })
     }
 

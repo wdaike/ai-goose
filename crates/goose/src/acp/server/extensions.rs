@@ -36,9 +36,7 @@ impl GooseAcpAgent {
     ) -> Result<GetConfigExtensionsResponse, agent_client_protocol::Error> {
         let extensions = crate::config::extensions::get_all_extensions()
             .into_iter()
-            .filter(|ext| {
-                !crate::agents::extension_manager::is_hidden_extension(&ext.config.name())
-            })
+            .filter(|_ext| true)
             .collect::<Vec<_>>();
         let warnings = crate::config::extensions::get_warnings();
         let extensions = extensions

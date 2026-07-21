@@ -12,7 +12,9 @@ use codex_app_server_client::{
 use codex_app_server_protocol::{
     Account, AskForApproval, ClientRequest, CommandAction, CommandExecutionStatus,
     ConfigWarningNotification, GetAccountParams, GetAccountResponse, JSONRPCErrorError,
-    LoginAccountParams, LoginAccountResponse, LogoutAccountResponse, ModelListParams,
+    ListMcpServerStatusParams, ListMcpServerStatusResponse, LoginAccountParams,
+    LoginAccountResponse, LogoutAccountResponse, McpResourceReadParams, McpResourceReadResponse,
+    McpServerStatus, McpServerToolCallParams, McpServerToolCallResponse, ModelListParams,
     ModelListResponse, PatchApplyStatus, RequestId, SandboxMode, ServerNotification,
     ThreadCompactStartParams, ThreadCompactStartResponse, ThreadItem, ThreadResumeParams,
     ThreadResumeResponse, ThreadStartParams, ThreadStartResponse, ThreadTokenUsage,
@@ -610,6 +612,95 @@ impl CodexAgentCore {
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         Ok(())
+    }
+
+    /// The MCP servers Codex has connected for this session, with their tools
+    /// and resources. Codex owns every MCP connection; goose only reads the
+    /// inventory to render its own tool and app surfaces.
+    pub(crate) async fn list_mcp_servers(&self, session_id: &str) -> Result<Vec<McpServerStatus>> {
+        let runtime = self.runtime.get_or_try_init(CodexRuntime::new).await?;
+        let thread_id = self.thread_id_for_session(session_id).await;
+        let mut servers = Vec::new();
+        let mut cursor = None;
+        loop {
+            let response = runtime
+                .request
+                .request_typed::<ListMcpServerStatusResponse>(ClientRequest::McpServerStatusList {
+                    request_id: next_request_id(),
+                    params: ListMcpServerStatusParams {
+                        cursor,
+                        limit: None,
+                        detail: None,
+                        thread_id: thread_id.clone(),
+                    },
+                })
+                .await
+                .map_err(|error| anyhow!(error.to_string()))?;
+            servers.extend(response.data);
+            cursor = response.next_cursor;
+            if cursor.is_none() {
+                break;
+            }
+        }
+        Ok(servers)
+    }
+
+    pub(crate) async fn call_mcp_tool(
+        &self,
+        session_id: &str,
+        server: &str,
+        tool: &str,
+        arguments: serde_json::Value,
+    ) -> Result<McpServerToolCallResponse> {
+        let runtime = self.runtime.get_or_try_init(CodexRuntime::new).await?;
+        let thread_id = self
+            .thread_id_for_session(session_id)
+            .await
+            .ok_or_else(|| anyhow!("Session {session_id} has no Codex thread yet"))?;
+        runtime
+            .request
+            .request_typed::<McpServerToolCallResponse>(ClientRequest::McpServerToolCall {
+                request_id: next_request_id(),
+                params: McpServerToolCallParams {
+                    thread_id,
+                    server: server.to_string(),
+                    tool: tool.to_string(),
+                    arguments: Some(arguments),
+                    meta: None,
+                },
+            })
+            .await
+            .map_err(|error| anyhow!(error.to_string()))
+    }
+
+    pub(crate) async fn read_mcp_resource(
+        &self,
+        session_id: &str,
+        server: &str,
+        uri: &str,
+    ) -> Result<McpResourceReadResponse> {
+        let runtime = self.runtime.get_or_try_init(CodexRuntime::new).await?;
+        let thread_id = self.thread_id_for_session(session_id).await;
+        runtime
+            .request
+            .request_typed::<McpResourceReadResponse>(ClientRequest::McpResourceRead {
+                request_id: next_request_id(),
+                params: McpResourceReadParams {
+                    thread_id,
+                    server: server.to_string(),
+                    uri: uri.to_string(),
+                },
+            })
+            .await
+            .map_err(|error| anyhow!(error.to_string()))
+    }
+
+    async fn thread_id_for_session(&self, session_id: &str) -> Option<String> {
+        self.threads
+            .lock()
+            .await
+            .get(session_id)
+            .map(|thread| thread.thread_id.clone())
     }
 
     pub(crate) async fn list_models(&self) -> Result<Vec<CodexModel>> {

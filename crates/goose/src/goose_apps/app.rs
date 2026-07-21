@@ -1,7 +1,5 @@
-use crate::agents::ExtensionManager;
 use rmcp::model::ErrorData;
 use serde::{Deserialize, Serialize};
-use tokio_util::sync::CancellationToken;
 use tracing::warn;
 use utoipa::ToSchema;
 
@@ -210,105 +208,95 @@ impl GooseApp {
     }
 }
 
+/// Discover MCP apps: `ui://` resources whose MIME type marks them as an app.
+/// Codex owns every MCP connection, so the inventory and the resource bodies
+/// both come from it.
 pub async fn fetch_mcp_apps(
-    extension_manager: &ExtensionManager,
+    agent: &crate::agents::Agent,
     session_id: &str,
 ) -> Result<Vec<GooseApp>, ErrorData> {
+    const MCP_APP_MIME_TYPE: &str = "text/html;profile=mcp-app";
+
+    let servers = agent
+        .list_mcp_servers(session_id)
+        .await
+        .map_err(|error| ErrorData::internal_error(error.to_string(), None))?;
+
     let mut apps = Vec::new();
+    for (server_name, resource) in servers.into_iter().flat_map(|server| {
+        let name = server.name.clone();
+        server
+            .resources
+            .into_iter()
+            .map(move |resource| (name.clone(), resource))
+    }) {
+        if resource.mime_type.as_deref() != Some(MCP_APP_MIME_TYPE) {
+            continue;
+        }
 
-    let ui_resources = extension_manager.get_ui_resources(session_id).await?;
-
-    for (extension_name, resource) in ui_resources {
-        match extension_manager
-            .read_resource(
-                session_id,
-                &resource.uri,
-                &extension_name,
-                CancellationToken::default(),
-            )
+        let html = match agent
+            .read_mcp_resource(session_id, &server_name, &resource.uri)
             .await
         {
-            Ok(read_result) => {
-                let mut html = String::new();
-                for content in read_result.contents {
-                    if let rmcp::model::ResourceContents::TextResourceContents { text, .. } =
-                        content
-                    {
-                        html = text;
-                        break;
-                    }
-                }
-
-                if !html.is_empty() {
-                    let mcp_resource = McpAppResource {
-                        uri: resource.uri.clone(),
-                        name: resource.name.clone(),
-                        description: resource.description.clone(),
-                        mime_type: "text/html;profile=mcp-app".to_string(),
-                        text: Some(html),
-                        blob: None,
-                        meta: None,
-                    };
-
-                    let window_props = if let Some(ref meta) = resource.meta {
-                        if let Some(window_obj) = meta.get("window").and_then(|v| v.as_object()) {
-                            if let (Some(width), Some(height), Some(resizable)) = (
-                                window_obj
-                                    .get("width")
-                                    .and_then(|v| v.as_u64())
-                                    .map(|v| v as u32),
-                                window_obj
-                                    .get("height")
-                                    .and_then(|v| v.as_u64())
-                                    .map(|v| v as u32),
-                                window_obj.get("resizable").and_then(|v| v.as_bool()),
-                            ) {
-                                Some(WindowProps {
-                                    width,
-                                    height,
-                                    resizable,
-                                })
-                            } else {
-                                Some(WindowProps {
-                                    width: 800,
-                                    height: 600,
-                                    resizable: true,
-                                })
-                            }
-                        } else {
-                            Some(WindowProps {
-                                width: 800,
-                                height: 600,
-                                resizable: true,
-                            })
-                        }
-                    } else {
-                        Some(WindowProps {
-                            width: 800,
-                            height: 600,
-                            resizable: true,
-                        })
-                    };
-
-                    let app = GooseApp {
-                        resource: mcp_resource,
-                        mcp_servers: vec![extension_name],
-                        window_props,
-                        prd: None,
-                        deletable: false,
-                    };
-
-                    apps.push(app);
-                }
-            }
-            Err(e) => {
+            Ok(contents) => contents,
+            Err(error) => {
                 warn!(
                     "Failed to read resource {} from {}: {}",
-                    resource.uri, extension_name, e
+                    resource.uri, server_name, error
                 );
+                continue;
             }
+        };
+        if html.is_empty() {
+            continue;
         }
+
+        apps.push(GooseApp {
+            resource: McpAppResource {
+                uri: resource.uri.clone(),
+                name: resource.name.clone(),
+                description: resource.description.clone(),
+                mime_type: MCP_APP_MIME_TYPE.to_string(),
+                text: Some(html),
+                blob: None,
+                meta: None,
+            },
+            mcp_servers: vec![server_name],
+            window_props: Some(window_props_from_meta(resource.meta.as_ref())),
+            prd: None,
+            deletable: false,
+        });
     }
 
     Ok(apps)
+}
+
+fn window_props_from_meta(meta: Option<&serde_json::Value>) -> WindowProps {
+    const DEFAULT: WindowProps = WindowProps {
+        width: 800,
+        height: 600,
+        resizable: true,
+    };
+
+    let Some(window) = meta
+        .and_then(|meta| meta.get("window"))
+        .and_then(|window| window.as_object())
+    else {
+        return DEFAULT;
+    };
+
+    WindowProps {
+        width: window
+            .get("width")
+            .and_then(|v| v.as_u64())
+            .map_or(DEFAULT.width, |v| v as u32),
+        height: window
+            .get("height")
+            .and_then(|v| v.as_u64())
+            .map_or(DEFAULT.height, |v| v as u32),
+        resizable: window
+            .get("resizable")
+            .and_then(|v| v.as_bool())
+            .unwrap_or(DEFAULT.resizable),
+    }
 }

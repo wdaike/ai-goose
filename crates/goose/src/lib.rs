@@ -5,7 +5,6 @@ compile_error!("Features `rustls-tls` and `native-tls` are mutually exclusive");
 
 pub mod acp;
 pub use goose_sdk_types::{custom_notifications, custom_requests};
-pub mod action_required_manager;
 pub mod agents;
 pub mod checks;
 pub mod codex;
@@ -15,7 +14,6 @@ pub mod conversation {
     pub use goose_types::conversation::*;
 }
 pub mod download_manager;
-pub mod elicitation;
 pub mod execution;
 pub mod gateway;
 pub mod goose_apps;
@@ -23,6 +21,7 @@ pub mod hints;
 pub mod hooks;
 pub mod instance_id;
 pub mod logging;
+pub mod login_shell;
 pub mod mcp_utils;
 pub mod model_config;
 pub mod oauth;

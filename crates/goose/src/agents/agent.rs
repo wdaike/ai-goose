@@ -1,15 +1,10 @@
-use std::collections::HashMap;
 use std::fmt;
 use std::sync::Arc;
 
 use anyhow::{anyhow, Context, Result};
 use futures::stream::BoxStream;
 
-use super::mcp_client::GooseMcpHostInfo;
-use crate::agents::extension::{ExtensionConfig, ExtensionResult, ToolInfo};
-use crate::agents::extension_manager::{
-    get_parameter_names, ExtensionManager, ExtensionManagerCapabilities,
-};
+use crate::agents::extension::{ExtensionConfig, ExtensionResult};
 use crate::agents::prompt_manager::PromptManager;
 use crate::agents::types::SessionConfig;
 use crate::config::permission::PermissionManager;
@@ -20,7 +15,7 @@ use crate::recipe::Response;
 use crate::session::extension_data::{EnabledExtensionsState, ExtensionState};
 use crate::session::{Session, SessionManager, SessionNameUpdate};
 use goose_types::thinking::ThinkingEffort;
-use rmcp::model::{GetPromptResult, Prompt, ServerNotification, Tool};
+use rmcp::model::{ServerNotification, Tool};
 use serde_json::Value;
 use tokio::sync::{mpsc, Mutex};
 use tokio_util::sync::CancellationToken;
@@ -56,7 +51,6 @@ pub struct AgentConfig {
     pub goose_mode: GooseMode,
     pub disable_session_naming: bool,
     pub goose_platform: GoosePlatform,
-    pub mcp_host_info: Option<GooseMcpHostInfo>,
     pub session_name_update_tx: Option<mpsc::UnboundedSender<SessionNameUpdate>>,
     pub use_login_shell_path: Option<bool>,
     pub(crate) codex_runtime: Arc<tokio::sync::OnceCell<crate::codex::CodexRuntime>>,
@@ -76,16 +70,10 @@ impl AgentConfig {
             goose_mode,
             disable_session_naming,
             goose_platform,
-            mcp_host_info: None,
             session_name_update_tx: None,
             use_login_shell_path: None,
             codex_runtime: Arc::new(tokio::sync::OnceCell::new()),
         }
-    }
-
-    pub fn with_mcp_host_info(mut self, mcp_host_info: Option<GooseMcpHostInfo>) -> Self {
-        self.mcp_host_info = mcp_host_info;
-        self
     }
 
     pub fn with_session_name_update_tx(
@@ -116,7 +104,6 @@ pub struct Agent {
     pub(super) current_goose_mode: Mutex<GooseMode>,
     codex_core: crate::codex::CodexAgentCore,
 
-    pub extension_manager: Arc<ExtensionManager>,
     final_output_json_schema: Mutex<Option<Value>>,
     pub(super) prompt_manager: Mutex<PromptManager>,
     pub(super) hook_manager: crate::hooks::HookManager,
@@ -153,38 +140,13 @@ impl Agent {
     }
 
     pub fn with_config(config: AgentConfig) -> Self {
-        let goose_platform = config.goose_platform.clone();
         let initial_mode = config.goose_mode;
-        let explicit_mcp_host_info = config.mcp_host_info.clone();
-        let mcpui = explicit_mcp_host_info
-            .as_ref()
-            .filter(|host_info| host_info.explicit_extensions)
-            .map(GooseMcpHostInfo::mcpui_enabled)
-            .unwrap_or_else(|| match config.goose_platform {
-                GoosePlatform::GooseDesktop => true,
-                GoosePlatform::GooseCli => false,
-            });
-        let capabilities = ExtensionManagerCapabilities {
-            mcpui,
-            host_info: explicit_mcp_host_info.clone(),
-        };
-        let client_name = explicit_mcp_host_info
-            .as_ref()
-            .and_then(|host_info| host_info.client_name.clone())
-            .unwrap_or_else(|| goose_platform.to_string());
-        let session_manager = Arc::clone(&config.session_manager);
         let codex_runtime = Arc::clone(&config.codex_runtime);
         let use_login_shell_path = config.resolve_use_login_shell_path();
         Self {
             config,
             current_goose_mode: Mutex::new(initial_mode),
             codex_core: crate::codex::CodexAgentCore::new(codex_runtime),
-            extension_manager: Arc::new(ExtensionManager::new(
-                session_manager,
-                client_name,
-                capabilities,
-                use_login_shell_path,
-            )),
             final_output_json_schema: Mutex::new(None),
             prompt_manager: Mutex::new(PromptManager::new()),
             hook_manager: crate::hooks::HookManager::load(
@@ -399,11 +361,75 @@ impl Agent {
         Ok(results)
     }
 
-    pub async fn list_tools(&self, session_id: &str, extension_name: Option<String>) -> Vec<Tool> {
-        self.extension_manager
-            .get_prefixed_tools(session_id, extension_name)
+    pub(crate) async fn list_mcp_servers(
+        &self,
+        session_id: &str,
+    ) -> Result<Vec<codex_app_server_protocol::McpServerStatus>> {
+        self.codex_core.list_mcp_servers(session_id).await
+    }
+
+    /// Read a `ui://` (or any) MCP resource and return its text content.
+    pub(crate) async fn read_mcp_resource(
+        &self,
+        session_id: &str,
+        server: &str,
+        uri: &str,
+    ) -> Result<String> {
+        let response = self
+            .codex_core
+            .read_mcp_resource(session_id, server, uri)
+            .await?;
+        Ok(response
+            .contents
+            .into_iter()
+            .find_map(|content| match content {
+                codex_protocol::mcp::ResourceContent::Text { text, .. } => Some(text),
+                codex_protocol::mcp::ResourceContent::Blob { .. } => None,
+            })
+            .unwrap_or_default())
+    }
+
+    /// Call a tool by its prefixed `server__tool` name.
+    pub async fn call_tool(
+        &self,
+        session_id: &str,
+        name: &str,
+        arguments: Value,
+    ) -> Result<codex_app_server_protocol::McpServerToolCallResponse> {
+        let (server, tool) = name
+            .split_once(TOOL_NAME_SEPARATOR)
+            .ok_or_else(|| anyhow!("Tool name must be `server{TOOL_NAME_SEPARATOR}tool`"))?;
+        self.codex_core
+            .call_mcp_tool(session_id, server, tool, arguments)
             .await
-            .unwrap_or_default()
+    }
+
+    /// Tools Codex has available for this session, prefixed `server__tool`.
+    pub async fn list_tools(&self, session_id: &str, extension_name: Option<String>) -> Vec<Tool> {
+        let servers = match self.codex_core.list_mcp_servers(session_id).await {
+            Ok(servers) => servers,
+            Err(error) => {
+                tracing::warn!(session_id, %error, "Failed to list Codex MCP servers");
+                return Vec::new();
+            }
+        };
+
+        let mut tools: Vec<Tool> = servers
+            .into_iter()
+            .filter(|server| {
+                extension_name
+                    .as_ref()
+                    .is_none_or(|wanted| &server.name == wanted)
+            })
+            .flat_map(|server| {
+                server
+                    .tools
+                    .into_iter()
+                    .map(move |(name, tool)| codex_tool_to_rmcp(&server.name, &name, tool))
+            })
+            .collect();
+        tools.sort_by(|a, b| a.name.cmp(&b.name));
+        tools
     }
 
     pub async fn remove_extension(&self, name: &str, session_id: &str) -> Result<()> {
@@ -429,14 +455,19 @@ impl Agent {
     }
 
     pub async fn list_extensions(&self) -> Vec<String> {
-        self.extension_manager
-            .list_extensions()
+        self.enabled_extensions()
             .await
-            .expect("Failed to list extensions")
+            .into_iter()
+            .map(|extension| extension.name())
+            .collect()
     }
 
     pub async fn get_extension_configs(&self) -> Vec<ExtensionConfig> {
-        self.extension_manager.get_extension_configs().await
+        self.enabled_extensions().await
+    }
+
+    async fn enabled_extensions(&self) -> Vec<ExtensionConfig> {
+        Vec::new()
     }
 
     #[instrument(
@@ -559,72 +590,22 @@ impl Agent {
         let mut prompt_manager = self.prompt_manager.lock().await;
         prompt_manager.clear_system_prompt_override();
     }
+}
 
-    pub async fn list_extension_prompts(&self, session_id: &str) -> HashMap<String, Vec<Prompt>> {
-        self.extension_manager
-            .list_prompts(session_id, CancellationToken::default())
-            .await
-            .expect("Failed to list prompts")
-    }
+pub(crate) const TOOL_NAME_SEPARATOR: &str = "__";
 
-    pub async fn get_prompt(
-        &self,
-        session_id: &str,
-        name: &str,
-        arguments: Value,
-    ) -> Result<GetPromptResult> {
-        // First find which extension has this prompt
-        let prompts = self
-            .extension_manager
-            .list_prompts(session_id, CancellationToken::default())
-            .await
-            .map_err(|e| anyhow!("Failed to list prompts: {}", e))?;
-
-        if let Some(extension) = prompts
-            .iter()
-            .find(|(_, prompt_list)| prompt_list.iter().any(|p| p.name == name))
-            .map(|(extension, _)| extension)
-        {
-            return self
-                .extension_manager
-                .get_prompt(
-                    session_id,
-                    extension,
-                    name,
-                    arguments,
-                    CancellationToken::default(),
-                )
-                .await
-                .map_err(|e| anyhow!("Failed to get prompt: {}", e));
-        }
-
-        Err(anyhow!("Prompt '{}' not found", name))
-    }
-
-    pub async fn get_plan_prompt(&self, session_id: &str) -> Result<String> {
-        let tools = self
-            .extension_manager
-            .get_prefixed_tools(session_id, None)
-            .await?;
-        let tools_info = tools
-            .into_iter()
-            .map(|tool| {
-                ToolInfo::new(
-                    &tool.name,
-                    tool.description
-                        .as_ref()
-                        .map(|d| d.as_ref())
-                        .unwrap_or_default(),
-                    get_parameter_names(&tool),
-                    None,
-                )
-            })
-            .collect();
-
-        let plan_prompt = self.extension_manager.get_planning_prompt(tools_info).await;
-
-        Ok(plan_prompt)
-    }
+fn codex_tool_to_rmcp(server: &str, name: &str, tool: codex_protocol::mcp::Tool) -> Tool {
+    let input_schema = tool.input_schema.as_object().cloned().unwrap_or_default();
+    let mut converted = Tool::new(
+        format!("{server}{TOOL_NAME_SEPARATOR}{name}"),
+        tool.description.unwrap_or_default(),
+        input_schema,
+    );
+    converted.output_schema = tool
+        .output_schema
+        .and_then(|schema| schema.as_object().cloned())
+        .map(Arc::new);
+    converted
 }
 
 #[cfg(test)]

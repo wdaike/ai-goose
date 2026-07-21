@@ -211,11 +211,6 @@ impl GooseAcpAgent {
             .await
             .internal_err_ctx("Failed to reload session")?;
 
-        agent
-            .extension_manager
-            .update_working_dir(&session.working_dir)
-            .await;
-
         let (mode_state, config_options) =
             build_session_setup_config(&self.codex_models(&session.id).await, &session)?;
 

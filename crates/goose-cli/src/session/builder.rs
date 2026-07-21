@@ -16,7 +16,6 @@ use std::sync::Arc;
 fn parse_cli_flag_extensions(
     extensions: &[String],
     streamable_http_extensions: &[StreamableHttpOptions],
-    builtins: &[String],
 ) -> Vec<ExtensionConfig> {
     let mut extensions_to_load = Vec::new();
 
@@ -41,11 +40,6 @@ fn parse_cli_flag_extensions(
         extensions_to_load.push(config);
     }
 
-    for builtin_str in builtins {
-        let configs = CliSession::parse_builtin_extensions(builtin_str);
-        extensions_to_load.extend(configs);
-    }
-
     extensions_to_load
 }
 
@@ -68,7 +62,6 @@ pub struct SessionBuilderConfig {
     /// List of streamable HTTP extension commands to add
     pub streamable_http_extensions: Vec<StreamableHttpOptions>,
     /// List of builtin extension commands to add
-    pub builtins: Vec<String>,
     pub no_profile: bool,
     /// Recipe for the session
     pub recipe: Option<Recipe>,
@@ -107,7 +100,6 @@ impl Default for SessionBuilderConfig {
             no_session: false,
             extensions: Vec::new(),
             streamable_http_extensions: Vec::new(),
-            builtins: Vec::new(),
             no_profile: false,
             recipe: None,
             additional_system_prompt: None,
@@ -297,7 +289,6 @@ async fn collect_extension_configs(
     let cli_flag_extensions = parse_cli_flag_extensions(
         &session_config.extensions,
         &session_config.streamable_http_extensions,
-        &session_config.builtins,
     );
 
     let mut all: Vec<ExtensionConfig> = configured_extensions;
@@ -486,7 +477,6 @@ mod tests {
                 url: "http://localhost:8080/mcp".to_string(),
                 timeout: goose::config::DEFAULT_EXTENSION_TIMEOUT,
             }],
-            builtins: vec!["developer".to_string()],
             no_profile: false,
             recipe: None,
             additional_system_prompt: Some("Test prompt".to_string()),
@@ -504,7 +494,6 @@ mod tests {
 
         assert_eq!(config.extensions.len(), 1);
         assert_eq!(config.streamable_http_extensions.len(), 1);
-        assert_eq!(config.builtins.len(), 1);
         assert!(config.debug);
         assert_eq!(config.max_tool_repetitions, Some(5));
         assert!(config.max_turns.is_none());
@@ -522,7 +511,6 @@ mod tests {
         assert!(!config.no_session);
         assert!(config.extensions.is_empty());
         assert!(config.streamable_http_extensions.is_empty());
-        assert!(config.builtins.is_empty());
         assert!(!config.no_profile);
         assert!(config.recipe.is_none());
         assert!(config.additional_system_prompt.is_none());

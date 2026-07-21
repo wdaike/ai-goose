@@ -179,6 +179,7 @@ codex-app-server-client = { git = "https://github.com/openai/codex", tag = "rust
 codex-app-server-protocol = { git = "https://github.com/openai/codex", tag = "rust-v0.144.4", version = "0.144.4" }
 codex-config = { git = "https://github.com/openai/codex", tag = "rust-v0.144.4", version = "0.144.4" }
 codex-feedback = { git = "https://github.com/openai/codex", tag = "rust-v0.144.4", version = "0.144.4" }
+codex-protocol = { git = "https://github.com/openai/codex", tag = "rust-v0.144.4", version = "0.144.4" }
 
 [target.'cfg(target_os = "windows")'.dependencies]
 winapi = { workspace = true }
@@ -214,10 +215,6 @@ tower = { version = "0.5.2", default-features = false, features = ["util"] }
 [[example]]
 name = "agent"
 path = "examples/agent.rs"
-
-[[bin]]
-name = "analyze_cli"
-path = "src/bin/analyze_cli.rs"
 
 [[bin]]
 name = "generate-acp-schema"

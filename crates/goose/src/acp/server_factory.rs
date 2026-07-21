@@ -9,7 +9,6 @@ use tokio::sync::OnceCell;
 use tracing::info;
 
 pub struct AcpServerFactoryConfig {
-    pub builtins: Vec<String>,
     pub data_dir: std::path::PathBuf,
     pub config_dir: std::path::PathBuf,
     pub goose_platform: GoosePlatform,
@@ -51,7 +50,6 @@ impl AcpServer {
         let scheduler = self.scheduler().await?;
 
         let agent = GooseAcpAgent::new(GooseAcpAgentOptions {
-            builtins: self.config.builtins.clone(),
             data_dir: self.config.data_dir.clone(),
             config_dir: self.config.config_dir.clone(),
             disable_session_naming,

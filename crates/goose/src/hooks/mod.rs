@@ -574,9 +574,8 @@ async fn run_command_hook_inner(
 fn hook_command(command: &str, plugin_root: &Path, path: Option<&str>) -> Command {
     #[cfg(not(windows))]
     {
-        if crate::agents::platform_extensions::developer::shell::is_flatpak() {
-            let mut process =
-                crate::agents::platform_extensions::developer::shell::flatpak_spawn_command();
+        if crate::login_shell::is_flatpak() {
+            let mut process = crate::login_shell::flatpak_spawn_command();
             process.arg(format!("--env=PLUGIN_ROOT={}", plugin_root.display()));
             if let Some(path) = path {
                 process.arg(format!("--env=PATH={path}"));
@@ -624,7 +623,7 @@ async fn resolve_hook_path() -> Option<String> {
     #[cfg(not(windows))]
     {
         tokio::task::spawn_blocking(|| {
-            crate::agents::platform_extensions::developer::shell::resolve_login_shell_path()
+            crate::login_shell::resolve_login_shell_path()
                 .map(|login| merge_paths(&login, &std::env::var("PATH").unwrap_or_default()))
         })
         .await

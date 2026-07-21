@@ -16,7 +16,6 @@ fn test_router(require_token: bool, dir: &tempfile::TempDir) -> Router {
 
 fn test_acp_router(dir: &tempfile::TempDir) -> Router {
     let server = Arc::new(AcpServer::new(AcpServerFactoryConfig {
-        builtins: vec![],
         data_dir: dir.path().join("data"),
         config_dir: dir.path().join("config"),
         goose_platform: GoosePlatform::GooseCli,
@@ -27,7 +26,6 @@ fn test_acp_router(dir: &tempfile::TempDir) -> Router {
 
 fn test_authenticated_acp_router(dir: &tempfile::TempDir) -> Router {
     let server = Arc::new(AcpServer::new(AcpServerFactoryConfig {
-        builtins: vec![],
         data_dir: dir.path().join("data"),
         config_dir: dir.path().join("config"),
         goose_platform: GoosePlatform::GooseCli,
@@ -42,7 +40,6 @@ fn test_router_with_origins(
     additional_allowed_origins: Vec<HeaderValue>,
 ) -> Router {
     let server = Arc::new(AcpServer::new(AcpServerFactoryConfig {
-        builtins: vec![],
         data_dir: dir.path().join("data"),
         config_dir: dir.path().join("config"),
         goose_platform: GoosePlatform::GooseCli,

@@ -162,11 +162,15 @@ mod tests {
     }
 
     fn test_extension() -> ExtensionConfig {
-        ExtensionConfig::Builtin {
+        ExtensionConfig::Stdio {
             name: "developer".into(),
             description: "dev".into(),
-            display_name: None,
+            cmd: "developer".into(),
+            args: vec![],
+            envs: Default::default(),
+            env_keys: vec![],
             timeout: None,
+            cwd: None,
             bundled: None,
             available_tools: vec![],
         }
@@ -286,11 +290,15 @@ mod tests {
                 bundled: None,
                 available_tools: Vec::new(),
             },
-            ExtensionConfig::Builtin {
+            ExtensionConfig::Stdio {
                 name: "developer".to_string(),
-                description: "".to_string(),
-                display_name: Some("Developer".to_string()),
+                description: String::new(),
+                cmd: "developer".to_string(),
+                args: Vec::new(),
+                envs: Default::default(),
+                env_keys: Vec::new(),
                 timeout: None,
+                cwd: None,
                 bundled: None,
                 available_tools: Vec::new(),
             },

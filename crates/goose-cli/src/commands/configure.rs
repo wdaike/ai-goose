@@ -1,8 +1,7 @@
 use crate::recipes::github_recipe::GOOSE_RECIPE_GITHUB_REPO_CONFIG_KEY;
 use cliclack::spinner;
 use console::style;
-use goose::agents::extension::{ToolInfo, PLATFORM_EXTENSIONS};
-use goose::agents::extension_manager::get_parameter_names;
+use goose::agents::extension::{get_parameter_names, ToolInfo};
 use goose::agents::Agent;
 use goose::agents::{extension::Envs, ExtensionConfig};
 use goose::config::extensions::{
@@ -518,42 +517,6 @@ fn collect_headers() -> anyhow::Result<HashMap<String, String>> {
     Ok(headers)
 }
 
-fn configure_platform_extension() -> anyhow::Result<()> {
-    let mut definitions = PLATFORM_EXTENSIONS
-        .values()
-        .filter(|definition| !definition.hidden)
-        .collect::<Vec<_>>();
-    definitions.sort_unstable_by_key(|definition| definition.name);
-
-    let mut select = cliclack::select("Which built-in extension would you like to enable?");
-    for definition in &definitions {
-        select = select.item(
-            definition.name,
-            definition.display_name,
-            definition.description,
-        );
-    }
-    let extension = select.interact()?.to_string();
-    let definition = definitions
-        .iter()
-        .find(|definition| definition.name == extension)
-        .expect("selected extension must exist");
-
-    set_extension(ExtensionEntry {
-        enabled: true,
-        config: ExtensionConfig::Platform {
-            name: definition.name.to_string(),
-            description: definition.description.to_string(),
-            display_name: Some(definition.display_name.to_string()),
-            bundled: Some(true),
-            available_tools: Vec::new(),
-        },
-    });
-
-    cliclack::outro(format!("Enabled {} extension", style(extension).green()))?;
-    Ok(())
-}
-
 fn configure_stdio_extension() -> anyhow::Result<()> {
     let name = prompt_extension_name("my-extension")?;
 
@@ -648,11 +611,6 @@ fn configure_streamable_http_extension() -> anyhow::Result<()> {
 pub fn configure_extensions_dialog() -> anyhow::Result<()> {
     let extension_type = cliclack::select("What type of extension would you like to add?")
         .item(
-            "built-in",
-            "Built-in Extension",
-            "Use an extension that comes with goose",
-        )
-        .item(
             "stdio",
             "Command-line Extension",
             "Run a local command or script",
@@ -665,7 +623,6 @@ pub fn configure_extensions_dialog() -> anyhow::Result<()> {
         .interact()?;
 
     match extension_type {
-        "built-in" => configure_platform_extension()?,
         "stdio" => configure_stdio_extension()?,
         "streamable_http" => configure_streamable_http_extension()?,
         _ => unreachable!(),

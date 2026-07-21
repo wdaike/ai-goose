@@ -6951,6 +6951,7 @@ dependencies = [
  "codex-config",
  "codex-core-api",
  "codex-feedback",
+ "codex-protocol",
  "ctor 0.2.9",
  "dirs",
  "dotenvy",

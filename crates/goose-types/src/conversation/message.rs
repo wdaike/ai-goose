@@ -4,9 +4,9 @@ use crate::mcp_utils::extract_text_from_resource;
 use crate::utils::sanitize_unicode_tags;
 use chrono::Utc;
 use rmcp::model::{
-    AnnotateAble, CallToolRequestParams, CallToolResult, Content, ElicitationAction, ImageContent,
-    JsonObject, PromptMessage, PromptMessageContent, PromptMessageRole, RawContent,
-    RawImageContent, RawTextContent, Role, TextContent,
+    AnnotateAble, CallToolRequestParams, CallToolResult, Content, ImageContent, JsonObject,
+    PromptMessage, PromptMessageContent, PromptMessageRole, RawContent, RawImageContent,
+    RawTextContent, Role, TextContent,
 };
 use serde::{Deserialize, Deserializer, Serialize};
 use std::collections::HashSet;
@@ -196,34 +196,6 @@ pub struct ToolConfirmationRequest {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
-#[serde(tag = "actionType", rename_all = "camelCase")]
-pub enum ActionRequiredData {
-    #[serde(rename_all = "camelCase")]
-    Elicitation {
-        id: String,
-        message: String,
-        requested_schema: serde_json::Value,
-    },
-    ElicitationResponse {
-        id: String,
-        user_data: serde_json::Value,
-        #[serde(default = "default_elicitation_action")]
-        #[schema(value_type = String)]
-        action: ElicitationAction,
-    },
-}
-
-fn default_elicitation_action() -> ElicitationAction {
-    ElicitationAction::Accept
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
-#[serde(rename_all = "camelCase")]
-pub struct ActionRequired {
-    pub data: ActionRequiredData,
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 pub struct ThinkingContent {
     pub thinking: String,
     pub signature: String,
@@ -270,7 +242,6 @@ pub enum MessageContent {
     ToolRequest(ToolRequest),
     ToolResponse(ToolResponse),
     ToolConfirmationRequest(ToolConfirmationRequest),
-    ActionRequired(ActionRequired),
     FrontendToolRequest(FrontendToolRequest),
     Thinking(ThinkingContent),
     RedactedThinking(RedactedThinkingContent),
@@ -296,14 +267,6 @@ impl fmt::Display for MessageContent {
             MessageContent::ToolConfirmationRequest(r) => {
                 write!(f, "[ToolConfirmationRequest: {}]", r.tool_name)
             }
-            MessageContent::ActionRequired(a) => match &a.data {
-                ActionRequiredData::Elicitation { message, .. } => {
-                    write!(f, "[ActionRequired: Elicitation - {}]", message)
-                }
-                ActionRequiredData::ElicitationResponse { id, .. } => {
-                    write!(f, "[ActionRequired: ElicitationResponse for {}]", id)
-                }
-            },
             MessageContent::FrontendToolRequest(r) => match &r.tool_call {
                 Ok(tool_call) => write!(f, "[FrontendToolRequest: {}]", tool_call.name),
                 Err(e) => write!(f, "[FrontendToolRequest: Error: {}]", e),
@@ -445,34 +408,6 @@ impl MessageContent {
         })
     }
 
-    pub fn action_required_elicitation<S: Into<String>>(
-        id: S,
-        message: String,
-        requested_schema: serde_json::Value,
-    ) -> Self {
-        MessageContent::ActionRequired(ActionRequired {
-            data: ActionRequiredData::Elicitation {
-                id: id.into(),
-                message,
-                requested_schema,
-            },
-        })
-    }
-
-    pub fn action_required_elicitation_response<S: Into<String>>(
-        id: S,
-        user_data: serde_json::Value,
-        action: ElicitationAction,
-    ) -> Self {
-        MessageContent::ActionRequired(ActionRequired {
-            data: ActionRequiredData::ElicitationResponse {
-                id: id.into(),
-                user_data,
-                action,
-            },
-        })
-    }
-
     pub fn thinking<S1: Into<String>, S2: Into<String>>(thinking: S1, signature: S2) -> Self {
         MessageContent::Thinking(ThinkingContent {
             thinking: thinking.into(),
@@ -536,14 +471,6 @@ impl MessageContent {
     pub fn as_tool_response(&self) -> Option<&ToolResponse> {
         if let MessageContent::ToolResponse(ref tool_response) = self {
             Some(tool_response)
-        } else {
-            None
-        }
-    }
-
-    pub fn as_action_required(&self) -> Option<&ActionRequired> {
-        if let MessageContent::ActionRequired(ref action_required) = self {
-            Some(action_required)
         } else {
             None
         }
@@ -1114,15 +1041,13 @@ pub struct TokenState {
 
 #[cfg(test)]
 mod tests {
-    use crate::conversation::message::{
-        ActionRequiredData, Message, MessageContent, MessageMetadata,
-    };
+    use crate::conversation::message::{Message, MessageContent, MessageMetadata};
     use crate::conversation::*;
     use rmcp::model::{
         AnnotateAble, CallToolRequestParams, PromptMessage, PromptMessageContent,
         PromptMessageRole, RawEmbeddedResource, RawImageContent, ResourceContents,
     };
-    use rmcp::model::{ElicitationAction, ErrorCode, ErrorData};
+    use rmcp::model::{ErrorCode, ErrorData};
     use rmcp::object;
     use serde_json::Value;
 
@@ -1277,29 +1202,6 @@ mod tests {
         };
         assert_eq!(thinking.thinking, "step by step");
         assert!(thinking.signature.is_empty());
-    }
-
-    #[test]
-    fn test_elicitation_response_defaults_action_to_accept() {
-        let action_required: ActionRequiredData = serde_json::from_value(serde_json::json!({
-            "actionType": "elicitationResponse",
-            "id": "request-123",
-            "user_data": { "name": "goose" }
-        }))
-        .unwrap();
-
-        let ActionRequiredData::ElicitationResponse {
-            id,
-            user_data,
-            action,
-        } = action_required
-        else {
-            panic!("Expected elicitation response");
-        };
-
-        assert_eq!(id, "request-123");
-        assert_eq!(user_data, serde_json::json!({ "name": "goose" }));
-        assert_eq!(action, ElicitationAction::Accept);
     }
 
     #[test]

@@ -4,18 +4,15 @@ use crate::config;
 use crate::config::extensions::name_to_key;
 use crate::config::permission::PermissionLevel;
 use crate::config::Config;
+use once_cell::sync::Lazy;
 use rmcp::model::Tool;
 use rmcp::service::ClientInitializeError;
 use rmcp::ServiceError as ClientError;
 use serde::Deserializer;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
-use tracing::warn;
+use tracing::{error, warn};
 use utoipa::ToSchema;
-
-pub use crate::agents::platform_extensions::{
-    PlatformExtensionContext, PlatformExtensionDef, PLATFORM_EXTENSIONS,
-};
 
 #[derive(Error, Debug)]
 #[error("process quit before initialization: stderr = {stderr}")]
@@ -453,8 +450,6 @@ impl ExtensionConfig {
     }
 
     pub async fn resolve(self, config: &Config) -> ExtensionResult<Self> {
-        use crate::agents::extension_manager::{merge_environments, substitute_env_vars};
-
         match self {
             Self::Stdio {
                 name,
@@ -612,6 +607,108 @@ impl ToolInfo {
         self.input_schema = Some(schema);
         self
     }
+}
+
+/// Tool-result metadata goose trusts because it came from its own dispatch
+/// path rather than from the model.
+pub(crate) const TRUSTED_TOOL_UPDATE_META_KEY: &str = "__goose_tool_update_meta";
+
+static RE_ENV_BRACES: Lazy<regex::Regex> =
+    Lazy::new(|| regex::Regex::new(r"\$\{\s*([A-Za-z_][A-Za-z0-9_]*)\s*\}").expect("valid regex"));
+
+static RE_ENV_SIMPLE: Lazy<regex::Regex> =
+    Lazy::new(|| regex::Regex::new(r"\$([A-Za-z_][A-Za-z0-9_]*)").expect("valid regex"));
+
+/// Merge environment variables from direct envs and keychain-stored env_keys
+pub(crate) async fn merge_environments(
+    envs: &Envs,
+    env_keys: &[String],
+    ext_name: &str,
+    config: &Config,
+) -> Result<HashMap<String, String>, ExtensionError> {
+    let mut all_envs = envs.get_env();
+
+    for key in env_keys {
+        if all_envs.contains_key(key) {
+            continue;
+        }
+
+        match config.get(key, true) {
+            Ok(value) => {
+                if value.is_null() {
+                    warn!(
+                        key = %key,
+                        ext_name = %ext_name,
+                        "Secret key not found in config (returned null)."
+                    );
+                    continue;
+                }
+
+                if let Some(str_val) = value.as_str() {
+                    all_envs.insert(key.clone(), str_val.to_string());
+                } else {
+                    warn!(
+                        key = %key,
+                        ext_name = %ext_name,
+                        value_type = %value.get("type").and_then(|t| t.as_str()).unwrap_or("unknown"),
+                        "Secret value is not a string; skipping."
+                    );
+                }
+            }
+            Err(e) => {
+                error!(
+                    key = %key,
+                    ext_name = %ext_name,
+                    error = %e,
+                    "Failed to fetch secret from config."
+                );
+                return Err(ExtensionError::ConfigError(format!(
+                    "Failed to fetch secret '{}' from config: {}",
+                    key, e
+                )));
+            }
+        }
+    }
+
+    Ok(Envs::new(all_envs).get_env())
+}
+
+/// Substitute environment variables in a string. Supports both ${VAR} and $VAR syntax.
+pub(crate) fn substitute_env_vars(value: &str, env_map: &HashMap<String, String>) -> String {
+    let mut result = value.to_string();
+
+    for cap in RE_ENV_BRACES.captures_iter(value) {
+        if let Some(var_name) = cap.get(1) {
+            if let Some(env_value) = env_map.get(var_name.as_str()) {
+                result = result.replace(&cap[0], env_value);
+            }
+        }
+    }
+
+    // Scan the original input for $VAR patterns (not the post-substitution result)
+    // to avoid recursive expansion when a substituted value contains $OTHER_VAR.
+    for cap in RE_ENV_SIMPLE.captures_iter(value) {
+        if let Some(var_name) = cap.get(1) {
+            if !value.contains(&format!("${{{}}}", var_name.as_str())) {
+                if let Some(env_value) = env_map.get(var_name.as_str()) {
+                    result = result.replace(&cap[0], env_value);
+                }
+            }
+        }
+    }
+
+    result
+}
+
+pub fn get_parameter_names(tool: &Tool) -> Vec<String> {
+    let mut names: Vec<String> = tool
+        .input_schema
+        .get("properties")
+        .and_then(|props| props.as_object())
+        .map(|props| props.keys().cloned().collect())
+        .unwrap_or_default();
+    names.sort();
+    names
 }
 
 #[cfg(test)]

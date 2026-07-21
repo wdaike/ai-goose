@@ -23,12 +23,10 @@ impl GooseAcpAgent {
         };
 
         let agent = self.get_session_agent(&session_id).await?;
-        let mut apps = fetch_mcp_apps(&agent.extension_manager, &session_id)
-            .await
-            .map_err(|error| {
-                agent_client_protocol::Error::internal_error()
-                    .data(format!("Failed to list apps: {}", error.message))
-            })?;
+        let mut apps = fetch_mcp_apps(&agent, &session_id).await.map_err(|error| {
+            agent_client_protocol::Error::internal_error()
+                .data(format!("Failed to list apps: {}", error.message))
+        })?;
 
         if let Some(cache) = cache.as_ref() {
             let active_extensions = apps

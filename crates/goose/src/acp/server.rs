@@ -5,9 +5,7 @@ pub(super) use crate::acp::response_builder::{
     build_session_setup_config, send_session_setup_notifications, session_meta,
     session_response_meta,
 };
-use crate::agents::extension::{Envs, PLATFORM_EXTENSIONS};
-use crate::agents::extension_manager::TRUSTED_TOOL_UPDATE_META_KEY;
-use crate::agents::mcp_client::GooseMcpHostInfo;
+use crate::agents::extension::Envs;
 use crate::agents::{
     Agent, AgentConfig, ExtensionConfig, ExtensionLoadResult, GoosePlatform, SessionConfig,
 };
@@ -17,8 +15,7 @@ use crate::config::paths::Paths;
 use crate::config::permission::PermissionManager;
 use crate::config::{Config, GooseMode};
 use crate::conversation::message::{
-    ActionRequiredData, Message, MessageContent, SystemNotificationContent, SystemNotificationType,
-    ToolRequest,
+    Message, MessageContent, SystemNotificationContent, SystemNotificationType, ToolRequest,
 };
 use crate::execution::manager::{AgentManager, AgentManagerGetResult, RuntimeContext};
 use crate::mcp_utils::ToolResult;
@@ -74,7 +71,6 @@ mod config;
 mod custom_dispatch;
 mod diagnostics;
 mod dispatch;
-mod elicitation;
 mod extensions;
 mod fork_session;
 mod list_sessions;
@@ -148,7 +144,6 @@ struct ActivePromptRun {
 }
 
 pub struct GooseAcpAgentOptions {
-    pub builtins: Vec<String>,
     pub data_dir: std::path::PathBuf,
     pub config_dir: std::path::PathBuf,
     pub disable_session_naming: bool,
@@ -162,11 +157,8 @@ pub struct GooseAcpAgent {
     active_prompt_runs: Arc<Mutex<HashMap<String, ActivePromptRun>>>,
     closed_session_ids: Arc<Mutex<HashSet<String>>>,
     agent_manager: Arc<AgentManager>,
-    builtins: Vec<String>,
     client_fs_capabilities: OnceCell<FileSystemCapabilities>,
     client_terminal: OnceCell<bool>,
-    client_mcp_host_info: OnceCell<GooseMcpHostInfo>,
-    client_supports_acp_elicitation: OnceCell<bool>,
     client_supports_goose_custom_notifications: OnceCell<bool>,
     client_supports_recipe_param_requests: OnceCell<bool>,
     use_login_shell_path: OnceCell<bool>,
@@ -254,18 +246,10 @@ struct ClientCapabilitiesMeta {
 
 #[derive(Debug, Default, Deserialize)]
 struct GooseClientCapabilities {
-    #[serde(rename = "mcpHostCapabilities", default)]
-    mcp_host_capabilities: Option<GooseMcpHostCapabilities>,
     #[serde(rename = "customNotifications", default)]
     custom_notifications: Option<bool>,
     #[serde(rename = "recipeParameterRequests", default)]
     recipe_parameter_requests: Option<bool>,
-}
-
-#[derive(Debug, Default, Deserialize)]
-struct GooseMcpHostCapabilities {
-    #[serde(default)]
-    extensions: Option<rmcp::model::ExtensionCapabilities>,
 }
 
 fn extract_client_capabilities_meta(args: &InitializeRequest) -> Option<ClientCapabilitiesMeta> {
@@ -273,28 +257,6 @@ fn extract_client_capabilities_meta(args: &InitializeRequest) -> Option<ClientCa
         .meta
         .as_ref()
         .and_then(|meta| serde_json::from_value(serde_json::Value::Object(meta.clone())).ok())
-}
-
-fn extract_client_mcp_host_info(
-    args: &InitializeRequest,
-    goose_client_capabilities: Option<&GooseClientCapabilities>,
-) -> GooseMcpHostInfo {
-    let host_capabilities =
-        goose_client_capabilities.and_then(|goose| goose.mcp_host_capabilities.as_ref());
-    let explicit_extensions = host_capabilities
-        .as_ref()
-        .and_then(|capabilities| capabilities.extensions.as_ref())
-        .is_some();
-    let extensions = host_capabilities
-        .and_then(|capabilities| capabilities.extensions.clone())
-        .unwrap_or_default();
-
-    GooseMcpHostInfo {
-        explicit_extensions,
-        extensions,
-        client_name: args.client_info.as_ref().map(|info| info.name.clone()),
-        client_version: args.client_info.as_ref().map(|info| info.version.clone()),
-    }
 }
 
 fn extract_use_login_shell_path(args: &InitializeRequest) -> bool {
@@ -646,27 +608,6 @@ fn pending_tool_call_from_request(tool_request: &ToolRequest) -> PendingToolCall
     }
 }
 
-fn builtin_to_extension_config(name: &str) -> ExtensionConfig {
-    if let Some(def) = PLATFORM_EXTENSIONS.get(name) {
-        ExtensionConfig::Platform {
-            name: def.name.into(),
-            description: def.description.into(),
-            display_name: Some(def.display_name.into()),
-            bundled: Some(true),
-            available_tools: vec![],
-        }
-    } else {
-        ExtensionConfig::Builtin {
-            name: name.into(),
-            display_name: None,
-            timeout: None,
-            bundled: Some(true),
-            description: name.into(),
-            available_tools: vec![],
-        }
-    }
-}
-
 fn to_nonnegative_u64(value: Option<i32>) -> Option<u64> {
     value.and_then(|v| u64::try_from(v).ok())
 }
@@ -765,13 +706,6 @@ impl GooseAcpAgent {
             .unwrap_or(false)
     }
 
-    fn supports_acp_elicitation(&self) -> bool {
-        self.client_supports_acp_elicitation
-            .get()
-            .copied()
-            .unwrap_or(false)
-    }
-
     // TODO: goose reads Paths::in_state_dir globally (e.g. RequestLog), ignoring this data_dir.
     pub async fn new(options: GooseAcpAgentOptions) -> Result<Self> {
         let session_manager = Arc::new(SessionManager::new(options.data_dir));
@@ -798,11 +732,8 @@ impl GooseAcpAgent {
             active_prompt_runs: Arc::new(Mutex::new(HashMap::new())),
             closed_session_ids: Arc::new(Mutex::new(HashSet::new())),
             agent_manager,
-            builtins: options.builtins,
             client_fs_capabilities: OnceCell::new(),
             client_terminal: OnceCell::new(),
-            client_mcp_host_info: OnceCell::new(),
-            client_supports_acp_elicitation: OnceCell::new(),
             client_supports_goose_custom_notifications: OnceCell::new(),
             client_supports_recipe_param_requests: OnceCell::new(),
             use_login_shell_path: OnceCell::new(),
@@ -829,7 +760,6 @@ impl GooseAcpAgent {
             .get_or_create_agent_with_runtime_context(
                 session_id,
                 RuntimeContext {
-                    mcp_host_info: self.client_mcp_host_info.get().cloned(),
                     use_login_shell_path: self.use_login_shell_path.get().copied(),
                     session_name_update_tx: (!self.disable_session_naming)
                         .then(|| spawn_session_name_update_notifier(cx.clone())),
@@ -848,9 +778,6 @@ impl GooseAcpAgent {
         recipe_extensions: Option<&[ExtensionConfig]>,
     ) -> Result<Vec<ExtensionConfig>, agent_client_protocol::Error> {
         let mut extensions = Vec::new();
-        for builtin in &self.builtins {
-            push_or_replace_extension(&mut extensions, builtin_to_extension_config(builtin));
-        }
 
         if let Some(recipe_extensions) = recipe_extensions {
             for extension in recipe_extensions {
@@ -1110,24 +1037,6 @@ impl GooseAcpAgent {
                     ),
                 ))?;
             }
-            MessageContent::ActionRequired(action_required) => match &action_required.data {
-                ActionRequiredData::Elicitation {
-                    id,
-                    message,
-                    requested_schema,
-                } => {
-                    self.handle_form_elicitation(
-                        cx,
-                        session_id,
-                        id,
-                        message,
-                        requested_schema,
-                        message_update_meta(message_id, message_created, false),
-                    )
-                    .await?;
-                }
-                ActionRequiredData::ElicitationResponse { .. } => {}
-            },
             MessageContent::SystemNotification(notification) => {
                 send_status_message_update(
                     cx,
@@ -1355,7 +1264,7 @@ fn extract_tool_call_update_meta(
         .meta
         .as_ref()?
         .0
-        .get(TRUSTED_TOOL_UPDATE_META_KEY)?
+        .get(crate::agents::extension::TRUSTED_TOOL_UPDATE_META_KEY)?
         .clone();
     let mut meta_map = serde_json::Map::new();
     meta_map.insert("goose".to_string(), goose_meta);
@@ -1465,19 +1374,12 @@ impl GooseAcpAgent {
         let _ = self.client_terminal.set(args.client_capabilities.terminal);
         let goose_client_capabilities =
             extract_client_capabilities_meta(&args).and_then(|meta| meta.goose);
-        let _ = self.client_mcp_host_info.set(extract_client_mcp_host_info(
-            &args,
-            goose_client_capabilities.as_ref(),
-        ));
         let _ = self.client_supports_goose_custom_notifications.set(
             extract_client_supports_goose_custom_notifications(goose_client_capabilities.as_ref()),
         );
         let _ = self.client_supports_recipe_param_requests.set(
             extract_client_supports_recipe_param_requests(goose_client_capabilities.as_ref()),
         );
-        let _ = self
-            .client_supports_acp_elicitation
-            .set(elicitation::client_supports_form_elicitation(&args));
         let _ = self
             .use_login_shell_path
             .set(extract_use_login_shell_path(&args));
@@ -2273,7 +2175,7 @@ impl agent_client_protocol::ConnectTo<Client> for GooseAgentConnection {
     }
 }
 
-pub async fn run(builtins: Vec<String>) -> Result<()> {
+pub async fn run() -> Result<()> {
     info!("listening on stdio");
 
     let outgoing = tokio::io::stdout().compat_write();
@@ -2281,7 +2183,6 @@ pub async fn run(builtins: Vec<String>) -> Result<()> {
 
     let server = crate::acp::server_factory::AcpServer::new(
         crate::acp::server_factory::AcpServerFactoryConfig {
-            builtins,
             data_dir: Paths::data_dir(),
             config_dir: Paths::config_dir(),
             goose_platform: GoosePlatform::GooseCli,
@@ -2631,7 +2532,7 @@ print(\"hello, world\")
                     "resourceUri": "ui://spoofed/app",
                 },
             },
-            TRUSTED_TOOL_UPDATE_META_KEY: {
+            crate::agents::extension::TRUSTED_TOOL_UPDATE_META_KEY: {
                 "mcpApp": {
                     "resourceUri": "ui://trusted/app",
                     "extensionName": "weather",

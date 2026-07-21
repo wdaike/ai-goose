@@ -3,8 +3,8 @@ use bat::WrappingMode;
 use console::{measure_text_width, style, Color, StyledObject, Term};
 use goose::config::Config;
 use goose::conversation::message::{
-    ActionRequiredData, Message, MessageContent, SystemNotificationContent, SystemNotificationType,
-    ToolRequest, ToolResponse,
+    Message, MessageContent, SystemNotificationContent, SystemNotificationType, ToolRequest,
+    ToolResponse,
 };
 #[cfg(target_os = "windows")]
 use goose::subprocess::SubprocessExt;
@@ -239,14 +239,6 @@ pub fn render_message(message: &Message, debug: bool) {
 
     for content in &message.content {
         match content {
-            MessageContent::ActionRequired(action) => match &action.data {
-                ActionRequiredData::Elicitation { message, .. } => {
-                    println!("action_required(elicitation): {}", message)
-                }
-                ActionRequiredData::ElicitationResponse { id, .. } => {
-                    println!("action_required(elicitation_response): {}", id)
-                }
-            },
             MessageContent::Text(text) => print_markdown(&text.text, theme),
             MessageContent::ToolRequest(req) => render_tool_request(req, theme, debug),
             MessageContent::ToolResponse(resp) => render_tool_response(resp, debug),
@@ -314,17 +306,6 @@ pub fn render_message_streaming(
             MessageContent::ToolResponse(resp) => {
                 flush_markdown_buffer(buffer, theme);
                 render_tool_response(resp, debug);
-            }
-            MessageContent::ActionRequired(action) => {
-                flush_markdown_buffer(buffer, theme);
-                match &action.data {
-                    ActionRequiredData::Elicitation { message, .. } => {
-                        println!("action_required(elicitation): {}", message)
-                    }
-                    ActionRequiredData::ElicitationResponse { id, .. } => {
-                        println!("action_required(elicitation_response): {}", id)
-                    }
-                }
             }
             MessageContent::Image(image) => {
                 flush_markdown_buffer(buffer, theme);
@@ -566,51 +547,6 @@ pub fn render_error(message: &str) {
     println!("\n  {} {}\n", danger("error:").bold(), message);
 }
 
-pub fn render_prompts(prompts: &HashMap<String, Vec<String>>) {
-    println!();
-    for (extension, prompts) in prompts {
-        println!(" {}", accent(extension));
-        for prompt in prompts {
-            println!("  - {}", style(prompt).cyan());
-        }
-    }
-    println!();
-}
-
-pub fn render_prompt_info(info: &PromptInfo) {
-    println!();
-    if let Some(ext) = &info.extension {
-        println!(" {}: {}", accent("Extension"), ext);
-    }
-    println!(" Prompt: {}", style(&info.name).cyan().bold());
-    if let Some(desc) = &info.description {
-        println!("\n {}", desc);
-    }
-    render_arguments(info);
-    println!();
-}
-
-fn render_arguments(info: &PromptInfo) {
-    if let Some(args) = &info.arguments {
-        println!("\n Arguments:");
-        for arg in args {
-            let required = arg.required.unwrap_or(false);
-            let req_str = if required {
-                style("(required)").bold()
-            } else {
-                style("(optional)").dim()
-            };
-
-            println!(
-                "  {} {} {}",
-                accent(&arg.name),
-                req_str,
-                arg.description.as_deref().unwrap_or("")
-            );
-        }
-    }
-}
-
 pub fn render_extension_success(name: &str) {
     println!();
     println!("  {} extension `{}`", success("added"), accent(name),);
@@ -620,30 +556,6 @@ pub fn render_extension_success(name: &str) {
 pub fn render_extension_error(name: &str, error: &str) {
     println!();
     println!("  {} to add extension {}", danger("failed"), danger(name));
-    println!();
-    println!("{}", style(error).dim());
-    println!();
-}
-
-pub fn render_builtin_success(names: &str) {
-    println!();
-    println!(
-        "  {} builtin{}: {}",
-        success("added"),
-        if names.contains(',') { "s" } else { "" },
-        accent(names)
-    );
-    println!();
-}
-
-pub fn render_builtin_error(names: &str, error: &str) {
-    println!();
-    println!(
-        "  {} to add builtin{}: {}",
-        danger("failed"),
-        if names.contains(',') { "s" } else { "" },
-        danger(names)
-    );
     println!();
     println!("{}", style(error).dim());
     println!();

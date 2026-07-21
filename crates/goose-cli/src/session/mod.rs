@@ -1,7 +1,6 @@
 mod builder;
 mod completion;
 pub mod editor;
-mod elicitation;
 mod export;
 mod input;
 mod output;
@@ -22,19 +21,18 @@ use goose_types::conversation::token_usage::ProviderUsage;
 
 use anyhow::Result;
 use completion::GooseCompleter;
-use goose::agents::extension::{Envs, ExtensionConfig, PLATFORM_EXTENSIONS};
+use goose::agents::extension::{Envs, ExtensionConfig};
 use goose::agents::types::RetryConfig;
 use goose::agents::{Agent, SessionConfig};
 use goose::config::extensions::name_to_key;
 use goose::config::{Config, GooseMode};
 use input::InputResult;
 use rmcp::model::ServerNotification;
-use rmcp::model::{ElicitationAction, PromptMessage};
 use rmcp::model::{ErrorCode, ErrorData};
 use strum::VariantNames;
 
 use goose::config::paths::Paths;
-use goose::conversation::message::{ActionRequiredData, Message, MessageContent};
+use goose::conversation::message::{Message, MessageContent};
 use rustyline::EditMode;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -301,22 +299,6 @@ impl CliSession {
         }
     }
 
-    /// Parse platform extension names (comma-separated) into ExtensionConfigs
-    pub fn parse_builtin_extensions(builtin_name: &str) -> Vec<ExtensionConfig> {
-        builtin_name
-            .split(',')
-            .map(str::trim)
-            .filter(|name| PLATFORM_EXTENSIONS.contains_key(name))
-            .map(|name| ExtensionConfig::Platform {
-                name: name.to_string(),
-                description: name.to_string(),
-                display_name: None,
-                bundled: None,
-                available_tools: Vec::new(),
-            })
-            .collect()
-    }
-
     async fn add_and_persist_extensions(&mut self, configs: Vec<ExtensionConfig>) -> Result<()> {
         for config in configs {
             self.agent
@@ -341,61 +323,6 @@ impl CliSession {
             goose::config::DEFAULT_EXTENSION_TIMEOUT,
         );
         self.add_and_persist_extensions(vec![config]).await
-    }
-
-    pub async fn add_builtin(&mut self, builtin_name: String) -> Result<()> {
-        let configs = Self::parse_builtin_extensions(&builtin_name);
-        self.add_and_persist_extensions(configs).await
-    }
-
-    pub async fn list_prompts(
-        &mut self,
-        extension: Option<String>,
-    ) -> Result<HashMap<String, Vec<String>>> {
-        let prompts = self.agent.list_extension_prompts(&self.session_id).await;
-
-        // Early validation if filtering by extension
-        if let Some(filter) = &extension {
-            if !prompts.contains_key(filter) {
-                return Err(anyhow::anyhow!("Extension '{}' not found", filter));
-            }
-        }
-
-        // Convert prompts into filtered map of extension names to prompt names
-        Ok(prompts
-            .into_iter()
-            .filter(|(ext, _)| extension.as_ref().is_none_or(|f| f == ext))
-            .map(|(extension, prompt_list)| {
-                let names = prompt_list.into_iter().map(|p| p.name).collect();
-                (extension, names)
-            })
-            .collect())
-    }
-
-    pub async fn get_prompt_info(&mut self, name: &str) -> Result<Option<output::PromptInfo>> {
-        let prompts = self.agent.list_extension_prompts(&self.session_id).await;
-
-        // Find which extension has this prompt
-        for (extension, prompt_list) in prompts {
-            if let Some(prompt) = prompt_list.iter().find(|p| p.name == name) {
-                return Ok(Some(output::PromptInfo {
-                    name: prompt.name.clone(),
-                    description: prompt.description.clone(),
-                    arguments: prompt.arguments.clone(),
-                    extension: Some(extension),
-                }));
-            }
-        }
-
-        Ok(None)
-    }
-
-    pub async fn get_prompt(&mut self, name: &str, arguments: Value) -> Result<Vec<PromptMessage>> {
-        Ok(self
-            .agent
-            .get_prompt(&self.session_id, name, arguments)
-            .await?
-            .messages)
     }
 
     /// Process a single message and get the response
@@ -509,13 +436,6 @@ impl CliSession {
                     Err(e) => output::render_extension_error(&cmd, &e.to_string()),
                 }
             }
-            InputResult::AddBuiltin(names) => {
-                history.save(editor);
-                match self.add_builtin(names.clone()).await {
-                    Ok(_) => output::render_builtin_success(&names),
-                    Err(e) => output::render_builtin_error(&names, &e.to_string()),
-                }
-            }
             InputResult::ToggleTheme => {
                 history.save(editor);
                 self.handle_toggle_theme();
@@ -529,13 +449,6 @@ impl CliSession {
                 self.handle_select_theme(&theme_name);
             }
             InputResult::Retry => {}
-            InputResult::ListPrompts(extension) => {
-                history.save(editor);
-                match self.list_prompts(extension).await {
-                    Ok(prompts) => output::render_prompts(&prompts),
-                    Err(e) => output::render_error(&e.to_string()),
-                }
-            }
             InputResult::GooseMode(mode) => {
                 history.save(editor);
                 self.handle_goose_mode(&mode).await?;
@@ -547,10 +460,6 @@ impl CliSession {
             InputResult::Clear => {
                 history.save(editor);
                 self.handle_clear().await?;
-            }
-            InputResult::PromptCommand(opts) => {
-                history.save(editor);
-                self.handle_prompt_command(opts).await?;
             }
             InputResult::Compact => {
                 history.save(editor);
@@ -921,79 +830,21 @@ impl CliSession {
                             if first_token_at.is_none() && message_has_text(&message) {
                                 first_token_at = Some(Instant::now());
                             }
-                            if let Some((elicitation_id, elicitation_message, schema)) = find_elicitation_request(&message) {
-                                if !interactive {
-                                    // Non-interactive/headless mode: cannot collect user input
-                                    tracing::warn!(
-                                        "Elicitation requested in non-interactive mode, cancelling"
-                                    );
-                                    cancel_token_clone.cancel();
-                                    drop(stream);
-                                    return Err(anyhow::anyhow!(
-                                        "Elicitation requested but no interactive terminal is available to collect user input"
-                                    ));
-                                }
+                            log_tool_metrics(&message, &self.messages);
+                            self.messages.push(message.clone());
 
-                                output::hide_thinking();
-                                let _ = progress_bars.hide();
+                            if interactive { output::hide_thinking() };
+                            let _ = progress_bars.hide();
 
-                                match elicitation::collect_elicitation_input(&elicitation_message, &schema) {
-                                    Ok(input) => {
-                                        match &input.action {
-                                            ElicitationAction::Decline => {
-                                                output::render_text("Information request declined.", Some(Color::Yellow), true);
-                                            }
-                                            ElicitationAction::Cancel => {
-                                                output::render_text("Information request cancelled.", Some(Color::Yellow), true);
-                                            }
-                                            ElicitationAction::Accept => {}
-                                        }
-
-                                        let should_cancel = input.action == ElicitationAction::Cancel;
-                                        let action = input.action;
-                                        let user_data_value = serde_json::to_value(input.user_data)
-                                            .unwrap_or(serde_json::Value::Object(serde_json::Map::new()));
-                                        let response_message = Message::user()
-                                            .with_content(MessageContent::action_required_elicitation_response(
-                                                elicitation_id,
-                                                user_data_value,
-                                                action,
-                                            ))
-                                            .with_visibility(false, true);
-                                        self.messages.push(response_message.clone());
-                                        // Elicitation responses return an empty stream - the response
-                                        // unblocks the waiting tool call via ActionRequiredManager
-                                        let _ = self.agent.reply(response_message, session_config.clone(), Some(cancel_token.clone())).await?;
-                                        if should_cancel {
-                                            cancel_token_clone.cancel();
-                                            drop(stream);
-                                            break;
-                                        }
-                                    }
-                                    Err(e) => {
-                                        output::render_error(&format!("Failed to collect input: {}", e));
-                                        cancel_token_clone.cancel();
-                                        drop(stream);
-                                        break;
-                                    }
-                                }
-                            } else {
-                                log_tool_metrics(&message, &self.messages);
-                                self.messages.push(message.clone());
-
-                                if interactive { output::hide_thinking() };
-                                let _ = progress_bars.hide();
-
-                                if is_stream_json_mode {
-                                    emit_stream_event(&StreamEvent::Message { message: message.clone() });
-                                } else if !is_json_mode {
-                                    output::render_message_streaming(&message, &mut markdown_buffer, &mut thinking_header_shown, self.debug);
-                                    maybe_open_credits_top_up_url(
-                                        &message,
-                                        interactive,
-                                        &mut prompted_credits_urls,
-                                    );
-                                }
+                            if is_stream_json_mode {
+                                emit_stream_event(&StreamEvent::Message { message: message.clone() });
+                            } else if !is_json_mode {
+                                output::render_message_streaming(&message, &mut markdown_buffer, &mut thinking_header_shown, self.debug);
+                                maybe_open_credits_top_up_url(
+                                    &message,
+                                    interactive,
+                                    &mut prompted_credits_urls,
+                                );
                             }
                         }
                         Some(Ok(AgentEvent::Usage(usage))) => {
@@ -1189,31 +1040,9 @@ impl CliSession {
     /// Update the completion cache with fresh data
     /// This should be called before the interactive session starts
     pub async fn update_completion_cache(&mut self) -> Result<()> {
-        // Get fresh data
-        let prompts = self.agent.list_extension_prompts(&self.session_id).await;
-
-        // Update the cache with write lock
         let mut cache = self.completion_cache.write().unwrap();
         cache.prompts.clear();
         cache.prompt_info.clear();
-
-        for (extension, prompt_list) in prompts {
-            let names: Vec<String> = prompt_list.iter().map(|p| p.name.clone()).collect();
-            cache.prompts.insert(extension.clone(), names);
-
-            for prompt in prompt_list {
-                cache.prompt_info.insert(
-                    prompt.name.clone(),
-                    output::PromptInfo {
-                        name: prompt.name.clone(),
-                        description: prompt.description.clone(),
-                        arguments: prompt.arguments.clone(),
-                        extension: Some(extension.clone()),
-                    },
-                );
-            }
-        }
-
         cache.last_updated = Instant::now();
         Ok(())
     }
@@ -1280,80 +1109,6 @@ impl CliSession {
             }
             Err(_) => {
                 output::display_context_usage(0, context_limit);
-            }
-        }
-
-        Ok(())
-    }
-
-    /// Handle prompt command execution
-    async fn handle_prompt_command(&mut self, opts: input::PromptCommandOptions) -> Result<()> {
-        // name is required
-        if opts.name.is_empty() {
-            output::render_error("Prompt name argument is required");
-            return Ok(());
-        }
-
-        if opts.info {
-            match self.get_prompt_info(&opts.name).await? {
-                Some(info) => output::render_prompt_info(&info),
-                None => output::render_error(&format!("Prompt '{}' not found", opts.name)),
-            }
-        } else {
-            // Convert the arguments HashMap to a Value
-            let arguments = serde_json::to_value(opts.arguments)
-                .map_err(|e| anyhow::anyhow!("Failed to serialize arguments: {}", e))?;
-
-            match self.get_prompt(&opts.name, arguments).await {
-                Ok(messages) => {
-                    let start_len = self.messages.len();
-                    let mut valid = true;
-                    let num_messages = messages.len();
-                    for (i, prompt_message) in messages.into_iter().enumerate() {
-                        let msg = Message::from(prompt_message);
-                        // ensure we get a User - Assistant - User type pattern
-                        let expected_role = if i % 2 == 0 {
-                            rmcp::model::Role::User
-                        } else {
-                            rmcp::model::Role::Assistant
-                        };
-
-                        if msg.role != expected_role {
-                            output::render_error(&format!(
-                                "Expected {:?} message at position {}, but found {:?}",
-                                expected_role, i, msg.role
-                            ));
-                            valid = false;
-                            // get rid of everything we added to messages
-                            self.messages.truncate(start_len);
-                            break;
-                        }
-
-                        if msg.role == rmcp::model::Role::User {
-                            output::render_message(&msg, self.debug);
-                        }
-                        self.push_message(msg);
-                    }
-
-                    if valid {
-                        if num_messages > 1 {
-                            for i in 0..(num_messages - 1) {
-                                let msg = &self.messages.messages()[start_len + i];
-                                self.agent
-                                    .config
-                                    .session_manager
-                                    .add_message(&self.session_id, msg)
-                                    .await?;
-                            }
-                        }
-
-                        output::show_thinking();
-                        self.process_agent_response(true, CancellationToken::default())
-                            .await?;
-                        output::hide_thinking();
-                    }
-                }
-                Err(e) => output::render_error(&e.to_string()),
             }
         }
 
@@ -1481,23 +1236,6 @@ fn emit_stream_event(event: &StreamEvent) {
     if let Ok(json) = serde_json::to_string(event) {
         println!("{}", json);
     }
-}
-
-/// Extract elicitation request from a message
-fn find_elicitation_request(message: &Message) -> Option<(String, String, Value)> {
-    message.content.iter().find_map(|content| {
-        if let MessageContent::ActionRequired(action) = content {
-            if let ActionRequiredData::Elicitation {
-                id,
-                message,
-                requested_schema,
-            } = &action.data
-            {
-                return Some((id.clone(), message.clone(), requested_schema.clone()));
-            }
-        }
-        None
-    })
 }
 
 /// Handle MCP notification event (logging or progress)

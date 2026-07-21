@@ -183,15 +183,6 @@ pub struct ExtensionOptions {
     pub streamable_http_extensions: Vec<StreamableHttpOptions>,
 
     #[arg(
-        long = "with-builtin",
-        value_name = "NAME",
-        help = "Add builtin extensions by name (e.g., 'developer' or multiple: 'developer,github')",
-        long_help = "Add one or more builtin extensions that are bundled with goose by specifying their names, comma-separated",
-        value_delimiter = ','
-    )]
-    pub builtins: Vec<String>,
-
-    #[arg(
         long = "no-profile",
         help = "Don't load your default extensions, only use CLI-specified extensions"
     )]
@@ -796,17 +787,7 @@ enum Command {
 
     /// Run goose as an ACP (Agent Client Protocol) agent
     #[command(about = "Run goose as an ACP agent server on stdio")]
-    Acp {
-        /// Add builtin extensions by name
-        #[arg(
-            long = "with-builtin",
-            value_name = "NAME",
-            help = "Add builtin extensions by name (e.g., 'developer' or multiple: 'developer,github')",
-            long_help = "Add one or more builtin extensions that are bundled with goose by specifying their names, comma-separated",
-            value_delimiter = ','
-        )]
-        builtins: Vec<String>,
-    },
+    Acp {},
 
     /// Start ACP server over HTTP and WebSocket
     #[command(about = "Start ACP server over HTTP and WebSocket")]
@@ -828,16 +809,6 @@ enum Command {
 
         #[arg(long, value_enum, default_value_t = ServePlatform::Cli)]
         platform: ServePlatform,
-
-        #[arg(
-            long = "with-builtin",
-            value_name = "NAME",
-            help = "Add builtin extensions by name (e.g., 'developer' or multiple: 'developer,github')",
-            long_help = "Add one or more builtin extensions that are bundled with goose by specifying their names, comma-separated",
-            value_delimiter = ',',
-            action = clap::ArgAction::Append
-        )]
-        builtins: Vec<String>,
 
         #[arg(
             long = "dangerously-unauthenticated",
@@ -1146,15 +1117,6 @@ enum Command {
         #[arg(long = "severity", value_name = "LEVEL", default_value = "medium")]
         severity: String,
     },
-    #[command(
-        name = "validate-extensions",
-        about = "Validate a bundled-extensions.json file",
-        hide = true
-    )]
-    ValidateExtensions {
-        #[arg(help = "Path to the bundled-extensions.json file")]
-        file: PathBuf,
-    },
 }
 
 #[derive(Subcommand)]
@@ -1283,7 +1245,6 @@ fn get_command_name(command: &Option<Command>) -> &'static str {
         Some(Command::Tui { .. }) => "tui",
         Some(Command::Completion { .. }) => "completion",
         Some(Command::Review { .. }) => "review",
-        Some(Command::ValidateExtensions { .. }) => "validate-extensions",
         None => "default_session",
     }
 }
@@ -1296,7 +1257,6 @@ struct ServeCommandArgs {
     tls_cert_path: Option<String>,
     tls_key_path: Option<String>,
     platform: ServePlatform,
-    builtins: Vec<String>,
     dangerously_unauthenticated: bool,
     allowed_origins: Vec<String>,
 }
@@ -1317,16 +1277,9 @@ async fn handle_serve_command(args: ServeCommandArgs) -> Result<()> {
         tls_cert_path,
         tls_key_path,
         platform,
-        builtins,
         dangerously_unauthenticated,
         allowed_origins,
     } = args;
-
-    let builtins = if builtins.is_empty() {
-        vec!["developer".to_string()]
-    } else {
-        builtins
-    };
 
     let additional_source_roots = Config::global()
         .get_param::<String>("ADDITIONAL_AGENT_SOURCE_ROOTS")
@@ -1341,7 +1294,6 @@ async fn handle_serve_command(args: ServeCommandArgs) -> Result<()> {
         .collect();
 
     let server = Arc::new(AcpServer::new(AcpServerFactoryConfig {
-        builtins,
         data_dir: Paths::data_dir(),
         config_dir: Paths::config_dir(),
         goose_platform: platform.into(),
@@ -1590,7 +1542,6 @@ async fn handle_interactive_session(
         no_session: false,
         extensions: extension_opts.extensions,
         streamable_http_extensions: extension_opts.streamable_http_extensions,
-        builtins: extension_opts.builtins,
         no_profile: extension_opts.no_profile,
         recipe: None,
         additional_system_prompt: None,
@@ -1802,7 +1753,6 @@ async fn handle_run_command(
         no_session: run_behavior.no_session,
         extensions: extension_opts.extensions,
         streamable_http_extensions: extension_opts.streamable_http_extensions,
-        builtins: extension_opts.builtins,
         no_profile: extension_opts.no_profile,
         recipe: recipe.clone(),
         additional_system_prompt: input_config.additional_system_prompt,
@@ -1943,7 +1893,6 @@ async fn handle_default_session() -> Result<()> {
         no_session: false,
         extensions: Vec::new(),
         streamable_http_extensions: Vec::new(),
-        builtins: Vec::new(),
         no_profile: false,
         recipe: None,
         additional_system_prompt: None,
@@ -1984,7 +1933,7 @@ pub async fn cli() -> anyhow::Result<()> {
         }
         Some(Command::Configure {}) => handle_configure().await,
         Some(Command::Info { verbose, check }) => handle_info(verbose, check).await,
-        Some(Command::Acp { builtins }) => goose::acp::server::run(builtins).await,
+        Some(Command::Acp {}) => goose::acp::server::run().await,
         Some(Command::Serve {
             host,
             port,
@@ -1992,7 +1941,6 @@ pub async fn cli() -> anyhow::Result<()> {
             tls_cert_path,
             tls_key_path,
             platform,
-            builtins,
             dangerously_unauthenticated,
             allowed_origins,
         }) => {
@@ -2003,7 +1951,6 @@ pub async fn cli() -> anyhow::Result<()> {
                 tls_cert_path,
                 tls_key_path,
                 platform,
-                builtins,
                 dangerously_unauthenticated,
                 allowed_origins,
             })
@@ -2115,19 +2062,6 @@ pub async fn cli() -> anyhow::Result<()> {
                 severity,
             })
             .await
-        }
-        Some(Command::ValidateExtensions { file }) => {
-            use goose::agents::validate_extensions::validate_bundled_extensions;
-            match validate_bundled_extensions(&file) {
-                Ok(msg) => {
-                    println!("{msg}");
-                    Ok(())
-                }
-                Err(e) => {
-                    eprintln!("{e}");
-                    std::process::exit(1);
-                }
-            }
         }
         None => handle_default_session().await,
     }

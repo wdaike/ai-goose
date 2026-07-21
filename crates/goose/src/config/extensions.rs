@@ -1,5 +1,4 @@
 use super::base::Config;
-use crate::agents::extension::PLATFORM_EXTENSIONS;
 use crate::agents::ExtensionConfig;
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
@@ -32,13 +31,15 @@ pub fn name_to_key(name: &str) -> String {
     result.to_lowercase()
 }
 
+/// Extension kinds Codex can no longer reach: the in-process transports were
+/// removed with the platform extensions and bundled servers.
 pub(crate) fn is_extension_available(config: &ExtensionConfig) -> bool {
-    match config {
-        ExtensionConfig::Platform { name, .. } => {
-            crate::agents::extension::PLATFORM_EXTENSIONS.contains_key(name_to_key(name).as_str())
-        }
-        _ => true,
-    }
+    !matches!(
+        config,
+        ExtensionConfig::Platform { .. }
+            | ExtensionConfig::Builtin { .. }
+            | ExtensionConfig::Sse { .. }
+    )
 }
 
 fn parse_extensions_map(raw: &Mapping) -> IndexMap<String, ExtensionEntry> {
@@ -215,23 +216,10 @@ pub fn get_enabled_extensions_with_config(config: &Config) -> Vec<ExtensionConfi
         .collect()
 }
 
+/// Extensions goose can offer to add. Codex owns MCP now, so nothing is
+/// bundled - users point at their own stdio or streamable_http servers.
 pub fn get_available_extensions() -> Vec<ExtensionConfig> {
-    let mut definitions = PLATFORM_EXTENSIONS
-        .values()
-        .filter(|definition| !definition.hidden)
-        .collect::<Vec<_>>();
-    definitions.sort_unstable_by_key(|definition| definition.name);
-
-    definitions
-        .into_iter()
-        .map(|definition| ExtensionConfig::Platform {
-            name: definition.name.to_string(),
-            description: definition.description.to_string(),
-            display_name: Some(definition.display_name.to_string()),
-            bundled: Some(true),
-            available_tools: Vec::new(),
-        })
-        .collect()
+    Vec::new()
 }
 
 pub fn get_warnings() -> Vec<String> {
@@ -249,10 +237,12 @@ pub fn get_warnings() -> Vec<String> {
                     "'{}': SSE is unsupported, migrate to streamable_http",
                     key
                 )),
-                ExtensionConfig::Builtin { .. } => warnings.push(format!(
-                    "'{}': bundled extensions were removed, migrate to stdio or streamable_http",
-                    key
-                )),
+                ExtensionConfig::Builtin { .. } | ExtensionConfig::Platform { .. } => {
+                    warnings.push(format!(
+                        "'{}': bundled extensions were removed, migrate to stdio or streamable_http",
+                        key
+                    ))
+                }
                 _ => {}
             }
         }
@@ -307,14 +297,18 @@ mod tests {
             .clone()
     }
 
-    fn builtin_entry(name: &str, enabled: bool) -> ExtensionEntry {
+    fn stdio_entry(name: &str, enabled: bool) -> ExtensionEntry {
         ExtensionEntry {
             enabled,
-            config: ExtensionConfig::Builtin {
+            config: ExtensionConfig::Stdio {
                 name: name.to_string(),
                 description: format!("{name} description"),
-                display_name: Some(name.to_string()),
+                cmd: name.to_string(),
+                args: Vec::new(),
+                envs: Default::default(),
+                env_keys: Vec::new(),
                 timeout: None,
+                cwd: None,
                 bundled: None,
                 available_tools: Vec::new(),
             },
@@ -322,26 +316,26 @@ mod tests {
     }
 
     #[test]
-    fn test_is_extension_available_filters_unknown_platform() {
-        let unknown_platform = ExtensionConfig::Platform {
-            name: "definitely_not_real_platform_extension".to_string(),
+    fn test_is_extension_available_rejects_in_process_transports() {
+        let platform = ExtensionConfig::Platform {
+            name: "todo".to_string(),
             description: "unknown".to_string(),
             display_name: None,
             bundled: None,
             available_tools: Vec::new(),
         };
-
         let builtin = ExtensionConfig::Builtin {
             name: "developer".to_string(),
-            description: "".to_string(),
+            description: String::new(),
             display_name: Some("Developer".to_string()),
             timeout: None,
             bundled: None,
             available_tools: Vec::new(),
         };
 
-        assert!(!is_extension_available(&unknown_platform));
-        assert!(is_extension_available(&builtin));
+        assert!(!is_extension_available(&platform));
+        assert!(!is_extension_available(&builtin));
+        assert!(is_extension_available(&stdio_entry("mine", true).config));
     }
 
     #[test]
@@ -351,16 +345,18 @@ mod tests {
 extensions:
   first:
     enabled: true
-    type: builtin
+    type: stdio
     name: first
     description: first description
-    display_name: First
+    cmd: first
+    args: []
   second:
     enabled: true
-    type: builtin
+    type: stdio
     name: second
     description: second description
-    display_name: Second
+    cmd: second
+    args: []
     extra_field: preserved
 "#,
         );
@@ -391,10 +387,11 @@ extensions:
 extensions:
   valid:
     enabled: true
-    type: builtin
+    type: stdio
     name: valid
     description: valid description
-    display_name: Valid
+    cmd: valid
+    args: []
   broken:
     enabled: true
     type: stdio
@@ -440,7 +437,7 @@ extensions:
         let before = read_extensions(&config);
         let broken_before = before.get("broken").unwrap().clone();
 
-        set_extension_with_config(&config, builtin_entry("new extension", true));
+        set_extension_with_config(&config, stdio_entry("new extension", true));
 
         let extensions = read_extensions(&config);
         assert_eq!(extensions.get("broken").unwrap(), &broken_before);
@@ -492,10 +489,11 @@ extensions:
 extensions:
   valid:
     enabled: true
-    type: builtin
+    type: stdio
     name: valid
     description: valid description
-    display_name: Valid
+    cmd: valid
+    args: []
   broken:
     enabled: true
     type: stdio
@@ -574,10 +572,11 @@ extensions:
 extensions:
   valid:
     enabled: true
-    type: builtin
+    type: stdio
     name: valid
     description: valid description
-    display_name: Valid
+    cmd: valid
+    args: []
   broken:
     enabled: true
     type: stdio
@@ -591,18 +590,10 @@ extensions:
 
         tracing::subscriber::with_default(subscriber, || {
             let extensions = get_enabled_extensions_with_config(&config);
-            // Bundled platform extensions are auto-injected; filter to user-declared entries
-            // (Builtin or anything with the test YAML's names) for the invariant check.
-            let user_names: Vec<&str> = extensions
-                .iter()
-                .filter_map(|ext| match ext {
-                    ExtensionConfig::Builtin { name, .. } => Some(name.as_str()),
-                    _ => None,
-                })
-                .collect();
+            let user_names: Vec<String> = extensions.iter().map(|ext| ext.name()).collect();
             assert_eq!(
                 user_names,
-                vec!["valid"],
+                vec!["valid".to_string()],
                 "expected only the parseable user extension to be enabled, got {:?}",
                 user_names
             );

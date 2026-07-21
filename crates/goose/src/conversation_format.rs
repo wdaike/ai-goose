@@ -1,4 +1,4 @@
-use crate::conversation::message::{ActionRequiredData, Message, MessageContent};
+use crate::conversation::message::{Message, MessageContent};
 use rmcp::model::Role;
 
 pub fn format_message_for_transcript(message: &Message) -> String {
@@ -35,14 +35,6 @@ pub fn format_message_for_transcript(message: &Message) -> String {
             MessageContent::ToolConfirmationRequest(request) => {
                 Some(format!("tool_confirmation_request: {}", request.tool_name))
             }
-            MessageContent::ActionRequired(action) => match &action.data {
-                ActionRequiredData::Elicitation { message, .. } => {
-                    Some(format!("action_required(elicitation): {message}"))
-                }
-                ActionRequiredData::ElicitationResponse { id, .. } => {
-                    Some(format!("action_required(elicitation_response): {id}"))
-                }
-            },
             MessageContent::FrontendToolRequest(request) => match &request.tool_call {
                 Ok(call) => Some(format!("frontend_tool_request: {}", call.name)),
                 Err(_) => Some("frontend_tool_request: [error]".to_string()),
