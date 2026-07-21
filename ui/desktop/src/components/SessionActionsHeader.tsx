@@ -8,6 +8,7 @@ import { acpDeleteSession, acpForkSession, acpRenameSession } from '../acp/sessi
 import { getSessionDisplayName } from '../sessions';
 import type { Session } from '../types/session';
 import { errorMessage } from '../utils/conversionUtils';
+import { Z_INDEX } from './Layout/constants';
 import { useNavigationContextSafe } from './Layout/NavigationContext';
 import { cn } from '../utils';
 import { Button } from './ui/button';
@@ -220,10 +221,12 @@ export default function SessionActionsHeader({
     <>
       <div
         className={cn(
-          'no-drag absolute top-[14px] z-30 flex max-w-[min(36rem,calc(100vw-18rem))] items-center gap-1.5',
+          'no-drag absolute top-[14px] flex max-w-[min(36rem,calc(100vw-18rem))] items-center gap-1.5',
           headerLeft,
           className
         )}
+        // Must outrank .titlebar-drag-region or the drag overlay swallows the clicks.
+        style={{ zIndex: Z_INDEX.HEADER }}
       >
         <Folder className="size-4 flex-shrink-0 text-text-secondary" />
         <span className="truncate text-[13px] font-medium text-text-primary" title={title}>
