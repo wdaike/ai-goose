@@ -1,5 +1,4 @@
 pub mod base;
-pub mod canonical;
 pub mod conversation;
 pub mod errors;
 pub mod formats;

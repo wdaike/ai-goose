@@ -2213,9 +2213,8 @@ async fn get_reasoner(
         None => None,
     };
 
-    let model_config =
-        goose::model_config::model_config_from_user_config(&provider, model.as_str())?
-            .with_context_limit(planner_context_limit);
+    let model_config = goose::model_config::model_config_from_user_config(model.as_str())?
+        .with_context_limit(planner_context_limit);
     let extensions = goose::config::extensions::get_enabled_extensions_with_config(config);
     let reasoner = create(&provider, extensions).await?;
 

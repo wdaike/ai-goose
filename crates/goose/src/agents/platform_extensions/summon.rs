@@ -1612,11 +1612,12 @@ impl SummonClient {
         params: &DelegateParams,
         recipe: &Recipe,
         session: &crate::session::Session,
-        provider_name: &str,
     ) -> Result<goose_providers::model::ModelConfig, anyhow::Error> {
-        let mut model_config = session.model_config.clone().map(Ok).unwrap_or_else(|| {
-            crate::model_config::model_config_from_user_config(provider_name, "default")
-        })?;
+        let mut model_config = session
+            .model_config
+            .clone()
+            .map(Ok)
+            .unwrap_or_else(|| crate::model_config::model_config_from_user_config("default"))?;
 
         let override_model = params
             .model
@@ -1642,7 +1643,6 @@ impl SummonClient {
                 let parent = model_config;
                 let mut cfg =
                     crate::model_config::model_config_from_user_config_with_session_settings(
-                        provider_name,
                         &model,
                         Some(&parent),
                         None,
@@ -1695,7 +1695,7 @@ impl SummonClient {
             .or_else(|| session.provider_name.clone())
             .ok_or_else(|| anyhow::anyhow!("No provider configured"))?;
 
-        let model_config = self.resolve_model_config(params, recipe, session, &provider_name)?;
+        let model_config = self.resolve_model_config(params, recipe, session)?;
         let provider = providers::create(&provider_name, Vec::new()).await?;
         Ok((provider, model_config))
     }
@@ -2541,12 +2541,12 @@ You review code."#;
             ..Default::default()
         };
         client
-            .resolve_model_config(&params, &empty_recipe(), &session_with(parent), PROVIDER)
+            .resolve_model_config(&params, &empty_recipe(), &session_with(parent))
             .expect("resolve_model_config")
     }
 
     fn parent_config() -> goose_providers::model::ModelConfig {
-        goose_providers::model::ModelConfig::new(PARENT_MODEL).with_canonical_limits(PROVIDER)
+        goose_providers::model::ModelConfig::new(PARENT_MODEL)
     }
 
     #[tokio::test]
@@ -2559,8 +2559,7 @@ You review code."#;
         ]);
 
         let parent = parent_config();
-        let overridden = goose_providers::model::ModelConfig::new(OVERRIDE_MODEL)
-            .with_canonical_limits(PROVIDER);
+        let overridden = goose_providers::model::ModelConfig::new(OVERRIDE_MODEL);
         assert_ne!(parent.context_limit, overridden.context_limit);
         assert_ne!(parent.reasoning, overridden.reasoning);
 

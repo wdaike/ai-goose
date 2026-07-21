@@ -352,11 +352,7 @@ pub async fn handle_term_info() -> Result<()> {
     let context_limit = config
         .get_goose_model()
         .ok()
-        .and_then(|model_name| {
-            config.get_goose_provider().ok().and_then(|provider_name| {
-                goose::model_config::model_config_from_user_config(&provider_name, &model_name).ok()
-            })
-        })
+        .and_then(|model_name| goose::model_config::model_config_from_user_config(&model_name).ok())
         .map(|mc| mc.context_limit())
         .unwrap_or(128_000);
 

@@ -6,7 +6,6 @@ use std::pin::Pin;
 use utoipa::ToSchema;
 
 use crate::{
-    canonical::{map_to_canonical_model, CanonicalModelRegistry},
     conversation::{
         message::{Message, MessageContent},
         token_usage::{ProviderUsage, Usage},
@@ -64,7 +63,7 @@ impl ProviderMetadata {
             default_model: default_model.to_string(),
             known_models: model_names
                 .iter()
-                .map(|&model_name| model_info_for_provider_model(name, model_name))
+                .map(|&model_name| ModelInfo::basic(model_name))
                 .collect(),
             model_doc_link: model_doc_link.to_string(),
             config_keys,
@@ -241,6 +240,17 @@ pub struct ModelInfo {
 }
 
 impl ModelInfo {
+    /// Metadata derivable from the model name alone. Codex owns the real
+    /// catalog, so limits and pricing are not known here.
+    pub fn basic(name: impl Into<String>) -> Self {
+        let name = name.into();
+        let reasoning = ModelConfig::new(&name).is_reasoning_model();
+        Self {
+            reasoning,
+            ..Self::new(name, 0)
+        }
+    }
+
     /// Create a new ModelInfo with just name and context limit
     pub fn new(name: impl Into<String>, context_limit: usize) -> Self {
         Self {
@@ -292,34 +302,6 @@ pub enum PermissionRouting {
     Noop,
 }
 
-pub fn model_info_for_provider_model(provider_name: &str, model_name: &str) -> ModelInfo {
-    let registry = CanonicalModelRegistry::bundled().ok();
-    let canonical = registry.as_ref().and_then(|registry| {
-        let canonical_id = map_to_canonical_model(provider_name, model_name, registry)?;
-        let (provider, model) = canonical_id.split_once('/')?;
-        registry.get(provider, model)
-    });
-
-    let reasoning = canonical
-        .as_ref()
-        .and_then(|model| model.reasoning)
-        .unwrap_or_else(|| ModelConfig::new(model_name).is_reasoning_model());
-
-    ModelInfo {
-        name: model_name.to_string(),
-        resolved_model: None,
-        context_limit: ModelConfig::new(model_name)
-            .with_canonical_limits(provider_name)
-            .context_limit(),
-        input_token_cost: None,
-        output_token_cost: None,
-        currency: None,
-        supports_cache_control: None,
-        reasoning,
-    }
-}
-
-/// Collect all chunks from a MessageStream into a single Message and ProviderUsage
 pub async fn collect_stream(
     mut stream: MessageStream,
 ) -> Result<(Message, ProviderUsage), ProviderError> {
@@ -424,107 +406,8 @@ pub trait Provider: Send + Sync {
             .fetch_supported_models()
             .await?
             .iter()
-            .map(|model_name| model_info_for_provider_model(self.get_name(), model_name))
+            .map(ModelInfo::basic)
             .collect())
-    }
-
-    async fn fetch_model_info(&self, model_name: &str) -> Result<ModelInfo, ProviderError> {
-        Ok(model_info_for_provider_model(self.get_name(), model_name))
-    }
-
-    fn skip_canonical_filtering(&self) -> bool {
-        false
-    }
-
-    /// Fetch inventory models filtered by canonical registry and usability.
-    ///
-    /// When `toolshim` is true, models that lack native tool-call support are
-    /// retained because the toolshim layer emulates tool calling.
-    async fn fetch_recommended_models(&self, toolshim: bool) -> Result<Vec<String>, ProviderError> {
-        let all_models = self.fetch_supported_models().await?;
-
-        if self.skip_canonical_filtering() {
-            return Ok(all_models);
-        }
-
-        let registry = CanonicalModelRegistry::bundled().map_err(|e| {
-            ProviderError::ExecutionError(format!("Failed to load canonical registry: {}", e))
-        })?;
-
-        let provider_name = self.get_name();
-
-        // Get all text-capable models with their release dates
-        let mut models_with_dates: Vec<(String, Option<String>)> = all_models
-            .iter()
-            .filter_map(|model| {
-                let canonical_id = map_to_canonical_model(provider_name, model, registry)?;
-
-                let (provider, model_name) = canonical_id.split_once('/')?;
-                let canonical_model = registry.get(provider, model_name)?;
-
-                if !canonical_model
-                    .modalities
-                    .input
-                    .contains(&crate::canonical::Modality::Text)
-                {
-                    return None;
-                }
-
-                if !canonical_model.tool_call && !toolshim {
-                    return None;
-                }
-
-                let release_date = canonical_model.release_date.clone();
-
-                Some((model.clone(), release_date))
-            })
-            .collect();
-
-        // Sort by release date (most recent first), then alphabetically for models without dates
-        models_with_dates.sort_by(|a, b| match (&a.1, &b.1) {
-            (Some(date_a), Some(date_b)) => date_b.cmp(date_a),
-            (Some(_), None) => std::cmp::Ordering::Less,
-            (None, Some(_)) => std::cmp::Ordering::Greater,
-            (None, None) => a.0.cmp(&b.0),
-        });
-
-        let inventory_models: Vec<String> = models_with_dates
-            .into_iter()
-            .map(|(name, _)| name)
-            .collect();
-
-        if inventory_models.is_empty() {
-            Ok(all_models)
-        } else {
-            Ok(inventory_models)
-        }
-    }
-
-    async fn fetch_recommended_model_info(
-        &self,
-        toolshim: bool,
-    ) -> Result<Vec<ModelInfo>, ProviderError> {
-        Ok(self
-            .fetch_recommended_models(toolshim)
-            .await?
-            .iter()
-            .map(|model_name| model_info_for_provider_model(self.get_name(), model_name))
-            .collect())
-    }
-
-    async fn map_to_canonical_model(
-        &self,
-        provider_model: &str,
-    ) -> Result<Option<String>, ProviderError> {
-        let registry = CanonicalModelRegistry::bundled().map_err(|e| {
-            ProviderError::ExecutionError(format!("Failed to load canonical registry: {}", e))
-        })?;
-
-        Ok(map_to_canonical_model(
-            self.get_name(),
-            provider_model,
-            registry,
-        ))
     }
 
     /// Whether the provider manages its own conversation context (e.g. CLI

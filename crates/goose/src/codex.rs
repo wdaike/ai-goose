@@ -49,6 +49,14 @@ fn next_request_id() -> RequestId {
     RequestId::Integer(NEXT_REQUEST_ID.fetch_add(1, Ordering::Relaxed))
 }
 
+/// List Codex's models without holding an agent, for one-shot CLI flows.
+/// Spins up a Codex runtime for the duration of the call.
+pub async fn list_models() -> Result<Vec<CodexModel>> {
+    CodexAgentCore::new(Arc::new(OnceCell::new()))
+        .list_models()
+        .await
+}
+
 pub fn run<F, Fut>(main_fn: F) -> Result<()>
 where
     F: FnOnce() -> Fut + Send + 'static,

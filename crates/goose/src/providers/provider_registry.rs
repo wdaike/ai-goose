@@ -44,7 +44,7 @@ impl ProviderEntry {
     /// the agent/session layer to resolve effective limits (e.g. for custom
     /// providers that declare explicit context limits in their config).
     pub fn normalize_model_config(&self, mut model: ModelConfig) -> Result<ModelConfig> {
-        model = crate::model_config::materialize_model_config(&self.metadata.name, model)?;
+        model = crate::model_config::materialize_model_config(model)?;
 
         if model.context_limit.is_none() {
             if let Some(info) = self

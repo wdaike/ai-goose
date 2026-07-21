@@ -141,10 +141,7 @@ impl OrchestratorClient {
             .ok_or_else(|| "Provider not available".to_string())
     }
 
-    async fn parent_model_config(
-        &self,
-        provider_name: &str,
-    ) -> Result<goose_providers::model::ModelConfig, String> {
+    async fn parent_model_config(&self) -> Result<goose_providers::model::ModelConfig, String> {
         if let Some(session) = self.context.session.as_ref() {
             return self.context.model_config_for_session(&session.id).await;
         }
@@ -152,7 +149,7 @@ impl OrchestratorClient {
         let model_name = Config::global()
             .get_goose_model()
             .map_err(|_| "Could not resolve model config: missing model".to_string())?;
-        crate::model_config::model_config_from_user_config(provider_name, &model_name)
+        crate::model_config::model_config_from_user_config(&model_name)
             .map_err(|e| format!("Could not resolve model config: {e}"))
     }
 
@@ -352,7 +349,7 @@ impl OrchestratorClient {
             conversation_text
         ));
 
-        let model_config = self.parent_model_config(provider.get_name()).await?;
+        let model_config = self.parent_model_config().await?;
         let (response, _usage) = crate::model_config::complete_fast(
             provider.as_ref(),
             &model_config,
@@ -428,7 +425,7 @@ impl OrchestratorClient {
 
         let parent_provider = self.get_provider().await?;
         let extensions = self.parent_extensions();
-        let model_config = self.parent_model_config(parent_provider.get_name()).await?;
+        let model_config = self.parent_model_config().await?;
         let provider = providers::create(parent_provider.get_name(), extensions)
             .await
             .map_err(|e| format!("Failed to create provider for new agent: {}", e))?;
@@ -467,7 +464,7 @@ impl OrchestratorClient {
         if agent.provider().await.is_err() {
             if let Ok(parent_provider) = self.get_provider().await {
                 let extensions = self.parent_extensions();
-                let model_config = self.parent_model_config(parent_provider.get_name()).await?;
+                let model_config = self.parent_model_config().await?;
                 if let Ok(provider) =
                     providers::create(parent_provider.get_name(), extensions).await
                 {

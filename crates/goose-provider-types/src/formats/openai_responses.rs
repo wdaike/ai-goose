@@ -1572,7 +1572,7 @@ mod tests {
 
     #[test]
     fn test_responses_request_includes_canonical_max_output_tokens() {
-        let model_config = ModelConfig::new("gpt-5.4").with_canonical_limits("openai");
+        let model_config = ModelConfig::new("gpt-5.4").with_max_tokens(Some(128_000));
 
         let result = create_responses_request(&model_config, "You are helpful.", &[], &[]).unwrap();
 

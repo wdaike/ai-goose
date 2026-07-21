@@ -10,16 +10,12 @@ use rmcp::model::Tool;
 use serde_json::Value;
 use std::collections::HashMap;
 
-pub fn model_config_from_user_config(
-    provider_name: &str,
-    model_name: impl AsRef<str>,
-) -> Result<ModelConfig> {
+pub fn model_config_from_user_config(model_name: impl AsRef<str>) -> Result<ModelConfig> {
     let model = base_model_config_from_user_config(model_name.as_ref())?;
-    materialize_model_config(provider_name, model)
+    materialize_model_config(model)
 }
 
 pub fn model_config_from_user_config_with_session_settings(
-    provider_name: &str,
     model_name: impl AsRef<str>,
     previous: Option<&ModelConfig>,
     request_params: Option<HashMap<String, Value>>,
@@ -32,12 +28,11 @@ pub fn model_config_from_user_config_with_session_settings(
         .with_inherited_session_settings_from(previous, request_params)
         .with_default_thinking_effort(config.get_goose_thinking_effort());
 
-    Ok(model.with_canonical_limits(provider_name))
+    Ok(model)
 }
 
-pub fn materialize_model_config(provider_name: &str, model: ModelConfig) -> Result<ModelConfig> {
-    let model = materialize_model_config_inner(model, true)?;
-    Ok(model.with_canonical_limits(provider_name))
+pub fn materialize_model_config(model: ModelConfig) -> Result<ModelConfig> {
+    materialize_model_config_inner(model, true)
 }
 
 fn materialize_model_config_inner(
@@ -91,9 +86,7 @@ pub async fn get_fast_model(
     };
 
     match fast_model_name {
-        Some(name) if name != model_config.model_name => {
-            model_config_from_user_config(provider_name, name)
-        }
+        Some(name) if name != model_config.model_name => model_config_from_user_config(name),
         _ => Ok(model_config.clone()),
     }
 }

@@ -10,7 +10,7 @@ pub async fn test_provider_configuration(
     toolshim_enabled: bool,
     toolshim_model: Option<String>,
 ) -> Result<()> {
-    let model_config = crate::model_config::model_config_from_user_config(provider_name, model)?
+    let model_config = crate::model_config::model_config_from_user_config(model)?
         .with_max_tokens(Some(50))
         .with_toolshim(toolshim_enabled)
         .with_toolshim_model(toolshim_model);

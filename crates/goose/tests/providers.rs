@@ -195,10 +195,7 @@ impl ProviderFixture {
         )
         .await
         .map_err(|e| anyhow::anyhow!("{}", e))?;
-        let model_config = goose::model_config::model_config_from_user_config(
-            &config.name.to_lowercase(),
-            config.model_name,
-        )?;
+        let model_config = goose::model_config::model_config_from_user_config(config.model_name)?;
 
         let temp_dir = tempfile::tempdir()?;
         let session_manager = Arc::new(SessionManager::new(temp_dir.path().to_path_buf()));
@@ -409,9 +406,10 @@ impl ProviderFixture {
     }
 
     async fn test_image_content_support(&self) -> Result<()> {
-        let image_config = self.image_model.as_ref().map(|model| {
-            goose_providers::model::ModelConfig::new(model).with_canonical_limits(&self.name)
-        });
+        let image_config = self
+            .image_model
+            .as_ref()
+            .map(goose_providers::model::ModelConfig::new);
         let response = self
             .tool_roundtrip(
                 "Use the get_image tool and describe what you see in its result.",
@@ -430,8 +428,7 @@ impl ProviderFixture {
     async fn test_model_switch(&self) -> Result<()> {
         let default = &self.model_config.model_name;
         let alt = self.model_switch_name.as_deref().unwrap();
-        let alt_config =
-            goose_providers::model::ModelConfig::new(alt).with_canonical_limits(&self.name);
+        let alt_config = goose_providers::model::ModelConfig::new(alt);
 
         let message = Message::user().with_text("Just say hello!");
         let (response, _) = goose::session_context::with_session_id(

@@ -2285,7 +2285,6 @@ impl GooseAcpAgent {
         let model = model_name.unwrap_or(&default_model);
         let model_config =
             crate::model_config::model_config_from_user_config_with_session_settings(
-                &resolved_provider_name,
                 model,
                 Some(&current_model_config),
                 request_params,

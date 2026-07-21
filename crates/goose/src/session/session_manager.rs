@@ -575,10 +575,7 @@ impl SessionManager {
                         .map_err(|_| {
                             anyhow::anyhow!("Could not resolve model config: missing model")
                         })?;
-                crate::model_config::model_config_from_user_config(
-                    provider.get_name(),
-                    &model_name,
-                )?
+                crate::model_config::model_config_from_user_config(&model_name)?
             }
         };
         let conversation = session

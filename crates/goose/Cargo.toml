@@ -223,10 +223,6 @@ name = "analyze_cli"
 path = "src/bin/analyze_cli.rs"
 
 [[bin]]
-name = "build_canonical_models"
-path = "src/bin/build_canonical_models.rs"
-
-[[bin]]
 name = "generate-acp-schema"
 path = "src/bin/generate_acp_schema.rs"
 
