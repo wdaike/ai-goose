@@ -18,7 +18,7 @@ pub use self::export::message_to_markdown;
 pub use builder::{build_session, SessionBuilderConfig};
 use console::Color;
 use goose::agents::AgentEvent;
-use goose_providers::conversation::token_usage::ProviderUsage;
+use goose_types::conversation::token_usage::ProviderUsage;
 
 use anyhow::Result;
 use completion::GooseCompleter;
@@ -45,7 +45,6 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio;
 use tokio_util::sync::CancellationToken;
-use tracing::warn;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct JsonOutput {
@@ -757,7 +756,7 @@ impl CliSession {
             .session_manager
             .update(&self.session_id)
             .provider_name("codex")
-            .model_config(goose_providers::model::ModelConfig::new(model_name))
+            .model_config(goose_types::model::ModelConfig::new(model_name))
             .apply()
             .await?;
         output::goose_mode_message(&format!(
@@ -1668,25 +1667,6 @@ fn handle_agent_error(e: &anyhow::Error, is_stream_json_mode: bool) {
         emit_stream_event(&StreamEvent::Error {
             error: error_msg.clone(),
         });
-    }
-
-    if e.downcast_ref::<goose_providers::errors::ProviderError>()
-        .map(|provider_error| {
-            matches!(
-                provider_error,
-                goose_providers::errors::ProviderError::ContextLengthExceeded(_)
-            )
-        })
-        .unwrap_or(false)
-    {
-        if !is_stream_json_mode {
-            output::render_text(
-                "Compaction requested. Should have happened in the agent!",
-                Some(Color::Yellow),
-                true,
-            );
-        }
-        warn!("Compaction requested. Should have happened in the agent!");
     }
 
     if !is_stream_json_mode {

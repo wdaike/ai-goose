@@ -12,21 +12,122 @@
 //! - `turn_context`, `compacted`, … — metadata, skipped.
 //!
 //! Assistant-side `response_item` payloads (`message` with `role:"assistant"`,
-//! `reasoning`, `function_call`) reuse the existing OpenAI Responses API
-//! types from `providers::formats::openai_responses` — so we get argument
-//! parsing, reasoning summary handling, and schema validation for free.
-//! User-side items (`message` with `role:"user"`, `function_call_output`,
-//! `web_search_call`) are rollout-specific and handled locally.
+//! `reasoning`, `function_call`) share the OpenAI Responses item shape, which
+//! [`ResponseOutputItem`] models. User-side items (`message` with
+//! `role:"user"`, `function_call_output`, `web_search_call`) are
+//! rollout-specific and handled locally.
 
 use anyhow::{anyhow, Result};
 use chrono::{DateTime, Utc};
 use rmcp::model::{CallToolRequestParams, CallToolResult, Content};
 use serde_json::{json, Map, Value};
 
-use crate::conversation::message::Message;
+use crate::conversation::message::{Message, MessageContent};
 use crate::conversation::Conversation;
-use goose_providers::conversation::token_usage::Usage;
-use goose_providers::formats::openai_responses::{ResponseOutputItem, ResponsesApiResponse};
+use goose_types::conversation::token_usage::Usage;
+use serde::Deserialize;
+
+#[derive(Debug, Deserialize)]
+struct SummaryText {
+    text: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(tag = "type")]
+#[serde(rename_all = "snake_case")]
+enum ResponseOutputItem {
+    Reasoning {
+        #[serde(default)]
+        summary: Vec<SummaryText>,
+    },
+    Message {
+        content: Vec<ResponseContentBlock>,
+    },
+    FunctionCall {
+        #[serde(default)]
+        id: Option<String>,
+        #[serde(default)]
+        call_id: Option<String>,
+        name: String,
+        arguments: String,
+    },
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(tag = "type")]
+#[serde(rename_all = "snake_case")]
+enum ResponseContentBlock {
+    OutputText {
+        text: String,
+    },
+    Refusal {
+        refusal: String,
+    },
+    ToolCall {
+        id: String,
+        name: String,
+        input: Value,
+    },
+}
+
+/// Decode one assistant-side rollout item into message content.
+fn item_content(item: &ResponseOutputItem) -> Vec<MessageContent> {
+    match item {
+        ResponseOutputItem::Reasoning { summary } => {
+            let text = summary
+                .iter()
+                .map(|s| s.text.as_str())
+                .collect::<Vec<_>>()
+                .join("\n");
+            if text.is_empty() {
+                Vec::new()
+            } else {
+                vec![MessageContent::thinking(text, "")]
+            }
+        }
+        ResponseOutputItem::Message { content } => content
+            .iter()
+            .filter_map(|block| match block {
+                ResponseContentBlock::OutputText { text } if !text.is_empty() => {
+                    Some(MessageContent::text(text))
+                }
+                ResponseContentBlock::Refusal { refusal } if !refusal.is_empty() => {
+                    Some(MessageContent::text(refusal))
+                }
+                ResponseContentBlock::ToolCall { id, name, input } => {
+                    Some(MessageContent::tool_request(
+                        id.clone(),
+                        Ok(CallToolRequestParams::new(name.clone())
+                            .with_arguments(as_object(input.clone()))),
+                    ))
+                }
+                _ => None,
+            })
+            .collect(),
+        ResponseOutputItem::FunctionCall {
+            id,
+            call_id,
+            name,
+            arguments,
+        } => {
+            let Some(request_id) = call_id.clone().or_else(|| id.clone()) else {
+                return Vec::new();
+            };
+            let parsed = serde_json::from_str(arguments).unwrap_or_else(|_| json!({}));
+            vec![MessageContent::tool_request(
+                request_id,
+                Ok(CallToolRequestParams::new(name.clone()).with_arguments(as_object(parsed))),
+            )]
+        }
+    }
+}
+
+fn as_object(value: Value) -> Map<String, Value> {
+    match value {
+        Value::Object(map) => map,
+        _ => Map::new(),
+    }
+}
 
 pub fn convert(content: &str) -> Result<String> {
     let lines: Vec<Value> = content
@@ -134,30 +235,13 @@ pub fn convert(content: &str) -> Result<String> {
         }
 
         if let Ok(item) = serde_json::from_value::<ResponseOutputItem>(payload.clone()) {
-            // Wrap the single item in a stub `ResponsesApiResponse` so we can
-            // reuse the existing decoder without duplicating its logic.
-            let stub = ResponsesApiResponse {
-                id: session_id.clone(),
-                object: "response".to_string(),
-                created_at: created,
-                status: "completed".to_string(),
-                model: String::new(),
-                output: vec![item],
-                reasoning: None,
-                usage: None,
-            };
-            if let Ok(decoded) =
-                goose_providers::formats::openai_responses::responses_api_to_message(&stub)
-            {
-                if !decoded.content.is_empty() {
-                    let mut msg = Message::assistant();
-                    msg.created = created;
-                    for c in decoded.content {
-                        msg.content.push(c);
-                    }
-                    messages.push(msg);
-                    continue;
-                }
+            let content = item_content(&item);
+            if !content.is_empty() {
+                let mut msg = Message::assistant();
+                msg.created = created;
+                msg.content = content;
+                messages.push(msg);
+                continue;
             }
         }
 

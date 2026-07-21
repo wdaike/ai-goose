@@ -10,8 +10,8 @@ use agent_client_protocol::schema::v1::{
     SessionModeId, SessionModeState, SessionNotification, SessionUpdate, UnstructuredCommandInput,
 };
 use agent_client_protocol::{Client, ConnectionTo};
-use goose_providers::model::ModelConfig;
-use goose_providers::thinking::ThinkingEffort;
+use goose_types::model::ModelConfig;
+use goose_types::thinking::ThinkingEffort;
 use serde::Serialize;
 use strum::{EnumMessage, VariantNames};
 
@@ -118,6 +118,9 @@ pub(super) struct ModelOption {
 pub(super) struct ModelSelection {
     pub current_model_id: String,
     pub available_models: Vec<ModelOption>,
+    /// Reasoning efforts Codex reports for the current model. Empty when the
+    /// model does not support extended thinking.
+    pub supported_reasoning_efforts: Vec<ThinkingEffort>,
 }
 
 pub(super) fn build_model_state(current_model: &str, models: &[CodexModel]) -> ModelSelection {
@@ -140,9 +143,22 @@ pub(super) fn build_model_state(current_model: &str, models: &[CodexModel]) -> M
             },
         );
     }
+    let supported_reasoning_efforts = models
+        .iter()
+        .find(|model| model.id == current_model)
+        .map(|model| {
+            model
+                .supported_reasoning_efforts
+                .iter()
+                .filter_map(|effort| effort.parse().ok())
+                .collect()
+        })
+        .unwrap_or_default();
+
     ModelSelection {
         current_model_id: current_model.to_string(),
         available_models,
+        supported_reasoning_efforts,
     }
 }
 
@@ -197,14 +213,14 @@ pub(super) fn build_config_options(
         .iter()
         .map(|m| SessionConfigSelectOption::new(m.id.clone(), m.name.clone()))
         .collect();
-    let thinking_effort_options = thinking_effort_values(model_config)
+    let thinking_effort_options = thinking_effort_values(model_state)
         .iter()
         .map(|effort| {
             let effort = effort.to_string();
             SessionConfigSelectOption::new(effort.clone(), effort)
         })
         .collect::<Vec<_>>();
-    let current_thinking_effort = current_thinking_effort_value(model_config);
+    let current_thinking_effort = current_thinking_effort_value(model_state, model_config);
     vec![
         SessionConfigOption::select(
             "mode",
@@ -231,30 +247,26 @@ pub(super) fn build_config_options(
     ]
 }
 
-fn thinking_effort_values(model_config: &ModelConfig) -> &'static [ThinkingEffort] {
-    if model_config.is_reasoning_model() {
-        &[
-            ThinkingEffort::Off,
-            ThinkingEffort::Low,
-            ThinkingEffort::Medium,
-            ThinkingEffort::High,
-            ThinkingEffort::Max,
-        ]
+fn thinking_effort_values(model_state: &ModelSelection) -> Vec<ThinkingEffort> {
+    if model_state.supported_reasoning_efforts.is_empty() {
+        vec![ThinkingEffort::Off]
     } else {
-        &[ThinkingEffort::Off]
+        model_state.supported_reasoning_efforts.clone()
     }
 }
 
-fn current_thinking_effort_value(model_config: &ModelConfig) -> String {
-    if model_config.is_reasoning_model() {
-        model_config
-            .thinking_effort()
-            .or_else(|| Config::global().get_goose_thinking_effort())
-            .map(|effort| effort.to_string())
-            .unwrap_or_else(|| "off".to_string())
-    } else {
-        "off".to_string()
+fn current_thinking_effort_value(
+    model_state: &ModelSelection,
+    model_config: &ModelConfig,
+) -> String {
+    if model_state.supported_reasoning_efforts.is_empty() {
+        return "off".to_string();
     }
+    model_config
+        .thinking_effort()
+        .or_else(|| Config::global().get_goose_thinking_effort())
+        .map(|effort| effort.to_string())
+        .unwrap_or_else(|| "off".to_string())
 }
 
 fn slash_command_meta(entry: &SlashCommandEntry) -> serde_json::Map<String, serde_json::Value> {
@@ -345,6 +357,18 @@ mod tests {
                     name: m.to_string(),
                 })
                 .collect(),
+            supported_reasoning_efforts: Vec::new(),
+        }
+    }
+
+    fn reasoning_model_selection(current: &str) -> ModelSelection {
+        ModelSelection {
+            supported_reasoning_efforts: vec![
+                ThinkingEffort::Off,
+                ThinkingEffort::Low,
+                ThinkingEffort::High,
+            ],
+            ..model_selection(current, &[current])
         }
     }
 
@@ -524,7 +548,7 @@ mod tests {
     #[test]
     fn test_build_config_options_uses_current_thinking_effort() {
         let mode_state = build_mode_state(GooseMode::Auto).unwrap();
-        let model_state = model_selection("claude-sonnet-4", &["claude-sonnet-4"]);
+        let model_state = reasoning_model_selection("claude-sonnet-4");
         let model_config = ModelConfig::new("claude-sonnet-4").with_merged_request_params(
             std::collections::HashMap::from([(
                 "thinking_effort".to_string(),
@@ -546,7 +570,7 @@ mod tests {
     }
 
     #[test]
-    fn test_build_config_options_masks_non_reasoning_thinking_effort() {
+    fn test_build_config_options_masks_thinking_effort_when_model_has_none() {
         let mode_state = build_mode_state(GooseMode::Auto).unwrap();
         let model_state = model_selection("gpt-4", &["gpt-4"]);
         let mut model_config =

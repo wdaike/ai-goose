@@ -26,7 +26,7 @@ use codex_core_api::{
 };
 use codex_feedback::CodexFeedback;
 use futures::stream::BoxStream;
-use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
+use goose_types::conversation::token_usage::{ProviderUsage, Usage};
 use rmcp::model::{CallToolRequestParams, CallToolResult, Content};
 use serde::{Deserialize, Serialize};
 use tokio::sync::{broadcast, Mutex, OnceCell};

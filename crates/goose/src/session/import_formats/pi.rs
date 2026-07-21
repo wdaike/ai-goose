@@ -16,7 +16,7 @@ use serde_json::{json, Map, Value};
 
 use crate::conversation::message::Message;
 use crate::conversation::Conversation;
-use goose_providers::conversation::token_usage::Usage;
+use goose_types::conversation::token_usage::Usage;
 
 pub fn convert(content: &str) -> Result<String> {
     let mut lines = content.lines().filter(|l| !l.trim().is_empty());

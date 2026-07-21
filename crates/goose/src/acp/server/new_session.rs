@@ -172,7 +172,7 @@ impl GooseAcpAgent {
         if let Some(model) = config.model {
             builder = builder
                 .provider_name("codex")
-                .model_config(goose_providers::model::ModelConfig::new(model));
+                .model_config(goose_types::model::ModelConfig::new(model));
         }
         if let Some(recipe) = config.recipe {
             builder = builder.recipe(Some(recipe));

@@ -401,7 +401,7 @@ pub async fn build_session(session_config: SessionBuilderConfig) -> CliSession {
         .and_then(|session| session.provider_name);
     let mut update = session_manager.update(&session_id).provider_name("codex");
     if let Some(model) = requested_model {
-        update = update.model_config(goose_providers::model::ModelConfig::new(model));
+        update = update.model_config(goose_types::model::ModelConfig::new(model));
     } else if previous_provider.as_deref() != Some("codex") {
         update = update.clear_model_config();
     }

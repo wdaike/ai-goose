@@ -19,7 +19,7 @@ use crate::conversation::Conversation;
 use crate::recipe::Response;
 use crate::session::extension_data::{EnabledExtensionsState, ExtensionState};
 use crate::session::{Session, SessionManager, SessionNameUpdate};
-use goose_providers::thinking::ThinkingEffort;
+use goose_types::thinking::ThinkingEffort;
 use rmcp::model::{GetPromptResult, Prompt, ServerNotification, Tool};
 use serde_json::Value;
 use tokio::sync::{mpsc, Mutex};
@@ -125,7 +125,7 @@ pub struct Agent {
 #[derive(Clone, Debug)]
 pub enum AgentEvent {
     Message(Message),
-    Usage(goose_providers::conversation::token_usage::ProviderUsage),
+    Usage(goose_types::conversation::token_usage::ProviderUsage),
     MessageUsage {
         message_id: Option<String>,
         usage: MessageUsage,
@@ -274,7 +274,7 @@ impl Agent {
         self.config
             .session_manager
             .update(session_id)
-            .usage(goose_providers::conversation::token_usage::Usage::new(
+            .usage(goose_types::conversation::token_usage::Usage::new(
                 Some(0),
                 Some(0),
                 Some(0),
@@ -292,7 +292,7 @@ impl Agent {
     pub async fn model_config_for_session(
         &self,
         session_id: &str,
-    ) -> Result<goose_providers::model::ModelConfig> {
+    ) -> Result<goose_types::model::ModelConfig> {
         if let Ok(session) = self
             .config
             .session_manager
@@ -485,7 +485,7 @@ impl Agent {
     pub async fn set_session_model(
         &self,
         provider_name: &str,
-        model_config: goose_providers::model::ModelConfig,
+        model_config: goose_types::model::ModelConfig,
         session_id: &str,
     ) -> Result<()> {
         self.config

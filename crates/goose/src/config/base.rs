@@ -1,7 +1,7 @@
 use crate::config::paths::Paths;
 use crate::config::GooseMode;
 use fs2::FileExt;
-use goose_providers::thinking::ThinkingEffort;
+use goose_types::thinking::ThinkingEffort;
 #[cfg(feature = "system-keyring")]
 use keyring::Entry;
 use once_cell::sync::OnceCell;

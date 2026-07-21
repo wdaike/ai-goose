@@ -23,7 +23,7 @@ path = "src/bin/generate_manpages.rs"
 clap_mangen = { version = "0.3", default-features = false }
 goose = { path = "../goose", default-features = false }
 goose-mcp = { path = "../goose-mcp", default-features = false }
-goose-providers = { path = "../goose-providers", default-features = false }
+goose-types = { path = "../goose-types", default-features = false }
 rmcp = { workspace = true }
 clap = { workspace = true }
 cliclack = { version = "0.5", default-features = false }
@@ -105,7 +105,6 @@ rustls-tls = [
     "sigstore-verify?/rustls",
     "goose/rustls-tls",
     "goose-mcp/rustls-tls",
-    "goose-providers/rustls-tls",
 ]
 native-tls = [
     "dep:axum-server",
@@ -114,7 +113,6 @@ native-tls = [
     "sigstore-verify?/native-tls",
     "goose/native-tls",
     "goose-mcp/native-tls",
-    "goose-providers/native-tls",
 ]
 
 [dev-dependencies]

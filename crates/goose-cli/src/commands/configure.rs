@@ -17,7 +17,7 @@ use goose::config::{
 #[cfg(feature = "telemetry")]
 use goose::posthog::{get_telemetry_choice, TELEMETRY_ENABLED_KEY};
 use goose::session::SessionType;
-use goose_providers::thinking::ThinkingEffort;
+use goose_types::thinking::ThinkingEffort;
 use serde_json::Value;
 use std::collections::HashMap;
 use std::io::{IsTerminal, Write};

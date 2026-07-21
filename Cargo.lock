@@ -7079,9 +7079,9 @@ dependencies = [
  "goose-acp-macros",
  "goose-download-manager",
  "goose-mcp",
- "goose-providers",
  "goose-sdk-types",
  "goose-test-support",
+ "goose-types",
  "http 1.4.2",
  "ignore",
  "image 0.24.9",
@@ -7203,7 +7203,7 @@ dependencies = [
  "futures",
  "goose",
  "goose-mcp",
- "goose-providers",
+ "goose-types",
  "indicatif",
  "open",
  "rand 0.10.2",
@@ -7276,54 +7276,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "goose-provider-types"
-version = "0.1.0-alpha.0"
-dependencies = [
- "anyhow",
- "async-stream",
- "async-trait",
- "base64 0.22.1",
- "chrono",
- "env-lock",
- "futures",
- "once_cell",
- "rand 0.10.2",
- "regex",
- "reqwest 0.13.4",
- "rmcp",
- "serde",
- "serde_json",
- "strum 0.28.0",
- "tempfile",
- "test-case",
- "thiserror 2.0.18",
- "tokio",
- "tokio-stream",
- "tracing",
- "unicode-normalization",
- "utoipa",
- "uuid",
-]
-
-[[package]]
-name = "goose-providers"
-version = "0.1.0-alpha.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "chrono",
- "goose-provider-types",
- "reqwest 0.13.4",
- "rmcp",
- "serde_json",
- "test-case",
- "tokio",
- "tracing",
- "url",
- "wiremock",
-]
-
-[[package]]
 name = "goose-sdk-types"
 version = "0.1.0-alpha.0"
 dependencies = [
@@ -7352,6 +7304,36 @@ dependencies = [
  "rmcp",
  "serde_json",
  "tokio",
+]
+
+[[package]]
+name = "goose-types"
+version = "0.1.0-alpha.0"
+dependencies = [
+ "anyhow",
+ "async-stream",
+ "async-trait",
+ "base64 0.22.1",
+ "chrono",
+ "env-lock",
+ "futures",
+ "once_cell",
+ "rand 0.10.2",
+ "regex",
+ "reqwest 0.13.4",
+ "rmcp",
+ "serde",
+ "serde_json",
+ "strum 0.28.0",
+ "tempfile",
+ "test-case",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-stream",
+ "tracing",
+ "unicode-normalization",
+ "utoipa",
+ "uuid",
 ]
 
 [[package]]

@@ -1,4 +1,3 @@
-use crate::formats::openai::is_openai_responses_model;
 use crate::thinking::ThinkingEffort;
 use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};
@@ -187,25 +186,6 @@ impl ModelConfig {
         self.context_limit.unwrap_or(DEFAULT_CONTEXT_LIMIT)
     }
 
-    pub fn is_openai_reasoning_model(&self) -> bool {
-        is_openai_responses_model(&self.model_name)
-    }
-
-    pub fn is_reasoning_model(&self) -> bool {
-        if let Some(reasoning) = self.reasoning {
-            return reasoning;
-        }
-
-        self.is_openai_reasoning_model()
-            || self.model_name.to_lowercase().contains("claude")
-            || Self::is_gemini3_reasoning_model_name(&self.model_name)
-    }
-
-    fn is_gemini3_reasoning_model_name(model_name: &str) -> bool {
-        let lower = model_name.to_lowercase();
-        lower.starts_with("gemini-3") || lower.contains("/gemini-3") || lower.contains("-gemini-3")
-    }
-
     pub fn max_output_tokens(&self) -> i32 {
         if let Some(tokens) = self.max_tokens {
             return tokens;
@@ -214,10 +194,9 @@ impl ModelConfig {
         4_096
     }
 
+    /// Split a trailing effort suffix (`gpt-5-high`) off the model name and
+    /// record it as the thinking effort.
     pub fn normalize_effort_suffix(&mut self) {
-        if !self.is_openai_reasoning_model() {
-            return;
-        }
         let parts: Vec<&str> = self.model_name.split('-').collect();
         let last = match parts.last() {
             Some(l) => *l,
@@ -464,7 +443,7 @@ mod tests {
         }
 
         #[test]
-        fn non_reasoning_model_suffix_not_stripped() {
+        fn effort_suffix_stripped_for_any_model() {
             let _guard = env_lock::lock_env([
                 ("GOOSE_THINKING_EFFORT", None::<&str>),
                 ("GOOSE_MAX_TOKENS", None::<&str>),
@@ -474,7 +453,8 @@ mod tests {
                 ("GOOSE_TOOLSHIM_OLLAMA_MODEL", None::<&str>),
             ]);
             let config = ModelConfig::new("claude-sonnet-4-high");
-            assert_eq!(config.model_name, "claude-sonnet-4-high");
+            assert_eq!(config.model_name, "claude-sonnet-4");
+            assert_eq!(config.thinking_effort(), Some(ThinkingEffort::High));
         }
 
         #[test]
@@ -488,88 +468,6 @@ mod tests {
             assert_eq!("max".parse::<ThinkingEffort>(), Ok(ThinkingEffort::Max));
             assert_eq!("xhigh".parse::<ThinkingEffort>(), Ok(ThinkingEffort::Max));
             assert!("invalid".parse::<ThinkingEffort>().is_err());
-        }
-    }
-
-    mod is_openai_reasoning_model {
-        use super::*;
-
-        const ENV_LOCK_KEYS: [(&str, Option<&str>); 5] = [
-            ("GOOSE_MAX_TOKENS", None),
-            ("GOOSE_TEMPERATURE", None),
-            ("GOOSE_CONTEXT_LIMIT", None),
-            ("GOOSE_TOOLSHIM", None),
-            ("GOOSE_TOOLSHIM_OLLAMA_MODEL", None),
-        ];
-
-        #[test]
-        fn bare_reasoning_models() {
-            let _guard = env_lock::lock_env(ENV_LOCK_KEYS);
-            assert!(ModelConfig::new("o1").is_openai_reasoning_model());
-            assert!(ModelConfig::new("o1-preview").is_openai_reasoning_model());
-            assert!(ModelConfig::new("o3").is_openai_reasoning_model());
-            assert!(ModelConfig::new("o3-mini").is_openai_reasoning_model());
-            assert!(ModelConfig::new("o4-mini").is_openai_reasoning_model());
-            assert!(ModelConfig::new("gpt-5").is_openai_reasoning_model());
-            assert!(ModelConfig::new("gpt-5-3-codex").is_openai_reasoning_model());
-        }
-
-        #[test]
-        fn goose_prefixed_reasoning_models() {
-            let _guard = env_lock::lock_env(ENV_LOCK_KEYS);
-            assert!(ModelConfig::new("goose-o3-mini").is_openai_reasoning_model());
-            assert!(ModelConfig::new("goose-o4-mini").is_openai_reasoning_model());
-            assert!(ModelConfig::new("goose-gpt-5").is_openai_reasoning_model());
-        }
-
-        #[test]
-        fn databricks_prefixed_reasoning_models() {
-            let _guard = env_lock::lock_env(ENV_LOCK_KEYS);
-            assert!(ModelConfig::new("databricks-o3-mini").is_openai_reasoning_model());
-            assert!(ModelConfig::new("databricks-o4-mini").is_openai_reasoning_model());
-            assert!(ModelConfig::new("databricks-gpt-5").is_openai_reasoning_model());
-        }
-
-        #[test]
-        fn non_reasoning_models() {
-            let _guard = env_lock::lock_env(ENV_LOCK_KEYS);
-            assert!(!ModelConfig::new("claude-sonnet-4").is_openai_reasoning_model());
-            assert!(!ModelConfig::new("gpt-4o").is_openai_reasoning_model());
-            assert!(!ModelConfig::new("databricks-claude-sonnet-4").is_openai_reasoning_model());
-            assert!(!ModelConfig::new("goose-claude-sonnet-4").is_openai_reasoning_model());
-            assert!(!ModelConfig::new("llama-3-70b").is_openai_reasoning_model());
-        }
-    }
-
-    mod is_reasoning_model {
-        use super::*;
-
-        const ENV_LOCK_KEYS: [(&str, Option<&str>); 5] = [
-            ("GOOSE_MAX_TOKENS", None),
-            ("GOOSE_TEMPERATURE", None),
-            ("GOOSE_CONTEXT_LIMIT", None),
-            ("GOOSE_TOOLSHIM", None),
-            ("GOOSE_TOOLSHIM_OLLAMA_MODEL", None),
-        ];
-
-        #[test]
-        fn includes_reasoning_model_families() {
-            let _guard = env_lock::lock_env(ENV_LOCK_KEYS);
-            assert!(ModelConfig::new("o3-mini").is_reasoning_model());
-            assert!(ModelConfig::new("claude-sonnet-4").is_reasoning_model());
-            assert!(ModelConfig::new("gemini-3-pro").is_reasoning_model());
-        }
-
-        #[test]
-        fn uses_explicit_metadata_first() {
-            let _guard = env_lock::lock_env(ENV_LOCK_KEYS);
-            let mut config = ModelConfig::new("provider-alias");
-            config.reasoning = Some(true);
-            assert!(config.is_reasoning_model());
-
-            let mut config = ModelConfig::new("claude-sonnet-4");
-            config.reasoning = Some(false);
-            assert!(!config.is_reasoning_model());
         }
     }
 }

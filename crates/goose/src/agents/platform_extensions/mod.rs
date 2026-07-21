@@ -136,7 +136,7 @@ impl PlatformExtensionContext {
     pub async fn model_config_for_session(
         &self,
         session_id: &str,
-    ) -> Result<goose_providers::model::ModelConfig, String> {
+    ) -> Result<goose_types::model::ModelConfig, String> {
         if let Ok(session) = self.session_manager.get_session(session_id, false).await {
             if let Some(model_config) = session.model_config {
                 return Ok(model_config);

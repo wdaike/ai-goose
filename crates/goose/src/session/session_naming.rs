@@ -1,6 +1,6 @@
 use std::sync::LazyLock;
 
-use goose_providers::conversation::Conversation;
+use goose_types::conversation::Conversation;
 use regex::Regex;
 
 use crate::utils::safe_truncate;
@@ -48,7 +48,7 @@ pub(crate) fn generate_session_name(messages: &Conversation) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use goose_providers::conversation::message::Message;
+    use goose_types::conversation::message::Message;
 
     #[test]
     fn test_strip_xml_tags() {

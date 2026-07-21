@@ -33,7 +33,6 @@ rustls-tls = [
     "jsonwebtoken/aws_lc_rs",
     "oauth2/reqwest",
     "oauth2/rustls-tls",
-    "goose-providers/rustls-tls",
 ]
 native-tls = [
     "dep:rcgen",
@@ -50,7 +49,6 @@ native-tls = [
     "jsonwebtoken/rust_crypto",
     "oauth2/reqwest",
     "oauth2/native-tls",
-    "goose-providers/native-tls",
 ]
 system-keyring = ["dep:keyring"]
 portable-default = ["rustls-tls", "telemetry", "otel"]
@@ -112,7 +110,7 @@ strum = { workspace = true }
 once_cell = { workspace = true }
 etcetera = { workspace = true }
 fs-err = { version = "3.1", default-features = false }
-goose-providers = { path = "../goose-providers", default-features = false }
+goose-types = { path = "../goose-types", default-features = false }
 goose-download-manager = { path = "../goose-download-manager" }
 goose-sdk-types = { path = "../goose-sdk-types" }
 rand = { workspace = true }

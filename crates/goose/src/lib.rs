@@ -13,7 +13,7 @@ pub mod codex;
 pub mod config;
 pub mod conversation_format;
 pub mod conversation {
-    pub use goose_providers::conversation::*;
+    pub use goose_types::conversation::*;
 }
 pub mod download_manager;
 pub mod elicitation;

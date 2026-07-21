@@ -2,7 +2,7 @@ use crate::config::paths::Paths;
 use crate::config::GooseMode;
 use crate::conversation::message::{Message, MessageUsage, TokenState};
 use crate::conversation::Conversation;
-use goose_providers::conversation::token_usage::CostSource;
+use goose_types::conversation::token_usage::CostSource;
 
 use crate::recipe::Recipe;
 use crate::session::extension_data::ExtensionData;
@@ -11,8 +11,8 @@ use crate::session::session_naming::{
 };
 use anyhow::Result;
 use chrono::{DateTime, TimeZone, Utc};
-use goose_providers::conversation::token_usage::Usage;
-use goose_providers::model::ModelConfig;
+use goose_types::conversation::token_usage::Usage;
+use goose_types::model::ModelConfig;
 use rmcp::model::Role;
 use serde::{Deserialize, Serialize};
 use sqlx::sqlite::{SqliteConnectOptions, SqlitePoolOptions};
@@ -2528,7 +2528,7 @@ fn merge_tool_meta(
 mod tests {
     use super::*;
     use crate::conversation::message::{Message, MessageContent};
-    use goose_providers::conversation::token_usage::CostSource;
+    use goose_types::conversation::token_usage::CostSource;
     use tempfile::TempDir;
     use test_case::test_case;
 

@@ -1,5 +1,5 @@
 use super::*;
-use goose_providers::thinking::ThinkingEffort;
+use goose_types::thinking::ThinkingEffort;
 
 const SECRET_MASK_SHOW_LEN: usize = 8;
 

@@ -2052,7 +2052,7 @@ impl GooseAcpAgent {
         self.session_manager
             .update(session_id)
             .provider_name("codex")
-            .model_config(goose_providers::model::ModelConfig::new(model_id))
+            .model_config(goose_types::model::ModelConfig::new(model_id))
             .apply()
             .await
             .internal_err_ctx("Failed to update model")?;
@@ -2113,7 +2113,7 @@ impl GooseAcpAgent {
         effort_id: &str,
     ) -> Result<(), agent_client_protocol::Error> {
         let effort = effort_id
-            .parse::<goose_providers::thinking::ThinkingEffort>()
+            .parse::<goose_types::thinking::ThinkingEffort>()
             .map_err(|_| {
                 agent_client_protocol::Error::invalid_params()
                     .data(format!("Invalid thinking effort: {}", effort_id))
@@ -2301,7 +2301,7 @@ mod tests {
         EnvVariable, HttpHeader, McpServer, McpServerHttp, McpServerSse, McpServerStdio,
         ResourceLink,
     };
-    use goose_providers::conversation::token_usage::Usage as TokenUsage;
+    use goose_types::conversation::token_usage::Usage as TokenUsage;
     use rmcp::model::{CallToolRequestParams, Content as RmcpContent};
     use std::io::Write;
     use std::path::PathBuf;
@@ -2873,8 +2873,7 @@ print(\"hello, world\")
             TokenUsage::default(),
         );
         session.model_config = Some(
-            goose_providers::model::ModelConfig::new("test-model")
-                .with_context_limit(Some(258_000)),
+            goose_types::model::ModelConfig::new("test-model").with_context_limit(Some(258_000)),
         );
         let totals = SessionUsageTotals {
             accumulated_usage: session.accumulated_usage,

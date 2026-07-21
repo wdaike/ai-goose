@@ -1,6 +1,6 @@
 use crate::config::{Config, ConfigError};
 use anyhow::{anyhow, Result};
-use goose_providers::model::ModelConfig;
+use goose_types::model::ModelConfig;
 use serde_json::Value;
 use std::collections::HashMap;
 
