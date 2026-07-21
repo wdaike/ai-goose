@@ -196,13 +196,6 @@ impl GooseAcpAgent {
             (!model.is_empty()).then_some(model)
         });
 
-        crate::providers::get_from_registry(&provider_id)
-            .await
-            .map_err(|_| {
-                agent_client_protocol::Error::invalid_params()
-                    .data(format!("Unknown provider: {provider_id}"))
-            })?;
-
         let config = self.config()?;
         let model = model_id.clone().unwrap_or_else(|| {
             crate::config::get_provider_entry(config, &provider_id)

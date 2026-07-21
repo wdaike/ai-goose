@@ -5,7 +5,6 @@ pub(super) use crate::acp::response_builder::{
     build_session_setup_config, send_session_setup_notifications, session_meta,
     session_response_meta,
 };
-use crate::acp::PermissionDecision;
 use crate::agents::extension::{Envs, PLATFORM_EXTENSIONS};
 use crate::agents::extension_manager::TRUSTED_TOOL_UPDATE_META_KEY;
 use crate::agents::mcp_client::GooseMcpHostInfo;
@@ -23,9 +22,6 @@ use crate::conversation::message::{
 };
 use crate::execution::manager::{AgentManager, AgentManagerGetResult, RuntimeContext};
 use crate::mcp_utils::ToolResult;
-use crate::permission::permission_confirmation::PrincipalType;
-use crate::permission::{Permission, PermissionConfirmation};
-use crate::providers::codex::CODEX_DEFAULT_MODEL;
 use crate::scheduler_trait::SchedulerTrait;
 use crate::session::session_manager::SessionUsageTotals;
 use crate::session::{
@@ -40,14 +36,13 @@ use agent_client_protocol::schema::v1::{
     EmbeddedResource, EmbeddedResourceResource, FileSystemCapabilities, ForkSessionRequest,
     ForkSessionResponse, ImageContent, Implementation, InitializeRequest, InitializeResponse,
     ListSessionsRequest, ListSessionsResponse, LoadSessionRequest, LoadSessionResponse,
-    McpCapabilities, McpServer, Meta, NewSessionRequest, NewSessionResponse, PermissionOption,
-    PermissionOptionKind, PromptCapabilities, PromptRequest, PromptResponse,
-    RequestPermissionOutcome, RequestPermissionRequest, ResourceLink, SessionCapabilities,
-    SessionCloseCapabilities, SessionConfigOption, SessionId, SessionInfoUpdate,
-    SessionListCapabilities, SessionNotification, SessionUpdate, SetSessionConfigOptionRequest,
+    McpCapabilities, McpServer, Meta, NewSessionRequest, NewSessionResponse, PromptCapabilities,
+    PromptRequest, PromptResponse, ResourceLink, SessionCapabilities, SessionCloseCapabilities,
+    SessionConfigOption, SessionId, SessionInfoUpdate, SessionListCapabilities,
+    SessionNotification, SessionUpdate, SetSessionConfigOptionRequest,
     SetSessionConfigOptionResponse, SetSessionModeRequest, SetSessionModeResponse, StopReason,
     TextContent, TextResourceContents, ToolCall, ToolCallContent, ToolCallId, ToolCallLocation,
-    ToolCallStatus, ToolCallUpdate, ToolCallUpdateFields, ToolKind, Usage, UsageUpdate,
+    ToolCallStatus, ToolCallUpdate, ToolCallUpdateFields, Usage, UsageUpdate,
 };
 use agent_client_protocol::util::MatchDispatchFrom;
 use agent_client_protocol::{
@@ -67,7 +62,7 @@ use std::sync::Arc;
 use tokio::sync::{Mutex, OnceCell};
 use tokio_util::compat::{TokioAsyncReadCompatExt as _, TokioAsyncWriteCompatExt as _};
 use tokio_util::sync::CancellationToken;
-use tracing::{debug, error, info, warn};
+use tracing::{debug, info, warn};
 use url::Url;
 use uuid::Uuid;
 
@@ -1077,7 +1072,7 @@ impl GooseAcpAgent {
         message_created: i64,
         role: &Role,
         steer: bool,
-        agent: &Arc<Agent>,
+        _agent: &Arc<Agent>,
         session: &mut GooseAcpSession,
         cx: &ConnectionTo<Client>,
     ) -> Result<(), agent_client_protocol::Error> {
@@ -1116,22 +1111,6 @@ impl GooseAcpAgent {
                 ))?;
             }
             MessageContent::ActionRequired(action_required) => match &action_required.data {
-                ActionRequiredData::ToolConfirmation {
-                    id,
-                    tool_name,
-                    arguments,
-                    prompt,
-                } => {
-                    self.handle_tool_permission_request(
-                        cx,
-                        agent,
-                        session_id,
-                        id.clone(),
-                        tool_name.clone(),
-                        arguments.clone(),
-                        prompt.clone(),
-                    )?;
-                }
                 ActionRequiredData::Elicitation {
                     id,
                     message,
@@ -1226,84 +1205,6 @@ impl GooseAcpAgent {
         Ok(())
     }
 
-    #[allow(clippy::too_many_arguments)]
-    fn handle_tool_permission_request(
-        &self,
-        cx: &ConnectionTo<Client>,
-        agent: &Arc<Agent>,
-        session_id: &SessionId,
-        request_id: String,
-        tool_name: String,
-        arguments: serde_json::Map<String, serde_json::Value>,
-        prompt: Option<String>,
-    ) -> Result<(), agent_client_protocol::Error> {
-        let cx = cx.clone();
-        let agent = agent.clone();
-        let session_id = session_id.clone();
-
-        let formatted_name = format_tool_name(&tool_name);
-
-        let mut fields = ToolCallUpdateFields::new()
-            .title(formatted_name)
-            .kind(ToolKind::default())
-            .status(ToolCallStatus::Pending)
-            .raw_input(serde_json::Value::Object(arguments));
-        if let Some(p) = prompt {
-            fields = fields.content(vec![ToolCallContent::Content(Content::new(
-                ContentBlock::Text(TextContent::new(p)),
-            ))]);
-        }
-        let tool_call_update = ToolCallUpdate::new(ToolCallId::new(request_id.clone()), fields);
-
-        fn option(kind: PermissionOptionKind) -> PermissionOption {
-            let id = serde_json::to_value(kind)
-                .unwrap()
-                .as_str()
-                .unwrap()
-                .to_string();
-            PermissionOption::new(id.clone(), id, kind)
-        }
-        let options = vec![
-            option(PermissionOptionKind::AllowAlways),
-            option(PermissionOptionKind::AllowOnce),
-            option(PermissionOptionKind::RejectOnce),
-            option(PermissionOptionKind::RejectAlways),
-        ];
-
-        let permission_request =
-            RequestPermissionRequest::new(session_id, tool_call_update, options);
-
-        cx.send_request(permission_request)
-            .on_receiving_result(move |result| async move {
-                match result {
-                    Ok(response) => {
-                        agent
-                            .handle_confirmation(
-                                request_id,
-                                outcome_to_confirmation(&response.outcome),
-                            )
-                            .await;
-                        Ok(())
-                    }
-                    Err(e) => {
-                        error!(error = ?e, "permission request failed");
-                        agent
-                            .handle_confirmation(
-                                request_id,
-                                PermissionConfirmation {
-                                    principal_type: PrincipalType::Tool,
-                                    permission: Permission::Cancel,
-                                },
-                            )
-                            .await;
-                        Ok(())
-                    }
-                }
-            })?;
-
-        Ok(())
-    }
-
     fn is_builtin_agent_command(command: &str) -> bool {
         let normalized = command.trim_start_matches('/');
 
@@ -1331,13 +1232,6 @@ fn extract_client_supports_recipe_param_requests(
     goose_client_capabilities
         .and_then(|goose| goose.recipe_parameter_requests)
         .unwrap_or(false)
-}
-
-fn outcome_to_confirmation(outcome: &RequestPermissionOutcome) -> PermissionConfirmation {
-    PermissionConfirmation {
-        principal_type: PrincipalType::Tool,
-        permission: Permission::from(PermissionDecision::from(outcome)),
-    }
 }
 
 fn prompt_error_from_message_content(
@@ -2175,11 +2069,6 @@ impl GooseAcpAgent {
             .await
             .internal_err()?;
         let agent = self.get_session_agent(&session_id.0).await?;
-        let provider = agent
-            .provider()
-            .await
-            .internal_err_ctx("Failed to get provider")?;
-        let _provider_name = provider.get_name().to_string();
         let current_model_config = agent
             .model_config_for_session(&session_id.0)
             .await
@@ -2248,44 +2137,23 @@ impl GooseAcpAgent {
     ) -> Result<(), agent_client_protocol::Error> {
         let config = self.config()?;
         let agent = self.get_session_agent(session_id).await?;
-        let current_provider = agent
-            .provider()
-            .await
-            .internal_err_ctx("Failed to get provider")?;
-        let current_provider_name = current_provider.get_name();
         let current_model_config = agent
             .model_config_for_session(session_id)
             .await
             .internal_err_ctx("Failed to resolve model config")?;
-        let current_model = current_model_config.model_name.clone();
-        let use_default_provider = provider_name == DEFAULT_PROVIDER_ID;
-        let resolved_provider_name = if use_default_provider {
+        let resolved_provider_name = if provider_name == DEFAULT_PROVIDER_ID {
             config
                 .get_goose_provider()
                 .internal_err_ctx("Failed to resolve default provider from config")?
         } else {
             provider_name.to_string()
         };
-        let is_changing_provider = resolved_provider_name != current_provider_name;
-        let default_model = if let Some(model_name) = model_name {
-            model_name.to_string()
-        } else if use_default_provider {
-            config
-                .get_goose_model()
-                .internal_err_ctx("Failed to resolve default model from config")?
-        } else if is_changing_provider {
-            crate::providers::get_from_registry(&resolved_provider_name)
-                .await
-                .ok()
-                .map(|entry| entry.metadata().default_model.clone())
-                .unwrap_or(CODEX_DEFAULT_MODEL.to_string())
-        } else {
-            current_model
-        };
-        let model = model_name.unwrap_or(&default_model);
+        let model = model_name
+            .unwrap_or(&current_model_config.model_name)
+            .to_string();
         let model_config =
             crate::model_config::model_config_from_user_config_with_session_settings(
-                model,
+                &model,
                 Some(&current_model_config),
                 request_params,
                 context_limit,
@@ -2293,12 +2161,15 @@ impl GooseAcpAgent {
             .invalid_params_err_ctx("Invalid model config")?;
 
         agent
-            .recreate_provider_for_session(session_id, &resolved_provider_name, model_config)
+            .set_session_model(&resolved_provider_name, model_config, session_id)
             .await
-            .internal_err_ctx("Failed to recreate provider")?;
+            .internal_err_ctx("Failed to persist model config")?;
 
-        // provider_name is already updated on the session by the agent's update_provider call.
-        Ok(())
+        let mode = agent.goose_mode().await;
+        agent
+            .update_goose_mode(mode, session_id)
+            .await
+            .internal_err_ctx("Failed to refresh session after model change")
     }
 
     async fn on_fork_session(
@@ -2428,7 +2299,7 @@ mod tests {
     use crate::session::session_manager::SessionType;
     use agent_client_protocol::schema::v1::{
         EnvVariable, HttpHeader, McpServer, McpServerHttp, McpServerSse, McpServerStdio,
-        PermissionOptionId, ResourceLink, SelectedPermissionOutcome,
+        ResourceLink,
     };
     use goose_providers::conversation::token_usage::Usage as TokenUsage;
     use rmcp::model::{CallToolRequestParams, Content as RmcpContent};
@@ -2599,43 +2470,6 @@ print(\"hello, world\")
         let result = summarize_tool_call("developer__read_file", Some(&args));
         assert!(result.ends_with('…'));
         assert!(result.len() < 90);
-    }
-
-    #[test_case(
-        RequestPermissionOutcome::Selected(SelectedPermissionOutcome::new(PermissionOptionId::from("allow_once".to_string()))),
-        PermissionConfirmation { principal_type: PrincipalType::Tool, permission: Permission::AllowOnce };
-        "allow_once_maps_to_allow_once"
-    )]
-    #[test_case(
-        RequestPermissionOutcome::Selected(SelectedPermissionOutcome::new(PermissionOptionId::from("allow_always".to_string()))),
-        PermissionConfirmation { principal_type: PrincipalType::Tool, permission: Permission::AlwaysAllow };
-        "allow_always_maps_to_always_allow"
-    )]
-    #[test_case(
-        RequestPermissionOutcome::Selected(SelectedPermissionOutcome::new(PermissionOptionId::from("reject_once".to_string()))),
-        PermissionConfirmation { principal_type: PrincipalType::Tool, permission: Permission::DenyOnce };
-        "reject_once_maps_to_deny_once"
-    )]
-    #[test_case(
-        RequestPermissionOutcome::Selected(SelectedPermissionOutcome::new(PermissionOptionId::from("reject_always".to_string()))),
-        PermissionConfirmation { principal_type: PrincipalType::Tool, permission: Permission::AlwaysDeny };
-        "reject_always_maps_to_always_deny"
-    )]
-    #[test_case(
-        RequestPermissionOutcome::Selected(SelectedPermissionOutcome::new(PermissionOptionId::from("unknown".to_string()))),
-        PermissionConfirmation { principal_type: PrincipalType::Tool, permission: Permission::Cancel };
-        "unknown_option_maps_to_cancel"
-    )]
-    #[test_case(
-        RequestPermissionOutcome::Cancelled,
-        PermissionConfirmation { principal_type: PrincipalType::Tool, permission: Permission::Cancel };
-        "cancelled_maps_to_cancel"
-    )]
-    fn test_outcome_to_confirmation(
-        input: RequestPermissionOutcome,
-        expected: PermissionConfirmation,
-    ) {
-        assert_eq!(outcome_to_confirmation(&input), expected);
     }
 
     fn json_object(pairs: Vec<(&str, serde_json::Value)>) -> rmcp::model::JsonObject {

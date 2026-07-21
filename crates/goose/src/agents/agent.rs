@@ -11,18 +11,15 @@ use crate::agents::extension_manager::{
     get_parameter_names, ExtensionManager, ExtensionManagerCapabilities,
 };
 use crate::agents::prompt_manager::PromptManager;
-use crate::agents::types::{SessionConfig, SharedProvider};
+use crate::agents::types::SessionConfig;
 use crate::config::permission::PermissionManager;
-use crate::config::{get_enabled_extensions, Config, GooseMode};
+use crate::config::{Config, GooseMode};
 use crate::conversation::message::{Message, MessageUsage};
-use crate::conversation::{fix_conversation, Conversation};
-use crate::permission::PermissionConfirmation;
-use crate::providers::base::{PermissionRouting, Provider};
-use crate::recipe::{Author, Recipe, Response, Settings};
+use crate::conversation::Conversation;
+use crate::recipe::Response;
 use crate::session::extension_data::{EnabledExtensionsState, ExtensionState};
 use crate::session::{Session, SessionManager, SessionNameUpdate};
 use goose_providers::thinking::ThinkingEffort;
-use regex::Regex;
 use rmcp::model::{GetPromptResult, Prompt, ServerNotification, Tool};
 use serde_json::Value;
 use tokio::sync::{mpsc, Mutex};
@@ -115,7 +112,6 @@ fn resolve_use_login_shell_path(explicit: Option<bool>, platform: &GoosePlatform
 
 /// The main goose Agent
 pub struct Agent {
-    pub(super) provider: SharedProvider,
     pub config: AgentConfig,
     pub(super) current_goose_mode: Mutex<GooseMode>,
     codex_core: crate::codex::CodexAgentCore,
@@ -129,7 +125,7 @@ pub struct Agent {
 #[derive(Clone, Debug)]
 pub enum AgentEvent {
     Message(Message),
-    Usage(crate::providers::base::ProviderUsage),
+    Usage(goose_providers::conversation::token_usage::ProviderUsage),
     MessageUsage {
         message_id: Option<String>,
         usage: MessageUsage,
@@ -157,8 +153,6 @@ impl Agent {
     }
 
     pub fn with_config(config: AgentConfig) -> Self {
-        let provider = Arc::new(Mutex::new(None));
-
         let goose_platform = config.goose_platform.clone();
         let initial_mode = config.goose_mode;
         let explicit_mcp_host_info = config.mcp_host_info.clone();
@@ -182,12 +176,10 @@ impl Agent {
         let codex_runtime = Arc::clone(&config.codex_runtime);
         let use_login_shell_path = config.resolve_use_login_shell_path();
         Self {
-            provider: provider.clone(),
             config,
             current_goose_mode: Mutex::new(initial_mode),
             codex_core: crate::codex::CodexAgentCore::new(codex_runtime),
             extension_manager: Arc::new(ExtensionManager::new(
-                provider.clone(),
                 session_manager,
                 client_name,
                 capabilities,
@@ -291,13 +283,6 @@ impl Agent {
             .await
     }
 
-    pub async fn provider(&self) -> Result<Arc<dyn Provider>, anyhow::Error> {
-        match &*self.provider.lock().await {
-            Some(provider) => Ok(Arc::clone(provider)),
-            None => Err(anyhow!("Provider not set")),
-        }
-    }
-
     /// Resolve the active model config for a session.
     ///
     /// The session is the source of truth for the selected model and its
@@ -325,12 +310,6 @@ impl Agent {
             .map_err(|_| anyhow!("Could not resolve model config: missing model"))?;
         crate::model_config::model_config_from_user_config(&model_name)
             .map_err(|e| anyhow!("Could not resolve model config: {e}"))
-    }
-
-    pub(crate) async fn total_extension_and_tool_counts(&self, session_id: &str) -> (usize, usize) {
-        self.extension_manager
-            .get_extension_and_tool_counts(session_id)
-            .await
     }
 
     pub async fn apply_recipe_components(
@@ -460,21 +439,6 @@ impl Agent {
         self.extension_manager.get_extension_configs().await
     }
 
-    pub async fn handle_confirmation(
-        &self,
-        request_id: String,
-        confirmation: PermissionConfirmation,
-    ) {
-        let provider = self.provider.lock().await.clone();
-        if let Some(provider) = provider.as_ref() {
-            if provider.permission_routing() == PermissionRouting::ActionRequired {
-                provider
-                    .handle_permission_confirmation(&request_id, &confirmation)
-                    .await;
-            }
-        }
-    }
-
     #[instrument(
         skip(self, user_message, session_config, cancel_token),
         fields(user_message, trace_input, session.id = %session_config.id)
@@ -518,37 +482,21 @@ impl Agent {
         prompt_manager.remove_system_prompt_extra(key);
     }
 
-    pub async fn update_provider(
+    pub async fn set_session_model(
         &self,
-        provider: Arc<dyn Provider>,
+        provider_name: &str,
         model_config: goose_providers::model::ModelConfig,
         session_id: &str,
     ) -> Result<()> {
-        let provider_name = provider.get_name().to_string();
-
-        // Normalize against the provider entry so custom/declarative providers
-        // backfill `context_limit` from their known models before the config is
-        // persisted as the session source of truth; otherwise auto-compaction
-        // would fall back to DEFAULT_CONTEXT_LIMIT.
-        let model_config = match crate::providers::get_from_registry(&provider_name).await {
-            Ok(entry) => entry
-                .normalize_model_config(model_config.clone())
-                .unwrap_or(model_config),
-            Err(_) => model_config,
-        };
-
-        let mut current_provider = self.provider.lock().await;
-        *current_provider = Some(provider);
-
         self.config
             .session_manager
             .clone()
             .update(session_id)
-            .provider_name(&provider_name)
+            .provider_name(provider_name)
             .model_config(model_config)
             .apply()
             .await
-            .context("Failed to persist provider config to session")
+            .context("Failed to persist model config to session")
     }
 
     pub async fn update_goose_mode(&self, mode: GooseMode, session_id: &str) -> Result<()> {
@@ -574,11 +522,10 @@ impl Agent {
         *self.current_goose_mode.lock().await
     }
 
-    pub async fn recreate_provider_for_session(
+    pub async fn update_thinking_effort(
         &self,
         session_id: &str,
-        provider_name: &str,
-        model_config: goose_providers::model::ModelConfig,
+        effort: ThinkingEffort,
     ) -> Result<()> {
         let session = self
             .config
@@ -586,41 +533,20 @@ impl Agent {
             .get_session(session_id, false)
             .await
             .context("Failed to get session")?;
-
-        let extensions = EnabledExtensionsState::extensions_or_default(
-            Some(&session.extension_data),
-            Config::global(),
-        );
-
-        let provider = crate::providers::create_with_working_dir(
-            provider_name,
-            extensions,
-            session.working_dir.clone(),
-        )
-        .await
-        .map_err(|e| anyhow!("Could not create provider: {}", e))?;
-
-        self.update_provider(provider, model_config, session_id)
-            .await?;
-
-        let mode = self.goose_mode().await;
-        self.update_goose_mode(mode, session_id).await
-    }
-
-    pub async fn update_thinking_effort(
-        &self,
-        session_id: &str,
-        effort: ThinkingEffort,
-    ) -> Result<()> {
-        let current_provider = self.provider().await?;
-        let provider_name = current_provider.get_name().to_string();
+        let provider_name = session
+            .provider_name
+            .clone()
+            .unwrap_or_else(|| crate::providers::CODEX_PROVIDER_NAME.to_string());
         let model_config = self
             .model_config_for_session(session_id)
             .await?
             .with_thinking_effort(effort);
 
-        self.recreate_provider_for_session(session_id, &provider_name, model_config)
-            .await
+        self.set_session_model(&provider_name, model_config, session_id)
+            .await?;
+
+        let mode = self.goose_mode().await;
+        self.update_goose_mode(mode, session_id).await
     }
 
     /// Override the system prompt with a custom template
@@ -699,232 +625,11 @@ impl Agent {
 
         Ok(plan_prompt)
     }
-
-    pub async fn create_recipe(
-        &self,
-        session_id: &str,
-        mut messages: Conversation,
-    ) -> Result<Recipe> {
-        tracing::info!("Starting recipe creation with {} messages", messages.len());
-
-        let session = self
-            .config
-            .session_manager
-            .get_session(session_id, false)
-            .await?;
-        let extensions_info = self
-            .extension_manager
-            .get_extensions_info(&session.working_dir)
-            .await;
-        tracing::debug!("Retrieved {} extensions info", extensions_info.len());
-        let (extension_count, tool_count) = self.total_extension_and_tool_counts(session_id).await;
-
-        let model_config = self.model_config_for_session(session_id).await?;
-        let model_name = &model_config.model_name;
-        tracing::debug!("Using model: {}", model_name);
-
-        let goose_mode = *self.current_goose_mode.lock().await;
-        let prompt_manager = self.prompt_manager.lock().await;
-        let system_prompt = prompt_manager
-            .builder()
-            .with_extensions(extensions_info.into_iter())
-            .with_extension_and_tool_counts(extension_count, tool_count)
-            .with_goose_mode(goose_mode)
-            .build();
-
-        let recipe_prompt = prompt_manager.get_recipe_prompt().await;
-        let tools: Vec<_> = self
-            .extension_manager
-            .get_prefixed_tools(session_id, None)
-            .await
-            .map_err(|e| {
-                tracing::error!("Failed to get tools for recipe creation: {}", e);
-                e
-            })?
-            .into_iter()
-            .filter(super::reply_parts::is_tool_visible_to_model)
-            .collect();
-
-        messages.push(Message::user().with_text(recipe_prompt));
-
-        let (messages, issues) = fix_conversation(messages);
-        if !issues.is_empty() {
-            issues
-                .iter()
-                .for_each(|issue| tracing::warn!(recipe.conversation.issue = issue));
-        }
-
-        tracing::debug!(
-            "Added recipe prompt to messages, total messages: {}",
-            messages.len()
-        );
-
-        tracing::info!("Calling provider to generate recipe content");
-        let provider = self.provider.lock().await;
-        let provider = provider.as_ref().ok_or_else(|| {
-            let error = anyhow!("Provider not available during recipe creation");
-            tracing::error!("{}", error);
-            error
-        })?;
-        let (result, _usage) = crate::session_context::with_session_id(
-            Some(session_id.to_string()),
-            provider.complete(&model_config, &system_prompt, messages.messages(), &tools),
-        )
-        .await
-        .map_err(|e| {
-            tracing::error!("Provider completion failed during recipe creation: {}", e);
-            e
-        })?;
-
-        let content = result.as_concat_text();
-        tracing::debug!(
-            "Provider returned content with {} characters",
-            content.len()
-        );
-
-        // the response may be contained in ```json ```, strip that before parsing json
-        let re = Regex::new(r"(?s)```[^\n]*\n(.*?)\n```").unwrap();
-        let clean_content = re
-            .captures(&content)
-            .and_then(|caps| caps.get(1).map(|m| m.as_str()))
-            .unwrap_or(&content)
-            .trim()
-            .to_string();
-
-        let (instructions, activities) =
-            if let Ok(json_content) = serde_json::from_str::<Value>(&clean_content) {
-                let instructions = json_content
-                    .get("instructions")
-                    .ok_or_else(|| anyhow!("Missing 'instructions' in json response"))?
-                    .as_str()
-                    .ok_or_else(|| anyhow!("instructions' is not a string"))?
-                    .to_string();
-
-                let activities = json_content
-                    .get("activities")
-                    .ok_or_else(|| anyhow!("Missing 'activities' in json response"))?
-                    .as_array()
-                    .ok_or_else(|| anyhow!("'activities' is not an array'"))?
-                    .iter()
-                    .map(|act| {
-                        act.as_str()
-                            .map(|s| s.to_string())
-                            .ok_or(anyhow!("'activities' array element is not a string"))
-                    })
-                    .collect::<Result<_, _>>()?;
-
-                (instructions, activities)
-            } else {
-                tracing::warn!("Failed to parse JSON, falling back to string parsing");
-                // If we can't get valid JSON, try string parsing
-                // Use split_once to get the content after "Instructions:".
-                let after_instructions = content
-                    .split_once("instructions:")
-                    .map(|(_, rest)| rest)
-                    .unwrap_or(&content);
-
-                // Split once more to separate instructions from activities.
-                let (instructions_part, activities_text) = after_instructions
-                    .split_once("activities:")
-                    .unwrap_or((after_instructions, ""));
-
-                let instructions = instructions_part
-                    .trim_end_matches(|c: char| c.is_whitespace() || c == '#')
-                    .trim()
-                    .to_string();
-                let activities_text = activities_text.trim();
-
-                // Regex to remove bullet markers or numbers with an optional dot.
-                let bullet_re = Regex::new(r"^[•\-*\d]+\.?\s*").expect("Invalid regex");
-
-                // Process each line in the activities section.
-                let activities: Vec<String> = activities_text
-                    .lines()
-                    .map(|line| bullet_re.replace(line, "").to_string())
-                    .map(|s| s.trim().to_string())
-                    .filter(|line| !line.is_empty())
-                    .collect();
-
-                (instructions, activities)
-            };
-
-        let extension_configs = get_enabled_extensions();
-
-        let author = Author {
-            contact: std::env::var("USER")
-                .or_else(|_| std::env::var("USERNAME"))
-                .ok(),
-            metadata: None,
-        };
-
-        // Ideally we'd get the name of the provider we are using from the provider itself,
-        // but it doesn't know and the plumbing looks complicated.
-        let config = Config::global();
-        let provider_name: String = config
-            .get_goose_provider()
-            .expect("No provider configured. Run 'goose configure' first");
-
-        let settings = Settings {
-            goose_provider: Some(provider_name.clone()),
-            goose_model: Some(model_name.clone()),
-            temperature: Some(model_config.temperature.unwrap_or(0.0)),
-            max_turns: None,
-        };
-
-        tracing::debug!(
-            "Building recipe with {} activities and {} extensions",
-            activities.len(),
-            extension_configs.len()
-        );
-
-        let (title, description) =
-            if let Ok(json_content) = serde_json::from_str::<Value>(&clean_content) {
-                let title = json_content
-                    .get("title")
-                    .and_then(|t| t.as_str())
-                    .unwrap_or("Custom recipe from chat")
-                    .to_string();
-
-                let description = json_content
-                    .get("description")
-                    .and_then(|d| d.as_str())
-                    .unwrap_or("a custom recipe instance from this chat session")
-                    .to_string();
-
-                (title, description)
-            } else {
-                (
-                    "Custom recipe from chat".to_string(),
-                    "a custom recipe instance from this chat session".to_string(),
-                )
-            };
-
-        let recipe = Recipe::builder()
-            .title(title)
-            .description(description)
-            .instructions(instructions)
-            .activities(activities)
-            .extensions(extension_configs)
-            .settings(settings)
-            .author(author)
-            .build()
-            .map_err(|e| {
-                tracing::error!("Failed to build recipe: {}", e);
-                anyhow!("Recipe build failed: {}", e)
-            })?;
-
-        tracing::info!("Recipe creation completed successfully");
-        Ok(recipe)
-    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::permission::permission_confirmation::PrincipalType;
-    use crate::providers::base::PermissionRouting;
-    use crate::recipe::Response;
-    use goose_providers::errors::ProviderError;
 
     #[test]
     fn resolve_use_login_shell_path_defaults_by_platform() {
@@ -948,104 +653,5 @@ mod tests {
             Some(false),
             &GoosePlatform::GooseDesktop
         ));
-    }
-
-    struct ActionRequiredProvider {
-        handled: tokio::sync::Mutex<Vec<(String, PermissionConfirmation)>>,
-    }
-
-    impl ActionRequiredProvider {
-        fn new() -> Self {
-            Self {
-                handled: tokio::sync::Mutex::new(Vec::new()),
-            }
-        }
-    }
-
-    impl std::fmt::Debug for ActionRequiredProvider {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            f.debug_struct("ActionRequiredProvider").finish()
-        }
-    }
-
-    #[async_trait::async_trait]
-    impl crate::providers::base::Provider for ActionRequiredProvider {
-        fn get_name(&self) -> &str {
-            "test-action-required"
-        }
-        async fn stream(
-            &self,
-            _: &goose_providers::model::ModelConfig,
-            _: &str,
-            _: &[crate::conversation::message::Message],
-            _: &[rmcp::model::Tool],
-        ) -> Result<crate::providers::base::MessageStream, ProviderError> {
-            unimplemented!()
-        }
-        fn permission_routing(&self) -> PermissionRouting {
-            PermissionRouting::ActionRequired
-        }
-        async fn handle_permission_confirmation(
-            &self,
-            request_id: &str,
-            confirmation: &PermissionConfirmation,
-        ) -> bool {
-            self.handled
-                .lock()
-                .await
-                .push((request_id.to_string(), confirmation.clone()));
-            request_id == "known"
-        }
-    }
-
-    #[tokio::test]
-    async fn test_handle_confirmation_routes_to_provider() {
-        let agent = Agent::new();
-        let provider = Arc::new(ActionRequiredProvider::new());
-        *agent.provider.lock().await =
-            Some(provider.clone() as Arc<dyn crate::providers::base::Provider>);
-
-        agent
-            .handle_confirmation(
-                "known".to_string(),
-                PermissionConfirmation {
-                    principal_type: PrincipalType::Tool,
-                    permission: crate::permission::Permission::AllowOnce,
-                },
-            )
-            .await;
-        assert_eq!(provider.handled.lock().await.len(), 1);
-
-        agent
-            .handle_confirmation(
-                "unknown".to_string(),
-                PermissionConfirmation {
-                    principal_type: PrincipalType::Tool,
-                    permission: crate::permission::Permission::DenyOnce,
-                },
-            )
-            .await;
-        assert_eq!(provider.handled.lock().await.len(), 2);
-    }
-
-    #[tokio::test]
-    async fn recipe_response_is_forwarded_as_codex_output_schema() -> Result<()> {
-        let agent = Agent::new();
-
-        let schema = serde_json::json!({
-            "type": "object",
-            "properties": {"result": {"type": "string"}}
-        });
-        agent
-            .apply_recipe_components(
-                Some(Response {
-                    json_schema: Some(schema.clone()),
-                }),
-                true,
-            )
-            .await;
-
-        assert_eq!(*agent.final_output_json_schema.lock().await, Some(schema));
-        Ok(())
     }
 }

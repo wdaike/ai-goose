@@ -34,7 +34,10 @@ pub mod plugins;
 #[cfg(feature = "telemetry")]
 pub mod posthog;
 pub mod prompt_template;
-pub mod providers;
+pub mod providers {
+    pub const CODEX_PROVIDER_NAME: &str = "codex";
+    pub const CODEX_DEFAULT_MODEL: &str = "current";
+}
 pub mod recipe;
 pub mod recipe_deeplink;
 pub mod scheduler;

@@ -1,11 +1,5 @@
-use crate::providers::base::Provider;
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
-use tokio::sync::Mutex;
 use utoipa::ToSchema;
-
-// We use double Arc here to allow easy provider swaps while sharing concurrent access
-pub type SharedProvider = Arc<Mutex<Option<Arc<dyn Provider>>>>;
 
 /// Configuration for retry logic in recipe execution
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]

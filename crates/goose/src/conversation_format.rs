@@ -36,9 +36,6 @@ pub fn format_message_for_transcript(message: &Message) -> String {
                 Some(format!("tool_confirmation_request: {}", request.tool_name))
             }
             MessageContent::ActionRequired(action) => match &action.data {
-                ActionRequiredData::ToolConfirmation { tool_name, .. } => {
-                    Some(format!("action_required(tool_confirmation): {tool_name}"))
-                }
                 ActionRequiredData::Elicitation { message, .. } => {
                     Some(format!("action_required(elicitation): {message}"))
                 }

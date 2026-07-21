@@ -24,10 +24,7 @@ pub enum InputResult {
     PromptCommand(PromptCommandOptions),
     GooseMode(String),
     Model(Option<String>),
-    Plan(PlanCommandOptions),
-    EndPlan,
     Clear,
-    Recipe(Option<String>),
     Compact,
     ToggleFullToolOutput,
     Edit(Option<String>),
@@ -40,11 +37,6 @@ pub struct PromptCommandOptions {
     pub name: String,
     pub info: bool,
     pub arguments: HashMap<String, String>,
-}
-
-#[derive(Debug)]
-pub struct PlanCommandOptions {
-    pub message_text: String,
 }
 
 struct CtrlCHandler {
@@ -230,10 +222,7 @@ fn handle_slash_command(input: &str) -> Option<InputResult> {
     const CMD_MODE: &str = "/mode ";
     const CMD_MODEL: &str = "/model";
     const CMD_MODEL_WITH_SPACE: &str = "/model ";
-    const CMD_PLAN: &str = "/plan";
-    const CMD_ENDPLAN: &str = "/endplan";
     const CMD_CLEAR: &str = "/clear";
-    const CMD_RECIPE: &str = "/recipe";
     const CMD_COMPACT: &str = "/compact";
     const CMD_SUMMARIZE_DEPRECATED: &str = "/summarize";
     const CMD_EDIT: &str = "/edit";
@@ -308,12 +297,7 @@ fn handle_slash_command(input: &str) -> Option<InputResult> {
                 Some(InputResult::Model(Some(model)))
             }
         }
-        s if s.starts_with(CMD_PLAN) => {
-            parse_plan_command(s.get(CMD_PLAN.len()..).unwrap_or("").trim().to_string())
-        }
-        s if s == CMD_ENDPLAN => Some(InputResult::EndPlan),
         s if s == CMD_CLEAR => Some(InputResult::Clear),
-        s if s.starts_with(CMD_RECIPE) => parse_recipe_command(s),
         s if s == CMD_COMPACT => Some(InputResult::Compact),
         // Match "/skills" exactly or "/skills " with args - avoids matching e.g. "/skillsextra"
         s if s == CMD_SKILLS || s.starts_with(&format!("{CMD_SKILLS} ")) => {
@@ -344,31 +328,6 @@ fn handle_slash_command(input: &str) -> Option<InputResult> {
         }
         _ => None,
     }
-}
-
-fn parse_recipe_command(s: &str) -> Option<InputResult> {
-    const CMD_RECIPE: &str = "/recipe";
-
-    if s == CMD_RECIPE {
-        // No filepath provided, use default
-        return Some(InputResult::Recipe(None));
-    }
-
-    // Extract the filepath from the command
-    let filepath = s.get(CMD_RECIPE.len()..).unwrap_or("").trim();
-
-    if filepath.is_empty() {
-        return Some(InputResult::Recipe(None));
-    }
-
-    // Validate that the filepath ends with .yaml
-    if !filepath.to_lowercase().ends_with(".yaml") {
-        println!("{}", console::style("Filepath must end with .yaml").red());
-        return Some(InputResult::Retry);
-    }
-
-    // Return the filepath for validation in the handler
-    Some(InputResult::Recipe(Some(filepath.to_string())))
 }
 
 fn parse_prompts_command(args: &str) -> Option<InputResult> {
@@ -424,14 +383,6 @@ fn parse_prompt_command(args: &str) -> Option<InputResult> {
     Some(InputResult::PromptCommand(options))
 }
 
-fn parse_plan_command(input: String) -> Option<InputResult> {
-    let options = PlanCommandOptions {
-        message_text: input.trim().to_string(),
-    };
-
-    Some(InputResult::Plan(options))
-}
-
 fn help_text() -> String {
     let modes = GooseMode::VARIANTS.join(", ");
     let newline_key = get_newline_key().to_ascii_uppercase();
@@ -454,14 +405,6 @@ fn help_text() -> String {
 /prompt <n> [--info] [key=value...] - Get prompt info or execute a prompt
 /mode <name> - Set the goose mode to use ({modes})
 /model [name] - Show the current model, or switch models for this session while keeping the same provider
-/plan <message_text> -  Enters 'plan' mode with optional message. Create a plan based on the current messages and asks user if they want to act on it.
-                        If user acts on the plan, goose mode is set to 'auto' and returns to 'normal' goose mode.
-                        To warm up goose before using '/plan', we recommend setting '/mode approve' & putting appropriate context into goose.
-                        The model is used based on $GOOSE_PLANNER_PROVIDER and $GOOSE_PLANNER_MODEL environment variables.
-                        If no model is set, the default model is used.
-/endplan - Exit plan mode and return to 'normal' goose mode.
-/recipe [filepath] - Generate a recipe from the current conversation and save it to the specified filepath (must end with .yaml).
-                       If no filepath is provided, it will be saved to ./recipe.yaml.
 /compact - Compact the current conversation to reduce context length while preserving key information.
 {additional_builtin_help}
 /edit [text] - Open your prompt editor to compose a message. Optionally pre-fill with text.
@@ -734,47 +677,6 @@ mod tests {
         } else {
             panic!("Expected PromptCommand");
         }
-    }
-
-    #[test]
-    fn test_plan_mode() {
-        // Test plan mode with no text
-        let result = handle_slash_command("/plan");
-        assert!(result.is_some());
-
-        // Test plan mode with text
-        let result = handle_slash_command("/plan hello world");
-        assert!(result.is_some());
-        let options = result.unwrap();
-        match options {
-            InputResult::Plan(options) => {
-                assert_eq!(options.message_text, "hello world");
-            }
-            _ => panic!("Expected Plan"),
-        }
-    }
-
-    #[test]
-    fn test_recipe_command() {
-        // Test recipe with no filepath
-        if let Some(InputResult::Recipe(filepath)) = handle_slash_command("/recipe") {
-            assert!(filepath.is_none());
-        } else {
-            panic!("Expected Recipe");
-        }
-
-        // Test recipe with filepath
-        if let Some(InputResult::Recipe(filepath)) =
-            handle_slash_command("/recipe /path/to/file.yaml")
-        {
-            assert_eq!(filepath, Some("/path/to/file.yaml".to_string()));
-        } else {
-            panic!("Expected recipe with filepath");
-        }
-
-        // Test recipe with invalid extension
-        let result = handle_slash_command("/recipe /path/to/file.txt");
-        assert!(matches!(result, Some(InputResult::Retry)));
     }
 
     // --- should_use_editor_always tests ---

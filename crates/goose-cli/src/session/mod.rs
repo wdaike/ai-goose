@@ -10,7 +10,6 @@ pub mod streaming_buffer;
 mod thinking;
 
 use goose::conversation::Conversation;
-use std::env;
 use std::str::FromStr;
 use tokio::signal::ctrl_c;
 use tokio_util::task::AbortOnDropHandle;
@@ -19,13 +18,9 @@ pub use self::export::message_to_markdown;
 pub use builder::{build_session, SessionBuilderConfig};
 use console::Color;
 use goose::agents::AgentEvent;
-use goose::permission::permission_confirmation::PrincipalType;
-use goose::permission::Permission;
-use goose::permission::PermissionConfirmation;
-use goose::providers::base::Provider;
-use goose::providers::base::ProviderUsage;
+use goose_providers::conversation::token_usage::ProviderUsage;
 
-use anyhow::{Context, Result};
+use anyhow::Result;
 use completion::GooseCompleter;
 use goose::agents::extension::{Envs, ExtensionConfig, PLATFORM_EXTENSIONS};
 use goose::agents::types::RetryConfig;
@@ -51,8 +46,6 @@ use std::time::{Duration, Instant};
 use tokio;
 use tokio_util::sync::CancellationToken;
 use tracing::warn;
-
-const GOOSE_PLANNER_CONTEXT_LIMIT: &str = "GOOSE_PLANNER_CONTEXT_LIMIT";
 
 #[derive(Serialize, Deserialize, Debug)]
 struct JsonOutput {
@@ -104,11 +97,6 @@ enum NotificationData {
         total: Option<f64>,
         message: Option<String>,
     },
-}
-
-pub enum RunMode {
-    Normal,
-    Plan,
 }
 
 struct HistoryManager {
@@ -164,7 +152,6 @@ pub struct CliSession {
     session_id: String,
     completion_cache: Arc<std::sync::RwLock<CompletionCache>>,
     debug: bool,
-    run_mode: RunMode,
     scheduled_job_id: Option<String>,
     max_turns: Option<u32>,
     edit_mode: Option<EditMode>,
@@ -199,46 +186,6 @@ impl CompletionCache {
     }
 }
 
-pub enum PlannerResponseType {
-    Plan,
-    ClarifyingQuestions,
-}
-
-/// Decide if the planner's response is a plan or a clarifying question
-///
-/// This function is called after the planner has generated a response
-/// to the user's message. The response is either a plan or a clarifying
-/// question.
-pub async fn classify_planner_response(
-    session_id: &str,
-    message_text: String,
-    provider: Arc<dyn Provider>,
-    model_config: goose_providers::model::ModelConfig,
-) -> Result<PlannerResponseType> {
-    let prompt = format!(
-        "The text below is the output from an AI model which can either provide a plan or list of clarifying questions. Based on the text below, decide if the output is a \"plan\" or \"clarifying questions\".\n---\n{message_text}"
-    );
-
-    let message = Message::user().with_text(&prompt);
-    let (result, _usage) = goose::session_context::with_session_id(
-        Some(session_id.to_string()),
-        provider.complete(
-            &model_config,
-            "Reply only with the classification label: \"plan\" or \"clarifying questions\"",
-            &[message],
-            &[],
-        ),
-    )
-    .await?;
-
-    let predicted = result.as_concat_text();
-    if predicted.to_lowercase().contains("plan") {
-        Ok(PlannerResponseType::Plan)
-    } else {
-        Ok(PlannerResponseType::ClarifyingQuestions)
-    }
-}
-
 impl CliSession {
     #[allow(clippy::too_many_arguments)]
     pub async fn new(
@@ -266,7 +213,6 @@ impl CliSession {
             session_id,
             completion_cache: Arc::new(std::sync::RwLock::new(CompletionCache::new())),
             debug,
-            run_mode: RunMode::Normal,
             scheduled_job_id,
             max_turns,
             edit_mode,
@@ -611,13 +557,6 @@ impl CliSession {
                 history.save(editor);
                 self.handle_model(model.as_deref()).await?;
             }
-            InputResult::Plan(options) => {
-                self.handle_plan_mode(options).await?;
-            }
-            InputResult::EndPlan => {
-                self.run_mode = RunMode::Normal;
-                output::render_exit_plan_mode();
-            }
             InputResult::Clear => {
                 history.save(editor);
                 self.handle_clear().await?;
@@ -625,10 +564,6 @@ impl CliSession {
             InputResult::PromptCommand(opts) => {
                 history.save(editor);
                 self.handle_prompt_command(opts).await?;
-            }
-            InputResult::Recipe(filepath_opt) => {
-                history.save(editor);
-                self.handle_recipe(filepath_opt).await;
             }
             InputResult::Compact => {
                 history.save(editor);
@@ -683,41 +618,30 @@ impl CliSession {
         history: &HistoryManager,
         editor: &mut rustyline::Editor<GooseCompleter, rustyline::history::DefaultHistory>,
     ) -> Result<()> {
-        match self.run_mode {
-            RunMode::Normal => {
-                history.save(editor);
-                self.push_message(Message::user().with_text(content));
+        history.save(editor);
+        self.push_message(Message::user().with_text(content));
 
-                if let Err(e) = crate::project_tracker::update_project_tracker(
-                    Some(content),
-                    Some(&self.session_id),
-                ) {
-                    eprintln!(
-                        "Warning: Failed to update project tracker with instruction: {}",
-                        e
-                    );
-                }
-
-                println!();
-                output::run_status_hook("thinking");
-                output::show_thinking();
-                let start_time = Instant::now();
-                self.process_agent_response(true, CancellationToken::default())
-                    .await?;
-                output::hide_thinking();
-
-                let elapsed = start_time.elapsed();
-                let elapsed_str = format_elapsed_time(elapsed);
-                println!("{}", console::style(format!("  ⏱ {}", elapsed_str)).dim());
-            }
-            RunMode::Plan => {
-                let mut plan_messages = self.messages.clone();
-                plan_messages.push(Message::user().with_text(content));
-                let (reasoner, reasoner_model_config) = get_reasoner().await?;
-                self.plan_with_reasoner_model(plan_messages, reasoner, reasoner_model_config)
-                    .await?;
-            }
+        if let Err(e) =
+            crate::project_tracker::update_project_tracker(Some(content), Some(&self.session_id))
+        {
+            eprintln!(
+                "Warning: Failed to update project tracker with instruction: {}",
+                e
+            );
         }
+
+        println!();
+        output::run_status_hook("thinking");
+        output::show_thinking();
+        let start_time = Instant::now();
+        self.process_agent_response(true, CancellationToken::default())
+            .await?;
+        output::hide_thinking();
+
+        let elapsed = start_time.elapsed();
+        let elapsed_str = format_elapsed_time(elapsed);
+        println!("{}", console::style(format!("  ⏱ {}", elapsed_str)).dim());
+
         Ok(())
     }
 
@@ -842,22 +766,6 @@ impl CliSession {
         Ok(())
     }
 
-    async fn handle_plan_mode(&mut self, options: input::PlanCommandOptions) -> Result<()> {
-        self.run_mode = RunMode::Plan;
-        output::render_enter_plan_mode();
-
-        if options.message_text.is_empty() {
-            return Ok(());
-        }
-
-        let mut plan_messages = self.messages.clone();
-        plan_messages.push(Message::user().with_text(&options.message_text));
-
-        let (reasoner, reasoner_model_config) = get_reasoner().await?;
-        self.plan_with_reasoner_model(plan_messages, reasoner, reasoner_model_config)
-            .await
-    }
-
     async fn handle_clear(&mut self) -> Result<()> {
         if let Err(e) = self.agent.clear_session(&self.session_id).await {
             output::render_error(&format!("Failed to clear session: {}", e));
@@ -871,37 +779,6 @@ impl CliSession {
             self.debug,
         );
         Ok(())
-    }
-
-    async fn handle_recipe(&mut self, filepath_opt: Option<String>) {
-        println!("{}", console::style("Generating Recipe").green());
-
-        output::show_thinking();
-        let recipe = self
-            .agent
-            .create_recipe(&self.session_id, self.messages.clone())
-            .await;
-        output::hide_thinking();
-
-        match recipe {
-            Ok(recipe) => {
-                let filepath_str = filepath_opt.as_deref().unwrap_or("recipe.yaml");
-                match self.save_recipe(&recipe, filepath_str) {
-                    Ok(path) => println!(
-                        "{}",
-                        console::style(format!("Saved recipe to {}", path.display())).green()
-                    ),
-                    Err(e) => println!("{}", console::style(e).red()),
-                }
-            }
-            Err(e) => {
-                println!(
-                    "{}: {:?}",
-                    console::style("Failed to generate recipe").red(),
-                    e
-                );
-            }
-        }
     }
 
     async fn handle_load_skills(&mut self, names: &[String]) -> Result<()> {
@@ -990,90 +867,6 @@ impl CliSession {
         Ok(())
     }
 
-    async fn plan_with_reasoner_model(
-        &mut self,
-        plan_messages: Conversation,
-        reasoner: Arc<dyn Provider>,
-        model_config: goose_providers::model::ModelConfig,
-    ) -> Result<(), anyhow::Error> {
-        let plan_prompt = self.agent.get_plan_prompt(&self.session_id).await?;
-        output::show_thinking();
-        let (plan_response, _usage) = goose::session_context::with_session_id(
-            Some(self.session_id.clone()),
-            reasoner.complete(&model_config, &plan_prompt, plan_messages.messages(), &[]),
-        )
-        .await?;
-        output::render_message(&plan_response, self.debug);
-        output::hide_thinking();
-        let planner_response_type = classify_planner_response(
-            &self.session_id,
-            plan_response.as_concat_text(),
-            self.agent.provider().await?,
-            self.agent
-                .model_config_for_session(&self.session_id)
-                .await?,
-        )
-        .await?;
-
-        match planner_response_type {
-            PlannerResponseType::Plan => {
-                println!();
-                let should_act = match cliclack::confirm(
-                    "Do you want to clear message history & act on this plan?",
-                )
-                .initial_value(true)
-                .interact()
-                {
-                    Ok(choice) => choice,
-                    Err(e) => {
-                        if e.kind() == std::io::ErrorKind::Interrupted {
-                            false // If interrupted, set should_act to false
-                        } else {
-                            return Err(e.into());
-                        }
-                    }
-                };
-                if should_act {
-                    output::render_act_on_plan();
-                    self.run_mode = RunMode::Normal;
-                    // set goose mode: auto if that isn't already the case
-                    let config = Config::global();
-                    let curr_goose_mode = config.get_goose_mode().unwrap_or_default();
-                    if curr_goose_mode != GooseMode::Auto {
-                        config.set_goose_mode(GooseMode::Auto).unwrap();
-                    }
-
-                    // clear the messages before acting on the plan
-                    self.messages.clear();
-                    // add the plan response as a user message
-                    let plan_message = Message::user().with_text(plan_response.as_concat_text());
-                    self.push_message(plan_message);
-                    // act on the plan
-                    output::show_thinking();
-                    self.process_agent_response(true, CancellationToken::default())
-                        .await?;
-                    output::hide_thinking();
-
-                    // Reset run & goose mode
-                    if curr_goose_mode != GooseMode::Auto {
-                        config.set_goose_mode(curr_goose_mode)?;
-                    }
-                } else {
-                    // add the plan response (assistant message) & carry the conversation forward
-                    // in the next round, the user might wanna slightly modify the plan
-                    self.push_message(plan_response);
-                }
-            }
-            PlannerResponseType::ClarifyingQuestions => {
-                // add the plan response (assistant message) & carry the conversation forward
-                // in the next round, the user will answer the clarifying questions
-                self.push_message(plan_response);
-            }
-        }
-
-        Ok(())
-    }
-
     /// Process a single message and exit
     pub async fn headless(&mut self, prompt: String) -> Result<()> {
         let message = Message::user().with_text(&prompt);
@@ -1141,55 +934,7 @@ impl CliSession {
                             if first_token_at.is_none() && message_has_text(&message) {
                                 first_token_at = Some(Instant::now());
                             }
-                            if let Some((id, security_prompt)) = find_tool_confirmation(&message) {
-                                let permission = if interactive {
-                                    prompt_tool_confirmation(&security_prompt)?
-                                } else {
-                                    // Non-interactive/headless mode: refuse to run in
-                                    // Approve/SmartApprove modes since auto-allowing would
-                                    // bypass the safety contract those modes are meant to enforce.
-                                    let config = Config::global();
-                                    let goose_mode = config.get_goose_mode().unwrap_or(GooseMode::Auto);
-                                    if goose_mode == GooseMode::Approve || goose_mode == GooseMode::SmartApprove {
-                                        cancel_token_clone.cancel();
-                                        drop(stream);
-                                        return Err(anyhow::anyhow!(
-                                            "Tool approval required in non-interactive mode with GooseMode::{goose_mode}. \
-                                             This is an invalid configuration — Approve/SmartApprove modes require an \
-                                             interactive terminal. Use GooseMode::Auto for headless sessions."
-                                        ));
-                                    }
-                                    tracing::warn!(
-                                        "Tool confirmation required in non-interactive mode, auto-allowing"
-                                    );
-                                    Permission::AllowOnce
-                                };
-
-                                if permission == Permission::Cancel {
-                                    output::render_text("Tool call cancelled. Returning to chat...", Some(Color::Yellow), true);
-                                    self.agent.handle_confirmation(id.clone(), PermissionConfirmation {
-                                        principal_type: PrincipalType::Tool,
-                                        permission: Permission::DenyOnce,
-                                    }).await;
-                                    let mut response_message = Message::user();
-                                    response_message.content.push(MessageContent::tool_response(
-                                        id,
-                                        Err(ErrorData {
-                                            code: ErrorCode::INVALID_REQUEST,
-                                            message: std::borrow::Cow::from("Tool call cancelled by user"),
-                                            data: None,
-                                        }),
-                                    ));
-                                    self.messages.push(response_message);
-                                    cancel_token_clone.cancel();
-                                    drop(stream);
-                                    break;
-                                }
-                                self.agent.handle_confirmation(id, PermissionConfirmation {
-                                    principal_type: PrincipalType::Tool,
-                                    permission,
-                                }).await;
-                            } else if let Some((elicitation_id, elicitation_message, schema)) = find_elicitation_request(&message) {
+                            if let Some((elicitation_id, elicitation_message, schema)) = find_elicitation_request(&message) {
                                 if !interactive {
                                     // Non-interactive/headless mode: cannot collect user input
                                     tracing::warn!(
@@ -1534,17 +1279,11 @@ impl CliSession {
 
     /// Display enhanced context usage with session totals
     pub async fn display_context_usage(&self) -> Result<()> {
-        let provider = self.agent.provider().await?;
-        let model_config = self
+        let context_limit = self
             .agent
             .model_config_for_session(&self.session_id)
-            .await?;
-        let context_limit = provider
-            .get_context_limit(&model_config)
-            .await
-            .unwrap_or_else(|_| model_config.context_limit());
-
-        let _config = Config::global();
+            .await?
+            .context_limit();
 
         match self.get_session().await {
             Ok(metadata) => {
@@ -1632,49 +1371,6 @@ impl CliSession {
         }
 
         Ok(())
-    }
-
-    /// Save a recipe to a file
-    ///
-    /// # Arguments
-    /// * `recipe` - The recipe to save
-    /// * `filepath_str` - The path to save the recipe to
-    ///
-    /// # Returns
-    /// * `Result<PathBuf, String>` - The path the recipe was saved to or an error message
-    fn save_recipe(
-        &self,
-        recipe: &goose::recipe::Recipe,
-        filepath_str: &str,
-    ) -> anyhow::Result<PathBuf> {
-        let path_buf = PathBuf::from(filepath_str);
-        let mut path = path_buf.clone();
-
-        // Update the final path if it's relative
-        if path_buf.is_relative() {
-            // If the path is relative, resolve it relative to the current working directory
-            let cwd = std::env::current_dir().context("Failed to get current directory")?;
-            path = cwd.join(&path_buf);
-        }
-
-        // Check if parent directory exists
-        if let Some(parent) = path.parent() {
-            if !parent.exists() {
-                return Err(anyhow::anyhow!(
-                    "Directory '{}' does not exist",
-                    parent.display()
-                ));
-            }
-        }
-
-        // Try creating the file
-        let file = std::fs::File::create(path.as_path())
-            .context(format!("Failed to create file '{}'", path.display()))?;
-
-        // Write YAML
-        serde_yaml::to_writer(file, recipe).context("Failed to save recipe")?;
-
-        Ok(path)
     }
 
     fn push_message(&mut self, message: Message) {
@@ -1798,68 +1494,6 @@ fn emit_stream_event(event: &StreamEvent) {
     if let Ok(json) = serde_json::to_string(event) {
         println!("{}", json);
     }
-}
-
-/// Prompt user for tool call confirmation, returns the Permission selected
-fn prompt_tool_confirmation(security_prompt: &Option<String>) -> Result<Permission> {
-    output::hide_thinking();
-
-    let prompt = if let Some(security_message) = security_prompt {
-        println!("\n{}", security_message);
-        "Do you allow this tool call?".to_string()
-    } else {
-        "Goose would like to call the above tool, do you allow?".to_string()
-    };
-
-    let permission_result = if security_prompt.is_none() {
-        cliclack::select(prompt)
-            .item(Permission::AllowOnce, "Allow", "Allow the tool call once")
-            .item(
-                Permission::AlwaysAllow,
-                "Always Allow",
-                "Always allow the tool call",
-            )
-            .item(Permission::DenyOnce, "Deny", "Deny the tool call")
-            .item(
-                Permission::Cancel,
-                "Cancel",
-                "Cancel the AI response and tool call",
-            )
-            .interact()
-    } else {
-        cliclack::select(prompt)
-            .item(Permission::AllowOnce, "Allow", "Allow the tool call once")
-            .item(Permission::DenyOnce, "Deny", "Deny the tool call")
-            .item(
-                Permission::Cancel,
-                "Cancel",
-                "Cancel the AI response and tool call",
-            )
-            .interact()
-    };
-
-    match permission_result {
-        Ok(p) => Ok(p),
-        Err(e) => {
-            if e.kind() == std::io::ErrorKind::Interrupted {
-                Ok(Permission::Cancel)
-            } else {
-                Err(e.into())
-            }
-        }
-    }
-}
-
-/// Extract tool confirmation request from a message
-fn find_tool_confirmation(message: &Message) -> Option<(String, Option<String>)> {
-    message.content.iter().find_map(|content| {
-        if let MessageContent::ActionRequired(action) = content {
-            if let ActionRequiredData::ToolConfirmation { id, prompt, .. } = &action.data {
-                return Some((id.clone(), prompt.clone()));
-            }
-        }
-        None
-    })
 }
 
 /// Extract elicitation request from a message
@@ -2060,52 +1694,6 @@ fn handle_agent_error(e: &anyhow::Error, is_stream_json_mode: bool) {
     }
 }
 
-async fn get_reasoner(
-) -> Result<(Arc<dyn Provider>, goose_providers::model::ModelConfig), anyhow::Error> {
-    use goose::providers::create;
-
-    let config = Config::global();
-
-    // Try planner-specific provider first, fall back to default provider
-    let provider = if let Ok(provider) = config.get_param::<String>("GOOSE_PLANNER_PROVIDER") {
-        provider
-    } else {
-        println!("WARNING: GOOSE_PLANNER_PROVIDER not found. Using default provider...");
-        config
-            .get_goose_provider()
-            .expect("No provider configured. Run 'goose configure' first")
-    };
-
-    // Try planner-specific model first, fall back to default model
-    let model = if let Ok(model) = config.get_param::<String>("GOOSE_PLANNER_MODEL") {
-        model
-    } else {
-        println!("WARNING: GOOSE_PLANNER_MODEL not found. Using default model...");
-        config
-            .get_goose_model()
-            .expect("No model configured. Run 'goose configure' first")
-    };
-
-    let planner_context_limit = match env::var(GOOSE_PLANNER_CONTEXT_LIMIT)
-        .ok()
-        .map(|v| v.parse::<usize>())
-    {
-        Some(Ok(n)) if n >= 4096 => Some(n),
-        Some(Ok(_)) => anyhow::bail!("{} must be at least 4096", GOOSE_PLANNER_CONTEXT_LIMIT),
-        Some(Err(e)) => anyhow::bail!("{}: {}", GOOSE_PLANNER_CONTEXT_LIMIT, e),
-        None => None,
-    };
-
-    let model_config = goose::model_config::model_config_from_user_config(model.as_str())?
-        .with_context_limit(planner_context_limit);
-    let extensions = goose::config::extensions::get_enabled_extensions_with_config(config);
-    let reasoner = create(&provider, extensions).await?;
-
-    Ok((reasoner, model_config))
-}
-
-/// Format elapsed time duration
-/// Shows seconds if less than 60, otherwise shows minutes:seconds
 fn format_elapsed_time(duration: std::time::Duration) -> String {
     let total_secs = duration.as_secs();
     if total_secs < 60 {

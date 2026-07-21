@@ -6,7 +6,6 @@ pub mod paths;
 pub mod permission;
 pub mod providers;
 pub mod search_path;
-pub mod tls;
 
 pub use crate::agents::ExtensionConfig;
 pub use base::{merge_config_values, Config, ConfigError};

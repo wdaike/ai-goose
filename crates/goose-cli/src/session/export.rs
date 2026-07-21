@@ -341,12 +341,6 @@ pub fn message_to_markdown(message: &Message, export_all_content: bool) -> Strin
     for content in &message.content {
         match content {
             MessageContent::ActionRequired(action) => match &action.data {
-                ActionRequiredData::ToolConfirmation { tool_name, .. } => {
-                    md.push_str(&format!(
-                        "**Action Required** (tool_confirmation): {}\n\n",
-                        tool_name
-                    ));
-                }
                 ActionRequiredData::Elicitation { message, .. } => {
                     md.push_str(&format!(
                         "**Action Required** (elicitation): {}\n\n",

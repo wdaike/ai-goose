@@ -2,14 +2,12 @@ use crate::config::base::Config;
 use crate::config::extensions::get_enabled_extensions;
 use crate::config::paths::Paths;
 use crate::prompt_template::list_templates;
-use crate::providers::utils::LOGS_TO_KEEP;
 use crate::session::SessionManager;
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
 use utoipa::ToSchema;
 
-const LLM_LOG_MAX_BYTES: usize = 2 * 1024 * 1024;
 const CONFIG_MAX_BYTES: usize = 256 * 1024;
 const CLI_LOG_TAIL_LINES: usize = 400;
 const CLI_LOGS_TO_INCLUDE: usize = 3;
@@ -59,7 +57,6 @@ pub struct DiagnosticsTextFile {
 #[serde(rename_all = "camelCase")]
 pub struct DiagnosticsLogs {
     pub cli: Vec<DiagnosticsTextFile>,
-    pub llm: Vec<DiagnosticsTextFile>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema, schemars::JsonSchema)]
@@ -151,11 +148,6 @@ pub fn config_path() -> PathBuf {
     Paths::config_dir().join("config.yaml")
 }
 
-pub fn latest_llm_log_path() -> Option<PathBuf> {
-    let path = Paths::in_state_dir("logs").join("llm_request.0.jsonl");
-    path.exists().then_some(path)
-}
-
 pub fn recent_cli_log_paths() -> Vec<PathBuf> {
     let component_dir = Paths::in_state_dir("logs").join("cli");
     let mut paths = Vec::new();
@@ -185,55 +177,6 @@ pub fn recent_cli_log_paths() -> Vec<PathBuf> {
     });
     paths.truncate(CLI_LOGS_TO_INCLUDE);
     paths
-}
-
-fn recent_llm_log_paths() -> Vec<PathBuf> {
-    let logs_dir = Paths::in_state_dir("logs");
-    let paths: Vec<_> = fs::read_dir(logs_dir)
-        .ok()
-        .into_iter()
-        .flatten()
-        .filter_map(|entry| entry.ok().map(|entry| entry.path()))
-        .filter(|path| {
-            path.file_name()
-                .and_then(|name| name.to_str())
-                .is_some_and(|name| name.starts_with("llm_request.") && name.ends_with(".jsonl"))
-        })
-        .collect();
-
-    let (mut numbered, mut temp): (Vec<_>, Vec<_>) = paths
-        .into_iter()
-        .partition(|path| llm_log_index(path).is_some());
-
-    numbered.sort_by_key(|path| llm_log_index(path).unwrap_or(usize::MAX));
-    temp.sort_by(|left, right| {
-        log_modified(right)
-            .cmp(&log_modified(left))
-            .then_with(|| log_name(left).cmp(&log_name(right)))
-    });
-
-    if temp.is_empty() || numbered.len() < LOGS_TO_KEEP {
-        numbered.extend(temp);
-        numbered.truncate(LOGS_TO_KEEP);
-        numbered
-    } else {
-        let temp_slots = 1;
-        let numbered_slots = LOGS_TO_KEEP.saturating_sub(temp_slots);
-        temp.truncate(temp_slots);
-        numbered.truncate(numbered_slots);
-        temp.extend(numbered);
-        temp
-    }
-}
-
-fn llm_log_index(path: &std::path::Path) -> Option<usize> {
-    let name = path
-        .file_name()
-        .and_then(|name| name.to_str())
-        .unwrap_or_default();
-    name.strip_prefix("llm_request.")
-        .and_then(|name| name.strip_suffix(".jsonl"))
-        .and_then(|name| name.parse::<usize>().ok())
 }
 
 fn log_modified(path: &std::path::Path) -> std::time::SystemTime {
@@ -338,19 +281,6 @@ pub async fn generate_diagnostics(
                         path: path.display().to_string(),
                         content,
                         truncated: true,
-                    })
-                })
-                .collect(),
-            llm: recent_llm_log_paths()
-                .into_iter()
-                .filter_map(|path| {
-                    read_capped(&path, LLM_LOG_MAX_BYTES).map(|content| {
-                        let truncated = was_truncated(&content);
-                        DiagnosticsTextFile {
-                            path: path.display().to_string(),
-                            content,
-                            truncated,
-                        }
                     })
                 })
                 .collect(),

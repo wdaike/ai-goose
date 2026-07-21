@@ -16,9 +16,6 @@ use goose::config::{
 };
 #[cfg(feature = "telemetry")]
 use goose::posthog::{get_telemetry_choice, TELEMETRY_ENABLED_KEY};
-use goose::providers::base::ConfigKey;
-use goose::providers::provider_test::test_provider_configuration;
-use goose::providers::{create, providers};
 use goose::session::SessionType;
 use goose_providers::thinking::ThinkingEffort;
 use serde_json::Value;
@@ -291,248 +288,17 @@ async fn handle_existing_config() -> anyhow::Result<()> {
     }
 }
 
-/// Helper function to handle OAuth configuration for a provider
-async fn handle_oauth_configuration(provider_name: &str, key_name: &str) -> anyhow::Result<()> {
-    let _ = cliclack::log::info(format!(
-        "Configuring {} using OAuth device code flow...",
-        key_name
-    ));
-
-    // Create a temporary provider instance to handle OAuth
-    match create(provider_name, Vec::new()).await {
-        Ok(provider) => match provider.configure_oauth().await {
-            Ok(_) => {
-                let _ = cliclack::log::success("OAuth authentication completed successfully!");
-                Ok(())
-            }
-            Err(e) => {
-                let _ = cliclack::log::error(format!("Failed to authenticate: {}", e));
-                Err(anyhow::anyhow!(
-                    "OAuth authentication failed for {}: {}",
-                    key_name,
-                    e
-                ))
-            }
-        },
-        Err(e) => {
-            let _ = cliclack::log::error(format!("Failed to create provider for OAuth: {}", e));
-            Err(anyhow::anyhow!(
-                "Failed to create provider for OAuth: {}",
-                e
-            ))
-        }
-    }
-}
-
-fn try_store_secret(config: &Config, key_name: &str, value: String) -> anyhow::Result<bool> {
-    match config.set_secret(key_name, &value) {
-        Ok(_) => Ok(true),
-        Err(ConfigError::FallbackToFileStorage) => Ok(true),
-        Err(e) => {
-            cliclack::outro(style(format!(
-                "Failed to store {} securely: {}. Please ensure your system's secure storage is accessible. Alternatively you can run with GOOSE_DISABLE_KEYRING=true or set the key in your environment variables",
-                key_name, e
-            )).on_red().white())?;
-            Ok(false)
-        }
-    }
-}
-
-async fn configure_single_key(
-    config: &Config,
-    provider_name: &str,
-    display_name: &str,
-    key: &ConfigKey,
-) -> anyhow::Result<bool> {
-    let from_env = std::env::var(&key.name).ok();
-
-    match from_env {
-        Some(env_value) => {
-            let _ = cliclack::log::info(format!("{} is set via environment variable", key.name));
-            if cliclack::confirm("Would you like to save this value to your keyring?")
-                .initial_value(true)
-                .interact()?
-            {
-                if key.secret {
-                    if !try_store_secret(config, &key.name, env_value)? {
-                        return Ok(false);
-                    }
-                } else {
-                    config.set_param(&key.name, &env_value)?;
-                }
-                let _ = cliclack::log::info(format!("Saved {} to {}", key.name, config.path()));
-            }
-        }
-        None => {
-            let existing: Result<String, _> = if key.secret {
-                config.get_secret(&key.name)
-            } else {
-                config.get_param(&key.name)
-            };
-
-            match existing {
-                Ok(_) => {
-                    let _ = cliclack::log::info(format!("{} is already configured", key.name));
-                    if cliclack::confirm("Would you like to update this value?").interact()? {
-                        if key.oauth_flow {
-                            handle_oauth_configuration(provider_name, &key.name).await?;
-                        } else {
-                            let value: String = if key.secret {
-                                cliclack::password(format!("Enter new value for {}", key.name))
-                                    .mask('▪')
-                                    .interact()?
-                            } else {
-                                let mut input =
-                                    cliclack::input(format!("Enter new value for {}", key.name));
-                                if key.default.is_some() {
-                                    input = input.default_input(&key.default.clone().unwrap());
-                                }
-                                input.interact()?
-                            };
-
-                            if key.secret {
-                                if !try_store_secret(config, &key.name, value)? {
-                                    return Ok(false);
-                                }
-                            } else {
-                                config.set_param(&key.name, &value)?;
-                            }
-                        }
-                    }
-                }
-                Err(_) => {
-                    if key.oauth_flow {
-                        handle_oauth_configuration(provider_name, &key.name).await?;
-                    } else if !key.required && key.secret {
-                        if cliclack::confirm(format!(
-                            "Would you like to set {}? (optional)",
-                            key.name
-                        ))
-                        .initial_value(true)
-                        .interact()?
-                        {
-                            let value: String =
-                                cliclack::password(format!("Enter value for {}", key.name))
-                                    .mask('▪')
-                                    .interact()?;
-                            if !try_store_secret(config, &key.name, value)? {
-                                return Ok(false);
-                            }
-                        }
-                    } else {
-                        let prompt = if key.required {
-                            format!(
-                                "Provider {} requires {}, please enter a value",
-                                display_name, key.name
-                            )
-                        } else {
-                            format!("Enter {} (optional, press Enter to skip)", key.name)
-                        };
-
-                        let value: String = if key.secret {
-                            cliclack::password(&prompt).mask('▪').interact()?
-                        } else {
-                            let mut input = cliclack::input(&prompt);
-                            if key.default.is_some() {
-                                input = input.default_input(&key.default.clone().unwrap());
-                            }
-                            if !key.required {
-                                input = input.required(false);
-                            }
-                            input.interact()?
-                        };
-
-                        if value.is_empty() {
-                            return Ok(true);
-                        }
-
-                        if key.secret {
-                            if !try_store_secret(config, &key.name, value)? {
-                                return Ok(false);
-                            }
-                        } else {
-                            config.set_param(&key.name, &value)?;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    Ok(true)
-}
-
 pub async fn configure_provider_dialog() -> anyhow::Result<bool> {
-    // Get global config instance
     let config = Config::global();
 
-    // Get all available providers and their metadata
-    let mut available_providers = providers().await;
-
-    // Sort providers alphabetically by display name
-    available_providers.sort_by(|a, b| a.0.display_name.cmp(&b.0.display_name));
-
-    // Create selection items from provider metadata
-    let provider_items: Vec<(&String, &str, &str)> = available_providers
-        .iter()
-        .map(|(p, _)| (&p.name, p.display_name.as_str(), p.description.as_str()))
-        .collect();
-
-    // Get current default provider if it exists
-    let current_provider: Option<String> = config.get_goose_provider().ok();
-    let default_provider = current_provider.unwrap_or_default();
-
-    // Select provider
-    let provider_name = cliclack::select("Which model provider should we use?")
-        .initial_value(&default_provider)
-        .items(&provider_items)
-        .filter_mode()
-        .interact()?;
-
-    // Get the selected provider's metadata
-    let (provider_meta, _) = available_providers
-        .iter()
-        .find(|(p, _)| &p.name == provider_name)
-        .expect("Selected provider must exist in metadata");
-
-    for key in provider_meta
-        .config_keys
-        .iter()
-        .filter(|k| k.primary || k.oauth_flow)
-    {
-        if !configure_single_key(config, provider_name, &provider_meta.display_name, key).await? {
-            return Ok(false);
-        }
-    }
-
-    let non_primary_keys: Vec<_> = provider_meta
-        .config_keys
-        .iter()
-        .filter(|k| !k.primary && !k.oauth_flow)
-        .collect();
-    if !non_primary_keys.is_empty()
-        && cliclack::confirm("Would you like to configure advanced settings?")
-            .initial_value(false)
-            .interact()?
-    {
-        for key in non_primary_keys {
-            if !configure_single_key(config, provider_name, &provider_meta.display_name, key)
-                .await?
-            {
-                return Ok(false);
-            }
-        }
-    }
-
     let spin = spinner();
-    spin.start("Attempting to fetch supported models...");
+    spin.start("Fetching available models...");
     let models = goose::codex::list_models().await.unwrap_or_default();
     spin.stop(style("Model fetch complete").green());
 
     let model: String = if models.is_empty() {
-        let default_model =
-            std::env::var("GOOSE_MODEL").unwrap_or(provider_meta.default_model.clone());
-        cliclack::input("Enter a model from that provider:")
-            .default_input(&default_model)
+        cliclack::input("Enter a model name:")
+            .default_input(goose::providers::CODEX_DEFAULT_MODEL)
             .interact()?
     } else {
         let items: Vec<(&str, &str, &str)> = models
@@ -570,32 +336,9 @@ pub async fn configure_provider_dialog() -> anyhow::Result<bool> {
         config.set_goose_thinking_effort(effort)?;
     }
 
-    // Test the configuration
-    let spin = spinner();
-    spin.start("Checking your configuration...");
-
-    let toolshim_enabled = std::env::var("GOOSE_TOOLSHIM")
-        .map(|val| val == "1" || val.to_lowercase() == "true")
-        .unwrap_or(false);
-    let toolshim_model = std::env::var("GOOSE_TOOLSHIM_OLLAMA_MODEL").ok();
-
-    match test_provider_configuration(provider_name, &model, toolshim_enabled, toolshim_model).await
-    {
-        Ok(()) => {
-            goose::config::set_active_provider(config, provider_name, &model)?;
-            print_config_file_saved()?;
-            Ok(true)
-        }
-        Err(e) => {
-            spin.stop(style(e.to_string()).red());
-            cliclack::outro(
-                style(format!("Failed to configure provider: {e}"))
-                    .on_red()
-                    .white(),
-            )?;
-            Ok(false)
-        }
-    }
+    goose::config::set_active_provider(config, goose::providers::CODEX_PROVIDER_NAME, &model)?;
+    print_config_file_saved()?;
+    Ok(true)
 }
 
 /// Configure extensions that can be used with goose
@@ -702,6 +445,20 @@ fn prompt_extension_name(placeholder: &str) -> anyhow::Result<String> {
             })
             .interact()?,
     )
+}
+
+fn try_store_secret(config: &Config, key_name: &str, value: String) -> anyhow::Result<bool> {
+    match config.set_secret(key_name, &value) {
+        Ok(_) => Ok(true),
+        Err(ConfigError::FallbackToFileStorage) => Ok(true),
+        Err(e) => {
+            cliclack::outro(style(format!(
+                "Failed to store {} securely: {}. Please ensure your system's secure storage is accessible. Alternatively you can run with GOOSE_DISABLE_KEYRING=true or set the key in your environment variables",
+                key_name, e
+            )).on_red().white())?;
+            Ok(false)
+        }
+    }
 }
 
 fn collect_env_vars() -> anyhow::Result<(HashMap<String, String>, Vec<String>)> {
@@ -1330,17 +1087,6 @@ pub async fn configure_tool_permissions_dialog() -> anyhow::Result<()> {
         .filter_mode()
         .interact()?;
 
-    let config = Config::global();
-
-    let provider_name: String = config
-        .get_goose_provider()
-        .expect("No provider configured. Please set model provider first");
-
-    let model: String = config
-        .get_goose_model()
-        .expect("No model configured. Please set model first");
-    let model_config = goose::model_config::model_config_from_user_config(&model)?;
-
     let agent = Agent::new();
 
     let session = agent
@@ -1374,12 +1120,6 @@ pub async fn configure_tool_permissions_dialog() -> anyhow::Result<()> {
         );
         return Ok(());
     }
-
-    let extensions = extension_config.into_iter().collect::<Vec<_>>();
-    let new_provider = create(&provider_name, extensions).await?;
-    agent
-        .update_provider(new_provider, model_config, &session.id)
-        .await?;
 
     let permission_manager = PermissionManager::instance();
     let selected_tools = agent

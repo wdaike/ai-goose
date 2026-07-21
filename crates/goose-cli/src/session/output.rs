@@ -240,9 +240,6 @@ pub fn render_message(message: &Message, debug: bool) {
     for content in &message.content {
         match content {
             MessageContent::ActionRequired(action) => match &action.data {
-                ActionRequiredData::ToolConfirmation { tool_name, .. } => {
-                    println!("action_required(tool_confirmation): {}", tool_name)
-                }
                 ActionRequiredData::Elicitation { message, .. } => {
                     println!("action_required(elicitation): {}", message)
                 }
@@ -321,9 +318,6 @@ pub fn render_message_streaming(
             MessageContent::ActionRequired(action) => {
                 flush_markdown_buffer(buffer, theme);
                 match &action.data {
-                    ActionRequiredData::ToolConfirmation { tool_name, .. } => {
-                        println!("action_required(tool_confirmation): {}", tool_name)
-                    }
                     ActionRequiredData::Elicitation { message, .. } => {
                         println!("action_required(elicitation): {}", message)
                     }
@@ -431,26 +425,6 @@ pub fn render_text_no_newlines(text: &str, color: Option<Color>, dim: bool) {
         styled_text = styled_text.fg(color);
     }
     print!("{}", styled_text);
-}
-
-pub fn render_enter_plan_mode() {
-    println!(
-        "\n{} {}\n",
-        accent("Entering plan mode.").bold(),
-        style("You can provide instructions to create a plan and then act on it. To exit early, type /endplan")
-            .dim()
-    );
-}
-
-pub fn render_act_on_plan() {
-    println!(
-        "\n{}\n",
-        accent("Exiting plan mode and acting on the above plan").bold(),
-    );
-}
-
-pub fn render_exit_plan_mode() {
-    println!("\n{}\n", accent("Exiting plan mode.").bold());
 }
 
 pub fn goose_mode_message(text: &str) {

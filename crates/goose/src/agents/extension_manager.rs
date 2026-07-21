@@ -33,7 +33,6 @@ use super::extension::{
     ToolInfo, PLATFORM_EXTENSIONS,
 };
 use super::tool_execution::{ToolCallContext, ToolCallResult};
-use super::types::SharedProvider;
 use crate::action_required_manager::ActionRequiredManager;
 use crate::agents::extension::{Envs, ProcessExit};
 use crate::agents::extension_malware_check;
@@ -185,7 +184,6 @@ pub(crate) const TRUSTED_TOOL_UPDATE_META_KEY: &str = "__goose_tool_update_meta"
 pub struct ExtensionManager {
     extensions: Mutex<HashMap<String, Extension>>,
     context: PlatformExtensionContext,
-    provider: SharedProvider,
     tools_cache: Mutex<Option<Arc<Vec<Tool>>>>,
     tools_cache_version: AtomicU64,
     client_name: String,
@@ -404,7 +402,6 @@ struct ResolvedTool {
 async fn child_process_client(
     mut command: Command,
     timeout: &Option<u64>,
-    provider: SharedProvider,
     working_dir: &PathBuf,
     client_name: String,
     capabilities: GooseMcpClientCapabilities,
@@ -441,7 +438,6 @@ async fn child_process_client(
     let client_result = McpClient::connect(
         transport,
         Duration::from_secs(resolve_timeout(*timeout)),
-        provider,
         client_name,
         capabilities,
         working_dir.clone(),
@@ -611,7 +607,6 @@ async fn connect_with_auth(
     uri: &str,
     timeout: Duration,
     headers: &HashMap<String, String>,
-    provider: SharedProvider,
     client_name: String,
     capabilities: GooseMcpClientCapabilities,
     roots_dir: &std::path::Path,
@@ -645,7 +640,6 @@ async fn connect_with_auth(
         McpClient::connect(
             transport,
             timeout,
-            provider,
             client_name,
             capabilities,
             roots_dir.to_path_buf(),
@@ -662,7 +656,6 @@ async fn create_streamable_http_client(
     name: &str,
     socket: Option<&str>,
     credential_store: Box<dyn CredentialStore>,
-    provider: SharedProvider,
     client_name: String,
     capabilities: GooseMcpClientCapabilities,
     roots_dir: &std::path::Path,
@@ -675,7 +668,6 @@ async fn create_streamable_http_client(
             headers,
             name,
             socket_path,
-            provider,
             client_name,
             capabilities,
             roots_dir,
@@ -730,7 +722,6 @@ async fn create_streamable_http_client(
                     uri,
                     timeout_duration,
                     headers,
-                    provider.clone(),
                     client_name.clone(),
                     capabilities.clone(),
                     roots_dir,
@@ -768,7 +759,6 @@ async fn create_streamable_http_client(
     let client_res = McpClient::connect(
         transport,
         timeout_duration,
-        provider.clone(),
         client_name.clone(),
         capabilities.clone(),
         roots_dir.to_path_buf(),
@@ -783,7 +773,6 @@ async fn create_streamable_http_client(
                     uri,
                     timeout_duration,
                     headers,
-                    provider,
                     client_name,
                     capabilities,
                     roots_dir,
@@ -805,7 +794,6 @@ async fn create_unix_socket_http_client(
     headers: &HashMap<String, String>,
     name: &str,
     socket_path: &str,
-    provider: SharedProvider,
     client_name: String,
     capabilities: GooseMcpClientCapabilities,
     roots_dir: &std::path::Path,
@@ -842,7 +830,6 @@ async fn create_unix_socket_http_client(
     let client_res = McpClient::connect(
         transport,
         timeout_duration,
-        provider.clone(),
         client_name.clone(),
         capabilities.clone(),
         roots_dir.to_path_buf(),
@@ -868,7 +855,6 @@ impl ExtensionManager {
     }
 
     pub fn new(
-        provider: SharedProvider,
         session_manager: Arc<crate::session::SessionManager>,
         client_name: String,
         capabilities: ExtensionManagerCapabilities,
@@ -882,7 +868,6 @@ impl ExtensionManager {
                 session: None,
                 use_login_shell_path,
             },
-            provider,
             tools_cache: Mutex::new(None),
             tools_cache_version: AtomicU64::new(0),
             client_name,
@@ -890,10 +875,9 @@ impl ExtensionManager {
         }
     }
 
-    pub fn new_without_provider(data_dir: std::path::PathBuf) -> Self {
+    pub fn new_for_tests(data_dir: std::path::PathBuf) -> Self {
         let session_manager = Arc::new(crate::session::SessionManager::new(data_dir));
         Self::new(
-            Arc::new(Mutex::new(None)),
             session_manager,
             "goose-cli".to_string(),
             ExtensionManagerCapabilities {
@@ -906,10 +890,6 @@ impl ExtensionManager {
 
     pub fn get_context(&self) -> &PlatformExtensionContext {
         &self.context
-    }
-
-    pub fn get_provider(&self) -> &SharedProvider {
-        &self.provider
     }
 
     pub async fn supports_resources(&self) -> bool {
@@ -985,7 +965,6 @@ impl ExtensionManager {
                     name,
                     resolved_socket.as_deref(),
                     Box::new(GooseCredentialStore::new(name.to_string())),
-                    self.provider.clone(),
                     self.client_name.clone(),
                     self.mcp_client_capabilities(),
                     &effective_working_dir,
@@ -1029,7 +1008,6 @@ impl ExtensionManager {
                         McpClient::connect(
                             (client_read, client_write),
                             Duration::from_secs(timeout_secs),
-                            self.provider.clone(),
                             self.client_name.clone(),
                             self.mcp_client_capabilities(),
                             effective_working_dir.clone(),
@@ -1070,7 +1048,6 @@ impl ExtensionManager {
                 let client = child_process_client(
                     command,
                     timeout,
-                    self.provider.clone(),
                     &process_working_dir,
                     self.client_name.clone(),
                     self.mcp_client_capabilities(),
@@ -1101,7 +1078,6 @@ impl ExtensionManager {
                 let client = child_process_client(
                     command,
                     timeout,
-                    self.provider.clone(),
                     &effective_working_dir,
                     self.client_name.clone(),
                     self.mcp_client_capabilities(),
@@ -2178,8 +2154,7 @@ mod tests {
         use super::super::tool_execution::ToolCallContext;
 
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
 
         // Add some mock clients using the helper method
         extension_manager
@@ -2262,8 +2237,7 @@ mod tests {
     #[tokio::test]
     async fn test_tool_availability_filtering() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
 
         // Only "available_tool" should be available to the LLM
         let available_tools = vec!["available_tool".to_string()];
@@ -2295,8 +2269,7 @@ mod tests {
     #[tokio::test]
     async fn test_tool_availability_defaults_to_available() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
 
         extension_manager
             .add_mock_extension_with_tools(
@@ -2330,8 +2303,7 @@ mod tests {
         use super::super::tool_execution::ToolCallContext;
 
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
 
         let available_tools = vec!["available_tool".to_string()];
 
@@ -2426,8 +2398,7 @@ mod tests {
     #[tokio::test]
     async fn test_tools_cache_invalidated_on_add_extension() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
 
         extension_manager
             .add_mock_extension("ext_a".to_string(), Arc::new(MockClient {}))
@@ -2463,8 +2434,7 @@ mod tests {
     #[tokio::test]
     async fn test_tools_cache_invalidated_on_remove_extension() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
 
         extension_manager
             .add_mock_extension("ext_a".to_string(), Arc::new(MockClient {}))
@@ -2495,8 +2465,7 @@ mod tests {
     #[tokio::test]
     async fn test_get_prefixed_tools_excluding() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
 
         extension_manager
             .add_mock_extension("ext_a".to_string(), Arc::new(MockClient {}))
@@ -2518,8 +2487,7 @@ mod tests {
     #[tokio::test]
     async fn test_mcp_app_tools_identified_when_filtering_tools() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
 
         extension_manager
             .add_mock_extension("autovisualiser".to_string(), Arc::new(MockClient {}))
@@ -2550,8 +2518,7 @@ mod tests {
     #[tokio::test]
     async fn test_get_prefixed_tools_by_extension_name() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
 
         extension_manager
             .add_mock_extension("ext_a".to_string(), Arc::new(MockClient {}))
@@ -2573,8 +2540,7 @@ mod tests {
     #[tokio::test]
     async fn test_resolve_tool_error_includes_available_tools() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
 
         extension_manager
             .add_mock_extension("ext_a".to_string(), Arc::new(MockClient {}))
@@ -2691,8 +2657,7 @@ mod tests {
     #[tokio::test]
     async fn test_resolve_tool_recovers_dotted_mangled_name() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
         extension_manager
             .add_mock_extension("test_client".to_string(), Arc::new(MockClient {}))
             .await;
@@ -2707,8 +2672,7 @@ mod tests {
     #[tokio::test]
     async fn test_resolve_tool_recovers_functions_prefixed_name() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
         extension_manager
             .add_mock_extension("test_client".to_string(), Arc::new(MockClient {}))
             .await;
@@ -2723,8 +2687,7 @@ mod tests {
     #[tokio::test]
     async fn test_resolve_tool_exact_dotted_name_never_rewritten() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
         extension_manager
             .add_mock_extension("dotted".to_string(), Arc::new(MockDottedClient {}))
             .await;
@@ -2740,8 +2703,7 @@ mod tests {
     #[tokio::test]
     async fn test_resolve_tool_recovers_mangled_separator_with_dotted_tool_name() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let extension_manager =
-            ExtensionManager::new_without_provider(temp_dir.path().to_path_buf());
+        let extension_manager = ExtensionManager::new_for_tests(temp_dir.path().to_path_buf());
         extension_manager
             .add_mock_extension("dotted".to_string(), Arc::new(MockDottedClient {}))
             .await;
@@ -2870,7 +2832,7 @@ mod tests {
         // When add_extension is called with a config that is byte-for-byte identical to
         // the already-loaded one, it must return Ok(()) without removing the extension.
         let temp_dir = tempfile::tempdir().unwrap();
-        let em = Arc::new(ExtensionManager::new_without_provider(
+        let em = Arc::new(ExtensionManager::new_for_tests(
             temp_dir.path().to_path_buf(),
         ));
 
@@ -2908,7 +2870,7 @@ mod tests {
         // When add_extension is called with an updated config (same name, different fields),
         // the existing extension must be removed so the caller can re-add with new config.
         let temp_dir = tempfile::tempdir().unwrap();
-        let em = Arc::new(ExtensionManager::new_without_provider(
+        let em = Arc::new(ExtensionManager::new_for_tests(
             temp_dir.path().to_path_buf(),
         ));
 
@@ -3031,7 +2993,6 @@ mod tests {
         headers.insert("bad header name".to_string(), "value".to_string());
 
         let temp_dir = tempdir().unwrap();
-        let provider: SharedProvider = Arc::new(Mutex::new(None));
         let capabilities = GooseMcpClientCapabilities {
             mcpui: false,
             host_info: None,
@@ -3044,7 +3005,6 @@ mod tests {
             "test-ext",
             None,
             Box::new(rmcp::transport::auth::InMemoryCredentialStore::new()),
-            provider,
             "goose-test".to_string(),
             capabilities,
             temp_dir.path(),
@@ -3066,7 +3026,6 @@ mod tests {
         headers.insert("x-valid-name".to_string(), "bad\r\nvalue".to_string());
 
         let temp_dir = tempdir().unwrap();
-        let provider: SharedProvider = Arc::new(Mutex::new(None));
         let capabilities = GooseMcpClientCapabilities {
             mcpui: false,
             host_info: None,
@@ -3079,7 +3038,6 @@ mod tests {
             "test-ext",
             None,
             Box::new(rmcp::transport::auth::InMemoryCredentialStore::new()),
-            provider,
             "goose-test".to_string(),
             capabilities,
             temp_dir.path(),
@@ -3110,7 +3068,6 @@ mod tests {
         headers.insert("x-api-key".to_string(), "test-secret-123".to_string());
 
         let temp_dir = tempdir().unwrap();
-        let provider: SharedProvider = Arc::new(Mutex::new(None));
         let capabilities = GooseMcpClientCapabilities {
             mcpui: false,
             host_info: None,
@@ -3125,7 +3082,6 @@ mod tests {
             "test-ext",
             None,
             Box::new(rmcp::transport::auth::InMemoryCredentialStore::new()),
-            provider,
             "goose-test".to_string(),
             capabilities,
             temp_dir.path(),
@@ -3193,7 +3149,6 @@ mod tests {
         auth_manager.set_credential_store(store);
 
         let temp_dir = tempdir().unwrap();
-        let provider: SharedProvider = Arc::new(Mutex::new(None));
         let capabilities = GooseMcpClientCapabilities {
             mcpui: false,
             host_info: None,
@@ -3206,7 +3161,6 @@ mod tests {
             &mock_server.uri(),
             Duration::from_secs(5),
             &headers,
-            provider,
             "goose-test".to_string(),
             capabilities,
             temp_dir.path(),

@@ -199,12 +199,6 @@ pub struct ToolConfirmationRequest {
 #[serde(tag = "actionType", rename_all = "camelCase")]
 pub enum ActionRequiredData {
     #[serde(rename_all = "camelCase")]
-    ToolConfirmation {
-        id: String,
-        tool_name: String,
-        arguments: JsonObject,
-        prompt: Option<String>,
-    },
     Elicitation {
         id: String,
         message: String,
@@ -303,9 +297,6 @@ impl fmt::Display for MessageContent {
                 write!(f, "[ToolConfirmationRequest: {}]", r.tool_name)
             }
             MessageContent::ActionRequired(a) => match &a.data {
-                ActionRequiredData::ToolConfirmation { tool_name, .. } => {
-                    write!(f, "[ActionRequired: ToolConfirmation for {}]", tool_name)
-                }
                 ActionRequiredData::Elicitation { message, .. } => {
                     write!(f, "[ActionRequired: Elicitation - {}]", message)
                 }
@@ -451,22 +442,6 @@ impl MessageContent {
             id: id.into(),
             tool_result,
             metadata: metadata.cloned(),
-        })
-    }
-
-    pub fn action_required<S: Into<String>>(
-        id: S,
-        tool_name: String,
-        arguments: JsonObject,
-        prompt: Option<String>,
-    ) -> Self {
-        MessageContent::ActionRequired(ActionRequired {
-            data: ActionRequiredData::ToolConfirmation {
-                id: id.into(),
-                tool_name,
-                arguments,
-                prompt,
-            },
         })
     }
 
@@ -950,19 +925,6 @@ impl Message {
             .push(MessageContent::tool_response_with_metadata(
                 id, result, metadata,
             ));
-    }
-
-    /// Add an action required message for tool confirmation
-    pub fn with_action_required<S: Into<String>>(
-        self,
-        id: S,
-        tool_name: String,
-        arguments: JsonObject,
-        prompt: Option<String>,
-    ) -> Self {
-        self.with_content(MessageContent::action_required(
-            id, tool_name, arguments, prompt,
-        ))
     }
 
     pub fn with_frontend_tool_request<S: Into<String>>(

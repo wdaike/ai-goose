@@ -2,7 +2,7 @@ use crate::config::paths::Paths;
 use crate::config::GooseMode;
 use crate::conversation::message::{Message, MessageUsage, TokenState};
 use crate::conversation::Conversation;
-use crate::providers::base::CostSource;
+use goose_providers::conversation::token_usage::CostSource;
 
 use crate::recipe::Recipe;
 use crate::session::extension_data::ExtensionData;
