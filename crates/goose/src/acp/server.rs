@@ -79,7 +79,6 @@ mod local_inference;
 mod manage_sessions;
 mod new_session;
 mod onboarding;
-mod prompts;
 mod recipe;
 mod resources;
 mod schedule;

@@ -1,7 +1,6 @@
 use crate::config::base::Config;
 use crate::config::extensions::get_enabled_extensions;
 use crate::config::paths::Paths;
-use crate::prompt_template::list_templates;
 use crate::session::SessionManager;
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -61,13 +60,6 @@ pub struct DiagnosticsLogs {
 
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema, schemars::JsonSchema)]
 #[serde(rename_all = "camelCase")]
-pub struct DiagnosticsPrompt {
-    pub name: String,
-    pub content: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, ToSchema, schemars::JsonSchema)]
-#[serde(rename_all = "camelCase")]
 pub struct DiagnosticsScheduledRecipe {
     pub path: String,
     pub content: String,
@@ -91,7 +83,6 @@ pub struct DiagnosticsReport {
     pub extensions: DiagnosticsExtensions,
     pub session: Option<serde_json::Value>,
     pub logs: DiagnosticsLogs,
-    pub prompts: Vec<DiagnosticsPrompt>,
     pub schedule: Option<serde_json::Value>,
     pub scheduled_recipes: Vec<DiagnosticsScheduledRecipe>,
     pub errors: Vec<DiagnosticsError>,
@@ -289,18 +280,6 @@ pub async fn generate_diagnostics(
         DiagnosticsLogs::default()
     };
 
-    let prompts = if is_full {
-        list_templates()
-            .into_iter()
-            .map(|template| DiagnosticsPrompt {
-                name: template.name,
-                content: template.user_content.unwrap_or(template.default_content),
-            })
-            .collect()
-    } else {
-        Vec::new()
-    };
-
     let schedule = if is_full {
         let schedule_json = data_dir.join("schedule.json");
         if schedule_json.exists() {
@@ -357,7 +336,6 @@ pub async fn generate_diagnostics(
         },
         session,
         logs,
-        prompts,
         schedule,
         scheduled_recipes,
         errors,

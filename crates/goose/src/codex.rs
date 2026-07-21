@@ -44,6 +44,11 @@ use crate::conversation::message::{
 use crate::session::extension_data::{EnabledExtensionsState, ExtensionState};
 use crate::session::{Session, SessionManager};
 
+/// Codex discovers `AGENTS.md` itself; goose only has to name the extra
+/// project-doc filenames it historically supported.
+const GOOSE_HINTS_FILENAME: &str = ".goosehints";
+const AGENTS_MD_FILENAME: &str = "AGENTS.md";
+
 static RUNTIME_PATHS: OnceLock<Arg0DispatchPaths> = OnceLock::new();
 static NEXT_REQUEST_ID: AtomicI64 = AtomicI64::new(1);
 
@@ -952,6 +957,20 @@ async fn thread_config(session: &Session) -> Result<ThreadStartParams> {
         .into_iter()
         .map(|(key, value)| Ok((key, serde_json::to_value(value)?)))
         .collect::<Result<HashMap<_, _>>>()?;
+    let context_filenames = crate::config::Config::global()
+        .get_param::<Vec<String>>("CONTEXT_FILE_NAMES")
+        .unwrap_or_else(|_| vec![GOOSE_HINTS_FILENAME.to_string()]);
+    let fallback_filenames: Vec<String> = context_filenames
+        .into_iter()
+        .filter(|name| name != AGENTS_MD_FILENAME)
+        .collect();
+    if !fallback_filenames.is_empty() {
+        config.insert(
+            "project_doc_fallback_filenames".to_string(),
+            serde_json::json!(fallback_filenames),
+        );
+    }
+
     if let (Ok(threshold), Some(context_limit)) = (
         crate::config::Config::global().get_param::<f64>("GOOSE_AUTO_COMPACT_THRESHOLD"),
         session

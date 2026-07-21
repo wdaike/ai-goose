@@ -17,7 +17,6 @@ pub mod download_manager;
 pub mod execution;
 pub mod gateway;
 pub mod goose_apps;
-pub mod hints;
 pub mod hooks;
 pub mod instance_id;
 pub mod logging;
@@ -31,7 +30,6 @@ pub mod permission;
 pub mod plugins;
 #[cfg(feature = "telemetry")]
 pub mod posthog;
-pub mod prompt_template;
 pub mod providers {
     pub const CODEX_PROVIDER_NAME: &str = "codex";
     pub const CODEX_DEFAULT_MODEL: &str = "current";

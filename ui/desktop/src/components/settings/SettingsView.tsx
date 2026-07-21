@@ -4,7 +4,6 @@ import ModelsSection from './models/ModelsSection';
 import ExternalBackendSection from './app/ExternalBackendSection';
 import AppSettingsSection from './app/AppSettingsSection';
 import ConfigSettings from './config/ConfigSettings';
-import PromptsSettingsSection from './PromptsSettingsSection';
 import ExtensionsSettingsSection from './extensions/ExtensionsSettingsSection';
 import SkillsSettingsSection from './skills/SkillsSettingsSection';
 import type { ExtensionConfig } from '../../types/extensions';
@@ -15,7 +14,6 @@ import {
   Share2,
   Monitor,
   MessageSquare,
-  FileText,
   Keyboard,
   HardDrive,
   KeyRound,
@@ -114,7 +112,6 @@ type SettingsTab =
   | 'extensions'
   | 'skills'
   | 'sharing'
-  | 'prompts'
   | 'keyboard'
   | 'auth';
 
@@ -166,7 +163,6 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: 'groupAdvanced',
     items: [
-      { tab: 'prompts', label: 'tabPrompts', icon: FileText, testId: 'settings-prompts-tab' },
       { tab: 'keyboard', label: 'tabKeyboard', icon: Keyboard, testId: 'settings-keyboard-tab' },
       { tab: 'auth', label: 'tabAuth', icon: KeyRound, testId: 'settings-auth-tab' },
     ],
@@ -227,7 +223,6 @@ export default function SettingsView({
         tools: 'chat',
         app: 'app',
         chat: 'chat',
-        prompts: 'prompts',
         extensions: 'extensions',
         skills: 'skills',
         keyboard: 'keyboard',
@@ -363,7 +358,6 @@ export default function SettingsView({
               )}
               {activeTab === 'skills' && <SkillsSettingsSection />}
               {activeTab === 'sharing' && <ExternalBackendSection />}
-              {activeTab === 'prompts' && <PromptsSettingsSection />}
               {activeTab === 'keyboard' && <KeyboardShortcutsSection />}
               {activeTab === 'auth' && <AuthSettingsSection />}
               {activeTab === 'app' && (

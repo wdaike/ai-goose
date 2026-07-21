@@ -35,11 +35,6 @@ export type DiagnosticsLogs = {
   cli: DiagnosticsTextFile[];
 };
 
-export type DiagnosticsPrompt = {
-  content: string;
-  name: string;
-};
-
 export type DiagnosticsScheduledRecipe = {
   content: string;
   path: string;
@@ -52,7 +47,6 @@ export type DiagnosticsReport = {
   generatedAt: string;
   level: DiagnosticsLevel;
   logs: DiagnosticsLogs;
-  prompts: DiagnosticsPrompt[];
   schedule?: unknown;
   scheduledRecipes: DiagnosticsScheduledRecipe[];
   schemaVersion: number;

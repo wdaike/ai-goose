@@ -12,8 +12,8 @@ mod session_naming;
 pub use diagnostics::{
     config_path, generate_diagnostics, get_system_info, read_capped, read_tail,
     recent_cli_log_paths, DiagnosticsConfig, DiagnosticsError, DiagnosticsExtensions,
-    DiagnosticsLevel, DiagnosticsLogs, DiagnosticsPrompt, DiagnosticsReport,
-    DiagnosticsScheduledRecipe, DiagnosticsTextFile, SystemInfo,
+    DiagnosticsLevel, DiagnosticsLogs, DiagnosticsReport, DiagnosticsScheduledRecipe,
+    DiagnosticsTextFile, SystemInfo,
 };
 pub use extension_data::{EnabledExtensionsState, ExtensionData, ExtensionState, TodoState};
 pub use session_manager::{
