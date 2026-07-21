@@ -583,9 +583,7 @@ describe('createAcpSessionNotificationAdapter', () => {
           status: { type: 'progress', message: 'Still working' },
         })
       );
-      expect(progressStateChanges).toEqual([
-        { type: 'progressMessage', message: 'Still working' },
-      ]);
+      expect(progressStateChanges).toEqual([{ type: 'progressMessage', message: 'Still working' }]);
     });
   });
 

@@ -1,5 +1,4 @@
 import { NavigateFunction } from 'react-router-dom';
-import type { Recipe } from '../recipe';
 import { UserInput } from '../types/message';
 
 export type View =
@@ -12,10 +11,8 @@ export type View =
   | 'configPage'
   | 'ConfigureProviders'
   | 'settingsV2'
-  | 'sessions'
   | 'schedules'
   | 'loading'
-  | 'recipes'
   | 'skills'
   | 'permission';
 
@@ -23,7 +20,6 @@ export type ViewOptions = {
   showEnvVars?: boolean;
   deepLinkConfig?: unknown;
   error?: string;
-  recipe?: Recipe;
   parentView?: View;
   parentViewOptions?: ViewOptions;
   disableAnimation?: boolean;
@@ -54,17 +50,11 @@ export const createNavigationHandler = (navigate: NavigateFunction) => {
       case 'settings':
         navigate('/settings', { state: options });
         break;
-      case 'sessions':
-        navigate('/sessions', { state: options });
-        break;
       case 'schedules':
         navigate('/schedules', { state: options });
         break;
-      case 'recipes':
-        navigate('/recipes', { state: options });
-        break;
       case 'skills':
-        navigate('/skills', { state: options });
+        navigate('/settings', { state: { ...options, section: 'skills' } });
         break;
       case 'permission':
         navigate('/permission', { state: options });
@@ -73,7 +63,7 @@ export const createNavigationHandler = (navigate: NavigateFunction) => {
         navigate('/configure-providers', { state: options });
         break;
       case 'extensions':
-        navigate('/extensions', { state: options });
+        navigate('/settings', { state: { ...options, section: 'extensions' } });
         break;
       default:
         navigate('/', { state: options });

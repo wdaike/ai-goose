@@ -182,8 +182,8 @@
   "chatInput.failedToReadImage": {
     "defaultMessage": "Не удалось прочитать файл изображения"
   },
-  "chatInput.navigationShortcut": {
-    "defaultMessage": "{prefix}↑/{prefix}↓ для навигации по сообщениям"
+  "chatInput.placeholder": {
+    "defaultMessage": "Сделайте что угодно"
   },
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "Обработка перетащенных файлов..."
@@ -211,9 +211,6 @@
   },
   "chatInput.unknownType": {
     "defaultMessage": "Неизвестный тип"
-  },
-  "chatInput.viewEditRecipe": {
-    "defaultMessage": "Просмотреть/изменить рецепт"
   },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "Ожидание завершения отмены"
@@ -337,156 +334,6 @@
   },
   "costTracker.totalSessionCost": {
     "defaultMessage": "Итоговая стоимость сеанса: {cost}"
-  },
-  "createEditRecipe.clickToGenerateDeeplink": {
-    "defaultMessage": "Нажмите, чтобы создать диплинк"
-  },
-  "createEditRecipe.close": {
-    "defaultMessage": "Закрыть"
-  },
-  "createEditRecipe.copied": {
-    "defaultMessage": "Скопировано!"
-  },
-  "createEditRecipe.copy": {
-    "defaultMessage": "Копировать"
-  },
-  "createEditRecipe.copyLinkDescription": {
-    "defaultMessage": "Скопируйте эту ссылку, чтобы поделиться с друзьями, или вставьте ее напрямую в Chrome для открытия"
-  },
-  "createEditRecipe.createRecipeTitle": {
-    "defaultMessage": "Создать рецепт"
-  },
-  "createEditRecipe.createSubtitle": {
-    "defaultMessage": "Создайте новый рецепт, чтобы задать поведение и возможности агента для повторно используемых сеансов чата."
-  },
-  "createEditRecipe.editSubtitle": {
-    "defaultMessage": "Вы можете изменить рецепт ниже, чтобы изменить поведение агента в новом сеансе."
-  },
-  "createEditRecipe.generatingDeeplink": {
-    "defaultMessage": "Создание диплинка..."
-  },
-  "createEditRecipe.learnMore": {
-    "defaultMessage": "Подробнее"
-  },
-  "createEditRecipe.recipeSavedAndLaunchedMsg": {
-    "defaultMessage": "Рецепт успешно сохранен и запущен"
-  },
-  "createEditRecipe.recipeSavedMsg": {
-    "defaultMessage": "Рецепт успешно сохранен"
-  },
-  "createEditRecipe.saveAndRunFailed": {
-    "defaultMessage": "Не удалось сохранить и запустить"
-  },
-  "createEditRecipe.saveAndRunFailedMsg": {
-    "defaultMessage": "Не удалось сохранить и запустить рецепт: {error}"
-  },
-  "createEditRecipe.saveAndRunRecipe": {
-    "defaultMessage": "Сохранить и запустить рецепт"
-  },
-  "createEditRecipe.saveFailed": {
-    "defaultMessage": "Не удалось сохранить"
-  },
-  "createEditRecipe.saveFailedMsg": {
-    "defaultMessage": "Не удалось сохранить рецепт: {error}"
-  },
-  "createEditRecipe.saveRecipe": {
-    "defaultMessage": "Сохранить рецепт"
-  },
-  "createEditRecipe.saving": {
-    "defaultMessage": "Сохранение..."
-  },
-  "createEditRecipe.validationFailed": {
-    "defaultMessage": "Проверка не пройдена"
-  },
-  "createEditRecipe.validationMsg": {
-    "defaultMessage": "Заполните все обязательные поля и убедитесь, что JSON-схема корректна."
-  },
-  "createEditRecipe.viewEditRecipeTitle": {
-    "defaultMessage": "Просмотреть/изменить рецепт"
-  },
-  "createSubRecipeInline.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "createSubRecipeInline.closeModal": {
-    "defaultMessage": "Закрыть окно создания подрецепта"
-  },
-  "createSubRecipeInline.createAndAdd": {
-    "defaultMessage": "Создать и добавить подрецепт"
-  },
-  "createSubRecipeInline.createdSuccess": {
-    "defaultMessage": "Подрецепт успешно создан"
-  },
-  "createSubRecipeInline.creating": {
-    "defaultMessage": "Создание..."
-  },
-  "createSubRecipeInline.duplicateName": {
-    "defaultMessage": "Повторяющееся имя"
-  },
-  "createSubRecipeInline.duplicateNameMsg": {
-    "defaultMessage": "Подрецепт с именем «{name}» уже существует. Используйте уникальное имя."
-  },
-  "createSubRecipeInline.instructionsLabel": {
-    "defaultMessage": "Инструкции"
-  },
-  "createSubRecipeInline.instructionsPlaceholder": {
-    "defaultMessage": "Инструкции для ИИ при вызове этого подрецепта..."
-  },
-  "createSubRecipeInline.nameHint": {
-    "defaultMessage": "Уникальный идентификатор, используемый для создания имени инструмента"
-  },
-  "createSubRecipeInline.nameLabel": {
-    "defaultMessage": "Имя"
-  },
-  "createSubRecipeInline.namePlaceholder": {
-    "defaultMessage": "например, security_scan"
-  },
-  "createSubRecipeInline.preconfiguredValues": {
-    "defaultMessage": "Предварительно настроенные значения"
-  },
-  "createSubRecipeInline.preconfiguredValuesHint": {
-    "defaultMessage": "Необязательные значения параметров, которые всегда передаются подрецепту"
-  },
-  "createSubRecipeInline.recipeDescriptionLabel": {
-    "defaultMessage": "Описание рецепта"
-  },
-  "createSubRecipeInline.recipeDescriptionPlaceholder": {
-    "defaultMessage": "Что делает этот рецепт при выполнении"
-  },
-  "createSubRecipeInline.recipeTitleLabel": {
-    "defaultMessage": "Название рецепта"
-  },
-  "createSubRecipeInline.recipeTitlePlaceholder": {
-    "defaultMessage": "например, Инструмент анализа безопасности"
-  },
-  "createSubRecipeInline.saveFailed": {
-    "defaultMessage": "Не удалось сохранить"
-  },
-  "createSubRecipeInline.saveFailedMsg": {
-    "defaultMessage": "Не удалось сохранить подрецепт: {error}"
-  },
-  "createSubRecipeInline.sequentialHint": {
-    "defaultMessage": "(Принудительно выполняет несколько экземпляров последовательно)"
-  },
-  "createSubRecipeInline.sequentialLabel": {
-    "defaultMessage": "Последовательно при повторении"
-  },
-  "createSubRecipeInline.subtitle": {
-    "defaultMessage": "Создайте простой рецепт для использования как вызываемый инструмент в основном рецепте"
-  },
-  "createSubRecipeInline.title": {
-    "defaultMessage": "Создать новый подрецепт"
-  },
-  "createSubRecipeInline.toolDescriptionLabel": {
-    "defaultMessage": "Описание инструмента"
-  },
-  "createSubRecipeInline.toolDescriptionPlaceholder": {
-    "defaultMessage": "Необязательное описание, показываемое при вызове как инструмента"
-  },
-  "createSubRecipeInline.validationFailed": {
-    "defaultMessage": "Проверка не пройдена"
-  },
-  "createSubRecipeInline.validationMsg": {
-    "defaultMessage": "Имя, название, описание рецепта и инструкции обязательны."
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "Добавить кредиты"
@@ -1154,25 +1001,25 @@
   "extensionsSection.updateExtension": {
     "defaultMessage": "Обновить расширение"
   },
-  "extensionsView.addCustomExtension": {
+  "extensionsSettings.addCustomExtension": {
     "defaultMessage": "Добавить пользовательское расширение"
   },
-  "extensionsView.addExtension": {
+  "extensionsSettings.addExtension": {
     "defaultMessage": "Добавить расширение"
   },
-  "extensionsView.browseExtensions": {
+  "extensionsSettings.browseExtensions": {
     "defaultMessage": "Просмотреть расширения"
   },
-  "extensionsView.defaultNote": {
+  "extensionsSettings.defaultNote": {
     "defaultMessage": "Расширения, включенные здесь, используются по умолчанию для новых чатов. Активные расширения также можно переключать во время чата."
   },
-  "extensionsView.description": {
+  "extensionsSettings.description": {
     "defaultMessage": "Эти расширения используют Model Context Protocol (MCP). Они расширяют возможности Goose с помощью трех основных компонентов: промптов, ресурсов и инструментов. {searchShortcut} для поиска."
   },
-  "extensionsView.heading": {
+  "extensionsSettings.heading": {
     "defaultMessage": "Расширения"
   },
-  "extensionsView.searchPlaceholder": {
+  "extensionsSettings.searchPlaceholder": {
     "defaultMessage": "Поиск расширений..."
   },
   "externalBackendSection.certFingerprint": {
@@ -1418,48 +1265,6 @@
   "imagePreview.unableToLoad": {
     "defaultMessage": "Не удалось загрузить изображение"
   },
-  "importRecipeForm.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "importRecipeForm.deeplinkHint": {
-    "defaultMessage": "Вставьте диплинк рецепта, начинающийся с «goose://recipe?config=»"
-  },
-  "importRecipeForm.deeplinkPlaceholder": {
-    "defaultMessage": "Вставьте сюда ваш диплинк goose://recipe?config=..."
-  },
-  "importRecipeForm.example": {
-    "defaultMessage": "пример"
-  },
-  "importRecipeForm.expectedRecipeStructure": {
-    "defaultMessage": "Ожидаемая структура рецепта"
-  },
-  "importRecipeForm.importRecipeButton": {
-    "defaultMessage": "Импортировать рецепт"
-  },
-  "importRecipeForm.importRecipeTitle": {
-    "defaultMessage": "Импортировать рецепт"
-  },
-  "importRecipeForm.importing": {
-    "defaultMessage": "Импорт..."
-  },
-  "importRecipeForm.or": {
-    "defaultMessage": "ИЛИ"
-  },
-  "importRecipeForm.recipeDeeplinkLabel": {
-    "defaultMessage": "Диплинк рецепта"
-  },
-  "importRecipeForm.recipeFileHint": {
-    "defaultMessage": "Загрузите YAML- или JSON-файл со структурой рецепта"
-  },
-  "importRecipeForm.recipeFileLabel": {
-    "defaultMessage": "Файл рецепта"
-  },
-  "importRecipeForm.reviewWarning": {
-    "defaultMessage": "Проверяйте содержимое файлов рецептов перед добавлением в интерфейс goose."
-  },
-  "importRecipeForm.schemaDescription": {
-    "defaultMessage": "Ваш YAML- или JSON-файл должен соответствовать этой структуре. Обязательные поля: title, description и instructions или prompt."
-  },
   "inlineEditText.clickToEdit": {
     "defaultMessage": "Нажмите, чтобы изменить"
   },
@@ -1471,48 +1276,6 @@
   },
   "inlineEditText.failedToSave": {
     "defaultMessage": "Не удалось сохранить"
-  },
-  "instructionsEditor.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "instructionsEditor.insertExample": {
-    "defaultMessage": "Вставить пример"
-  },
-  "instructionsEditor.label": {
-    "defaultMessage": "Инструкции"
-  },
-  "instructionsEditor.placeholder": {
-    "defaultMessage": "Подробные инструкции для ИИ, скрытые от пользователя"
-  },
-  "instructionsEditor.save": {
-    "defaultMessage": "Сохранить инструкции"
-  },
-  "instructionsEditor.syntaxHelp": {
-    "defaultMessage": "Используйте синтаксис {code}, чтобы определить параметры, которые пользователи смогут заполнить"
-  },
-  "instructionsEditor.title": {
-    "defaultMessage": "Редактор инструкций"
-  },
-  "jsonSchemaEditor.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "jsonSchemaEditor.description": {
-    "defaultMessage": "Определите ожидаемую структуру ответа ИИ в формате JSON Schema"
-  },
-  "jsonSchemaEditor.insertExample": {
-    "defaultMessage": "Вставить пример"
-  },
-  "jsonSchemaEditor.invalidJson": {
-    "defaultMessage": "Неверный формат JSON"
-  },
-  "jsonSchemaEditor.label": {
-    "defaultMessage": "JSON-схема ответа"
-  },
-  "jsonSchemaEditor.save": {
-    "defaultMessage": "Сохранить схему"
-  },
-  "jsonSchemaEditor.title": {
-    "defaultMessage": "Редактор JSON Schema"
   },
   "jsonSchemaForm.cancel": {
     "defaultMessage": "Отмена"
@@ -1540,18 +1303,6 @@
   },
   "jsonSchemaForm.submit": {
     "defaultMessage": "Отправить"
-  },
-  "keyValueEditor.addValue": {
-    "defaultMessage": "Добавить предварительно настроенное значение"
-  },
-  "keyValueEditor.defaultKeyPlaceholder": {
-    "defaultMessage": "Имя параметра..."
-  },
-  "keyValueEditor.defaultValuePlaceholder": {
-    "defaultMessage": "Значение параметра..."
-  },
-  "keyValueEditor.removeValue": {
-    "defaultMessage": "Удалить предварительно настроенное значение {key}"
   },
   "keyboardShortcuts.alwaysOnTopDescription": {
     "defaultMessage": "Переключить окно поверх всех"
@@ -2336,32 +2087,32 @@
   "navigation.itemApps": {
     "defaultMessage": "Приложения"
   },
-  "navigation.itemExtensions": {
-    "defaultMessage": "Расширения"
-  },
   "navigation.itemHome": {
     "defaultMessage": "Новый чат"
-  },
-  "navigation.itemRecipes": {
-    "defaultMessage": "Рецепты"
   },
   "navigation.itemScheduler": {
     "defaultMessage": "Планировщик"
   },
-  "navigation.itemSessions": {
-    "defaultMessage": "История сеансов"
-  },
   "navigation.itemSettings": {
     "defaultMessage": "Настройки"
   },
-  "navigation.itemSkills": {
-    "defaultMessage": "Навыки"
-  },
-  "navigationPanel.chats": {
-    "defaultMessage": "Чаты"
+  "navigationPanel.help": {
+    "defaultMessage": "Справка"
   },
   "navigationPanel.noChats": {
     "defaultMessage": "Нет недавних чатов"
+  },
+  "navigationPanel.noResults": {
+    "defaultMessage": "Подходящих чатов нет"
+  },
+  "navigationPanel.projects": {
+    "defaultMessage": "Проекты"
+  },
+  "navigationPanel.search": {
+    "defaultMessage": "Поиск чатов"
+  },
+  "navigationPanel.searching": {
+    "defaultMessage": "Поиск..."
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Безымянный сеанс"
@@ -2404,99 +2155,6 @@
   },
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "Поделиться анонимными данными об использовании"
-  },
-  "parameterInput.defaultValue": {
-    "defaultMessage": "Значение по умолчанию"
-  },
-  "parameterInput.defaultValuePlaceholder": {
-    "defaultMessage": "Введите значение по умолчанию"
-  },
-  "parameterInput.deleteParameter": {
-    "defaultMessage": "Удалить параметр: {key}"
-  },
-  "parameterInput.description": {
-    "defaultMessage": "описание"
-  },
-  "parameterInput.descriptionHelp": {
-    "defaultMessage": "Это сообщение увидит конечный пользователь."
-  },
-  "parameterInput.descriptionPlaceholder": {
-    "defaultMessage": "Например: «Введите имя нового компонента»"
-  },
-  "parameterInput.inputType": {
-    "defaultMessage": "Тип ввода"
-  },
-  "parameterInput.optional": {
-    "defaultMessage": "Необязательно"
-  },
-  "parameterInput.optionsHelp": {
-    "defaultMessage": "Введите каждый вариант с новой строки. Они будут показаны как пункты выпадающего списка."
-  },
-  "parameterInput.optionsLabel": {
-    "defaultMessage": "Варианты (по одному на строку)"
-  },
-  "parameterInput.optionsPlaceholder": {
-    "defaultMessage": "Вариант 1 Вариант 2 Вариант 3"
-  },
-  "parameterInput.required": {
-    "defaultMessage": "Обязательно"
-  },
-  "parameterInput.requirement": {
-    "defaultMessage": "Требование"
-  },
-  "parameterInput.typeBoolean": {
-    "defaultMessage": "Булево"
-  },
-  "parameterInput.typeNumber": {
-    "defaultMessage": "Число"
-  },
-  "parameterInput.typeSelect": {
-    "defaultMessage": "Селект"
-  },
-  "parameterInput.typeString": {
-    "defaultMessage": "Строка"
-  },
-  "parameterInput.unused": {
-    "defaultMessage": "Не используется"
-  },
-  "parameterInput.unusedWarningTitle": {
-    "defaultMessage": "Этот параметр не используется в инструкциях или промпте. Он будет доступен для ручного ввода, но может быть не нужен."
-  },
-  "parameterInputModal.backToForm": {
-    "defaultMessage": "Вернуться к форме параметров"
-  },
-  "parameterInputModal.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "parameterInputModal.cancelRecipeSetup": {
-    "defaultMessage": "Отменить настройку рецепта"
-  },
-  "parameterInputModal.enterValue": {
-    "defaultMessage": "Введите значение для {key}..."
-  },
-  "parameterInputModal.false": {
-    "defaultMessage": "False"
-  },
-  "parameterInputModal.recipeParameters": {
-    "defaultMessage": "Параметры рецепта"
-  },
-  "parameterInputModal.select": {
-    "defaultMessage": "Выберите..."
-  },
-  "parameterInputModal.selectOption": {
-    "defaultMessage": "Выберите вариант..."
-  },
-  "parameterInputModal.startNewChat": {
-    "defaultMessage": "Начать новый чат (без рецепта)"
-  },
-  "parameterInputModal.startRecipe": {
-    "defaultMessage": "Запустить рецепт"
-  },
-  "parameterInputModal.true": {
-    "defaultMessage": "True"
-  },
-  "parameterInputModal.whatToDo": {
-    "defaultMessage": "Что вы хотите сделать?"
   },
   "permissionModal.alwaysAllow": {
     "defaultMessage": "Всегда разрешать"
@@ -2888,363 +2546,6 @@
   "providerSetupActions.submit": {
     "defaultMessage": "Отправить"
   },
-  "recipeActivityEditor.activitiesDescription": {
-    "defaultMessage": "Верхнеуровневые промпты и кнопки активностей, которые будут отображаться в окне чата рецепта."
-  },
-  "recipeActivityEditor.activitiesLabel": {
-    "defaultMessage": "Действия"
-  },
-  "recipeActivityEditor.activityButtonsDescription": {
-    "defaultMessage": "Кликабельные кнопки, которые появятся под сообщением, чтобы помочь пользователям взаимодействовать с рецептом."
-  },
-  "recipeActivityEditor.activityButtonsLabel": {
-    "defaultMessage": "Кнопки действий"
-  },
-  "recipeActivityEditor.addActivity": {
-    "defaultMessage": "Добавить действие"
-  },
-  "recipeActivityEditor.addNewActivityPlaceholder": {
-    "defaultMessage": "Добавить новое действие..."
-  },
-  "recipeActivityEditor.messageDescription": {
-    "defaultMessage": "Форматированное сообщение, которое появится вверху рецепта. Поддерживает форматирование Markdown."
-  },
-  "recipeActivityEditor.messageLabel": {
-    "defaultMessage": "Сообщение"
-  },
-  "recipeActivityEditor.messagePlaceholder": {
-    "defaultMessage": "Введите вступительное сообщение для пользователя вашего рецепта (поддерживает **жирный**, *курсив*, `код` и т. д.)"
-  },
-  "recipeExtensionSelector.description": {
-    "defaultMessage": "Выберите расширения, доступные при запуске этого рецепта. Оставьте пустым, чтобы использовать расширения по умолчанию."
-  },
-  "recipeExtensionSelector.extensionsSelected": {
-    "defaultMessage": "{count, plural, one {Выбрано # расширение} few {Выбрано # расширения} many {Выбрано # расширений} other {Выбрано # расширения}}"
-  },
-  "recipeExtensionSelector.label": {
-    "defaultMessage": "Расширения (необязательно)"
-  },
-  "recipeExtensionSelector.noExtensionsAvailable": {
-    "defaultMessage": "Нет доступных расширений"
-  },
-  "recipeExtensionSelector.noExtensionsFound": {
-    "defaultMessage": "Расширения не найдены"
-  },
-  "recipeExtensionSelector.searchPlaceholder": {
-    "defaultMessage": "Поиск расширений..."
-  },
-  "recipeFormFields.addParameter": {
-    "defaultMessage": "Добавить параметр"
-  },
-  "recipeFormFields.advancedOptions": {
-    "defaultMessage": "Дополнительные параметры"
-  },
-  "recipeFormFields.advancedOptionsHint": {
-    "defaultMessage": "Действия, параметры, модель, расширения, схема ответа, подрецепты"
-  },
-  "recipeFormFields.descriptionLabel": {
-    "defaultMessage": "Описание"
-  },
-  "recipeFormFields.descriptionPlaceholder": {
-    "defaultMessage": "Краткое описание того, что делает этот рецепт"
-  },
-  "recipeFormFields.enterValueFor": {
-    "defaultMessage": "Введите значение для {key}"
-  },
-  "recipeFormFields.initialPrompt": {
-    "defaultMessage": "Начальный промпт"
-  },
-  "recipeFormFields.instructionsLabel": {
-    "defaultMessage": "Инструкции"
-  },
-  "recipeFormFields.instructionsPlaceholder": {
-    "defaultMessage": "Подробные инструкции для ИИ, скрытые от пользователя"
-  },
-  "recipeFormFields.openEditor": {
-    "defaultMessage": "Открыть редактор"
-  },
-  "recipeFormFields.parameterNamePlaceholder": {
-    "defaultMessage": "Введите имя параметра..."
-  },
-  "recipeFormFields.parametersDescription": {
-    "defaultMessage": "Параметры будут автоматически обнаружены по синтаксису '{{parameter_name}}' в инструкциях/промпте/действиях, либо их можно добавить вручную ниже."
-  },
-  "recipeFormFields.parametersLabel": {
-    "defaultMessage": "Параметры"
-  },
-  "recipeFormFields.promptOptionalHint": {
-    "defaultMessage": "(Необязательно - требуются инструкции или промпт)"
-  },
-  "recipeFormFields.promptPlaceholder": {
-    "defaultMessage": "Предзаполненный промпт при запуске рецепта"
-  },
-  "recipeFormFields.responseJsonSchema": {
-    "defaultMessage": "JSON-схема ответа"
-  },
-  "recipeFormFields.responseJsonSchemaDescription": {
-    "defaultMessage": "Определите ожидаемую структуру ответа ИИ в формате JSON Schema"
-  },
-  "recipeFormFields.templateVarHint": {
-    "defaultMessage": "Используйте '{{parameter_name}}', чтобы определить параметры, которые можно заполнить при запуске рецепта."
-  },
-  "recipeFormFields.titleLabel": {
-    "defaultMessage": "Название"
-  },
-  "recipeFormFields.titlePlaceholder": {
-    "defaultMessage": "Название рецепта"
-  },
-  "recipeHeader.recipeLabel": {
-    "defaultMessage": "Рецепт"
-  },
-  "recipeModelSelector.backToModelList": {
-    "defaultMessage": "Назад к списку моделей"
-  },
-  "recipeModelSelector.enterCustomModel": {
-    "defaultMessage": "Введите имя пользовательской модели"
-  },
-  "recipeModelSelector.enterModelNotListed": {
-    "defaultMessage": "Введите модель, которой нет в списке..."
-  },
-  "recipeModelSelector.fetchError": {
-    "defaultMessage": "Не удалось получить модели. Повторите попытку позже."
-  },
-  "recipeModelSelector.loadingModels": {
-    "defaultMessage": "Загрузка моделей…"
-  },
-  "recipeModelSelector.modelHint": {
-    "defaultMessage": "Оставьте пустым, чтобы использовать модель по умолчанию для выбранного провайдера"
-  },
-  "recipeModelSelector.modelLabel": {
-    "defaultMessage": "Модель (необязательно)"
-  },
-  "recipeModelSelector.providerHint": {
-    "defaultMessage": "Оставьте пустым, чтобы использовать провайдера по умолчанию из настроек"
-  },
-  "recipeModelSelector.providerLabel": {
-    "defaultMessage": "Провайдер (необязательно)"
-  },
-  "recipeModelSelector.selectModel": {
-    "defaultMessage": "Выберите модель"
-  },
-  "recipeModelSelector.selectProvider": {
-    "defaultMessage": "Выберите провайдера"
-  },
-  "recipeModelSelector.useDefaultProvider": {
-    "defaultMessage": "Использовать провайдера по умолчанию"
-  },
-  "recipeNameField.defaultLabel": {
-    "defaultMessage": "Имя рецепта"
-  },
-  "recipeNameField.formatHint": {
-    "defaultMessage": "Будет автоматически отформатировано (нижний регистр, дефисы вместо пробелов)"
-  },
-  "recipeWarningModal.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "recipeWarningModal.descriptionLabel": {
-    "defaultMessage": "Описание:"
-  },
-  "recipeWarningModal.firstTimeDescription": {
-    "defaultMessage": "Вы собираетесь выполнить рецепт, который еще не запускали."
-  },
-  "recipeWarningModal.hiddenCharsWarning": {
-    "defaultMessage": "Этот рецепт содержит скрытые символы, которые будут проигнорированы для вашей безопасности, так как их могут использовать во вредоносных целях."
-  },
-  "recipeWarningModal.instructionsLabel": {
-    "defaultMessage": "Инструкции:"
-  },
-  "recipeWarningModal.newRecipeWarningTitle": {
-    "defaultMessage": "⚠️ Предупреждение о новом рецепте"
-  },
-  "recipeWarningModal.recipePreview": {
-    "defaultMessage": "Предпросмотр рецепта:"
-  },
-  "recipeWarningModal.securityWarningTitle": {
-    "defaultMessage": "⚠️ Предупреждение безопасности"
-  },
-  "recipeWarningModal.titleLabel": {
-    "defaultMessage": "Название:"
-  },
-  "recipeWarningModal.trustAndExecute": {
-    "defaultMessage": "Доверять и выполнить"
-  },
-  "recipeWarningModal.trustSource": {
-    "defaultMessage": "Продолжайте только если доверяете источнику этого рецепта."
-  },
-  "recipesView.addSchedule": {
-    "defaultMessage": "Добавить расписание"
-  },
-  "recipesView.addSlashCommand": {
-    "defaultMessage": "Добавить slash-команду"
-  },
-  "recipesView.adjustSearchTerms": {
-    "defaultMessage": "Попробуйте изменить поисковый запрос"
-  },
-  "recipesView.allFiles": {
-    "defaultMessage": "Все файлы"
-  },
-  "recipesView.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "recipesView.copyDeeplink": {
-    "defaultMessage": "Копировать диплинк"
-  },
-  "recipesView.copyDeeplinkFailedMsg": {
-    "defaultMessage": "Не удалось скопировать диплинк в буфер обмена"
-  },
-  "recipesView.copyFailedTitle": {
-    "defaultMessage": "Копирование не удалось"
-  },
-  "recipesView.copyYaml": {
-    "defaultMessage": "Копировать YAML"
-  },
-  "recipesView.copyYamlFailedMsg": {
-    "defaultMessage": "Не удалось скопировать YAML рецепта в буфер обмена"
-  },
-  "recipesView.createRecipe": {
-    "defaultMessage": "Создать рецепт"
-  },
-  "recipesView.deeplinkCopiedMsg": {
-    "defaultMessage": "Диплинк рецепта скопирован в буфер обмена"
-  },
-  "recipesView.deeplinkCopiedTitle": {
-    "defaultMessage": "Диплинк скопирован"
-  },
-  "recipesView.deleteRecipe": {
-    "defaultMessage": "Удалить рецепт"
-  },
-  "recipesView.deleteRecipeConfirm": {
-    "defaultMessage": "Удалить «{title}»?"
-  },
-  "recipesView.deleteRecipeDetail": {
-    "defaultMessage": "Файл рецепта будет удален."
-  },
-  "recipesView.deleteRecipeTitle": {
-    "defaultMessage": "Удалить рецепт"
-  },
-  "recipesView.editRecipe": {
-    "defaultMessage": "Изменить рецепт"
-  },
-  "recipesView.editSchedule": {
-    "defaultMessage": "Изменить расписание"
-  },
-  "recipesView.editSlashCommand": {
-    "defaultMessage": "Изменить slash-команду"
-  },
-  "recipesView.errorLoadingRecipes": {
-    "defaultMessage": "Ошибка загрузки рецептов"
-  },
-  "recipesView.exportFailedMsg": {
-    "defaultMessage": "Не удалось экспортировать рецепт в файл"
-  },
-  "recipesView.exportFailedTitle": {
-    "defaultMessage": "Экспорт не удался"
-  },
-  "recipesView.exportRecipeDialogTitle": {
-    "defaultMessage": "Экспортировать рецепт"
-  },
-  "recipesView.exportToFile": {
-    "defaultMessage": "Экспортировать в файл"
-  },
-  "recipesView.noMatchingRecipes": {
-    "defaultMessage": "Подходящие рецепты не найдены"
-  },
-  "recipesView.noSavedRecipes": {
-    "defaultMessage": "Нет сохраненных рецептов"
-  },
-  "recipesView.noSavedRecipesDescription": {
-    "defaultMessage": "Рецепты, сохраненные из чатов, появятся здесь."
-  },
-  "recipesView.openInNewWindow": {
-    "defaultMessage": "Открыть в новом окне"
-  },
-  "recipesView.recipeDeletedSuccess": {
-    "defaultMessage": "Рецепт успешно удален"
-  },
-  "recipesView.recipeExportedMsg": {
-    "defaultMessage": "Рецепт сохранен в {filePath}"
-  },
-  "recipesView.recipeExportedTitle": {
-    "defaultMessage": "Рецепт экспортирован"
-  },
-  "recipesView.recipesDescription": {
-    "defaultMessage": "Просматривайте и управляйте сохраненными рецептами, чтобы быстро запускать новые сеансы с предустановленными конфигурациями. {shortcut} для поиска."
-  },
-  "recipesView.recipesTitle": {
-    "defaultMessage": "Рецепты"
-  },
-  "recipesView.remove": {
-    "defaultMessage": "Удалить"
-  },
-  "recipesView.removeSchedule": {
-    "defaultMessage": "Удалить расписание"
-  },
-  "recipesView.runs": {
-    "defaultMessage": "Запускается {schedule}"
-  },
-  "recipesView.save": {
-    "defaultMessage": "Сохранить"
-  },
-  "recipesView.scheduleDialogTitle": {
-    "defaultMessage": "{action} расписание"
-  },
-  "recipesView.scheduleRemovedMsg": {
-    "defaultMessage": "Рецепт больше не будет запускаться автоматически"
-  },
-  "recipesView.scheduleRemovedTitle": {
-    "defaultMessage": "Расписание удалено"
-  },
-  "recipesView.scheduleSavedMsg": {
-    "defaultMessage": "Рецепт будет запускаться {schedule}"
-  },
-  "recipesView.scheduleSavedTitle": {
-    "defaultMessage": "Расписание сохранено"
-  },
-  "recipesView.searchRecipesPlaceholder": {
-    "defaultMessage": "Поиск рецептов..."
-  },
-  "recipesView.shareRecipe": {
-    "defaultMessage": "Поделиться рецептом"
-  },
-  "recipesView.slashCommandDescription": {
-    "defaultMessage": "Задайте slash-команду, чтобы быстро запускать этот рецепт из любого чата"
-  },
-  "recipesView.slashCommandPlaceholder": {
-    "defaultMessage": "command-name"
-  },
-  "recipesView.slashCommandRemovedMsg": {
-    "defaultMessage": "Slash-команда рецепта удалена"
-  },
-  "recipesView.slashCommandRemovedTitle": {
-    "defaultMessage": "Slash-команда удалена"
-  },
-  "recipesView.slashCommandSavedMsg": {
-    "defaultMessage": "Используйте /{command}, чтобы запустить этот рецепт"
-  },
-  "recipesView.slashCommandSavedTitle": {
-    "defaultMessage": "Slash-команда сохранена"
-  },
-  "recipesView.slashCommandTitle": {
-    "defaultMessage": "Slash-команда"
-  },
-  "recipesView.slashCommandUsageHint": {
-    "defaultMessage": "Используйте /{command} в любом чате, чтобы запустить этот рецепт"
-  },
-  "recipesView.tryAgain": {
-    "defaultMessage": "Повторить попытку"
-  },
-  "recipesView.useRecipe": {
-    "defaultMessage": "Использовать рецепт"
-  },
-  "recipesView.yamlCopiedMsg": {
-    "defaultMessage": "YAML рецепта скопирован в буфер обмена"
-  },
-  "recipesView.yamlCopiedTitle": {
-    "defaultMessage": "YAML скопирован"
-  },
-  "recipesView.yamlFiles": {
-    "defaultMessage": "Файлы YAML"
-  },
   "resetProviderSection.resetButton": {
     "defaultMessage": "Сбросить провайдера и модель"
   },
@@ -3416,9 +2717,6 @@
   "scheduleDetailView.viewingScheduleId": {
     "defaultMessage": "Просмотр ID расписания: {id}"
   },
-  "scheduleModal.browseYaml": {
-    "defaultMessage": "Выбрать YAML-файл..."
-  },
   "scheduleModal.cancel": {
     "defaultMessage": "Отмена"
   },
@@ -3431,26 +2729,8 @@
   "scheduleModal.creating": {
     "defaultMessage": "Создание..."
   },
-  "scheduleModal.deepLink": {
-    "defaultMessage": "Диплинк"
-  },
-  "scheduleModal.deepLinkPlaceholder": {
-    "defaultMessage": "Вставьте ссылку goose://recipe сюда..."
-  },
   "scheduleModal.editSchedule": {
     "defaultMessage": "Изменить расписание"
-  },
-  "scheduleModal.failedParseRecipe": {
-    "defaultMessage": "Не удалось разобрать рецепт из файла."
-  },
-  "scheduleModal.failedReadFile": {
-    "defaultMessage": "Не удалось прочитать выбранный файл."
-  },
-  "scheduleModal.invalidDeepLink": {
-    "defaultMessage": "Неверный диплинк. Используйте ссылку goose://recipe."
-  },
-  "scheduleModal.invalidFileType": {
-    "defaultMessage": "Неверный тип файла: выберите YAML-файл (.yaml или .yml)"
   },
   "scheduleModal.nameLabel": {
     "defaultMessage": "Имя:"
@@ -3458,17 +2738,14 @@
   "scheduleModal.namePlaceholder": {
     "defaultMessage": "например, daily-summary-job"
   },
-  "scheduleModal.provideValidRecipe": {
-    "defaultMessage": "Укажите корректный источник рецепта."
+  "scheduleModal.promptLabel": {
+    "defaultMessage": "Промпт:"
   },
-  "scheduleModal.recipeDescription": {
-    "defaultMessage": "Описание: {description}"
+  "scheduleModal.promptPlaceholder": {
+    "defaultMessage": "Что goose должен делать при каждом запуске?"
   },
-  "scheduleModal.recipeParsed": {
-    "defaultMessage": "Рецепт успешно разобран"
-  },
-  "scheduleModal.recipeTitle": {
-    "defaultMessage": "Название: {title}"
+  "scheduleModal.promptRequired": {
+    "defaultMessage": "Требуется промпт."
   },
   "scheduleModal.scheduleIdRequired": {
     "defaultMessage": "Требуется ID расписания."
@@ -3476,20 +2753,11 @@
   "scheduleModal.scheduleLabel": {
     "defaultMessage": "Расписание:"
   },
-  "scheduleModal.selected": {
-    "defaultMessage": "Выбрано: {path}"
-  },
-  "scheduleModal.sourceLabel": {
-    "defaultMessage": "Источник:"
-  },
   "scheduleModal.updateSchedule": {
     "defaultMessage": "Обновить расписание"
   },
   "scheduleModal.updating": {
     "defaultMessage": "Обновление..."
-  },
-  "scheduleModal.yaml": {
-    "defaultMessage": "YAML"
   },
   "schedulesView.confirmDelete": {
     "defaultMessage": "Удалить расписание «{id}»? Рецепт будет сохранен."
@@ -3662,20 +2930,23 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Cancel"
   },
-  "sessionActionsHeader.close": {
-    "defaultMessage": "Close"
+  "sessionActionsHeader.deleteConfirm": {
+    "defaultMessage": "Удалить сеанс «{name}»? Это действие нельзя отменить."
   },
-  "sessionActionsHeader.copiedJson": {
-    "defaultMessage": "Session JSON copied"
+  "sessionActionsHeader.deleteFailed": {
+    "defaultMessage": "Не удалось удалить сессию: {error}"
   },
-  "sessionActionsHeader.copiedText": {
-    "defaultMessage": "Text copied"
+  "sessionActionsHeader.deleteSession": {
+    "defaultMessage": "Удалить сеанс"
   },
-  "sessionActionsHeader.copyJson": {
-    "defaultMessage": "Copy JSON"
+  "sessionActionsHeader.deleteTitle": {
+    "defaultMessage": "Удалить сеанс"
   },
-  "sessionActionsHeader.copyText": {
-    "defaultMessage": "Copy text"
+  "sessionActionsHeader.deleted": {
+    "defaultMessage": "Сеанс успешно удален"
+  },
+  "sessionActionsHeader.deleting": {
+    "defaultMessage": "Удаление..."
   },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Failed to duplicate session: {error}"
@@ -3685,18 +2956,6 @@
   },
   "sessionActionsHeader.duplicated": {
     "defaultMessage": "Session duplicated"
-  },
-  "sessionActionsHeader.fullTextTitle": {
-    "defaultMessage": "Text value"
-  },
-  "sessionActionsHeader.jsonFailed": {
-    "defaultMessage": "Failed to load session JSON: {error}"
-  },
-  "sessionActionsHeader.jsonTitle": {
-    "defaultMessage": "Session JSON"
-  },
-  "sessionActionsHeader.loadingJson": {
-    "defaultMessage": "Loading JSON..."
   },
   "sessionActionsHeader.renameFailed": {
     "defaultMessage": "Failed to rename session: {error}"
@@ -3719,9 +2978,6 @@
   "sessionActionsHeader.saving": {
     "defaultMessage": "Saving..."
   },
-  "sessionActionsHeader.viewJson": {
-    "defaultMessage": "View session JSON"
-  },
   "sessionIndicators.error": {
     "defaultMessage": "В сеансе возникла ошибка"
   },
@@ -3730,156 +2986,6 @@
   },
   "sessionIndicators.streaming": {
     "defaultMessage": "Потоковая передача"
-  },
-  "sessionViewComponents.empty.description": {
-    "defaultMessage": "Этот сеанс не содержит сообщений"
-  },
-  "sessionViewComponents.empty.title": {
-    "defaultMessage": "Сообщения не найдены"
-  },
-  "sessionViewComponents.error.loading": {
-    "defaultMessage": "Ошибка загрузки сведений о сеансе"
-  },
-  "sessionViewComponents.error.tryAgain": {
-    "defaultMessage": "Повторить попытку"
-  },
-  "sessionViewComponents.role.assistant": {
-    "defaultMessage": "Goose"
-  },
-  "sessionViewComponents.role.user": {
-    "defaultMessage": "Вы"
-  },
-  "sessions.action.delete": {
-    "defaultMessage": "Удалить сеанс"
-  },
-  "sessions.action.duplicate": {
-    "defaultMessage": "Дублировать сеанс"
-  },
-  "sessions.action.editName": {
-    "defaultMessage": "Изменить имя сеанса"
-  },
-  "sessions.action.export": {
-    "defaultMessage": "Экспортировать сеанс"
-  },
-  "sessions.action.openNewWindow": {
-    "defaultMessage": "Открыть в новом окне"
-  },
-  "sessions.action.shareNostr": {
-    "defaultMessage": "Поделиться зашифрованной ссылкой Nostr"
-  },
-  "sessions.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "sessions.chatHistory": {
-    "defaultMessage": "История чатов"
-  },
-  "sessions.chatHistoryDesc": {
-    "defaultMessage": "Просматривайте и ищите прошлые разговоры с Goose. {shortcut} для поиска."
-  },
-  "sessions.close": {
-    "defaultMessage": "Закрыть"
-  },
-  "sessions.delete.message": {
-    "defaultMessage": "Удалить сеанс «{name}»? Это действие нельзя отменить."
-  },
-  "sessions.delete.title": {
-    "defaultMessage": "Удалить сеанс"
-  },
-  "sessions.edit.placeholder": {
-    "defaultMessage": "Введите описание сеанса"
-  },
-  "sessions.edit.title": {
-    "defaultMessage": "Изменить описание сеанса"
-  },
-  "sessions.empty.description": {
-    "defaultMessage": "История чатов появится здесь"
-  },
-  "sessions.empty.title": {
-    "defaultMessage": "Сеансы чата не найдены"
-  },
-  "sessions.error.loading": {
-    "defaultMessage": "Ошибка загрузки сеансов"
-  },
-  "sessions.error.tryAgain": {
-    "defaultMessage": "Повторить попытку"
-  },
-  "sessions.import": {
-    "defaultMessage": "Импортировать сеанс"
-  },
-  "sessions.importNostr": {
-    "defaultMessage": "Импортировать ссылку"
-  },
-  "sessions.importNostr.description": {
-    "defaultMessage": "Вставьте ссылку общего доступа Goose Nostr, чтобы получить, расшифровать и импортировать сеанс."
-  },
-  "sessions.importNostr.placeholder": {
-    "defaultMessage": "goose://sessions/nostr?nevent=...&key=..."
-  },
-  "sessions.importNostr.title": {
-    "defaultMessage": "Импортировать сеанс Nostr"
-  },
-  "sessions.importing": {
-    "defaultMessage": "Импорт..."
-  },
-  "sessions.loadingMore": {
-    "defaultMessage": "Загрузка дополнительных сеансов..."
-  },
-  "sessions.save": {
-    "defaultMessage": "Сохранить"
-  },
-  "sessions.saving": {
-    "defaultMessage": "Сохранение..."
-  },
-  "sessions.search.noResults": {
-    "defaultMessage": "Подходящие сеансы не найдены"
-  },
-  "sessions.search.noResultsDesc": {
-    "defaultMessage": "Попробуйте изменить поисковый запрос"
-  },
-  "sessions.searchPlaceholder": {
-    "defaultMessage": "Поиск по истории..."
-  },
-  "sessions.shareNostr.description": {
-    "defaultMessage": "Любой, у кого есть эта ссылка, сможет получить и расшифровать ваш сеанс. Обращайтесь с ней как с секретом."
-  },
-  "sessions.shareNostr.title": {
-    "defaultMessage": "Зашифрованная ссылка общего доступа Nostr"
-  },
-  "sessions.toast.copied": {
-    "defaultMessage": "Скопировано в буфер обмена"
-  },
-  "sessions.toast.deleteFailed": {
-    "defaultMessage": "Не удалось удалить сеанс «{name}»: {error}"
-  },
-  "sessions.toast.deleted": {
-    "defaultMessage": "Сеанс успешно удален"
-  },
-  "sessions.toast.duplicateFailed": {
-    "defaultMessage": "Не удалось дублировать сеанс: {error}"
-  },
-  "sessions.toast.duplicated": {
-    "defaultMessage": "Сеанс «{name}» успешно дублирован"
-  },
-  "sessions.toast.exported": {
-    "defaultMessage": "Сеанс успешно экспортирован"
-  },
-  "sessions.toast.importFailed": {
-    "defaultMessage": "Не удалось импортировать сеанс: {error}"
-  },
-  "sessions.toast.imported": {
-    "defaultMessage": "Сеанс успешно импортирован"
-  },
-  "sessions.toast.shareNostr": {
-    "defaultMessage": "Зашифрованная ссылка Nostr создана"
-  },
-  "sessions.toast.shareNostrFailed": {
-    "defaultMessage": "Не удалось создать ссылку Nostr: {error}"
-  },
-  "sessions.toast.updateFailed": {
-    "defaultMessage": "Не удалось обновить описание сеанса: {error}"
-  },
-  "sessions.toast.updated": {
-    "defaultMessage": "Описание сеанса успешно обновлено"
   },
   "settings.appearance.description": {
     "defaultMessage": "Настройте, как goose отображается в вашей системе"
@@ -4058,6 +3164,9 @@
   "settingsView.tabChat": {
     "defaultMessage": "Чат"
   },
+  "settingsView.tabExtensions": {
+    "defaultMessage": "Расширения"
+  },
   "settingsView.tabExternalBackend": {
     "defaultMessage": "Внешний бэкенд"
   },
@@ -4072,6 +3181,9 @@
   },
   "settingsView.tabPrompts": {
     "defaultMessage": "Промпты"
+  },
+  "settingsView.tabSkills": {
+    "defaultMessage": "Навыки"
   },
   "settingsView.title": {
     "defaultMessage": "Настройки"
@@ -4094,37 +3206,31 @@
   "shortcutRecorder.save": {
     "defaultMessage": "Сохранить"
   },
-  "skillsView.addSkill": {
-    "defaultMessage": "Добавить навык"
-  },
-  "skillsView.adjustSearchTerms": {
+  "skillsSettings.adjustSearchTerms": {
     "defaultMessage": "Попробуйте изменить поисковый запрос"
   },
-  "skillsView.comingSoon": {
-    "defaultMessage": "Скоро"
-  },
-  "skillsView.errorLoadingSkills": {
+  "skillsSettings.errorLoadingSkills": {
     "defaultMessage": "Ошибка загрузки навыков"
   },
-  "skillsView.noMatchingSkills": {
+  "skillsSettings.noMatchingSkills": {
     "defaultMessage": "Подходящие навыки не найдены"
   },
-  "skillsView.noSkillsDescription": {
+  "skillsSettings.noSkillsDescription": {
     "defaultMessage": "Навыки загружаются из файлов SKILL.md в ~/.config/agents/skills/, .goose/skills/ или других поддерживаемых каталогах."
   },
-  "skillsView.noSkillsInstalled": {
+  "skillsSettings.noSkillsInstalled": {
     "defaultMessage": "Навыки не установлены"
   },
-  "skillsView.searchSkillsPlaceholder": {
+  "skillsSettings.searchSkillsPlaceholder": {
     "defaultMessage": "Поиск навыков..."
   },
-  "skillsView.skillsDescription": {
+  "skillsSettings.skillsDescription": {
     "defaultMessage": "Просматривайте установленные навыки, расширяющие возможности Goose. {shortcut} для поиска."
   },
-  "skillsView.skillsTitle": {
+  "skillsSettings.skillsTitle": {
     "defaultMessage": "Навыки"
   },
-  "skillsView.tryAgain": {
+  "skillsSettings.tryAgain": {
     "defaultMessage": "Повторить попытку"
   },
   "spellcheckToggle.description": {
@@ -4153,99 +3259,6 @@
   },
   "stringUtils.ollamaNotConfiguredSuffix": {
     "defaultMessage": "должно быть установлено на вашем компьютере и открыто, либо нужно ввести значение для OLLAMA_HOST."
-  },
-  "subRecipeEditor.addExisting": {
-    "defaultMessage": "Добавить существующий"
-  },
-  "subRecipeEditor.createNew": {
-    "defaultMessage": "Создать новый подрецепт"
-  },
-  "subRecipeEditor.deleteSubrecipe": {
-    "defaultMessage": "Удалить подрецепт {name}"
-  },
-  "subRecipeEditor.description": {
-    "defaultMessage": "Подрецепты — это рецепты, которые можно вызывать как инструменты во время выполнения. Они позволяют создавать многошаговые процессы и переиспользуемые компоненты."
-  },
-  "subRecipeEditor.duplicateName": {
-    "defaultMessage": "Повторяющееся имя"
-  },
-  "subRecipeEditor.duplicateNameMsg": {
-    "defaultMessage": "Подрецепт с именем «{name}» уже существует. Используйте уникальное имя."
-  },
-  "subRecipeEditor.editSubrecipe": {
-    "defaultMessage": "Изменить подрецепт {name}"
-  },
-  "subRecipeEditor.label": {
-    "defaultMessage": "Подрецепты"
-  },
-  "subRecipeEditor.preconfiguredValues": {
-    "defaultMessage": "Предварительно настроенные значения:"
-  },
-  "subRecipeEditor.sequential": {
-    "defaultMessage": "Последовательно"
-  },
-  "subRecipeModal.addTitle": {
-    "defaultMessage": "Добавить подрецепт"
-  },
-  "subRecipeModal.apply": {
-    "defaultMessage": "Применить"
-  },
-  "subRecipeModal.browse": {
-    "defaultMessage": "Обзор"
-  },
-  "subRecipeModal.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "subRecipeModal.closeModal": {
-    "defaultMessage": "Закрыть окно подрецепта"
-  },
-  "subRecipeModal.configureTitle": {
-    "defaultMessage": "Настроить подрецепт"
-  },
-  "subRecipeModal.descriptionLabel": {
-    "defaultMessage": "Описание"
-  },
-  "subRecipeModal.descriptionPlaceholder": {
-    "defaultMessage": "Необязательное описание того, что делает этот подрецепт..."
-  },
-  "subRecipeModal.invalidFile": {
-    "defaultMessage": "Неверный файл"
-  },
-  "subRecipeModal.invalidFileMsg": {
-    "defaultMessage": "Выберите YAML-файл (.yaml или .yml)."
-  },
-  "subRecipeModal.nameHint": {
-    "defaultMessage": "Уникальный идентификатор, используемый для создания имени инструмента"
-  },
-  "subRecipeModal.nameLabel": {
-    "defaultMessage": "Имя"
-  },
-  "subRecipeModal.namePlaceholder": {
-    "defaultMessage": "например, security_scan"
-  },
-  "subRecipeModal.pathHint": {
-    "defaultMessage": "Выберите существующий файл рецепта или введите путь вручную"
-  },
-  "subRecipeModal.pathLabel": {
-    "defaultMessage": "Путь"
-  },
-  "subRecipeModal.pathPlaceholder": {
-    "defaultMessage": "например, ./subrecipes/security-analysis.yaml"
-  },
-  "subRecipeModal.preconfiguredValues": {
-    "defaultMessage": "Предварительно настроенные значения"
-  },
-  "subRecipeModal.preconfiguredValuesHint": {
-    "defaultMessage": "Необязательные значения параметров, которые всегда передаются подрецепту"
-  },
-  "subRecipeModal.sequentialHint": {
-    "defaultMessage": "(Принудительно выполняет несколько экземпляров подрецепта последовательно)"
-  },
-  "subRecipeModal.sequentialLabel": {
-    "defaultMessage": "Последовательно при повторении"
-  },
-  "subRecipeModal.subtitle": {
-    "defaultMessage": "Настройте подрецепт, который можно вызывать как инструмент при выполнении рецепта"
   },
   "switchModelModal.backToModelList": {
     "defaultMessage": "Назад к списку моделей"
@@ -4453,9 +3466,6 @@
   },
   "toolCallWithResponse.activityCount": {
     "defaultMessage": "Активность ({count})"
-  },
-  "toolCallWithResponse.code": {
-    "defaultMessage": "Код"
   },
   "toolCallWithResponse.loadingSpinner": {
     "defaultMessage": "Индикатор загрузки"

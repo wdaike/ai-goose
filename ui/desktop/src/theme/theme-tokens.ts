@@ -34,8 +34,9 @@ type ColorTokenKey = Exclude<McpUiStyleVariableKey, BaseTokenKey>;
 // ---------------------------------------------------------------------------
 const baseTokens: Pick<ThemeTokens, BaseTokenKey> = {
   // Typography — families
-  '--font-sans': "'Cash Sans', sans-serif",
-  '--font-mono': 'monospace',
+  '--font-sans':
+    '-apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif',
+  '--font-mono': 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
 
   // Typography — weights
   '--font-weight-normal': '400',
@@ -94,43 +95,43 @@ type ColorTokens = Pick<ThemeTokens, ColorTokenKey>;
 const lightColorTokens: ColorTokens = {
   // Backgrounds
   '--color-background-primary': '#ffffff',
-  '--color-background-secondary': '#f4f6f7',
-  '--color-background-tertiary': '#e3e6ea',
-  '--color-background-inverse': '#000000',
+  '--color-background-secondary': '#f7f7f7',
+  '--color-background-tertiary': '#ececec',
+  '--color-background-inverse': '#1a1a1a',
   '--color-background-ghost': 'transparent',
   '--color-background-info': '#5c98f9',
-  '--color-background-danger': '#f94b4b',
-  '--color-background-success': '#91cb80',
-  '--color-background-warning': '#fbcd44',
-  '--color-background-disabled': '#e3e6ea',
+  '--color-background-danger': '#e5484d',
+  '--color-background-success': '#4c9a5a',
+  '--color-background-warning': '#e5a83c',
+  '--color-background-disabled': '#ececec',
 
   // Text
-  '--color-text-primary': '#3f434b',
-  '--color-text-secondary': '#878787',
-  '--color-text-tertiary': '#a7b0b9',
+  '--color-text-primary': '#1a1a1a',
+  '--color-text-secondary': '#6b6b6b',
+  '--color-text-tertiary': '#9b9b9b',
   '--color-text-inverse': '#ffffff',
-  '--color-text-ghost': '#878787',
+  '--color-text-ghost': '#6b6b6b',
   '--color-text-info': '#5c98f9',
-  '--color-text-danger': '#f94b4b',
-  '--color-text-success': '#91cb80',
-  '--color-text-warning': '#fbcd44',
-  '--color-text-disabled': '#cbd1d6',
+  '--color-text-danger': '#e5484d',
+  '--color-text-success': '#4c9a5a',
+  '--color-text-warning': '#b7791f',
+  '--color-text-disabled': '#c4c4c4',
 
   // Borders
-  '--color-border-primary': '#e3e6ea',
-  '--color-border-secondary': '#e3e6ea',
-  '--color-border-tertiary': '#cbd1d6',
-  '--color-border-inverse': '#000000',
+  '--color-border-primary': '#e5e5e5',
+  '--color-border-secondary': '#d4d4d4',
+  '--color-border-tertiary': '#c4c4c4',
+  '--color-border-inverse': '#1a1a1a',
   '--color-border-ghost': 'transparent',
   '--color-border-info': '#5c98f9',
-  '--color-border-danger': '#f94b4b',
-  '--color-border-success': '#91cb80',
-  '--color-border-warning': '#fbcd44',
-  '--color-border-disabled': '#e3e6ea',
+  '--color-border-danger': '#e5484d',
+  '--color-border-success': '#4c9a5a',
+  '--color-border-warning': '#e5a83c',
+  '--color-border-disabled': '#e5e5e5',
 
   // Rings
-  '--color-ring-primary': '#e3e6ea',
-  '--color-ring-secondary': '#cbd1d6',
+  '--color-ring-primary': '#d4d4d4',
+  '--color-ring-secondary': '#c4c4c4',
   '--color-ring-inverse': '#ffffff',
   '--color-ring-info': '#5c98f9',
   '--color-ring-danger': '#f94b4b',
@@ -149,44 +150,44 @@ const lightColorTokens: ColorTokens = {
 // ---------------------------------------------------------------------------
 const darkColorTokens: ColorTokens = {
   // Backgrounds
-  '--color-background-primary': '#22252a',
-  '--color-background-secondary': '#3f434b',
-  '--color-background-tertiary': '#474e57',
-  '--color-background-inverse': '#cbd1d6',
+  '--color-background-primary': '#1a1a1a',
+  '--color-background-secondary': '#212121',
+  '--color-background-tertiary': '#2e2e2e',
+  '--color-background-inverse': '#ededed',
   '--color-background-ghost': 'transparent',
   '--color-background-info': '#7cacff',
-  '--color-background-danger': '#ff6b6b',
-  '--color-background-success': '#a3d795',
-  '--color-background-warning': '#ffd966',
-  '--color-background-disabled': '#474e57',
+  '--color-background-danger': '#e5484d',
+  '--color-background-success': '#5bb374',
+  '--color-background-warning': '#e5a83c',
+  '--color-background-disabled': '#2e2e2e',
 
   // Text
-  '--color-text-primary': '#ffffff',
-  '--color-text-secondary': '#878787',
-  '--color-text-tertiary': '#606c7a',
-  '--color-text-inverse': '#000000',
-  '--color-text-ghost': '#878787',
+  '--color-text-primary': '#ededed',
+  '--color-text-secondary': '#8f8f8f',
+  '--color-text-tertiary': '#6b6b6b',
+  '--color-text-inverse': '#1a1a1a',
+  '--color-text-ghost': '#8f8f8f',
   '--color-text-info': '#7cacff',
-  '--color-text-danger': '#ff6b6b',
-  '--color-text-success': '#a3d795',
-  '--color-text-warning': '#ffd966',
-  '--color-text-disabled': '#525b68',
+  '--color-text-danger': '#ff6369',
+  '--color-text-success': '#5bb374',
+  '--color-text-warning': '#e5a83c',
+  '--color-text-disabled': '#5a5a5a',
 
   // Borders
-  '--color-border-primary': '#3f434b',
-  '--color-border-secondary': '#525b68',
-  '--color-border-tertiary': '#474e57',
-  '--color-border-inverse': '#ffffff',
+  '--color-border-primary': '#2a2a2a',
+  '--color-border-secondary': '#3a3a3a',
+  '--color-border-tertiary': '#4a4a4a',
+  '--color-border-inverse': '#ededed',
   '--color-border-ghost': 'transparent',
   '--color-border-info': '#7cacff',
-  '--color-border-danger': '#ff6b6b',
-  '--color-border-success': '#a3d795',
-  '--color-border-warning': '#ffd966',
-  '--color-border-disabled': '#3f434b',
+  '--color-border-danger': '#e5484d',
+  '--color-border-success': '#5bb374',
+  '--color-border-warning': '#e5a83c',
+  '--color-border-disabled': '#2a2a2a',
 
   // Rings
-  '--color-ring-primary': '#525b68',
-  '--color-ring-secondary': '#474e57',
+  '--color-ring-primary': '#3a3a3a',
+  '--color-ring-secondary': '#4a4a4a',
   '--color-ring-inverse': '#000000',
   '--color-ring-info': '#7cacff',
   '--color-ring-danger': '#ff6b6b',
@@ -210,44 +211,11 @@ export const darkTokens: ThemeTokens = { ...baseTokens, ...darkColorTokens };
 // Helpers
 // ---------------------------------------------------------------------------
 
-// @font-face rules passed to MCP apps so sandboxed iframes can load host fonts.
-const HOST_FONT_CSS = `
-@font-face {
-  font-family: 'Cash Sans';
-  src: url(https://cash-f.squarecdn.com/static/fonts/cashsans/woff2/CashSans-Light.woff2) format('woff2'),
-       url(https://cash-f.squarecdn.com/static/fonts/cashsans/woff/CashSans-Light.woff) format('woff');
-  font-weight: 300;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Cash Sans';
-  src: url(https://cash-f.squarecdn.com/static/fonts/cashsans/woff2/CashSans-Regular.woff2) format('woff2'),
-       url(https://cash-f.squarecdn.com/static/fonts/cashsans/woff/CashSans-Regular.woff) format('woff');
-  font-weight: 400;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Cash Sans';
-  src: url(https://cash-f.squarecdn.com/static/fonts/cashsans/woff2/CashSans-Medium.woff2) format('woff2'),
-       url(https://cash-f.squarecdn.com/static/fonts/cashsans/woff/CashSans-Medium.woff) format('woff');
-  font-weight: 500;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Cash Sans';
-  src: url(https://cash-f.squarecdn.com/static/fonts/cashsans/woff2/CashSans-Bold.woff2) format('woff2'),
-       url(https://cash-f.squarecdn.com/static/fonts/cashsans/woff/CashSans-Bold.woff) format('woff');
-  font-weight: 700;
-  font-style: normal;
-}
-`.trim();
-
 /**
  * Build the McpUiHostStyles object for MCP apps.
  * Color keys use light-dark() so a single payload works for both themes.
  * Non-color keys (fonts, radii, shadows) use plain values from baseTokens
  * (or light as the default when values differ, e.g. shadows).
- * css.fonts provides @font-face rules so sandboxed apps can load host fonts.
  */
 export function buildMcpHostStyles(): McpUiHostStyles {
   const variables: McpUiStyles = {} as McpUiStyles;
@@ -260,7 +228,7 @@ export function buildMcpHostStyles(): McpUiHostStyles {
       variables[key] = light;
     }
   }
-  return { variables, css: { fonts: HOST_FONT_CSS } };
+  return { variables };
 }
 
 /**

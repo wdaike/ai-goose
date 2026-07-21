@@ -1,13 +1,4 @@
-import {
-  AppWindow,
-  Clock,
-  FileText,
-  History,
-  MessageSquarePlus,
-  Puzzle,
-  Settings,
-  Zap,
-} from 'lucide-react';
+import { AppWindow, Clock, MessageSquarePlus, Settings } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { defineMessages, type IntlShape, type MessageDescriptor } from 'react-intl';
 
@@ -23,12 +14,8 @@ export interface NavItem {
 /** Top-level nav items (excluding Settings which is pinned to the bottom). */
 export const NAV_ITEMS: NavItem[] = [
   { id: 'home', path: '/', label: 'New Chat', icon: MessageSquarePlus },
-  { id: 'recipes', path: '/recipes', label: 'Recipes', icon: FileText },
-  { id: 'skills', path: '/skills', label: 'Skills', icon: Zap },
-  { id: 'apps', path: '/apps', label: 'Apps', icon: AppWindow },
   { id: 'scheduler', path: '/schedules', label: 'Scheduler', icon: Clock },
-  { id: 'extensions', path: '/extensions', label: 'Extensions', icon: Puzzle },
-  { id: 'sessions', path: '/sessions', label: 'Session History', icon: History },
+  { id: 'apps', path: '/apps', label: 'Apps', icon: AppWindow },
 ];
 
 /** Settings is rendered separately, pinned to the bottom of the sidebar. */
@@ -46,14 +33,6 @@ const navItemMessages = defineMessages({
     id: 'navigation.itemHome',
     defaultMessage: 'New Chat',
   },
-  recipes: {
-    id: 'navigation.itemRecipes',
-    defaultMessage: 'Recipes',
-  },
-  skills: {
-    id: 'navigation.itemSkills',
-    defaultMessage: 'Skills',
-  },
   apps: {
     id: 'navigation.itemApps',
     defaultMessage: 'Apps',
@@ -61,14 +40,6 @@ const navItemMessages = defineMessages({
   scheduler: {
     id: 'navigation.itemScheduler',
     defaultMessage: 'Scheduler',
-  },
-  extensions: {
-    id: 'navigation.itemExtensions',
-    defaultMessage: 'Extensions',
-  },
-  sessions: {
-    id: 'navigation.itemSessions',
-    defaultMessage: 'Session History',
   },
   settings: {
     id: 'navigation.itemSettings',

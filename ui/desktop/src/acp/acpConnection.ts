@@ -13,7 +13,6 @@ import {
 import { createWebSocketStream } from './createWebSocketStream';
 import { requestAcpElicitation } from './elicitationRequests';
 import { requestAcpPermission } from './permissionRequests';
-import { requestAcpRecipeParams } from './recipeParamRequests';
 
 type AcpConnection = {
   client: GooseClient;
@@ -145,7 +144,6 @@ async function openConnection(generation: number): Promise<AcpConnection> {
             goose: {
               mcpHostCapabilities: DEFAULT_GOOSE_MCP_HOST_CAPABILITIES,
               customNotifications: true,
-              recipeParameterRequests: true,
             },
           },
         },
@@ -213,7 +211,6 @@ function createClientCallbacks(): () => GooseClientCallbacks {
   return () => ({
     requestPermission: requestAcpPermission,
     unstable_createElicitation: requestAcpElicitation,
-    unstable_sessionRecipeRequestParams: requestAcpRecipeParams,
     sessionUpdate: handleAcpSessionNotification,
     unstable_sessionUpdate: handleAcpGooseSessionNotification,
   });

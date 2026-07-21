@@ -1,11 +1,11 @@
 import { AppEvents } from '../constants/events';
 import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
-import { ArrowUp, Bug, ScrollText } from 'lucide-react';
+import { ArrowUp, Bug, Plus, ScrollText } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/Tooltip';
 import { Button } from './ui/button';
 import type { View } from '../utils/navigationUtils';
 import Stop from './ui/Stop';
-import { Attach, Close, Microphone } from './icons';
+import { Close, Microphone } from './icons';
 import { ChatState } from '../types/chatState';
 import debounce from 'lodash/debounce';
 import { LocalMessageStorage } from '../utils/localMessageStorage';
@@ -23,7 +23,6 @@ import { COST_TRACKING_ENABLED } from '../updates';
 import { CostTracker } from './bottom_menu/CostTracker';
 import { ContextWindowIndicator } from './bottom_menu/ContextWindowIndicator';
 import { DroppedFile, useFileDrop } from '../hooks/useFileDrop';
-import { Recipe } from '../recipe';
 import { MessageQueue, QueuedMessage } from './MessageQueue';
 import { detectInterruption } from '../utils/interruptionDetector';
 import { DiagnosticsModal } from './ui/Diagnostics';
@@ -31,7 +30,6 @@ import type { Message } from '../types/message';
 import { getInitialWorkingDir } from '../utils/workingDir';
 import { getPredefinedModelsFromEnv } from './settings/models/predefinedModelsUtils';
 import { trackFileAttached, trackVoiceDictation, trackDiagnosticsOpened } from '../utils/analytics';
-import { getNavigationShortcutText } from '../utils/keyboardShortcuts';
 import { UserInput, ImageData } from '../types/message';
 import { compressImageDataUrl } from '../utils/conversionUtils';
 import { fetchCanonicalModelInfo } from '../utils/canonical';
@@ -94,6 +92,10 @@ const getContextAlertType = (totalTokens: number, tokenLimit: number): AlertType
 const MANUAL_COMPACT_TRIGGER = '/compact';
 
 const i18n = defineMessages({
+  placeholder: {
+    id: 'chatInput.placeholder',
+    defaultMessage: 'Do anything',
+  },
   dictationError: {
     id: 'chatInput.dictationError',
     defaultMessage: 'Dictation Error',
@@ -150,10 +152,6 @@ const i18n = defineMessages({
     id: 'chatInput.failedToReadImage',
     defaultMessage: 'Failed to read image file',
   },
-  viewEditRecipe: {
-    id: 'chatInput.viewEditRecipe',
-    defaultMessage: 'View/Edit Recipe',
-  },
 });
 
 interface ChatInputProps {
@@ -175,9 +173,6 @@ interface ChatInputProps {
   accumulatedCost?: number | null;
   messages?: Message[];
   disableAnimation?: boolean;
-  recipe?: Recipe | null;
-  recipeId?: string | null;
-  recipeAccepted?: boolean;
   initialPrompt?: string;
   append?: (message: Message) => void;
   onWorkingDirChange?: (newDir: string) => Promise<void> | void;
@@ -210,9 +205,6 @@ export default function ChatInput({
   accumulatedCost,
   messages = [],
   disableAnimation = false,
-  recipe: _recipe,
-  recipeId: _recipeId,
-  recipeAccepted,
   initialPrompt,
   append: _append,
   onWorkingDirChange,
@@ -522,17 +514,15 @@ export default function ChatInput({
     setHasUserTyped(false);
   }, [initialValue]);
 
-  // Handle recipe prompt updates
   useEffect(() => {
-    // If recipe is accepted and we have an initial prompt, and no messages yet, and we haven't set it before
-    if (recipeAccepted && initialPrompt && messages.length === 0) {
+    if (initialPrompt && messages.length === 0) {
       setDisplayValue(initialPrompt);
       setValue(initialPrompt);
       setTimeout(() => {
         textAreaRef.current?.focus();
       }, 0);
     }
-  }, [recipeAccepted, initialPrompt, messages.length, textAreaRef]);
+  }, [initialPrompt, messages.length, textAreaRef]);
 
   const [isComposing, setIsComposing] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -664,7 +654,7 @@ export default function ChatInput({
       });
     }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalTokens, tokenLimit, isTokenLimitLoaded, isLoading, addAlert, clearAlerts]);
 
   // Cleanup effect for component unmount - prevent memory leaks
@@ -1467,7 +1457,7 @@ export default function ChatInput({
         isFocused
           ? 'border-border-secondary hover:border-border-secondary'
           : 'border-border-primary hover:border-border-primary'
-      } bg-background-primary z-10`}
+      } bg-transparent z-10`}
       data-drop-zone="true"
       onDrop={handleLocalDrop}
       onDragOver={handleLocalDragOver}
@@ -1502,7 +1492,7 @@ export default function ChatInput({
             data-testid="chat-input"
             autoFocus
             id="dynamic-textarea"
-            placeholder={isRecording ? '' : getNavigationShortcutText(intl)}
+            placeholder={isRecording ? '' : intl.formatMessage(i18n.placeholder)}
             value={displayValue}
             onChange={handleChange}
             onCompositionStart={handleCompositionStart}
@@ -1519,7 +1509,7 @@ export default function ChatInput({
               maxHeight: `${maxHeight}px`,
               overflowY: 'auto',
             }}
-            className="w-full outline-none border-none focus:ring-0 bg-transparent px-3 pt-3 pb-1.5 text-sm resize-none text-text-primary placeholder:text-text-secondary"
+            className="w-full outline-none border-none focus:ring-0 bg-transparent px-3 pt-2 pb-2 text-[15px] leading-6 resize-none text-text-primary placeholder:text-text-tertiary"
           />
 
           {/* Recording/transcribing status indicator (floats above the bottom bar) */}
@@ -1646,27 +1636,41 @@ export default function ChatInput({
         </div>
       )}
 
-      {/* Bottom action bar. Single flat row; no dividers. Left side: model
-          + working dir. Right side (after spacer): context indicator,
-          extensions, diagnostics, attach, mic, send. When the bar is narrow
+      {/* Bottom action bar. Single flat row; no dividers. Left side: attach
+          + working dir + extensions. Right side (after spacer): context
+          indicator, diagnostics, model, mic, send. When the bar is narrow
           (e.g. on a small window), the secondary controls drop out so the
           model selector + send button always stay visible. */}
       <div ref={bottomBarRef} className="flex flex-row items-center gap-2 px-3 py-2 relative">
-        {/* Left: model selector */}
+        {/* Left: attach */}
         <Tooltip>
-          <div>
-            <ModelsBottomBar
-              sessionId={sessionId}
-              dropdownRef={dropdownRef}
-              setView={setView}
-              sessionModel={effectiveModel}
-              sessionProvider={effectiveProvider}
-              latestInference={latestInference}
-              onModelChanged={setModelOverride}
-              sessionLoaded={sessionLoaded}
-            />
-          </div>
+          <TooltipTrigger asChild>
+            <Button
+              type="button"
+              onClick={handleFileSelect}
+              disabled={isFilePickerOpen}
+              variant="ghost"
+              size="sm"
+              shape="round"
+              className={cn(
+                'border border-border-secondary text-text-secondary hover:text-text-primary transition-colors',
+                isFilePickerOpen ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+              )}
+            >
+              <Plus className="w-4 h-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Attach file</TooltipContent>
         </Tooltip>
+
+        {/* Left: extension selector */}
+        {!isBottomBarNarrow && (
+          <BottomMenuExtensionSelection
+            sessionId={sessionId}
+            nextChatExtensionDraft={nextChatExtensionDraft}
+            onNextChatExtensionDraftChange={onNextChatExtensionDraftChange}
+          />
+        )}
 
         {/* Left: working directory (leaf folder name only) */}
         {!isBottomBarNarrow && (
@@ -1704,13 +1708,6 @@ export default function ChatInput({
               alerts={alerts}
             />
 
-            {/* Right: extension selector */}
-            <BottomMenuExtensionSelection
-              sessionId={sessionId}
-              nextChatExtensionDraft={nextChatExtensionDraft}
-              onNextChatExtensionDraftChange={onNextChatExtensionDraftChange}
-            />
-
             {/* Right: diagnostics */}
             {sessionId && (
               <Tooltip>
@@ -1732,29 +1729,24 @@ export default function ChatInput({
                 <TooltipContent>Generate diagnostics bundle</TooltipContent>
               </Tooltip>
             )}
-
-            {/* Right: attach */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  type="button"
-                  onClick={handleFileSelect}
-                  disabled={isFilePickerOpen}
-                  variant="ghost"
-                  size="sm"
-                  shape="round"
-                  className={cn(
-                    'text-text-primary/70 hover:text-text-primary transition-colors',
-                    isFilePickerOpen ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-                  )}
-                >
-                  <Attach className="w-4 h-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Attach file</TooltipContent>
-            </Tooltip>
           </>
         )}
+
+        {/* Right: model + reasoning selector */}
+        <Tooltip>
+          <div>
+            <ModelsBottomBar
+              sessionId={sessionId}
+              dropdownRef={dropdownRef}
+              setView={setView}
+              sessionModel={effectiveModel}
+              sessionProvider={effectiveProvider}
+              latestInference={latestInference}
+              onModelChanged={setModelOverride}
+              sessionLoaded={sessionLoaded}
+            />
+          </div>
+        </Tooltip>
 
         {/* Right: mic — ghost icon, no background when idle */}
         {dictationProvider && (
@@ -1828,10 +1820,9 @@ export default function ChatInput({
                   aria-label={intl.formatMessage(i18n.send)}
                   onClick={onFormSubmit}
                   className={cn(
-                    'bg-background-tertiary',
                     isSubmitButtonDisabled
-                      ? 'text-text-secondary cursor-not-allowed opacity-60'
-                      : 'text-text-primary hover:bg-background-tertiary/70 hover:cursor-pointer'
+                      ? 'bg-background-tertiary text-text-secondary cursor-not-allowed opacity-60'
+                      : 'bg-background-inverse text-text-inverse hover:bg-background-inverse/90 hover:cursor-pointer'
                   )}
                 >
                   <ArrowUp className="w-4 h-4" strokeWidth={2.25} />

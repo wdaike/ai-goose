@@ -123,13 +123,13 @@ export default function Hub({
   return (
     <div className="flex flex-col h-full min-h-0 items-center justify-center px-6 relative">
       <div className="w-full max-w-2xl">
-        <div className="flex items-baseline gap-2 mb-1">
-          <span className="text-6xl font-light text-text-primary tracking-tight tabular-nums">
+        <div className="mb-6 flex items-baseline justify-center gap-2">
+          <span className="text-2xl font-medium text-text-primary">{greeting}</span>
+          <span className="text-2xl font-light tabular-nums text-text-tertiary">
             {time}
+            <span className="ml-1 text-base">{meridiem}</span>
           </span>
-          <span className="text-2xl font-light text-text-secondary">{meridiem}</span>
         </div>
-        <p className="text-xl text-text-secondary mb-6">{greeting}</p>
 
         <ChatInputCard>
           <ChatInput

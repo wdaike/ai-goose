@@ -182,8 +182,8 @@
   "chatInput.failedToReadImage": {
     "defaultMessage": "Bilddatei konnte nicht gelesen werden"
   },
-  "chatInput.navigationShortcut": {
-    "defaultMessage": "{prefix}↑/{prefix}↓ zum Navigieren der Nachrichten"
+  "chatInput.placeholder": {
+    "defaultMessage": "Alles möglich"
   },
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "Abgelegte Dateien werden verarbeitet..."
@@ -211,9 +211,6 @@
   },
   "chatInput.unknownType": {
     "defaultMessage": "Unbekannter Typ"
-  },
-  "chatInput.viewEditRecipe": {
-    "defaultMessage": "Rezept anzeigen/bearbeiten"
   },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "Warten auf Abschluss des Abbruchs"
@@ -337,156 +334,6 @@
   },
   "costTracker.totalSessionCost": {
     "defaultMessage": "Gesamtkosten der Sitzung: {cost}"
-  },
-  "createEditRecipe.clickToGenerateDeeplink": {
-    "defaultMessage": "Klicken, um Deeplink zu generieren"
-  },
-  "createEditRecipe.close": {
-    "defaultMessage": "Schließen"
-  },
-  "createEditRecipe.copied": {
-    "defaultMessage": "Kopiert!"
-  },
-  "createEditRecipe.copy": {
-    "defaultMessage": "Kopieren"
-  },
-  "createEditRecipe.copyLinkDescription": {
-    "defaultMessage": "Kopieren Sie diesen Link, um ihn mit Freunden zu teilen, oder fügen Sie ihn direkt in Chrome ein, um ihn zu öffnen"
-  },
-  "createEditRecipe.createRecipeTitle": {
-    "defaultMessage": "Rezept erstellen"
-  },
-  "createEditRecipe.createSubtitle": {
-    "defaultMessage": "Erstellen Sie ein neues Rezept, um das Verhalten und die Fähigkeiten des Agenten für wiederverwendbare Chat-Sitzungen festzulegen."
-  },
-  "createEditRecipe.editSubtitle": {
-    "defaultMessage": "Sie können das Rezept unten bearbeiten, um das Verhalten des Agenten in einer neuen Sitzung zu ändern."
-  },
-  "createEditRecipe.generatingDeeplink": {
-    "defaultMessage": "Deeplink wird generiert..."
-  },
-  "createEditRecipe.learnMore": {
-    "defaultMessage": "Mehr erfahren"
-  },
-  "createEditRecipe.recipeSavedAndLaunchedMsg": {
-    "defaultMessage": "Rezept erfolgreich gespeichert und gestartet"
-  },
-  "createEditRecipe.recipeSavedMsg": {
-    "defaultMessage": "Rezept erfolgreich gespeichert"
-  },
-  "createEditRecipe.saveAndRunFailed": {
-    "defaultMessage": "Speichern und Ausführen fehlgeschlagen"
-  },
-  "createEditRecipe.saveAndRunFailedMsg": {
-    "defaultMessage": "Rezept konnte nicht gespeichert und ausgeführt werden: {error}"
-  },
-  "createEditRecipe.saveAndRunRecipe": {
-    "defaultMessage": "Rezept speichern & ausführen"
-  },
-  "createEditRecipe.saveFailed": {
-    "defaultMessage": "Speichern fehlgeschlagen"
-  },
-  "createEditRecipe.saveFailedMsg": {
-    "defaultMessage": "Rezept konnte nicht gespeichert werden: {error}"
-  },
-  "createEditRecipe.saveRecipe": {
-    "defaultMessage": "Rezept speichern"
-  },
-  "createEditRecipe.saving": {
-    "defaultMessage": "Wird gespeichert..."
-  },
-  "createEditRecipe.validationFailed": {
-    "defaultMessage": "Validierung fehlgeschlagen"
-  },
-  "createEditRecipe.validationMsg": {
-    "defaultMessage": "Bitte füllen Sie alle erforderlichen Felder aus und stellen Sie sicher, dass das JSON-Schema gültig ist."
-  },
-  "createEditRecipe.viewEditRecipeTitle": {
-    "defaultMessage": "Rezept anzeigen/bearbeiten"
-  },
-  "createSubRecipeInline.cancel": {
-    "defaultMessage": "Abbrechen"
-  },
-  "createSubRecipeInline.closeModal": {
-    "defaultMessage": "Dialog zum Erstellen von Unterrezepten schließen"
-  },
-  "createSubRecipeInline.createAndAdd": {
-    "defaultMessage": "Unterrezept erstellen & hinzufügen"
-  },
-  "createSubRecipeInline.createdSuccess": {
-    "defaultMessage": "Unterrezept erfolgreich erstellt"
-  },
-  "createSubRecipeInline.creating": {
-    "defaultMessage": "Wird erstellt..."
-  },
-  "createSubRecipeInline.duplicateName": {
-    "defaultMessage": "Doppelter Name"
-  },
-  "createSubRecipeInline.duplicateNameMsg": {
-    "defaultMessage": "Ein Unterrezept mit dem Namen \"{name}\" existiert bereits. Bitte verwenden Sie einen eindeutigen Namen."
-  },
-  "createSubRecipeInline.instructionsLabel": {
-    "defaultMessage": "Anweisungen"
-  },
-  "createSubRecipeInline.instructionsPlaceholder": {
-    "defaultMessage": "Anweisungen für die KI, wenn dieses Unterrezept aufgerufen wird..."
-  },
-  "createSubRecipeInline.nameHint": {
-    "defaultMessage": "Eindeutige Kennung, die zur Generierung des Tool-Namens verwendet wird"
-  },
-  "createSubRecipeInline.nameLabel": {
-    "defaultMessage": "Name"
-  },
-  "createSubRecipeInline.namePlaceholder": {
-    "defaultMessage": "z. B. security_scan"
-  },
-  "createSubRecipeInline.preconfiguredValues": {
-    "defaultMessage": "Vorkonfigurierte Werte"
-  },
-  "createSubRecipeInline.preconfiguredValuesHint": {
-    "defaultMessage": "Optionale Parameterwerte, die immer an das Unterrezept übergeben werden"
-  },
-  "createSubRecipeInline.recipeDescriptionLabel": {
-    "defaultMessage": "Rezeptbeschreibung"
-  },
-  "createSubRecipeInline.recipeDescriptionPlaceholder": {
-    "defaultMessage": "Was dieses Rezept bei der Ausführung tut"
-  },
-  "createSubRecipeInline.recipeTitleLabel": {
-    "defaultMessage": "Rezepttitel"
-  },
-  "createSubRecipeInline.recipeTitlePlaceholder": {
-    "defaultMessage": "z. B. Sicherheitsanalyse-Tool"
-  },
-  "createSubRecipeInline.saveFailed": {
-    "defaultMessage": "Speichern fehlgeschlagen"
-  },
-  "createSubRecipeInline.saveFailedMsg": {
-    "defaultMessage": "Unterrezept konnte nicht gespeichert werden: {error}"
-  },
-  "createSubRecipeInline.sequentialHint": {
-    "defaultMessage": "(Erzwingt die sequenzielle Ausführung mehrerer Instanzen)"
-  },
-  "createSubRecipeInline.sequentialLabel": {
-    "defaultMessage": "Sequenziell bei Wiederholung"
-  },
-  "createSubRecipeInline.subtitle": {
-    "defaultMessage": "Erstellen Sie ein einfaches Rezept zur Verwendung als aufrufbares Tool in Ihrem Hauptrezept"
-  },
-  "createSubRecipeInline.title": {
-    "defaultMessage": "Neues Unterrezept erstellen"
-  },
-  "createSubRecipeInline.toolDescriptionLabel": {
-    "defaultMessage": "Tool-Beschreibung"
-  },
-  "createSubRecipeInline.toolDescriptionPlaceholder": {
-    "defaultMessage": "Optionale Beschreibung, die angezeigt wird, wenn dies als Tool aufgerufen wird"
-  },
-  "createSubRecipeInline.validationFailed": {
-    "defaultMessage": "Validierung fehlgeschlagen"
-  },
-  "createSubRecipeInline.validationMsg": {
-    "defaultMessage": "Name, Titel, Rezeptbeschreibung und Anweisungen sind erforderlich."
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "Guthaben hinzufügen"
@@ -1154,25 +1001,25 @@
   "extensionsSection.updateExtension": {
     "defaultMessage": "Erweiterung aktualisieren"
   },
-  "extensionsView.addCustomExtension": {
+  "extensionsSettings.addCustomExtension": {
     "defaultMessage": "Benutzerdefinierte Erweiterung hinzufügen"
   },
-  "extensionsView.addExtension": {
+  "extensionsSettings.addExtension": {
     "defaultMessage": "Erweiterung hinzufügen"
   },
-  "extensionsView.browseExtensions": {
+  "extensionsSettings.browseExtensions": {
     "defaultMessage": "Erweiterungen durchsuchen"
   },
-  "extensionsView.defaultNote": {
+  "extensionsSettings.defaultNote": {
     "defaultMessage": "Hier aktivierte Erweiterungen werden als Standard für neue Chats verwendet. Sie können aktive Erweiterungen auch während eines Chats umschalten."
   },
-  "extensionsView.description": {
+  "extensionsSettings.description": {
     "defaultMessage": "Diese Erweiterungen nutzen das Model Context Protocol (MCP). Sie können die Fähigkeiten von Goose mit drei Hauptkomponenten erweitern: Prompts, Ressourcen und Tools. {searchShortcut} zum Suchen."
   },
-  "extensionsView.heading": {
+  "extensionsSettings.heading": {
     "defaultMessage": "Erweiterungen"
   },
-  "extensionsView.searchPlaceholder": {
+  "extensionsSettings.searchPlaceholder": {
     "defaultMessage": "Erweiterungen suchen..."
   },
   "externalBackendSection.certFingerprint": {
@@ -1418,48 +1265,6 @@
   "imagePreview.unableToLoad": {
     "defaultMessage": "Bild kann nicht geladen werden"
   },
-  "importRecipeForm.cancel": {
-    "defaultMessage": "Abbrechen"
-  },
-  "importRecipeForm.deeplinkHint": {
-    "defaultMessage": "Fügen Sie einen Recipe-Deeplink ein, der mit „goose://recipe?config=“ beginnt"
-  },
-  "importRecipeForm.deeplinkPlaceholder": {
-    "defaultMessage": "Fügen Sie hier Ihren goose://recipe?config=...-Deeplink ein"
-  },
-  "importRecipeForm.example": {
-    "defaultMessage": "Beispiel"
-  },
-  "importRecipeForm.expectedRecipeStructure": {
-    "defaultMessage": "Erwartete Recipe-Struktur"
-  },
-  "importRecipeForm.importRecipeButton": {
-    "defaultMessage": "Recipe importieren"
-  },
-  "importRecipeForm.importRecipeTitle": {
-    "defaultMessage": "Recipe importieren"
-  },
-  "importRecipeForm.importing": {
-    "defaultMessage": "Wird importiert..."
-  },
-  "importRecipeForm.or": {
-    "defaultMessage": "ODER"
-  },
-  "importRecipeForm.recipeDeeplinkLabel": {
-    "defaultMessage": "Recipe-Deeplink"
-  },
-  "importRecipeForm.recipeFileHint": {
-    "defaultMessage": "Laden Sie eine YAML- oder JSON-Datei hoch, die die Recipe-Struktur enthält"
-  },
-  "importRecipeForm.recipeFileLabel": {
-    "defaultMessage": "Recipe-Datei"
-  },
-  "importRecipeForm.reviewWarning": {
-    "defaultMessage": "Stellen Sie sicher, dass Sie den Inhalt von Recipe-Dateien überprüfen, bevor Sie sie zu Ihrer goose-Oberfläche hinzufügen."
-  },
-  "importRecipeForm.schemaDescription": {
-    "defaultMessage": "Ihre YAML- oder JSON-Datei sollte dieser Struktur folgen. Erforderliche Felder sind: title, description und entweder instructions oder prompt."
-  },
   "inlineEditText.clickToEdit": {
     "defaultMessage": "Zum Bearbeiten klicken"
   },
@@ -1471,48 +1276,6 @@
   },
   "inlineEditText.failedToSave": {
     "defaultMessage": "Speichern fehlgeschlagen"
-  },
-  "instructionsEditor.cancel": {
-    "defaultMessage": "Abbrechen"
-  },
-  "instructionsEditor.insertExample": {
-    "defaultMessage": "Beispiel einfügen"
-  },
-  "instructionsEditor.label": {
-    "defaultMessage": "Anweisungen"
-  },
-  "instructionsEditor.placeholder": {
-    "defaultMessage": "Detaillierte Anweisungen für die KI, vor dem Benutzer verborgen"
-  },
-  "instructionsEditor.save": {
-    "defaultMessage": "Anweisungen speichern"
-  },
-  "instructionsEditor.syntaxHelp": {
-    "defaultMessage": "Verwenden Sie die {code}-Syntax, um Parameter zu definieren, die Benutzer ausfüllen können"
-  },
-  "instructionsEditor.title": {
-    "defaultMessage": "Anweisungseditor"
-  },
-  "jsonSchemaEditor.cancel": {
-    "defaultMessage": "Abbrechen"
-  },
-  "jsonSchemaEditor.description": {
-    "defaultMessage": "Definieren Sie die erwartete Struktur der KI-Antwort im JSON-Schema-Format"
-  },
-  "jsonSchemaEditor.insertExample": {
-    "defaultMessage": "Beispiel einfügen"
-  },
-  "jsonSchemaEditor.invalidJson": {
-    "defaultMessage": "Ungültiges JSON-Format"
-  },
-  "jsonSchemaEditor.label": {
-    "defaultMessage": "Antwort-JSON-Schema"
-  },
-  "jsonSchemaEditor.save": {
-    "defaultMessage": "Schema speichern"
-  },
-  "jsonSchemaEditor.title": {
-    "defaultMessage": "JSON-Schema-Editor"
   },
   "jsonSchemaForm.cancel": {
     "defaultMessage": "Abbrechen"
@@ -1540,18 +1303,6 @@
   },
   "jsonSchemaForm.submit": {
     "defaultMessage": "Absenden"
-  },
-  "keyValueEditor.addValue": {
-    "defaultMessage": "Vorkonfigurierten Wert hinzufügen"
-  },
-  "keyValueEditor.defaultKeyPlaceholder": {
-    "defaultMessage": "Parametername..."
-  },
-  "keyValueEditor.defaultValuePlaceholder": {
-    "defaultMessage": "Parameterwert..."
-  },
-  "keyValueEditor.removeValue": {
-    "defaultMessage": "Vorkonfigurierten Wert {key} entfernen"
   },
   "keyboardShortcuts.alwaysOnTopDescription": {
     "defaultMessage": "Fenster immer im Vordergrund umschalten"
@@ -2336,32 +2087,32 @@
   "navigation.itemApps": {
     "defaultMessage": "Apps"
   },
-  "navigation.itemExtensions": {
-    "defaultMessage": "Erweiterungen"
-  },
   "navigation.itemHome": {
     "defaultMessage": "Neuer Chat"
-  },
-  "navigation.itemRecipes": {
-    "defaultMessage": "Rezepte"
   },
   "navigation.itemScheduler": {
     "defaultMessage": "Planer"
   },
-  "navigation.itemSessions": {
-    "defaultMessage": "Sitzungsverlauf"
-  },
   "navigation.itemSettings": {
     "defaultMessage": "Einstellungen"
   },
-  "navigation.itemSkills": {
-    "defaultMessage": "Skills"
-  },
-  "navigationPanel.chats": {
-    "defaultMessage": "Chats"
+  "navigationPanel.help": {
+    "defaultMessage": "Hilfe"
   },
   "navigationPanel.noChats": {
     "defaultMessage": "Keine aktuellen Chats"
+  },
+  "navigationPanel.noResults": {
+    "defaultMessage": "Keine passenden Chats"
+  },
+  "navigationPanel.projects": {
+    "defaultMessage": "Projekte"
+  },
+  "navigationPanel.search": {
+    "defaultMessage": "Chats durchsuchen"
+  },
+  "navigationPanel.searching": {
+    "defaultMessage": "Wird gesucht..."
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Unbenannte Sitzung"
@@ -2404,99 +2155,6 @@
   },
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "Anonyme Nutzungsdaten teilen"
-  },
-  "parameterInput.defaultValue": {
-    "defaultMessage": "Standardwert"
-  },
-  "parameterInput.defaultValuePlaceholder": {
-    "defaultMessage": "Standardwert eingeben"
-  },
-  "parameterInput.deleteParameter": {
-    "defaultMessage": "Parameter löschen: {key}"
-  },
-  "parameterInput.description": {
-    "defaultMessage": "Beschreibung"
-  },
-  "parameterInput.descriptionHelp": {
-    "defaultMessage": "Dies ist die Nachricht, die der Endbenutzer sieht."
-  },
-  "parameterInput.descriptionPlaceholder": {
-    "defaultMessage": "Z. B. \"Geben Sie den Namen für die neue Komponente ein\""
-  },
-  "parameterInput.inputType": {
-    "defaultMessage": "Eingabetyp"
-  },
-  "parameterInput.optional": {
-    "defaultMessage": "Optional"
-  },
-  "parameterInput.optionsHelp": {
-    "defaultMessage": "Geben Sie jede Option in einer neuen Zeile ein. Diese werden als Dropdown-Auswahlmöglichkeiten angezeigt."
-  },
-  "parameterInput.optionsLabel": {
-    "defaultMessage": "Optionen (eine pro Zeile)"
-  },
-  "parameterInput.optionsPlaceholder": {
-    "defaultMessage": "Option 1 Option 2 Option 3"
-  },
-  "parameterInput.required": {
-    "defaultMessage": "Erforderlich"
-  },
-  "parameterInput.requirement": {
-    "defaultMessage": "Anforderung"
-  },
-  "parameterInput.typeBoolean": {
-    "defaultMessage": "Boolescher Wert"
-  },
-  "parameterInput.typeNumber": {
-    "defaultMessage": "Zahl"
-  },
-  "parameterInput.typeSelect": {
-    "defaultMessage": "Auswahl"
-  },
-  "parameterInput.typeString": {
-    "defaultMessage": "Zeichenkette"
-  },
-  "parameterInput.unused": {
-    "defaultMessage": "Nicht verwendet"
-  },
-  "parameterInput.unusedWarningTitle": {
-    "defaultMessage": "Dieser Parameter wird in den Anweisungen oder im Prompt nicht verwendet. Er steht für die manuelle Eingabe zur Verfügung, wird aber möglicherweise nicht benötigt."
-  },
-  "parameterInputModal.backToForm": {
-    "defaultMessage": "Zurück zum Parameterformular"
-  },
-  "parameterInputModal.cancel": {
-    "defaultMessage": "Abbrechen"
-  },
-  "parameterInputModal.cancelRecipeSetup": {
-    "defaultMessage": "Rezepteinrichtung abbrechen"
-  },
-  "parameterInputModal.enterValue": {
-    "defaultMessage": "Wert für {key} eingeben..."
-  },
-  "parameterInputModal.false": {
-    "defaultMessage": "Falsch"
-  },
-  "parameterInputModal.recipeParameters": {
-    "defaultMessage": "Rezeptparameter"
-  },
-  "parameterInputModal.select": {
-    "defaultMessage": "Auswählen..."
-  },
-  "parameterInputModal.selectOption": {
-    "defaultMessage": "Eine Option auswählen..."
-  },
-  "parameterInputModal.startNewChat": {
-    "defaultMessage": "Neuen Chat starten (kein Rezept)"
-  },
-  "parameterInputModal.startRecipe": {
-    "defaultMessage": "Rezept starten"
-  },
-  "parameterInputModal.true": {
-    "defaultMessage": "Wahr"
-  },
-  "parameterInputModal.whatToDo": {
-    "defaultMessage": "Was möchten Sie tun?"
   },
   "permissionModal.alwaysAllow": {
     "defaultMessage": "Immer zulassen"
@@ -2888,363 +2546,6 @@
   "providerSetupActions.submit": {
     "defaultMessage": "Absenden"
   },
-  "recipeActivityEditor.activitiesDescription": {
-    "defaultMessage": "Die einleitenden Prompts und Aktivitätsschaltflächen, die im Rezept-Chatfenster angezeigt werden."
-  },
-  "recipeActivityEditor.activitiesLabel": {
-    "defaultMessage": "Aktivitäten"
-  },
-  "recipeActivityEditor.activityButtonsDescription": {
-    "defaultMessage": "Anklickbare Schaltflächen, die unterhalb der Nachricht erscheinen, um Benutzern die Interaktion mit Ihrem Rezept zu erleichtern."
-  },
-  "recipeActivityEditor.activityButtonsLabel": {
-    "defaultMessage": "Aktivitätsschaltflächen"
-  },
-  "recipeActivityEditor.addActivity": {
-    "defaultMessage": "Aktivität hinzufügen"
-  },
-  "recipeActivityEditor.addNewActivityPlaceholder": {
-    "defaultMessage": "Neue Aktivität hinzufügen..."
-  },
-  "recipeActivityEditor.messageDescription": {
-    "defaultMessage": "Eine formatierte Nachricht, die oben im Rezept angezeigt wird. Unterstützt Markdown-Formatierung."
-  },
-  "recipeActivityEditor.messageLabel": {
-    "defaultMessage": "Nachricht"
-  },
-  "recipeActivityEditor.messagePlaceholder": {
-    "defaultMessage": "Geben Sie eine für Benutzer sichtbare Einleitungsnachricht für Ihr Rezept ein (unterstützt **fett**, *kursiv*, `Code` usw.)"
-  },
-  "recipeExtensionSelector.description": {
-    "defaultMessage": "Wählen Sie aus, welche Erweiterungen beim Ausführen dieses Rezepts verfügbar sein sollen. Leer lassen, um die Standarderweiterungen zu verwenden."
-  },
-  "recipeExtensionSelector.extensionsSelected": {
-    "defaultMessage": "{count,plural,one{# Erweiterung ausgewählt} other{# Erweiterungen ausgewählt}}"
-  },
-  "recipeExtensionSelector.label": {
-    "defaultMessage": "Erweiterungen (optional)"
-  },
-  "recipeExtensionSelector.noExtensionsAvailable": {
-    "defaultMessage": "Keine Erweiterungen verfügbar"
-  },
-  "recipeExtensionSelector.noExtensionsFound": {
-    "defaultMessage": "Keine Erweiterungen gefunden"
-  },
-  "recipeExtensionSelector.searchPlaceholder": {
-    "defaultMessage": "Erweiterungen suchen..."
-  },
-  "recipeFormFields.addParameter": {
-    "defaultMessage": "Parameter hinzufügen"
-  },
-  "recipeFormFields.advancedOptions": {
-    "defaultMessage": "Erweiterte Optionen"
-  },
-  "recipeFormFields.advancedOptionsHint": {
-    "defaultMessage": "Aktivitäten, Parameter, Modell, Erweiterungen, Antwortschema, Unterrezepte"
-  },
-  "recipeFormFields.descriptionLabel": {
-    "defaultMessage": "Beschreibung"
-  },
-  "recipeFormFields.descriptionPlaceholder": {
-    "defaultMessage": "Kurze Beschreibung dessen, was dieses Rezept tut"
-  },
-  "recipeFormFields.enterValueFor": {
-    "defaultMessage": "Wert für {key} eingeben"
-  },
-  "recipeFormFields.initialPrompt": {
-    "defaultMessage": "Erster Prompt"
-  },
-  "recipeFormFields.instructionsLabel": {
-    "defaultMessage": "Anweisungen"
-  },
-  "recipeFormFields.instructionsPlaceholder": {
-    "defaultMessage": "Detaillierte Anweisungen für die KI, vor dem Benutzer verborgen"
-  },
-  "recipeFormFields.openEditor": {
-    "defaultMessage": "Editor öffnen"
-  },
-  "recipeFormFields.parameterNamePlaceholder": {
-    "defaultMessage": "Parameternamen eingeben..."
-  },
-  "recipeFormFields.parametersDescription": {
-    "defaultMessage": "Parameter werden automatisch anhand der Syntax '{{parameter_name}}' in Anweisungen/Prompt/Aktivitäten erkannt, oder Sie können sie unten manuell hinzufügen."
-  },
-  "recipeFormFields.parametersLabel": {
-    "defaultMessage": "Parameter"
-  },
-  "recipeFormFields.promptOptionalHint": {
-    "defaultMessage": "(Optional – Anweisungen oder Prompt sind erforderlich)"
-  },
-  "recipeFormFields.promptPlaceholder": {
-    "defaultMessage": "Vorausgefüllter Prompt beim Start des Rezepts"
-  },
-  "recipeFormFields.responseJsonSchema": {
-    "defaultMessage": "JSON-Schema der Antwort"
-  },
-  "recipeFormFields.responseJsonSchemaDescription": {
-    "defaultMessage": "Definieren Sie die erwartete Struktur der KI-Antwort im JSON-Schema-Format"
-  },
-  "recipeFormFields.templateVarHint": {
-    "defaultMessage": "Verwenden Sie '{{parameter_name}}', um Parameter zu definieren, die beim Ausführen des Rezepts ausgefüllt werden können."
-  },
-  "recipeFormFields.titleLabel": {
-    "defaultMessage": "Titel"
-  },
-  "recipeFormFields.titlePlaceholder": {
-    "defaultMessage": "Rezepttitel"
-  },
-  "recipeHeader.recipeLabel": {
-    "defaultMessage": "Rezept"
-  },
-  "recipeModelSelector.backToModelList": {
-    "defaultMessage": "Zurück zur Modellliste"
-  },
-  "recipeModelSelector.enterCustomModel": {
-    "defaultMessage": "Benutzerdefinierten Modellnamen eingeben"
-  },
-  "recipeModelSelector.enterModelNotListed": {
-    "defaultMessage": "Ein nicht aufgeführtes Modell eingeben..."
-  },
-  "recipeModelSelector.fetchError": {
-    "defaultMessage": "Modelle konnten nicht abgerufen werden. Bitte versuchen Sie es später erneut."
-  },
-  "recipeModelSelector.loadingModels": {
-    "defaultMessage": "Modelle werden geladen…"
-  },
-  "recipeModelSelector.modelHint": {
-    "defaultMessage": "Leer lassen, um das Standardmodell für den ausgewählten Anbieter zu verwenden"
-  },
-  "recipeModelSelector.modelLabel": {
-    "defaultMessage": "Modell (optional)"
-  },
-  "recipeModelSelector.providerHint": {
-    "defaultMessage": "Leer lassen, um den in den Einstellungen konfigurierten Standardanbieter zu verwenden"
-  },
-  "recipeModelSelector.providerLabel": {
-    "defaultMessage": "Anbieter (optional)"
-  },
-  "recipeModelSelector.selectModel": {
-    "defaultMessage": "Ein Modell auswählen"
-  },
-  "recipeModelSelector.selectProvider": {
-    "defaultMessage": "Anbieter auswählen"
-  },
-  "recipeModelSelector.useDefaultProvider": {
-    "defaultMessage": "Standardanbieter verwenden"
-  },
-  "recipeNameField.defaultLabel": {
-    "defaultMessage": "Rezeptname"
-  },
-  "recipeNameField.formatHint": {
-    "defaultMessage": "Wird automatisch formatiert (Kleinbuchstaben, Bindestriche für Leerzeichen)"
-  },
-  "recipeWarningModal.cancel": {
-    "defaultMessage": "Abbrechen"
-  },
-  "recipeWarningModal.descriptionLabel": {
-    "defaultMessage": "Beschreibung:"
-  },
-  "recipeWarningModal.firstTimeDescription": {
-    "defaultMessage": "Sie sind dabei, ein Rezept auszuführen, das Sie zuvor noch nicht ausgeführt haben."
-  },
-  "recipeWarningModal.hiddenCharsWarning": {
-    "defaultMessage": "Dieses Rezept enthält versteckte Zeichen, die zu Ihrer Sicherheit ignoriert werden, da sie für böswillige Zwecke verwendet werden könnten."
-  },
-  "recipeWarningModal.instructionsLabel": {
-    "defaultMessage": "Anweisungen:"
-  },
-  "recipeWarningModal.newRecipeWarningTitle": {
-    "defaultMessage": "⚠️ Warnung zu neuem Rezept"
-  },
-  "recipeWarningModal.recipePreview": {
-    "defaultMessage": "Rezeptvorschau:"
-  },
-  "recipeWarningModal.securityWarningTitle": {
-    "defaultMessage": "⚠️ Sicherheitswarnung"
-  },
-  "recipeWarningModal.titleLabel": {
-    "defaultMessage": "Titel:"
-  },
-  "recipeWarningModal.trustAndExecute": {
-    "defaultMessage": "Vertrauen und ausführen"
-  },
-  "recipeWarningModal.trustSource": {
-    "defaultMessage": "Fahren Sie nur fort, wenn Sie der Quelle dieses Rezepts vertrauen."
-  },
-  "recipesView.addSchedule": {
-    "defaultMessage": "Zeitplan hinzufügen"
-  },
-  "recipesView.addSlashCommand": {
-    "defaultMessage": "Slash-Befehl hinzufügen"
-  },
-  "recipesView.adjustSearchTerms": {
-    "defaultMessage": "Versuchen Sie, Ihre Suchbegriffe anzupassen"
-  },
-  "recipesView.allFiles": {
-    "defaultMessage": "Alle Dateien"
-  },
-  "recipesView.cancel": {
-    "defaultMessage": "Abbrechen"
-  },
-  "recipesView.copyDeeplink": {
-    "defaultMessage": "Deeplink kopieren"
-  },
-  "recipesView.copyDeeplinkFailedMsg": {
-    "defaultMessage": "Deeplink konnte nicht in die Zwischenablage kopiert werden"
-  },
-  "recipesView.copyFailedTitle": {
-    "defaultMessage": "Kopieren fehlgeschlagen"
-  },
-  "recipesView.copyYaml": {
-    "defaultMessage": "YAML kopieren"
-  },
-  "recipesView.copyYamlFailedMsg": {
-    "defaultMessage": "Rezept-YAML konnte nicht in die Zwischenablage kopiert werden"
-  },
-  "recipesView.createRecipe": {
-    "defaultMessage": "Rezept erstellen"
-  },
-  "recipesView.deeplinkCopiedMsg": {
-    "defaultMessage": "Der Rezept-Deeplink wurde in die Zwischenablage kopiert"
-  },
-  "recipesView.deeplinkCopiedTitle": {
-    "defaultMessage": "Deeplink kopiert"
-  },
-  "recipesView.deleteRecipe": {
-    "defaultMessage": "Rezept löschen"
-  },
-  "recipesView.deleteRecipeConfirm": {
-    "defaultMessage": "Möchten Sie \"{title}\" wirklich löschen?"
-  },
-  "recipesView.deleteRecipeDetail": {
-    "defaultMessage": "Die Rezeptdatei wird gelöscht."
-  },
-  "recipesView.deleteRecipeTitle": {
-    "defaultMessage": "Rezept löschen"
-  },
-  "recipesView.editRecipe": {
-    "defaultMessage": "Rezept bearbeiten"
-  },
-  "recipesView.editSchedule": {
-    "defaultMessage": "Zeitplan bearbeiten"
-  },
-  "recipesView.editSlashCommand": {
-    "defaultMessage": "Slash-Befehl bearbeiten"
-  },
-  "recipesView.errorLoadingRecipes": {
-    "defaultMessage": "Fehler beim Laden der Rezepte"
-  },
-  "recipesView.exportFailedMsg": {
-    "defaultMessage": "Rezept konnte nicht in eine Datei exportiert werden"
-  },
-  "recipesView.exportFailedTitle": {
-    "defaultMessage": "Export fehlgeschlagen"
-  },
-  "recipesView.exportRecipeDialogTitle": {
-    "defaultMessage": "Rezept exportieren"
-  },
-  "recipesView.exportToFile": {
-    "defaultMessage": "In Datei exportieren"
-  },
-  "recipesView.noMatchingRecipes": {
-    "defaultMessage": "Keine passenden Rezepte gefunden"
-  },
-  "recipesView.noSavedRecipes": {
-    "defaultMessage": "Keine gespeicherten Rezepte"
-  },
-  "recipesView.noSavedRecipesDescription": {
-    "defaultMessage": "Aus Chats gespeicherte Rezepte werden hier angezeigt."
-  },
-  "recipesView.openInNewWindow": {
-    "defaultMessage": "In neuem Fenster öffnen"
-  },
-  "recipesView.recipeDeletedSuccess": {
-    "defaultMessage": "Rezept erfolgreich gelöscht"
-  },
-  "recipesView.recipeExportedMsg": {
-    "defaultMessage": "Rezept gespeichert unter {filePath}"
-  },
-  "recipesView.recipeExportedTitle": {
-    "defaultMessage": "Rezept exportiert"
-  },
-  "recipesView.recipesDescription": {
-    "defaultMessage": "Sehen und verwalten Sie Ihre gespeicherten Rezepte, um schnell neue Sitzungen mit vordefinierten Konfigurationen zu starten. {shortcut} zum Suchen."
-  },
-  "recipesView.recipesTitle": {
-    "defaultMessage": "Rezepte"
-  },
-  "recipesView.remove": {
-    "defaultMessage": "Entfernen"
-  },
-  "recipesView.removeSchedule": {
-    "defaultMessage": "Zeitplan entfernen"
-  },
-  "recipesView.runs": {
-    "defaultMessage": "Läuft {schedule}"
-  },
-  "recipesView.save": {
-    "defaultMessage": "Speichern"
-  },
-  "recipesView.scheduleDialogTitle": {
-    "defaultMessage": "Zeitplan {action}"
-  },
-  "recipesView.scheduleRemovedMsg": {
-    "defaultMessage": "Das Rezept wird nicht mehr automatisch ausgeführt"
-  },
-  "recipesView.scheduleRemovedTitle": {
-    "defaultMessage": "Zeitplan entfernt"
-  },
-  "recipesView.scheduleSavedMsg": {
-    "defaultMessage": "Das Rezept läuft {schedule}"
-  },
-  "recipesView.scheduleSavedTitle": {
-    "defaultMessage": "Zeitplan gespeichert"
-  },
-  "recipesView.searchRecipesPlaceholder": {
-    "defaultMessage": "Rezepte suchen..."
-  },
-  "recipesView.shareRecipe": {
-    "defaultMessage": "Rezept teilen"
-  },
-  "recipesView.slashCommandDescription": {
-    "defaultMessage": "Legen Sie einen Slash-Befehl fest, um dieses Rezept schnell aus jedem Chat auszuführen"
-  },
-  "recipesView.slashCommandPlaceholder": {
-    "defaultMessage": "befehlsname"
-  },
-  "recipesView.slashCommandRemovedMsg": {
-    "defaultMessage": "Der Slash-Befehl des Rezepts wurde entfernt"
-  },
-  "recipesView.slashCommandRemovedTitle": {
-    "defaultMessage": "Slash-Befehl entfernt"
-  },
-  "recipesView.slashCommandSavedMsg": {
-    "defaultMessage": "Verwenden Sie /{command}, um dieses Rezept auszuführen"
-  },
-  "recipesView.slashCommandSavedTitle": {
-    "defaultMessage": "Slash-Befehl gespeichert"
-  },
-  "recipesView.slashCommandTitle": {
-    "defaultMessage": "Slash-Befehl"
-  },
-  "recipesView.slashCommandUsageHint": {
-    "defaultMessage": "Verwenden Sie /{command} in jedem Chat, um dieses Rezept auszuführen"
-  },
-  "recipesView.tryAgain": {
-    "defaultMessage": "Erneut versuchen"
-  },
-  "recipesView.useRecipe": {
-    "defaultMessage": "Rezept verwenden"
-  },
-  "recipesView.yamlCopiedMsg": {
-    "defaultMessage": "Das Rezept-YAML wurde in die Zwischenablage kopiert"
-  },
-  "recipesView.yamlCopiedTitle": {
-    "defaultMessage": "YAML kopiert"
-  },
-  "recipesView.yamlFiles": {
-    "defaultMessage": "YAML-Dateien"
-  },
   "resetProviderSection.resetButton": {
     "defaultMessage": "Anbieter und Modell zurücksetzen"
   },
@@ -3416,9 +2717,6 @@
   "scheduleDetailView.viewingScheduleId": {
     "defaultMessage": "Zeitplan-ID wird angezeigt: {id}"
   },
-  "scheduleModal.browseYaml": {
-    "defaultMessage": "Nach YAML-Datei suchen..."
-  },
   "scheduleModal.cancel": {
     "defaultMessage": "Abbrechen"
   },
@@ -3431,26 +2729,8 @@
   "scheduleModal.creating": {
     "defaultMessage": "Wird erstellt..."
   },
-  "scheduleModal.deepLink": {
-    "defaultMessage": "Deep-Link"
-  },
-  "scheduleModal.deepLinkPlaceholder": {
-    "defaultMessage": "goose://recipe-Link hier einfügen..."
-  },
   "scheduleModal.editSchedule": {
     "defaultMessage": "Zeitplan bearbeiten"
-  },
-  "scheduleModal.failedParseRecipe": {
-    "defaultMessage": "Rezept konnte nicht aus der Datei gelesen werden."
-  },
-  "scheduleModal.failedReadFile": {
-    "defaultMessage": "Die ausgewählte Datei konnte nicht gelesen werden."
-  },
-  "scheduleModal.invalidDeepLink": {
-    "defaultMessage": "Ungültiger Deep-Link. Bitte verwenden Sie einen goose://recipe-Link."
-  },
-  "scheduleModal.invalidFileType": {
-    "defaultMessage": "Ungültiger Dateityp: Bitte wählen Sie eine YAML-Datei (.yaml oder .yml)"
   },
   "scheduleModal.nameLabel": {
     "defaultMessage": "Name:"
@@ -3458,17 +2738,14 @@
   "scheduleModal.namePlaceholder": {
     "defaultMessage": "z. B. daily-summary-job"
   },
-  "scheduleModal.provideValidRecipe": {
-    "defaultMessage": "Bitte geben Sie eine gültige Rezeptquelle an."
+  "scheduleModal.promptLabel": {
+    "defaultMessage": "Prompt:"
   },
-  "scheduleModal.recipeDescription": {
-    "defaultMessage": "Beschreibung: {description}"
+  "scheduleModal.promptPlaceholder": {
+    "defaultMessage": "Was soll goose bei jedem Lauf tun?"
   },
-  "scheduleModal.recipeParsed": {
-    "defaultMessage": "Rezept erfolgreich gelesen"
-  },
-  "scheduleModal.recipeTitle": {
-    "defaultMessage": "Titel: {title}"
+  "scheduleModal.promptRequired": {
+    "defaultMessage": "Ein Prompt ist erforderlich."
   },
   "scheduleModal.scheduleIdRequired": {
     "defaultMessage": "Zeitplan-ID ist erforderlich."
@@ -3476,20 +2753,11 @@
   "scheduleModal.scheduleLabel": {
     "defaultMessage": "Zeitplan:"
   },
-  "scheduleModal.selected": {
-    "defaultMessage": "Ausgewählt: {path}"
-  },
-  "scheduleModal.sourceLabel": {
-    "defaultMessage": "Quelle:"
-  },
   "scheduleModal.updateSchedule": {
     "defaultMessage": "Zeitplan aktualisieren"
   },
   "scheduleModal.updating": {
     "defaultMessage": "Wird aktualisiert..."
-  },
-  "scheduleModal.yaml": {
-    "defaultMessage": "YAML"
   },
   "schedulesView.confirmDelete": {
     "defaultMessage": "Zeitplan \"{id}\" entfernen? Das Rezept bleibt erhalten."
@@ -3662,20 +2930,23 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Abbrechen"
   },
-  "sessionActionsHeader.close": {
-    "defaultMessage": "Schließen"
+  "sessionActionsHeader.deleteConfirm": {
+    "defaultMessage": "Möchten Sie die Sitzung \"{name}\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
   },
-  "sessionActionsHeader.copiedJson": {
-    "defaultMessage": "Sitzungs-JSON kopiert"
+  "sessionActionsHeader.deleteFailed": {
+    "defaultMessage": "Sitzung konnte nicht gelöscht werden: {error}"
   },
-  "sessionActionsHeader.copiedText": {
-    "defaultMessage": "Text kopiert"
+  "sessionActionsHeader.deleteSession": {
+    "defaultMessage": "Sitzung löschen"
   },
-  "sessionActionsHeader.copyJson": {
-    "defaultMessage": "JSON kopieren"
+  "sessionActionsHeader.deleteTitle": {
+    "defaultMessage": "Sitzung löschen"
   },
-  "sessionActionsHeader.copyText": {
-    "defaultMessage": "Text kopieren"
+  "sessionActionsHeader.deleted": {
+    "defaultMessage": "Sitzung erfolgreich gelöscht"
+  },
+  "sessionActionsHeader.deleting": {
+    "defaultMessage": "Wird gelöscht..."
   },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Sitzung konnte nicht dupliziert werden: {error}"
@@ -3685,18 +2956,6 @@
   },
   "sessionActionsHeader.duplicated": {
     "defaultMessage": "Sitzung dupliziert"
-  },
-  "sessionActionsHeader.fullTextTitle": {
-    "defaultMessage": "Textwert"
-  },
-  "sessionActionsHeader.jsonFailed": {
-    "defaultMessage": "Sitzungs-JSON konnte nicht geladen werden: {error}"
-  },
-  "sessionActionsHeader.jsonTitle": {
-    "defaultMessage": "Sitzungs-JSON"
-  },
-  "sessionActionsHeader.loadingJson": {
-    "defaultMessage": "JSON wird geladen..."
   },
   "sessionActionsHeader.renameFailed": {
     "defaultMessage": "Sitzung konnte nicht umbenannt werden: {error}"
@@ -3719,9 +2978,6 @@
   "sessionActionsHeader.saving": {
     "defaultMessage": "Wird gespeichert..."
   },
-  "sessionActionsHeader.viewJson": {
-    "defaultMessage": "Sitzungs-JSON anzeigen"
-  },
   "sessionIndicators.error": {
     "defaultMessage": "In der Sitzung ist ein Fehler aufgetreten"
   },
@@ -3730,156 +2986,6 @@
   },
   "sessionIndicators.streaming": {
     "defaultMessage": "Streaming"
-  },
-  "sessionViewComponents.empty.description": {
-    "defaultMessage": "Diese Sitzung enthält keine Nachrichten"
-  },
-  "sessionViewComponents.empty.title": {
-    "defaultMessage": "Keine Nachrichten gefunden"
-  },
-  "sessionViewComponents.error.loading": {
-    "defaultMessage": "Fehler beim Laden der Sitzungsdetails"
-  },
-  "sessionViewComponents.error.tryAgain": {
-    "defaultMessage": "Erneut versuchen"
-  },
-  "sessionViewComponents.role.assistant": {
-    "defaultMessage": "Goose"
-  },
-  "sessionViewComponents.role.user": {
-    "defaultMessage": "Sie"
-  },
-  "sessions.action.delete": {
-    "defaultMessage": "Sitzung löschen"
-  },
-  "sessions.action.duplicate": {
-    "defaultMessage": "Sitzung duplizieren"
-  },
-  "sessions.action.editName": {
-    "defaultMessage": "Sitzungsnamen bearbeiten"
-  },
-  "sessions.action.export": {
-    "defaultMessage": "Sitzung exportieren"
-  },
-  "sessions.action.openNewWindow": {
-    "defaultMessage": "In neuem Fenster öffnen"
-  },
-  "sessions.action.shareNostr": {
-    "defaultMessage": "Verschlüsselten Nostr-Link teilen"
-  },
-  "sessions.cancel": {
-    "defaultMessage": "Abbrechen"
-  },
-  "sessions.chatHistory": {
-    "defaultMessage": "Chatverlauf"
-  },
-  "sessions.chatHistoryDesc": {
-    "defaultMessage": "Sehen und durchsuchen Sie Ihre vergangenen Unterhaltungen mit Goose. {shortcut} zum Suchen."
-  },
-  "sessions.close": {
-    "defaultMessage": "Schließen"
-  },
-  "sessions.delete.message": {
-    "defaultMessage": "Möchten Sie die Sitzung \"{name}\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
-  },
-  "sessions.delete.title": {
-    "defaultMessage": "Sitzung löschen"
-  },
-  "sessions.edit.placeholder": {
-    "defaultMessage": "Sitzungsbeschreibung eingeben"
-  },
-  "sessions.edit.title": {
-    "defaultMessage": "Sitzungsbeschreibung bearbeiten"
-  },
-  "sessions.empty.description": {
-    "defaultMessage": "Ihr Chatverlauf wird hier angezeigt"
-  },
-  "sessions.empty.title": {
-    "defaultMessage": "Keine Chatsitzungen gefunden"
-  },
-  "sessions.error.loading": {
-    "defaultMessage": "Fehler beim Laden der Sitzungen"
-  },
-  "sessions.error.tryAgain": {
-    "defaultMessage": "Erneut versuchen"
-  },
-  "sessions.import": {
-    "defaultMessage": "Sitzung importieren"
-  },
-  "sessions.importNostr": {
-    "defaultMessage": "Link importieren"
-  },
-  "sessions.importNostr.description": {
-    "defaultMessage": "Fügen Sie einen Goose-Nostr-Freigabelink ein, um die Sitzung abzurufen, zu entschlüsseln und zu importieren."
-  },
-  "sessions.importNostr.placeholder": {
-    "defaultMessage": "goose://sessions/nostr?nevent=...&key=..."
-  },
-  "sessions.importNostr.title": {
-    "defaultMessage": "Nostr-Sitzung importieren"
-  },
-  "sessions.importing": {
-    "defaultMessage": "Wird importiert..."
-  },
-  "sessions.loadingMore": {
-    "defaultMessage": "Weitere Sitzungen werden geladen..."
-  },
-  "sessions.save": {
-    "defaultMessage": "Speichern"
-  },
-  "sessions.saving": {
-    "defaultMessage": "Wird gespeichert..."
-  },
-  "sessions.search.noResults": {
-    "defaultMessage": "Keine passenden Sitzungen gefunden"
-  },
-  "sessions.search.noResultsDesc": {
-    "defaultMessage": "Versuchen Sie, Ihre Suchbegriffe anzupassen"
-  },
-  "sessions.searchPlaceholder": {
-    "defaultMessage": "Verlauf durchsuchen..."
-  },
-  "sessions.shareNostr.description": {
-    "defaultMessage": "Jeder mit diesem Link kann die Sitzung abrufen und entschlüsseln. Behandeln Sie ihn wie ein Geheimnis."
-  },
-  "sessions.shareNostr.title": {
-    "defaultMessage": "Verschlüsselter Nostr-Freigabelink"
-  },
-  "sessions.toast.copied": {
-    "defaultMessage": "In die Zwischenablage kopiert"
-  },
-  "sessions.toast.deleteFailed": {
-    "defaultMessage": "Sitzung \"{name}\" konnte nicht gelöscht werden: {error}"
-  },
-  "sessions.toast.deleted": {
-    "defaultMessage": "Sitzung erfolgreich gelöscht"
-  },
-  "sessions.toast.duplicateFailed": {
-    "defaultMessage": "Sitzung konnte nicht dupliziert werden: {error}"
-  },
-  "sessions.toast.duplicated": {
-    "defaultMessage": "Sitzung \"{name}\" erfolgreich dupliziert"
-  },
-  "sessions.toast.exported": {
-    "defaultMessage": "Sitzung erfolgreich exportiert"
-  },
-  "sessions.toast.importFailed": {
-    "defaultMessage": "Sitzung konnte nicht importiert werden: {error}"
-  },
-  "sessions.toast.imported": {
-    "defaultMessage": "Sitzung erfolgreich importiert"
-  },
-  "sessions.toast.shareNostr": {
-    "defaultMessage": "Verschlüsselter Nostr-Freigabelink erstellt"
-  },
-  "sessions.toast.shareNostrFailed": {
-    "defaultMessage": "Nostr-Freigabelink konnte nicht erstellt werden: {error}"
-  },
-  "sessions.toast.updateFailed": {
-    "defaultMessage": "Sitzungsbeschreibung konnte nicht aktualisiert werden: {error}"
-  },
-  "sessions.toast.updated": {
-    "defaultMessage": "Sitzungsbeschreibung erfolgreich aktualisiert"
   },
   "settings.appearance.description": {
     "defaultMessage": "Konfigurieren Sie, wie goose auf Ihrem System angezeigt wird"
@@ -4058,6 +3164,9 @@
   "settingsView.tabChat": {
     "defaultMessage": "Chat"
   },
+  "settingsView.tabExtensions": {
+    "defaultMessage": "Erweiterungen"
+  },
   "settingsView.tabExternalBackend": {
     "defaultMessage": "Externes Backend"
   },
@@ -4072,6 +3181,9 @@
   },
   "settingsView.tabPrompts": {
     "defaultMessage": "Prompts"
+  },
+  "settingsView.tabSkills": {
+    "defaultMessage": "Skills"
   },
   "settingsView.title": {
     "defaultMessage": "Einstellungen"
@@ -4094,37 +3206,31 @@
   "shortcutRecorder.save": {
     "defaultMessage": "Speichern"
   },
-  "skillsView.addSkill": {
-    "defaultMessage": "Skill hinzufügen"
-  },
-  "skillsView.adjustSearchTerms": {
+  "skillsSettings.adjustSearchTerms": {
     "defaultMessage": "Versuchen Sie, Ihre Suchbegriffe anzupassen"
   },
-  "skillsView.comingSoon": {
-    "defaultMessage": "Demnächst verfügbar"
-  },
-  "skillsView.errorLoadingSkills": {
+  "skillsSettings.errorLoadingSkills": {
     "defaultMessage": "Fehler beim Laden der Skills"
   },
-  "skillsView.noMatchingSkills": {
+  "skillsSettings.noMatchingSkills": {
     "defaultMessage": "Keine passenden Skills gefunden"
   },
-  "skillsView.noSkillsDescription": {
+  "skillsSettings.noSkillsDescription": {
     "defaultMessage": "Skills werden aus SKILL.md-Dateien in ~/.config/agents/skills/, .goose/skills/ oder anderen unterstützten Verzeichnissen geladen."
   },
-  "skillsView.noSkillsInstalled": {
+  "skillsSettings.noSkillsInstalled": {
     "defaultMessage": "Keine Skills installiert"
   },
-  "skillsView.searchSkillsPlaceholder": {
+  "skillsSettings.searchSkillsPlaceholder": {
     "defaultMessage": "Skills durchsuchen..."
   },
-  "skillsView.skillsDescription": {
+  "skillsSettings.skillsDescription": {
     "defaultMessage": "Zeigen Sie installierte Skills an, die die Fähigkeiten von Goose erweitern. {shortcut} zum Suchen."
   },
-  "skillsView.skillsTitle": {
+  "skillsSettings.skillsTitle": {
     "defaultMessage": "Skills"
   },
-  "skillsView.tryAgain": {
+  "skillsSettings.tryAgain": {
     "defaultMessage": "Erneut versuchen"
   },
   "spellcheckToggle.description": {
@@ -4153,99 +3259,6 @@
   },
   "stringUtils.ollamaNotConfiguredSuffix": {
     "defaultMessage": "auf Ihrem Computer installiert und geöffnet sein, oder Sie müssen einen Wert für OLLAMA_HOST eingeben."
-  },
-  "subRecipeEditor.addExisting": {
-    "defaultMessage": "Vorhandenes hinzufügen"
-  },
-  "subRecipeEditor.createNew": {
-    "defaultMessage": "Neues Subrezept erstellen"
-  },
-  "subRecipeEditor.deleteSubrecipe": {
-    "defaultMessage": "Subrezept {name} löschen"
-  },
-  "subRecipeEditor.description": {
-    "defaultMessage": "Subrezepte sind Rezepte, die während der Ausführung als Tools aufgerufen werden können. Sie ermöglichen mehrstufige Workflows und wiederverwendbare Komponenten."
-  },
-  "subRecipeEditor.duplicateName": {
-    "defaultMessage": "Doppelter Name"
-  },
-  "subRecipeEditor.duplicateNameMsg": {
-    "defaultMessage": "Ein Subrezept namens \"{name}\" existiert bereits. Bitte verwenden Sie einen eindeutigen Namen."
-  },
-  "subRecipeEditor.editSubrecipe": {
-    "defaultMessage": "Subrezept {name} bearbeiten"
-  },
-  "subRecipeEditor.label": {
-    "defaultMessage": "Subrezepte"
-  },
-  "subRecipeEditor.preconfiguredValues": {
-    "defaultMessage": "Vorkonfigurierte Werte:"
-  },
-  "subRecipeEditor.sequential": {
-    "defaultMessage": "Sequenziell"
-  },
-  "subRecipeModal.addTitle": {
-    "defaultMessage": "Subrezept hinzufügen"
-  },
-  "subRecipeModal.apply": {
-    "defaultMessage": "Anwenden"
-  },
-  "subRecipeModal.browse": {
-    "defaultMessage": "Durchsuchen"
-  },
-  "subRecipeModal.cancel": {
-    "defaultMessage": "Abbrechen"
-  },
-  "subRecipeModal.closeModal": {
-    "defaultMessage": "Subrezept-Dialog schließen"
-  },
-  "subRecipeModal.configureTitle": {
-    "defaultMessage": "Subrezept konfigurieren"
-  },
-  "subRecipeModal.descriptionLabel": {
-    "defaultMessage": "Beschreibung"
-  },
-  "subRecipeModal.descriptionPlaceholder": {
-    "defaultMessage": "Optionale Beschreibung, was dieses Subrezept tut..."
-  },
-  "subRecipeModal.invalidFile": {
-    "defaultMessage": "Ungültige Datei"
-  },
-  "subRecipeModal.invalidFileMsg": {
-    "defaultMessage": "Bitte wählen Sie eine YAML-Datei (.yaml oder .yml)."
-  },
-  "subRecipeModal.nameHint": {
-    "defaultMessage": "Eindeutige Kennung, die zur Generierung des Tool-Namens verwendet wird"
-  },
-  "subRecipeModal.nameLabel": {
-    "defaultMessage": "Name"
-  },
-  "subRecipeModal.namePlaceholder": {
-    "defaultMessage": "z. B. security_scan"
-  },
-  "subRecipeModal.pathHint": {
-    "defaultMessage": "Nach einer vorhandenen Rezeptdatei suchen oder einen Pfad manuell eingeben"
-  },
-  "subRecipeModal.pathLabel": {
-    "defaultMessage": "Pfad"
-  },
-  "subRecipeModal.pathPlaceholder": {
-    "defaultMessage": "z. B. ./subrecipes/security-analysis.yaml"
-  },
-  "subRecipeModal.preconfiguredValues": {
-    "defaultMessage": "Vorkonfigurierte Werte"
-  },
-  "subRecipeModal.preconfiguredValuesHint": {
-    "defaultMessage": "Optionale Parameterwerte, die immer an das Subrezept übergeben werden"
-  },
-  "subRecipeModal.sequentialHint": {
-    "defaultMessage": "(Erzwingt die sequenzielle Ausführung mehrerer Subrezept-Instanzen)"
-  },
-  "subRecipeModal.sequentialLabel": {
-    "defaultMessage": "Sequenziell bei Wiederholung"
-  },
-  "subRecipeModal.subtitle": {
-    "defaultMessage": "Konfigurieren Sie ein Subrezept, das während der Rezeptausführung als Tool aufgerufen werden kann"
   },
   "switchModelModal.backToModelList": {
     "defaultMessage": "Zurück zur Modellliste"
@@ -4453,9 +3466,6 @@
   },
   "toolCallWithResponse.activityCount": {
     "defaultMessage": "Aktivität ({count})"
-  },
-  "toolCallWithResponse.code": {
-    "defaultMessage": "Code"
   },
   "toolCallWithResponse.loadingSpinner": {
     "defaultMessage": "Ladeanimation"

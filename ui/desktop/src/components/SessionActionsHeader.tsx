@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useMemo, useState, type KeyboardEvent } from 'react';
-import { ChevronDown, ChevronRight, Copy, Edit2, FileJson, LoaderCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Copy, Edit2, Folder, LoaderCircle, MoreHorizontal, Trash2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { AppEvents } from '../constants/events';
 import { defineMessages, useIntl } from '../i18n';
-import { acpExportSession, acpForkSession, acpRenameSession } from '../acp/sessions';
+import { acpDeleteSession, acpForkSession, acpRenameSession } from '../acp/sessions';
 import { getSessionDisplayName } from '../sessions';
 import type { Session } from '../types/session';
 import { errorMessage } from '../utils/conversionUtils';
+import { useNavigationContextSafe } from './Layout/NavigationContext';
 import { cn } from '../utils';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
@@ -24,15 +26,15 @@ const i18n = defineMessages({
   },
   renameSession: {
     id: 'sessionActionsHeader.renameSession',
-    defaultMessage: 'Rename session',
+    defaultMessage: 'Rename chat',
   },
   duplicateSession: {
     id: 'sessionActionsHeader.duplicateSession',
-    defaultMessage: 'Duplicate session',
+    defaultMessage: 'Duplicate chat',
   },
-  viewJson: {
-    id: 'sessionActionsHeader.viewJson',
-    defaultMessage: 'View session JSON',
+  deleteSession: {
+    id: 'sessionActionsHeader.deleteSession',
+    defaultMessage: 'Delete chat',
   },
   renameTitle: {
     id: 'sessionActionsHeader.renameTitle',
@@ -70,243 +72,32 @@ const i18n = defineMessages({
     id: 'sessionActionsHeader.duplicateFailed',
     defaultMessage: 'Failed to duplicate session: {error}',
   },
-  jsonTitle: {
-    id: 'sessionActionsHeader.jsonTitle',
-    defaultMessage: 'Session JSON',
+  deleteTitle: {
+    id: 'sessionActionsHeader.deleteTitle',
+    defaultMessage: 'Delete Session',
   },
-  loadingJson: {
-    id: 'sessionActionsHeader.loadingJson',
-    defaultMessage: 'Loading JSON...',
+  deleteConfirm: {
+    id: 'sessionActionsHeader.deleteConfirm',
+    defaultMessage: 'Delete "{name}"? This cannot be undone.',
   },
-  jsonFailed: {
-    id: 'sessionActionsHeader.jsonFailed',
-    defaultMessage: 'Failed to load session JSON: {error}',
+  deleting: {
+    id: 'sessionActionsHeader.deleting',
+    defaultMessage: 'Deleting...',
   },
-  close: {
-    id: 'sessionActionsHeader.close',
-    defaultMessage: 'Close',
+  deleted: {
+    id: 'sessionActionsHeader.deleted',
+    defaultMessage: 'Session deleted',
   },
-  copyJson: {
-    id: 'sessionActionsHeader.copyJson',
-    defaultMessage: 'Copy JSON',
-  },
-  copiedJson: {
-    id: 'sessionActionsHeader.copiedJson',
-    defaultMessage: 'Session JSON copied',
-  },
-  fullTextTitle: {
-    id: 'sessionActionsHeader.fullTextTitle',
-    defaultMessage: 'Text value',
-  },
-  copyText: {
-    id: 'sessionActionsHeader.copyText',
-    defaultMessage: 'Copy text',
-  },
-  copiedText: {
-    id: 'sessionActionsHeader.copiedText',
-    defaultMessage: 'Text copied',
+  deleteFailed: {
+    id: 'sessionActionsHeader.deleteFailed',
+    defaultMessage: 'Failed to delete session: {error}',
   },
 });
-
-const LONG_STRING_THRESHOLD = 180;
-const STRING_PREVIEW_START = 96;
-const STRING_PREVIEW_END = 56;
 
 interface SessionActionsHeaderProps {
   session?: Session;
   onSessionChange: (updater: (session: Session) => Session) => void;
   className?: string;
-}
-
-interface ParsedSessionJson {
-  value: unknown;
-  pretty: string;
-}
-
-interface FullTextSelection {
-  path: string;
-  value: string;
-}
-
-function parseSessionJson(json: string): ParsedSessionJson {
-  const value = JSON.parse(json) as unknown;
-  return {
-    value,
-    pretty: JSON.stringify(value, null, 2),
-  };
-}
-
-function isJsonRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-function getNodePath(parentPath: string, key: string, isArrayItem: boolean): string {
-  if (isArrayItem) {
-    return `${parentPath}[${key}]`;
-  }
-
-  return /^[A-Za-z_$][\w$]*$/.test(key)
-    ? `${parentPath}.${key}`
-    : `${parentPath}[${JSON.stringify(key)}]`;
-}
-
-function getStringPreview(value: string): string {
-  if (value.length <= LONG_STRING_THRESHOLD) {
-    return JSON.stringify(value);
-  }
-
-  return JSON.stringify(
-    `${value.slice(0, STRING_PREVIEW_START)} ... ${value.slice(-STRING_PREVIEW_END)}`
-  );
-}
-
-function JsonPrimitiveValue({
-  value,
-  path,
-  onOpenText,
-}: {
-  value: unknown;
-  path: string;
-  onOpenText: (selection: FullTextSelection) => void;
-}) {
-  if (typeof value === 'string') {
-    const isLong = value.length > LONG_STRING_THRESHOLD;
-    const preview = getStringPreview(value);
-
-    if (isLong) {
-      return (
-        <button
-          type="button"
-          className="min-w-0 rounded-sm text-left text-blue-600 underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-border-active dark:text-blue-300 break-all"
-          onClick={() => onOpenText({ path, value })}
-          title={path}
-        >
-          {preview}
-        </button>
-      );
-    }
-
-    return (
-      <span className="min-w-0 text-emerald-700 dark:text-emerald-300 break-all">{preview}</span>
-    );
-  }
-
-  if (typeof value === 'number') {
-    return <span className="text-purple-700 dark:text-purple-300">{value}</span>;
-  }
-
-  if (typeof value === 'boolean') {
-    return <span className="text-amber-700 dark:text-amber-300">{String(value)}</span>;
-  }
-
-  if (value === null) {
-    return <span className="text-text-secondary">null</span>;
-  }
-
-  return <span className="text-text-secondary">{String(value)}</span>;
-}
-
-function JsonTreeNode({
-  label,
-  value,
-  depth,
-  path,
-  isArrayItem = false,
-  onOpenText,
-}: {
-  label?: string;
-  value: unknown;
-  depth: number;
-  path: string;
-  isArrayItem?: boolean;
-  onOpenText: (selection: FullTextSelection) => void;
-}) {
-  const isArray = Array.isArray(value);
-  const isRecord = isJsonRecord(value);
-  const isContainer = isArray || isRecord;
-  const [isOpen, setIsOpen] = useState(depth < 3);
-
-  const labelNode =
-    label === undefined ? null : (
-      <span className="text-text-secondary">{isArrayItem ? label : JSON.stringify(label)}:</span>
-    );
-
-  if (!isContainer) {
-    return (
-      <div className="flex min-w-0 flex-wrap items-baseline gap-x-1 px-1 py-0.5">
-        {labelNode}
-        <JsonPrimitiveValue value={value} path={path} onOpenText={onOpenText} />
-      </div>
-    );
-  }
-
-  const entries = isArray
-    ? value.map((item, index) => [String(index), item] as const)
-    : Object.entries(value);
-  const openToken = isArray ? '[' : '{';
-  const closeToken = isArray ? ']' : '}';
-  const countLabel = isArray
-    ? `${entries.length} ${entries.length === 1 ? 'item' : 'items'}`
-    : `${entries.length} ${entries.length === 1 ? 'key' : 'keys'}`;
-
-  return (
-    <div className="min-w-0">
-      <button
-        type="button"
-        className="flex max-w-full items-baseline gap-1 rounded-sm px-1 py-0.5 text-left transition-colors hover:bg-background-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-border-active"
-        onClick={() => entries.length > 0 && setIsOpen((open) => !open)}
-      >
-        {entries.length > 0 ? (
-          isOpen ? (
-            <ChevronDown className="mt-0.5 size-3.5 shrink-0 text-text-secondary" />
-          ) : (
-            <ChevronRight className="mt-0.5 size-3.5 shrink-0 text-text-secondary" />
-          )
-        ) : (
-          <span className="size-3.5 shrink-0" />
-        )}
-        <span className="min-w-0 flex flex-wrap items-baseline gap-x-1">
-          {labelNode}
-          <span>{openToken}</span>
-          {!isOpen && entries.length > 0 && (
-            <span className="text-text-secondary">{countLabel}</span>
-          )}
-          {(!isOpen || entries.length === 0) && <span>{closeToken}</span>}
-        </span>
-      </button>
-
-      {isOpen && entries.length > 0 && (
-        <div className="ml-3 border-l border-border-primary/70 pl-3">
-          {entries.map(([key, childValue]) => (
-            <JsonTreeNode
-              key={`${path}.${key}`}
-              label={key}
-              value={childValue}
-              depth={depth + 1}
-              path={getNodePath(path, key, isArray)}
-              isArrayItem={isArray}
-              onOpenText={onOpenText}
-            />
-          ))}
-          <div className="px-1 py-0.5">{closeToken}</div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function JsonTree({
-  value,
-  onOpenText,
-}: {
-  value: unknown;
-  onOpenText: (selection: FullTextSelection) => void;
-}) {
-  return (
-    <div className="min-w-0 font-mono text-xs leading-5 text-text-primary">
-      <JsonTreeNode value={value} depth={0} path="root" onOpenText={onOpenText} />
-    </div>
-  );
 }
 
 export default function SessionActionsHeader({
@@ -315,17 +106,21 @@ export default function SessionActionsHeader({
   className,
 }: SessionActionsHeaderProps) {
   const intl = useIntl();
+  const navigate = useNavigate();
   const [isRenameOpen, setIsRenameOpen] = useState(false);
   const [renameValue, setRenameValue] = useState('');
   const [isRenaming, setIsRenaming] = useState(false);
-  const [isJsonOpen, setIsJsonOpen] = useState(false);
-  const [jsonValue, setJsonValue] = useState<unknown>(null);
-  const [jsonText, setJsonText] = useState('');
-  const [isJsonLoading, setIsJsonLoading] = useState(false);
   const [isDuplicating, setIsDuplicating] = useState(false);
-  const [fullTextSelection, setFullTextSelection] = useState<FullTextSelection | null>(null);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const title = useMemo(() => (session ? getSessionDisplayName(session) : ''), [session]);
+
+  // With the sidebar collapsed the title has to clear the floating nav toggle,
+  // which sits after the macOS window controls.
+  const isNavExpanded = useNavigationContextSafe()?.isNavExpanded ?? true;
+  const isMacOS = (window?.electron?.platform || 'darwin') === 'darwin';
+  const headerLeft = isNavExpanded ? 'left-4' : isMacOS ? 'left-[140px]' : 'left-[60px]';
 
   useEffect(() => {
     if (session && isRenameOpen) {
@@ -385,48 +180,28 @@ export default function SessionActionsHeader({
     }
   }, [intl, isDuplicating, session]);
 
-  const handleViewJson = useCallback(async () => {
-    if (!session) return;
+  const handleDelete = useCallback(async () => {
+    if (!session || isDeleting) return;
 
-    setIsJsonOpen(true);
-    setJsonValue(null);
-    setJsonText('');
-    setIsJsonLoading(true);
+    setIsDeleting(true);
     try {
-      const json = await acpExportSession(session.id);
-      const parsed = parseSessionJson(json);
-      setJsonValue(parsed.value);
-      setJsonText(parsed.pretty);
+      await acpDeleteSession(session.id);
+      window.dispatchEvent(
+        new CustomEvent(AppEvents.SESSION_DELETED, { detail: { sessionId: session.id } })
+      );
+      setIsDeleteOpen(false);
+      toast.success(intl.formatMessage(i18n.deleted));
+      navigate('/');
     } catch (error) {
-      setIsJsonOpen(false);
       toast.error(
-        intl.formatMessage(i18n.jsonFailed, {
+        intl.formatMessage(i18n.deleteFailed, {
           error: errorMessage(error, 'Unknown error'),
         })
       );
     } finally {
-      setIsJsonLoading(false);
+      setIsDeleting(false);
     }
-  }, [intl, session]);
-
-  const handleCopyJson = useCallback(async () => {
-    if (!jsonText) return;
-    await navigator.clipboard.writeText(jsonText);
-    toast.success(intl.formatMessage(i18n.copiedJson));
-  }, [intl, jsonText]);
-
-  const handleCopyFullText = useCallback(async () => {
-    if (!fullTextSelection) return;
-    await navigator.clipboard.writeText(fullTextSelection.value);
-    toast.success(intl.formatMessage(i18n.copiedText));
-  }, [fullTextSelection, intl]);
-
-  const handleJsonOpenChange = useCallback((open: boolean) => {
-    setIsJsonOpen(open);
-    if (!open) {
-      setFullTextSelection(null);
-    }
-  }, []);
+  }, [intl, isDeleting, navigate, session]);
 
   const handleRenameKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
@@ -445,22 +220,26 @@ export default function SessionActionsHeader({
     <>
       <div
         className={cn(
-          'no-drag absolute top-[14px] left-1/2 z-30 max-w-[min(36rem,calc(100vw-13rem))] -translate-x-1/2',
+          'no-drag absolute top-[14px] z-30 flex max-w-[min(36rem,calc(100vw-18rem))] items-center gap-1.5',
+          headerLeft,
           className
         )}
       >
+        <Folder className="size-4 flex-shrink-0 text-text-secondary" />
+        <span className="truncate text-[13px] font-medium text-text-primary" title={title}>
+          {title}
+        </span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="flex h-7 max-w-full items-center gap-1 rounded-md px-2.5 text-text-primary transition-colors hover:bg-background-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-border-active"
+              className="flex size-6 flex-shrink-0 items-center justify-center rounded-md text-text-secondary transition-colors hover:bg-background-tertiary hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-border-active"
               aria-label={intl.formatMessage(i18n.actionsLabel)}
             >
-              <span className="truncate text-xs font-medium">{title}</span>
-              <ChevronDown className="size-3.5 text-text-secondary" />
+              <MoreHorizontal className="size-4" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="center" className="w-56">
+          <DropdownMenuContent align="start" className="w-56">
             <DropdownMenuItem onSelect={() => setIsRenameOpen(true)}>
               <Edit2 className="size-4" />
               {intl.formatMessage(i18n.renameSession)}
@@ -473,13 +252,12 @@ export default function SessionActionsHeader({
               )}
               {intl.formatMessage(i18n.duplicateSession)}
             </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => void handleViewJson()}>
-              {isJsonLoading ? (
-                <LoaderCircle className="size-4 animate-spin" />
-              ) : (
-                <FileJson className="size-4" />
-              )}
-              {intl.formatMessage(i18n.viewJson)}
+            <DropdownMenuItem
+              className="text-text-danger focus:text-text-danger"
+              onSelect={() => setIsDeleteOpen(true)}
+            >
+              <Trash2 className="size-4" />
+              {intl.formatMessage(i18n.deleteSession)}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -505,65 +283,32 @@ export default function SessionActionsHeader({
             <Button variant="outline" onClick={() => setIsRenameOpen(false)} disabled={isRenaming}>
               {intl.formatMessage(i18n.cancel)}
             </Button>
-            <Button onClick={() => void handleRename()} disabled={isRenaming || !renameValue.trim()}>
+            <Button
+              onClick={() => void handleRename()}
+              disabled={isRenaming || !renameValue.trim()}
+            >
               {isRenaming ? intl.formatMessage(i18n.saving) : intl.formatMessage(i18n.save)}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <Dialog open={isJsonOpen} onOpenChange={handleJsonOpenChange}>
-        <DialogContent className="grid max-h-[85vh] grid-rows-[auto_minmax(0,1fr)_auto] sm:max-w-4xl">
+      <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{intl.formatMessage(i18n.jsonTitle)}</DialogTitle>
+            <DialogTitle>{intl.formatMessage(i18n.deleteTitle)}</DialogTitle>
           </DialogHeader>
-          <div className="min-h-0 overflow-hidden rounded-lg border border-border-primary bg-background-secondary">
-            {isJsonLoading ? (
-              <div className="flex h-64 items-center justify-center gap-2 text-sm text-text-secondary">
-                <LoaderCircle className="size-4 animate-spin" />
-                {intl.formatMessage(i18n.loadingJson)}
-              </div>
-            ) : (
-              <div className="max-h-[60vh] overflow-auto p-3">
-                <JsonTree value={jsonValue} onOpenText={setFullTextSelection} />
-              </div>
-            )}
-          </div>
+          <p className="text-sm text-text-secondary">
+            {intl.formatMessage(i18n.deleteConfirm, { name: title })}
+          </p>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsJsonOpen(false)}>
-              {intl.formatMessage(i18n.close)}
+            <Button variant="outline" onClick={() => setIsDeleteOpen(false)} disabled={isDeleting}>
+              {intl.formatMessage(i18n.cancel)}
             </Button>
-            <Button onClick={() => void handleCopyJson()} disabled={!jsonText || isJsonLoading}>
-              {intl.formatMessage(i18n.copyJson)}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
-        open={!!fullTextSelection}
-        onOpenChange={(open) => !open && setFullTextSelection(null)}
-      >
-        <DialogContent className="grid max-h-[80vh] grid-rows-[auto_minmax(0,1fr)_auto] sm:max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>{intl.formatMessage(i18n.fullTextTitle)}</DialogTitle>
-          </DialogHeader>
-          {fullTextSelection && (
-            <div className="min-h-0 space-y-3">
-              <code className="block truncate rounded-md bg-background-secondary px-3 py-2 text-xs text-text-secondary">
-                {fullTextSelection.path}
-              </code>
-              <pre className="max-h-[55vh] overflow-auto whitespace-pre-wrap break-words rounded-lg border border-border-primary bg-background-secondary p-4 text-xs leading-5 text-text-primary">
-                {fullTextSelection.value}
-              </pre>
-            </div>
-          )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setFullTextSelection(null)}>
-              {intl.formatMessage(i18n.close)}
-            </Button>
-            <Button onClick={() => void handleCopyFullText()} disabled={!fullTextSelection}>
-              {intl.formatMessage(i18n.copyText)}
+            <Button variant="destructive" onClick={() => void handleDelete()} disabled={isDeleting}>
+              {isDeleting
+                ? intl.formatMessage(i18n.deleting)
+                : intl.formatMessage(i18n.deleteSession)}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -1,6 +1,6 @@
 export const NAV_DIMENSIONS = {
   /** Width of the navigation sidebar */
-  NAV_WIDTH: 240,
+  NAV_WIDTH: 264,
 } as const;
 
 export const Z_INDEX = {

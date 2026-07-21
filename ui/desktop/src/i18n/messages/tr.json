@@ -182,8 +182,8 @@
   "chatInput.failedToReadImage": {
     "defaultMessage": "Resim dosyası okunamadı"
   },
-  "chatInput.navigationShortcut": {
-    "defaultMessage": "Mesajlarda gezinmek için {prefix}↑/{prefix}↓"
+  "chatInput.placeholder": {
+    "defaultMessage": "Her şeyi yapın"
   },
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "Bırakılan dosyalar işleniyor..."
@@ -211,9 +211,6 @@
   },
   "chatInput.unknownType": {
     "defaultMessage": "Bilinmeyen tür"
-  },
-  "chatInput.viewEditRecipe": {
-    "defaultMessage": "Tarifi Görüntüle/Düzenle"
   },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "İptalin tamamlanması bekleniyor"
@@ -337,156 +334,6 @@
   },
   "costTracker.totalSessionCost": {
     "defaultMessage": "Toplam oturum maliyeti: {cost}"
-  },
-  "createEditRecipe.clickToGenerateDeeplink": {
-    "defaultMessage": "Derin bağlantı oluşturmak için tıklayın"
-  },
-  "createEditRecipe.close": {
-    "defaultMessage": "Kapat"
-  },
-  "createEditRecipe.copied": {
-    "defaultMessage": "Kopyalandı!"
-  },
-  "createEditRecipe.copy": {
-    "defaultMessage": "Kopyala"
-  },
-  "createEditRecipe.copyLinkDescription": {
-    "defaultMessage": "Arkadaşlarınızla paylaşmak için bu bağlantıyı kopyalayın veya açmak için doğrudan Chrome'ye yapıştırın"
-  },
-  "createEditRecipe.createRecipeTitle": {
-    "defaultMessage": "Tarif Oluştur"
-  },
-  "createEditRecipe.createSubtitle": {
-    "defaultMessage": "Yeniden kullanılabilir sohbet oturumlarına yönelik temsilci davranışını ve yeteneklerini tanımlamak için yeni bir tarif oluşturun."
-  },
-  "createEditRecipe.editSubtitle": {
-    "defaultMessage": "Yeni bir oturumda temsilcinin davranışını değiştirmek için aşağıdaki tarifi düzenleyebilirsiniz."
-  },
-  "createEditRecipe.generatingDeeplink": {
-    "defaultMessage": "Derin bağlantı oluşturuluyor..."
-  },
-  "createEditRecipe.learnMore": {
-    "defaultMessage": "Daha fazla bilgi edinin"
-  },
-  "createEditRecipe.recipeSavedAndLaunchedMsg": {
-    "defaultMessage": "Tarif başarıyla kaydedildi ve başlatıldı"
-  },
-  "createEditRecipe.recipeSavedMsg": {
-    "defaultMessage": "Tarif başarıyla kaydedildi"
-  },
-  "createEditRecipe.saveAndRunFailed": {
-    "defaultMessage": "Kaydetme ve Çalıştırma Başarısız Oldu"
-  },
-  "createEditRecipe.saveAndRunFailedMsg": {
-    "defaultMessage": "Tarif kaydedilip çalıştırılamadı: {error}"
-  },
-  "createEditRecipe.saveAndRunRecipe": {
-    "defaultMessage": "Tarifi Kaydet ve Çalıştır"
-  },
-  "createEditRecipe.saveFailed": {
-    "defaultMessage": "Kaydetme Başarısız Oldu"
-  },
-  "createEditRecipe.saveFailedMsg": {
-    "defaultMessage": "Tarif kaydedilemedi: {error}"
-  },
-  "createEditRecipe.saveRecipe": {
-    "defaultMessage": "Tarifi Kaydet"
-  },
-  "createEditRecipe.saving": {
-    "defaultMessage": "Kaydediliyor..."
-  },
-  "createEditRecipe.validationFailed": {
-    "defaultMessage": "Doğrulama Başarısız"
-  },
-  "createEditRecipe.validationMsg": {
-    "defaultMessage": "Lütfen gerekli tüm alanları doldurun ve JSON şemasının geçerli olduğundan emin olun."
-  },
-  "createEditRecipe.viewEditRecipeTitle": {
-    "defaultMessage": "Tarifi görüntüle/düzenle"
-  },
-  "createSubRecipeInline.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "createSubRecipeInline.closeModal": {
-    "defaultMessage": "Alt tarif modelini oluşturmayı kapat"
-  },
-  "createSubRecipeInline.createAndAdd": {
-    "defaultMessage": "Alt Tarif Oluştur ve Ekle"
-  },
-  "createSubRecipeInline.createdSuccess": {
-    "defaultMessage": "Alt tarif başarıyla oluşturuldu"
-  },
-  "createSubRecipeInline.creating": {
-    "defaultMessage": "Oluşturuluyor..."
-  },
-  "createSubRecipeInline.duplicateName": {
-    "defaultMessage": "Yinelenen Ad"
-  },
-  "createSubRecipeInline.duplicateNameMsg": {
-    "defaultMessage": "\"{name}\" adlı bir alt tarif zaten mevcut. Lütfen benzersiz bir ad kullanın."
-  },
-  "createSubRecipeInline.instructionsLabel": {
-    "defaultMessage": "Talimatlar"
-  },
-  "createSubRecipeInline.instructionsPlaceholder": {
-    "defaultMessage": "Bu alt tarif çağrıldığında AI için talimatlar..."
-  },
-  "createSubRecipeInline.nameHint": {
-    "defaultMessage": "Araç adını oluşturmak için kullanılan benzersiz tanımlayıcı"
-  },
-  "createSubRecipeInline.nameLabel": {
-    "defaultMessage": "İsim"
-  },
-  "createSubRecipeInline.namePlaceholder": {
-    "defaultMessage": "ör. güvenlik_tarama"
-  },
-  "createSubRecipeInline.preconfiguredValues": {
-    "defaultMessage": "Önceden Yapılandırılmış Değerler"
-  },
-  "createSubRecipeInline.preconfiguredValuesHint": {
-    "defaultMessage": "Her zaman alt tarife aktarılan isteğe bağlı parametre değerleri"
-  },
-  "createSubRecipeInline.recipeDescriptionLabel": {
-    "defaultMessage": "Tarif Açıklaması"
-  },
-  "createSubRecipeInline.recipeDescriptionPlaceholder": {
-    "defaultMessage": "Bu tarif uygulandığında ne yapar?"
-  },
-  "createSubRecipeInline.recipeTitleLabel": {
-    "defaultMessage": "Tarif Başlığı"
-  },
-  "createSubRecipeInline.recipeTitlePlaceholder": {
-    "defaultMessage": "örneğin, Güvenlik Analizi Aracı"
-  },
-  "createSubRecipeInline.saveFailed": {
-    "defaultMessage": "Kaydetme Başarısız Oldu"
-  },
-  "createSubRecipeInline.saveFailedMsg": {
-    "defaultMessage": "Alt tarif kaydedilemedi: {error}"
-  },
-  "createSubRecipeInline.sequentialHint": {
-    "defaultMessage": "(Birden fazla örneğin sıralı yürütülmesini zorlar)"
-  },
-  "createSubRecipeInline.sequentialLabel": {
-    "defaultMessage": "Tekrarlandığında sıralı"
-  },
-  "createSubRecipeInline.subtitle": {
-    "defaultMessage": "Ana tarifinizde çağrılabilir bir araç olarak kullanmak için basit bir tarif oluşturun"
-  },
-  "createSubRecipeInline.title": {
-    "defaultMessage": "Yeni Alt Tarif Oluştur"
-  },
-  "createSubRecipeInline.toolDescriptionLabel": {
-    "defaultMessage": "Araç Açıklaması"
-  },
-  "createSubRecipeInline.toolDescriptionPlaceholder": {
-    "defaultMessage": "Bu bir araç olarak adlandırıldığında gösterilen isteğe bağlı açıklama"
-  },
-  "createSubRecipeInline.validationFailed": {
-    "defaultMessage": "Doğrulama Başarısız"
-  },
-  "createSubRecipeInline.validationMsg": {
-    "defaultMessage": "Ad, başlık, tarif açıklaması ve talimatlar gereklidir."
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "Kredi ekle"
@@ -1154,25 +1001,25 @@
   "extensionsSection.updateExtension": {
     "defaultMessage": "Uzantıyı Güncelle"
   },
-  "extensionsView.addCustomExtension": {
+  "extensionsSettings.addCustomExtension": {
     "defaultMessage": "Özel uzantı ekle"
   },
-  "extensionsView.addExtension": {
+  "extensionsSettings.addExtension": {
     "defaultMessage": "Uzantı Ekle"
   },
-  "extensionsView.browseExtensions": {
+  "extensionsSettings.browseExtensions": {
     "defaultMessage": "Uzantılara göz atın"
   },
-  "extensionsView.defaultNote": {
+  "extensionsSettings.defaultNote": {
     "defaultMessage": "Burada etkinleştirilen uzantılar, yeni sohbetler için varsayılan olarak kullanılır. Ayrıca sohbet sırasında etkin uzantıları da değiştirebilirsiniz."
   },
-  "extensionsView.description": {
+  "extensionsSettings.description": {
     "defaultMessage": "Bu uzantılar Model Bağlam Protokolünü (MCP) kullanır. Üç ana bileşeni kullanarak Goose'nin yeteneklerini genişletebilirler: İstemler, Kaynaklar ve Araçlar. Aramak için {searchShortcut}."
   },
-  "extensionsView.heading": {
+  "extensionsSettings.heading": {
     "defaultMessage": "Uzantılar"
   },
-  "extensionsView.searchPlaceholder": {
+  "extensionsSettings.searchPlaceholder": {
     "defaultMessage": "Uzantıları ara..."
   },
   "externalBackendSection.certFingerprint": {
@@ -1418,48 +1265,6 @@
   "imagePreview.unableToLoad": {
     "defaultMessage": "Resim yüklenemiyor"
   },
-  "importRecipeForm.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "importRecipeForm.deeplinkHint": {
-    "defaultMessage": "\"goose://recipe?config=\" ile başlayan bir tarif derin bağlantısı yapıştırın"
-  },
-  "importRecipeForm.deeplinkPlaceholder": {
-    "defaultMessage": "goose://recipe?config=... derin bağlantınızı buraya yapıştırın"
-  },
-  "importRecipeForm.example": {
-    "defaultMessage": "örnek"
-  },
-  "importRecipeForm.expectedRecipeStructure": {
-    "defaultMessage": "Beklenen Tarif Yapısı"
-  },
-  "importRecipeForm.importRecipeButton": {
-    "defaultMessage": "Tarifi İçe Aktar"
-  },
-  "importRecipeForm.importRecipeTitle": {
-    "defaultMessage": "Tarifi İçe Aktar"
-  },
-  "importRecipeForm.importing": {
-    "defaultMessage": "İçe aktarılıyor..."
-  },
-  "importRecipeForm.or": {
-    "defaultMessage": "VEYA"
-  },
-  "importRecipeForm.recipeDeeplinkLabel": {
-    "defaultMessage": "Tarif Derin Bağlantısı"
-  },
-  "importRecipeForm.recipeFileHint": {
-    "defaultMessage": "Tarif yapısını içeren bir YAML veya JSON dosyası yükleyin"
-  },
-  "importRecipeForm.recipeFileLabel": {
-    "defaultMessage": "Tarif Dosyası"
-  },
-  "importRecipeForm.reviewWarning": {
-    "defaultMessage": "Tarif dosyalarının içeriğini goose arayüzünüze eklemeden önce incelediğinizden emin olun."
-  },
-  "importRecipeForm.schemaDescription": {
-    "defaultMessage": "YAML veya JSON dosyanız bu yapıyı takip etmelidir. Zorunlu alanlar şunlardır: başlık, açıklama ve talimatlar veya bilgi istemi."
-  },
   "inlineEditText.clickToEdit": {
     "defaultMessage": "Düzenlemek için tıklayın"
   },
@@ -1471,48 +1276,6 @@
   },
   "inlineEditText.failedToSave": {
     "defaultMessage": "Kaydedilemedi"
-  },
-  "instructionsEditor.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "instructionsEditor.insertExample": {
-    "defaultMessage": "Örnek Ekle"
-  },
-  "instructionsEditor.label": {
-    "defaultMessage": "Talimatlar"
-  },
-  "instructionsEditor.placeholder": {
-    "defaultMessage": "Kullanıcıdan gizlenen yapay zeka için ayrıntılı talimatlar"
-  },
-  "instructionsEditor.save": {
-    "defaultMessage": "Talimatları Kaydet"
-  },
-  "instructionsEditor.syntaxHelp": {
-    "defaultMessage": "Kullanıcıların doldurabileceği parametreleri tanımlamak için {code} sözdizimini kullanın"
-  },
-  "instructionsEditor.title": {
-    "defaultMessage": "Talimat Düzenleyicisi"
-  },
-  "jsonSchemaEditor.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "jsonSchemaEditor.description": {
-    "defaultMessage": "JSON Şema formatını kullanarak yapay zekanın yanıtının beklenen yapısını tanımlayın"
-  },
-  "jsonSchemaEditor.insertExample": {
-    "defaultMessage": "Örnek Ekle"
-  },
-  "jsonSchemaEditor.invalidJson": {
-    "defaultMessage": "Geçersiz JSON biçimi"
-  },
-  "jsonSchemaEditor.label": {
-    "defaultMessage": "Yanıt JSON Şeması"
-  },
-  "jsonSchemaEditor.save": {
-    "defaultMessage": "Şemayı Kaydet"
-  },
-  "jsonSchemaEditor.title": {
-    "defaultMessage": "JSON Şema Düzenleyici"
   },
   "jsonSchemaForm.cancel": {
     "defaultMessage": "İptal"
@@ -1540,18 +1303,6 @@
   },
   "jsonSchemaForm.submit": {
     "defaultMessage": "Gönder"
-  },
-  "keyValueEditor.addValue": {
-    "defaultMessage": "Önceden yapılandırılmış değer ekleyin"
-  },
-  "keyValueEditor.defaultKeyPlaceholder": {
-    "defaultMessage": "Parametre adı..."
-  },
-  "keyValueEditor.defaultValuePlaceholder": {
-    "defaultMessage": "Parametre değeri..."
-  },
-  "keyValueEditor.removeValue": {
-    "defaultMessage": "Önceden yapılandırılmış değeri kaldır {key}"
   },
   "keyboardShortcuts.alwaysOnTopDescription": {
     "defaultMessage": "Pencereyi her zaman üstte değiştir"
@@ -2336,32 +2087,32 @@
   "navigation.itemApps": {
     "defaultMessage": "Uygulamalar"
   },
-  "navigation.itemExtensions": {
-    "defaultMessage": "Uzantılar"
-  },
   "navigation.itemHome": {
     "defaultMessage": "Yeni Sohbet"
-  },
-  "navigation.itemRecipes": {
-    "defaultMessage": "Tarifler"
   },
   "navigation.itemScheduler": {
     "defaultMessage": "Zamanlayıcı"
   },
-  "navigation.itemSessions": {
-    "defaultMessage": "Oturum Geçmişi"
-  },
   "navigation.itemSettings": {
     "defaultMessage": "Ayarlar"
   },
-  "navigation.itemSkills": {
-    "defaultMessage": "Beceriler"
-  },
-  "navigationPanel.chats": {
-    "defaultMessage": "Sohbetler"
+  "navigationPanel.help": {
+    "defaultMessage": "Yardım"
   },
   "navigationPanel.noChats": {
     "defaultMessage": "Son sohbet yok"
+  },
+  "navigationPanel.noResults": {
+    "defaultMessage": "Eşleşen sohbet yok"
+  },
+  "navigationPanel.projects": {
+    "defaultMessage": "Projeler"
+  },
+  "navigationPanel.search": {
+    "defaultMessage": "Sohbetlerde ara"
+  },
+  "navigationPanel.searching": {
+    "defaultMessage": "Aranıyor..."
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Başlıksız oturum"
@@ -2404,99 +2155,6 @@
   },
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "Anonim kullanım verilerini paylaşın"
-  },
-  "parameterInput.defaultValue": {
-    "defaultMessage": "Varsayılan Değer"
-  },
-  "parameterInput.defaultValuePlaceholder": {
-    "defaultMessage": "Varsayılan değeri girin"
-  },
-  "parameterInput.deleteParameter": {
-    "defaultMessage": "Parametreyi sil: {key}"
-  },
-  "parameterInput.description": {
-    "defaultMessage": "açıklama"
-  },
-  "parameterInput.descriptionHelp": {
-    "defaultMessage": "Bu, son kullanıcının göreceği mesajdır."
-  },
-  "parameterInput.descriptionPlaceholder": {
-    "defaultMessage": "Örneğin, \"Yeni bileşenin adını girin\""
-  },
-  "parameterInput.inputType": {
-    "defaultMessage": "Giriş Türü"
-  },
-  "parameterInput.optional": {
-    "defaultMessage": "İsteğe bağlı"
-  },
-  "parameterInput.optionsHelp": {
-    "defaultMessage": "Her seçeneği yeni bir satıra girin. Bunlar açılır seçenekler olarak gösterilecektir."
-  },
-  "parameterInput.optionsLabel": {
-    "defaultMessage": "Seçenekler (her satıra bir tane)"
-  },
-  "parameterInput.optionsPlaceholder": {
-    "defaultMessage": "Seçenek 1 Seçenek 2 Seçenek 3"
-  },
-  "parameterInput.required": {
-    "defaultMessage": "Gerekli"
-  },
-  "parameterInput.requirement": {
-    "defaultMessage": "Gereksinim"
-  },
-  "parameterInput.typeBoolean": {
-    "defaultMessage": "Boolean"
-  },
-  "parameterInput.typeNumber": {
-    "defaultMessage": "Sayı"
-  },
-  "parameterInput.typeSelect": {
-    "defaultMessage": "Seç"
-  },
-  "parameterInput.typeString": {
-    "defaultMessage": "Dize"
-  },
-  "parameterInput.unused": {
-    "defaultMessage": "Kullanılmayan"
-  },
-  "parameterInput.unusedWarningTitle": {
-    "defaultMessage": "Bu parametre talimatlarda veya istemde kullanılmaz. Manuel giriş için mevcut olacaktır ancak gerekli olmayabilir."
-  },
-  "parameterInputModal.backToForm": {
-    "defaultMessage": "Parametre Formuna Geri Dön"
-  },
-  "parameterInputModal.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "parameterInputModal.cancelRecipeSetup": {
-    "defaultMessage": "Tarif Kurulumunu İptal Et"
-  },
-  "parameterInputModal.enterValue": {
-    "defaultMessage": "{key} için değer girin..."
-  },
-  "parameterInputModal.false": {
-    "defaultMessage": "Yanlış"
-  },
-  "parameterInputModal.recipeParameters": {
-    "defaultMessage": "Tarif Parametreleri"
-  },
-  "parameterInputModal.select": {
-    "defaultMessage": "Seç..."
-  },
-  "parameterInputModal.selectOption": {
-    "defaultMessage": "Bir seçenek seçin..."
-  },
-  "parameterInputModal.startNewChat": {
-    "defaultMessage": "Yeni Sohbet Başlat (Tarif Yok)"
-  },
-  "parameterInputModal.startRecipe": {
-    "defaultMessage": "Tarifi Başlat"
-  },
-  "parameterInputModal.true": {
-    "defaultMessage": "Doğru"
-  },
-  "parameterInputModal.whatToDo": {
-    "defaultMessage": "Ne yapmak istersin?"
   },
   "permissionModal.alwaysAllow": {
     "defaultMessage": "Her zaman izin ver"
@@ -2888,363 +2546,6 @@
   "providerSetupActions.submit": {
     "defaultMessage": "Gönder"
   },
-  "recipeActivityEditor.activitiesDescription": {
-    "defaultMessage": "Tarif sohbeti penceresinde görüntülenecek üst satırdaki istemler ve etkinlik düğmeleri."
-  },
-  "recipeActivityEditor.activitiesLabel": {
-    "defaultMessage": "Faaliyetler"
-  },
-  "recipeActivityEditor.activityButtonsDescription": {
-    "defaultMessage": "Kullanıcıların tarifinizle etkileşime geçmesine yardımcı olmak için mesajın altında görünecek tıklanabilir düğmeler."
-  },
-  "recipeActivityEditor.activityButtonsLabel": {
-    "defaultMessage": "Etkinlik Düğmeleri"
-  },
-  "recipeActivityEditor.addActivity": {
-    "defaultMessage": "Etkinlik ekle"
-  },
-  "recipeActivityEditor.addNewActivityPlaceholder": {
-    "defaultMessage": "Yeni etkinlik ekle..."
-  },
-  "recipeActivityEditor.messageDescription": {
-    "defaultMessage": "Tarifin üst kısmında görünecek biçimlendirilmiş bir mesaj. Markdown biçimlendirmesini destekler."
-  },
-  "recipeActivityEditor.messageLabel": {
-    "defaultMessage": "Mesaj"
-  },
-  "recipeActivityEditor.messagePlaceholder": {
-    "defaultMessage": "Tarifiniz için kullanıcıya yönelik bir tanıtım mesajı girin (**kalın**, *italik*, `kod' vb. destekler)"
-  },
-  "recipeExtensionSelector.description": {
-    "defaultMessage": "Bu tarifi çalıştırırken hangi uzantıların mevcut olacağını seçin. Varsayılan uzantıları kullanmak için boş bırakın."
-  },
-  "recipeExtensionSelector.extensionsSelected": {
-    "defaultMessage": "{count,plural,one{# uzantı seçildi} other{# uzantı seçildi}}"
-  },
-  "recipeExtensionSelector.label": {
-    "defaultMessage": "Uzantılar (İsteğe bağlı)"
-  },
-  "recipeExtensionSelector.noExtensionsAvailable": {
-    "defaultMessage": "Uzantı yok"
-  },
-  "recipeExtensionSelector.noExtensionsFound": {
-    "defaultMessage": "Uzantı bulunamadı"
-  },
-  "recipeExtensionSelector.searchPlaceholder": {
-    "defaultMessage": "Uzantıları ara..."
-  },
-  "recipeFormFields.addParameter": {
-    "defaultMessage": "Parametre ekle"
-  },
-  "recipeFormFields.advancedOptions": {
-    "defaultMessage": "Gelişmiş Seçenekler"
-  },
-  "recipeFormFields.advancedOptionsHint": {
-    "defaultMessage": "Faaliyetler, parametreler, model, uzantılar, yanıt şeması, alt tarifler"
-  },
-  "recipeFormFields.descriptionLabel": {
-    "defaultMessage": "Açıklama"
-  },
-  "recipeFormFields.descriptionPlaceholder": {
-    "defaultMessage": "Bu tarifin ne işe yaradığının kısa açıklaması"
-  },
-  "recipeFormFields.enterValueFor": {
-    "defaultMessage": "{key} için değer girin"
-  },
-  "recipeFormFields.initialPrompt": {
-    "defaultMessage": "İlk İstem"
-  },
-  "recipeFormFields.instructionsLabel": {
-    "defaultMessage": "Talimatlar"
-  },
-  "recipeFormFields.instructionsPlaceholder": {
-    "defaultMessage": "Kullanıcıdan gizlenen yapay zeka için ayrıntılı talimatlar"
-  },
-  "recipeFormFields.openEditor": {
-    "defaultMessage": "Düzenleyiciyi Aç"
-  },
-  "recipeFormFields.parameterNamePlaceholder": {
-    "defaultMessage": "Parametre adını girin..."
-  },
-  "recipeFormFields.parametersDescription": {
-    "defaultMessage": "Parametreler, talimatlar/istem/aktivitelerdeki '{{parameter_name}}' sözdiziminden otomatik olarak algılanacaktır veya bunları aşağıda manuel olarak ekleyebilirsiniz."
-  },
-  "recipeFormFields.parametersLabel": {
-    "defaultMessage": "Parametreler"
-  },
-  "recipeFormFields.promptOptionalHint": {
-    "defaultMessage": "(İsteğe bağlı - Talimatlar veya İstem gereklidir)"
-  },
-  "recipeFormFields.promptPlaceholder": {
-    "defaultMessage": "Tarif başladığında önceden doldurulmuş bilgi istemi"
-  },
-  "recipeFormFields.responseJsonSchema": {
-    "defaultMessage": "Yanıt JSON Şeması"
-  },
-  "recipeFormFields.responseJsonSchemaDescription": {
-    "defaultMessage": "JSON Şema formatını kullanarak yapay zekanın yanıtının beklenen yapısını tanımlayın"
-  },
-  "recipeFormFields.templateVarHint": {
-    "defaultMessage": "Tarifi çalıştırırken doldurulabilecek parametreleri tanımlamak için '{{parameter_name}}' kullanın."
-  },
-  "recipeFormFields.titleLabel": {
-    "defaultMessage": "Başlık"
-  },
-  "recipeFormFields.titlePlaceholder": {
-    "defaultMessage": "Tarif başlığı"
-  },
-  "recipeHeader.recipeLabel": {
-    "defaultMessage": "Tarif"
-  },
-  "recipeModelSelector.backToModelList": {
-    "defaultMessage": "Model listesine geri dön"
-  },
-  "recipeModelSelector.enterCustomModel": {
-    "defaultMessage": "Özel model adını girin"
-  },
-  "recipeModelSelector.enterModelNotListed": {
-    "defaultMessage": "Listelenmeyen bir model girin..."
-  },
-  "recipeModelSelector.fetchError": {
-    "defaultMessage": "Modeller getirilemedi. Lütfen daha sonra tekrar deneyin."
-  },
-  "recipeModelSelector.loadingModels": {
-    "defaultMessage": "Modeller yükleniyor…"
-  },
-  "recipeModelSelector.modelHint": {
-    "defaultMessage": "Seçilen sağlayıcı için varsayılan modeli kullanmak için boş bırakın"
-  },
-  "recipeModelSelector.modelLabel": {
-    "defaultMessage": "Modeli (İsteğe bağlı)"
-  },
-  "recipeModelSelector.providerHint": {
-    "defaultMessage": "Ayarlarda yapılandırılan varsayılan sağlayıcıyı kullanmak için boş bırakın"
-  },
-  "recipeModelSelector.providerLabel": {
-    "defaultMessage": "Sağlayıcı (İsteğe bağlı)"
-  },
-  "recipeModelSelector.selectModel": {
-    "defaultMessage": "Bir model seçin"
-  },
-  "recipeModelSelector.selectProvider": {
-    "defaultMessage": "Sağlayıcı seçin"
-  },
-  "recipeModelSelector.useDefaultProvider": {
-    "defaultMessage": "Varsayılan sağlayıcıyı kullan"
-  },
-  "recipeNameField.defaultLabel": {
-    "defaultMessage": "Tarif Adı"
-  },
-  "recipeNameField.formatHint": {
-    "defaultMessage": "Otomatik olarak biçimlendirilecektir (küçük harf, boşluklar için kısa çizgiler)"
-  },
-  "recipeWarningModal.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "recipeWarningModal.descriptionLabel": {
-    "defaultMessage": "Açıklama:"
-  },
-  "recipeWarningModal.firstTimeDescription": {
-    "defaultMessage": "Daha önce çalıştırmadığınız bir tarifi uygulamak üzeresiniz."
-  },
-  "recipeWarningModal.hiddenCharsWarning": {
-    "defaultMessage": "Bu tarif, kötü amaçlarla kullanılabilecekleri için güvenliğiniz açısından göz ardı edilecek gizli karakterler içermektedir."
-  },
-  "recipeWarningModal.instructionsLabel": {
-    "defaultMessage": "Talimatlar:"
-  },
-  "recipeWarningModal.newRecipeWarningTitle": {
-    "defaultMessage": "⚠️ Yeni Tarif Uyarısı"
-  },
-  "recipeWarningModal.recipePreview": {
-    "defaultMessage": "Tarif Önizlemesi:"
-  },
-  "recipeWarningModal.securityWarningTitle": {
-    "defaultMessage": "⚠️ Güvenlik Uyarısı"
-  },
-  "recipeWarningModal.titleLabel": {
-    "defaultMessage": "Başlık:"
-  },
-  "recipeWarningModal.trustAndExecute": {
-    "defaultMessage": "Güvenin ve Uygulayın"
-  },
-  "recipeWarningModal.trustSource": {
-    "defaultMessage": "Yalnızca bu tarifin kaynağına güveniyorsanız devam edin."
-  },
-  "recipesView.addSchedule": {
-    "defaultMessage": "Program ekle"
-  },
-  "recipesView.addSlashCommand": {
-    "defaultMessage": "Eğik çizgi komutu ekle"
-  },
-  "recipesView.adjustSearchTerms": {
-    "defaultMessage": "Arama terimlerinizi ayarlamayı deneyin"
-  },
-  "recipesView.allFiles": {
-    "defaultMessage": "Tüm Dosyalar"
-  },
-  "recipesView.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "recipesView.copyDeeplink": {
-    "defaultMessage": "Derin Bağlantıyı Kopyala"
-  },
-  "recipesView.copyDeeplinkFailedMsg": {
-    "defaultMessage": "Derin bağlantı panoya kopyalanamadı"
-  },
-  "recipesView.copyFailedTitle": {
-    "defaultMessage": "Kopyalama başarısız oldu"
-  },
-  "recipesView.copyYaml": {
-    "defaultMessage": "YAML'yi kopyala"
-  },
-  "recipesView.copyYamlFailedMsg": {
-    "defaultMessage": "YAML tarifi panoya kopyalanamadı"
-  },
-  "recipesView.createRecipe": {
-    "defaultMessage": "Tarif Oluştur"
-  },
-  "recipesView.deeplinkCopiedMsg": {
-    "defaultMessage": "Tarif derin bağlantısı panoya kopyalandı"
-  },
-  "recipesView.deeplinkCopiedTitle": {
-    "defaultMessage": "Derin bağlantı kopyalandı"
-  },
-  "recipesView.deleteRecipe": {
-    "defaultMessage": "Tarifi sil"
-  },
-  "recipesView.deleteRecipeConfirm": {
-    "defaultMessage": "\"{title}\"yi silmek istediğinizden emin misiniz?"
-  },
-  "recipesView.deleteRecipeDetail": {
-    "defaultMessage": "Tarif dosyası silinecek."
-  },
-  "recipesView.deleteRecipeTitle": {
-    "defaultMessage": "Tarifi Sil"
-  },
-  "recipesView.editRecipe": {
-    "defaultMessage": "Tarifi düzenle"
-  },
-  "recipesView.editSchedule": {
-    "defaultMessage": "Programı düzenle"
-  },
-  "recipesView.editSlashCommand": {
-    "defaultMessage": "Eğik çizgi komutunu düzenle"
-  },
-  "recipesView.errorLoadingRecipes": {
-    "defaultMessage": "Tarifler Yüklenirken Hata Oluştu"
-  },
-  "recipesView.exportFailedMsg": {
-    "defaultMessage": "Tarif dosyaya aktarılamadı"
-  },
-  "recipesView.exportFailedTitle": {
-    "defaultMessage": "Dışa aktarma başarısız oldu"
-  },
-  "recipesView.exportRecipeDialogTitle": {
-    "defaultMessage": "Tarifi Dışa Aktar"
-  },
-  "recipesView.exportToFile": {
-    "defaultMessage": "Dosyaya Aktar"
-  },
-  "recipesView.noMatchingRecipes": {
-    "defaultMessage": "Eşleşen tarif bulunamadı"
-  },
-  "recipesView.noSavedRecipes": {
-    "defaultMessage": "Kayıtlı tarif yok"
-  },
-  "recipesView.noSavedRecipesDescription": {
-    "defaultMessage": "Sohbetlerden kaydedilen tarif burada görünecek."
-  },
-  "recipesView.openInNewWindow": {
-    "defaultMessage": "Yeni pencerede aç"
-  },
-  "recipesView.recipeDeletedSuccess": {
-    "defaultMessage": "Tarif başarıyla silindi"
-  },
-  "recipesView.recipeExportedMsg": {
-    "defaultMessage": "Tarif {filePath}'ye kaydedildi"
-  },
-  "recipesView.recipeExportedTitle": {
-    "defaultMessage": "Tarif dışa aktarıldı"
-  },
-  "recipesView.recipesDescription": {
-    "defaultMessage": "Önceden tanımlanmış konfigürasyonlarla yeni oturumları hızlı bir şekilde başlatmak için kayıtlı tariflerinizi görüntüleyin ve yönetin. Aramak için {shortcut}."
-  },
-  "recipesView.recipesTitle": {
-    "defaultMessage": "Tarifler"
-  },
-  "recipesView.remove": {
-    "defaultMessage": "Kaldır"
-  },
-  "recipesView.removeSchedule": {
-    "defaultMessage": "Programı Kaldır"
-  },
-  "recipesView.runs": {
-    "defaultMessage": "{schedule}'yi çalıştırır"
-  },
-  "recipesView.save": {
-    "defaultMessage": "Kaydet"
-  },
-  "recipesView.scheduleDialogTitle": {
-    "defaultMessage": "{action} Programı"
-  },
-  "recipesView.scheduleRemovedMsg": {
-    "defaultMessage": "Tarif artık otomatik olarak çalışmayacak"
-  },
-  "recipesView.scheduleRemovedTitle": {
-    "defaultMessage": "Program kaldırıldı"
-  },
-  "recipesView.scheduleSavedMsg": {
-    "defaultMessage": "Tarif {schedule}'yi çalıştıracak"
-  },
-  "recipesView.scheduleSavedTitle": {
-    "defaultMessage": "Program kaydedildi"
-  },
-  "recipesView.searchRecipesPlaceholder": {
-    "defaultMessage": "Tarif ara..."
-  },
-  "recipesView.shareRecipe": {
-    "defaultMessage": "Tarifi paylaş"
-  },
-  "recipesView.slashCommandDescription": {
-    "defaultMessage": "Bu tarifi herhangi bir sohbetten hızlı bir şekilde çalıştırmak için bir eğik çizgi komutu ayarlayın"
-  },
-  "recipesView.slashCommandPlaceholder": {
-    "defaultMessage": "komut adı"
-  },
-  "recipesView.slashCommandRemovedMsg": {
-    "defaultMessage": "Tarif eğik çizgi komutu kaldırıldı"
-  },
-  "recipesView.slashCommandRemovedTitle": {
-    "defaultMessage": "Eğik çizgi komutu kaldırıldı"
-  },
-  "recipesView.slashCommandSavedMsg": {
-    "defaultMessage": "Bu tarifi çalıştırmak için /{command} kullanın"
-  },
-  "recipesView.slashCommandSavedTitle": {
-    "defaultMessage": "Eğik çizgi komutu kaydedildi"
-  },
-  "recipesView.slashCommandTitle": {
-    "defaultMessage": "Eğik Çizgi Komutu"
-  },
-  "recipesView.slashCommandUsageHint": {
-    "defaultMessage": "Bu tarifi çalıştırmak için herhangi bir sohbette /{command} kullanın"
-  },
-  "recipesView.tryAgain": {
-    "defaultMessage": "Tekrar Deneyin"
-  },
-  "recipesView.useRecipe": {
-    "defaultMessage": "Tarifi kullan"
-  },
-  "recipesView.yamlCopiedMsg": {
-    "defaultMessage": "Tarif YAML panoya kopyalandı"
-  },
-  "recipesView.yamlCopiedTitle": {
-    "defaultMessage": "YAML kopyalandı"
-  },
-  "recipesView.yamlFiles": {
-    "defaultMessage": "YAML Dosyaları"
-  },
   "resetProviderSection.resetButton": {
     "defaultMessage": "Sağlayıcıyı ve Modeli Sıfırla"
   },
@@ -3416,9 +2717,6 @@
   "scheduleDetailView.viewingScheduleId": {
     "defaultMessage": "Program Kimliğini Görüntüleme: {id}"
   },
-  "scheduleModal.browseYaml": {
-    "defaultMessage": "YAML dosyasına göz atın..."
-  },
   "scheduleModal.cancel": {
     "defaultMessage": "İptal"
   },
@@ -3431,26 +2729,8 @@
   "scheduleModal.creating": {
     "defaultMessage": "Oluşturuluyor..."
   },
-  "scheduleModal.deepLink": {
-    "defaultMessage": "Derin bağlantı"
-  },
-  "scheduleModal.deepLinkPlaceholder": {
-    "defaultMessage": "goose://tarif bağlantısını buraya yapıştırın..."
-  },
   "scheduleModal.editSchedule": {
     "defaultMessage": "Programı Düzenle"
-  },
-  "scheduleModal.failedParseRecipe": {
-    "defaultMessage": "Dosyadan tarif ayrıştırılamadı."
-  },
-  "scheduleModal.failedReadFile": {
-    "defaultMessage": "Seçilen dosya okunamadı."
-  },
-  "scheduleModal.invalidDeepLink": {
-    "defaultMessage": "Geçersiz derin bağlantı. Lütfen goose://tarif bağlantısını kullanın."
-  },
-  "scheduleModal.invalidFileType": {
-    "defaultMessage": "Geçersiz dosya türü: Lütfen bir YAML dosyası seçin (.yaml veya.yml)"
   },
   "scheduleModal.nameLabel": {
     "defaultMessage": "İsim:"
@@ -3458,17 +2738,14 @@
   "scheduleModal.namePlaceholder": {
     "defaultMessage": "örneğin günlük özet işi"
   },
-  "scheduleModal.provideValidRecipe": {
-    "defaultMessage": "Lütfen geçerli bir tarif kaynağı sağlayın."
+  "scheduleModal.promptLabel": {
+    "defaultMessage": "İstem:"
   },
-  "scheduleModal.recipeDescription": {
-    "defaultMessage": "Açıklama: {description}"
+  "scheduleModal.promptPlaceholder": {
+    "defaultMessage": "goose her çalıştırmada ne yapmalı?"
   },
-  "scheduleModal.recipeParsed": {
-    "defaultMessage": "Tarif başarıyla ayrıştırıldı"
-  },
-  "scheduleModal.recipeTitle": {
-    "defaultMessage": "Başlık: {title}"
+  "scheduleModal.promptRequired": {
+    "defaultMessage": "Bir istem gereklidir."
   },
   "scheduleModal.scheduleIdRequired": {
     "defaultMessage": "Program kimliği gerekli."
@@ -3476,20 +2753,11 @@
   "scheduleModal.scheduleLabel": {
     "defaultMessage": "Program:"
   },
-  "scheduleModal.selected": {
-    "defaultMessage": "Seçili: {path}"
-  },
-  "scheduleModal.sourceLabel": {
-    "defaultMessage": "Kaynak:"
-  },
   "scheduleModal.updateSchedule": {
     "defaultMessage": "Programı Güncelle"
   },
   "scheduleModal.updating": {
     "defaultMessage": "Güncelleniyor..."
-  },
-  "scheduleModal.yaml": {
-    "defaultMessage": "YAML"
   },
   "schedulesView.confirmDelete": {
     "defaultMessage": "\"{id}\" programı kaldırılsın mı? Tarif saklanacak."
@@ -3662,20 +2930,23 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Cancel"
   },
-  "sessionActionsHeader.close": {
-    "defaultMessage": "Close"
+  "sessionActionsHeader.deleteConfirm": {
+    "defaultMessage": "\"{name}\" oturumunu silmek istediğinizden emin misiniz? Bu eylem geri alınamaz."
   },
-  "sessionActionsHeader.copiedJson": {
-    "defaultMessage": "Session JSON copied"
+  "sessionActionsHeader.deleteFailed": {
+    "defaultMessage": "Oturum silinemedi: {error}"
   },
-  "sessionActionsHeader.copiedText": {
-    "defaultMessage": "Text copied"
+  "sessionActionsHeader.deleteSession": {
+    "defaultMessage": "Oturumu sil"
   },
-  "sessionActionsHeader.copyJson": {
-    "defaultMessage": "Copy JSON"
+  "sessionActionsHeader.deleteTitle": {
+    "defaultMessage": "Oturumu Sil"
   },
-  "sessionActionsHeader.copyText": {
-    "defaultMessage": "Copy text"
+  "sessionActionsHeader.deleted": {
+    "defaultMessage": "Oturum başarıyla silindi"
+  },
+  "sessionActionsHeader.deleting": {
+    "defaultMessage": "Siliniyor..."
   },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Failed to duplicate session: {error}"
@@ -3685,18 +2956,6 @@
   },
   "sessionActionsHeader.duplicated": {
     "defaultMessage": "Session duplicated"
-  },
-  "sessionActionsHeader.fullTextTitle": {
-    "defaultMessage": "Text value"
-  },
-  "sessionActionsHeader.jsonFailed": {
-    "defaultMessage": "Failed to load session JSON: {error}"
-  },
-  "sessionActionsHeader.jsonTitle": {
-    "defaultMessage": "Session JSON"
-  },
-  "sessionActionsHeader.loadingJson": {
-    "defaultMessage": "Loading JSON..."
   },
   "sessionActionsHeader.renameFailed": {
     "defaultMessage": "Failed to rename session: {error}"
@@ -3719,9 +2978,6 @@
   "sessionActionsHeader.saving": {
     "defaultMessage": "Saving..."
   },
-  "sessionActionsHeader.viewJson": {
-    "defaultMessage": "View session JSON"
-  },
   "sessionIndicators.error": {
     "defaultMessage": "Oturum bir hatayla karşılaştı"
   },
@@ -3730,156 +2986,6 @@
   },
   "sessionIndicators.streaming": {
     "defaultMessage": "Akış"
-  },
-  "sessionViewComponents.empty.description": {
-    "defaultMessage": "Bu oturum herhangi bir mesaj içermiyor"
-  },
-  "sessionViewComponents.empty.title": {
-    "defaultMessage": "Mesaj bulunamadı"
-  },
-  "sessionViewComponents.error.loading": {
-    "defaultMessage": "Oturum Ayrıntıları Yüklenirken Hata Oluştu"
-  },
-  "sessionViewComponents.error.tryAgain": {
-    "defaultMessage": "Tekrar Deneyin"
-  },
-  "sessionViewComponents.role.assistant": {
-    "defaultMessage": "Goose"
-  },
-  "sessionViewComponents.role.user": {
-    "defaultMessage": "sen"
-  },
-  "sessions.action.delete": {
-    "defaultMessage": "Oturumu sil"
-  },
-  "sessions.action.duplicate": {
-    "defaultMessage": "Yinelenen oturum"
-  },
-  "sessions.action.editName": {
-    "defaultMessage": "Oturum adını düzenleyin"
-  },
-  "sessions.action.export": {
-    "defaultMessage": "Oturumu dışa aktar"
-  },
-  "sessions.action.openNewWindow": {
-    "defaultMessage": "Yeni pencerede aç"
-  },
-  "sessions.action.shareNostr": {
-    "defaultMessage": "Şifrelenmiş Nostr bağlantısını paylaşın"
-  },
-  "sessions.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "sessions.chatHistory": {
-    "defaultMessage": "Sohbet geçmişi"
-  },
-  "sessions.chatHistoryDesc": {
-    "defaultMessage": "Goose ile geçmiş konuşmalarınızı görüntüleyin ve arayın. Aramak için {shortcut}."
-  },
-  "sessions.close": {
-    "defaultMessage": "Kapat"
-  },
-  "sessions.delete.message": {
-    "defaultMessage": "\"{name}\" oturumunu silmek istediğinizden emin misiniz? Bu eylem geri alınamaz."
-  },
-  "sessions.delete.title": {
-    "defaultMessage": "Oturumu Sil"
-  },
-  "sessions.edit.placeholder": {
-    "defaultMessage": "Oturum açıklamasını girin"
-  },
-  "sessions.edit.title": {
-    "defaultMessage": "Oturum Açıklamasını Düzenle"
-  },
-  "sessions.empty.description": {
-    "defaultMessage": "Sohbet geçmişiniz burada görünecek"
-  },
-  "sessions.empty.title": {
-    "defaultMessage": "Sohbet oturumu bulunamadı"
-  },
-  "sessions.error.loading": {
-    "defaultMessage": "Oturumlar Yüklenirken Hata Oluştu"
-  },
-  "sessions.error.tryAgain": {
-    "defaultMessage": "Tekrar Deneyin"
-  },
-  "sessions.import": {
-    "defaultMessage": "Oturumu İçe Aktar"
-  },
-  "sessions.importNostr": {
-    "defaultMessage": "Bağlantıyı İçe Aktar"
-  },
-  "sessions.importNostr.description": {
-    "defaultMessage": "Oturumu almak, şifresini çözmek ve içe aktarmak için bir Goose Nostr paylaşım bağlantısını yapıştırın."
-  },
-  "sessions.importNostr.placeholder": {
-    "defaultMessage": "goose://sessions/nostr?nevent=...&key=..."
-  },
-  "sessions.importNostr.title": {
-    "defaultMessage": "Nostr Oturumunu İçe Aktar"
-  },
-  "sessions.importing": {
-    "defaultMessage": "İçe aktarılıyor..."
-  },
-  "sessions.loadingMore": {
-    "defaultMessage": "Daha fazla oturum yükleniyor..."
-  },
-  "sessions.save": {
-    "defaultMessage": "Kaydet"
-  },
-  "sessions.saving": {
-    "defaultMessage": "Kaydediliyor..."
-  },
-  "sessions.search.noResults": {
-    "defaultMessage": "Eşleşen oturum bulunamadı"
-  },
-  "sessions.search.noResultsDesc": {
-    "defaultMessage": "Arama terimlerinizi ayarlamayı deneyin"
-  },
-  "sessions.searchPlaceholder": {
-    "defaultMessage": "Arama geçmişi..."
-  },
-  "sessions.shareNostr.description": {
-    "defaultMessage": "Bu bağlantıya sahip olan herkes oturumu alıp şifresini çözebilir. Buna bir sırmış gibi davran."
-  },
-  "sessions.shareNostr.title": {
-    "defaultMessage": "Şifreli Nostr Paylaşım Bağlantısı"
-  },
-  "sessions.toast.copied": {
-    "defaultMessage": "Panoya kopyalandı"
-  },
-  "sessions.toast.deleteFailed": {
-    "defaultMessage": "\"{name}\" oturumu silinemedi: {error}"
-  },
-  "sessions.toast.deleted": {
-    "defaultMessage": "Oturum başarıyla silindi"
-  },
-  "sessions.toast.duplicateFailed": {
-    "defaultMessage": "Oturum kopyalanamadı: {error}"
-  },
-  "sessions.toast.duplicated": {
-    "defaultMessage": "\"{name}\" oturumu başarıyla kopyalandı"
-  },
-  "sessions.toast.exported": {
-    "defaultMessage": "Oturum başarıyla dışa aktarıldı"
-  },
-  "sessions.toast.importFailed": {
-    "defaultMessage": "Oturum içe aktarılamadı: {error}"
-  },
-  "sessions.toast.imported": {
-    "defaultMessage": "Oturum başarıyla içe aktarıldı"
-  },
-  "sessions.toast.shareNostr": {
-    "defaultMessage": "Şifrelenmiş Nostr paylaşım bağlantısı oluşturuldu"
-  },
-  "sessions.toast.shareNostrFailed": {
-    "defaultMessage": "Nostr paylaşım bağlantısı oluşturulamadı: {error}"
-  },
-  "sessions.toast.updateFailed": {
-    "defaultMessage": "Oturum açıklaması güncellenemedi: {error}"
-  },
-  "sessions.toast.updated": {
-    "defaultMessage": "Oturum açıklaması başarıyla güncellendi"
   },
   "settings.appearance.description": {
     "defaultMessage": "goose'nin sisteminizde nasıl görüneceğini yapılandırın"
@@ -4058,6 +3164,9 @@
   "settingsView.tabChat": {
     "defaultMessage": "Sohbet"
   },
+  "settingsView.tabExtensions": {
+    "defaultMessage": "Uzantılar"
+  },
   "settingsView.tabExternalBackend": {
     "defaultMessage": "Harici Arka Uç"
   },
@@ -4072,6 +3181,9 @@
   },
   "settingsView.tabPrompts": {
     "defaultMessage": "İstemler"
+  },
+  "settingsView.tabSkills": {
+    "defaultMessage": "Beceriler"
   },
   "settingsView.title": {
     "defaultMessage": "Ayarlar"
@@ -4094,37 +3206,31 @@
   "shortcutRecorder.save": {
     "defaultMessage": "Kaydet"
   },
-  "skillsView.addSkill": {
-    "defaultMessage": "Beceri Ekle"
-  },
-  "skillsView.adjustSearchTerms": {
+  "skillsSettings.adjustSearchTerms": {
     "defaultMessage": "Arama terimlerinizi ayarlamayı deneyin"
   },
-  "skillsView.comingSoon": {
-    "defaultMessage": "Yakında"
-  },
-  "skillsView.errorLoadingSkills": {
+  "skillsSettings.errorLoadingSkills": {
     "defaultMessage": "Beceriler Yüklenirken Hata Oluştu"
   },
-  "skillsView.noMatchingSkills": {
+  "skillsSettings.noMatchingSkills": {
     "defaultMessage": "Eşleşen beceri bulunamadı"
   },
-  "skillsView.noSkillsDescription": {
+  "skillsSettings.noSkillsDescription": {
     "defaultMessage": "Beceriler ~/.config/agents/skills/,.goose/skills/ veya desteklenen diğer dizinlerdeki SKILL.md dosyalarından yüklenir."
   },
-  "skillsView.noSkillsInstalled": {
+  "skillsSettings.noSkillsInstalled": {
     "defaultMessage": "Hiçbir beceri yüklü değil"
   },
-  "skillsView.searchSkillsPlaceholder": {
+  "skillsSettings.searchSkillsPlaceholder": {
     "defaultMessage": "Arama becerileri..."
   },
-  "skillsView.skillsDescription": {
+  "skillsSettings.skillsDescription": {
     "defaultMessage": "Goose yeteneklerini genişleten yüklü becerileri görüntüleyin. Aramak için {shortcut}."
   },
-  "skillsView.skillsTitle": {
+  "skillsSettings.skillsTitle": {
     "defaultMessage": "Beceriler"
   },
-  "skillsView.tryAgain": {
+  "skillsSettings.tryAgain": {
     "defaultMessage": "Tekrar Deneyin"
   },
   "spellcheckToggle.description": {
@@ -4153,99 +3259,6 @@
   },
   "stringUtils.ollamaNotConfiguredSuffix": {
     "defaultMessage": "makinenizde kurulu ve açık olmalı veya OLLAMA_HOST için bir değer girmelisiniz."
-  },
-  "subRecipeEditor.addExisting": {
-    "defaultMessage": "Mevcut Ekle"
-  },
-  "subRecipeEditor.createNew": {
-    "defaultMessage": "Yeni Alt Tarif Oluştur"
-  },
-  "subRecipeEditor.deleteSubrecipe": {
-    "defaultMessage": "{name} alt tarifini sil"
-  },
-  "subRecipeEditor.description": {
-    "defaultMessage": "Alt tarifler, uygulama sırasında araç olarak adlandırılabilecek tariflerdir. Çok adımlı iş akışlarına ve yeniden kullanılabilir bileşenlere olanak tanırlar."
-  },
-  "subRecipeEditor.duplicateName": {
-    "defaultMessage": "Yinelenen Ad"
-  },
-  "subRecipeEditor.duplicateNameMsg": {
-    "defaultMessage": "\"{name}\" adlı bir alt tarif zaten mevcut. Lütfen benzersiz bir ad kullanın."
-  },
-  "subRecipeEditor.editSubrecipe": {
-    "defaultMessage": "{name} alt tarifini düzenleyin"
-  },
-  "subRecipeEditor.label": {
-    "defaultMessage": "Alt tarifler"
-  },
-  "subRecipeEditor.preconfiguredValues": {
-    "defaultMessage": "Önceden yapılandırılmış değerler:"
-  },
-  "subRecipeEditor.sequential": {
-    "defaultMessage": "Sıralı"
-  },
-  "subRecipeModal.addTitle": {
-    "defaultMessage": "Alt Tarif Ekle"
-  },
-  "subRecipeModal.apply": {
-    "defaultMessage": "Uygula"
-  },
-  "subRecipeModal.browse": {
-    "defaultMessage": "Göz at"
-  },
-  "subRecipeModal.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "subRecipeModal.closeModal": {
-    "defaultMessage": "Alt tarif modelini kapat"
-  },
-  "subRecipeModal.configureTitle": {
-    "defaultMessage": "Alt Tarifi Yapılandır"
-  },
-  "subRecipeModal.descriptionLabel": {
-    "defaultMessage": "Açıklama"
-  },
-  "subRecipeModal.descriptionPlaceholder": {
-    "defaultMessage": "Bu alt tarifin ne işe yaradığına ilişkin isteğe bağlı açıklama..."
-  },
-  "subRecipeModal.invalidFile": {
-    "defaultMessage": "Geçersiz Dosya"
-  },
-  "subRecipeModal.invalidFileMsg": {
-    "defaultMessage": "Lütfen bir YAML dosyası seçin (.yaml veya.yml)."
-  },
-  "subRecipeModal.nameHint": {
-    "defaultMessage": "Araç adını oluşturmak için kullanılan benzersiz tanımlayıcı"
-  },
-  "subRecipeModal.nameLabel": {
-    "defaultMessage": "İsim"
-  },
-  "subRecipeModal.namePlaceholder": {
-    "defaultMessage": "ör. güvenlik_tarama"
-  },
-  "subRecipeModal.pathHint": {
-    "defaultMessage": "Mevcut bir tarif dosyasına göz atın veya manuel olarak bir yol girin"
-  },
-  "subRecipeModal.pathLabel": {
-    "defaultMessage": "Yol"
-  },
-  "subRecipeModal.pathPlaceholder": {
-    "defaultMessage": "ör.,./subrecipes/security-analiz.yaml"
-  },
-  "subRecipeModal.preconfiguredValues": {
-    "defaultMessage": "Önceden Yapılandırılmış Değerler"
-  },
-  "subRecipeModal.preconfiguredValuesHint": {
-    "defaultMessage": "Her zaman alt tarife aktarılan isteğe bağlı parametre değerleri"
-  },
-  "subRecipeModal.sequentialHint": {
-    "defaultMessage": "(Birden fazla alt tarif örneğinin sıralı olarak yürütülmesini zorlar)"
-  },
-  "subRecipeModal.sequentialLabel": {
-    "defaultMessage": "Tekrarlandığında sıralı"
-  },
-  "subRecipeModal.subtitle": {
-    "defaultMessage": "Tarif yürütme sırasında araç olarak çağrılabilecek bir alt tarif yapılandırın"
   },
   "switchModelModal.backToModelList": {
     "defaultMessage": "Model listesine geri dön"
@@ -4453,9 +3466,6 @@
   },
   "toolCallWithResponse.activityCount": {
     "defaultMessage": "Etkinlik ({count})"
-  },
-  "toolCallWithResponse.code": {
-    "defaultMessage": "Kod"
   },
   "toolCallWithResponse.loadingSpinner": {
     "defaultMessage": "Döndürücü yükleniyor"

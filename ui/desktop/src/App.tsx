@@ -8,12 +8,9 @@ import {
   useLocation,
   useSearchParams,
 } from 'react-router-dom';
-import { importNostrSessionFromDeepLink } from './sessionLinks';
 import { ErrorUI } from './components/ErrorBoundary';
 import { ExtensionInstallModal } from './components/ExtensionInstallModal';
-import RecipeParamsModalContainer from './components/RecipeParamsModalContainer';
-import { isRecipeParamsCancelled } from './acp/errors';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import AnnouncementModal from './components/AnnouncementModal';
 import TelemetryConsentPrompt from './components/TelemetryConsentPrompt';
 import OnboardingGuard from './components/onboarding/OnboardingGuard';
@@ -30,7 +27,6 @@ interface PairRouteState {
   noAutoSubmit?: boolean;
 }
 import SettingsView, { SettingsViewOptions } from './components/settings/SettingsView';
-import SessionsView from './components/sessions/SessionsView';
 import SchedulesView from './components/schedule/SchedulesView';
 import ProviderSettings from './components/settings/providers/ProviderSettingsPage';
 import { AppLayout } from './components/Layout/AppLayout';
@@ -44,9 +40,6 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { FeaturesProvider } from './contexts/FeaturesContext';
 import PermissionSettingsView from './components/settings/permission/PermissionSetting';
 
-import ExtensionsView, { ExtensionsViewOptions } from './components/extensions/ExtensionsView';
-import RecipesView from './components/recipes/RecipesView';
-import SkillsView from './components/skills/SkillsView';
 import AppsView from './components/apps/AppsView';
 import StandaloneAppView from './components/apps/StandaloneAppView';
 import { View, ViewOptions } from './utils/navigationUtils';
@@ -71,16 +64,6 @@ const HubRouteWrapper = () => {
   return <Hub setView={setView} />;
 };
 
-export function resolveSessionInitialMessage(
-  session: { recipe?: { prompt?: string | null } | null },
-  initialMessage?: UserInput
-): UserInput | undefined {
-  return (
-    initialMessage ??
-    (session.recipe?.prompt ? { msg: session.recipe.prompt, images: [] } : undefined)
-  );
-}
-
 const PairRouteWrapper = ({
   activeSessions,
 }: {
@@ -99,37 +82,26 @@ const PairRouteWrapper = ({
     (location.state as PairRouteState) || (window.history.state as PairRouteState) || {};
   const [searchParams, setSearchParams] = useSearchParams();
   const isCreatingSessionRef = useRef(false);
-  const navigate = useNavigate();
-
   const resumeSessionId = searchParams.get('resumeSessionId') ?? undefined;
-  const recipeDeeplinkFromConfig = window.appConfig?.get('recipeDeeplink') as string | undefined;
-  const recipeIdFromConfig = window.appConfig?.get('recipeId') as string | undefined;
   const initialMessage = routeState.initialMessage;
   const noAutoSubmit = routeState.noAutoSubmit;
 
-  // Create session if we have an initialMessage, recipeDeeplink, or recipeId but no sessionId
+  // Create session if we have an initialMessage but no sessionId
   useEffect(() => {
-    if (
-      (initialMessage || recipeDeeplinkFromConfig || recipeIdFromConfig) &&
-      !resumeSessionId &&
-      !isCreatingSessionRef.current
-    ) {
+    if (initialMessage && !resumeSessionId && !isCreatingSessionRef.current) {
       isCreatingSessionRef.current = true;
 
       (async () => {
         try {
           const newSession = await createSession(getInitialWorkingDir(), {
-            recipeDeeplink: recipeDeeplinkFromConfig,
-            recipeId: recipeIdFromConfig,
             allExtensions: extensionsList,
           });
-          const sessionInitialMessage = resolveSessionInitialMessage(newSession, initialMessage);
 
           window.dispatchEvent(
             new CustomEvent(AppEvents.ADD_ACTIVE_SESSION, {
               detail: {
                 sessionId: newSession.id,
-                initialMessage: sessionInitialMessage,
+                initialMessage,
                 noAutoSubmit,
               },
             })
@@ -140,10 +112,6 @@ const PairRouteWrapper = ({
             return prev;
           });
         } catch (error) {
-          if (isRecipeParamsCancelled(error)) {
-            navigate('/');
-            return;
-          }
           console.error('Failed to create session:', error);
           trackErrorWithContext(error, {
             component: 'PairRouteWrapper',
@@ -156,14 +124,7 @@ const PairRouteWrapper = ({
       })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    initialMessage,
-    recipeDeeplinkFromConfig,
-    recipeIdFromConfig,
-    resumeSessionId,
-    setSearchParams,
-    extensionsList,
-  ]);
+  }, [initialMessage, resumeSessionId, setSearchParams, extensionsList]);
 
   // Add resumed session to active sessions if not already there
   useEffect(() => {
@@ -202,21 +163,9 @@ const SettingsRoute = () => {
   return <SettingsView onClose={() => navigate('/')} setView={setView} viewOptions={viewOptions} />;
 };
 
-const SessionsRoute = () => {
-  return <SessionsView />;
-};
-
 const SchedulesRoute = () => {
   const navigate = useNavigate();
   return <SchedulesView onClose={() => navigate('/')} />;
-};
-
-const RecipesRoute = () => {
-  return <RecipesView />;
-};
-
-const SkillsRoute = () => {
-  return <SkillsView />;
 };
 
 const PermissionRoute = () => {
@@ -239,17 +188,8 @@ const PermissionRoute = () => {
           case 'settings':
             navigate('/settings', { state: parentViewOptions });
             break;
-          case 'sessions':
-            navigate('/sessions');
-            break;
           case 'schedules':
             navigate('/schedules');
-            break;
-          case 'recipes':
-            navigate('/recipes');
-            break;
-          case 'skills':
-            navigate('/skills');
             break;
           default:
             navigate('/');
@@ -272,43 +212,8 @@ const ConfigureProvidersRoute = () => {
   );
 };
 
-const ExtensionsRoute = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // Get viewOptions from location.state or history.state (for deep link extensions)
-  const viewOptions =
-    (location.state as ExtensionsViewOptions) ||
-    (window.history.state as ExtensionsViewOptions) ||
-    {};
-
-  return (
-    <ExtensionsView
-      onClose={() => navigate(-1)}
-      setView={(view, options) => {
-        switch (view) {
-          case 'chat':
-            navigate('/');
-            break;
-          case 'pair':
-            navigate('/pair', { state: options });
-            break;
-          case 'settings':
-            navigate('/settings', { state: options });
-            break;
-          default:
-            navigate('/');
-        }
-      }}
-      viewOptions={viewOptions}
-    />
-  );
-};
-
 export function AppInner() {
   const [fatalError, setFatalError] = useState<string | null>(null);
-
-  const nostrImportInFlight = useRef<string | null>(null);
 
   const navigate = useNavigate();
   const setView = useNavigation();
@@ -317,7 +222,6 @@ export function AppInner() {
     sessionId: '',
     name: DEFAULT_CHAT_TITLE,
     messages: [],
-    recipe: null,
   });
 
   const MAX_ACTIVE_SESSIONS = 10;
@@ -406,56 +310,13 @@ export function AppInner() {
   useEffect(() => {
     acpListSessions()
       .then(({ sessions }) => {
-        const phantom = sessions.filter(
-          (s) => s.messageCount === 0 && !s.userSetName && !s.hasRecipe
-        );
+        const phantom = sessions.filter((s) => s.messageCount === 0 && !s.userSetName);
         for (const s of phantom) {
           acpDeleteSession(s.id).catch(() => {});
         }
       })
       .catch(() => {});
   }, []);
-
-  useEffect(() => {
-    const handleOpenSharedSession = async (_event: IpcRendererEvent, ...args: unknown[]) => {
-      const link = args[0] as string;
-      window.electron.logInfo('Opening session share link');
-
-      if (!link.startsWith('goose://sessions/nostr')) {
-        toast.error('Unsupported session share link');
-        navigate('/sessions');
-        return;
-      }
-
-      if (nostrImportInFlight.current === link) {
-        window.electron.logInfo('Skipping duplicate Nostr deep link import');
-        return;
-      }
-      nostrImportInFlight.current = link;
-
-      try {
-        await importNostrSessionFromDeepLink(link);
-        navigate('/sessions');
-      } catch (error) {
-        console.error('Unexpected error opening Nostr session share:', error);
-        trackErrorWithContext(error, {
-          component: 'AppInner',
-          action: 'open_nostr_session_share',
-          recoverable: true,
-        });
-        toast.error(`Failed to import Nostr session: ${errorMessage(error, 'Unknown error')}`);
-        navigate('/sessions');
-      } finally {
-        if (nostrImportInFlight.current === link) {
-          nostrImportInFlight.current = null;
-        }
-      }
-    };
-    window.electron.on('open-shared-session', handleOpenSharedSession);
-    return () => {
-      window.electron.off('open-shared-session', handleOpenSharedSession);
-    };
-  }, [navigate]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -625,7 +486,6 @@ export function AppInner() {
         pauseOnHover
       />
       <ExtensionInstallModal addExtension={addExtension} setView={setView} />
-      <RecipeParamsModalContainer />
       <div className="relative w-screen h-screen overflow-hidden bg-background-secondary flex flex-col">
         <div className="titlebar-drag-region" />
         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -654,19 +514,8 @@ export function AppInner() {
                 }
               />
               <Route path="settings" element={<SettingsRoute />} />
-              <Route
-                path="extensions"
-                element={
-                  <ChatProvider chat={chat} setChat={setChat} contextKey="extensions">
-                    <ExtensionsRoute />
-                  </ChatProvider>
-                }
-              />
               <Route path="apps" element={<AppsView />} />
-              <Route path="sessions" element={<SessionsRoute />} />
               <Route path="schedules" element={<SchedulesRoute />} />
-              <Route path="recipes" element={<RecipesRoute />} />
-              <Route path="skills" element={<SkillsRoute />} />
               <Route path="permission" element={<PermissionRoute />} />
             </Route>
           </Routes>

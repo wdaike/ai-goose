@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, CircleHelp, Folder, Search, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigationContext } from './NavigationContext';
 import { useConfig } from '../ConfigContext';
@@ -14,9 +14,11 @@ import {
 import { AppEvents } from '../../constants/events';
 import { InlineEditText } from '../common/InlineEditText';
 import { SessionIndicators } from '../SessionIndicators';
-import { acpRenameSession, type SessionListItem } from '../../acp/sessions';
+import EnvironmentBadge from '../GooseSidebar/EnvironmentBadge';
+import { Goose } from '../icons/Goose';
+import { acpListSessions, acpRenameSession, type SessionListItem } from '../../acp/sessions';
 import { cn } from '../../utils';
-import type { ProjectGroup } from '../../utils/projectSessions';
+import { groupSessionsByProject, type ProjectGroup } from '../../utils/projectSessions';
 import { defineMessages, useIntl } from '../../i18n';
 
 type StreamState = 'idle' | 'loading' | 'streaming' | 'error';
@@ -26,10 +28,13 @@ interface SessionStatus {
   hasUnreadActivity: boolean;
 }
 
+const DOCS_URL = 'https://goose-docs.ai';
+const SEARCH_DEBOUNCE_MS = 250;
+
 const i18n = defineMessages({
-  chats: {
-    id: 'navigationPanel.chats',
-    defaultMessage: 'Chats',
+  projects: {
+    id: 'navigationPanel.projects',
+    defaultMessage: 'Projects',
   },
   noChats: {
     id: 'navigationPanel.noChats',
@@ -39,12 +44,28 @@ const i18n = defineMessages({
     id: 'navigationPanel.untitledSession',
     defaultMessage: 'Untitled session',
   },
+  search: {
+    id: 'navigationPanel.search',
+    defaultMessage: 'Search chats',
+  },
+  noResults: {
+    id: 'navigationPanel.noResults',
+    defaultMessage: 'No matching chats',
+  },
+  searching: {
+    id: 'navigationPanel.searching',
+    defaultMessage: 'Searching...',
+  },
+  help: {
+    id: 'navigationPanel.help',
+    defaultMessage: 'Help',
+  },
 });
 
-const navItemClass = (active: boolean) =>
+const rowClass = (active: boolean) =>
   cn(
-    'flex flex-row items-center gap-3 outline-none no-drag w-full',
-    'rounded-full px-3 py-2 text-sm font-medium transition-colors',
+    'no-drag flex w-full flex-row items-center gap-2.5 rounded-lg px-2 py-1.5 outline-none',
+    'text-[13px] transition-colors',
     active
       ? 'bg-background-tertiary text-text-primary'
       : 'text-text-primary hover:bg-background-tertiary/60'
@@ -60,12 +81,10 @@ const NavRow: React.FC<NavRowProps> = ({ item, active, onClick }) => {
   const intl = useIntl();
   const Icon = item.icon;
   return (
-    <button onClick={onClick} className={navItemClass(active)}>
-      <Icon className="w-5 h-5 flex-shrink-0 text-text-secondary" />
-      <span className="text-left flex-1 truncate">{getNavItemLabel(item, intl)}</span>
-      {item.getTag && (
-        <span className="text-xs font-mono text-text-secondary">{item.getTag()}</span>
-      )}
+    <button onClick={onClick} className={rowClass(active)}>
+      <Icon className="size-4 flex-shrink-0 text-text-secondary" />
+      <span className="flex-1 truncate text-left">{getNavItemLabel(item, intl)}</span>
+      {item.getTag && <span className="font-mono text-xs text-text-tertiary">{item.getTag()}</span>}
     </button>
   );
 };
@@ -89,9 +108,11 @@ const SessionRow: React.FC<SessionRowProps> = ({ session, active, status, onClic
     <div
       onClick={() => !isEditing && onClick()}
       className={cn(
-        'flex items-center gap-2 px-3 py-1.5 rounded-full cursor-pointer text-sm',
-        'hover:bg-background-tertiary/60 transition-colors',
-        active && 'bg-background-tertiary'
+        'no-drag flex cursor-pointer items-center gap-2 rounded-lg py-1.5 pl-8 pr-2 text-[13px]',
+        'transition-colors',
+        active
+          ? 'bg-background-tertiary text-text-primary'
+          : 'text-text-secondary hover:bg-background-tertiary/60 hover:text-text-primary'
       )}
     >
       <InlineEditText
@@ -108,8 +129,8 @@ const SessionRow: React.FC<SessionRowProps> = ({ session, active, status, onClic
         placeholder={intl.formatMessage(i18n.untitledSession)}
         disabled={isStreaming}
         singleClickEdit={false}
-        className="truncate text-text-primary flex-1 !px-0 !py-0 hover:bg-transparent"
-        editClassName="!text-sm"
+        className="flex-1 truncate !px-0 !py-0 text-inherit hover:bg-transparent"
+        editClassName="!text-[13px]"
         onEditStart={() => setIsEditing(true)}
         onEditEnd={() => setIsEditing(false)}
       />
@@ -126,19 +147,32 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
 
   const appsExtensionEnabled = !!extensionsList?.find((ext) => ext.name === 'apps')?.enabled;
 
-  const visibleItems = useMemo<NavItem[]>(() => {
-    return NAV_ITEMS.filter((item) => {
-      if (item.path === '/apps') return appsExtensionEnabled;
-      return true;
-    });
-  }, [appsExtensionEnabled]);
+  const visibleItems = useMemo<NavItem[]>(
+    () =>
+      NAV_ITEMS.filter((item) => {
+        if (item.path === '/apps') return appsExtensionEnabled;
+        return true;
+      }),
+    [appsExtensionEnabled]
+  );
 
   const isActive = useCallback((path: string) => location.pathname === path, [location.pathname]);
 
-  const { recentSessions, recentSessionsByProject, activeSessionId, fetchSessions, handleNavClick, handleSessionClick } =
-    useNavigationSessions();
+  const {
+    recentSessionsByProject,
+    activeSessionId,
+    fetchSessions,
+    handleNavClick,
+    handleSessionClick,
+  } = useNavigationSessions();
 
   const [sessionStatuses, setSessionStatuses] = useState<Map<string, SessionStatus>>(new Map());
+  const [query, setQuery] = useState('');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<SessionListItem[] | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
+  const [collapsedProjects, setCollapsedProjects] = useState<Set<string>>(new Set());
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleStatusUpdate = (event: Event) => {
@@ -180,7 +214,57 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
     }
   }, [isNavExpanded, fetchSessions]);
 
-  const [isChatsExpanded, setIsChatsExpanded] = useState(true);
+  const toggleProject = useCallback((path: string) => {
+    setCollapsedProjects((prev) => {
+      const next = new Set(prev);
+      if (next.has(path)) next.delete(path);
+      else next.add(path);
+      return next;
+    });
+  }, []);
+
+  // Searching hits the backend so it covers the full history, not just the
+  // recent sessions the sidebar keeps in memory.
+  const keyword = query.trim();
+  useEffect(() => {
+    if (!keyword) {
+      setSearchResults(null);
+      setIsSearching(false);
+      return;
+    }
+
+    let cancelled = false;
+    setIsSearching(true);
+    const timeout = setTimeout(async () => {
+      try {
+        const { sessions } = await acpListSessions(null, { keyword });
+        if (!cancelled) setSearchResults(sessions);
+      } catch (error) {
+        console.error('Failed to search sessions:', error);
+        if (!cancelled) setSearchResults([]);
+      } finally {
+        if (!cancelled) setIsSearching(false);
+      }
+    }, SEARCH_DEBOUNCE_MS);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timeout);
+    };
+  }, [keyword]);
+
+  const groups = useMemo<ProjectGroup[]>(
+    () => (searchResults ? groupSessionsByProject(searchResults) : recentSessionsByProject),
+    [recentSessionsByProject, searchResults]
+  );
+
+  const openSearch = useCallback(() => {
+    setIsSearchOpen((open) => {
+      if (open) setQuery('');
+      return !open;
+    });
+    requestAnimationFrame(() => searchInputRef.current?.focus());
+  }, []);
 
   if (!isNavExpanded) return null;
 
@@ -192,11 +276,51 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.15 }}
-      className={cn('bg-background-primary outline-none flex flex-col h-full', className)}
+      className={cn(
+        'flex h-full flex-col bg-background-secondary outline-none',
+        'border-r border-border-primary',
+        className
+      )}
     >
-      <div className="h-[48px] no-drag" />
+      {/* Drag region clearing the window controls. */}
+      <div className="h-[52px]" />
 
-      <div className="px-2 flex flex-col gap-0.5">
+      <div className="flex items-center gap-1 px-3 pb-2">
+        <span className="flex items-center gap-1.5 text-[15px] font-semibold text-text-primary">
+          <Goose className="size-4" />
+          goose
+        </span>
+        <EnvironmentBadge />
+        <div className="flex-1" />
+        <button
+          onClick={openSearch}
+          className="no-drag rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-background-tertiary hover:text-text-primary"
+          aria-label={intl.formatMessage(i18n.search)}
+          title={intl.formatMessage(i18n.search)}
+        >
+          <Search className="size-4" />
+        </button>
+      </div>
+
+      {isSearchOpen && (
+        <div className="px-3 pb-2">
+          <input
+            ref={searchInputRef}
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Escape') {
+                setQuery('');
+                setIsSearchOpen(false);
+              }
+            }}
+            placeholder={intl.formatMessage(i18n.search)}
+            className="no-drag w-full rounded-lg bg-background-tertiary px-2.5 py-1.5 text-[13px] text-text-primary outline-none placeholder:text-text-tertiary"
+          />
+        </div>
+      )}
+
+      <div className="flex flex-col gap-px px-2">
         {visibleItems.map((item) => (
           <NavRow
             key={item.id}
@@ -207,73 +331,78 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
         ))}
       </div>
 
-      <div className="flex-1 min-h-0 flex flex-col mt-3">
-        <button
-          onClick={() => setIsChatsExpanded((v) => !v)}
-          className="flex items-center gap-1 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary transition-colors self-start"
-        >
-          {isChatsExpanded ? (
-            <ChevronDown className="w-3 h-3" />
+      <div className="mt-4 flex min-h-0 flex-1 flex-col">
+        <div className="px-4 pb-1 text-xs text-text-tertiary">
+          {intl.formatMessage(i18n.projects)}
+        </div>
+        <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
+          {isSearching && groups.length === 0 ? (
+            <div className="px-2 py-1.5 text-xs text-text-tertiary">
+              {intl.formatMessage(i18n.searching)}
+            </div>
+          ) : groups.length === 0 ? (
+            <div className="px-2 py-1.5 text-xs text-text-tertiary">
+              {intl.formatMessage(keyword ? i18n.noResults : i18n.noChats)}
+            </div>
           ) : (
-            <ChevronRight className="w-3 h-3" />
-          )}
-          <span>{intl.formatMessage(i18n.chats)}</span>
-        </button>
-        {isChatsExpanded && (
-          <div className="flex-1 min-h-0 overflow-y-auto px-2 pb-2 mt-1">
-            {recentSessions.length === 0 ? (
-              <div className="px-3 py-2 text-xs text-text-secondary">
-                {intl.formatMessage(i18n.noChats)}
-              </div>
-            ) : recentSessionsByProject.length > 1 ? (
-              recentSessionsByProject.map((group: ProjectGroup) => (
+            groups.map((group) => {
+              const isCollapsed = collapsedProjects.has(group.path) && !keyword;
+              return (
                 <React.Fragment key={group.path}>
-                  <div
-                    className="px-3 pt-2 pb-0.5 text-[10px] uppercase tracking-wider text-text-tertiary truncate"
+                  <button
+                    onClick={() => toggleProject(group.path)}
+                    className={rowClass(false)}
                     title={group.path}
                   >
-                    {group.label}
-                  </div>
-                  {group.sessions.map((session) => (
-                    <SessionRow
-                      key={session.id}
-                      session={session}
-                      active={session.id === activeSessionId}
-                      status={sessionStatuses.get(session.id)}
-                      onClick={() => {
-                        clearUnread(session.id);
-                        handleSessionClick(session.id);
-                      }}
-                      onRenamed={fetchSessions}
-                    />
-                  ))}
+                    {isCollapsed ? (
+                      <ChevronRight className="size-3.5 flex-shrink-0 text-text-tertiary" />
+                    ) : (
+                      <ChevronDown className="size-3.5 flex-shrink-0 text-text-tertiary" />
+                    )}
+                    <Folder className="size-4 flex-shrink-0 text-text-secondary" />
+                    <span className="flex-1 truncate text-left">{group.label}</span>
+                  </button>
+                  {!isCollapsed &&
+                    group.sessions.map((session) => (
+                      <SessionRow
+                        key={session.id}
+                        session={session}
+                        active={session.id === activeSessionId}
+                        status={sessionStatuses.get(session.id)}
+                        onClick={() => {
+                          clearUnread(session.id);
+                          handleSessionClick(session.id);
+                        }}
+                        onRenamed={fetchSessions}
+                      />
+                    ))}
                 </React.Fragment>
-              ))
-            ) : (
-              recentSessions.map((session) => (
-                <SessionRow
-                  key={session.id}
-                  session={session}
-                  active={session.id === activeSessionId}
-                  status={sessionStatuses.get(session.id)}
-                  onClick={() => {
-                    clearUnread(session.id);
-                    handleSessionClick(session.id);
-                  }}
-                  onRenamed={fetchSessions}
-                />
-              ))
-            )}
-          </div>
-        )}
+              );
+            })
+          )}
+        </div>
       </div>
 
-      <div className="px-2 pt-2 pb-2 border-t border-border-secondary">
-        <NavRow
-          item={SETTINGS_NAV_ITEM}
-          active={isActive(SETTINGS_NAV_ITEM.path)}
+      <div className="flex items-center gap-2 border-t border-border-primary px-3 py-2.5">
+        <button
           onClick={() => handleNavClick(SETTINGS_NAV_ITEM.path)}
-        />
+          className="no-drag flex min-w-0 flex-1 items-center gap-2 rounded-lg px-1 py-1 text-[13px] text-text-primary transition-colors hover:bg-background-tertiary/60"
+        >
+          <span className="flex size-6 flex-shrink-0 items-center justify-center rounded-full bg-background-tertiary">
+            <Settings className="size-3.5 text-text-secondary" />
+          </span>
+          <span className="truncate">{getNavItemLabel(SETTINGS_NAV_ITEM, intl)}</span>
+        </button>
+        <a
+          href={DOCS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="no-drag rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-background-tertiary hover:text-text-primary"
+          aria-label={intl.formatMessage(i18n.help)}
+          title={intl.formatMessage(i18n.help)}
+        >
+          <CircleHelp className="size-4" />
+        </a>
       </div>
     </motion.div>
   );

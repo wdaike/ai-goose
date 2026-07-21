@@ -182,8 +182,8 @@
   "chatInput.failedToReadImage": {
     "defaultMessage": "Không thể đọc tệp hình ảnh"
   },
-  "chatInput.navigationShortcut": {
-    "defaultMessage": "{prefix}↑/{prefix}↓ để điều hướng tin nhắn"
+  "chatInput.placeholder": {
+    "defaultMessage": "Làm bất cứ điều gì"
   },
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "Đang xử lý các tệp đã thả..."
@@ -211,9 +211,6 @@
   },
   "chatInput.unknownType": {
     "defaultMessage": "Loại không xác định"
-  },
-  "chatInput.viewEditRecipe": {
-    "defaultMessage": "Xem/Chỉnh sửa công thức"
   },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "Đang chờ hủy hoàn tất"
@@ -337,156 +334,6 @@
   },
   "costTracker.totalSessionCost": {
     "defaultMessage": "Tổng chi phí phiên: {cost}"
-  },
-  "createEditRecipe.clickToGenerateDeeplink": {
-    "defaultMessage": "Nhấp để tạo deeplink"
-  },
-  "createEditRecipe.close": {
-    "defaultMessage": "Đóng"
-  },
-  "createEditRecipe.copied": {
-    "defaultMessage": "Đã sao chép!"
-  },
-  "createEditRecipe.copy": {
-    "defaultMessage": "Sao chép"
-  },
-  "createEditRecipe.copyLinkDescription": {
-    "defaultMessage": "Sao chép liên kết này để chia sẻ với bạn bè hoặc dán trực tiếp vào Chrome để mở"
-  },
-  "createEditRecipe.createRecipeTitle": {
-    "defaultMessage": "Tạo công thức"
-  },
-  "createEditRecipe.createSubtitle": {
-    "defaultMessage": "Tạo công thức mới để xác định hành vi và khả năng của tác nhân cho các phiên trò chuyện có thể tái sử dụng."
-  },
-  "createEditRecipe.editSubtitle": {
-    "defaultMessage": "Bạn có thể chỉnh sửa công thức bên dưới để thay đổi hành vi của tác nhân trong một phiên mới."
-  },
-  "createEditRecipe.generatingDeeplink": {
-    "defaultMessage": "Đang tạo deeplink..."
-  },
-  "createEditRecipe.learnMore": {
-    "defaultMessage": "Tìm hiểu thêm"
-  },
-  "createEditRecipe.recipeSavedAndLaunchedMsg": {
-    "defaultMessage": "Đã lưu và khởi chạy công thức thành công"
-  },
-  "createEditRecipe.recipeSavedMsg": {
-    "defaultMessage": "Đã lưu công thức thành công"
-  },
-  "createEditRecipe.saveAndRunFailed": {
-    "defaultMessage": "Lưu và chạy thất bại"
-  },
-  "createEditRecipe.saveAndRunFailedMsg": {
-    "defaultMessage": "Không thể lưu và chạy công thức: {error}"
-  },
-  "createEditRecipe.saveAndRunRecipe": {
-    "defaultMessage": "Lưu & Chạy công thức"
-  },
-  "createEditRecipe.saveFailed": {
-    "defaultMessage": "Lưu thất bại"
-  },
-  "createEditRecipe.saveFailedMsg": {
-    "defaultMessage": "Không thể lưu công thức: {error}"
-  },
-  "createEditRecipe.saveRecipe": {
-    "defaultMessage": "Lưu công thức"
-  },
-  "createEditRecipe.saving": {
-    "defaultMessage": "Đang lưu..."
-  },
-  "createEditRecipe.validationFailed": {
-    "defaultMessage": "Xác thực thất bại"
-  },
-  "createEditRecipe.validationMsg": {
-    "defaultMessage": "Vui lòng điền tất cả các trường bắt buộc và đảm bảo lược đồ JSON hợp lệ."
-  },
-  "createEditRecipe.viewEditRecipeTitle": {
-    "defaultMessage": "Xem/chỉnh sửa công thức"
-  },
-  "createSubRecipeInline.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "createSubRecipeInline.closeModal": {
-    "defaultMessage": "Đóng hộp thoại tạo công thức con"
-  },
-  "createSubRecipeInline.createAndAdd": {
-    "defaultMessage": "Tạo & Thêm công thức con"
-  },
-  "createSubRecipeInline.createdSuccess": {
-    "defaultMessage": "Đã tạo công thức con thành công"
-  },
-  "createSubRecipeInline.creating": {
-    "defaultMessage": "Đang tạo..."
-  },
-  "createSubRecipeInline.duplicateName": {
-    "defaultMessage": "Tên trùng lặp"
-  },
-  "createSubRecipeInline.duplicateNameMsg": {
-    "defaultMessage": "Đã tồn tại một công thức con có tên \"{name}\". Vui lòng sử dụng tên duy nhất."
-  },
-  "createSubRecipeInline.instructionsLabel": {
-    "defaultMessage": "Hướng dẫn"
-  },
-  "createSubRecipeInline.instructionsPlaceholder": {
-    "defaultMessage": "Hướng dẫn cho AI khi công thức con này được gọi..."
-  },
-  "createSubRecipeInline.nameHint": {
-    "defaultMessage": "Định danh duy nhất dùng để tạo tên công cụ"
-  },
-  "createSubRecipeInline.nameLabel": {
-    "defaultMessage": "Tên"
-  },
-  "createSubRecipeInline.namePlaceholder": {
-    "defaultMessage": "ví dụ: security_scan"
-  },
-  "createSubRecipeInline.preconfiguredValues": {
-    "defaultMessage": "Giá trị được cấu hình sẵn"
-  },
-  "createSubRecipeInline.preconfiguredValuesHint": {
-    "defaultMessage": "Các giá trị tham số tùy chọn luôn được truyền cho công thức con"
-  },
-  "createSubRecipeInline.recipeDescriptionLabel": {
-    "defaultMessage": "Mô tả công thức"
-  },
-  "createSubRecipeInline.recipeDescriptionPlaceholder": {
-    "defaultMessage": "Công thức này làm gì khi được thực thi"
-  },
-  "createSubRecipeInline.recipeTitleLabel": {
-    "defaultMessage": "Tiêu đề công thức"
-  },
-  "createSubRecipeInline.recipeTitlePlaceholder": {
-    "defaultMessage": "ví dụ: Công cụ phân tích bảo mật"
-  },
-  "createSubRecipeInline.saveFailed": {
-    "defaultMessage": "Lưu thất bại"
-  },
-  "createSubRecipeInline.saveFailedMsg": {
-    "defaultMessage": "Không thể lưu công thức con: {error}"
-  },
-  "createSubRecipeInline.sequentialHint": {
-    "defaultMessage": "(Buộc thực thi tuần tự nhiều phiên bản)"
-  },
-  "createSubRecipeInline.sequentialLabel": {
-    "defaultMessage": "Tuần tự khi lặp lại"
-  },
-  "createSubRecipeInline.subtitle": {
-    "defaultMessage": "Tạo một công thức đơn giản để dùng làm công cụ có thể gọi trong công thức chính của bạn"
-  },
-  "createSubRecipeInline.title": {
-    "defaultMessage": "Tạo công thức con mới"
-  },
-  "createSubRecipeInline.toolDescriptionLabel": {
-    "defaultMessage": "Mô tả công cụ"
-  },
-  "createSubRecipeInline.toolDescriptionPlaceholder": {
-    "defaultMessage": "Mô tả tùy chọn được hiển thị khi công thức này được gọi như một công cụ"
-  },
-  "createSubRecipeInline.validationFailed": {
-    "defaultMessage": "Xác thực thất bại"
-  },
-  "createSubRecipeInline.validationMsg": {
-    "defaultMessage": "Tên, tiêu đề, mô tả công thức và hướng dẫn là bắt buộc."
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "Thêm tín dụng"
@@ -1154,25 +1001,25 @@
   "extensionsSection.updateExtension": {
     "defaultMessage": "Cập nhật tiện ích mở rộng"
   },
-  "extensionsView.addCustomExtension": {
+  "extensionsSettings.addCustomExtension": {
     "defaultMessage": "Thêm tiện ích mở rộng tùy chỉnh"
   },
-  "extensionsView.addExtension": {
+  "extensionsSettings.addExtension": {
     "defaultMessage": "Thêm tiện ích mở rộng"
   },
-  "extensionsView.browseExtensions": {
+  "extensionsSettings.browseExtensions": {
     "defaultMessage": "Duyệt tiện ích mở rộng"
   },
-  "extensionsView.defaultNote": {
+  "extensionsSettings.defaultNote": {
     "defaultMessage": "Các tiện ích mở rộng được bật ở đây sẽ được dùng làm mặc định cho các cuộc trò chuyện mới. Bạn cũng có thể bật/tắt các tiện ích mở rộng đang hoạt động trong khi trò chuyện."
   },
-  "extensionsView.description": {
+  "extensionsSettings.description": {
     "defaultMessage": "Các tiện ích mở rộng này sử dụng Model Context Protocol (MCP). Chúng có thể mở rộng khả năng của Goose bằng ba thành phần chính: Lời nhắc, Tài nguyên và Công cụ. {searchShortcut} để tìm kiếm."
   },
-  "extensionsView.heading": {
+  "extensionsSettings.heading": {
     "defaultMessage": "Tiện ích mở rộng"
   },
-  "extensionsView.searchPlaceholder": {
+  "extensionsSettings.searchPlaceholder": {
     "defaultMessage": "Tìm kiếm tiện ích mở rộng..."
   },
   "externalBackendSection.certFingerprint": {
@@ -1418,48 +1265,6 @@
   "imagePreview.unableToLoad": {
     "defaultMessage": "Không thể tải hình ảnh"
   },
-  "importRecipeForm.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "importRecipeForm.deeplinkHint": {
-    "defaultMessage": "Dán một deeplink công thức bắt đầu bằng \"goose://recipe?config=\""
-  },
-  "importRecipeForm.deeplinkPlaceholder": {
-    "defaultMessage": "Dán deeplink goose://recipe?config=... của bạn vào đây"
-  },
-  "importRecipeForm.example": {
-    "defaultMessage": "ví dụ"
-  },
-  "importRecipeForm.expectedRecipeStructure": {
-    "defaultMessage": "Cấu trúc công thức dự kiến"
-  },
-  "importRecipeForm.importRecipeButton": {
-    "defaultMessage": "Nhập công thức"
-  },
-  "importRecipeForm.importRecipeTitle": {
-    "defaultMessage": "Nhập công thức"
-  },
-  "importRecipeForm.importing": {
-    "defaultMessage": "Đang nhập..."
-  },
-  "importRecipeForm.or": {
-    "defaultMessage": "HOẶC"
-  },
-  "importRecipeForm.recipeDeeplinkLabel": {
-    "defaultMessage": "Deeplink công thức"
-  },
-  "importRecipeForm.recipeFileHint": {
-    "defaultMessage": "Tải lên tệp YAML hoặc JSON chứa cấu trúc công thức"
-  },
-  "importRecipeForm.recipeFileLabel": {
-    "defaultMessage": "Tệp công thức"
-  },
-  "importRecipeForm.reviewWarning": {
-    "defaultMessage": "Hãy đảm bảo bạn xem lại nội dung của các tệp công thức trước khi thêm chúng vào giao diện goose của bạn."
-  },
-  "importRecipeForm.schemaDescription": {
-    "defaultMessage": "Tệp YAML hoặc JSON của bạn phải tuân theo cấu trúc này. Các trường bắt buộc là: title, description, và instructions hoặc prompt."
-  },
   "inlineEditText.clickToEdit": {
     "defaultMessage": "Nhấp để chỉnh sửa"
   },
@@ -1471,48 +1276,6 @@
   },
   "inlineEditText.failedToSave": {
     "defaultMessage": "Không thể lưu"
-  },
-  "instructionsEditor.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "instructionsEditor.insertExample": {
-    "defaultMessage": "Chèn ví dụ"
-  },
-  "instructionsEditor.label": {
-    "defaultMessage": "Hướng dẫn"
-  },
-  "instructionsEditor.placeholder": {
-    "defaultMessage": "Hướng dẫn chi tiết cho AI, ẩn khỏi người dùng"
-  },
-  "instructionsEditor.save": {
-    "defaultMessage": "Lưu hướng dẫn"
-  },
-  "instructionsEditor.syntaxHelp": {
-    "defaultMessage": "Dùng cú pháp {code} để định nghĩa các tham số mà người dùng có thể điền vào"
-  },
-  "instructionsEditor.title": {
-    "defaultMessage": "Trình chỉnh sửa hướng dẫn"
-  },
-  "jsonSchemaEditor.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "jsonSchemaEditor.description": {
-    "defaultMessage": "Định nghĩa cấu trúc dự kiến của phản hồi từ AI bằng định dạng JSON Schema"
-  },
-  "jsonSchemaEditor.insertExample": {
-    "defaultMessage": "Chèn ví dụ"
-  },
-  "jsonSchemaEditor.invalidJson": {
-    "defaultMessage": "Định dạng JSON không hợp lệ"
-  },
-  "jsonSchemaEditor.label": {
-    "defaultMessage": "JSON Schema phản hồi"
-  },
-  "jsonSchemaEditor.save": {
-    "defaultMessage": "Lưu Schema"
-  },
-  "jsonSchemaEditor.title": {
-    "defaultMessage": "Trình chỉnh sửa JSON Schema"
   },
   "jsonSchemaForm.cancel": {
     "defaultMessage": "Hủy"
@@ -1540,18 +1303,6 @@
   },
   "jsonSchemaForm.submit": {
     "defaultMessage": "Gửi"
-  },
-  "keyValueEditor.addValue": {
-    "defaultMessage": "Thêm giá trị được cấu hình sẵn"
-  },
-  "keyValueEditor.defaultKeyPlaceholder": {
-    "defaultMessage": "Tên tham số..."
-  },
-  "keyValueEditor.defaultValuePlaceholder": {
-    "defaultMessage": "Giá trị tham số..."
-  },
-  "keyValueEditor.removeValue": {
-    "defaultMessage": "Xóa giá trị được cấu hình sẵn {key}"
   },
   "keyboardShortcuts.alwaysOnTopDescription": {
     "defaultMessage": "Bật/tắt cửa sổ luôn ở trên cùng"
@@ -2336,32 +2087,32 @@
   "navigation.itemApps": {
     "defaultMessage": "Ứng dụng"
   },
-  "navigation.itemExtensions": {
-    "defaultMessage": "Tiện ích mở rộng"
-  },
   "navigation.itemHome": {
     "defaultMessage": "Trò chuyện mới"
-  },
-  "navigation.itemRecipes": {
-    "defaultMessage": "Công thức"
   },
   "navigation.itemScheduler": {
     "defaultMessage": "Bộ lập lịch"
   },
-  "navigation.itemSessions": {
-    "defaultMessage": "Lịch sử phiên"
-  },
   "navigation.itemSettings": {
     "defaultMessage": "Cài đặt"
   },
-  "navigation.itemSkills": {
-    "defaultMessage": "Kỹ năng"
-  },
-  "navigationPanel.chats": {
-    "defaultMessage": "Cuộc trò chuyện"
+  "navigationPanel.help": {
+    "defaultMessage": "Trợ giúp"
   },
   "navigationPanel.noChats": {
     "defaultMessage": "Không có cuộc trò chuyện gần đây"
+  },
+  "navigationPanel.noResults": {
+    "defaultMessage": "Không có cuộc trò chuyện phù hợp"
+  },
+  "navigationPanel.projects": {
+    "defaultMessage": "Dự án"
+  },
+  "navigationPanel.search": {
+    "defaultMessage": "Tìm kiếm cuộc trò chuyện"
+  },
+  "navigationPanel.searching": {
+    "defaultMessage": "Đang tìm kiếm..."
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Phiên chưa đặt tên"
@@ -2404,99 +2155,6 @@
   },
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "Chia sẻ dữ liệu sử dụng ẩn danh"
-  },
-  "parameterInput.defaultValue": {
-    "defaultMessage": "Giá trị mặc định"
-  },
-  "parameterInput.defaultValuePlaceholder": {
-    "defaultMessage": "Nhập giá trị mặc định"
-  },
-  "parameterInput.deleteParameter": {
-    "defaultMessage": "Xóa tham số: {key}"
-  },
-  "parameterInput.description": {
-    "defaultMessage": "mô tả"
-  },
-  "parameterInput.descriptionHelp": {
-    "defaultMessage": "Đây là thông báo mà người dùng cuối sẽ thấy."
-  },
-  "parameterInput.descriptionPlaceholder": {
-    "defaultMessage": "Ví dụ: \"Nhập tên cho thành phần mới\""
-  },
-  "parameterInput.inputType": {
-    "defaultMessage": "Kiểu nhập"
-  },
-  "parameterInput.optional": {
-    "defaultMessage": "Tùy chọn"
-  },
-  "parameterInput.optionsHelp": {
-    "defaultMessage": "Nhập mỗi lựa chọn trên một dòng mới. Các lựa chọn này sẽ hiển thị dưới dạng danh sách thả xuống."
-  },
-  "parameterInput.optionsLabel": {
-    "defaultMessage": "Lựa chọn (mỗi dòng một lựa chọn)"
-  },
-  "parameterInput.optionsPlaceholder": {
-    "defaultMessage": "Lựa chọn 1 Lựa chọn 2 Lựa chọn 3"
-  },
-  "parameterInput.required": {
-    "defaultMessage": "Bắt buộc"
-  },
-  "parameterInput.requirement": {
-    "defaultMessage": "Yêu cầu"
-  },
-  "parameterInput.typeBoolean": {
-    "defaultMessage": "Boolean"
-  },
-  "parameterInput.typeNumber": {
-    "defaultMessage": "Số"
-  },
-  "parameterInput.typeSelect": {
-    "defaultMessage": "Lựa chọn"
-  },
-  "parameterInput.typeString": {
-    "defaultMessage": "Chuỗi"
-  },
-  "parameterInput.unused": {
-    "defaultMessage": "Không dùng"
-  },
-  "parameterInput.unusedWarningTitle": {
-    "defaultMessage": "Tham số này không được sử dụng trong hướng dẫn hoặc lời nhắc. Nó sẽ khả dụng để nhập thủ công nhưng có thể không cần thiết."
-  },
-  "parameterInputModal.backToForm": {
-    "defaultMessage": "Quay lại biểu mẫu tham số"
-  },
-  "parameterInputModal.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "parameterInputModal.cancelRecipeSetup": {
-    "defaultMessage": "Hủy thiết lập công thức"
-  },
-  "parameterInputModal.enterValue": {
-    "defaultMessage": "Nhập giá trị cho {key}..."
-  },
-  "parameterInputModal.false": {
-    "defaultMessage": "Sai"
-  },
-  "parameterInputModal.recipeParameters": {
-    "defaultMessage": "Tham số công thức"
-  },
-  "parameterInputModal.select": {
-    "defaultMessage": "Chọn..."
-  },
-  "parameterInputModal.selectOption": {
-    "defaultMessage": "Chọn một lựa chọn..."
-  },
-  "parameterInputModal.startNewChat": {
-    "defaultMessage": "Bắt đầu trò chuyện mới (Không dùng công thức)"
-  },
-  "parameterInputModal.startRecipe": {
-    "defaultMessage": "Bắt đầu công thức"
-  },
-  "parameterInputModal.true": {
-    "defaultMessage": "Đúng"
-  },
-  "parameterInputModal.whatToDo": {
-    "defaultMessage": "Bạn muốn làm gì?"
   },
   "permissionModal.alwaysAllow": {
     "defaultMessage": "Luôn cho phép"
@@ -2888,363 +2546,6 @@
   "providerSetupActions.submit": {
     "defaultMessage": "Gửi"
   },
-  "recipeActivityEditor.activitiesDescription": {
-    "defaultMessage": "Các lời nhắc nổi bật và nút hoạt động sẽ hiển thị trong cửa sổ trò chuyện công thức."
-  },
-  "recipeActivityEditor.activitiesLabel": {
-    "defaultMessage": "Hoạt động"
-  },
-  "recipeActivityEditor.activityButtonsDescription": {
-    "defaultMessage": "Các nút có thể nhấp sẽ xuất hiện bên dưới tin nhắn để giúp người dùng tương tác với công thức của bạn."
-  },
-  "recipeActivityEditor.activityButtonsLabel": {
-    "defaultMessage": "Nút hoạt động"
-  },
-  "recipeActivityEditor.addActivity": {
-    "defaultMessage": "Thêm hoạt động"
-  },
-  "recipeActivityEditor.addNewActivityPlaceholder": {
-    "defaultMessage": "Thêm hoạt động mới..."
-  },
-  "recipeActivityEditor.messageDescription": {
-    "defaultMessage": "Một tin nhắn được định dạng sẽ xuất hiện ở đầu công thức. Hỗ trợ định dạng markdown."
-  },
-  "recipeActivityEditor.messageLabel": {
-    "defaultMessage": "Tin nhắn"
-  },
-  "recipeActivityEditor.messagePlaceholder": {
-    "defaultMessage": "Nhập tin nhắn giới thiệu hướng tới người dùng cho công thức của bạn (hỗ trợ **đậm**, *nghiêng*, `mã`, v.v.)"
-  },
-  "recipeExtensionSelector.description": {
-    "defaultMessage": "Chọn các phần mở rộng sẽ khả dụng khi chạy công thức này. Để trống để sử dụng các phần mở rộng mặc định."
-  },
-  "recipeExtensionSelector.extensionsSelected": {
-    "defaultMessage": "{count,plural,one{# phần mở rộng được chọn} other{# phần mở rộng được chọn}}"
-  },
-  "recipeExtensionSelector.label": {
-    "defaultMessage": "Phần mở rộng (Tùy chọn)"
-  },
-  "recipeExtensionSelector.noExtensionsAvailable": {
-    "defaultMessage": "Không có phần mở rộng nào khả dụng"
-  },
-  "recipeExtensionSelector.noExtensionsFound": {
-    "defaultMessage": "Không tìm thấy phần mở rộng nào"
-  },
-  "recipeExtensionSelector.searchPlaceholder": {
-    "defaultMessage": "Tìm kiếm phần mở rộng..."
-  },
-  "recipeFormFields.addParameter": {
-    "defaultMessage": "Thêm tham số"
-  },
-  "recipeFormFields.advancedOptions": {
-    "defaultMessage": "Tùy chọn nâng cao"
-  },
-  "recipeFormFields.advancedOptionsHint": {
-    "defaultMessage": "Hoạt động, tham số, mô hình, phần mở rộng, lược đồ phản hồi, công thức con"
-  },
-  "recipeFormFields.descriptionLabel": {
-    "defaultMessage": "Mô tả"
-  },
-  "recipeFormFields.descriptionPlaceholder": {
-    "defaultMessage": "Mô tả ngắn gọn về chức năng của công thức này"
-  },
-  "recipeFormFields.enterValueFor": {
-    "defaultMessage": "Nhập giá trị cho {key}"
-  },
-  "recipeFormFields.initialPrompt": {
-    "defaultMessage": "Lời nhắc ban đầu"
-  },
-  "recipeFormFields.instructionsLabel": {
-    "defaultMessage": "Hướng dẫn"
-  },
-  "recipeFormFields.instructionsPlaceholder": {
-    "defaultMessage": "Hướng dẫn chi tiết cho AI, ẩn khỏi người dùng"
-  },
-  "recipeFormFields.openEditor": {
-    "defaultMessage": "Mở trình chỉnh sửa"
-  },
-  "recipeFormFields.parameterNamePlaceholder": {
-    "defaultMessage": "Nhập tên tham số..."
-  },
-  "recipeFormFields.parametersDescription": {
-    "defaultMessage": "Tham số sẽ được tự động phát hiện từ cú pháp '{{parameter_name}}' trong hướng dẫn/lời nhắc/hoạt động, hoặc bạn có thể thêm thủ công bên dưới."
-  },
-  "recipeFormFields.parametersLabel": {
-    "defaultMessage": "Tham số"
-  },
-  "recipeFormFields.promptOptionalHint": {
-    "defaultMessage": "(Tùy chọn - Bắt buộc có Hướng dẫn hoặc Lời nhắc)"
-  },
-  "recipeFormFields.promptPlaceholder": {
-    "defaultMessage": "Lời nhắc điền sẵn khi công thức bắt đầu"
-  },
-  "recipeFormFields.responseJsonSchema": {
-    "defaultMessage": "Lược đồ JSON phản hồi"
-  },
-  "recipeFormFields.responseJsonSchemaDescription": {
-    "defaultMessage": "Xác định cấu trúc mong đợi của phản hồi từ AI bằng định dạng JSON Schema"
-  },
-  "recipeFormFields.templateVarHint": {
-    "defaultMessage": "Dùng '{{parameter_name}}' để định nghĩa các tham số có thể điền khi chạy công thức."
-  },
-  "recipeFormFields.titleLabel": {
-    "defaultMessage": "Tiêu đề"
-  },
-  "recipeFormFields.titlePlaceholder": {
-    "defaultMessage": "Tiêu đề công thức"
-  },
-  "recipeHeader.recipeLabel": {
-    "defaultMessage": "Công thức"
-  },
-  "recipeModelSelector.backToModelList": {
-    "defaultMessage": "Quay lại danh sách mô hình"
-  },
-  "recipeModelSelector.enterCustomModel": {
-    "defaultMessage": "Nhập tên mô hình tùy chỉnh"
-  },
-  "recipeModelSelector.enterModelNotListed": {
-    "defaultMessage": "Nhập một mô hình không có trong danh sách..."
-  },
-  "recipeModelSelector.fetchError": {
-    "defaultMessage": "Không lấy được danh sách mô hình. Vui lòng thử lại sau."
-  },
-  "recipeModelSelector.loadingModels": {
-    "defaultMessage": "Đang tải mô hình…"
-  },
-  "recipeModelSelector.modelHint": {
-    "defaultMessage": "Để trống để sử dụng mô hình mặc định cho nhà cung cấp đã chọn"
-  },
-  "recipeModelSelector.modelLabel": {
-    "defaultMessage": "Mô hình (Tùy chọn)"
-  },
-  "recipeModelSelector.providerHint": {
-    "defaultMessage": "Để trống để sử dụng nhà cung cấp mặc định đã cấu hình trong cài đặt"
-  },
-  "recipeModelSelector.providerLabel": {
-    "defaultMessage": "Nhà cung cấp (Tùy chọn)"
-  },
-  "recipeModelSelector.selectModel": {
-    "defaultMessage": "Chọn một mô hình"
-  },
-  "recipeModelSelector.selectProvider": {
-    "defaultMessage": "Chọn nhà cung cấp"
-  },
-  "recipeModelSelector.useDefaultProvider": {
-    "defaultMessage": "Sử dụng nhà cung cấp mặc định"
-  },
-  "recipeNameField.defaultLabel": {
-    "defaultMessage": "Tên công thức"
-  },
-  "recipeNameField.formatHint": {
-    "defaultMessage": "Sẽ được định dạng tự động (chữ thường, dấu gạch ngang thay cho khoảng trắng)"
-  },
-  "recipeWarningModal.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "recipeWarningModal.descriptionLabel": {
-    "defaultMessage": "Mô tả:"
-  },
-  "recipeWarningModal.firstTimeDescription": {
-    "defaultMessage": "Bạn sắp thực thi một công thức mà bạn chưa từng chạy trước đây."
-  },
-  "recipeWarningModal.hiddenCharsWarning": {
-    "defaultMessage": "Công thức này chứa các ký tự ẩn sẽ bị bỏ qua vì sự an toàn của bạn, vì chúng có thể được sử dụng cho mục đích độc hại."
-  },
-  "recipeWarningModal.instructionsLabel": {
-    "defaultMessage": "Hướng dẫn:"
-  },
-  "recipeWarningModal.newRecipeWarningTitle": {
-    "defaultMessage": "⚠️ Cảnh báo công thức mới"
-  },
-  "recipeWarningModal.recipePreview": {
-    "defaultMessage": "Xem trước công thức:"
-  },
-  "recipeWarningModal.securityWarningTitle": {
-    "defaultMessage": "⚠️ Cảnh báo bảo mật"
-  },
-  "recipeWarningModal.titleLabel": {
-    "defaultMessage": "Tiêu đề:"
-  },
-  "recipeWarningModal.trustAndExecute": {
-    "defaultMessage": "Tin cậy và thực thi"
-  },
-  "recipeWarningModal.trustSource": {
-    "defaultMessage": "Chỉ tiếp tục nếu bạn tin cậy nguồn của công thức này."
-  },
-  "recipesView.addSchedule": {
-    "defaultMessage": "Thêm lịch"
-  },
-  "recipesView.addSlashCommand": {
-    "defaultMessage": "Thêm lệnh gạch chéo"
-  },
-  "recipesView.adjustSearchTerms": {
-    "defaultMessage": "Thử điều chỉnh từ khóa tìm kiếm của bạn"
-  },
-  "recipesView.allFiles": {
-    "defaultMessage": "Tất cả tệp"
-  },
-  "recipesView.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "recipesView.copyDeeplink": {
-    "defaultMessage": "Sao chép deeplink"
-  },
-  "recipesView.copyDeeplinkFailedMsg": {
-    "defaultMessage": "Không sao chép được deeplink vào bộ nhớ tạm"
-  },
-  "recipesView.copyFailedTitle": {
-    "defaultMessage": "Sao chép thất bại"
-  },
-  "recipesView.copyYaml": {
-    "defaultMessage": "Sao chép YAML"
-  },
-  "recipesView.copyYamlFailedMsg": {
-    "defaultMessage": "Không sao chép được YAML công thức vào bộ nhớ tạm"
-  },
-  "recipesView.createRecipe": {
-    "defaultMessage": "Tạo công thức"
-  },
-  "recipesView.deeplinkCopiedMsg": {
-    "defaultMessage": "Deeplink công thức đã được sao chép vào bộ nhớ tạm"
-  },
-  "recipesView.deeplinkCopiedTitle": {
-    "defaultMessage": "Đã sao chép deeplink"
-  },
-  "recipesView.deleteRecipe": {
-    "defaultMessage": "Xóa công thức"
-  },
-  "recipesView.deleteRecipeConfirm": {
-    "defaultMessage": "Bạn có chắc chắn muốn xóa \"{title}\" không?"
-  },
-  "recipesView.deleteRecipeDetail": {
-    "defaultMessage": "Tệp công thức sẽ bị xóa."
-  },
-  "recipesView.deleteRecipeTitle": {
-    "defaultMessage": "Xóa công thức"
-  },
-  "recipesView.editRecipe": {
-    "defaultMessage": "Chỉnh sửa công thức"
-  },
-  "recipesView.editSchedule": {
-    "defaultMessage": "Chỉnh sửa lịch"
-  },
-  "recipesView.editSlashCommand": {
-    "defaultMessage": "Chỉnh sửa lệnh gạch chéo"
-  },
-  "recipesView.errorLoadingRecipes": {
-    "defaultMessage": "Lỗi khi tải công thức"
-  },
-  "recipesView.exportFailedMsg": {
-    "defaultMessage": "Không xuất được công thức ra tệp"
-  },
-  "recipesView.exportFailedTitle": {
-    "defaultMessage": "Xuất thất bại"
-  },
-  "recipesView.exportRecipeDialogTitle": {
-    "defaultMessage": "Xuất công thức"
-  },
-  "recipesView.exportToFile": {
-    "defaultMessage": "Xuất ra tệp"
-  },
-  "recipesView.noMatchingRecipes": {
-    "defaultMessage": "Không tìm thấy công thức phù hợp"
-  },
-  "recipesView.noSavedRecipes": {
-    "defaultMessage": "Chưa có công thức nào được lưu"
-  },
-  "recipesView.noSavedRecipesDescription": {
-    "defaultMessage": "Các công thức được lưu từ cuộc trò chuyện sẽ hiển thị ở đây."
-  },
-  "recipesView.openInNewWindow": {
-    "defaultMessage": "Mở trong cửa sổ mới"
-  },
-  "recipesView.recipeDeletedSuccess": {
-    "defaultMessage": "Đã xóa công thức thành công"
-  },
-  "recipesView.recipeExportedMsg": {
-    "defaultMessage": "Đã lưu công thức vào {filePath}"
-  },
-  "recipesView.recipeExportedTitle": {
-    "defaultMessage": "Đã xuất công thức"
-  },
-  "recipesView.recipesDescription": {
-    "defaultMessage": "Xem và quản lý các công thức đã lưu để nhanh chóng bắt đầu phiên mới với các cấu hình định sẵn. {shortcut} để tìm kiếm."
-  },
-  "recipesView.recipesTitle": {
-    "defaultMessage": "Công thức"
-  },
-  "recipesView.remove": {
-    "defaultMessage": "Xóa"
-  },
-  "recipesView.removeSchedule": {
-    "defaultMessage": "Xóa lịch trình"
-  },
-  "recipesView.runs": {
-    "defaultMessage": "Chạy {schedule}"
-  },
-  "recipesView.save": {
-    "defaultMessage": "Lưu"
-  },
-  "recipesView.scheduleDialogTitle": {
-    "defaultMessage": "{action} lịch trình"
-  },
-  "recipesView.scheduleRemovedMsg": {
-    "defaultMessage": "Công thức sẽ không còn chạy tự động nữa"
-  },
-  "recipesView.scheduleRemovedTitle": {
-    "defaultMessage": "Đã xóa lịch trình"
-  },
-  "recipesView.scheduleSavedMsg": {
-    "defaultMessage": "Công thức sẽ chạy {schedule}"
-  },
-  "recipesView.scheduleSavedTitle": {
-    "defaultMessage": "Đã lưu lịch trình"
-  },
-  "recipesView.searchRecipesPlaceholder": {
-    "defaultMessage": "Tìm công thức..."
-  },
-  "recipesView.shareRecipe": {
-    "defaultMessage": "Chia sẻ công thức"
-  },
-  "recipesView.slashCommandDescription": {
-    "defaultMessage": "Đặt một lệnh gạch chéo để nhanh chóng chạy công thức này từ bất kỳ cuộc trò chuyện nào"
-  },
-  "recipesView.slashCommandPlaceholder": {
-    "defaultMessage": "command-name"
-  },
-  "recipesView.slashCommandRemovedMsg": {
-    "defaultMessage": "Đã xóa lệnh gạch chéo của công thức"
-  },
-  "recipesView.slashCommandRemovedTitle": {
-    "defaultMessage": "Đã xóa lệnh gạch chéo"
-  },
-  "recipesView.slashCommandSavedMsg": {
-    "defaultMessage": "Dùng /{command} để chạy công thức này"
-  },
-  "recipesView.slashCommandSavedTitle": {
-    "defaultMessage": "Đã lưu lệnh gạch chéo"
-  },
-  "recipesView.slashCommandTitle": {
-    "defaultMessage": "Lệnh gạch chéo"
-  },
-  "recipesView.slashCommandUsageHint": {
-    "defaultMessage": "Dùng /{command} trong bất kỳ cuộc trò chuyện nào để chạy công thức này"
-  },
-  "recipesView.tryAgain": {
-    "defaultMessage": "Thử lại"
-  },
-  "recipesView.useRecipe": {
-    "defaultMessage": "Dùng công thức"
-  },
-  "recipesView.yamlCopiedMsg": {
-    "defaultMessage": "Đã sao chép YAML của công thức vào bộ nhớ tạm"
-  },
-  "recipesView.yamlCopiedTitle": {
-    "defaultMessage": "Đã sao chép YAML"
-  },
-  "recipesView.yamlFiles": {
-    "defaultMessage": "Tệp YAML"
-  },
   "resetProviderSection.resetButton": {
     "defaultMessage": "Đặt lại nhà cung cấp và mô hình"
   },
@@ -3416,9 +2717,6 @@
   "scheduleDetailView.viewingScheduleId": {
     "defaultMessage": "Đang xem ID lịch trình: {id}"
   },
-  "scheduleModal.browseYaml": {
-    "defaultMessage": "Duyệt tìm tệp YAML..."
-  },
   "scheduleModal.cancel": {
     "defaultMessage": "Hủy"
   },
@@ -3431,26 +2729,8 @@
   "scheduleModal.creating": {
     "defaultMessage": "Đang tạo..."
   },
-  "scheduleModal.deepLink": {
-    "defaultMessage": "Liên kết sâu"
-  },
-  "scheduleModal.deepLinkPlaceholder": {
-    "defaultMessage": "Dán liên kết goose://recipe vào đây..."
-  },
   "scheduleModal.editSchedule": {
     "defaultMessage": "Sửa lịch trình"
-  },
-  "scheduleModal.failedParseRecipe": {
-    "defaultMessage": "Không thể phân tích công thức từ tệp."
-  },
-  "scheduleModal.failedReadFile": {
-    "defaultMessage": "Không thể đọc tệp đã chọn."
-  },
-  "scheduleModal.invalidDeepLink": {
-    "defaultMessage": "Liên kết sâu không hợp lệ. Vui lòng dùng liên kết goose://recipe."
-  },
-  "scheduleModal.invalidFileType": {
-    "defaultMessage": "Loại tệp không hợp lệ: Vui lòng chọn tệp YAML (.yaml hoặc .yml)"
   },
   "scheduleModal.nameLabel": {
     "defaultMessage": "Tên:"
@@ -3458,17 +2738,14 @@
   "scheduleModal.namePlaceholder": {
     "defaultMessage": "ví dụ: daily-summary-job"
   },
-  "scheduleModal.provideValidRecipe": {
-    "defaultMessage": "Vui lòng cung cấp nguồn công thức hợp lệ."
+  "scheduleModal.promptLabel": {
+    "defaultMessage": "Lời nhắc:"
   },
-  "scheduleModal.recipeDescription": {
-    "defaultMessage": "Mô tả: {description}"
+  "scheduleModal.promptPlaceholder": {
+    "defaultMessage": "goose nên làm gì trong mỗi lần chạy?"
   },
-  "scheduleModal.recipeParsed": {
-    "defaultMessage": "Đã phân tích công thức thành công"
-  },
-  "scheduleModal.recipeTitle": {
-    "defaultMessage": "Tiêu đề: {title}"
+  "scheduleModal.promptRequired": {
+    "defaultMessage": "Cần có lời nhắc."
   },
   "scheduleModal.scheduleIdRequired": {
     "defaultMessage": "Bắt buộc phải có ID lịch trình."
@@ -3476,20 +2753,11 @@
   "scheduleModal.scheduleLabel": {
     "defaultMessage": "Lịch trình:"
   },
-  "scheduleModal.selected": {
-    "defaultMessage": "Đã chọn: {path}"
-  },
-  "scheduleModal.sourceLabel": {
-    "defaultMessage": "Nguồn:"
-  },
   "scheduleModal.updateSchedule": {
     "defaultMessage": "Cập nhật lịch trình"
   },
   "scheduleModal.updating": {
     "defaultMessage": "Đang cập nhật..."
-  },
-  "scheduleModal.yaml": {
-    "defaultMessage": "YAML"
   },
   "schedulesView.confirmDelete": {
     "defaultMessage": "Xóa lịch trình \"{id}\"? Công thức sẽ được giữ lại."
@@ -3662,20 +2930,23 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Hủy"
   },
-  "sessionActionsHeader.close": {
-    "defaultMessage": "Đóng"
+  "sessionActionsHeader.deleteConfirm": {
+    "defaultMessage": "Bạn có chắc chắn muốn xóa phiên \"{name}\" không? Hành động này không thể hoàn tác."
   },
-  "sessionActionsHeader.copiedJson": {
-    "defaultMessage": "Đã sao chép JSON của phiên"
+  "sessionActionsHeader.deleteFailed": {
+    "defaultMessage": "Không thể xóa phiên: {error}"
   },
-  "sessionActionsHeader.copiedText": {
-    "defaultMessage": "Đã sao chép văn bản"
+  "sessionActionsHeader.deleteSession": {
+    "defaultMessage": "Xóa phiên"
   },
-  "sessionActionsHeader.copyJson": {
-    "defaultMessage": "Sao chép JSON"
+  "sessionActionsHeader.deleteTitle": {
+    "defaultMessage": "Xóa phiên"
   },
-  "sessionActionsHeader.copyText": {
-    "defaultMessage": "Sao chép văn bản"
+  "sessionActionsHeader.deleted": {
+    "defaultMessage": "Đã xóa phiên làm việc thành công"
+  },
+  "sessionActionsHeader.deleting": {
+    "defaultMessage": "Đang xóa..."
   },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Không thể nhân bản phiên: {error}"
@@ -3685,18 +2956,6 @@
   },
   "sessionActionsHeader.duplicated": {
     "defaultMessage": "Đã nhân bản phiên"
-  },
-  "sessionActionsHeader.fullTextTitle": {
-    "defaultMessage": "Giá trị văn bản"
-  },
-  "sessionActionsHeader.jsonFailed": {
-    "defaultMessage": "Không thể tải JSON của phiên: {error}"
-  },
-  "sessionActionsHeader.jsonTitle": {
-    "defaultMessage": "JSON của phiên"
-  },
-  "sessionActionsHeader.loadingJson": {
-    "defaultMessage": "Đang tải JSON..."
   },
   "sessionActionsHeader.renameFailed": {
     "defaultMessage": "Không thể đổi tên phiên: {error}"
@@ -3719,9 +2978,6 @@
   "sessionActionsHeader.saving": {
     "defaultMessage": "Đang lưu..."
   },
-  "sessionActionsHeader.viewJson": {
-    "defaultMessage": "Xem JSON của phiên"
-  },
   "sessionIndicators.error": {
     "defaultMessage": "Phiên gặp lỗi"
   },
@@ -3730,156 +2986,6 @@
   },
   "sessionIndicators.streaming": {
     "defaultMessage": "Đang truyền phát"
-  },
-  "sessionViewComponents.empty.description": {
-    "defaultMessage": "Phiên này không chứa tin nhắn nào"
-  },
-  "sessionViewComponents.empty.title": {
-    "defaultMessage": "Không tìm thấy tin nhắn nào"
-  },
-  "sessionViewComponents.error.loading": {
-    "defaultMessage": "Lỗi khi tải chi tiết phiên"
-  },
-  "sessionViewComponents.error.tryAgain": {
-    "defaultMessage": "Thử lại"
-  },
-  "sessionViewComponents.role.assistant": {
-    "defaultMessage": "Goose"
-  },
-  "sessionViewComponents.role.user": {
-    "defaultMessage": "Bạn"
-  },
-  "sessions.action.delete": {
-    "defaultMessage": "Xóa phiên"
-  },
-  "sessions.action.duplicate": {
-    "defaultMessage": "Nhân bản phiên"
-  },
-  "sessions.action.editName": {
-    "defaultMessage": "Sửa tên phiên"
-  },
-  "sessions.action.export": {
-    "defaultMessage": "Xuất phiên"
-  },
-  "sessions.action.openNewWindow": {
-    "defaultMessage": "Mở trong cửa sổ mới"
-  },
-  "sessions.action.shareNostr": {
-    "defaultMessage": "Chia sẻ liên kết Nostr được mã hóa"
-  },
-  "sessions.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "sessions.chatHistory": {
-    "defaultMessage": "Lịch sử trò chuyện"
-  },
-  "sessions.chatHistoryDesc": {
-    "defaultMessage": "Xem và tìm kiếm các cuộc trò chuyện trước đây của bạn với Goose. {shortcut} để tìm kiếm."
-  },
-  "sessions.close": {
-    "defaultMessage": "Đóng"
-  },
-  "sessions.delete.message": {
-    "defaultMessage": "Bạn có chắc chắn muốn xóa phiên \"{name}\" không? Hành động này không thể hoàn tác."
-  },
-  "sessions.delete.title": {
-    "defaultMessage": "Xóa phiên"
-  },
-  "sessions.edit.placeholder": {
-    "defaultMessage": "Nhập mô tả phiên"
-  },
-  "sessions.edit.title": {
-    "defaultMessage": "Sửa mô tả phiên"
-  },
-  "sessions.empty.description": {
-    "defaultMessage": "Lịch sử trò chuyện của bạn sẽ hiển thị ở đây"
-  },
-  "sessions.empty.title": {
-    "defaultMessage": "Không tìm thấy phiên trò chuyện nào"
-  },
-  "sessions.error.loading": {
-    "defaultMessage": "Lỗi khi tải các phiên"
-  },
-  "sessions.error.tryAgain": {
-    "defaultMessage": "Thử lại"
-  },
-  "sessions.import": {
-    "defaultMessage": "Nhập phiên"
-  },
-  "sessions.importNostr": {
-    "defaultMessage": "Nhập liên kết"
-  },
-  "sessions.importNostr.description": {
-    "defaultMessage": "Dán một liên kết chia sẻ Nostr của Goose để tìm nạp, giải mã và nhập phiên."
-  },
-  "sessions.importNostr.placeholder": {
-    "defaultMessage": "goose://sessions/nostr?nevent=...&key=..."
-  },
-  "sessions.importNostr.title": {
-    "defaultMessage": "Nhập phiên Nostr"
-  },
-  "sessions.importing": {
-    "defaultMessage": "Đang nhập..."
-  },
-  "sessions.loadingMore": {
-    "defaultMessage": "Đang tải thêm phiên..."
-  },
-  "sessions.save": {
-    "defaultMessage": "Lưu"
-  },
-  "sessions.saving": {
-    "defaultMessage": "Đang lưu..."
-  },
-  "sessions.search.noResults": {
-    "defaultMessage": "Không tìm thấy phiên phù hợp"
-  },
-  "sessions.search.noResultsDesc": {
-    "defaultMessage": "Hãy thử điều chỉnh từ khóa tìm kiếm của bạn"
-  },
-  "sessions.searchPlaceholder": {
-    "defaultMessage": "Tìm kiếm lịch sử..."
-  },
-  "sessions.shareNostr.description": {
-    "defaultMessage": "Bất kỳ ai có liên kết này đều có thể tải về và giải mã phiên làm việc. Hãy coi nó như một bí mật."
-  },
-  "sessions.shareNostr.title": {
-    "defaultMessage": "Liên kết chia sẻ Nostr được mã hóa"
-  },
-  "sessions.toast.copied": {
-    "defaultMessage": "Đã sao chép vào bộ nhớ tạm"
-  },
-  "sessions.toast.deleteFailed": {
-    "defaultMessage": "Không thể xóa phiên làm việc \"{name}\": {error}"
-  },
-  "sessions.toast.deleted": {
-    "defaultMessage": "Đã xóa phiên làm việc thành công"
-  },
-  "sessions.toast.duplicateFailed": {
-    "defaultMessage": "Không thể nhân bản phiên làm việc: {error}"
-  },
-  "sessions.toast.duplicated": {
-    "defaultMessage": "Đã nhân bản phiên làm việc \"{name}\" thành công"
-  },
-  "sessions.toast.exported": {
-    "defaultMessage": "Đã xuất phiên làm việc thành công"
-  },
-  "sessions.toast.importFailed": {
-    "defaultMessage": "Không thể nhập phiên làm việc: {error}"
-  },
-  "sessions.toast.imported": {
-    "defaultMessage": "Đã nhập phiên làm việc thành công"
-  },
-  "sessions.toast.shareNostr": {
-    "defaultMessage": "Đã tạo liên kết chia sẻ Nostr được mã hóa"
-  },
-  "sessions.toast.shareNostrFailed": {
-    "defaultMessage": "Không thể tạo liên kết chia sẻ Nostr: {error}"
-  },
-  "sessions.toast.updateFailed": {
-    "defaultMessage": "Không thể cập nhật mô tả phiên làm việc: {error}"
-  },
-  "sessions.toast.updated": {
-    "defaultMessage": "Đã cập nhật mô tả phiên làm việc thành công"
   },
   "settings.appearance.description": {
     "defaultMessage": "Định cấu hình cách goose hiển thị trên hệ thống của bạn"
@@ -4058,6 +3164,9 @@
   "settingsView.tabChat": {
     "defaultMessage": "Trò chuyện"
   },
+  "settingsView.tabExtensions": {
+    "defaultMessage": "Tiện ích mở rộng"
+  },
   "settingsView.tabExternalBackend": {
     "defaultMessage": "Backend bên ngoài"
   },
@@ -4072,6 +3181,9 @@
   },
   "settingsView.tabPrompts": {
     "defaultMessage": "Lời nhắc"
+  },
+  "settingsView.tabSkills": {
+    "defaultMessage": "Kỹ năng"
   },
   "settingsView.title": {
     "defaultMessage": "Cài đặt"
@@ -4094,37 +3206,31 @@
   "shortcutRecorder.save": {
     "defaultMessage": "Lưu"
   },
-  "skillsView.addSkill": {
-    "defaultMessage": "Thêm kỹ năng"
-  },
-  "skillsView.adjustSearchTerms": {
+  "skillsSettings.adjustSearchTerms": {
     "defaultMessage": "Hãy thử điều chỉnh từ khóa tìm kiếm của bạn"
   },
-  "skillsView.comingSoon": {
-    "defaultMessage": "Sắp ra mắt"
-  },
-  "skillsView.errorLoadingSkills": {
+  "skillsSettings.errorLoadingSkills": {
     "defaultMessage": "Lỗi khi tải kỹ năng"
   },
-  "skillsView.noMatchingSkills": {
+  "skillsSettings.noMatchingSkills": {
     "defaultMessage": "Không tìm thấy kỹ năng phù hợp"
   },
-  "skillsView.noSkillsDescription": {
+  "skillsSettings.noSkillsDescription": {
     "defaultMessage": "Kỹ năng được tải từ các tệp SKILL.md trong ~/.config/agents/skills/, .goose/skills/, hoặc các thư mục được hỗ trợ khác."
   },
-  "skillsView.noSkillsInstalled": {
+  "skillsSettings.noSkillsInstalled": {
     "defaultMessage": "Chưa cài đặt kỹ năng nào"
   },
-  "skillsView.searchSkillsPlaceholder": {
+  "skillsSettings.searchSkillsPlaceholder": {
     "defaultMessage": "Tìm kiếm kỹ năng..."
   },
-  "skillsView.skillsDescription": {
+  "skillsSettings.skillsDescription": {
     "defaultMessage": "Xem các kỹ năng đã cài đặt giúp mở rộng khả năng của Goose. {shortcut} để tìm kiếm."
   },
-  "skillsView.skillsTitle": {
+  "skillsSettings.skillsTitle": {
     "defaultMessage": "Kỹ năng"
   },
-  "skillsView.tryAgain": {
+  "skillsSettings.tryAgain": {
     "defaultMessage": "Thử lại"
   },
   "spellcheckToggle.description": {
@@ -4153,99 +3259,6 @@
   },
   "stringUtils.ollamaNotConfiguredSuffix": {
     "defaultMessage": "phải được cài đặt trên máy của bạn và đang mở, hoặc bạn phải nhập một giá trị cho OLLAMA_HOST."
-  },
-  "subRecipeEditor.addExisting": {
-    "defaultMessage": "Thêm hiện có"
-  },
-  "subRecipeEditor.createNew": {
-    "defaultMessage": "Tạo công thức con mới"
-  },
-  "subRecipeEditor.deleteSubrecipe": {
-    "defaultMessage": "Xóa công thức con {name}"
-  },
-  "subRecipeEditor.description": {
-    "defaultMessage": "Công thức con là các công thức có thể được gọi như công cụ trong quá trình thực thi. Chúng cho phép quy trình làm việc nhiều bước và các thành phần có thể tái sử dụng."
-  },
-  "subRecipeEditor.duplicateName": {
-    "defaultMessage": "Tên trùng lặp"
-  },
-  "subRecipeEditor.duplicateNameMsg": {
-    "defaultMessage": "Đã tồn tại một công thức con có tên \"{name}\". Vui lòng sử dụng một tên duy nhất."
-  },
-  "subRecipeEditor.editSubrecipe": {
-    "defaultMessage": "Chỉnh sửa công thức con {name}"
-  },
-  "subRecipeEditor.label": {
-    "defaultMessage": "Công thức con"
-  },
-  "subRecipeEditor.preconfiguredValues": {
-    "defaultMessage": "Giá trị được cấu hình sẵn:"
-  },
-  "subRecipeEditor.sequential": {
-    "defaultMessage": "Tuần tự"
-  },
-  "subRecipeModal.addTitle": {
-    "defaultMessage": "Thêm công thức con"
-  },
-  "subRecipeModal.apply": {
-    "defaultMessage": "Áp dụng"
-  },
-  "subRecipeModal.browse": {
-    "defaultMessage": "Duyệt"
-  },
-  "subRecipeModal.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "subRecipeModal.closeModal": {
-    "defaultMessage": "Đóng hộp thoại công thức con"
-  },
-  "subRecipeModal.configureTitle": {
-    "defaultMessage": "Định cấu hình công thức con"
-  },
-  "subRecipeModal.descriptionLabel": {
-    "defaultMessage": "Mô tả"
-  },
-  "subRecipeModal.descriptionPlaceholder": {
-    "defaultMessage": "Mô tả tùy chọn về chức năng của công thức con này..."
-  },
-  "subRecipeModal.invalidFile": {
-    "defaultMessage": "Tệp không hợp lệ"
-  },
-  "subRecipeModal.invalidFileMsg": {
-    "defaultMessage": "Vui lòng chọn một tệp YAML (.yaml hoặc .yml)."
-  },
-  "subRecipeModal.nameHint": {
-    "defaultMessage": "Định danh duy nhất được dùng để tạo tên công cụ"
-  },
-  "subRecipeModal.nameLabel": {
-    "defaultMessage": "Tên"
-  },
-  "subRecipeModal.namePlaceholder": {
-    "defaultMessage": "ví dụ: security_scan"
-  },
-  "subRecipeModal.pathHint": {
-    "defaultMessage": "Duyệt tìm một tệp công thức hiện có hoặc nhập đường dẫn theo cách thủ công"
-  },
-  "subRecipeModal.pathLabel": {
-    "defaultMessage": "Đường dẫn"
-  },
-  "subRecipeModal.pathPlaceholder": {
-    "defaultMessage": "ví dụ: ./subrecipes/security-analysis.yaml"
-  },
-  "subRecipeModal.preconfiguredValues": {
-    "defaultMessage": "Giá trị được cấu hình sẵn"
-  },
-  "subRecipeModal.preconfiguredValuesHint": {
-    "defaultMessage": "Giá trị tham số tùy chọn luôn được truyền vào công thức con"
-  },
-  "subRecipeModal.sequentialHint": {
-    "defaultMessage": "(Buộc thực thi tuần tự nhiều phiên bản của công thức con)"
-  },
-  "subRecipeModal.sequentialLabel": {
-    "defaultMessage": "Tuần tự khi lặp lại"
-  },
-  "subRecipeModal.subtitle": {
-    "defaultMessage": "Định cấu hình một công thức con có thể được gọi như công cụ trong quá trình thực thi công thức"
   },
   "switchModelModal.backToModelList": {
     "defaultMessage": "Quay lại danh sách mô hình"
@@ -4453,9 +3466,6 @@
   },
   "toolCallWithResponse.activityCount": {
     "defaultMessage": "Hoạt động ({count})"
-  },
-  "toolCallWithResponse.code": {
-    "defaultMessage": "Mã"
   },
   "toolCallWithResponse.loadingSpinner": {
     "defaultMessage": "Biểu tượng tải"

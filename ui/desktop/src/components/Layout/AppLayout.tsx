@@ -77,18 +77,19 @@ const AppLayoutContent: React.FC<AppLayoutContentProps> = ({ activeSessions }) =
       >
         <Button
           onClick={() => setIsNavExpanded(!isNavExpanded)}
-          className="no-drag hover:!bg-background-tertiary"
+          className="no-drag text-text-secondary hover:!bg-background-tertiary hover:text-text-primary"
           variant="ghost"
-          size="xs"
+          size="sm"
+          shape="round"
           title={navToggleTitle}
           aria-label={navToggleTitle}
         >
-          {isNavExpanded ? <PanelLeft className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {isNavExpanded ? <PanelLeft className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
         </Button>
       </div>
 
-      {/* Main content with navigation. Shared white canvas; the sidebar is a
-          rounded outlined card floating on it with breathing room. */}
+      {/* Main content with navigation. The sidebar is flush with the window
+          edge and separated from the canvas by a hairline, like Codex. */}
       <div className="flex flex-1 w-full h-full min-h-0 flex-row">
         <motion.div
           key="nav"
@@ -96,9 +97,12 @@ const AppLayoutContent: React.FC<AppLayoutContentProps> = ({ activeSessions }) =
           animate={{ width: isNavExpanded ? NAV_DIMENSIONS.NAV_WIDTH : 0 }}
           transition={{ type: 'spring', stiffness: 400, damping: 40 }}
           style={{ height: '100%' }}
-          className="relative flex-shrink-0 overflow-hidden h-full p-2"
+          className="relative flex-shrink-0 overflow-hidden h-full"
         >
-          <div className="w-full h-full overflow-hidden rounded-xl border border-border-primary">
+          <div
+            className="w-full h-full overflow-hidden"
+            style={{ width: NAV_DIMENSIONS.NAV_WIDTH }}
+          >
             <Navigation />
           </div>
         </motion.div>

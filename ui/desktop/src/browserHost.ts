@@ -5,7 +5,6 @@ import type {
   MessageBoxOptions,
   UpdaterEvent,
 } from './preload';
-import type { Recipe } from './recipe';
 import { defaultSettings, type SettingKey, type Settings } from './utils/settings';
 
 type BrowserEnvironment = {
@@ -21,7 +20,6 @@ const environment = import.meta.env as BrowserEnvironment;
 const listeners = new Map<string, Set<HostListener>>();
 const settingsPrefix = 'goose:web:setting:';
 const recentDirectoriesKey = 'goose:web:recent-directories';
-const acceptedRecipesKey = 'goose:web:accepted-recipes';
 
 function platform(): string {
   const value = navigator.platform.toLowerCase();
@@ -79,10 +77,6 @@ function openExternal(url: string): void {
   window.open(url, '_blank', 'noopener,noreferrer');
 }
 
-function recipeKey(recipe: Recipe): string {
-  return JSON.stringify(recipe);
-}
-
 function showMessageBox(options: MessageBoxOptions): { response: number } {
   const message = options.detail ? `${options.message}\n\n${options.detail}` : options.message;
   if (!options.buttons || options.buttons.length < 2) {
@@ -101,36 +95,6 @@ function createChatWindow(options: CreateChatWindowOptions = {}): void {
     url.hash = '/';
   }
   window.open(url, '_blank', 'noopener,noreferrer');
-}
-
-function selectImportSessionFile(): Promise<{
-  filePath: string;
-  contents: string;
-  error?: string;
-} | null> {
-  return new Promise((resolve) => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json,.jsonl';
-    input.addEventListener(
-      'change',
-      () => {
-        const file = input.files?.[0];
-        if (!file) {
-          resolve(null);
-          return;
-        }
-        void file
-          .text()
-          .then((contents) => resolve({ filePath: file.name, contents }))
-          .catch((error: unknown) =>
-            resolve({ filePath: file.name, contents: '', error: String(error) })
-          );
-      },
-      { once: true }
-    );
-    input.click();
-  });
 }
 
 const appConfig: Record<string, unknown> = {
@@ -161,7 +125,6 @@ const browserElectron: ElectronAPI = {
   reloadApp: () => window.location.reload(),
   checkForOllama: async () => false,
   selectFileOrDirectory: async () => null,
-  selectImportSessionFile,
   getBinaryPath: async () => '',
   readFile: async (filePath) => ({
     file: '',
@@ -221,14 +184,6 @@ const browserElectron: ElectronAPI = {
   isUsingGitHubFallback: async () => false,
   getAutoDownloadDisabled: async () => true,
   closeWindow: () => window.close(),
-  hasAcceptedRecipeBefore: async (recipe) =>
-    readJson<string[]>(acceptedRecipesKey, []).includes(recipeKey(recipe)),
-  recordRecipeHash: async (recipe) => {
-    const accepted = new Set(readJson<string[]>(acceptedRecipesKey, []));
-    accepted.add(recipeKey(recipe));
-    writeJson(acceptedRecipesKey, [...accepted]);
-    return true;
-  },
   openDirectoryInExplorer: async () => false,
   launchApp: async () => undefined,
   refreshApp: async () => undefined,

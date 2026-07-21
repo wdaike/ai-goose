@@ -182,8 +182,8 @@
   "chatInput.failedToReadImage": {
     "defaultMessage": "画像ファイルの読み込みに失敗しました"
   },
-  "chatInput.navigationShortcut": {
-    "defaultMessage": "{prefix}↑/{prefix}↓でメッセージを移動"
+  "chatInput.placeholder": {
+    "defaultMessage": "何でもできます"
   },
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "ドロップしたファイルを処理中..."
@@ -211,9 +211,6 @@
   },
   "chatInput.unknownType": {
     "defaultMessage": "不明なタイプ"
-  },
-  "chatInput.viewEditRecipe": {
-    "defaultMessage": "レシピを表示/編集"
   },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "キャンセルの完了を待機中"
@@ -337,156 +334,6 @@
   },
   "costTracker.totalSessionCost": {
     "defaultMessage": "セッション合計コスト: {cost}"
-  },
-  "createEditRecipe.clickToGenerateDeeplink": {
-    "defaultMessage": "クリックしてディープリンクを生成"
-  },
-  "createEditRecipe.close": {
-    "defaultMessage": "閉じる"
-  },
-  "createEditRecipe.copied": {
-    "defaultMessage": "コピーしました！"
-  },
-  "createEditRecipe.copy": {
-    "defaultMessage": "コピー"
-  },
-  "createEditRecipe.copyLinkDescription": {
-    "defaultMessage": "このリンクをコピーして友人と共有するか、Chromeに直接貼り付けて開けます"
-  },
-  "createEditRecipe.createRecipeTitle": {
-    "defaultMessage": "レシピを作成"
-  },
-  "createEditRecipe.createSubtitle": {
-    "defaultMessage": "再利用可能なチャットセッション用に、エージェントの動作と機能を定義する新しいレシピを作成します。"
-  },
-  "createEditRecipe.editSubtitle": {
-    "defaultMessage": "下のレシピを編集して、新しいセッションでのエージェントの動作を変更できます。"
-  },
-  "createEditRecipe.generatingDeeplink": {
-    "defaultMessage": "ディープリンクを生成中..."
-  },
-  "createEditRecipe.learnMore": {
-    "defaultMessage": "詳しく見る"
-  },
-  "createEditRecipe.recipeSavedAndLaunchedMsg": {
-    "defaultMessage": "レシピを保存して起動しました"
-  },
-  "createEditRecipe.recipeSavedMsg": {
-    "defaultMessage": "レシピを保存しました"
-  },
-  "createEditRecipe.saveAndRunFailed": {
-    "defaultMessage": "保存と実行に失敗しました"
-  },
-  "createEditRecipe.saveAndRunFailedMsg": {
-    "defaultMessage": "レシピの保存と実行に失敗しました: {error}"
-  },
-  "createEditRecipe.saveAndRunRecipe": {
-    "defaultMessage": "レシピを保存して実行"
-  },
-  "createEditRecipe.saveFailed": {
-    "defaultMessage": "保存に失敗しました"
-  },
-  "createEditRecipe.saveFailedMsg": {
-    "defaultMessage": "レシピの保存に失敗しました: {error}"
-  },
-  "createEditRecipe.saveRecipe": {
-    "defaultMessage": "レシピを保存"
-  },
-  "createEditRecipe.saving": {
-    "defaultMessage": "保存中..."
-  },
-  "createEditRecipe.validationFailed": {
-    "defaultMessage": "検証に失敗しました"
-  },
-  "createEditRecipe.validationMsg": {
-    "defaultMessage": "必須項目をすべて入力し、JSONスキーマが有効であることを確認してください。"
-  },
-  "createEditRecipe.viewEditRecipeTitle": {
-    "defaultMessage": "レシピを表示/編集"
-  },
-  "createSubRecipeInline.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "createSubRecipeInline.closeModal": {
-    "defaultMessage": "サブレシピ作成モーダルを閉じる"
-  },
-  "createSubRecipeInline.createAndAdd": {
-    "defaultMessage": "サブレシピを作成して追加"
-  },
-  "createSubRecipeInline.createdSuccess": {
-    "defaultMessage": "サブレシピを作成しました"
-  },
-  "createSubRecipeInline.creating": {
-    "defaultMessage": "作成中..."
-  },
-  "createSubRecipeInline.duplicateName": {
-    "defaultMessage": "名前が重複しています"
-  },
-  "createSubRecipeInline.duplicateNameMsg": {
-    "defaultMessage": "\"{name}\" という名前のサブレシピはすでに存在します。一意の名前を使用してください。"
-  },
-  "createSubRecipeInline.instructionsLabel": {
-    "defaultMessage": "指示"
-  },
-  "createSubRecipeInline.instructionsPlaceholder": {
-    "defaultMessage": "このサブレシピが呼び出されたときのAIへの指示..."
-  },
-  "createSubRecipeInline.nameHint": {
-    "defaultMessage": "ツール名の生成に使用される一意の識別子"
-  },
-  "createSubRecipeInline.nameLabel": {
-    "defaultMessage": "名前"
-  },
-  "createSubRecipeInline.namePlaceholder": {
-    "defaultMessage": "例: security_scan"
-  },
-  "createSubRecipeInline.preconfiguredValues": {
-    "defaultMessage": "事前設定値"
-  },
-  "createSubRecipeInline.preconfiguredValuesHint": {
-    "defaultMessage": "サブレシピに常に渡される任意のパラメーター値"
-  },
-  "createSubRecipeInline.recipeDescriptionLabel": {
-    "defaultMessage": "レシピの説明"
-  },
-  "createSubRecipeInline.recipeDescriptionPlaceholder": {
-    "defaultMessage": "このレシピの実行時の動作"
-  },
-  "createSubRecipeInline.recipeTitleLabel": {
-    "defaultMessage": "レシピタイトル"
-  },
-  "createSubRecipeInline.recipeTitlePlaceholder": {
-    "defaultMessage": "例: セキュリティ分析ツール"
-  },
-  "createSubRecipeInline.saveFailed": {
-    "defaultMessage": "保存に失敗しました"
-  },
-  "createSubRecipeInline.saveFailedMsg": {
-    "defaultMessage": "サブレシピの保存に失敗しました: {error}"
-  },
-  "createSubRecipeInline.sequentialHint": {
-    "defaultMessage": "（複数インスタンスを順番に実行します）"
-  },
-  "createSubRecipeInline.sequentialLabel": {
-    "defaultMessage": "繰り返し時は順次実行"
-  },
-  "createSubRecipeInline.subtitle": {
-    "defaultMessage": "メインレシピで呼び出し可能なツールとして使うシンプルなレシピを作成します"
-  },
-  "createSubRecipeInline.title": {
-    "defaultMessage": "新しいサブレシピを作成"
-  },
-  "createSubRecipeInline.toolDescriptionLabel": {
-    "defaultMessage": "ツールの説明"
-  },
-  "createSubRecipeInline.toolDescriptionPlaceholder": {
-    "defaultMessage": "ツールとして呼び出されるときに表示される任意の説明"
-  },
-  "createSubRecipeInline.validationFailed": {
-    "defaultMessage": "検証に失敗しました"
-  },
-  "createSubRecipeInline.validationMsg": {
-    "defaultMessage": "名前、タイトル、レシピの説明、指示は必須です。"
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "クレジットを追加"
@@ -1154,25 +1001,25 @@
   "extensionsSection.updateExtension": {
     "defaultMessage": "拡張機能を更新"
   },
-  "extensionsView.addCustomExtension": {
+  "extensionsSettings.addCustomExtension": {
     "defaultMessage": "カスタム拡張機能を追加"
   },
-  "extensionsView.addExtension": {
+  "extensionsSettings.addExtension": {
     "defaultMessage": "拡張機能を追加"
   },
-  "extensionsView.browseExtensions": {
+  "extensionsSettings.browseExtensions": {
     "defaultMessage": "拡張機能を参照"
   },
-  "extensionsView.defaultNote": {
+  "extensionsSettings.defaultNote": {
     "defaultMessage": "ここで有効にした拡張機能は、新しいチャットのデフォルトとして使用されます。チャット中にアクティブな拡張機能を切り替えることもできます。"
   },
-  "extensionsView.description": {
+  "extensionsSettings.description": {
     "defaultMessage": "これらの拡張機能は Model Context Protocol（MCP）を使用します。Prompts、Resources、Tools の3つの主要コンポーネントで Goose の機能を拡張できます。検索するには {searchShortcut}。"
   },
-  "extensionsView.heading": {
+  "extensionsSettings.heading": {
     "defaultMessage": "拡張機能"
   },
-  "extensionsView.searchPlaceholder": {
+  "extensionsSettings.searchPlaceholder": {
     "defaultMessage": "拡張機能を検索..."
   },
   "externalBackendSection.certFingerprint": {
@@ -1418,48 +1265,6 @@
   "imagePreview.unableToLoad": {
     "defaultMessage": "画像を読み込めません"
   },
-  "importRecipeForm.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "importRecipeForm.deeplinkHint": {
-    "defaultMessage": "goose://recipe?config= で始まるレシピのディープリンクを貼り付けてください"
-  },
-  "importRecipeForm.deeplinkPlaceholder": {
-    "defaultMessage": "goose://recipe?config=... のディープリンクをここに貼り付け"
-  },
-  "importRecipeForm.example": {
-    "defaultMessage": "例"
-  },
-  "importRecipeForm.expectedRecipeStructure": {
-    "defaultMessage": "想定されるレシピ構造"
-  },
-  "importRecipeForm.importRecipeButton": {
-    "defaultMessage": "レシピをインポート"
-  },
-  "importRecipeForm.importRecipeTitle": {
-    "defaultMessage": "レシピをインポート"
-  },
-  "importRecipeForm.importing": {
-    "defaultMessage": "インポート中..."
-  },
-  "importRecipeForm.or": {
-    "defaultMessage": "または"
-  },
-  "importRecipeForm.recipeDeeplinkLabel": {
-    "defaultMessage": "レシピのディープリンク"
-  },
-  "importRecipeForm.recipeFileHint": {
-    "defaultMessage": "レシピ構造を含む YAML または JSON ファイルをアップロードしてください"
-  },
-  "importRecipeForm.recipeFileLabel": {
-    "defaultMessage": "レシピファイル"
-  },
-  "importRecipeForm.reviewWarning": {
-    "defaultMessage": "レシピファイルを goose インターフェースに追加する前に、必ず内容を確認してください。"
-  },
-  "importRecipeForm.schemaDescription": {
-    "defaultMessage": "YAML または JSON ファイルはこの構造に従う必要があります。必須フィールドは title、description、および instructions または prompt です。"
-  },
   "inlineEditText.clickToEdit": {
     "defaultMessage": "クリックして編集"
   },
@@ -1471,48 +1276,6 @@
   },
   "inlineEditText.failedToSave": {
     "defaultMessage": "保存に失敗しました"
-  },
-  "instructionsEditor.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "instructionsEditor.insertExample": {
-    "defaultMessage": "例を挿入"
-  },
-  "instructionsEditor.label": {
-    "defaultMessage": "指示"
-  },
-  "instructionsEditor.placeholder": {
-    "defaultMessage": "AIへの詳細な指示（ユーザーには表示されません）"
-  },
-  "instructionsEditor.save": {
-    "defaultMessage": "指示を保存"
-  },
-  "instructionsEditor.syntaxHelp": {
-    "defaultMessage": "ユーザーが入力できるパラメーターを定義するには {code} 構文を使用してください"
-  },
-  "instructionsEditor.title": {
-    "defaultMessage": "指示エディター"
-  },
-  "jsonSchemaEditor.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "jsonSchemaEditor.description": {
-    "defaultMessage": "JSON Schema 形式で AI の応答の想定構造を定義します"
-  },
-  "jsonSchemaEditor.insertExample": {
-    "defaultMessage": "例を挿入"
-  },
-  "jsonSchemaEditor.invalidJson": {
-    "defaultMessage": "JSON形式が無効です"
-  },
-  "jsonSchemaEditor.label": {
-    "defaultMessage": "応答JSON Schema"
-  },
-  "jsonSchemaEditor.save": {
-    "defaultMessage": "スキーマを保存"
-  },
-  "jsonSchemaEditor.title": {
-    "defaultMessage": "JSON Schema エディター"
   },
   "jsonSchemaForm.cancel": {
     "defaultMessage": "キャンセル"
@@ -1540,18 +1303,6 @@
   },
   "jsonSchemaForm.submit": {
     "defaultMessage": "送信"
-  },
-  "keyValueEditor.addValue": {
-    "defaultMessage": "事前設定値を追加"
-  },
-  "keyValueEditor.defaultKeyPlaceholder": {
-    "defaultMessage": "パラメーター名..."
-  },
-  "keyValueEditor.defaultValuePlaceholder": {
-    "defaultMessage": "パラメーター値..."
-  },
-  "keyValueEditor.removeValue": {
-    "defaultMessage": "事前設定値 {key} を削除"
   },
   "keyboardShortcuts.alwaysOnTopDescription": {
     "defaultMessage": "ウィンドウの常に手前表示を切り替える"
@@ -2336,32 +2087,32 @@
   "navigation.itemApps": {
     "defaultMessage": "アプリ"
   },
-  "navigation.itemExtensions": {
-    "defaultMessage": "拡張機能"
-  },
   "navigation.itemHome": {
     "defaultMessage": "新規チャット"
-  },
-  "navigation.itemRecipes": {
-    "defaultMessage": "レシピ"
   },
   "navigation.itemScheduler": {
     "defaultMessage": "スケジューラー"
   },
-  "navigation.itemSessions": {
-    "defaultMessage": "セッション履歴"
-  },
   "navigation.itemSettings": {
     "defaultMessage": "設定"
   },
-  "navigation.itemSkills": {
-    "defaultMessage": "スキル"
-  },
-  "navigationPanel.chats": {
-    "defaultMessage": "チャット"
+  "navigationPanel.help": {
+    "defaultMessage": "ヘルプ"
   },
   "navigationPanel.noChats": {
     "defaultMessage": "最近のチャットはありません"
+  },
+  "navigationPanel.noResults": {
+    "defaultMessage": "一致するチャットはありません"
+  },
+  "navigationPanel.projects": {
+    "defaultMessage": "プロジェクト"
+  },
+  "navigationPanel.search": {
+    "defaultMessage": "チャットを検索"
+  },
+  "navigationPanel.searching": {
+    "defaultMessage": "検索中..."
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "無題のセッション"
@@ -2404,99 +2155,6 @@
   },
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "匿名の使用データを共有"
-  },
-  "parameterInput.defaultValue": {
-    "defaultMessage": "デフォルト値"
-  },
-  "parameterInput.defaultValuePlaceholder": {
-    "defaultMessage": "デフォルト値を入力"
-  },
-  "parameterInput.deleteParameter": {
-    "defaultMessage": "パラメーターを削除: {key}"
-  },
-  "parameterInput.description": {
-    "defaultMessage": "説明"
-  },
-  "parameterInput.descriptionHelp": {
-    "defaultMessage": "これはエンドユーザーに表示されるメッセージです。"
-  },
-  "parameterInput.descriptionPlaceholder": {
-    "defaultMessage": "例: 「新しいコンポーネントの名前を入力」"
-  },
-  "parameterInput.inputType": {
-    "defaultMessage": "入力タイプ"
-  },
-  "parameterInput.optional": {
-    "defaultMessage": "任意"
-  },
-  "parameterInput.optionsHelp": {
-    "defaultMessage": "各オプションを改行で入力します。ドロップダウンの選択肢として表示されます。"
-  },
-  "parameterInput.optionsLabel": {
-    "defaultMessage": "オプション（1行に1つ）"
-  },
-  "parameterInput.optionsPlaceholder": {
-    "defaultMessage": "オプション1 オプション2 オプション3"
-  },
-  "parameterInput.required": {
-    "defaultMessage": "必須"
-  },
-  "parameterInput.requirement": {
-    "defaultMessage": "要件"
-  },
-  "parameterInput.typeBoolean": {
-    "defaultMessage": "真偽値"
-  },
-  "parameterInput.typeNumber": {
-    "defaultMessage": "数値"
-  },
-  "parameterInput.typeSelect": {
-    "defaultMessage": "選択"
-  },
-  "parameterInput.typeString": {
-    "defaultMessage": "文字列"
-  },
-  "parameterInput.unused": {
-    "defaultMessage": "未使用"
-  },
-  "parameterInput.unusedWarningTitle": {
-    "defaultMessage": "このパラメーターは手順またはプロンプトで使用されていません。手動入力には使用できますが、必要ない可能性があります。"
-  },
-  "parameterInputModal.backToForm": {
-    "defaultMessage": "パラメーターフォームに戻る"
-  },
-  "parameterInputModal.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "parameterInputModal.cancelRecipeSetup": {
-    "defaultMessage": "レシピ設定をキャンセル"
-  },
-  "parameterInputModal.enterValue": {
-    "defaultMessage": "{key}の値を入力..."
-  },
-  "parameterInputModal.false": {
-    "defaultMessage": "偽"
-  },
-  "parameterInputModal.recipeParameters": {
-    "defaultMessage": "レシピパラメーター"
-  },
-  "parameterInputModal.select": {
-    "defaultMessage": "選択..."
-  },
-  "parameterInputModal.selectOption": {
-    "defaultMessage": "オプションを選択..."
-  },
-  "parameterInputModal.startNewChat": {
-    "defaultMessage": "新規チャットを開始（レシピなし）"
-  },
-  "parameterInputModal.startRecipe": {
-    "defaultMessage": "レシピを開始"
-  },
-  "parameterInputModal.true": {
-    "defaultMessage": "真"
-  },
-  "parameterInputModal.whatToDo": {
-    "defaultMessage": "どうしますか？"
   },
   "permissionModal.alwaysAllow": {
     "defaultMessage": "常に許可"
@@ -2888,363 +2546,6 @@
   "providerSetupActions.submit": {
     "defaultMessage": "送信"
   },
-  "recipeActivityEditor.activitiesDescription": {
-    "defaultMessage": "レシピチャットウィンドウに表示される冒頭プロンプトとアクティビティボタンです。"
-  },
-  "recipeActivityEditor.activitiesLabel": {
-    "defaultMessage": "アクティビティ"
-  },
-  "recipeActivityEditor.activityButtonsDescription": {
-    "defaultMessage": "メッセージの下に表示され、ユーザーがレシピを操作するためのクリック可能なボタンです。"
-  },
-  "recipeActivityEditor.activityButtonsLabel": {
-    "defaultMessage": "アクティビティボタン"
-  },
-  "recipeActivityEditor.addActivity": {
-    "defaultMessage": "アクティビティを追加"
-  },
-  "recipeActivityEditor.addNewActivityPlaceholder": {
-    "defaultMessage": "新しいアクティビティを追加..."
-  },
-  "recipeActivityEditor.messageDescription": {
-    "defaultMessage": "レシピの上部に表示される整形済みメッセージです。Markdown形式に対応しています。"
-  },
-  "recipeActivityEditor.messageLabel": {
-    "defaultMessage": "メッセージ"
-  },
-  "recipeActivityEditor.messagePlaceholder": {
-    "defaultMessage": "レシピ用にユーザー向けの紹介メッセージを入力してください（**太字**、*斜体*、`コード`などに対応）"
-  },
-  "recipeExtensionSelector.description": {
-    "defaultMessage": "このレシピの実行時に利用できる拡張機能を選択します。空のままにするとデフォルトの拡張機能を使用します。"
-  },
-  "recipeExtensionSelector.extensionsSelected": {
-    "defaultMessage": "{count,plural,one{# 個の拡張機能を選択済み} other{# 個の拡張機能を選択済み}}"
-  },
-  "recipeExtensionSelector.label": {
-    "defaultMessage": "拡張機能（任意）"
-  },
-  "recipeExtensionSelector.noExtensionsAvailable": {
-    "defaultMessage": "利用可能な拡張機能はありません"
-  },
-  "recipeExtensionSelector.noExtensionsFound": {
-    "defaultMessage": "拡張機能が見つかりません"
-  },
-  "recipeExtensionSelector.searchPlaceholder": {
-    "defaultMessage": "拡張機能を検索..."
-  },
-  "recipeFormFields.addParameter": {
-    "defaultMessage": "パラメーターを追加"
-  },
-  "recipeFormFields.advancedOptions": {
-    "defaultMessage": "詳細オプション"
-  },
-  "recipeFormFields.advancedOptionsHint": {
-    "defaultMessage": "アクティビティ、パラメーター、モデル、拡張機能、応答スキーマ、サブレシピ"
-  },
-  "recipeFormFields.descriptionLabel": {
-    "defaultMessage": "説明"
-  },
-  "recipeFormFields.descriptionPlaceholder": {
-    "defaultMessage": "このレシピの内容を簡単に説明"
-  },
-  "recipeFormFields.enterValueFor": {
-    "defaultMessage": "{key}の値を入力"
-  },
-  "recipeFormFields.initialPrompt": {
-    "defaultMessage": "初期プロンプト"
-  },
-  "recipeFormFields.instructionsLabel": {
-    "defaultMessage": "指示"
-  },
-  "recipeFormFields.instructionsPlaceholder": {
-    "defaultMessage": "AIへの詳細な指示（ユーザーには表示されません）"
-  },
-  "recipeFormFields.openEditor": {
-    "defaultMessage": "エディターを開く"
-  },
-  "recipeFormFields.parameterNamePlaceholder": {
-    "defaultMessage": "パラメーター名を入力..."
-  },
-  "recipeFormFields.parametersDescription": {
-    "defaultMessage": "パラメーターは、指示/プロンプト/アクティビティ内の'{{parameter_name}}'構文から自動検出されます。下で手動で追加することもできます。"
-  },
-  "recipeFormFields.parametersLabel": {
-    "defaultMessage": "パラメーター"
-  },
-  "recipeFormFields.promptOptionalHint": {
-    "defaultMessage": "（任意 - 指示またはプロンプトが必要）"
-  },
-  "recipeFormFields.promptPlaceholder": {
-    "defaultMessage": "レシピ開始時に入力済みとなるプロンプト"
-  },
-  "recipeFormFields.responseJsonSchema": {
-    "defaultMessage": "応答JSONスキーマ"
-  },
-  "recipeFormFields.responseJsonSchemaDescription": {
-    "defaultMessage": "JSON Schema形式でAIの応答に期待する構造を定義します"
-  },
-  "recipeFormFields.templateVarHint": {
-    "defaultMessage": "'{{parameter_name}}'を使って、レシピ実行時に入力できるパラメーターを定義します。"
-  },
-  "recipeFormFields.titleLabel": {
-    "defaultMessage": "タイトル"
-  },
-  "recipeFormFields.titlePlaceholder": {
-    "defaultMessage": "レシピタイトル"
-  },
-  "recipeHeader.recipeLabel": {
-    "defaultMessage": "レシピ"
-  },
-  "recipeModelSelector.backToModelList": {
-    "defaultMessage": "モデル一覧に戻る"
-  },
-  "recipeModelSelector.enterCustomModel": {
-    "defaultMessage": "カスタムモデル名を入力"
-  },
-  "recipeModelSelector.enterModelNotListed": {
-    "defaultMessage": "一覧にないモデルを入力..."
-  },
-  "recipeModelSelector.fetchError": {
-    "defaultMessage": "モデルの取得に失敗しました。後でもう一度お試しください。"
-  },
-  "recipeModelSelector.loadingModels": {
-    "defaultMessage": "モデルを読み込み中…"
-  },
-  "recipeModelSelector.modelHint": {
-    "defaultMessage": "選択したプロバイダーのデフォルトモデルを使用する場合は空のままにします"
-  },
-  "recipeModelSelector.modelLabel": {
-    "defaultMessage": "モデル（任意）"
-  },
-  "recipeModelSelector.providerHint": {
-    "defaultMessage": "設定で構成されたデフォルトプロバイダーを使用する場合は空のままにします"
-  },
-  "recipeModelSelector.providerLabel": {
-    "defaultMessage": "プロバイダー（任意）"
-  },
-  "recipeModelSelector.selectModel": {
-    "defaultMessage": "モデルを選択"
-  },
-  "recipeModelSelector.selectProvider": {
-    "defaultMessage": "プロバイダーを選択"
-  },
-  "recipeModelSelector.useDefaultProvider": {
-    "defaultMessage": "デフォルトプロバイダーを使用"
-  },
-  "recipeNameField.defaultLabel": {
-    "defaultMessage": "レシピ名"
-  },
-  "recipeNameField.formatHint": {
-    "defaultMessage": "自動的に整形されます（小文字、スペースはダッシュ）"
-  },
-  "recipeWarningModal.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "recipeWarningModal.descriptionLabel": {
-    "defaultMessage": "説明:"
-  },
-  "recipeWarningModal.firstTimeDescription": {
-    "defaultMessage": "これまで実行したことのないレシピを実行しようとしています。"
-  },
-  "recipeWarningModal.hiddenCharsWarning": {
-    "defaultMessage": "このレシピには、安全のため無視される隠し文字が含まれています。悪意のある目的に使用される可能性があります。"
-  },
-  "recipeWarningModal.instructionsLabel": {
-    "defaultMessage": "指示:"
-  },
-  "recipeWarningModal.newRecipeWarningTitle": {
-    "defaultMessage": "⚠️ 新しいレシピの警告"
-  },
-  "recipeWarningModal.recipePreview": {
-    "defaultMessage": "レシピのプレビュー:"
-  },
-  "recipeWarningModal.securityWarningTitle": {
-    "defaultMessage": "⚠️ セキュリティ警告"
-  },
-  "recipeWarningModal.titleLabel": {
-    "defaultMessage": "タイトル:"
-  },
-  "recipeWarningModal.trustAndExecute": {
-    "defaultMessage": "信頼して実行"
-  },
-  "recipeWarningModal.trustSource": {
-    "defaultMessage": "このレシピの提供元を信頼できる場合のみ続行してください。"
-  },
-  "recipesView.addSchedule": {
-    "defaultMessage": "スケジュールを追加"
-  },
-  "recipesView.addSlashCommand": {
-    "defaultMessage": "スラッシュコマンドを追加"
-  },
-  "recipesView.adjustSearchTerms": {
-    "defaultMessage": "検索条件を調整してみてください"
-  },
-  "recipesView.allFiles": {
-    "defaultMessage": "すべてのファイル"
-  },
-  "recipesView.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "recipesView.copyDeeplink": {
-    "defaultMessage": "ディープリンクをコピー"
-  },
-  "recipesView.copyDeeplinkFailedMsg": {
-    "defaultMessage": "ディープリンクをクリップボードにコピーできませんでした"
-  },
-  "recipesView.copyFailedTitle": {
-    "defaultMessage": "コピーに失敗しました"
-  },
-  "recipesView.copyYaml": {
-    "defaultMessage": "YAMLをコピー"
-  },
-  "recipesView.copyYamlFailedMsg": {
-    "defaultMessage": "レシピYAMLをクリップボードにコピーできませんでした"
-  },
-  "recipesView.createRecipe": {
-    "defaultMessage": "レシピを作成"
-  },
-  "recipesView.deeplinkCopiedMsg": {
-    "defaultMessage": "レシピのディープリンクをクリップボードにコピーしました"
-  },
-  "recipesView.deeplinkCopiedTitle": {
-    "defaultMessage": "ディープリンクをコピーしました"
-  },
-  "recipesView.deleteRecipe": {
-    "defaultMessage": "レシピを削除"
-  },
-  "recipesView.deleteRecipeConfirm": {
-    "defaultMessage": "\"{title}\"を削除してもよろしいですか？"
-  },
-  "recipesView.deleteRecipeDetail": {
-    "defaultMessage": "レシピファイルが削除されます。"
-  },
-  "recipesView.deleteRecipeTitle": {
-    "defaultMessage": "レシピを削除"
-  },
-  "recipesView.editRecipe": {
-    "defaultMessage": "レシピを編集"
-  },
-  "recipesView.editSchedule": {
-    "defaultMessage": "スケジュールを編集"
-  },
-  "recipesView.editSlashCommand": {
-    "defaultMessage": "スラッシュコマンドを編集"
-  },
-  "recipesView.errorLoadingRecipes": {
-    "defaultMessage": "レシピの読み込みエラー"
-  },
-  "recipesView.exportFailedMsg": {
-    "defaultMessage": "レシピをファイルにエクスポートできませんでした"
-  },
-  "recipesView.exportFailedTitle": {
-    "defaultMessage": "エクスポートに失敗しました"
-  },
-  "recipesView.exportRecipeDialogTitle": {
-    "defaultMessage": "レシピをエクスポート"
-  },
-  "recipesView.exportToFile": {
-    "defaultMessage": "ファイルにエクスポート"
-  },
-  "recipesView.noMatchingRecipes": {
-    "defaultMessage": "一致するレシピが見つかりません"
-  },
-  "recipesView.noSavedRecipes": {
-    "defaultMessage": "保存済みのレシピはありません"
-  },
-  "recipesView.noSavedRecipesDescription": {
-    "defaultMessage": "チャットから保存したレシピがここに表示されます。"
-  },
-  "recipesView.openInNewWindow": {
-    "defaultMessage": "新しいウィンドウで開く"
-  },
-  "recipesView.recipeDeletedSuccess": {
-    "defaultMessage": "レシピを削除しました"
-  },
-  "recipesView.recipeExportedMsg": {
-    "defaultMessage": "レシピを{filePath}に保存しました"
-  },
-  "recipesView.recipeExportedTitle": {
-    "defaultMessage": "レシピをエクスポートしました"
-  },
-  "recipesView.recipesDescription": {
-    "defaultMessage": "保存済みのレシピを表示・管理し、事前定義された設定で新しいセッションをすばやく開始できます。{shortcut}で検索できます。"
-  },
-  "recipesView.recipesTitle": {
-    "defaultMessage": "レシピ"
-  },
-  "recipesView.remove": {
-    "defaultMessage": "削除"
-  },
-  "recipesView.removeSchedule": {
-    "defaultMessage": "スケジュールを削除"
-  },
-  "recipesView.runs": {
-    "defaultMessage": "実行: {schedule}"
-  },
-  "recipesView.save": {
-    "defaultMessage": "保存"
-  },
-  "recipesView.scheduleDialogTitle": {
-    "defaultMessage": "スケジュールを{action}"
-  },
-  "recipesView.scheduleRemovedMsg": {
-    "defaultMessage": "レシピは自動実行されなくなります"
-  },
-  "recipesView.scheduleRemovedTitle": {
-    "defaultMessage": "スケジュールを削除しました"
-  },
-  "recipesView.scheduleSavedMsg": {
-    "defaultMessage": "レシピは{schedule}実行されます"
-  },
-  "recipesView.scheduleSavedTitle": {
-    "defaultMessage": "スケジュールを保存しました"
-  },
-  "recipesView.searchRecipesPlaceholder": {
-    "defaultMessage": "レシピを検索..."
-  },
-  "recipesView.shareRecipe": {
-    "defaultMessage": "レシピを共有"
-  },
-  "recipesView.slashCommandDescription": {
-    "defaultMessage": "このレシピを任意のチャットからすばやく実行するためのスラッシュコマンドを設定します"
-  },
-  "recipesView.slashCommandPlaceholder": {
-    "defaultMessage": "command-name"
-  },
-  "recipesView.slashCommandRemovedMsg": {
-    "defaultMessage": "レシピのスラッシュコマンドを削除しました"
-  },
-  "recipesView.slashCommandRemovedTitle": {
-    "defaultMessage": "スラッシュコマンドを削除しました"
-  },
-  "recipesView.slashCommandSavedMsg": {
-    "defaultMessage": "/{command}でこのレシピを実行できます"
-  },
-  "recipesView.slashCommandSavedTitle": {
-    "defaultMessage": "スラッシュコマンドを保存しました"
-  },
-  "recipesView.slashCommandTitle": {
-    "defaultMessage": "スラッシュコマンド"
-  },
-  "recipesView.slashCommandUsageHint": {
-    "defaultMessage": "任意のチャットで/{command}を使ってこのレシピを実行できます"
-  },
-  "recipesView.tryAgain": {
-    "defaultMessage": "再試行"
-  },
-  "recipesView.useRecipe": {
-    "defaultMessage": "レシピを使用"
-  },
-  "recipesView.yamlCopiedMsg": {
-    "defaultMessage": "レシピYAMLをクリップボードにコピーしました"
-  },
-  "recipesView.yamlCopiedTitle": {
-    "defaultMessage": "YAMLをコピーしました"
-  },
-  "recipesView.yamlFiles": {
-    "defaultMessage": "YAMLファイル"
-  },
   "resetProviderSection.resetButton": {
     "defaultMessage": "プロバイダーとモデルをリセット"
   },
@@ -3416,9 +2717,6 @@
   "scheduleDetailView.viewingScheduleId": {
     "defaultMessage": "表示中のスケジュールID: {id}"
   },
-  "scheduleModal.browseYaml": {
-    "defaultMessage": "YAMLファイルを選択..."
-  },
   "scheduleModal.cancel": {
     "defaultMessage": "キャンセル"
   },
@@ -3431,26 +2729,8 @@
   "scheduleModal.creating": {
     "defaultMessage": "作成中..."
   },
-  "scheduleModal.deepLink": {
-    "defaultMessage": "ディープリンク"
-  },
-  "scheduleModal.deepLinkPlaceholder": {
-    "defaultMessage": "goose://recipe リンクをここに貼り付け..."
-  },
   "scheduleModal.editSchedule": {
     "defaultMessage": "スケジュールを編集"
-  },
-  "scheduleModal.failedParseRecipe": {
-    "defaultMessage": "ファイルからレシピを解析できませんでした。"
-  },
-  "scheduleModal.failedReadFile": {
-    "defaultMessage": "選択したファイルを読み取れませんでした。"
-  },
-  "scheduleModal.invalidDeepLink": {
-    "defaultMessage": "無効なディープリンクです。goose://recipe リンクを使用してください。"
-  },
-  "scheduleModal.invalidFileType": {
-    "defaultMessage": "無効なファイル形式です。YAMLファイル（.yaml または .yml）を選択してください"
   },
   "scheduleModal.nameLabel": {
     "defaultMessage": "名前:"
@@ -3458,17 +2738,14 @@
   "scheduleModal.namePlaceholder": {
     "defaultMessage": "例: daily-summary-job"
   },
-  "scheduleModal.provideValidRecipe": {
-    "defaultMessage": "有効なレシピソースを指定してください。"
+  "scheduleModal.promptLabel": {
+    "defaultMessage": "プロンプト:"
   },
-  "scheduleModal.recipeDescription": {
-    "defaultMessage": "説明: {description}"
+  "scheduleModal.promptPlaceholder": {
+    "defaultMessage": "実行のたびに goose に何をさせますか?"
   },
-  "scheduleModal.recipeParsed": {
-    "defaultMessage": "レシピを正常に解析しました"
-  },
-  "scheduleModal.recipeTitle": {
-    "defaultMessage": "タイトル: {title}"
+  "scheduleModal.promptRequired": {
+    "defaultMessage": "プロンプトは必須です。"
   },
   "scheduleModal.scheduleIdRequired": {
     "defaultMessage": "スケジュールIDは必須です。"
@@ -3476,20 +2753,11 @@
   "scheduleModal.scheduleLabel": {
     "defaultMessage": "スケジュール:"
   },
-  "scheduleModal.selected": {
-    "defaultMessage": "選択済み: {path}"
-  },
-  "scheduleModal.sourceLabel": {
-    "defaultMessage": "ソース:"
-  },
   "scheduleModal.updateSchedule": {
     "defaultMessage": "スケジュールを更新"
   },
   "scheduleModal.updating": {
     "defaultMessage": "更新中..."
-  },
-  "scheduleModal.yaml": {
-    "defaultMessage": "YAML"
   },
   "schedulesView.confirmDelete": {
     "defaultMessage": "スケジュール「{id}」を削除しますか？レシピは保持されます。"
@@ -3662,20 +2930,23 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "キャンセル"
   },
-  "sessionActionsHeader.close": {
-    "defaultMessage": "閉じる"
+  "sessionActionsHeader.deleteConfirm": {
+    "defaultMessage": "セッション「{name}」を削除してもよろしいですか？この操作は元に戻せません。"
   },
-  "sessionActionsHeader.copiedJson": {
-    "defaultMessage": "セッションJSONをコピーしました"
+  "sessionActionsHeader.deleteFailed": {
+    "defaultMessage": "セッションの削除に失敗しました: {error}"
   },
-  "sessionActionsHeader.copiedText": {
-    "defaultMessage": "テキストをコピーしました"
+  "sessionActionsHeader.deleteSession": {
+    "defaultMessage": "セッションを削除"
   },
-  "sessionActionsHeader.copyJson": {
-    "defaultMessage": "JSONをコピー"
+  "sessionActionsHeader.deleteTitle": {
+    "defaultMessage": "セッションを削除"
   },
-  "sessionActionsHeader.copyText": {
-    "defaultMessage": "テキストをコピー"
+  "sessionActionsHeader.deleted": {
+    "defaultMessage": "セッションを削除しました"
+  },
+  "sessionActionsHeader.deleting": {
+    "defaultMessage": "削除中..."
   },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "セッションを複製できませんでした: {error}"
@@ -3685,18 +2956,6 @@
   },
   "sessionActionsHeader.duplicated": {
     "defaultMessage": "セッションを複製しました"
-  },
-  "sessionActionsHeader.fullTextTitle": {
-    "defaultMessage": "テキスト値"
-  },
-  "sessionActionsHeader.jsonFailed": {
-    "defaultMessage": "セッションJSONを読み込めませんでした: {error}"
-  },
-  "sessionActionsHeader.jsonTitle": {
-    "defaultMessage": "セッションJSON"
-  },
-  "sessionActionsHeader.loadingJson": {
-    "defaultMessage": "JSONを読み込み中..."
   },
   "sessionActionsHeader.renameFailed": {
     "defaultMessage": "セッションの名前を変更できませんでした: {error}"
@@ -3719,9 +2978,6 @@
   "sessionActionsHeader.saving": {
     "defaultMessage": "保存中..."
   },
-  "sessionActionsHeader.viewJson": {
-    "defaultMessage": "セッションJSONを表示"
-  },
   "sessionIndicators.error": {
     "defaultMessage": "セッションでエラーが発生しました"
   },
@@ -3730,156 +2986,6 @@
   },
   "sessionIndicators.streaming": {
     "defaultMessage": "ストリーミング中"
-  },
-  "sessionViewComponents.empty.description": {
-    "defaultMessage": "このセッションにはメッセージがありません"
-  },
-  "sessionViewComponents.empty.title": {
-    "defaultMessage": "メッセージが見つかりません"
-  },
-  "sessionViewComponents.error.loading": {
-    "defaultMessage": "セッション詳細の読み込みエラー"
-  },
-  "sessionViewComponents.error.tryAgain": {
-    "defaultMessage": "再試行"
-  },
-  "sessionViewComponents.role.assistant": {
-    "defaultMessage": "Goose"
-  },
-  "sessionViewComponents.role.user": {
-    "defaultMessage": "あなた"
-  },
-  "sessions.action.delete": {
-    "defaultMessage": "セッションを削除"
-  },
-  "sessions.action.duplicate": {
-    "defaultMessage": "セッションを複製"
-  },
-  "sessions.action.editName": {
-    "defaultMessage": "セッション名を編集"
-  },
-  "sessions.action.export": {
-    "defaultMessage": "セッションをエクスポート"
-  },
-  "sessions.action.openNewWindow": {
-    "defaultMessage": "新しいウィンドウで開く"
-  },
-  "sessions.action.shareNostr": {
-    "defaultMessage": "暗号化Nostrリンクを共有"
-  },
-  "sessions.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "sessions.chatHistory": {
-    "defaultMessage": "チャット履歴"
-  },
-  "sessions.chatHistoryDesc": {
-    "defaultMessage": "Gooseとの過去の会話を表示・検索できます。{shortcut}で検索。"
-  },
-  "sessions.close": {
-    "defaultMessage": "閉じる"
-  },
-  "sessions.delete.message": {
-    "defaultMessage": "セッション「{name}」を削除してもよろしいですか？この操作は元に戻せません。"
-  },
-  "sessions.delete.title": {
-    "defaultMessage": "セッションを削除"
-  },
-  "sessions.edit.placeholder": {
-    "defaultMessage": "セッションの説明を入力"
-  },
-  "sessions.edit.title": {
-    "defaultMessage": "セッションの説明を編集"
-  },
-  "sessions.empty.description": {
-    "defaultMessage": "チャット履歴はここに表示されます"
-  },
-  "sessions.empty.title": {
-    "defaultMessage": "チャットセッションが見つかりません"
-  },
-  "sessions.error.loading": {
-    "defaultMessage": "セッションの読み込みエラー"
-  },
-  "sessions.error.tryAgain": {
-    "defaultMessage": "再試行"
-  },
-  "sessions.import": {
-    "defaultMessage": "セッションをインポート"
-  },
-  "sessions.importNostr": {
-    "defaultMessage": "リンクをインポート"
-  },
-  "sessions.importNostr.description": {
-    "defaultMessage": "Goose Nostr共有リンクを貼り付けて、セッションを取得・復号・インポートします。"
-  },
-  "sessions.importNostr.placeholder": {
-    "defaultMessage": "goose://sessions/nostr?nevent=...&key=..."
-  },
-  "sessions.importNostr.title": {
-    "defaultMessage": "Nostrセッションをインポート"
-  },
-  "sessions.importing": {
-    "defaultMessage": "インポート中..."
-  },
-  "sessions.loadingMore": {
-    "defaultMessage": "さらにセッションを読み込み中..."
-  },
-  "sessions.save": {
-    "defaultMessage": "保存"
-  },
-  "sessions.saving": {
-    "defaultMessage": "保存中..."
-  },
-  "sessions.search.noResults": {
-    "defaultMessage": "一致するセッションが見つかりません"
-  },
-  "sessions.search.noResultsDesc": {
-    "defaultMessage": "検索条件を変更してみてください"
-  },
-  "sessions.searchPlaceholder": {
-    "defaultMessage": "履歴を検索..."
-  },
-  "sessions.shareNostr.description": {
-    "defaultMessage": "このリンクを持つ人は誰でもセッションを取得して復号できます。秘密情報として扱ってください。"
-  },
-  "sessions.shareNostr.title": {
-    "defaultMessage": "暗号化Nostr共有リンク"
-  },
-  "sessions.toast.copied": {
-    "defaultMessage": "クリップボードにコピーしました"
-  },
-  "sessions.toast.deleteFailed": {
-    "defaultMessage": "セッション「{name}」を削除できませんでした: {error}"
-  },
-  "sessions.toast.deleted": {
-    "defaultMessage": "セッションを削除しました"
-  },
-  "sessions.toast.duplicateFailed": {
-    "defaultMessage": "セッションを複製できませんでした: {error}"
-  },
-  "sessions.toast.duplicated": {
-    "defaultMessage": "セッション「{name}」を複製しました"
-  },
-  "sessions.toast.exported": {
-    "defaultMessage": "セッションをエクスポートしました"
-  },
-  "sessions.toast.importFailed": {
-    "defaultMessage": "セッションをインポートできませんでした: {error}"
-  },
-  "sessions.toast.imported": {
-    "defaultMessage": "セッションをインポートしました"
-  },
-  "sessions.toast.shareNostr": {
-    "defaultMessage": "暗号化Nostr共有リンクを作成しました"
-  },
-  "sessions.toast.shareNostrFailed": {
-    "defaultMessage": "Nostr共有リンクを作成できませんでした: {error}"
-  },
-  "sessions.toast.updateFailed": {
-    "defaultMessage": "セッションの説明を更新できませんでした: {error}"
-  },
-  "sessions.toast.updated": {
-    "defaultMessage": "セッションの説明を更新しました"
   },
   "settings.appearance.description": {
     "defaultMessage": "システム上でのgooseの表示を設定します"
@@ -4058,6 +3164,9 @@
   "settingsView.tabChat": {
     "defaultMessage": "チャット"
   },
+  "settingsView.tabExtensions": {
+    "defaultMessage": "拡張機能"
+  },
   "settingsView.tabExternalBackend": {
     "defaultMessage": "外部バックエンド"
   },
@@ -4072,6 +3181,9 @@
   },
   "settingsView.tabPrompts": {
     "defaultMessage": "プロンプト"
+  },
+  "settingsView.tabSkills": {
+    "defaultMessage": "スキル"
   },
   "settingsView.title": {
     "defaultMessage": "設定"
@@ -4094,37 +3206,31 @@
   "shortcutRecorder.save": {
     "defaultMessage": "保存"
   },
-  "skillsView.addSkill": {
-    "defaultMessage": "スキルを追加"
-  },
-  "skillsView.adjustSearchTerms": {
+  "skillsSettings.adjustSearchTerms": {
     "defaultMessage": "検索条件を変更してみてください"
   },
-  "skillsView.comingSoon": {
-    "defaultMessage": "近日公開"
-  },
-  "skillsView.errorLoadingSkills": {
+  "skillsSettings.errorLoadingSkills": {
     "defaultMessage": "スキルの読み込みエラー"
   },
-  "skillsView.noMatchingSkills": {
+  "skillsSettings.noMatchingSkills": {
     "defaultMessage": "一致するスキルが見つかりません"
   },
-  "skillsView.noSkillsDescription": {
+  "skillsSettings.noSkillsDescription": {
     "defaultMessage": "スキルは ~/.config/agents/skills/、.goose/skills/、またはその他の対応ディレクトリ内の SKILL.md ファイルから読み込まれます。"
   },
-  "skillsView.noSkillsInstalled": {
+  "skillsSettings.noSkillsInstalled": {
     "defaultMessage": "スキルがインストールされていません"
   },
-  "skillsView.searchSkillsPlaceholder": {
+  "skillsSettings.searchSkillsPlaceholder": {
     "defaultMessage": "スキルを検索..."
   },
-  "skillsView.skillsDescription": {
+  "skillsSettings.skillsDescription": {
     "defaultMessage": "Gooseの機能を拡張するインストール済みスキルを表示します。{shortcut}で検索。"
   },
-  "skillsView.skillsTitle": {
+  "skillsSettings.skillsTitle": {
     "defaultMessage": "スキル"
   },
-  "skillsView.tryAgain": {
+  "skillsSettings.tryAgain": {
     "defaultMessage": "再試行"
   },
   "spellcheckToggle.description": {
@@ -4153,99 +3259,6 @@
   },
   "stringUtils.ollamaNotConfiguredSuffix": {
     "defaultMessage": "をマシンにインストールして開いておくか、OLLAMA_HOSTの値を入力する必要があります。"
-  },
-  "subRecipeEditor.addExisting": {
-    "defaultMessage": "既存を追加"
-  },
-  "subRecipeEditor.createNew": {
-    "defaultMessage": "新しいサブレシピを作成"
-  },
-  "subRecipeEditor.deleteSubrecipe": {
-    "defaultMessage": "サブレシピ「{name}」を削除"
-  },
-  "subRecipeEditor.description": {
-    "defaultMessage": "サブレシピは、実行中にツールとして呼び出せるレシピです。複数ステップのワークフローや再利用可能なコンポーネントを実現します。"
-  },
-  "subRecipeEditor.duplicateName": {
-    "defaultMessage": "重複する名前"
-  },
-  "subRecipeEditor.duplicateNameMsg": {
-    "defaultMessage": "「{name}」という名前のサブレシピはすでに存在します。一意の名前を使用してください。"
-  },
-  "subRecipeEditor.editSubrecipe": {
-    "defaultMessage": "サブレシピ「{name}」を編集"
-  },
-  "subRecipeEditor.label": {
-    "defaultMessage": "サブレシピ"
-  },
-  "subRecipeEditor.preconfiguredValues": {
-    "defaultMessage": "事前設定値:"
-  },
-  "subRecipeEditor.sequential": {
-    "defaultMessage": "順次実行"
-  },
-  "subRecipeModal.addTitle": {
-    "defaultMessage": "サブレシピを追加"
-  },
-  "subRecipeModal.apply": {
-    "defaultMessage": "適用"
-  },
-  "subRecipeModal.browse": {
-    "defaultMessage": "参照"
-  },
-  "subRecipeModal.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "subRecipeModal.closeModal": {
-    "defaultMessage": "サブレシピのモーダルを閉じる"
-  },
-  "subRecipeModal.configureTitle": {
-    "defaultMessage": "サブレシピを設定"
-  },
-  "subRecipeModal.descriptionLabel": {
-    "defaultMessage": "説明"
-  },
-  "subRecipeModal.descriptionPlaceholder": {
-    "defaultMessage": "このサブレシピの処理内容（任意）..."
-  },
-  "subRecipeModal.invalidFile": {
-    "defaultMessage": "無効なファイル"
-  },
-  "subRecipeModal.invalidFileMsg": {
-    "defaultMessage": "YAMLファイル（.yamlまたは.yml）を選択してください。"
-  },
-  "subRecipeModal.nameHint": {
-    "defaultMessage": "ツール名の生成に使用される一意の識別子"
-  },
-  "subRecipeModal.nameLabel": {
-    "defaultMessage": "名前"
-  },
-  "subRecipeModal.namePlaceholder": {
-    "defaultMessage": "例: security_scan"
-  },
-  "subRecipeModal.pathHint": {
-    "defaultMessage": "既存のレシピファイルを参照するか、パスを手動で入力します"
-  },
-  "subRecipeModal.pathLabel": {
-    "defaultMessage": "パス"
-  },
-  "subRecipeModal.pathPlaceholder": {
-    "defaultMessage": "例: ./subrecipes/security-analysis.yaml"
-  },
-  "subRecipeModal.preconfiguredValues": {
-    "defaultMessage": "事前設定値"
-  },
-  "subRecipeModal.preconfiguredValuesHint": {
-    "defaultMessage": "サブレシピに常に渡される任意のパラメータ値"
-  },
-  "subRecipeModal.sequentialHint": {
-    "defaultMessage": "（複数のサブレシピインスタンスを強制的に順次実行します）"
-  },
-  "subRecipeModal.sequentialLabel": {
-    "defaultMessage": "繰り返し時に順次実行"
-  },
-  "subRecipeModal.subtitle": {
-    "defaultMessage": "レシピ実行中にツールとして呼び出せるサブレシピを設定します"
   },
   "switchModelModal.backToModelList": {
     "defaultMessage": "モデル一覧に戻る"
@@ -4453,9 +3466,6 @@
   },
   "toolCallWithResponse.activityCount": {
     "defaultMessage": "アクティビティ ({count})"
-  },
-  "toolCallWithResponse.code": {
-    "defaultMessage": "コード"
   },
   "toolCallWithResponse.loadingSpinner": {
     "defaultMessage": "読み込みスピナー"

@@ -6,6 +6,8 @@ import ExternalBackendSection from './app/ExternalBackendSection';
 import AppSettingsSection from './app/AppSettingsSection';
 import ConfigSettings from './config/ConfigSettings';
 import PromptsSettingsSection from './PromptsSettingsSection';
+import ExtensionsSettingsSection from './extensions/ExtensionsSettingsSection';
+import SkillsSettingsSection from './skills/SkillsSettingsSection';
 import type { ExtensionConfig } from '../../types/extensions';
 import { MainPanelLayout } from '../Layout/MainPanelLayout';
 import {
@@ -17,6 +19,8 @@ import {
   Keyboard,
   HardDrive,
   KeyRound,
+  Puzzle,
+  Zap,
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import ChatSettingsSection from './chat/ChatSettingsSection';
@@ -65,6 +69,14 @@ const i18n = defineMessages({
     id: 'settingsView.tabApp',
     defaultMessage: 'App',
   },
+  tabExtensions: {
+    id: 'settingsView.tabExtensions',
+    defaultMessage: 'Extensions',
+  },
+  tabSkills: {
+    id: 'settingsView.tabSkills',
+    defaultMessage: 'Skills',
+  },
 });
 
 export type SettingsViewOptions = {
@@ -106,6 +118,8 @@ export default function SettingsView({
         app: 'app',
         chat: 'chat',
         prompts: 'prompts',
+        extensions: 'extensions',
+        skills: 'skills',
         keyboard: 'keyboard',
         auth: 'auth',
         'local-inference': 'local-inference',
@@ -189,6 +203,22 @@ export default function SettingsView({
                     {intl.formatMessage(i18n.tabChat)}
                   </TabsTrigger>
                   <TabsTrigger
+                    value="extensions"
+                    className="flex gap-2"
+                    data-testid="settings-extensions-tab"
+                  >
+                    <Puzzle className="h-4 w-4" />
+                    {intl.formatMessage(i18n.tabExtensions)}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="skills"
+                    className="flex gap-2"
+                    data-testid="settings-skills-tab"
+                  >
+                    <Zap className="h-4 w-4" />
+                    {intl.formatMessage(i18n.tabSkills)}
+                  </TabsTrigger>
+                  <TabsTrigger
                     value="sharing"
                     className="flex gap-2"
                     data-testid="settings-sharing-tab"
@@ -245,6 +275,23 @@ export default function SettingsView({
                   className="mt-0 focus-visible:outline-none focus-visible:ring-0"
                 >
                   <ChatSettingsSection />
+                </TabsContent>
+
+                <TabsContent
+                  value="extensions"
+                  className="mt-0 focus-visible:outline-none focus-visible:ring-0"
+                >
+                  <ExtensionsSettingsSection
+                    deepLinkConfig={viewOptions.deepLinkConfig}
+                    showEnvVars={viewOptions.showEnvVars}
+                  />
+                </TabsContent>
+
+                <TabsContent
+                  value="skills"
+                  className="mt-0 focus-visible:outline-none focus-visible:ring-0"
+                >
+                  <SkillsSettingsSection />
                 </TabsContent>
 
                 <TabsContent

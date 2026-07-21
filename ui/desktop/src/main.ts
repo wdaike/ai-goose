@@ -50,7 +50,6 @@ import {
   updateTrayMenu,
 } from './utils/autoUpdater';
 import { UPDATES_ENABLED } from './updates';
-import './utils/recipeHash';
 import type { GooseApp } from './types/apps';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { BLOCKED_PROTOCOLS, WEB_PROTOCOLS } from './utils/urlSecurity';
@@ -442,24 +441,6 @@ if (process.platform !== 'darwin') {
       const protocolUrl = commandLine.find((arg) => arg.startsWith('goose://'));
       if (protocolUrl) {
         const parsedUrl = new URL(protocolUrl);
-        // If it's a bot/recipe URL, handle it directly by creating a new window
-        if (parsedUrl.hostname === 'bot' || parsedUrl.hostname === 'recipe') {
-          app.whenReady().then(async () => {
-            const recentDirs = loadRecentDirs();
-            const openDir = recentDirs.length > 0 ? recentDirs[0] : null;
-
-            const deeplinkData = parseRecipeDeeplink(protocolUrl);
-            const scheduledJobId = parsedUrl.searchParams.get('scheduledJob');
-
-            await createChat(app, {
-              dir: openDir || undefined,
-              recipeDeeplink: deeplinkData?.config,
-              scheduledJobId: scheduledJobId || undefined,
-              recipeParameters: deeplinkData?.parameters,
-            });
-          });
-          return; // Skip the rest of the handler
-        }
 
         // Handle new-session URL by creating a fresh chat window
         if (parsedUrl.hostname === 'new-session') {
@@ -485,11 +466,9 @@ if (process.platform !== 'darwin') {
           return;
         }
 
-        // For non-bot URLs, continue with normal handling
         handleProtocolUrl(protocolUrl, parsedUrl);
       }
 
-      // Only focus existing windows for non-bot/recipe URLs
       const existingWindows = BrowserWindow.getAllWindows();
       if (existingWindows.length > 0) {
         const mainWindow = existingWindows[0];
@@ -538,54 +517,13 @@ function queuePendingDeepLink(windowId: number, url: string): void {
 
 const reactReadyWindows = new Set<number>();
 
-const DEEPLINK_BURST_DEDUP_MS = 2000;
-const recentSessionDeepLinkSends = new Map<string, number>();
-
-function pruneExpiredSessionDeepLinkSends(now: number): void {
-  for (const [url, sentAt] of recentSessionDeepLinkSends) {
-    if (now - sentAt >= DEEPLINK_BURST_DEDUP_MS) {
-      recentSessionDeepLinkSends.delete(url);
-    }
-  }
-}
-
-function isBurstDuplicateSessionDeepLink(url: string): boolean {
-  const now = Date.now();
-  pruneExpiredSessionDeepLinkSends(now);
-  const sentAt = recentSessionDeepLinkSends.get(url);
-  return sentAt !== undefined && now - sentAt < DEEPLINK_BURST_DEDUP_MS;
-}
-
-function recordSessionDeepLinkSend(url: string): void {
-  const now = Date.now();
-  recentSessionDeepLinkSends.set(url, now);
-  pruneExpiredSessionDeepLinkSends(now);
-}
-
-function sendOpenSharedSession(window: BrowserWindow, url: string): void {
-  if (isBurstDuplicateSessionDeepLink(url)) {
-    log.info('[Main] Ignoring burst duplicate session deep link');
-    return;
-  }
-  recordSessionDeepLinkSend(url);
-  window.webContents.send('open-shared-session', url);
-}
-
-function deliverExtensionOrSessionDeepLink(
-  url: string,
-  parsedUrl: URL,
-  targetWindow: BrowserWindow
-): void {
+function deliverExtensionDeepLink(url: string, targetWindow: BrowserWindow): void {
   if (!reactReadyWindows.has(targetWindow.id) || targetWindow.webContents.isLoadingMainFrame()) {
     queuePendingDeepLink(targetWindow.id, url);
     return;
   }
 
-  if (parsedUrl.hostname === 'extension') {
-    targetWindow.webContents.send('add-extension', url);
-  } else if (parsedUrl.hostname === 'sessions') {
-    sendOpenSharedSession(targetWindow, url);
-  }
+  targetWindow.webContents.send('add-extension', url);
 }
 
 function getResumeSessionId(parsedUrl: URL): string | null {
@@ -625,14 +563,6 @@ async function handleProtocolUrl(url: string, parsedUrl: URL) {
   } else if (parsedUrl.hostname === 'resume') {
     await createResumeChatWindow(parsedUrl, openDir || undefined);
     return;
-  } else if (parsedUrl.hostname === 'bot' || parsedUrl.hostname === 'recipe') {
-    const existingWindows = BrowserWindow.getAllWindows();
-    const targetWindow =
-      existingWindows.length > 0
-        ? existingWindows[0]
-        : await createChat(app, { dir: openDir || undefined });
-    if (!targetWindow) return;
-    await processProtocolUrl(url, parsedUrl, targetWindow);
   } else {
     const existingWindows = BrowserWindow.getAllWindows();
     let targetWindow: BrowserWindow | undefined;
@@ -657,27 +587,10 @@ async function handleProtocolUrl(url: string, parsedUrl: URL) {
 }
 
 async function processProtocolUrl(url: string, parsedUrl: URL, window: BrowserWindow) {
-  const recentDirs = loadRecentDirs();
-  const openDir = recentDirs.length > 0 ? recentDirs[0] : null;
-
   if (parsedUrl.hostname === 'extension') {
     window.webContents.send('add-extension', url);
-  } else if (parsedUrl.hostname === 'sessions') {
-    sendOpenSharedSession(window, url);
-  } else if (parsedUrl.hostname === 'bot' || parsedUrl.hostname === 'recipe') {
-    const deeplinkData = parseRecipeDeeplink(url);
-    const scheduledJobId = parsedUrl.searchParams.get('scheduledJob');
-
-    await createChat(app, {
-      dir: openDir || undefined,
-      recipeDeeplink: deeplinkData?.config,
-      scheduledJobId: scheduledJobId || undefined,
-      recipeParameters: deeplinkData?.parameters,
-    });
   }
 }
-
-let windowDeeplinkURL: string | null = null;
 
 app.on('open-url', async (_event, url) => {
   if (process.platform !== 'win32') {
@@ -712,34 +625,14 @@ app.on('open-url', async (_event, url) => {
       return;
     }
 
-    // Handle bot/recipe URLs by directly creating a new window
-    if (parsedUrl.hostname === 'bot' || parsedUrl.hostname === 'recipe') {
-      log.info('[Main] Detected bot/recipe URL, creating new chat window');
-      openUrlHandledLaunch = true;
-      const deeplinkData = parseRecipeDeeplink(url);
-      if (deeplinkData) {
-        windowDeeplinkURL = url;
-      }
-      const scheduledJobId = parsedUrl.searchParams.get('scheduledJob');
-
-      await createChat(app, {
-        dir: openDir || undefined,
-        recipeDeeplink: deeplinkData?.config,
-        scheduledJobId: scheduledJobId || undefined,
-        recipeParameters: deeplinkData?.parameters,
-      });
-      windowDeeplinkURL = null;
-      return;
-    }
-
-    // For extension/session URLs, send to existing window or store pending for new one
+    // For extension URLs, send to existing window or store pending for new one
     const existingWindows = BrowserWindow.getAllWindows();
     if (existingWindows.length > 0) {
       const targetWindow = existingWindows[0];
       if (targetWindow.isMinimized()) targetWindow.restore();
       targetWindow.focus();
-      if (parsedUrl.hostname === 'extension' || parsedUrl.hostname === 'sessions') {
-        deliverExtensionOrSessionDeepLink(url, parsedUrl, targetWindow);
+      if (parsedUrl.hostname === 'extension') {
+        deliverExtensionDeepLink(url, targetWindow);
       }
     } else {
       openUrlHandledLaunch = true;
@@ -980,10 +873,7 @@ interface CreateChatOptions {
   dir?: string;
   resumeSessionId?: string;
   viewType?: string;
-  recipeDeeplink?: string;
-  recipeId?: string;
   scheduledJobId?: string;
-  recipeParameters?: Record<string, string>;
 }
 
 const createChat = async (
@@ -996,10 +886,7 @@ const createChat = async (
     dir,
     resumeSessionId,
     viewType,
-    recipeDeeplink,
-    recipeId,
     scheduledJobId,
-    recipeParameters,
   } = options;
   const settings = getSettings();
 
@@ -1252,9 +1139,6 @@ const createChat = async (
             GOOSE_WORKING_DIR: workingDir,
             REQUEST_DIR: dir,
             GOOSE_VERSION: version,
-            recipeDeeplink: recipeDeeplink,
-            recipeId: recipeId,
-            recipeParameters: recipeParameters,
             scheduledJobId: scheduledJobId,
             SECURITY_ML_MODEL_MAPPING: process.env.SECURITY_ML_MODEL_MAPPING,
             SECURITY_PROMPT_ENABLED_OVERRIDE: process.env.SECURITY_PROMPT_ENABLED_OVERRIDE,
@@ -1392,10 +1276,7 @@ const createChat = async (
     chat: '/',
     pair: '/pair',
     settings: '/settings',
-    sessions: '/sessions',
     schedules: '/schedules',
-    recipes: '/recipes',
-    skills: '/skills',
     permission: '/permission',
     ConfigureProviders: '/configure-providers',
   };
@@ -1403,10 +1284,7 @@ const createChat = async (
   if (viewType) {
     appPath = routeMap[viewType] || '/';
   }
-  if (
-    appPath === '/' &&
-    (recipeDeeplink !== undefined || recipeId !== undefined || initialMessage)
-  ) {
+  if (appPath === '/' && initialMessage) {
     appPath = '/pair';
   }
 
@@ -1753,71 +1631,10 @@ const openDirectoryDialog = async (): Promise<OpenDialogReturnValue> => {
 
     addRecentDir(dirToAdd);
 
-    let deeplinkData: RecipeDeeplinkData | undefined = undefined;
-    if (windowDeeplinkURL) {
-      deeplinkData = parseRecipeDeeplink(windowDeeplinkURL);
-    }
-    await createChat(app, {
-      dir: dirToAdd,
-      recipeDeeplink: deeplinkData?.config,
-      recipeParameters: deeplinkData?.parameters,
-    });
+    await createChat(app, { dir: dirToAdd });
   }
   return result;
 };
-
-interface RecipeDeeplinkData {
-  config: string;
-  parameters?: Record<string, string>;
-}
-
-function parseRecipeDeeplink(url: string): RecipeDeeplinkData | undefined {
-  const parsedUrl = new URL(url);
-  let recipeDeeplink = parsedUrl.searchParams.get('config');
-  if (recipeDeeplink && !url.includes(recipeDeeplink)) {
-    // URLSearchParams decodes + as space, which can break encoded configs
-    // Parse raw query to preserve "+" characters in values like config
-    const search = parsedUrl.search || '';
-    const configMatch = search.match(/(?:[?&])config=([^&]*)/);
-    let recipeDeeplinkTmp = configMatch ? configMatch[1] : null;
-    if (recipeDeeplinkTmp) {
-      try {
-        recipeDeeplink = decodeURIComponent(recipeDeeplinkTmp);
-      } catch (error) {
-        console.error('[Main] parseRecipeDeeplink - Failed to decode:', errorMessage(error));
-        return undefined;
-      }
-    }
-  }
-  if (!recipeDeeplink) {
-    return undefined;
-  }
-
-  // Extract all query parameters except 'config' and 'scheduledJob' as recipe parameters
-  // Use raw query string parsing to preserve '+' characters (consistent with config handling)
-  const parameters: Record<string, string> = {};
-  const search = parsedUrl.search || '';
-  const paramMatches = search.matchAll(/[?&]([^=&]+)=([^&]*)/g);
-
-  for (const match of paramMatches) {
-    const key = match[1];
-    const rawValue = match[2];
-
-    if (key !== 'config' && key !== 'scheduledJob') {
-      try {
-        parameters[key] = decodeURIComponent(rawValue);
-      } catch {
-        // If decoding fails, use raw value
-        parameters[key] = rawValue;
-      }
-    }
-  }
-
-  return {
-    config: recipeDeeplink,
-    parameters: Object.keys(parameters).length > 0 ? parameters : undefined,
-  };
-}
 
 // Global error handler
 const handleFatalError = (error: Error) => {
@@ -1866,8 +1683,6 @@ ipcMain.on('react-ready', (event) => {
       const parsedUrl = new URL(deepLinkUrl);
       if (parsedUrl.hostname === 'extension') {
         window.webContents.send('add-extension', deepLinkUrl);
-      } else if (parsedUrl.hostname === 'sessions') {
-        sendOpenSharedSession(window, deepLinkUrl);
       }
     } catch (error) {
       log.error('Error processing pending deep link:', error);
@@ -2191,29 +2006,6 @@ ipcMain.handle('select-file-or-directory', async (_event, defaultPath?: string) 
 // reach `~/.claude/projects/...` or `~/.pi/agent/sessions/...`), filters for
 // .json/.jsonl, and returns the file's contents inline so the renderer doesn't
 // need a separate read step.
-ipcMain.handle('select-import-session-file', async () => {
-  const result = (await dialog.showOpenDialog({
-    title: 'Import session',
-    defaultPath: os.homedir(),
-    properties: ['openFile', 'showHiddenFiles'],
-    filters: [
-      { name: 'Session files', extensions: ['json', 'jsonl'] },
-      { name: 'All files', extensions: ['*'] },
-    ],
-  })) as unknown as OpenDialogReturnValue;
-
-  if (result.canceled || result.filePaths.length === 0) {
-    return null;
-  }
-  const filePath = result.filePaths[0];
-  try {
-    const contents = await fs.readFile(filePath, 'utf8');
-    return { filePath, contents };
-  } catch (err) {
-    return { filePath, contents: '', error: errorMessage(err) };
-  }
-});
-
 ipcMain.handle('check-ollama', async () => {
   try {
     return new Promise((resolve) => {
@@ -2784,7 +2576,7 @@ async function appMain() {
   });
 
   ipcMain.on('create-chat-window', (event, options = {}) => {
-    const { query, dir, resumeSessionId, viewType, recipeId } = options;
+    const { query, dir, resumeSessionId, viewType } = options;
 
     let resolvedDir = dir;
     if (!resolvedDir?.trim()) {
@@ -2792,7 +2584,7 @@ async function appMain() {
       resolvedDir = recentDirs.length > 0 ? recentDirs[0] : undefined;
     }
 
-    const isFromLauncher = query && !resumeSessionId && !viewType && !recipeId;
+    const isFromLauncher = query && !resumeSessionId && !viewType;
 
     if (isFromLauncher) {
       const senderWindow = BrowserWindow.fromWebContents(event.sender);
@@ -2817,7 +2609,6 @@ async function appMain() {
       dir: resolvedDir,
       resumeSessionId,
       viewType,
-      recipeId,
     });
   });
 

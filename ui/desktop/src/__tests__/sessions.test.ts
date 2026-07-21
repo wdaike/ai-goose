@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getSessionDisplayName, shouldShowNewChatTitle } from '../sessions';
+import { shouldShowNewChatTitle } from '../sessions';
 import { prependUnique } from '../hooks/useNavigationSessions';
 import type { SessionListItem } from '../acp/sessions';
 import type { Session } from '../types/session';
@@ -44,37 +44,6 @@ describe('shouldShowNewChatTitle', () => {
   it('returns false when the user has set a custom name', () => {
     const session = makeSession({ message_count: 0, user_set_name: true });
     expect(shouldShowNewChatTitle(session)).toBe(false);
-  });
-
-  it('returns false when the session has a recipe', () => {
-    const session = makeSession({
-      message_count: 0,
-      user_set_name: false,
-      recipe: { title: 'Recipe', steps: [] } as unknown as Session['recipe'],
-    });
-    expect(shouldShowNewChatTitle(session)).toBe(false);
-  });
-});
-
-describe('getSessionDisplayName (fix for #8865)', () => {
-  it('returns the user-set name for a recipe session that has been renamed', () => {
-    const session = makeSession({
-      name: 'My Renamed Chat',
-      user_set_name: true,
-      message_count: 2,
-      recipe: { title: 'Some Recipe' } as unknown as Session['recipe'],
-    });
-    expect(getSessionDisplayName(session)).toBe('My Renamed Chat');
-  });
-
-  it('falls back to the recipe title when the user has not renamed', () => {
-    const session = makeSession({
-      name: 'auto-generated',
-      user_set_name: false,
-      message_count: 2,
-      recipe: { title: 'Some Recipe' } as unknown as Session['recipe'],
-    });
-    expect(getSessionDisplayName(session)).toBe('Some Recipe');
   });
 });
 

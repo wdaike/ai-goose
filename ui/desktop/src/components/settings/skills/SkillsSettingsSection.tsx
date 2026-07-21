@@ -1,62 +1,52 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Zap, AlertCircle, Plus } from 'lucide-react';
-import { ScrollArea } from '../ui/scroll-area';
-import { Card } from '../ui/card';
-import { Button } from '../ui/button';
-import { Skeleton } from '../ui/skeleton';
-import { MainPanelLayout } from '../Layout/MainPanelLayout';
-import { errorMessage } from '../../utils/conversionUtils';
-import { getInitialWorkingDir } from '../../utils/workingDir';
-import { defineMessages, useIntl } from '../../i18n';
-import { SearchView } from '../conversation/SearchView';
-import { getSearchShortcutText } from '../../utils/keyboardShortcuts';
-import { listSkillSources } from '../../acp/sources';
+import { Zap, AlertCircle } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
+import { Button } from '../../ui/button';
+import { Skeleton } from '../../ui/skeleton';
+import { errorMessage } from '../../../utils/conversionUtils';
+import { getInitialWorkingDir } from '../../../utils/workingDir';
+import { defineMessages, useIntl } from '../../../i18n';
+import { SearchView } from '../../conversation/SearchView';
+import { getSearchShortcutText } from '../../../utils/keyboardShortcuts';
+import { listSkillSources } from '../../../acp/sources';
 
 const i18n = defineMessages({
   errorLoadingSkills: {
-    id: 'skillsView.errorLoadingSkills',
+    id: 'skillsSettings.errorLoadingSkills',
     defaultMessage: 'Error Loading Skills',
   },
   tryAgain: {
-    id: 'skillsView.tryAgain',
+    id: 'skillsSettings.tryAgain',
     defaultMessage: 'Try Again',
   },
   noSkillsInstalled: {
-    id: 'skillsView.noSkillsInstalled',
+    id: 'skillsSettings.noSkillsInstalled',
     defaultMessage: 'No skills installed',
   },
   noSkillsDescription: {
-    id: 'skillsView.noSkillsDescription',
+    id: 'skillsSettings.noSkillsDescription',
     defaultMessage:
       'Skills are loaded from SKILL.md files in ~/.config/agents/skills/, .goose/skills/, or other supported directories.',
   },
   noMatchingSkills: {
-    id: 'skillsView.noMatchingSkills',
+    id: 'skillsSettings.noMatchingSkills',
     defaultMessage: 'No matching skills found',
   },
   adjustSearchTerms: {
-    id: 'skillsView.adjustSearchTerms',
+    id: 'skillsSettings.adjustSearchTerms',
     defaultMessage: 'Try adjusting your search terms',
   },
   skillsTitle: {
-    id: 'skillsView.skillsTitle',
+    id: 'skillsSettings.skillsTitle',
     defaultMessage: 'Skills',
   },
-  addSkill: {
-    id: 'skillsView.addSkill',
-    defaultMessage: 'Add Skill',
-  },
   skillsDescription: {
-    id: 'skillsView.skillsDescription',
+    id: 'skillsSettings.skillsDescription',
     defaultMessage: 'View installed skills that extend Goose capabilities. {shortcut} to search.',
   },
   searchSkillsPlaceholder: {
-    id: 'skillsView.searchSkillsPlaceholder',
+    id: 'skillsSettings.searchSkillsPlaceholder',
     defaultMessage: 'Search skills...',
-  },
-  comingSoon: {
-    id: 'skillsView.comingSoon',
-    defaultMessage: 'Coming soon',
   },
 });
 
@@ -93,7 +83,7 @@ function SkillSkeleton() {
   );
 }
 
-export default function SkillsView() {
+export default function SkillsSettingsSection() {
   const intl = useIntl();
   const [skills, setSkills] = useState<SkillEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -119,11 +109,7 @@ export default function SkillsView() {
       setShowContent(false);
       setError(null);
       const sources = await listSkillSources(getInitialWorkingDir());
-      const skillEntries: SkillEntry[] = sources.map((source) => ({
-        name: source.name,
-        description: source.description,
-      }));
-      setSkills(skillEntries);
+      setSkills(sources.map((source) => ({ name: source.name, description: source.description })));
     } catch (err) {
       setError(errorMessage(err, 'Failed to load skills'));
     } finally {
@@ -159,8 +145,8 @@ export default function SkillsView() {
 
     if (error) {
       return (
-        <div className="flex flex-col items-center justify-center h-full text-text-secondary">
-          <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
+        <div className="flex flex-col items-center justify-center py-8 text-text-secondary">
+          <AlertCircle className="h-12 w-12 text-text-danger mb-4" />
           <p className="text-lg mb-2">{intl.formatMessage(i18n.errorLoadingSkills)}</p>
           <p className="text-sm text-center mb-4">{error}</p>
           <Button onClick={loadSkills} variant="default">
@@ -172,7 +158,7 @@ export default function SkillsView() {
 
     if (skills.length === 0) {
       return (
-        <div className="flex flex-col justify-center pt-2 h-full">
+        <div className="flex flex-col justify-center pt-2">
           <p className="text-lg">{intl.formatMessage(i18n.noSkillsInstalled)}</p>
           <p className="text-sm text-text-secondary">
             {intl.formatMessage(i18n.noSkillsDescription)}
@@ -183,7 +169,7 @@ export default function SkillsView() {
 
     if (filteredSkills.length === 0 && searchTerm) {
       return (
-        <div className="flex flex-col items-center justify-center h-full text-text-secondary mt-4">
+        <div className="flex flex-col items-center justify-center py-8 text-text-secondary">
           <Zap className="h-12 w-12 mb-4" />
           <p className="text-lg mb-2">{intl.formatMessage(i18n.noMatchingSkills)}</p>
           <p className="text-sm">{intl.formatMessage(i18n.adjustSearchTerms)}</p>
@@ -201,48 +187,29 @@ export default function SkillsView() {
   };
 
   return (
-    <MainPanelLayout>
-      <div className="flex-1 flex flex-col min-h-0">
-        <div className="bg-background-primary px-8 pb-8 pt-16">
-          <div className="flex flex-col page-transition">
-            <div className="flex justify-between items-center mb-1">
-              <h1 className="text-4xl font-light">{intl.formatMessage(i18n.skillsTitle)}</h1>
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-2"
-                hidden
-                title={intl.formatMessage(i18n.comingSoon)}
-              >
-                <Plus className="w-4 h-4" />
-                {intl.formatMessage(i18n.addSkill)}
-              </Button>
-            </div>
-            <p className="text-sm text-text-secondary mb-1">
-              {intl.formatMessage(i18n.skillsDescription, {
-                shortcut: getSearchShortcutText(),
-              })}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex-1 min-h-0 relative px-8">
-          <ScrollArea className="h-full">
-            <SearchView
-              onSearch={(term) => setSearchTerm(term)}
-              placeholder={intl.formatMessage(i18n.searchSkillsPlaceholder)}
+    <div className="space-y-4 pr-4 pb-8 mt-1" data-search-scroll-area>
+      <Card className="pb-2 rounded-lg">
+        <CardHeader className="pb-2">
+          <CardTitle>{intl.formatMessage(i18n.skillsTitle)}</CardTitle>
+          <CardDescription>
+            {intl.formatMessage(i18n.skillsDescription, { shortcut: getSearchShortcutText() })}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="px-2">
+          <SearchView
+            onSearch={(term) => setSearchTerm(term)}
+            placeholder={intl.formatMessage(i18n.searchSkillsPlaceholder)}
+          >
+            <div
+              className={`relative transition-all duration-300 ${
+                showContent || showSkeleton ? 'opacity-100 animate-in fade-in' : 'opacity-0'
+              }`}
             >
-              <div
-                className={`h-full relative transition-all duration-300 ${
-                  showContent || showSkeleton ? 'opacity-100 animate-in fade-in' : 'opacity-0'
-                }`}
-              >
-                {renderContent()}
-              </div>
-            </SearchView>
-          </ScrollArea>
-        </div>
-      </div>
-    </MainPanelLayout>
+              {renderContent()}
+            </div>
+          </SearchView>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
