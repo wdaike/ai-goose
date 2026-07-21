@@ -579,27 +579,6 @@ impl SessionManager {
         Ok(None)
     }
 
-    pub async fn search_chat_history(
-        &self,
-        query: &str,
-        limit: Option<usize>,
-        after_date: Option<chrono::DateTime<chrono::Utc>>,
-        before_date: Option<chrono::DateTime<chrono::Utc>>,
-        exclude_session_id: Option<String>,
-        session_types: Vec<SessionType>,
-    ) -> Result<crate::session::chat_history_search::ChatRecallResults> {
-        self.storage
-            .search_chat_history(
-                query,
-                limit,
-                after_date,
-                before_date,
-                exclude_session_id,
-                session_types,
-            )
-            .await
-    }
-
     pub async fn update_message_metadata<F>(id: &str, message_id: &str, f: F) -> Result<()>
     where
         F: FnOnce(
@@ -2381,31 +2360,6 @@ impl SessionStorage {
         Ok(())
     }
 
-    async fn search_chat_history(
-        &self,
-        query: &str,
-        limit: Option<usize>,
-        after_date: Option<chrono::DateTime<chrono::Utc>>,
-        before_date: Option<chrono::DateTime<chrono::Utc>>,
-        exclude_session_id: Option<String>,
-        session_types: Vec<SessionType>,
-    ) -> Result<crate::session::chat_history_search::ChatRecallResults> {
-        use crate::session::chat_history_search::ChatHistorySearch;
-
-        let pool = self.pool().await?;
-        ChatHistorySearch::new(
-            pool,
-            query,
-            limit,
-            after_date,
-            before_date,
-            exclude_session_id,
-            session_types,
-        )
-        .execute()
-        .await
-    }
-
     async fn update_message_metadata<F>(
         &self,
         session_id: &str,
@@ -2886,73 +2840,6 @@ mod tests {
         let reloaded = sm.get_session(&session.id, false).await.unwrap();
         assert_eq!(reloaded.name, original_name);
         assert!(!reloaded.user_set_name);
-    }
-
-    async fn create_search_session(
-        sm: &SessionManager,
-        name: &str,
-        session_type: SessionType,
-        updated_at: &str,
-        messages: &[(&str, &str)],
-    ) -> String {
-        let session = sm
-            .create_session(
-                PathBuf::from("/tmp/search-test"),
-                name.to_string(),
-                session_type,
-                GooseMode::default(),
-            )
-            .await
-            .unwrap();
-
-        for (text, timestamp) in messages {
-            add_message_at(sm, &session.id, text, timestamp).await;
-        }
-        set_sessions_updated_at(sm, std::slice::from_ref(&session.id), updated_at).await;
-
-        session.id
-    }
-
-    #[tokio::test]
-    async fn test_search_chat_history_preserves_message_limited_behavior() {
-        let temp_dir = TempDir::new().unwrap();
-        let sm = SessionManager::new(temp_dir.path().to_path_buf());
-
-        let _older_target = create_search_session(
-            &sm,
-            "Older target",
-            SessionType::User,
-            "2026-05-01T00:00:00Z",
-            &[(
-                "does Acme have an email address for John Doe",
-                "2026-05-01T00:00:00Z",
-            )],
-        )
-        .await;
-
-        let newer_noise = create_search_session(
-            &sm,
-            "Newer noise",
-            SessionType::User,
-            "2026-05-22T00:00:00Z",
-            &[
-                ("Acme person name looking for Acme", "2026-05-22T00:00:00Z"),
-                (
-                    "another Acme person name looking for Acme",
-                    "2026-05-22T00:01:00Z",
-                ),
-            ],
-        )
-        .await;
-
-        let results = sm
-            .search_chat_history("Acme", Some(2), None, None, None, vec![SessionType::User])
-            .await
-            .unwrap();
-
-        assert_eq!(results.results.len(), 1);
-        assert_eq!(results.results[0].session_id, newer_noise);
-        assert_eq!(results.results[0].messages.len(), 2);
     }
 
     async fn expected_session_list_ids(sm: &SessionManager, session_ids: &[String]) -> Vec<String> {
