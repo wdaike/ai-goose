@@ -216,36 +216,21 @@ pub fn get_enabled_extensions_with_config(config: &Config) -> Vec<ExtensionConfi
 }
 
 pub fn get_available_extensions() -> Vec<ExtensionConfig> {
-    let mut builtin_names = crate::builtin_extension::get_builtin_extension_names();
-    builtin_names.sort_unstable();
-
-    let mut platform_definitions = PLATFORM_EXTENSIONS
+    let mut definitions = PLATFORM_EXTENSIONS
         .values()
         .filter(|definition| !definition.hidden)
         .collect::<Vec<_>>();
-    platform_definitions.sort_unstable_by_key(|definition| definition.name);
+    definitions.sort_unstable_by_key(|definition| definition.name);
 
-    builtin_names
+    definitions
         .into_iter()
-        .map(|name| ExtensionConfig::Builtin {
-            name: name.to_string(),
-            description: String::new(),
-            display_name: Some(name.to_string()),
-            timeout: None,
+        .map(|definition| ExtensionConfig::Platform {
+            name: definition.name.to_string(),
+            description: definition.description.to_string(),
+            display_name: Some(definition.display_name.to_string()),
             bundled: Some(true),
             available_tools: Vec::new(),
         })
-        .chain(
-            platform_definitions
-                .into_iter()
-                .map(|definition| ExtensionConfig::Platform {
-                    name: definition.name.to_string(),
-                    description: definition.description.to_string(),
-                    display_name: Some(definition.display_name.to_string()),
-                    bundled: Some(true),
-                    available_tools: Vec::new(),
-                }),
-        )
         .collect()
 }
 
@@ -259,11 +244,16 @@ pub fn get_warnings() -> Vec<String> {
         if let (serde_yaml::Value::String(key), Ok(entry)) =
             (k, serde_yaml::from_value::<ExtensionEntry>(v))
         {
-            if matches!(entry.config, ExtensionConfig::Sse { .. }) {
-                warnings.push(format!(
+            match entry.config {
+                ExtensionConfig::Sse { .. } => warnings.push(format!(
                     "'{}': SSE is unsupported, migrate to streamable_http",
                     key
-                ));
+                )),
+                ExtensionConfig::Builtin { .. } => warnings.push(format!(
+                    "'{}': bundled extensions were removed, migrate to stdio or streamable_http",
+                    key
+                )),
+                _ => {}
             }
         }
     }
@@ -455,19 +445,6 @@ extensions:
         let extensions = read_extensions(&config);
         assert_eq!(extensions.get("broken").unwrap(), &broken_before);
         assert!(extensions.contains_key("newextension"));
-    }
-
-    #[test]
-    fn test_get_extension_by_name_falls_back_to_available_builtin() {
-        fn spawn_builtin(_: tokio::io::DuplexStream, _: tokio::io::DuplexStream) {}
-        crate::builtin_extension::register_builtin_extension("memory", spawn_builtin);
-
-        let extension = get_extension_by_name("memory").unwrap();
-
-        assert!(matches!(
-            extension,
-            ExtensionConfig::Builtin { ref name, .. } if name == "memory"
-        ));
     }
 
     #[test]

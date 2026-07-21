@@ -518,69 +518,36 @@ fn collect_headers() -> anyhow::Result<HashMap<String, String>> {
     Ok(headers)
 }
 
-fn configure_builtin_extension() -> anyhow::Result<()> {
-    let extensions = vec![
-        (
-            "autovisualiser",
-            "Auto Visualiser",
-            "Data visualisation and UI generation tools",
-        ),
-        (
-            "computercontroller",
-            "Computer Controller",
-            "controls for webscraping, file caching, and automations",
-        ),
-        (
-            "developer",
-            "Developer Tools",
-            "Code editing and shell access",
-        ),
-        (
-            "memory",
-            "Memory",
-            "Tools to save and retrieve durable memories",
-        ),
-        (
-            "tutorial",
-            "Tutorial",
-            "Access interactive tutorials and guides",
-        ),
-    ];
+fn configure_platform_extension() -> anyhow::Result<()> {
+    let mut definitions = PLATFORM_EXTENSIONS
+        .values()
+        .filter(|definition| !definition.hidden)
+        .collect::<Vec<_>>();
+    definitions.sort_unstable_by_key(|definition| definition.name);
 
     let mut select = cliclack::select("Which built-in extension would you like to enable?");
-    for (id, name, desc) in &extensions {
-        select = select.item(id, name, desc);
+    for definition in &definitions {
+        select = select.item(
+            definition.name,
+            definition.display_name,
+            definition.description,
+        );
     }
     let extension = select.interact()?.to_string();
-    let (display_name, description) = extensions
+    let definition = definitions
         .iter()
-        .find(|(id, _, _)| id == &extension)
-        .map(|(_, name, desc)| (name.to_string(), desc.to_string()))
-        .unwrap_or_else(|| (extension.clone(), extension.clone()));
-
-    let config = if PLATFORM_EXTENSIONS.contains_key(extension.as_str()) {
-        ExtensionConfig::Platform {
-            name: extension.clone(),
-            description,
-            display_name: Some(display_name),
-            bundled: Some(true),
-            available_tools: Vec::new(),
-        }
-    } else {
-        let timeout = prompt_extension_timeout()?;
-        ExtensionConfig::Builtin {
-            name: extension.clone(),
-            display_name: Some(display_name),
-            timeout: Some(timeout),
-            bundled: Some(true),
-            description,
-            available_tools: Vec::new(),
-        }
-    };
+        .find(|definition| definition.name == extension)
+        .expect("selected extension must exist");
 
     set_extension(ExtensionEntry {
         enabled: true,
-        config,
+        config: ExtensionConfig::Platform {
+            name: definition.name.to_string(),
+            description: definition.description.to_string(),
+            display_name: Some(definition.display_name.to_string()),
+            bundled: Some(true),
+            available_tools: Vec::new(),
+        },
     });
 
     cliclack::outro(format!("Enabled {} extension", style(extension).green()))?;
@@ -698,7 +665,7 @@ pub fn configure_extensions_dialog() -> anyhow::Result<()> {
         .interact()?;
 
     match extension_type {
-        "built-in" => configure_builtin_extension()?,
+        "built-in" => configure_platform_extension()?,
         "stdio" => configure_stdio_extension()?,
         "streamable_http" => configure_streamable_http_extension()?,
         _ => unreachable!(),

@@ -39,7 +39,6 @@ use crate::agents::extension_malware_check;
 use crate::agents::mcp_client::{
     GooseMcpClientCapabilities, GooseMcpHostInfo, McpClient, McpClientTrait,
 };
-use crate::builtin_extension::get_builtin_extension;
 use crate::config::extensions::name_to_key;
 use crate::config::search_path::SearchPaths;
 use crate::config::{get_all_extensions, Config};
@@ -971,50 +970,28 @@ impl ExtensionManager {
                 )
                 .await?
             }
-            ExtensionConfig::Builtin { ref name, .. }
-            | ExtensionConfig::Platform { ref name, .. } => {
-                let timeout = if let ExtensionConfig::Builtin { timeout, .. } = &config {
-                    *timeout
-                } else {
-                    None
-                };
+            ExtensionConfig::Platform { ref name, .. } => {
                 let normalized_name = name_to_key(name);
+                let def = PLATFORM_EXTENSIONS
+                    .get(normalized_name.as_str())
+                    .ok_or_else(|| {
+                        ExtensionError::ConfigError(format!("Unknown extension: {}", name))
+                    })?;
 
-                if let Some(def) = PLATFORM_EXTENSIONS.get(normalized_name.as_str()) {
-                    // Platform extension: create via in-process client factory
-                    let mut context = self.context.clone();
-                    context.extension_manager = Some(Arc::downgrade(self));
-                    if let Some(id) = session_id {
-                        if let Ok(session) =
-                            self.context.session_manager.get_session(id, false).await
-                        {
-                            context.session = Some(Arc::new(session));
-                        }
+                let mut context = self.context.clone();
+                context.extension_manager = Some(Arc::downgrade(self));
+                if let Some(id) = session_id {
+                    if let Ok(session) = self.context.session_manager.get_session(id, false).await {
+                        context.session = Some(Arc::new(session));
                     }
-                    (def.client_factory)(context)
-                } else {
-                    // Builtin MCP server extension
-                    let timeout_secs = resolve_timeout(timeout);
-                    let extension_fn =
-                        get_builtin_extension(normalized_name.as_str()).ok_or_else(|| {
-                            ExtensionError::ConfigError(format!("Unknown extension: {}", name))
-                        })?;
-
-                    let (server_read, client_write) = tokio::io::duplex(65536);
-                    let (client_read, server_write) = tokio::io::duplex(65536);
-                    extension_fn(server_read, server_write);
-
-                    Box::new(
-                        McpClient::connect(
-                            (client_read, client_write),
-                            Duration::from_secs(timeout_secs),
-                            self.client_name.clone(),
-                            self.mcp_client_capabilities(),
-                            effective_working_dir.clone(),
-                        )
-                        .await?,
-                    )
                 }
+                (def.client_factory)(context)
+            }
+            ExtensionConfig::Builtin { ref name, .. } => {
+                return Err(ExtensionError::ConfigError(format!(
+                    "'{}' is a bundled extension; those were removed, migrate to stdio or streamable_http",
+                    name
+                )))
             }
             ExtensionConfig::Stdio {
                 cmd,

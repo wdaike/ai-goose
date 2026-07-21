@@ -301,30 +301,18 @@ impl CliSession {
         }
     }
 
-    /// Parse builtin extension names (comma-separated) into ExtensionConfigs
+    /// Parse platform extension names (comma-separated) into ExtensionConfigs
     pub fn parse_builtin_extensions(builtin_name: &str) -> Vec<ExtensionConfig> {
         builtin_name
             .split(',')
-            .map(|name| {
-                let extension_name = name.trim();
-                if PLATFORM_EXTENSIONS.contains_key(extension_name) {
-                    ExtensionConfig::Platform {
-                        name: extension_name.to_string(),
-                        description: extension_name.to_string(),
-                        display_name: None,
-                        bundled: None,
-                        available_tools: Vec::new(),
-                    }
-                } else {
-                    ExtensionConfig::Builtin {
-                        name: extension_name.to_string(),
-                        display_name: None,
-                        timeout: None,
-                        bundled: None,
-                        description: extension_name.to_string(),
-                        available_tools: Vec::new(),
-                    }
-                }
+            .map(str::trim)
+            .filter(|name| PLATFORM_EXTENSIONS.contains_key(name))
+            .map(|name| ExtensionConfig::Platform {
+                name: name.to_string(),
+                description: name.to_string(),
+                display_name: None,
+                bundled: None,
+                available_tools: Vec::new(),
             })
             .collect()
     }
