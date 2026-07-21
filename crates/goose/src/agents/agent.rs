@@ -11,7 +11,6 @@ use crate::config::permission::PermissionManager;
 use crate::config::{Config, GooseMode};
 use crate::conversation::message::{Message, MessageUsage};
 use crate::conversation::Conversation;
-use crate::recipe::Response;
 use crate::session::extension_data::{EnabledExtensionsState, ExtensionState};
 use crate::session::{Session, SessionManager, SessionNameUpdate};
 use goose_types::thinking::ThinkingEffort;
@@ -106,7 +105,6 @@ pub struct Agent {
 
     final_output_json_schema: Mutex<Option<Value>>,
     pub(super) prompt_manager: Mutex<PromptManager>,
-    pub(super) hook_manager: crate::hooks::HookManager,
 }
 
 #[derive(Clone, Debug)]
@@ -142,27 +140,14 @@ impl Agent {
     pub fn with_config(config: AgentConfig) -> Self {
         let initial_mode = config.goose_mode;
         let codex_runtime = Arc::clone(&config.codex_runtime);
-        let use_login_shell_path = config.resolve_use_login_shell_path();
+        let _use_login_shell_path = config.resolve_use_login_shell_path();
         Self {
             config,
             current_goose_mode: Mutex::new(initial_mode),
             codex_core: crate::codex::CodexAgentCore::new(codex_runtime),
             final_output_json_schema: Mutex::new(None),
             prompt_manager: Mutex::new(PromptManager::new()),
-            hook_manager: crate::hooks::HookManager::load(
-                std::env::current_dir().ok().as_deref(),
-                use_login_shell_path,
-            ),
         }
-    }
-
-    pub async fn emit_hook(&self, event: crate::hooks::HookEvent, session_id: &str) {
-        if !self.hook_manager.has_hooks(event) {
-            return;
-        }
-        self.hook_manager
-            .emit(event, crate::hooks::HookContext::new(event, session_id))
-            .await;
     }
 
     pub async fn steer(&self, session_id: &str, message: Message) {
@@ -272,17 +257,6 @@ impl Agent {
             .map_err(|_| anyhow!("Could not resolve model config: missing model"))?;
         crate::model_config::model_config_from_user_config(&model_name)
             .map_err(|e| anyhow!("Could not resolve model config: {e}"))
-    }
-
-    pub async fn apply_recipe_components(
-        &self,
-        response: Option<Response>,
-        include_final_output: bool,
-    ) {
-        if include_final_output {
-            *self.final_output_json_schema.lock().await =
-                response.and_then(|response| response.json_schema);
-        }
     }
 
     pub async fn add_extension(

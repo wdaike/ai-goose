@@ -343,10 +343,6 @@ impl CliSession {
     pub async fn interactive(&mut self, prompt: Option<String>) -> Result<()> {
         let result = self.run_interactive(prompt).await;
 
-        self.agent
-            .emit_hook(goose::hooks::HookEvent::SessionEnd, &self.session_id)
-            .await;
-
         if result.is_ok() {
             println!(
                 "\n  {} {}",
@@ -768,9 +764,6 @@ impl CliSession {
         let message = Message::user().with_text(&prompt);
         let result = self
             .process_message(message, CancellationToken::default(), false)
-            .await;
-        self.agent
-            .emit_hook(goose::hooks::HookEvent::SessionEnd, &self.session_id)
             .await;
         result?;
         Ok(())

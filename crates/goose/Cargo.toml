@@ -10,7 +10,6 @@ description.workspace = true
 
 [features]
 default = []
-telemetry = []
 otel = [
     "dep:tracing-opentelemetry",
     "dep:opentelemetry",
@@ -51,7 +50,7 @@ native-tls = [
     "oauth2/native-tls",
 ]
 system-keyring = ["dep:keyring"]
-portable-default = ["rustls-tls", "telemetry", "otel"]
+portable-default = ["rustls-tls", "otel"]
 nostr = ["dep:nostr", "dep:nostr-sdk"]
 
 [lints]

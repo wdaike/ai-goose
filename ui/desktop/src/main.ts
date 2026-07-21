@@ -1276,7 +1276,6 @@ const createChat = async (
     chat: '/',
     pair: '/pair',
     settings: '/settings',
-    schedules: '/schedules',
     permission: '/permission',
     ConfigureProviders: '/configure-providers',
   };

@@ -11,7 +11,6 @@ export type View =
   | 'configPage'
   | 'ConfigureProviders'
   | 'settingsV2'
-  | 'schedules'
   | 'loading'
   | 'skills'
   | 'permission';
@@ -49,9 +48,6 @@ export const createNavigationHandler = (navigate: NavigateFunction) => {
       }
       case 'settings':
         navigate('/settings', { state: options });
-        break;
-      case 'schedules':
-        navigate('/schedules', { state: options });
         break;
       case 'skills':
         navigate('/settings', { state: { ...options, section: 'skills' } });

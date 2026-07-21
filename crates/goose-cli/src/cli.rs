@@ -4,31 +4,17 @@ use clap_complete::{generate, Shell as ClapShell};
 use clap_complete_nushell::Nushell as ClapNushell;
 use goose::agents::GoosePlatform;
 use goose::config::{Config, GooseMode};
-#[cfg(feature = "telemetry")]
-use goose::posthog::get_telemetry_choice;
-use goose::recipe::Recipe;
 use goose::source_roots::SourceRoot;
 
-#[cfg(feature = "telemetry")]
-use crate::commands::configure::configure_telemetry_consent_dialog;
 use crate::commands::configure::handle_configure;
 use crate::commands::info::handle_info;
-use crate::commands::plugin::{handle_plugin_install, handle_plugin_update};
 use crate::commands::project::{handle_project_default, handle_projects_interactive};
-use crate::commands::recipe::{handle_deeplink, handle_list, handle_open, handle_validate};
 use crate::commands::term::{
     handle_term_info, handle_term_init, handle_term_log, handle_term_run, Shell,
 };
 
-use crate::commands::schedule::{
-    handle_schedule_add, handle_schedule_cron_help, handle_schedule_list, handle_schedule_remove,
-    handle_schedule_run_now, handle_schedule_services_status, handle_schedule_services_stop,
-    handle_schedule_sessions,
-};
 use crate::commands::session::{handle_session_list, handle_session_remove};
 use crate::commands::skills::handle_skills_list;
-use crate::recipes::extract_from_cli::extract_recipe_info_from_cli;
-use crate::recipes::recipe::{explain_recipe, render_recipe_as_yaml};
 use crate::session::{build_session, SessionBuilderConfig};
 use goose::session::session_manager::SessionType;
 use goose::session::SessionManager;
@@ -575,198 +561,11 @@ enum SessionCommand {
     },
 }
 
-#[derive(Subcommand, Debug)]
-enum SchedulerCommand {
-    #[command(about = "Add a new scheduled job")]
-    Add {
-        #[arg(
-            long = "schedule-id",
-            alias = "id",
-            help = "Unique ID for the recurring scheduled job"
-        )]
-        schedule_id: String,
-        #[arg(
-            long,
-            help = "Cron expression for the schedule",
-            long_help = "Cron expression for when to run the job. Examples:\n  '0 * * * *'     - Every hour at minute 0\n  '0 */2 * * *'   - Every 2 hours\n  '@hourly'       - Every hour (shorthand)\n  '0 9 * * *'     - Every day at 9:00 AM\n  '0 9 * * 1'     - Every Monday at 9:00 AM\n  '0 0 1 * *'     - First day of every month at midnight"
-        )]
-        cron: String,
-        #[arg(
-            long,
-            help = "Recipe source (path to file, or base64 encoded recipe string)"
-        )]
-        recipe_source: String,
-        #[arg(
-            long,
-            value_name = "KEY=VALUE",
-            help = "Recipe parameter in KEY=VALUE format (can be specified multiple times)",
-            action = clap::ArgAction::Append,
-            value_parser = parse_key_val,
-        )]
-        params: Vec<(String, String)>,
-    },
-    #[command(about = "List all scheduled jobs")]
-    List {},
-    #[command(about = "Remove a scheduled job by ID")]
-    Remove {
-        #[arg(
-            long = "schedule-id",
-            alias = "id",
-            help = "ID of the scheduled job to remove (removes the recurring schedule)"
-        )]
-        schedule_id: String,
-    },
-    /// List sessions created by a specific schedule
-    #[command(about = "List sessions created by a specific schedule")]
-    Sessions {
-        /// ID of the schedule
-        #[arg(long = "schedule-id", alias = "id", help = "ID of the schedule")]
-        schedule_id: String,
-        #[arg(short = 'l', long, help = "Maximum number of sessions to return")]
-        limit: Option<usize>,
-    },
-    #[command(about = "Run a scheduled job immediately")]
-    RunNow {
-        /// ID of the schedule to run
-        #[arg(long = "schedule-id", alias = "id", help = "ID of the schedule to run")]
-        schedule_id: String,
-    },
-    /// Check status of scheduler services (deprecated - no external services needed)
-    #[command(about = "[Deprecated] Check status of scheduler services")]
-    ServicesStatus {},
-    /// Stop scheduler services (deprecated - no external services needed)
-    #[command(about = "[Deprecated] Stop scheduler services")]
-    ServicesStop {},
-    /// Show cron expression examples and help
-    #[command(about = "Show cron expression examples and help")]
-    CronHelp {},
-}
-
-#[derive(Subcommand)]
-enum GatewayCommand {
-    #[command(about = "Show gateway status")]
-    Status {},
-
-    #[command(about = "Start a gateway")]
-    Start {
-        #[arg(help = "Gateway type (e.g., 'telegram')")]
-        gateway_type: String,
-
-        #[arg(
-            long = "bot-token",
-            help = "Bot token for the gateway platform",
-            long_help = "Authentication token for the gateway platform (e.g., Telegram bot token)"
-        )]
-        bot_token: String,
-    },
-
-    #[command(about = "Stop a running gateway")]
-    Stop {
-        #[arg(help = "Gateway type to stop (e.g., 'telegram')")]
-        gateway_type: String,
-    },
-
-    #[command(about = "Generate a pairing code for a gateway")]
-    Pair {
-        #[arg(help = "Gateway type to generate pairing code for")]
-        gateway_type: String,
-    },
-}
-
-#[derive(Subcommand)]
-enum PluginCommand {
-    /// Install a plugin from a git repository URL
-    #[command(about = "Install a plugin from a git repository URL")]
-    Install {
-        #[arg(
-            long,
-            help = "Automatically update this plugin before plugin skills are loaded"
-        )]
-        auto_update: bool,
-
-        #[arg(help = "URL to a git repository containing a supported plugin")]
-        url: String,
-    },
-
-    /// Update an installed git-backed plugin
-    #[command(about = "Update an installed git-backed plugin")]
-    Update {
-        #[arg(help = "Name of the installed plugin to update")]
-        name: String,
-    },
-}
-
 #[derive(Subcommand)]
 enum SkillsCommand {
     /// List all skills available to the goose agent
     #[command(about = "List all skills available to the goose agent")]
     List,
-}
-
-#[derive(Subcommand)]
-enum RecipeCommand {
-    /// Validate a recipe file
-    #[command(about = "Validate a recipe")]
-    Validate {
-        /// Recipe name to get recipe file to validate
-        #[arg(help = "recipe name to get recipe file or full path to the recipe file to validate")]
-        recipe_name: String,
-    },
-
-    /// Generate a deeplink for a recipe file
-    #[command(about = "Generate a deeplink for a recipe")]
-    Deeplink {
-        /// Recipe name to get recipe file to generate deeplink
-        #[arg(
-            help = "recipe name to get recipe file or full path to the recipe file to generate deeplink"
-        )]
-        recipe_name: String,
-        /// Recipe parameters in key=value format (can be specified multiple times)
-        #[arg(
-            short = 'p',
-            long = "param",
-            value_name = "KEY=VALUE",
-            help = "Recipe parameter in key=value format (can be specified multiple times)"
-        )]
-        params: Vec<String>,
-    },
-
-    /// Open a recipe in Goose Desktop
-    #[command(about = "Open a recipe in Goose Desktop")]
-    Open {
-        /// Recipe name to get recipe file to open
-        #[arg(help = "recipe name or full path to the recipe file")]
-        recipe_name: String,
-        /// Recipe parameters in key=value format (can be specified multiple times)
-        #[arg(
-            short = 'p',
-            long = "param",
-            value_name = "KEY=VALUE",
-            help = "Recipe parameter in key=value format (can be specified multiple times)"
-        )]
-        params: Vec<String>,
-    },
-
-    /// List available recipes
-    #[command(about = "List available recipes")]
-    List {
-        /// Output format (text, json)
-        #[arg(
-            long = "format",
-            value_name = "FORMAT",
-            help = "Output format (text, json)",
-            default_value = "text"
-        )]
-        format: String,
-
-        /// Show verbose information including recipe descriptions
-        #[arg(
-            short,
-            long,
-            help = "Show verbose information including recipe descriptions"
-        )]
-        verbose: bool,
-    },
 }
 
 #[derive(Subcommand)]
@@ -912,42 +711,11 @@ enum Command {
         model_opts: ModelOptions,
     },
 
-    /// Recipe utilities for validation and deeplinking
-    #[command(about = "Recipe utilities for validation and deeplinking")]
-    Recipe {
-        #[command(subcommand)]
-        command: RecipeCommand,
-    },
-
     /// Skill utilities
     #[command(about = "Skill utilities")]
     Skills {
         #[command(subcommand)]
         command: SkillsCommand,
-    },
-
-    /// Manage plugins
-    #[command(about = "Manage plugins")]
-    Plugin {
-        #[command(subcommand)]
-        command: PluginCommand,
-    },
-
-    /// Manage scheduled jobs
-    #[command(about = "Manage scheduled jobs", visible_alias = "sched")]
-    Schedule {
-        #[command(subcommand)]
-        command: SchedulerCommand,
-    },
-
-    /// Manage gateways for external platform integrations (e.g., Telegram)
-    #[command(
-        about = "Manage gateways for external platform integrations",
-        visible_alias = "gw"
-    )]
-    Gateway {
-        #[command(subcommand)]
-        command: GatewayCommand,
     },
 
     /// Update the goose CLI version
@@ -1233,13 +1001,9 @@ fn get_command_name(command: &Option<Command>) -> &'static str {
         Some(Command::Project {}) => "project",
         Some(Command::Projects) => "projects",
         Some(Command::Run { .. }) => "run",
-        Some(Command::Gateway { .. }) => "gateway",
-        Some(Command::Schedule { .. }) => "schedule",
         #[cfg(feature = "update")]
         Some(Command::Update { .. }) => "update",
-        Some(Command::Recipe { .. }) => "recipe",
         Some(Command::Skills { .. }) => "skills",
-        Some(Command::Plugin { .. }) => "plugin",
         Some(Command::Term { .. }) => "term",
         #[cfg(feature = "tui")]
         Some(Command::Tui { .. }) => "tui",
@@ -1472,11 +1236,6 @@ async fn handle_interactive_session(
     session_opts: SessionOptions,
     extension_opts: ExtensionOptions,
 ) -> Result<()> {
-    #[cfg(feature = "telemetry")]
-    if get_telemetry_choice().is_none() {
-        configure_telemetry_consent_dialog()?;
-    }
-
     let session_start = std::time::Instant::now();
     let session_type = if fork {
         "forked"
@@ -1543,14 +1302,12 @@ async fn handle_interactive_session(
         extensions: extension_opts.extensions,
         streamable_http_extensions: extension_opts.streamable_http_extensions,
         no_profile: extension_opts.no_profile,
-        recipe: None,
         additional_system_prompt: None,
         provider: None,
         model: None,
         debug: session_opts.debug,
         max_tool_repetitions: session_opts.max_tool_repetitions,
         max_turns: session_opts.max_turns,
-        scheduled_job_id: None,
         interactive: true,
         quiet: false,
         output_format: "text".to_string(),
@@ -1607,29 +1364,19 @@ async fn log_session_completion(
     }
 }
 
-fn parse_run_input(
-    input_opts: &InputOptions,
-    quiet: bool,
-) -> Result<Option<(InputConfig, Option<Recipe>)>> {
-    match (
-        &input_opts.instructions,
-        &input_opts.input_text,
-        &input_opts.recipe,
-    ) {
-        (Some(file), _, _) if file == "-" => {
+fn parse_run_input(input_opts: &InputOptions) -> Result<Option<InputConfig>> {
+    match (&input_opts.instructions, &input_opts.input_text) {
+        (Some(file), _) if file == "-" => {
             let mut contents = String::new();
             std::io::stdin()
                 .read_to_string(&mut contents)
                 .expect("Failed to read from stdin");
-            Ok(Some((
-                InputConfig {
-                    contents: Some(contents),
-                    additional_system_prompt: input_opts.system.clone(),
-                },
-                None,
-            )))
+            Ok(Some(InputConfig {
+                contents: Some(contents),
+                additional_system_prompt: input_opts.system.clone(),
+            }))
         }
-        (Some(file), _, _) => {
+        (Some(file), _) => {
             let contents = std::fs::read_to_string(file).unwrap_or_else(|err| {
                 eprintln!(
                     "Instruction file not found — did you mean to use goose run --text?\n{}",
@@ -1637,70 +1384,19 @@ fn parse_run_input(
                 );
                 std::process::exit(1);
             });
-            Ok(Some((
-                InputConfig {
-                    contents: Some(contents),
-                    additional_system_prompt: None,
-                },
-                None,
-            )))
+            Ok(Some(InputConfig {
+                contents: Some(contents),
+                additional_system_prompt: None,
+            }))
         }
-        (_, Some(text), _) => Ok(Some((
-            InputConfig {
-                contents: Some(text.clone()),
-                additional_system_prompt: input_opts.system.clone(),
-            },
-            None,
-        ))),
-        (_, _, Some(recipe_name)) => {
-            let recipe_display_name = std::path::Path::new(recipe_name)
-                .file_name()
-                .and_then(|name| name.to_str())
-                .unwrap_or(recipe_name);
-
-            let recipe_version = crate::recipes::search_recipe::load_recipe_file(recipe_name)
-                .ok()
-                .and_then(|rf| {
-                    goose::recipe::template_recipe::parse_recipe_content(
-                        &rf.content,
-                        Some(rf.parent_dir.display().to_string()),
-                    )
-                    .ok()
-                    .map(|(r, _)| r.version)
-                })
-                .unwrap_or_else(|| "unknown".to_string());
-
-            if input_opts.explain {
-                explain_recipe(recipe_name, input_opts.params.clone())?;
-                return Ok(None);
-            }
-            if input_opts.render_recipe {
-                if let Err(err) = render_recipe_as_yaml(recipe_name, input_opts.params.clone()) {
-                    eprintln!("{}: {}", console::style("Error").red().bold(), err);
-                    std::process::exit(1);
-                }
-                return Ok(None);
-            }
-
-            tracing::info!(
-                monotonic_counter.goose.recipe_runs = 1,
-                recipe_name = %recipe_display_name,
-                recipe_version = %recipe_version,
-                session_type = "recipe",
-                interface = "cli",
-                "Recipe execution started"
+        (_, Some(text)) => Ok(Some(InputConfig {
+            contents: Some(text.clone()),
+            additional_system_prompt: input_opts.system.clone(),
+        })),
+        (None, None) => {
+            eprintln!(
+                "Error: Must provide either --instructions (-i) or --text (-t). Use -i - for stdin."
             );
-
-            let (input_config, recipe) = extract_recipe_info_from_cli(
-                recipe_name.clone(),
-                input_opts.params.clone(),
-                input_opts.additional_sub_recipes.clone(),
-                quiet,
-            )?;
-            Ok(Some((input_config, Some(recipe))))
-        }
-        (None, None, None) => {
-            eprintln!("Error: Must provide either --instructions (-i), --text (-t), or --recipe. Use -i - for stdin.");
             std::process::exit(1);
         }
     }
@@ -1715,14 +1411,7 @@ async fn handle_run_command(
     output_opts: OutputOptions,
     model_opts: ModelOptions,
 ) -> Result<()> {
-    #[cfg(feature = "telemetry")]
-    if run_behavior.interactive && get_telemetry_choice().is_none() {
-        configure_telemetry_consent_dialog()?;
-    }
-
-    let parsed = parse_run_input(&input_opts, output_opts.quiet)?;
-
-    let Some((input_config, recipe)) = parsed else {
+    let Some(input_config) = parse_run_input(&input_opts)? else {
         return Ok(());
     };
 
@@ -1754,14 +1443,12 @@ async fn handle_run_command(
         extensions: extension_opts.extensions,
         streamable_http_extensions: extension_opts.streamable_http_extensions,
         no_profile: extension_opts.no_profile,
-        recipe: recipe.clone(),
         additional_system_prompt: input_config.additional_system_prompt,
         provider: None,
         model: model_opts.model,
         debug: session_opts.debug,
         max_tool_repetitions: session_opts.max_tool_repetitions,
         max_turns: session_opts.max_turns,
-        scheduled_job_id: run_behavior.scheduled_job_id,
         interactive: run_behavior.interactive,
         quiet: output_opts.quiet,
         output_format: output_opts.output_format,
@@ -1773,7 +1460,7 @@ async fn handle_run_command(
         session.interactive(input_config.contents).await
     } else if let Some(contents) = input_config.contents {
         let session_start = std::time::Instant::now();
-        let session_type = if recipe.is_some() { "recipe" } else { "run" };
+        let session_type = "run";
 
         tracing::info!(
             monotonic_counter.goose.session_starts = 1,
@@ -1789,68 +1476,6 @@ async fn handle_run_command(
         Err(anyhow::anyhow!(
             "no text provided for prompt in headless mode"
         ))
-    }
-}
-
-async fn handle_gateway_command(command: GatewayCommand) -> Result<()> {
-    use crate::commands::gateway;
-
-    match command {
-        GatewayCommand::Status {} => gateway::handle_gateway_status().await,
-        GatewayCommand::Start {
-            gateway_type,
-            bot_token,
-        } => {
-            let platform_config = serde_json::json!({ "bot_token": bot_token });
-            gateway::handle_gateway_start(gateway_type, platform_config).await
-        }
-        GatewayCommand::Stop { gateway_type } => gateway::handle_gateway_stop(gateway_type).await,
-        GatewayCommand::Pair { gateway_type } => gateway::handle_gateway_pair(gateway_type).await,
-    }
-}
-
-async fn handle_schedule_command(command: SchedulerCommand) -> Result<()> {
-    match command {
-        SchedulerCommand::Add {
-            schedule_id,
-            cron,
-            recipe_source,
-            params,
-        } => handle_schedule_add(schedule_id, cron, recipe_source, params).await,
-        SchedulerCommand::List {} => handle_schedule_list().await,
-        SchedulerCommand::Remove { schedule_id } => handle_schedule_remove(schedule_id).await,
-        SchedulerCommand::Sessions { schedule_id, limit } => {
-            handle_schedule_sessions(schedule_id, limit).await
-        }
-        SchedulerCommand::RunNow { schedule_id } => handle_schedule_run_now(schedule_id).await,
-        SchedulerCommand::ServicesStatus {} => handle_schedule_services_status().await,
-        SchedulerCommand::ServicesStop {} => handle_schedule_services_stop().await,
-        SchedulerCommand::CronHelp {} => handle_schedule_cron_help().await,
-    }
-}
-
-fn handle_plugin_subcommand(command: PluginCommand) -> Result<()> {
-    match command {
-        PluginCommand::Install { url, auto_update } => handle_plugin_install(&url, auto_update),
-        PluginCommand::Update { name } => handle_plugin_update(&name),
-    }
-}
-
-fn handle_recipe_subcommand(command: RecipeCommand) -> Result<()> {
-    match command {
-        RecipeCommand::Validate { recipe_name } => handle_validate(&recipe_name),
-        RecipeCommand::Deeplink {
-            recipe_name,
-            params,
-        } => {
-            handle_deeplink(&recipe_name, &params)?;
-            Ok(())
-        }
-        RecipeCommand::Open {
-            recipe_name,
-            params,
-        } => handle_open(&recipe_name, &params),
-        RecipeCommand::List { format, verbose } => handle_list(&format, verbose),
     }
 }
 
@@ -1878,11 +1503,6 @@ async fn handle_default_session() -> Result<()> {
         return handle_configure().await;
     }
 
-    #[cfg(feature = "telemetry")]
-    if get_telemetry_choice().is_none() {
-        configure_telemetry_consent_dialog()?;
-    }
-
     let goose_mode = Config::global().get_goose_mode().unwrap_or_default();
     let session_id = get_or_create_session_id(None, false, false, goose_mode).await?;
 
@@ -1894,14 +1514,12 @@ async fn handle_default_session() -> Result<()> {
         extensions: Vec::new(),
         streamable_http_extensions: Vec::new(),
         no_profile: false,
-        recipe: None,
         additional_system_prompt: None,
         provider: None,
         model: None,
         debug: false,
         max_tool_repetitions: None,
         max_turns: None,
-        scheduled_job_id: None,
         interactive: true,
         quiet: false,
         output_format: "text".to_string(),
@@ -2008,8 +1626,6 @@ pub async fn cli() -> anyhow::Result<()> {
             )
             .await
         }
-        Some(Command::Gateway { command }) => handle_gateway_command(command).await,
-        Some(Command::Schedule { command }) => handle_schedule_command(command).await,
         #[cfg(feature = "update")]
         Some(Command::Update {
             canary,
@@ -2018,9 +1634,7 @@ pub async fn cli() -> anyhow::Result<()> {
             crate::commands::update::update(canary, reconfigure).await?;
             Ok(())
         }
-        Some(Command::Recipe { command }) => handle_recipe_subcommand(command),
         Some(Command::Skills { command }) => handle_skills_subcommand(command).await,
-        Some(Command::Plugin { command }) => handle_plugin_subcommand(command),
         Some(Command::Term { command }) => handle_term_subcommand(command).await,
         #[cfg(feature = "tui")]
         Some(Command::Tui { args }) => crate::commands::tui::handle_tui(args),

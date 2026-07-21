@@ -1,4 +1,4 @@
-import { AppWindow, Clock, MessageSquarePlus, Settings } from 'lucide-react';
+import { AppWindow, MessageSquarePlus, Settings } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { defineMessages, type IntlShape, type MessageDescriptor } from 'react-intl';
 
@@ -14,7 +14,6 @@ export interface NavItem {
 /** Top-level nav items (excluding Settings which is pinned to the bottom). */
 export const NAV_ITEMS: NavItem[] = [
   { id: 'home', path: '/', label: 'New Chat', icon: MessageSquarePlus },
-  { id: 'scheduler', path: '/schedules', label: 'Scheduler', icon: Clock },
   { id: 'apps', path: '/apps', label: 'Apps', icon: AppWindow },
 ];
 

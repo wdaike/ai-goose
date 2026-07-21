@@ -28,7 +28,6 @@ struct SessionMeta<'a> {
     archived_at: Option<chrono::DateTime<chrono::Utc>>,
     user_set_name: bool,
     session_type: String,
-    has_recipe: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     project_id: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -48,7 +47,6 @@ impl<'a> From<&'a Session> for SessionMeta<'a> {
             archived_at: session.archived_at,
             user_set_name: session.user_set_name,
             session_type: session.session_type.to_string(),
-            has_recipe: session.recipe.is_some(),
             project_id: session.project_id.as_deref(),
             provider_id: session.provider_name.as_deref(),
             model_id: session
@@ -72,16 +70,6 @@ pub(super) fn session_response_meta(
     extension_results: &[ExtensionLoadResult],
 ) -> serde_json::Map<String, serde_json::Value> {
     let mut meta = serde_json::Map::new();
-    if let Some(recipe) = &session.recipe {
-        if let Ok(v) = serde_json::to_value(recipe) {
-            meta.insert("recipe".to_string(), v);
-        }
-    }
-    if let Some(values) = &session.user_recipe_values {
-        if let Ok(v) = serde_json::to_value(values) {
-            meta.insert("userRecipeValues".to_string(), v);
-        }
-    }
     if let Ok(v) = serde_json::to_value(extension_results) {
         meta.insert("extensionResults".to_string(), v);
     }
@@ -273,7 +261,6 @@ fn slash_command_meta(entry: &SlashCommandEntry) -> serde_json::Map<String, serd
     let mut meta = serde_json::Map::new();
     let command_type = match entry.source {
         SlashCommandSource::Builtin => "Builtin",
-        SlashCommandSource::Recipe => "Recipe",
         SlashCommandSource::Skill => "Skill",
     };
     meta.insert(
@@ -440,9 +427,9 @@ mod tests {
         let cases = [
             (SlashCommandSource::Builtin, "Builtin", None),
             (
-                SlashCommandSource::Recipe,
-                "Recipe",
-                Some("/tmp/release.yaml".to_string()),
+                SlashCommandSource::Skill,
+                "Skill",
+                Some("/tmp/release.md".to_string()),
             ),
             (SlashCommandSource::Skill, "Skill", None),
         ];

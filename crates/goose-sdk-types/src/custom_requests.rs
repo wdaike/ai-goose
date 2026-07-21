@@ -4,11 +4,6 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-mod recipe;
-pub use recipe::*;
-mod schedule;
-pub use schedule::*;
-
 /// Schema descriptor for a single custom method, produced by the
 /// `#[custom_methods]` macro's generated `custom_method_schemas()` function.
 ///
@@ -1269,8 +1264,6 @@ pub enum SourceType {
     #[default]
     Skill,
     BuiltinSkill,
-    Recipe,
-    Subrecipe,
     Agent,
     Project,
 }
@@ -1280,8 +1273,6 @@ impl std::fmt::Display for SourceType {
         match self {
             SourceType::Skill => write!(f, "skill"),
             SourceType::BuiltinSkill => write!(f, "builtin skill"),
-            SourceType::Recipe => write!(f, "recipe"),
-            SourceType::Subrecipe => write!(f, "subrecipe"),
             SourceType::Agent => write!(f, "agent"),
             SourceType::Project => write!(f, "project"),
         }

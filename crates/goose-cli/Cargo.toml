@@ -78,7 +78,6 @@ winapi = { workspace = true, features = [
 [features]
 default = [
     "tui",
-    "telemetry",
     "nostr",
     "otel",
     "rustls-tls",
@@ -88,13 +87,12 @@ default = [
 cuda = []
 vulkan = []
 mlx = []
-telemetry = ["goose/telemetry"]
 nostr = ["goose/nostr"]
 otel = ["goose/otel"]
 system-keyring = ["goose/system-keyring"]
 tui = []
 update = ["dep:sigstore-verify"]
-portable-default = ["rustls-tls", "telemetry", "otel", "tui"]
+portable-default = ["rustls-tls", "otel", "tui"]
 # disables the update command
 disable-update = []
 rustls-tls = [

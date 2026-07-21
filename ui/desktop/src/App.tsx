@@ -27,7 +27,6 @@ interface PairRouteState {
   noAutoSubmit?: boolean;
 }
 import SettingsView, { SettingsViewOptions } from './components/settings/SettingsView';
-import SchedulesView from './components/schedule/SchedulesView';
 import ProviderSettings from './components/settings/providers/ProviderSettingsPage';
 import { AppLayout } from './components/Layout/AppLayout';
 import { ChatProvider, DEFAULT_CHAT_TITLE } from './contexts/ChatContext';
@@ -163,11 +162,6 @@ const SettingsRoute = () => {
   return <SettingsView onClose={() => navigate('/')} setView={setView} viewOptions={viewOptions} />;
 };
 
-const SchedulesRoute = () => {
-  const navigate = useNavigate();
-  return <SchedulesView onClose={() => navigate('/')} />;
-};
-
 const PermissionRoute = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -187,9 +181,6 @@ const PermissionRoute = () => {
             break;
           case 'settings':
             navigate('/settings', { state: parentViewOptions });
-            break;
-          case 'schedules':
-            navigate('/schedules');
             break;
           default:
             navigate('/');
@@ -515,7 +506,6 @@ export function AppInner() {
               />
               <Route path="settings" element={<SettingsRoute />} />
               <Route path="apps" element={<AppsView />} />
-              <Route path="schedules" element={<SchedulesRoute />} />
               <Route path="permission" element={<PermissionRoute />} />
             </Route>
           </Routes>

@@ -15,9 +15,7 @@ pub mod conversation {
 }
 pub mod download_manager;
 pub mod execution;
-pub mod gateway;
 pub mod goose_apps;
-pub mod hooks;
 pub mod instance_id;
 pub mod logging;
 pub mod login_shell;
@@ -27,17 +25,10 @@ pub mod oauth;
 #[cfg(feature = "otel")]
 pub mod otel;
 pub mod permission;
-pub mod plugins;
-#[cfg(feature = "telemetry")]
-pub mod posthog;
 pub mod providers {
     pub const CODEX_PROVIDER_NAME: &str = "codex";
     pub const CODEX_DEFAULT_MODEL: &str = "current";
 }
-pub mod recipe;
-pub mod recipe_deeplink;
-pub mod scheduler;
-pub mod scheduler_trait;
 pub mod session;
 pub mod session_context;
 pub mod skills;

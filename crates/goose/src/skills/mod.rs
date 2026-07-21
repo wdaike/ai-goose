@@ -6,7 +6,6 @@ mod arguments;
 mod builtin;
 
 use crate::config::paths::Paths;
-use crate::plugins::installed_plugin_skill_dirs;
 use crate::sources::parse_frontmatter;
 use agent_client_protocol::Error;
 use anyhow::Result;
@@ -179,7 +178,6 @@ fn inferred_discoverable_skill_root(path: &Path) -> Option<PathBuf> {
         global_roots.push(home.join(".claude").join("skills"));
         global_roots.push(home.join(".config").join("agents").join("skills"));
     }
-    global_roots.extend(installed_plugin_skill_dirs());
 
     for root in global_roots {
         let canonical_root = canonicalize_or_original(&root);
@@ -308,12 +306,6 @@ pub fn all_skill_dirs(working_dir: Option<&Path>) -> Vec<(PathBuf, bool)> {
         dirs.push((h.join(".claude").join("skills"), true));
         dirs.push((h.join(".config").join("agents").join("skills"), true));
     }
-
-    dirs.extend(
-        installed_plugin_skill_dirs()
-            .into_iter()
-            .map(|dir| (dir, true)),
-    );
 
     dirs
 }

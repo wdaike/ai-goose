@@ -6,7 +6,6 @@ use console::style;
 use goose::agents::{Agent, ExtensionError};
 use goose::config::resolve_extensions_for_new_session;
 use goose::config::{Config, ExtensionConfig, GooseMode};
-use goose::recipe::Recipe;
 use goose::session::session_manager::SessionType;
 use goose::session::{EnabledExtensionsState, ExtensionState};
 use rustyline::EditMode;
@@ -63,8 +62,6 @@ pub struct SessionBuilderConfig {
     pub streamable_http_extensions: Vec<StreamableHttpOptions>,
     /// List of builtin extension commands to add
     pub no_profile: bool,
-    /// Recipe for the session
-    pub recipe: Option<Recipe>,
     /// Any additional system prompt to append to the default
     pub additional_system_prompt: Option<String>,
     /// Provider override from CLI arguments
@@ -77,8 +74,6 @@ pub struct SessionBuilderConfig {
     pub max_tool_repetitions: Option<u32>,
     /// Maximum number of turns (iterations) allowed without user input
     pub max_turns: Option<u32>,
-    /// ID of the scheduled job that triggered this session (if any)
-    pub scheduled_job_id: Option<String>,
     /// Whether this session will be used interactively (affects debugging prompts)
     pub interactive: bool,
     /// Quiet mode - suppress non-response output
@@ -101,14 +96,12 @@ impl Default for SessionBuilderConfig {
             extensions: Vec::new(),
             streamable_http_extensions: Vec::new(),
             no_profile: false,
-            recipe: None,
             additional_system_prompt: None,
             provider: None,
             model: None,
             debug: false,
             max_tool_repetitions: None,
             max_turns: None,
-            scheduled_job_id: None,
             interactive: false,
             quiet: false,
             output_format: "text".to_string(),
@@ -269,10 +262,8 @@ async fn handle_resumed_session_workdir(agent: &Agent, session_id: &str, interac
 async fn collect_extension_configs(
     agent: &Agent,
     session_config: &SessionBuilderConfig,
-    recipe: Option<&Recipe>,
     session_id: &str,
 ) -> Result<Vec<ExtensionConfig>, ExtensionError> {
-    let recipe_extensions = recipe.and_then(|r| r.extensions.as_deref());
     let configured_extensions: Vec<ExtensionConfig> = if session_config.resume {
         EnabledExtensionsState::for_session(
             &agent.config.session_manager,
@@ -283,7 +274,7 @@ async fn collect_extension_configs(
     } else if session_config.no_profile {
         Vec::new()
     } else {
-        resolve_extensions_for_new_session(recipe_extensions, None)
+        resolve_extensions_for_new_session(None, None)
     };
 
     let cli_flag_extensions = parse_cli_flag_extensions(
@@ -292,12 +283,6 @@ async fn collect_extension_configs(
     );
 
     let mut all: Vec<ExtensionConfig> = configured_extensions;
-    if !session_config.no_profile && !session_config.resume && recipe_extensions.is_none() {
-        let project_root = std::env::current_dir().ok();
-        all.extend(goose::plugins::mcp_servers::enabled_plugin_mcp_servers(
-            project_root.as_deref(),
-        ));
-    }
     all.extend(cli_flag_extensions);
 
     Ok(all)
@@ -341,19 +326,10 @@ async fn configure_session_prompts(
 }
 
 pub async fn build_session(session_config: SessionBuilderConfig) -> CliSession {
-    #[cfg(feature = "telemetry")]
-    goose::posthog::set_session_context("cli", session_config.resume);
-
     let config = Config::global();
     let agent: Agent = Agent::new();
 
     let session_manager = agent.config.session_manager.clone();
-
-    let recipe = session_config.recipe.as_ref();
-
-    agent
-        .apply_recipe_components(recipe.and_then(|r| r.response.clone()), true)
-        .await;
 
     let session_id =
         resolve_session_id(&session_config, &session_manager, agent.config.goose_mode).await;
@@ -362,14 +338,13 @@ pub async fn build_session(session_config: SessionBuilderConfig) -> CliSession {
         handle_resumed_session_workdir(&agent, &session_id, session_config.interactive).await;
     }
 
-    let extensions =
-        match collect_extension_configs(&agent, &session_config, recipe, &session_id).await {
-            Ok(exts) => exts,
-            Err(e) => {
-                output::render_error(&format!("Failed to collect extensions: {}", e));
-                process::exit(1);
-            }
-        };
+    let extensions = match collect_extension_configs(&agent, &session_config, &session_id).await {
+        Ok(exts) => exts,
+        Err(e) => {
+            output::render_error(&format!("Failed to collect extensions: {}", e));
+            process::exit(1);
+        }
+    };
 
     if session_config.provider.as_deref().is_some_and(|provider| {
         !provider.eq_ignore_ascii_case("codex") && !provider.eq_ignore_ascii_case("openai")
@@ -380,11 +355,7 @@ pub async fn build_session(session_config: SessionBuilderConfig) -> CliSession {
         );
     }
 
-    let requested_model = session_config.model.clone().or_else(|| {
-        recipe
-            .and_then(|recipe| recipe.settings.as_ref())
-            .and_then(|settings| settings.goose_model.clone())
-    });
+    let requested_model = session_config.model.clone();
     let previous_provider = session_manager
         .get_session(&session_id, false)
         .await
@@ -395,9 +366,6 @@ pub async fn build_session(session_config: SessionBuilderConfig) -> CliSession {
         update = update.model_config(goose_types::model::ModelConfig::new(model));
     } else if previous_provider.as_deref() != Some("codex") {
         update = update.clear_model_config();
-    }
-    if let Some(recipe) = session_config.recipe.clone() {
-        update = update.recipe(Some(recipe));
     }
     update.apply().await.unwrap_or_else(|error| {
         output::render_error(&format!("Failed to update session: {error}"));
@@ -432,10 +400,10 @@ pub async fn build_session(session_config: SessionBuilderConfig) -> CliSession {
         Arc::try_unwrap(agent_ptr).unwrap_or_else(|_| panic!("There should be no more references")),
         session_id.clone(),
         debug_mode,
-        session_config.scheduled_job_id.clone(),
+        None,
         session_config.max_turns,
         edit_mode,
-        recipe.and_then(|r| r.retry.clone()),
+        None,
         session_config.output_format.clone(),
         session_config.stats,
     )
@@ -478,14 +446,12 @@ mod tests {
                 timeout: goose::config::DEFAULT_EXTENSION_TIMEOUT,
             }],
             no_profile: false,
-            recipe: None,
             additional_system_prompt: Some("Test prompt".to_string()),
             provider: None,
             model: None,
             debug: true,
             max_tool_repetitions: Some(5),
             max_turns: None,
-            scheduled_job_id: None,
             interactive: true,
             quiet: false,
             output_format: "text".to_string(),
@@ -497,7 +463,6 @@ mod tests {
         assert!(config.debug);
         assert_eq!(config.max_tool_repetitions, Some(5));
         assert!(config.max_turns.is_none());
-        assert!(config.scheduled_job_id.is_none());
         assert!(config.interactive);
         assert!(!config.quiet);
     }
@@ -512,12 +477,10 @@ mod tests {
         assert!(config.extensions.is_empty());
         assert!(config.streamable_http_extensions.is_empty());
         assert!(!config.no_profile);
-        assert!(config.recipe.is_none());
         assert!(config.additional_system_prompt.is_none());
         assert!(!config.debug);
         assert!(config.max_tool_repetitions.is_none());
         assert!(config.max_turns.is_none());
-        assert!(config.scheduled_job_id.is_none());
         assert!(!config.interactive);
         assert!(!config.quiet);
         assert!(!config.fork);

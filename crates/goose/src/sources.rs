@@ -3,7 +3,6 @@
 //! `<project>/.agents/skills/`). Projects live in `<dataDir>/projects/<slug>.md`.
 
 use crate::config::paths::Paths;
-use crate::recipe::{Recipe, RECIPE_FILE_EXTENSIONS};
 use crate::skills::{
     build_skill_md, discover_skills, infer_skill_name, is_global_skill_dir,
     parse_skill_frontmatter, resolve_discoverable_skill_dir, resolve_skill_dir, skill_base_dir,
@@ -43,16 +42,7 @@ fn require_mutable_type(source_type: SourceType) -> Result<(), Error> {
 }
 
 fn require_listable_type(source_type: Option<SourceType>) -> Result<SourceType, Error> {
-    match source_type.unwrap_or(SourceType::Skill) {
-        SourceType::Skill => Ok(SourceType::Skill),
-        SourceType::BuiltinSkill => Ok(SourceType::BuiltinSkill),
-        SourceType::Project => Ok(SourceType::Project),
-        SourceType::Agent => Ok(SourceType::Agent),
-        other => Err(Error::invalid_params().data(format!(
-            "Source type '{}' is not supported for listing.",
-            other
-        ))),
-    }
+    Ok(source_type.unwrap_or(SourceType::Skill))
 }
 
 // --- Project helpers ---
@@ -964,10 +954,6 @@ pub fn list_sources_with_roots(
                     sources.push(check.to_source_entry(global));
                 }
             }
-            SourceType::Recipe | SourceType::Subrecipe => {
-                return Err(Error::invalid_params()
-                    .data(format!("Source type '{}' listing is not supported.", kind)));
-            }
         }
     }
 
@@ -1629,24 +1615,7 @@ mod tests {
         .unwrap_err();
         assert!(format!("{:?}", err).contains("not supported"));
 
-        let err = update_source_with_roots(
-            SourceType::Recipe,
-            "x",
-            "x",
-            "d",
-            "c",
-            UpdateSourceOptions {
-                properties: Some(HashMap::new()),
-                additional_roots: &[],
-            },
-        )
-        .unwrap_err();
-        assert!(format!("{:?}", err).contains("not supported"));
-
         let err = delete_source(SourceType::BuiltinSkill, "builtin://skills/x").unwrap_err();
-        assert!(format!("{:?}", err).contains("not supported"));
-
-        let err = delete_source(SourceType::Subrecipe, "x").unwrap_err();
         assert!(format!("{:?}", err).contains("not supported"));
 
         let listed = list_sources(Some(SourceType::BuiltinSkill), Some(project), false).unwrap();
@@ -1654,13 +1623,7 @@ mod tests {
             .iter()
             .any(|source| source.source_type == SourceType::BuiltinSkill));
 
-        let err = list_sources(Some(SourceType::Recipe), Some(project), false).unwrap_err();
-        assert!(format!("{:?}", err).contains("not supported"));
-
         let err = export_source(SourceType::BuiltinSkill, "builtin://skills/x").unwrap_err();
-        assert!(format!("{:?}", err).contains("not supported"));
-
-        let err = export_source(SourceType::Recipe, "x").unwrap_err();
         assert!(format!("{:?}", err).contains("not supported"));
 
         let payload = serde_json::json!({
@@ -1896,68 +1859,6 @@ fn parse_agent_content(content: &str, path: &Path) -> Option<SourceEntry> {
     })
 }
 
-fn scan_recipes_from_dir(
-    dir: &Path,
-    kind: SourceType,
-    suppress_config_warnings: bool,
-    sources: &mut Vec<SourceEntry>,
-    seen: &mut std::collections::HashSet<String>,
-) {
-    let entries = match std::fs::read_dir(dir) {
-        Ok(e) => e,
-        Err(_) => return,
-    };
-
-    for entry in entries.flatten() {
-        let path = entry.path();
-        if !path.is_file() {
-            continue;
-        }
-
-        let ext = path.extension().and_then(|e| e.to_str()).unwrap_or("");
-        if !RECIPE_FILE_EXTENSIONS.contains(&ext) {
-            continue;
-        }
-
-        let name = path
-            .file_stem()
-            .and_then(|s| s.to_str())
-            .unwrap_or("")
-            .to_string();
-
-        if name.is_empty() || seen.contains(&name) {
-            continue;
-        }
-
-        match Recipe::from_file_path(&path) {
-            Ok(recipe) => {
-                seen.insert(name.clone());
-                sources.push(SourceEntry {
-                    source_type: kind,
-                    name,
-                    description: recipe.description.clone(),
-                    content: recipe.instructions.clone().unwrap_or_default(),
-                    path: path.to_string_lossy().into_owned(),
-                    global: false,
-                    writable: true,
-                    supporting_files: Vec::new(),
-                    properties: std::collections::HashMap::new(),
-                });
-            }
-            Err(e) => {
-                // The working directory commonly contains project config like package.json
-                // and tsconfig.json, which parse as valid JSON but lack Recipe fields. In that
-                // case treat them as "not a recipe" rather than warning. Dedicated recipe
-                // directories still warn so a real recipe with a typo is not silently dropped.
-                if suppress_config_warnings && e.to_string().contains("missing field") {
-                    continue;
-                }
-                warn!("Failed to parse recipe {}: {}", path.display(), e);
-            }
-        }
-    }
-}
-
 fn scan_agents_from_dir(
     dir: &Path,
     sources: &mut Vec<SourceEntry>,
@@ -2003,29 +1904,6 @@ pub fn discover_filesystem_sources(working_dir: &Path) -> Vec<SourceEntry> {
     let home = dirs::home_dir();
     let config = Paths::config_dir();
 
-    let local_recipe_dirs: Vec<PathBuf> = vec![
-        working_dir.join(".goose/recipes"),
-        working_dir.join(".agents/recipes"),
-    ];
-
-    let global_recipe_dirs: Vec<PathBuf> = std::env::var("GOOSE_RECIPE_PATH")
-        .ok()
-        .into_iter()
-        .flat_map(|p| {
-            let sep = if cfg!(windows) { ';' } else { ':' };
-            p.split(sep).map(PathBuf::from).collect::<Vec<_>>()
-        })
-        .chain(
-            [
-                home.as_ref().map(|h| h.join(".goose/recipes")),
-                Some(config.join("recipes")),
-                home.as_ref().map(|h| h.join(".agents/recipes")),
-            ]
-            .into_iter()
-            .flatten(),
-        )
-        .collect();
-
     let local_agent_dirs: Vec<PathBuf> = vec![
         working_dir.join(".goose/agents"),
         working_dir.join(".claude/agents"),
@@ -2042,24 +1920,8 @@ pub fn discover_filesystem_sources(working_dir: &Path) -> Vec<SourceEntry> {
     .flatten()
     .collect();
 
-    scan_recipes_from_dir(
-        working_dir,
-        SourceType::Recipe,
-        true,
-        &mut sources,
-        &mut seen,
-    );
-
-    for dir in local_recipe_dirs {
-        scan_recipes_from_dir(&dir, SourceType::Recipe, false, &mut sources, &mut seen);
-    }
-
     for dir in local_agent_dirs {
         scan_agents_from_dir(&dir, &mut sources, &mut seen);
-    }
-
-    for dir in global_recipe_dirs {
-        scan_recipes_from_dir(&dir, SourceType::Recipe, false, &mut sources, &mut seen);
     }
 
     for dir in global_agent_dirs {
