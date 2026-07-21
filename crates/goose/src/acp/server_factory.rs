@@ -1,4 +1,4 @@
-use crate::acp::server::{AcpProviderFactory, GooseAcpAgent, GooseAcpAgentOptions};
+use crate::acp::server::{GooseAcpAgent, GooseAcpAgentOptions};
 use crate::agents::GoosePlatform;
 use crate::scheduler_trait::SchedulerTrait;
 use crate::session::SessionManager;
@@ -50,25 +50,7 @@ impl AcpServer {
         let disable_session_naming = config.get_goose_disable_session_naming().unwrap_or(false);
         let scheduler = self.scheduler().await?;
 
-        let provider_factory: AcpProviderFactory =
-            Arc::new(move |provider_name, extensions, working_dir| {
-                Box::pin(async move {
-                    match working_dir {
-                        Some(working_dir) => {
-                            crate::providers::create_with_working_dir(
-                                &provider_name,
-                                extensions,
-                                working_dir,
-                            )
-                            .await
-                        }
-                        None => crate::providers::create(&provider_name, extensions).await,
-                    }
-                })
-            });
-
         let agent = GooseAcpAgent::new(GooseAcpAgentOptions {
-            provider_factory,
             builtins: self.config.builtins.clone(),
             data_dir: self.config.data_dir.clone(),
             config_dir: self.config.config_dir.clone(),

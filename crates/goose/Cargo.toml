@@ -218,15 +218,6 @@ tower = { version = "0.5.2", default-features = false, features = ["util"] }
 name = "agent"
 path = "examples/agent.rs"
 
-[[example]]
-name = "databricks_oauth"
-path = "examples/databricks_oauth.rs"
-
-[[example]]
-name = "test_whisper"
-path = "examples/test_whisper.rs"
-required-features = ["local-inference"]
-
 [[bin]]
 name = "analyze_cli"
 path = "src/bin/analyze_cli.rs"

@@ -1,39 +1,8 @@
-use serde_json::Value;
-
 use crate::conversation::message::{Message, MessageContent};
 use crate::utils::safe_truncate;
 use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
 use goose_providers::errors::ProviderError;
 use rmcp::model::Role;
-
-pub(crate) fn extract_usage_tokens(usage_info: &Value) -> Usage {
-    let get = |key: &str| {
-        usage_info
-            .get(key)
-            .and_then(|v| v.as_i64())
-            .and_then(|v| i32::try_from(v).ok())
-    };
-    Usage::from_cache_exclusive_input(
-        get("input_tokens"),
-        get("output_tokens"),
-        get("total_tokens"),
-        get("cache_read_input_tokens"),
-        get("cache_creation_input_tokens"),
-    )
-}
-
-pub(crate) fn error_from_event(provider_name: &str, parsed: &Value) -> ProviderError {
-    let error_msg = parsed
-        .get("error")
-        .and_then(|e| e.as_str())
-        .or_else(|| parsed.get("message").and_then(|m| m.as_str()))
-        .unwrap_or("Unknown error");
-    if error_msg.contains("context window exceeded") {
-        ProviderError::ContextLengthExceeded(error_msg.to_string())
-    } else {
-        ProviderError::RequestFailed(format!("{provider_name} error: {error_msg}"))
-    }
-}
 
 pub(crate) const SESSION_NAME_BEGIN_MARKER: &str = "---BEGIN USER MESSAGES---";
 pub(crate) const SESSION_NAME_END_MARKER: &str = "---END USER MESSAGES---";

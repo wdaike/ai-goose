@@ -23,10 +23,6 @@ pub enum ProviderType {
     Custom,
 }
 
-pub(crate) fn current_working_dir() -> PathBuf {
-    std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."))
-}
-
 pub trait ProviderDef: ProviderDescriptor + Send + Sync {
     type Provider: Provider + 'static;
 

@@ -1,5 +1,4 @@
 use super::*;
-use crate::providers::inventory::ensure_refresh_identity_current;
 
 impl HandleDispatchFrom<Client> for GooseAcpHandler {
     fn describe_chain(&self) -> impl std::fmt::Debug {
@@ -149,145 +148,10 @@ impl HandleDispatchFrom<Client> for GooseAcpHandler {
                                     return Ok(());
                                 }
                             }
-                            // Respond immediately using the current provider inventory snapshot.
                             let (notification, config_options) = agent.build_config_update(&session_id).await?;
                             cx.send_notification(notification)?;
                             responder.respond(SetSessionConfigOptionResponse::new(config_options))?;
 
-                            let maybe_refresh = if config_id == "provider" {
-                                let provider_id = value_id.0.to_string();
-                                agent
-                                    .provider_inventory
-                                    .plan_refresh_jobs(std::slice::from_ref(&provider_id))
-                                    .await
-                                    .ok()
-                                    .and_then(|plan| {
-                                        plan.started
-                                            .into_iter()
-                                            .find(|job| job.provider_id == provider_id)
-                                    })
-                            } else {
-                                None
-                            };
-                            if let Some(refresh_job) = maybe_refresh {
-                                let agent_bg = agent.clone();
-                                let cx_bg = cx.clone();
-                                let session_id_bg = session_id.clone();
-                                tokio::spawn(async move {
-                                    let refresh_identity = refresh_job.identity;
-                                    let refresh_provider_id = refresh_job.provider_id;
-                                    let mut refresh_guard =
-                                        agent_bg.provider_inventory.refresh_guard(&refresh_identity);
-                                    let provider_result: Result<Arc<dyn Provider>> =
-                                        AssertUnwindSafe(async {
-                                            let session_agent =
-                                                agent_bg.get_session_agent(&session_id_bg.0).await?;
-                                            let provider = session_agent
-                                                .provider()
-                                                .await
-                                                .map_err(|e| anyhow::anyhow!(e.to_string()))?;
-                                            let provider_name = provider.get_name().to_string();
-                                            if provider_name != refresh_provider_id {
-                                                return Err(anyhow::anyhow!(
-                                                    "provider changed before inventory refresh completed"
-                                                ));
-                                            }
-                                            Ok(provider)
-                                        })
-                                        .catch_unwind()
-                                .await
-                                .map_err(|_| {
-                                    anyhow::anyhow!("provider inventory refresh task panicked")
-                                })
-                                .and_then(|result| result);
-
-                                let fetch_result = match provider_result {
-                                    Ok(provider) => {
-                                        match ensure_refresh_identity_current(
-                                            &refresh_provider_id,
-                                            &refresh_identity,
-                                        )
-                                        .await
-                                        {
-                                            Ok(()) => match AssertUnwindSafe(
-                                                provider.fetch_recommended_models(
-                                                    crate::model_config::global_toolshim(),
-                                                ),
-                                            )
-                                            .catch_unwind()
-                                            .await
-                                            {
-                                                Ok(Ok(models)) => Ok(models),
-                                                Ok(Err(error)) => {
-                                                    Err(anyhow::anyhow!(error.to_string()))
-                                                }
-                                                Err(_) => Err(anyhow::anyhow!(
-                                                    "provider inventory refresh task panicked"
-                                                )),
-                                            },
-                                            Err(error) => Err(error),
-                                        }
-                                    }
-                                    Err(error) => Err(error),
-                                };
-
-                                match fetch_result {
-                                    Ok(models) => match agent_bg
-                                        .provider_inventory
-                                        .store_refreshed_models_for_identity(
-                                            &refresh_identity,
-                                            &models,
-                                        )
-                                        .await
-                                    {
-                                        Ok(()) => {
-                                            refresh_guard.complete();
-                                            match agent_bg.build_config_update(&session_id_bg).await
-                                            {
-                                                Ok((fresh_notification, _)) => {
-                                                    let _ = cx_bg
-                                                        .send_notification(fresh_notification);
-                                                }
-                                                Err(error) => warn!(
-                                                    provider = %refresh_provider_id,
-                                                    error = %error,
-                                                    "failed to build config update after provider inventory refresh"
-                                                ),
-                                            }
-                                        }
-                                        Err(error) => warn!(
-                                            provider = %refresh_provider_id,
-                                            error = %error,
-                                            "failed to store refreshed provider inventory after config change"
-                                        ),
-                                    },
-                                    Err(error) => {
-                                        let error_message = error.to_string();
-                                        match agent_bg
-                                            .provider_inventory
-                                            .store_refresh_error_for_identity(
-                                                &refresh_identity,
-                                                error_message.clone(),
-                                            )
-                                            .await
-                                        {
-                                            Ok(()) => refresh_guard.complete(),
-                                            Err(store_error) => warn!(
-                                                provider = %refresh_provider_id,
-                                                error = %store_error,
-                                                refresh_error = %error_message,
-                                                "failed to store provider inventory refresh error after config change"
-                                            ),
-                                        }
-                                        warn!(
-                                            provider = %refresh_provider_id,
-                                            error = %error_message,
-                                            "provider inventory refresh failed after config change"
-                                        );
-                                    }
-                                }
-                                });
-                            }
 
                             debug!(target: "perf", sid = %sid, ms = t_handler.elapsed().as_millis() as u64, config_id = %config_id, "perf: set_config_option done");
                             Ok(())

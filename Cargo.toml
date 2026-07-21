@@ -1,9 +1,5 @@
 [workspace]
-members = [
-    "crates/*",
-    # Mainly for cargo-machete to not error out during inspection.
-    "vendor/v8",
-]
+members = ["crates/*"]
 resolver = "2"
 
 [workspace.package]
@@ -103,7 +99,6 @@ llama-cpp-2 = { version = "=0.1.146", default-features = false, features = ["sam
 llama-cpp-sys-2 = { version = "=0.1.146", default-features = false }
 
 [patch.crates-io]
-v8 = { path = "vendor/v8" }
 tokio-tungstenite = { git = "https://github.com/openai-oss-forks/tokio-tungstenite", rev = "0e5b2d73aa18dd9f0a50ee9ff199d5aef7594186" }
 tungstenite = { git = "https://github.com/openai-oss-forks/tungstenite-rs", rev = "4fffad30fe373adbdcffab9545e9e9bf4f2fc19f" }
 

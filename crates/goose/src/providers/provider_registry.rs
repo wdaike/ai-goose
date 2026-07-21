@@ -1,6 +1,5 @@
 use super::api_client::TlsConfig;
 use super::base::{Provider, ProviderDef, ProviderMetadata, ProviderType};
-use super::inventory::{InventoryIdentityInput, InventoryRegistration, InventoryResolvers};
 use crate::config::ExtensionConfig;
 use anyhow::Result;
 use futures::future::BoxFuture;
@@ -25,11 +24,8 @@ pub type ProviderCleanup = Arc<dyn Fn() -> BoxFuture<'static, Result<()>> + Send
 pub struct ProviderEntry {
     metadata: ProviderMetadata,
     pub(crate) constructor: ProviderConstructor,
-    pub(crate) inventory_identity: super::inventory::InventoryIdentityResolver,
-    pub(crate) inventory_configured: super::inventory::InventoryConfiguredResolver,
     pub(crate) cleanup: Option<ProviderCleanup>,
     provider_type: ProviderType,
-    supports_inventory_refresh: bool,
     tls_config: Option<TlsConfig>,
 }
 
@@ -40,18 +36,6 @@ impl ProviderEntry {
 
     pub fn provider_type(&self) -> ProviderType {
         self.provider_type
-    }
-
-    pub fn supports_inventory_refresh(&self) -> bool {
-        self.supports_inventory_refresh
-    }
-
-    pub fn inventory_identity(&self) -> Result<InventoryIdentityInput> {
-        (self.inventory_identity)()
-    }
-
-    pub fn inventory_configured(&self) -> bool {
-        (self.inventory_configured)()
     }
 
     /// Apply provider-specific normalization to a model config: materialize
@@ -114,20 +98,8 @@ impl ProviderRegistry {
     where
         F: ProviderDef + 'static,
     {
-        self.register_with_inventory::<F>(preferred, None);
-    }
-
-    pub fn register_with_inventory<F>(
-        &mut self,
-        preferred: bool,
-        inventory_registration: Option<InventoryRegistration>,
-    ) where
-        F: ProviderDef + 'static,
-    {
         let metadata = F::metadata();
         let name = metadata.name.clone();
-
-        let inventory = InventoryResolvers::for_metadata(&metadata, inventory_registration);
 
         self.entries.insert(
             name,
@@ -145,15 +117,12 @@ impl ProviderRegistry {
                         Ok(Arc::new(provider) as Arc<dyn Provider>)
                     })
                 }),
-                inventory_identity: inventory.identity,
-                inventory_configured: inventory.configured,
                 cleanup: None,
                 provider_type: if preferred {
                     ProviderType::Preferred
                 } else {
                     ProviderType::Builtin
                 },
-                supports_inventory_refresh: inventory.supports_refresh,
                 tls_config: self.tls_config.clone(),
             },
         );

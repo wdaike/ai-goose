@@ -1552,28 +1552,13 @@ impl CliSession {
             .await
             .unwrap_or_else(|_| model_config.context_limit());
 
-        let config = Config::global();
-        let show_cost = config
-            .get_param::<bool>("GOOSE_CLI_SHOW_COST")
-            .unwrap_or(false);
-
-        let provider_name = config
-            .get_goose_provider()
-            .unwrap_or_else(|_| "unknown".to_string());
+        let _config = Config::global();
 
         match self.get_session().await {
             Ok(metadata) => {
                 let total_tokens = metadata.usage.total_tokens.unwrap_or(0) as usize;
 
                 output::display_context_usage(total_tokens, context_limit);
-
-                if show_cost {
-                    output::display_cost_usage(
-                        &provider_name,
-                        &model_config.model_name,
-                        &metadata.usage,
-                    );
-                }
             }
             Err(_) => {
                 output::display_context_usage(0, context_limit);

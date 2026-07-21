@@ -1,7 +1,6 @@
 use anyhow::Result;
 use dotenvy::dotenv;
 use futures::StreamExt;
-use goose::acp::ACP_CURRENT_MODEL;
 use goose::agents::{Agent, AgentConfig, AgentEvent, GoosePlatform, PromptManager, SessionConfig};
 use goose::config::{ExtensionConfig, GooseMode, PermissionManager};
 use goose::conversation::message::{ActionRequiredData, Message, MessageContent};
@@ -139,38 +138,8 @@ impl ProviderTestConfig {
         }
     }
 
-    fn model_switch_name(mut self, name: &'static str) -> Self {
-        self.model_switch_name = Some(name);
-        self
-    }
-
-    fn image_model(mut self, name: &'static str) -> Self {
-        self.image_model = Some(name);
-        self
-    }
-
     fn test_permissions(mut self, v: bool) -> Self {
         self.test_permissions = v;
-        self
-    }
-
-    fn test_smart_approve(mut self, v: bool) -> Self {
-        self.test_smart_approve = v;
-        self
-    }
-
-    fn test_mcp_tools(mut self, v: bool) -> Self {
-        self.test_mcp_tools = v;
-        self
-    }
-
-    fn expect_context_length_exceeded(mut self, v: bool) -> Self {
-        self.expect_context_length_exceeded = v;
-        self
-    }
-
-    fn context_length_exceeded(mut self, token_count: usize) -> Self {
-        self.context_length_exceeded = token_count;
         self
     }
 
@@ -495,7 +464,7 @@ impl ProviderFixture {
 
         assert!(!models.is_empty());
         let resolved = &self.model_config.model_name;
-        assert_ne!(resolved.as_str(), ACP_CURRENT_MODEL);
+        assert_ne!(resolved.as_str(), CODEX_DEFAULT_MODEL);
         assert!(models
             .iter()
             .any(|m| m == resolved || m.contains(resolved) || resolved.contains(m)));

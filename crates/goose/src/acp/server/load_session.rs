@@ -217,7 +217,7 @@ impl GooseAcpAgent {
             .await;
 
         let (mode_state, config_options) =
-            build_session_setup_config(&self.provider_inventory, &session).await?;
+            build_session_setup_config(&self.codex_models(&session.id).await, &session)?;
 
         self.notify_session_setup(cx, &session).await?;
 

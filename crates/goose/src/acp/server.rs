@@ -1,11 +1,11 @@
 use crate::acp::custom_notifications::*;
 use crate::acp::custom_requests::*;
 pub(super) use crate::acp::response_builder::{
-    build_config_options, build_mode_state, build_model_state, build_provider_options,
-    build_session_info, build_session_setup_config, send_session_setup_notifications, session_meta,
-    session_provider_selection, session_response_meta,
+    build_config_options, build_mode_state, build_model_state, build_session_info,
+    build_session_setup_config, send_session_setup_notifications, session_meta,
+    session_response_meta,
 };
-use crate::acp::{PermissionDecision, ACP_CURRENT_MODEL};
+use crate::acp::PermissionDecision;
 use crate::agents::extension::{Envs, PLATFORM_EXTENSIONS};
 use crate::agents::extension_manager::TRUSTED_TOOL_UPDATE_META_KEY;
 use crate::agents::mcp_client::GooseMcpHostInfo;
@@ -25,11 +25,7 @@ use crate::execution::manager::{AgentManager, AgentManagerGetResult, RuntimeCont
 use crate::mcp_utils::ToolResult;
 use crate::permission::permission_confirmation::PrincipalType;
 use crate::permission::{Permission, PermissionConfirmation};
-use crate::providers::base::Provider;
-use crate::providers::inventory::{
-    ProviderInventoryEntry, ProviderInventoryService, RefreshJobPlan, RefreshPlan,
-    RefreshSkipReason,
-};
+use crate::providers::codex::CODEX_DEFAULT_MODEL;
 use crate::scheduler_trait::SchedulerTrait;
 use crate::session::session_manager::SessionUsageTotals;
 use crate::session::{
@@ -60,14 +56,12 @@ use agent_client_protocol::{
 };
 use anyhow::Result;
 use fs_err as fs;
-use futures::future::{BoxFuture, FutureExt};
-use futures::stream::{self, StreamExt};
+use futures::stream::StreamExt;
 use rmcp::model::{
     AnnotateAble, CallToolResult, RawContent, RawTextContent, ResourceContents, Role,
 };
 use serde::Deserialize;
 use std::collections::{HashMap, HashSet};
-use std::panic::AssertUnwindSafe;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use tokio::sync::{Mutex, OnceCell};
@@ -95,7 +89,6 @@ mod manage_sessions;
 mod new_session;
 mod onboarding;
 mod prompts;
-mod providers;
 mod recipe;
 mod resources;
 mod schedule;
@@ -103,16 +96,6 @@ mod slash_commands;
 mod sources;
 mod tool_notifications;
 mod tools;
-
-pub type AcpProviderFactory = Arc<
-    dyn Fn(
-            String,
-            Vec<ExtensionConfig>,
-            Option<PathBuf>,
-        ) -> BoxFuture<'static, Result<Arc<dyn Provider>>>
-        + Send
-        + Sync,
->;
 
 /// Convenience conversions from any `Display` error into an `agent_client_protocol::Error`.
 ///
@@ -147,8 +130,6 @@ impl<T, E: std::fmt::Display> ResultExt<T> for Result<T, E> {
 }
 
 pub(super) const DEFAULT_PROVIDER_ID: &str = "goose";
-pub(super) const DEFAULT_PROVIDER_LABEL: &str = "Goose (Default)";
-const PROVIDER_CONFIG_STATUS_CHECK_CONCURRENCY: usize = 16;
 
 /// In-memory state for an active ACP session.
 ///
@@ -172,7 +153,6 @@ struct ActivePromptRun {
 }
 
 pub struct GooseAcpAgentOptions {
-    pub provider_factory: AcpProviderFactory,
     pub builtins: Vec<String>,
     pub data_dir: std::path::PathBuf,
     pub config_dir: std::path::PathBuf,
@@ -187,7 +167,6 @@ pub struct GooseAcpAgent {
     active_prompt_runs: Arc<Mutex<HashMap<String, ActivePromptRun>>>,
     closed_session_ids: Arc<Mutex<HashSet<String>>>,
     agent_manager: Arc<AgentManager>,
-    provider_factory: AcpProviderFactory,
     builtins: Vec<String>,
     client_fs_capabilities: OnceCell<FileSystemCapabilities>,
     client_terminal: OnceCell<bool>,
@@ -201,7 +180,6 @@ pub struct GooseAcpAgent {
     session_manager: Arc<SessionManager>,
     permission_manager: Arc<PermissionManager>,
     disable_session_naming: bool,
-    provider_inventory: ProviderInventoryService,
     additional_source_roots: Vec<SourceRoot>,
     recipe_path_cache: Arc<Mutex<HashMap<String, PathBuf>>>,
 }
@@ -229,21 +207,6 @@ fn meta_string(
         );
     };
     Ok(Some(value.to_string()))
-}
-
-fn agent_capabilities_meta() -> Option<Meta> {
-    let mut goose = serde_json::Map::new();
-    if cfg!(feature = "local-inference") {
-        goose.insert("localInference".to_string(), serde_json::json!({}));
-    }
-
-    if goose.is_empty() {
-        return None;
-    }
-
-    let mut meta = serde_json::Map::new();
-    meta.insert("goose".to_string(), serde_json::Value::Object(goose));
-    Some(meta)
 }
 
 fn spawn_session_name_update_notifier(
@@ -825,7 +788,6 @@ impl GooseAcpAgent {
         });
 
         let permission_manager = Arc::new(PermissionManager::new(options.config_dir.clone()));
-        let provider_inventory = ProviderInventoryService::new(session_manager.storage().clone());
         let agent_config = AgentConfig::new(
             Arc::clone(&session_manager),
             Arc::clone(&permission_manager),
@@ -841,7 +803,6 @@ impl GooseAcpAgent {
             active_prompt_runs: Arc::new(Mutex::new(HashMap::new())),
             closed_session_ids: Arc::new(Mutex::new(HashSet::new())),
             agent_manager,
-            provider_factory: options.provider_factory,
             builtins: options.builtins,
             client_fs_capabilities: OnceCell::new(),
             client_terminal: OnceCell::new(),
@@ -855,7 +816,6 @@ impl GooseAcpAgent {
             session_manager,
             permission_manager,
             disable_session_naming: options.disable_session_naming,
-            provider_inventory,
             additional_source_roots: options.additional_source_roots,
             recipe_path_cache: Arc::new(Mutex::new(HashMap::new())),
         })
@@ -863,15 +823,6 @@ impl GooseAcpAgent {
 
     fn config(&self) -> Result<&'static Config, agent_client_protocol::Error> {
         Ok(Config::global())
-    }
-
-    async fn create_provider(
-        &self,
-        provider_name: &str,
-        extensions: Vec<ExtensionConfig>,
-        working_dir: Option<PathBuf>,
-    ) -> Result<Arc<dyn Provider>> {
-        (self.provider_factory)(provider_name.to_string(), extensions, working_dir).await
     }
 
     async fn get_or_create_session_agent_with_results(
@@ -1650,8 +1601,7 @@ impl GooseAcpAgent {
                     .audio(false)
                     .embedded_context(true),
             )
-            .mcp_capabilities(McpCapabilities::new().http(true))
-            .meta(agent_capabilities_meta());
+            .mcp_capabilities(McpCapabilities::new().http(true));
         Ok(InitializeResponse::new(args.protocol_version)
             .agent_info(Implementation::new("goose", env!("CARGO_PKG_VERSION")))
             .agent_capabilities(capabilities)
@@ -1667,6 +1617,21 @@ impl GooseAcpAgent {
     }
 
     /// Look up the session's agent.
+    /// Codex owns the model catalog. A failure here degrades the picker to the
+    /// session's current model rather than failing session setup outright.
+    pub(super) async fn codex_models(&self, session_id: &str) -> Vec<crate::codex::CodexModel> {
+        let Ok(agent) = self.get_session_agent(session_id).await else {
+            return Vec::new();
+        };
+        match agent.list_models().await {
+            Ok(models) => models,
+            Err(error) => {
+                warn!(session_id, %error, "Failed to list Codex models");
+                Vec::new()
+            }
+        }
+    }
+
     async fn get_session_agent(
         &self,
         session_id: &str,
@@ -2204,7 +2169,7 @@ impl GooseAcpAgent {
         &self,
         session_id: &SessionId,
     ) -> Result<(SessionNotification, Vec<SessionConfigOption>), agent_client_protocol::Error> {
-        let session = self
+        let _session = self
             .session_manager
             .get_session(&session_id.0, false)
             .await
@@ -2214,32 +2179,17 @@ impl GooseAcpAgent {
             .provider()
             .await
             .internal_err_ctx("Failed to get provider")?;
-        let provider_name = provider.get_name().to_string();
+        let _provider_name = provider.get_name().to_string();
         let current_model_config = agent
             .model_config_for_session(&session_id.0)
             .await
             .internal_err_ctx("Failed to resolve model config")?;
         let current_model = current_model_config.model_name.clone();
         let goose_mode = agent.goose_mode().await;
-        let inventory = self
-            .provider_inventory
-            .entry_for_provider(&provider_name)
-            .await
-            .internal_err()?;
-        let Some(inventory) = inventory else {
-            return Err(agent_client_protocol::Error::internal_error()
-                .data(format!("Unknown provider inventory: {}", provider_name)));
-        };
-        let model_state = build_model_state(current_model.as_str(), &inventory);
+        let models = self.codex_models(&session_id.0).await;
+        let model_state = build_model_state(current_model.as_str(), &models);
         let mode_state = build_mode_state(goose_mode)?;
-        let provider_options = build_provider_options(Some(&provider_name)).await;
-        let config_options = build_config_options(
-            &mode_state,
-            &model_state,
-            &current_model_config,
-            session_provider_selection(&session),
-            provider_options,
-        );
+        let config_options = build_config_options(&mode_state, &model_state, &current_model_config);
         let notification = SessionNotification::new(
             session_id.clone(),
             SessionUpdate::ConfigOptionUpdate(ConfigOptionUpdate::new(config_options.clone())),
@@ -2328,7 +2278,7 @@ impl GooseAcpAgent {
                 .await
                 .ok()
                 .map(|entry| entry.metadata().default_model.clone())
-                .unwrap_or(ACP_CURRENT_MODEL.to_string())
+                .unwrap_or(CODEX_DEFAULT_MODEL.to_string())
         } else {
             current_model
         };

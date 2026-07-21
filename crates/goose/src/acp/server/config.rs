@@ -196,34 +196,12 @@ impl GooseAcpAgent {
             (!model.is_empty()).then_some(model)
         });
 
-        let entries = self
-            .provider_inventory
-            .entries(std::slice::from_ref(&provider_id))
+        crate::providers::get_from_registry(&provider_id)
             .await
-            .internal_err_ctx("Failed to read provider inventory")?;
-        let Some(entry) = entries
-            .into_iter()
-            .find(|entry| entry.provider_id == provider_id)
-        else {
-            return Err(agent_client_protocol::Error::invalid_params()
-                .data(format!("Unknown provider: {provider_id}")));
-        };
-
-        if !entry.configured {
-            return Err(agent_client_protocol::Error::invalid_params()
-                .data(format!("Provider is not configured: {provider_id}")));
-        }
-
-        if let Some(model_id) = model_id.as_deref() {
-            let model_exists = entry.default_model == model_id
-                || entry.models.iter().any(|model| model.id == model_id)
-                || (provider_id == "local" && local_inference_model_exists(model_id)?);
-            if !model_exists {
-                return Err(agent_client_protocol::Error::invalid_params().data(format!(
-                    "Model '{model_id}' is not available for provider '{provider_id}'"
-                )));
-            }
-        }
+            .map_err(|_| {
+                agent_client_protocol::Error::invalid_params()
+                    .data(format!("Unknown provider: {provider_id}"))
+            })?;
 
         let config = self.config()?;
         let model = model_id.clone().unwrap_or_else(|| {
@@ -252,20 +230,6 @@ impl GooseAcpAgent {
             provider_id: None,
             model_id: None,
         })
-    }
-}
-
-fn local_inference_model_exists(model_id: &str) -> Result<bool, agent_client_protocol::Error> {
-    #[cfg(feature = "local-inference")]
-    {
-        crate::providers::local_inference::management::model_exists(model_id)
-            .internal_err_ctx("Failed to read local inference models")
-    }
-
-    #[cfg(not(feature = "local-inference"))]
-    {
-        let _ = model_id;
-        Ok(false)
     }
 }
 

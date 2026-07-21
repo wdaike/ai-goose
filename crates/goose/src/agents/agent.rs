@@ -230,6 +230,24 @@ impl Agent {
         self.codex_core.invalidate_session(session).await;
     }
 
+    pub async fn list_models(&self) -> Result<Vec<crate::codex::CodexModel>> {
+        self.codex_core.list_models().await
+    }
+
+    pub async fn codex_account(&self) -> Result<crate::codex::CodexAccount> {
+        self.codex_core.read_account().await
+    }
+
+    /// Start a Codex login. Passing an API key logs in directly; omitting it
+    /// returns the ChatGPT OAuth URL the client must open.
+    pub async fn codex_login(&self, api_key: Option<String>) -> Result<crate::codex::CodexLogin> {
+        self.codex_core.start_login(api_key).await
+    }
+
+    pub async fn codex_logout(&self) -> Result<()> {
+        self.codex_core.logout().await
+    }
+
     pub async fn compact_session(&self, session_id: &str) -> Result<()> {
         let session = self
             .config

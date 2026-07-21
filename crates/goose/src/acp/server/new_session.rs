@@ -196,7 +196,7 @@ impl GooseAcpAgent {
         extension_results: &[ExtensionLoadResult],
     ) -> Result<NewSessionResponse, agent_client_protocol::Error> {
         let (mode_state, config_options) =
-            super::build_session_setup_config(&self.provider_inventory, session).await?;
+            super::build_session_setup_config(&self.codex_models(&session.id).await, session)?;
 
         let mut response =
             NewSessionResponse::new(SessionId::new(session.id.clone())).modes(mode_state);

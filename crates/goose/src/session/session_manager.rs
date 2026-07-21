@@ -1039,7 +1039,6 @@ impl SessionStorage {
         // The inventory tables already use `CREATE TABLE IF NOT EXISTS`
         // and run on the shared pool, so they don't need to be inside
         // the same transaction.
-        crate::providers::inventory::create_tables(pool).await?;
 
         Ok(())
     }
@@ -1393,7 +1392,9 @@ impl SessionStorage {
                     .await?;
             }
             11 => {
-                crate::providers::inventory::create_tables_in_tx(tx).await?;
+                // Provider inventory tables; the inventory cache was removed
+                // when goose moved to Codex's model catalog. Existing databases
+                // keep the now-unused tables.
             }
             12 => {
                 // Add archived_at, project_id columns to sessions.

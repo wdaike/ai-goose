@@ -45,10 +45,6 @@ pub async fn get_from_registry(name: &str) -> Result<ProviderEntry> {
         .cloned()
 }
 
-pub async fn inventory_identity(name: &str) -> Result<super::inventory::InventoryIdentityInput> {
-    get_from_registry(name).await?.inventory_identity()
-}
-
 pub async fn create(name: &str, extensions: Vec<ExtensionConfig>) -> Result<Arc<dyn Provider>> {
     let entry = get_from_registry(name).await?;
     entry.create(extensions).await

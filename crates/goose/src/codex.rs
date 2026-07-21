@@ -10,13 +10,14 @@ use codex_app_server_client::{
     DEFAULT_IN_PROCESS_CHANNEL_CAPACITY,
 };
 use codex_app_server_protocol::{
-    AskForApproval, ClientRequest, CommandAction, CommandExecutionStatus,
-    ConfigWarningNotification, JSONRPCErrorError, PatchApplyStatus, RequestId, SandboxMode,
-    ServerNotification, ThreadCompactStartParams, ThreadCompactStartResponse, ThreadItem,
-    ThreadResumeParams, ThreadResumeResponse, ThreadStartParams, ThreadStartResponse,
-    ThreadTokenUsage, ThreadUnsubscribeParams, ThreadUnsubscribeResponse, TurnInterruptParams,
-    TurnInterruptResponse, TurnStartParams, TurnStartResponse, TurnStatus, TurnSteerParams,
-    TurnSteerResponse, UserInput,
+    Account, AskForApproval, ClientRequest, CommandAction, CommandExecutionStatus,
+    ConfigWarningNotification, GetAccountParams, GetAccountResponse, JSONRPCErrorError,
+    LoginAccountParams, LoginAccountResponse, LogoutAccountResponse, ModelListParams,
+    ModelListResponse, PatchApplyStatus, RequestId, SandboxMode, ServerNotification,
+    ThreadCompactStartParams, ThreadCompactStartResponse, ThreadItem, ThreadResumeParams,
+    ThreadResumeResponse, ThreadStartParams, ThreadStartResponse, ThreadTokenUsage,
+    ThreadUnsubscribeParams, ThreadUnsubscribeResponse, TurnInterruptParams, TurnInterruptResponse,
+    TurnStartParams, TurnStartResponse, TurnStatus, TurnSteerParams, TurnSteerResponse, UserInput,
 };
 use codex_config::{CloudConfigBundleLoader, LoaderOverrides};
 use codex_core_api::{
@@ -526,6 +527,171 @@ impl CodexAgentCore {
         threads.insert(session.id.clone(), active_thread.clone());
         Ok(active_thread)
     }
+
+    /// Codex owns authentication. goose no longer stores provider credentials;
+    /// it reports what Codex is signed in as and drives Codex's login flows.
+    pub(crate) async fn read_account(&self) -> Result<CodexAccount> {
+        let runtime = self.runtime.get_or_try_init(CodexRuntime::new).await?;
+        let response = runtime
+            .request
+            .request_typed::<GetAccountResponse>(ClientRequest::GetAccount {
+                request_id: next_request_id(),
+                params: GetAccountParams {
+                    refresh_token: false,
+                },
+            })
+            .await
+            .map_err(|error| anyhow!(error.to_string()))?;
+        Ok(CodexAccount {
+            kind: response
+                .account
+                .as_ref()
+                .map(account_kind)
+                .map(String::from),
+            email: response.account.as_ref().and_then(account_email),
+            plan: response.account.as_ref().and_then(account_plan),
+            requires_login: response.requires_openai_auth,
+        })
+    }
+
+    pub(crate) async fn start_login(&self, api_key: Option<String>) -> Result<CodexLogin> {
+        let runtime = self.runtime.get_or_try_init(CodexRuntime::new).await?;
+        let params = match api_key {
+            Some(api_key) => LoginAccountParams::ApiKey { api_key },
+            None => LoginAccountParams::Chatgpt {
+                codex_streamlined_login: true,
+                use_hosted_login_success_page: true,
+                app_brand: None,
+            },
+        };
+        let response = runtime
+            .request
+            .request_typed::<LoginAccountResponse>(ClientRequest::LoginAccount {
+                request_id: next_request_id(),
+                params,
+            })
+            .await
+            .map_err(|error| anyhow!(error.to_string()))?;
+        Ok(match response {
+            LoginAccountResponse::Chatgpt { login_id, auth_url } => CodexLogin {
+                login_id: Some(login_id),
+                auth_url: Some(auth_url),
+                user_code: None,
+            },
+            LoginAccountResponse::ChatgptDeviceCode {
+                login_id,
+                verification_url,
+                user_code,
+            } => CodexLogin {
+                login_id: Some(login_id),
+                auth_url: Some(verification_url),
+                user_code: Some(user_code),
+            },
+            _ => CodexLogin::default(),
+        })
+    }
+
+    pub(crate) async fn logout(&self) -> Result<()> {
+        let runtime = self.runtime.get_or_try_init(CodexRuntime::new).await?;
+        runtime
+            .request
+            .request_typed::<LogoutAccountResponse>(ClientRequest::LogoutAccount {
+                request_id: next_request_id(),
+                params: None,
+            })
+            .await
+            .map_err(|error| anyhow!(error.to_string()))?;
+        Ok(())
+    }
+
+    pub(crate) async fn list_models(&self) -> Result<Vec<CodexModel>> {
+        let runtime = self.runtime.get_or_try_init(CodexRuntime::new).await?;
+        let mut models = Vec::new();
+        let mut cursor = None;
+        loop {
+            let response = runtime
+                .request
+                .request_typed::<ModelListResponse>(ClientRequest::ModelList {
+                    request_id: next_request_id(),
+                    params: ModelListParams {
+                        cursor,
+                        ..Default::default()
+                    },
+                })
+                .await
+                .map_err(|error| anyhow!(error.to_string()))?;
+            models.extend(
+                response
+                    .data
+                    .into_iter()
+                    .filter(|model| !model.hidden)
+                    .map(|model| CodexModel {
+                        id: model.id,
+                        display_name: model.display_name,
+                        is_default: model.is_default,
+                        supported_reasoning_efforts: model
+                            .supported_reasoning_efforts
+                            .into_iter()
+                            .map(|option| option.reasoning_effort.to_string())
+                            .collect(),
+                    }),
+            );
+            cursor = response.next_cursor;
+            if cursor.is_none() {
+                break;
+            }
+        }
+        Ok(models)
+    }
+}
+
+/// What Codex is currently authenticated as.
+#[derive(Clone, Debug, Default, Serialize)]
+pub struct CodexAccount {
+    pub kind: Option<String>,
+    pub email: Option<String>,
+    pub plan: Option<String>,
+    pub requires_login: bool,
+}
+
+/// A login flow Codex has started and the client must complete in a browser.
+#[derive(Clone, Debug, Default, Serialize)]
+pub struct CodexLogin {
+    pub login_id: Option<String>,
+    pub auth_url: Option<String>,
+    pub user_code: Option<String>,
+}
+
+fn account_kind(account: &Account) -> &'static str {
+    match account {
+        Account::ApiKey {} => "apiKey",
+        Account::Chatgpt { .. } => "chatgpt",
+        Account::AmazonBedrock { .. } => "amazonBedrock",
+    }
+}
+
+fn account_email(account: &Account) -> Option<String> {
+    match account {
+        Account::Chatgpt { email, .. } => email.clone(),
+        _ => None,
+    }
+}
+
+fn account_plan(account: &Account) -> Option<String> {
+    match account {
+        Account::Chatgpt { plan_type, .. } => Some(format!("{plan_type:?}").to_lowercase()),
+        _ => None,
+    }
+}
+
+/// The subset of Codex's model catalog that goose's session config surface
+/// needs. Codex owns the catalog; goose no longer ships its own copy.
+#[derive(Clone, Debug)]
+pub struct CodexModel {
+    pub id: String,
+    pub display_name: String,
+    pub is_default: bool,
+    pub supported_reasoning_efforts: Vec<String>,
 }
 
 pub(crate) struct CodexRuntime {

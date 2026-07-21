@@ -1,6 +1,6 @@
 use crate::agents::ExtensionLoadResult;
+use crate::codex::CodexModel;
 use crate::config::{Config, GooseMode};
-use crate::providers::inventory::{ProviderInventoryEntry, ProviderInventoryService};
 use crate::session::session_manager::SessionUsageTotals;
 use crate::session::Session;
 use crate::slash_commands::types::{SlashCommandEntry, SlashCommandSource};
@@ -15,14 +15,7 @@ use goose_providers::thinking::ThinkingEffort;
 use serde::Serialize;
 use strum::{EnumMessage, VariantNames};
 
-use super::server::{build_usage_updates, DEFAULT_PROVIDER_ID, DEFAULT_PROVIDER_LABEL};
-
-pub(super) fn session_provider_selection(session: &Session) -> &str {
-    session
-        .provider_name
-        .as_deref()
-        .unwrap_or(DEFAULT_PROVIDER_ID)
-}
+use super::server::build_usage_updates;
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -127,16 +120,12 @@ pub(super) struct ModelSelection {
     pub available_models: Vec<ModelOption>,
 }
 
-pub(super) fn build_model_state(
-    current_model: &str,
-    inventory: &ProviderInventoryEntry,
-) -> ModelSelection {
-    let mut available_models = inventory
-        .models
+pub(super) fn build_model_state(current_model: &str, models: &[CodexModel]) -> ModelSelection {
+    let mut available_models = models
         .iter()
         .map(|model| ModelOption {
             id: model.id.clone(),
-            name: model.name.clone(),
+            name: model.display_name.clone(),
         })
         .collect::<Vec<_>>();
     if !available_models
@@ -155,56 +144,6 @@ pub(super) fn build_model_state(
         current_model_id: current_model.to_string(),
         available_models,
     }
-}
-
-struct ProviderOptionEntry {
-    id: String,
-    label: String,
-}
-
-async fn list_provider_entries(current_provider: Option<&str>) -> Vec<ProviderOptionEntry> {
-    let mut providers = crate::providers::providers()
-        .await
-        .into_iter()
-        .map(|(metadata, _)| ProviderOptionEntry {
-            id: metadata.name,
-            label: metadata.display_name,
-        })
-        .collect::<Vec<_>>();
-    providers.sort_by(|left, right| left.id.cmp(&right.id));
-    providers.dedup_by(|left, right| left.id == right.id);
-
-    if let Some(current_provider) = current_provider {
-        if current_provider != DEFAULT_PROVIDER_ID
-            && !providers
-                .iter()
-                .any(|provider| provider.id == current_provider)
-        {
-            providers.push(ProviderOptionEntry {
-                id: current_provider.to_string(),
-                label: current_provider.to_string(),
-            });
-            providers.sort_by(|left, right| left.id.cmp(&right.id));
-        }
-    }
-
-    let mut entries = Vec::with_capacity(providers.len() + 1);
-    entries.push(ProviderOptionEntry {
-        id: DEFAULT_PROVIDER_ID.to_string(),
-        label: DEFAULT_PROVIDER_LABEL.to_string(),
-    });
-    entries.extend(providers);
-    entries
-}
-
-pub(super) async fn build_provider_options(
-    current_provider: Option<&str>,
-) -> Vec<SessionConfigSelectOption> {
-    list_provider_entries(current_provider)
-        .await
-        .into_iter()
-        .map(|provider| SessionConfigSelectOption::new(provider.id, provider.label))
-        .collect()
 }
 
 pub(super) fn build_mode_state(
@@ -226,34 +165,17 @@ pub(super) fn build_mode_state(
     ))
 }
 
-pub(super) async fn build_session_setup_config(
-    provider_inventory: &ProviderInventoryService,
+pub(super) fn build_session_setup_config(
+    models: &[CodexModel],
     session: &Session,
 ) -> Result<(SessionModeState, Option<Vec<SessionConfigOption>>), agent_client_protocol::Error> {
     let mode_state = build_mode_state(session.goose_mode)?;
 
-    let (Some(provider_name), Some(model_config)) = (
-        session.provider_name.as_deref(),
-        session.model_config.as_ref(),
-    ) else {
+    let Some(model_config) = session.model_config.as_ref() else {
         return Ok((mode_state, None));
     };
-    let Some(inventory) = provider_inventory
-        .find_entry_for_provider(provider_name)
-        .await
-    else {
-        return Ok((mode_state, None));
-    };
-    let model_state = build_model_state(model_config.model_name.as_str(), &inventory);
-    let provider_selection = session_provider_selection(session);
-    let provider_options = build_provider_options(Some(provider_name)).await;
-    let config_options = build_config_options(
-        &mode_state,
-        &model_state,
-        model_config,
-        provider_selection,
-        provider_options,
-    );
+    let model_state = build_model_state(model_config.model_name.as_str(), models);
+    let config_options = build_config_options(&mode_state, &model_state, model_config);
     Ok((mode_state, Some(config_options)))
 }
 
@@ -261,8 +183,6 @@ pub(super) fn build_config_options(
     mode_state: &SessionModeState,
     model_state: &ModelSelection,
     model_config: &ModelConfig,
-    provider_selection: &str,
-    provider_options: Vec<SessionConfigSelectOption>,
 ) -> Vec<SessionConfigOption> {
     let mode_options: Vec<SessionConfigSelectOption> = mode_state
         .available_modes
@@ -286,12 +206,6 @@ pub(super) fn build_config_options(
         .collect::<Vec<_>>();
     let current_thinking_effort = current_thinking_effort_value(model_config);
     vec![
-        SessionConfigOption::select(
-            "provider",
-            "Provider",
-            provider_selection.to_string(),
-            provider_options,
-        ),
         SessionConfigOption::select(
             "mode",
             "Mode",
@@ -445,35 +359,16 @@ mod tests {
         ; "empty model list"
     )]
     fn test_build_model_state(models: Vec<String>) -> ModelSelection {
-        let inventory = ProviderInventoryEntry {
-            provider_id: "mock".to_string(),
-            provider_name: "Mock".to_string(),
-            description: "Mock".to_string(),
-            default_model: "unused".to_string(),
-            configured: true,
-            provider_type: crate::providers::base::ProviderType::Builtin,
-            category: crate::providers::catalog::ProviderSetupCategory::Model,
-            config_keys: vec![],
-            setup_steps: vec![],
-            supports_refresh: true,
-            refreshing: false,
-            models: models
-                .into_iter()
-                .map(|id| crate::providers::inventory::InventoryModel {
-                    name: id.clone(),
-                    id,
-                    family: None,
-                    context_limit: None,
-                    reasoning: None,
-                    recommended: false,
-                })
-                .collect(),
-            last_updated_at: None,
-            last_refresh_attempt_at: None,
-            last_refresh_error: None,
-            model_selection_hint: None,
-        };
-        build_model_state("unused", &inventory)
+        let models: Vec<CodexModel> = models
+            .into_iter()
+            .map(|id| CodexModel {
+                display_name: id.clone(),
+                id,
+                is_default: false,
+                supported_reasoning_efforts: vec![],
+            })
+            .collect();
+        build_model_state("unused", &models)
     }
 
     #[test_case(
@@ -561,20 +456,8 @@ mod tests {
 
     #[test_case(
         build_mode_state(GooseMode::Auto).unwrap(),
-        "openai",
-        vec![
-            SessionConfigSelectOption::new("anthropic", "anthropic"),
-            SessionConfigSelectOption::new("openai", "openai"),
-        ],
         model_selection("gpt-4", &["gpt-4", "gpt-3.5"])
         => vec![
-            SessionConfigOption::select(
-                "provider", "Provider", "openai",
-                vec![
-                    SessionConfigSelectOption::new("anthropic", "anthropic"),
-                    SessionConfigSelectOption::new("openai", "openai"),
-                ],
-            ),
             SessionConfigOption::select(
                 "mode", "Mode", "auto",
                 vec![
@@ -602,14 +485,8 @@ mod tests {
     )]
     #[test_case(
         build_mode_state(GooseMode::Approve).unwrap(),
-        "openai",
-        vec![SessionConfigSelectOption::new("openai", "openai")],
         model_selection("only-model", &["only-model"])
         => vec![
-            SessionConfigOption::select(
-                "provider", "Provider", "openai",
-                vec![SessionConfigSelectOption::new("openai", "openai")],
-            ),
             SessionConfigOption::select(
                 "mode", "Mode", "approve",
                 vec![
@@ -634,8 +511,6 @@ mod tests {
     )]
     fn test_build_config_options(
         mode_state: SessionModeState,
-        provider_name: &'static str,
-        provider_options: Vec<SessionConfigSelectOption>,
         model_state: ModelSelection,
     ) -> Vec<SessionConfigOption> {
         let model_config = ModelConfig::new(model_state.current_model_id.as_str())
@@ -643,13 +518,7 @@ mod tests {
                 "thinking_effort".to_string(),
                 serde_json::json!("off"),
             )]));
-        build_config_options(
-            &mode_state,
-            &model_state,
-            &model_config,
-            provider_name,
-            provider_options,
-        )
+        build_config_options(&mode_state, &model_state, &model_config)
     }
 
     #[test]
@@ -663,13 +532,7 @@ mod tests {
             )]),
         );
 
-        let options = build_config_options(
-            &mode_state,
-            &model_state,
-            &model_config,
-            "openai",
-            vec![SessionConfigSelectOption::new("openai", "openai")],
-        );
+        let options = build_config_options(&mode_state, &model_state, &model_config);
         let option = options
             .iter()
             .find(|option| option.id.0.as_ref() == "thinking_effort")
@@ -692,13 +555,7 @@ mod tests {
             ));
         model_config.reasoning = Some(false);
 
-        let options = build_config_options(
-            &mode_state,
-            &model_state,
-            &model_config,
-            "openai",
-            vec![SessionConfigSelectOption::new("openai", "openai")],
-        );
+        let options = build_config_options(&mode_state, &model_state, &model_config);
         let option = options
             .iter()
             .find(|option| option.id.0.as_ref() == "thinking_effort")

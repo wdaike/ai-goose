@@ -1,5 +1,3 @@
-use reqwest::header::{HeaderName, HeaderValue};
-
 pub const SESSION_ID_HEADER: &str = "agent-session-id";
 
 pub const TOOL_CALL_REQUEST_ID_HEADER: &str = "agent-tool-call-request-id";
@@ -18,22 +16,6 @@ where
 
 pub fn current_session_id() -> Option<String> {
     SESSION_ID.try_with(|id| id.clone()).ok().flatten()
-}
-
-pub fn session_id_request_builder() -> goose_providers::api_client::RequestBuilderDecorator {
-    std::sync::Arc::new(|request| {
-        let (client, request) = request.build_split();
-        let mut request = request?;
-        let session_header = HeaderName::from_static(SESSION_ID_HEADER);
-        request.headers_mut().remove(&session_header);
-
-        if let Some(session_id) = current_session_id() {
-            let value = HeaderValue::from_str(&session_id)?;
-            request.headers_mut().insert(session_header, value);
-        }
-
-        Ok(reqwest::RequestBuilder::from_parts(client, request))
-    })
 }
 
 /// Local OS user running goose, shared by the OTLP `user.name` resource
