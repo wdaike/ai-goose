@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Switch } from '../../ui/switch';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
+import { SettingsGroup, SettingsRow, SettingsSection } from '../SettingsGroup';
 import { useConfig } from '../../ConfigContext';
 import { TELEMETRY_UI_ENABLED } from '../../../updates';
 import PrivacyInfoModal from '../../onboarding/PrivacyInfoModal';
@@ -15,10 +15,6 @@ const i18n = defineMessages({
   title: {
     id: 'telemetrySettings.title',
     defaultMessage: 'Privacy',
-  },
-  description: {
-    id: 'telemetrySettings.description',
-    defaultMessage: 'Control how your data is used',
   },
   toggleLabel: {
     id: 'telemetrySettings.toggleLabel',
@@ -101,7 +97,6 @@ export default function TelemetrySettings() {
   }
 
   const title = intl.formatMessage(i18n.title);
-  const description = intl.formatMessage(i18n.description);
   const toggleLabel = intl.formatMessage(i18n.toggleLabel);
   const toggleDescription = intl.formatMessage(i18n.toggleDescription);
 
@@ -125,27 +120,22 @@ export default function TelemetrySettings() {
 
   const modal = <PrivacyInfoModal isOpen={showModal} onClose={handleModalClose} />;
 
-  const toggleRow = (
-    <div className="flex items-center justify-between">
-      <div>
-        <h4 className="text-text-primary text-xs">{toggleLabel}</h4>
-        <p className="text-xs text-text-secondary max-w-md mt-[2px]">
-          {toggleDescription} {learnMoreLink}
-        </p>
-      </div>
-      <div className="flex items-center">{toggle}</div>
-    </div>
-  );
-
   return (
     <>
-      <Card className="rounded-lg">
-        <CardHeader className="pb-0">
-          <CardTitle className="mb-1">{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        <CardContent className="pt-4 space-y-4 px-4">{toggleRow}</CardContent>
-      </Card>
+      <SettingsSection title={title}>
+        <SettingsGroup>
+          <SettingsRow
+            title={toggleLabel}
+            description={
+              <>
+                {toggleDescription} {learnMoreLink}
+              </>
+            }
+          >
+            {toggle}
+          </SettingsRow>
+        </SettingsGroup>
+      </SettingsSection>
       {modal}
     </>
   );

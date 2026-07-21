@@ -6,6 +6,8 @@ export const NAV_DIMENSIONS = {
 export const Z_INDEX = {
   /** Header controls (menu button, etc.) */
   HEADER: 100,
+  /** Full-window views (settings) that cover the navigation sidebar */
+  FULL_WINDOW_VIEW: 150,
   /** Tooltips - should appear above most UI elements */
   TOOLTIP: 200,
   /** Popover content (hover menus) */

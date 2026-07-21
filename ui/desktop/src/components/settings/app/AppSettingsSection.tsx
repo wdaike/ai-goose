@@ -14,7 +14,7 @@ import {
 import UpdateSection from './UpdateSection';
 
 import { COST_TRACKING_ENABLED, UPDATES_ENABLED } from '../../../updates';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
+import { SettingsGroup, SettingsRow, SettingsSection } from '../SettingsGroup';
 import ThemeSelector from '../../GooseSidebar/ThemeSelector';
 import BlockLogoBlack from './icons/block-lockup_black.png';
 import BlockLogoWhite from './icons/block-lockup_white.png';
@@ -331,245 +331,200 @@ export default function AppSettingsSection({ scrollToSection }: AppSettingsSecti
     LANGUAGE_OPTIONS.find((option) => option.value === language) ?? LANGUAGE_OPTIONS[0];
 
   return (
-    <div className="space-y-4 pr-4 pb-8 mt-1">
-      <Card className="rounded-lg">
-        <CardHeader className="pb-0">
-          <CardTitle className="">{intl.formatMessage(i18n.appearanceTitle)}</CardTitle>
-          <CardDescription>{intl.formatMessage(i18n.appearanceDesc)}</CardDescription>
-        </CardHeader>
-        <CardContent className="pt-4 space-y-4 px-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-text-primary text-xs">
-                {intl.formatMessage(i18n.notifications)}
-              </h3>
-              <p className="text-xs text-text-secondary max-w-md mt-[2px]">
-                {intl.formatMessage(i18n.notificationsDesc, {
-                  link: (
-                    <span
-                      className="underline hover:cursor-pointer"
-                      onClick={() => setShowNotificationModal(true)}
-                    >
-                      {intl.formatMessage(i18n.configGuide)}
-                    </span>
-                  ),
-                })}
-              </p>
-            </div>
-            <div className="flex items-center">
-              <Button
-                className="flex items-center gap-2 justify-center"
-                variant="secondary"
-                size="sm"
-                onClick={async () => {
-                  try {
-                    await window.electron.openNotificationsSettings();
-                  } catch (error) {
-                    console.error('Failed to open notification settings:', error);
-                  }
-                }}
-              >
-                <Settings />
-                {intl.formatMessage(i18n.openSettings)}
-              </Button>
-            </div>
-          </div>
+    <div className="pb-8">
+      <SettingsSection title={intl.formatMessage(i18n.appearanceTitle)}>
+        <SettingsGroup>
+          <SettingsRow
+            title={intl.formatMessage(i18n.themeTitle)}
+            description={intl.formatMessage(i18n.themeDesc)}
+          >
+            <ThemeSelector className="w-auto" hideTitle horizontal />
+          </SettingsRow>
 
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-text-primary text-xs">
-                {intl.formatMessage(i18n.taskNotifications)}
-              </h3>
-              <p className="text-xs text-text-secondary max-w-md mt-[2px]">
-                {intl.formatMessage(i18n.taskNotificationsDesc)}
-              </p>
-            </div>
-            <div className="flex items-center">
-              <Switch
-                checked={notificationsEnabled}
-                onCheckedChange={handleNotificationsToggle}
-                variant="mono"
-              />
-            </div>
-          </div>
+          <SettingsRow
+            title={intl.formatMessage(i18n.languageTitle)}
+            description={intl.formatMessage(i18n.languageDesc)}
+          >
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex w-[220px] items-center justify-between gap-2 rounded-lg border border-border-primary bg-background-primary px-3 py-2 text-sm text-text-primary transition-colors hover:border-border-secondary">
+                <span className="truncate">
+                  {intl.formatMessage(i18n[selectedLanguage.message])}
+                </span>
+                <ChevronDown className="h-4 w-4 shrink-0" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[260px]">
+                <DropdownMenuRadioGroup value={language} onValueChange={handleLanguageChange}>
+                  {LANGUAGE_OPTIONS.map((option) => (
+                    <DropdownMenuRadioItem key={option.value} value={option.value}>
+                      {intl.formatMessage(i18n[option.message])}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SettingsRow>
 
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-text-primary text-xs">{intl.formatMessage(i18n.menuBarIcon)}</h3>
-              <p className="text-xs text-text-secondary max-w-md mt-[2px]">
-                {intl.formatMessage(i18n.menuBarIconDesc)}
-              </p>
-            </div>
-            <div className="flex items-center">
-              <Switch
-                checked={menuBarIconEnabled}
-                onCheckedChange={handleMenuBarIconToggle}
-                variant="mono"
-              />
-            </div>
-          </div>
+          <SettingsRow
+            title={intl.formatMessage(i18n.menuBarIcon)}
+            description={intl.formatMessage(i18n.menuBarIconDesc)}
+          >
+            <Switch
+              checked={menuBarIconEnabled}
+              onCheckedChange={handleMenuBarIconToggle}
+              variant="mono"
+            />
+          </SettingsRow>
 
           {isMacOS && (
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-text-primary text-xs">{intl.formatMessage(i18n.dockIcon)}</h3>
-                <p className="text-xs text-text-secondary max-w-md mt-[2px]">
-                  {intl.formatMessage(i18n.dockIconDesc)}
-                </p>
-              </div>
-              <div className="flex items-center">
-                <Switch
-                  disabled={isDockSwitchDisabled}
-                  checked={dockIconEnabled}
-                  onCheckedChange={handleDockIconToggle}
-                  variant="mono"
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Prevent Sleep */}
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-text-primary text-xs">{intl.formatMessage(i18n.preventSleep)}</h3>
-              <p className="text-xs text-text-secondary max-w-md mt-[2px]">
-                {intl.formatMessage(i18n.preventSleepDesc)}
-              </p>
-            </div>
-            <div className="flex items-center">
+            <SettingsRow
+              title={intl.formatMessage(i18n.dockIcon)}
+              description={intl.formatMessage(i18n.dockIconDesc)}
+            >
               <Switch
-                checked={wakelockEnabled}
-                onCheckedChange={handleWakelockToggle}
+                disabled={isDockSwitchDisabled}
+                checked={dockIconEnabled}
+                onCheckedChange={handleDockIconToggle}
                 variant="mono"
               />
-            </div>
-          </div>
-
-          {/* Cost Tracking */}
-          {COST_TRACKING_ENABLED && (
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="text-text-primary">{intl.formatMessage(i18n.costTracking)}</h3>
-                <p className="text-xs text-text-secondary max-w-md mt-[2px]">
-                  {intl.formatMessage(i18n.costTrackingDesc)}
-                </p>
-              </div>
-              <div className="flex items-center">
-                <Switch
-                  checked={showPricing}
-                  onCheckedChange={handleShowPricingToggle}
-                  variant="mono"
-                />
-              </div>
-            </div>
+            </SettingsRow>
           )}
-        </CardContent>
-      </Card>
 
-      <Card className="rounded-lg">
-        <CardHeader className="pb-0">
-          <CardTitle className="mb-1">{intl.formatMessage(i18n.themeTitle)}</CardTitle>
-          <CardDescription>{intl.formatMessage(i18n.themeDesc)}</CardDescription>
-        </CardHeader>
-        <CardContent className="pt-4 px-4">
-          <ThemeSelector className="w-auto" hideTitle horizontal />
-        </CardContent>
-      </Card>
+          <SettingsRow
+            title={intl.formatMessage(i18n.preventSleep)}
+            description={intl.formatMessage(i18n.preventSleepDesc)}
+          >
+            <Switch
+              checked={wakelockEnabled}
+              onCheckedChange={handleWakelockToggle}
+              variant="mono"
+            />
+          </SettingsRow>
 
-      <Card className="rounded-lg">
-        <CardHeader className="pb-0">
-          <CardTitle className="mb-1">{intl.formatMessage(i18n.languageTitle)}</CardTitle>
-          <CardDescription>{intl.formatMessage(i18n.languageDesc)}</CardDescription>
-        </CardHeader>
-        <CardContent className="pt-4 px-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex w-full max-w-[260px] items-center justify-between gap-2 rounded-md border border-border-primary bg-background-primary px-3 py-2 text-sm text-text-primary transition-colors hover:border-border-primary">
-              <span className="truncate">{intl.formatMessage(i18n[selectedLanguage.message])}</span>
-              <ChevronDown className="h-4 w-4 shrink-0" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-[260px]">
-              <DropdownMenuRadioGroup value={language} onValueChange={handleLanguageChange}>
-                {LANGUAGE_OPTIONS.map((option) => (
-                  <DropdownMenuRadioItem key={option.value} value={option.value}>
-                    {intl.formatMessage(i18n[option.message])}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </CardContent>
-      </Card>
+          {COST_TRACKING_ENABLED && (
+            <SettingsRow
+              title={intl.formatMessage(i18n.costTracking)}
+              description={intl.formatMessage(i18n.costTrackingDesc)}
+            >
+              <Switch
+                checked={showPricing}
+                onCheckedChange={handleShowPricingToggle}
+                variant="mono"
+              />
+            </SettingsRow>
+          )}
+        </SettingsGroup>
+      </SettingsSection>
+
+      <SettingsSection title={intl.formatMessage(i18n.notifications)}>
+        <SettingsGroup>
+          <SettingsRow
+            title={intl.formatMessage(i18n.notifications)}
+            description={intl.formatMessage(i18n.notificationsDesc, {
+              link: (
+                <span
+                  className="underline hover:cursor-pointer"
+                  onClick={() => setShowNotificationModal(true)}
+                >
+                  {intl.formatMessage(i18n.configGuide)}
+                </span>
+              ),
+            })}
+          >
+            <Button
+              className="flex items-center gap-2 justify-center"
+              variant="secondary"
+              size="sm"
+              onClick={async () => {
+                try {
+                  await window.electron.openNotificationsSettings();
+                } catch (error) {
+                  console.error('Failed to open notification settings:', error);
+                }
+              }}
+            >
+              <Settings />
+              {intl.formatMessage(i18n.openSettings)}
+            </Button>
+          </SettingsRow>
+
+          <SettingsRow
+            title={intl.formatMessage(i18n.taskNotifications)}
+            description={intl.formatMessage(i18n.taskNotificationsDesc)}
+          >
+            <Switch
+              checked={notificationsEnabled}
+              onCheckedChange={handleNotificationsToggle}
+              variant="mono"
+            />
+          </SettingsRow>
+        </SettingsGroup>
+      </SettingsSection>
+
       <TelemetrySettings />
 
-      <Card className="rounded-lg">
-        <CardHeader className="pb-0">
-          <CardTitle className="mb-1">{intl.formatMessage(i18n.helpTitle)}</CardTitle>
-          <CardDescription>{intl.formatMessage(i18n.helpDesc)}</CardDescription>
-        </CardHeader>
-        <CardContent className="pt-4 px-4">
-          <div className="flex space-x-4">
-            <Button
-              onClick={() => {
-                window.open(
-                  'https://github.com/aaif-goose/goose/issues/new?template=bug_report.md',
-                  '_blank'
-                );
-              }}
-              variant="secondary"
-              size="sm"
-            >
-              {intl.formatMessage(i18n.reportBug)}
-            </Button>
-            <Button
-              onClick={() => {
-                window.open(
-                  'https://github.com/aaif-goose/goose/issues/new?template=feature_request.md',
-                  '_blank'
-                );
-              }}
-              variant="secondary"
-              size="sm"
-            >
-              {intl.formatMessage(i18n.requestFeature)}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Version Section - only show if GOOSE_VERSION is set */}
-      {!shouldShowUpdates && (
-        <Card className="rounded-lg">
-          <CardHeader className="pb-0">
-            <CardTitle className="mb-1">{intl.formatMessage(i18n.versionTitle)}</CardTitle>
-          </CardHeader>
-          <CardContent className="pt-4 px-4">
-            <div className="flex items-center gap-3">
-              <img
-                src={isDarkMode ? BlockLogoWhite : BlockLogoBlack}
-                alt="Block Logo" // TODO: replace with AAIF logo asset
-                className="h-8 w-auto"
-              />
-              <span className="text-2xl font-mono text-black dark:text-white">
-                {String(window.appConfig.get('GOOSE_VERSION') || 'Development')}
-              </span>
+      <SettingsSection title={intl.formatMessage(i18n.helpTitle)}>
+        <SettingsGroup>
+          <SettingsRow
+            title={intl.formatMessage(i18n.helpTitle)}
+            description={intl.formatMessage(i18n.helpDesc)}
+          >
+            <div className="flex gap-2">
+              <Button
+                onClick={() => {
+                  window.open(
+                    'https://github.com/aaif-goose/goose/issues/new?template=bug_report.md',
+                    '_blank'
+                  );
+                }}
+                variant="secondary"
+                size="sm"
+              >
+                {intl.formatMessage(i18n.reportBug)}
+              </Button>
+              <Button
+                onClick={() => {
+                  window.open(
+                    'https://github.com/aaif-goose/goose/issues/new?template=feature_request.md',
+                    '_blank'
+                  );
+                }}
+                variant="secondary"
+                size="sm"
+              >
+                {intl.formatMessage(i18n.requestFeature)}
+              </Button>
             </div>
-          </CardContent>
-        </Card>
-      )}
+          </SettingsRow>
+
+          {!shouldShowUpdates && (
+            <SettingsRow title={intl.formatMessage(i18n.versionTitle)}>
+              <div className="flex items-center gap-3">
+                <img
+                  src={isDarkMode ? BlockLogoWhite : BlockLogoBlack}
+                  alt="Block Logo" // TODO: replace with AAIF logo asset
+                  className="h-6 w-auto"
+                />
+                <span className="text-lg font-mono text-text-primary">
+                  {String(window.appConfig.get('GOOSE_VERSION') || 'Development')}
+                </span>
+              </div>
+            </SettingsRow>
+          )}
+        </SettingsGroup>
+      </SettingsSection>
 
       {/* Update Section - only show if GOOSE_VERSION is NOT set */}
       {UPDATES_ENABLED && shouldShowUpdates && (
-        <div ref={updateSectionRef}>
-          <Card className="rounded-lg">
-            <CardHeader className="pb-0">
-              <CardTitle className="mb-1">{intl.formatMessage(i18n.updatesTitle)}</CardTitle>
-              <CardDescription>{intl.formatMessage(i18n.updatesDesc)}</CardDescription>
-            </CardHeader>
-            <CardContent className="px-4">
+        <SettingsSection title={intl.formatMessage(i18n.updatesTitle)}>
+          <div ref={updateSectionRef}>
+            <SettingsGroup className="divide-y-0 px-5 py-4">
+              <p className="text-sm text-text-secondary mb-3">
+                {intl.formatMessage(i18n.updatesDesc)}
+              </p>
               <UpdateSection />
-            </CardContent>
-          </Card>
-        </div>
+            </SettingsGroup>
+          </div>
+        </SettingsSection>
       )}
 
       {/* Notification Instructions Modal */}

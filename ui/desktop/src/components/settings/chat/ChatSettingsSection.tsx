@@ -4,7 +4,7 @@ import { SecurityToggle } from '../security/SecurityToggle';
 import { ResponseStylesSection } from '../response_styles/ResponseStylesSection';
 import { GoosehintsSection } from './GoosehintsSection';
 import { SpellcheckToggle } from './SpellcheckToggle';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
+import { SettingsGroup, SettingsSection } from '../SettingsGroup';
 import { defineMessages, useIntl } from '../../../i18n';
 
 const i18n = defineMessages({
@@ -31,45 +31,43 @@ export default function ChatSettingsSection() {
   const intl = useIntl();
 
   return (
-    <div className="space-y-4 pr-4 pb-8 mt-1">
-      <Card className="pb-2 rounded-lg">
-        <CardHeader className="pb-0">
-          <CardTitle className="">{intl.formatMessage(i18n.modeTitle)}</CardTitle>
-          <CardDescription>{intl.formatMessage(i18n.modeDescription)}</CardDescription>
-        </CardHeader>
-        <CardContent className="px-2">
+    <div className="pb-8">
+      <SettingsSection title={intl.formatMessage(i18n.modeTitle)}>
+        <p className="text-sm text-text-secondary mb-3">
+          {intl.formatMessage(i18n.modeDescription)}
+        </p>
+        <SettingsGroup className="divide-y-0 px-3 py-2">
           <ModeSection />
-        </CardContent>
-      </Card>
+        </SettingsGroup>
+      </SettingsSection>
 
-      <Card className="pb-2 rounded-lg">
-        <CardContent className="px-2">
+      <SettingsSection>
+        <SettingsGroup className="divide-y-0 px-3 py-2">
           <GoosehintsSection />
-        </CardContent>
-      </Card>
+        </SettingsGroup>
+      </SettingsSection>
 
-      <Card className="pb-2 rounded-lg">
-        <CardContent className="px-2">
+      <SettingsSection>
+        <SettingsGroup className="divide-y-0 px-3 py-2">
           <DictationSettings />
           <SpellcheckToggle />
-        </CardContent>
-      </Card>
+        </SettingsGroup>
+      </SettingsSection>
 
-      <Card className="pb-2 rounded-lg">
-        <CardHeader className="pb-0">
-          <CardTitle className="">{intl.formatMessage(i18n.responseStylesTitle)}</CardTitle>
-          <CardDescription>{intl.formatMessage(i18n.responseStylesDescription)}</CardDescription>
-        </CardHeader>
-        <CardContent className="px-2">
+      <SettingsSection title={intl.formatMessage(i18n.responseStylesTitle)}>
+        <p className="text-sm text-text-secondary mb-3">
+          {intl.formatMessage(i18n.responseStylesDescription)}
+        </p>
+        <SettingsGroup className="divide-y-0 px-3 py-2">
           <ResponseStylesSection />
-        </CardContent>
-      </Card>
+        </SettingsGroup>
+      </SettingsSection>
 
-      <Card className="pb-2 rounded-lg">
-        <CardContent className="px-2">
+      <SettingsSection>
+        <SettingsGroup className="divide-y-0 px-3 py-2">
           <SecurityToggle />
-        </CardContent>
-      </Card>
+        </SettingsGroup>
+      </SettingsSection>
     </div>
   );
 }

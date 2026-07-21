@@ -1,5 +1,4 @@
 import { ScrollArea } from '../ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { View, ViewOptions } from '../../utils/navigationUtils';
 import ModelsSection from './models/ModelsSection';
 import ExternalBackendSection from './app/ExternalBackendSection';
@@ -9,8 +8,9 @@ import PromptsSettingsSection from './PromptsSettingsSection';
 import ExtensionsSettingsSection from './extensions/ExtensionsSettingsSection';
 import SkillsSettingsSection from './skills/SkillsSettingsSection';
 import type { ExtensionConfig } from '../../types/extensions';
-import { MainPanelLayout } from '../Layout/MainPanelLayout';
+import { Z_INDEX } from '../Layout/constants';
 import {
+  ArrowLeft,
   Bot,
   Share2,
   Monitor,
@@ -20,9 +20,11 @@ import {
   HardDrive,
   KeyRound,
   Puzzle,
+  Search,
   Zap,
+  type LucideIcon,
 } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import ChatSettingsSection from './chat/ChatSettingsSection';
 import KeyboardShortcutsSection from './keyboard/KeyboardShortcutsSection';
 import AuthSettingsSection from './auth/AuthSettingsSection';
@@ -31,11 +33,36 @@ import { CONFIGURATION_ENABLED } from '../../updates';
 import { trackSettingsTabViewed } from '../../utils/analytics';
 import { useFeatures } from '../../contexts/FeaturesContext';
 import { defineMessages, useIntl } from '../../i18n';
+import { cn } from '../../utils';
 
 const i18n = defineMessages({
   title: {
     id: 'settingsView.title',
     defaultMessage: 'Settings',
+  },
+  back: {
+    id: 'settingsView.back',
+    defaultMessage: 'Back to app',
+  },
+  search: {
+    id: 'settingsView.search',
+    defaultMessage: 'Search settings...',
+  },
+  noResults: {
+    id: 'settingsView.noResults',
+    defaultMessage: 'No settings match your search',
+  },
+  groupPersonal: {
+    id: 'settingsView.groupPersonal',
+    defaultMessage: 'Personal',
+  },
+  groupIntegrations: {
+    id: 'settingsView.groupIntegrations',
+    defaultMessage: 'Integrations',
+  },
+  groupAdvanced: {
+    id: 'settingsView.groupAdvanced',
+    defaultMessage: 'Advanced',
   },
   tabModels: {
     id: 'settingsView.tabModels',
@@ -79,6 +106,73 @@ const i18n = defineMessages({
   },
 });
 
+type SettingsTab =
+  | 'models'
+  | 'local-inference'
+  | 'chat'
+  | 'app'
+  | 'extensions'
+  | 'skills'
+  | 'sharing'
+  | 'prompts'
+  | 'keyboard'
+  | 'auth';
+
+type NavItem = {
+  tab: SettingsTab;
+  label: keyof typeof i18n;
+  icon: LucideIcon;
+  testId: string;
+};
+
+type NavGroup = {
+  label: keyof typeof i18n;
+  items: NavItem[];
+};
+
+const NAV_GROUPS: NavGroup[] = [
+  {
+    label: 'groupPersonal',
+    items: [
+      { tab: 'models', label: 'tabModels', icon: Bot, testId: 'settings-models-tab' },
+      {
+        tab: 'local-inference',
+        label: 'tabLocalInference',
+        icon: HardDrive,
+        testId: 'settings-local-inference-tab',
+      },
+      { tab: 'chat', label: 'tabChat', icon: MessageSquare, testId: 'settings-chat-tab' },
+      { tab: 'app', label: 'tabApp', icon: Monitor, testId: 'settings-app-tab' },
+    ],
+  },
+  {
+    label: 'groupIntegrations',
+    items: [
+      {
+        tab: 'extensions',
+        label: 'tabExtensions',
+        icon: Puzzle,
+        testId: 'settings-extensions-tab',
+      },
+      { tab: 'skills', label: 'tabSkills', icon: Zap, testId: 'settings-skills-tab' },
+      {
+        tab: 'sharing',
+        label: 'tabExternalBackend',
+        icon: Share2,
+        testId: 'settings-sharing-tab',
+      },
+    ],
+  },
+  {
+    label: 'groupAdvanced',
+    items: [
+      { tab: 'prompts', label: 'tabPrompts', icon: FileText, testId: 'settings-prompts-tab' },
+      { tab: 'keyboard', label: 'tabKeyboard', icon: Keyboard, testId: 'settings-keyboard-tab' },
+      { tab: 'auth', label: 'tabAuth', icon: KeyRound, testId: 'settings-auth-tab' },
+    ],
+  },
+];
+
 export type SettingsViewOptions = {
   deepLinkConfig?: ExtensionConfig;
   showEnvVars?: boolean;
@@ -94,21 +188,37 @@ export default function SettingsView({
   setView: (view: View, viewOptions?: ViewOptions) => void;
   viewOptions: SettingsViewOptions;
 }) {
-  const [activeTab, setActiveTab] = useState('models');
+  const [activeTab, setActiveTab] = useState<SettingsTab>('models');
+  const [search, setSearch] = useState('');
   const hasTrackedInitialTab = useRef(false);
   const { localInference } = useFeatures();
   const intl = useIntl();
 
-  const handleTabChange = (tab: string) => {
+  const handleTabChange = (tab: SettingsTab) => {
     setActiveTab(tab);
     trackSettingsTabViewed(tab);
   };
+
+  const visibleGroups = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    return NAV_GROUPS.map((group) => ({
+      ...group,
+      items: group.items.filter((item) => {
+        if (item.tab === 'local-inference' && !localInference) return false;
+        return !query || intl.formatMessage(i18n[item.label]).toLowerCase().includes(query);
+      }),
+    })).filter((group) => group.items.length > 0);
+  }, [search, localInference, intl]);
+
+  const activeItem = NAV_GROUPS.flatMap((group) => group.items).find(
+    (item) => item.tab === activeTab
+  );
 
   // Determine initial tab based on section prop
   useEffect(() => {
     if (viewOptions.section) {
       // Map section names to tab values
-      const sectionToTab: Record<string, string> = {
+      const sectionToTab: Record<string, SettingsTab> = {
         update: 'app',
         models: 'models',
         modes: 'chat',
@@ -161,183 +271,111 @@ export default function SettingsView({
   }, [onClose]);
 
   return (
-    <>
-      <MainPanelLayout>
-        <div className="flex-1 flex flex-col min-h-0">
-          <div className="bg-background-primary px-8 pb-8 pt-16">
-            <div className="flex flex-col page-transition">
-              <div className="flex justify-between items-center mb-1">
-                <h1 className="text-4xl font-light">{intl.formatMessage(i18n.title)}</h1>
-              </div>
+    <div
+      className="fixed inset-0 flex bg-background-primary animate-fade-in"
+      style={{ zIndex: Z_INDEX.FULL_WINDOW_VIEW }}
+    >
+      <div className="flex flex-1 min-h-0">
+        <nav className="flex flex-col w-[260px] shrink-0 border-r border-border-primary bg-background-secondary">
+          {/* Drag region clearing the window controls. */}
+          <div className="h-[52px]" />
+
+          <div className="px-4">
+            <button
+              onClick={onClose}
+              className="no-drag flex items-center gap-2 h-9 px-2 -ml-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-background-tertiary transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="text-sm">{intl.formatMessage(i18n.back)}</span>
+            </button>
+          </div>
+
+          <div className="px-4 py-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-tertiary pointer-events-none" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={intl.formatMessage(i18n.search)}
+                data-testid="settings-search"
+                className="w-full h-9 pl-9 pr-3 rounded-lg border border-border-primary bg-background-primary text-sm text-text-primary placeholder:text-text-tertiary focus:border-border-secondary focus-visible:outline-none transition-colors"
+              />
             </div>
           </div>
 
-          <div className="flex-1 min-h-0 relative px-6">
-            <Tabs
-              value={activeTab}
-              onValueChange={handleTabChange}
-              className="h-full flex flex-col"
-            >
-              <div className="px-1">
-                <TabsList className="w-full mb-2 justify-start overflow-x-auto flex-nowrap">
-                  <TabsTrigger
-                    value="models"
-                    className="flex gap-2"
-                    data-testid="settings-models-tab"
-                  >
-                    <Bot className="h-4 w-4" />
-                    {intl.formatMessage(i18n.tabModels)}
-                  </TabsTrigger>
-                  {localInference && (
-                    <TabsTrigger
-                      value="local-inference"
-                      className="flex gap-2"
-                      data-testid="settings-local-inference-tab"
-                    >
-                      <HardDrive className="h-4 w-4" />
-                      {intl.formatMessage(i18n.tabLocalInference)}
-                    </TabsTrigger>
-                  )}
-                  <TabsTrigger value="chat" className="flex gap-2" data-testid="settings-chat-tab">
-                    <MessageSquare className="h-4 w-4" />
-                    {intl.formatMessage(i18n.tabChat)}
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="extensions"
-                    className="flex gap-2"
-                    data-testid="settings-extensions-tab"
-                  >
-                    <Puzzle className="h-4 w-4" />
-                    {intl.formatMessage(i18n.tabExtensions)}
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="skills"
-                    className="flex gap-2"
-                    data-testid="settings-skills-tab"
-                  >
-                    <Zap className="h-4 w-4" />
-                    {intl.formatMessage(i18n.tabSkills)}
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="sharing"
-                    className="flex gap-2"
-                    data-testid="settings-sharing-tab"
-                  >
-                    <Share2 className="h-4 w-4" />
-                    {intl.formatMessage(i18n.tabExternalBackend)}
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="prompts"
-                    className="flex gap-2"
-                    data-testid="settings-prompts-tab"
-                  >
-                    <FileText className="h-4 w-4" />
-                    {intl.formatMessage(i18n.tabPrompts)}
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="keyboard"
-                    className="flex gap-2"
-                    data-testid="settings-keyboard-tab"
-                  >
-                    <Keyboard className="h-4 w-4" />
-                    {intl.formatMessage(i18n.tabKeyboard)}
-                  </TabsTrigger>
-                  <TabsTrigger value="auth" className="flex gap-2" data-testid="settings-auth-tab">
-                    <KeyRound className="h-4 w-4" />
-                    {intl.formatMessage(i18n.tabAuth)}
-                  </TabsTrigger>
-                  <TabsTrigger value="app" className="flex gap-2" data-testid="settings-app-tab">
-                    <Monitor className="h-4 w-4" />
-                    {intl.formatMessage(i18n.tabApp)}
-                  </TabsTrigger>
-                </TabsList>
-              </div>
-
-              <ScrollArea className="flex-1 px-2">
-                <TabsContent
-                  value="models"
-                  className="mt-0 focus-visible:outline-none focus-visible:ring-0"
-                >
-                  <ModelsSection setView={setView} />
-                </TabsContent>
-
-                {localInference && (
-                  <TabsContent
-                    value="local-inference"
-                    className="mt-0 focus-visible:outline-none focus-visible:ring-0"
-                  >
-                    <LocalInferenceSection />
-                  </TabsContent>
-                )}
-
-                <TabsContent
-                  value="chat"
-                  className="mt-0 focus-visible:outline-none focus-visible:ring-0"
-                >
-                  <ChatSettingsSection />
-                </TabsContent>
-
-                <TabsContent
-                  value="extensions"
-                  className="mt-0 focus-visible:outline-none focus-visible:ring-0"
-                >
-                  <ExtensionsSettingsSection
-                    deepLinkConfig={viewOptions.deepLinkConfig}
-                    showEnvVars={viewOptions.showEnvVars}
-                  />
-                </TabsContent>
-
-                <TabsContent
-                  value="skills"
-                  className="mt-0 focus-visible:outline-none focus-visible:ring-0"
-                >
-                  <SkillsSettingsSection />
-                </TabsContent>
-
-                <TabsContent
-                  value="sharing"
-                  className="mt-0 focus-visible:outline-none focus-visible:ring-0"
-                >
-                  <div className="space-y-8 pb-8">
-                    <ExternalBackendSection />
+          <ScrollArea className="flex-1">
+            <div className="px-3 pb-6 space-y-5">
+              {visibleGroups.map((group) => (
+                <div key={group.label}>
+                  <div className="px-3 pb-1 text-xs text-text-tertiary">
+                    {intl.formatMessage(i18n[group.label])}
                   </div>
-                </TabsContent>
+                  {group.items.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = item.tab === activeTab;
+                    return (
+                      <button
+                        key={item.tab}
+                        onClick={() => handleTabChange(item.tab)}
+                        data-testid={item.testId}
+                        aria-current={isActive ? 'page' : undefined}
+                        className={cn(
+                          'w-full flex items-center gap-3 h-9 px-3 rounded-lg text-sm transition-colors',
+                          isActive
+                            ? 'bg-background-tertiary text-text-primary'
+                            : 'text-text-secondary hover:bg-background-tertiary/60 hover:text-text-primary'
+                        )}
+                      >
+                        <Icon className="h-4 w-4 shrink-0" />
+                        <span className="truncate">{intl.formatMessage(i18n[item.label])}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ))}
+              {visibleGroups.length === 0 && (
+                <div className="px-3 py-6 text-sm text-text-tertiary">
+                  {intl.formatMessage(i18n.noResults)}
+                </div>
+              )}
+            </div>
+          </ScrollArea>
+        </nav>
 
-                <TabsContent
-                  value="prompts"
-                  className="mt-0 focus-visible:outline-none focus-visible:ring-0"
-                >
-                  <PromptsSettingsSection />
-                </TabsContent>
+        <main className="flex-1 min-w-0 flex flex-col pt-[52px]">
+          <ScrollArea className="flex-1">
+            <div className="mx-auto w-full max-w-[840px] px-10 py-10 page-transition">
+              <h1 className="text-3xl font-light mb-8">
+                {activeItem
+                  ? intl.formatMessage(i18n[activeItem.label])
+                  : intl.formatMessage(i18n.title)}
+              </h1>
 
-                <TabsContent
-                  value="keyboard"
-                  className="mt-0 focus-visible:outline-none focus-visible:ring-0"
-                >
-                  <KeyboardShortcutsSection />
-                </TabsContent>
-
-                <TabsContent
-                  value="auth"
-                  className="mt-0 focus-visible:outline-none focus-visible:ring-0"
-                >
-                  <AuthSettingsSection />
-                </TabsContent>
-
-                <TabsContent
-                  value="app"
-                  className="mt-0 focus-visible:outline-none focus-visible:ring-0"
-                >
-                  <div className="space-y-8">
-                    {CONFIGURATION_ENABLED && <ConfigSettings />}
-                    <AppSettingsSection scrollToSection={viewOptions.section} />
-                  </div>
-                </TabsContent>
-              </ScrollArea>
-            </Tabs>
-          </div>
-        </div>
-      </MainPanelLayout>
-    </>
+              {activeTab === 'models' && <ModelsSection setView={setView} />}
+              {activeTab === 'local-inference' && localInference && <LocalInferenceSection />}
+              {activeTab === 'chat' && <ChatSettingsSection />}
+              {activeTab === 'extensions' && (
+                <ExtensionsSettingsSection
+                  deepLinkConfig={viewOptions.deepLinkConfig}
+                  showEnvVars={viewOptions.showEnvVars}
+                />
+              )}
+              {activeTab === 'skills' && <SkillsSettingsSection />}
+              {activeTab === 'sharing' && <ExternalBackendSection />}
+              {activeTab === 'prompts' && <PromptsSettingsSection />}
+              {activeTab === 'keyboard' && <KeyboardShortcutsSection />}
+              {activeTab === 'auth' && <AuthSettingsSection />}
+              {activeTab === 'app' && (
+                <div className="space-y-8">
+                  {CONFIGURATION_ENABLED && <ConfigSettings />}
+                  <AppSettingsSection scrollToSection={viewOptions.section} />
+                </div>
+              )}
+            </div>
+          </ScrollArea>
+        </main>
+      </div>
+    </div>
   );
 }
