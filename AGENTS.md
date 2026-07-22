@@ -7,7 +7,7 @@ no Rust code and no backend of our own.
 
 The Electron main process spawns `codex app-server` (the official binary, from
 `PATH` or `GOOSE_CODEX_BIN`) and bridges its stdio JSONL JSON-RPC to the
-renderer over IPC (`ui/desktop/src/codex/bridge.ts`, exposed as
+renderer over IPC (`desktop/src/codex/bridge.ts`, exposed as
 `window.codex`). The renderer speaks the app-server v2 protocol directly.
 
 Codex owns everything backend-shaped: inference, tool execution, the MCP
@@ -32,27 +32,28 @@ Key renderer modules:
 ## Commands
 
 ```bash
-cd ui/desktop && pnpm install
-cd ui/desktop && pnpm run start-gui   # run the app (needs `codex` on PATH)
-cd ui/desktop && pnpm run typecheck
-cd ui/desktop && pnpm test
-cd ui/desktop && npx eslint src --ext .ts,.tsx
+cd desktop && pnpm install
+cd desktop && pnpm run start-gui   # run the app (needs `codex` on PATH)
+cd desktop && pnpm run typecheck
+cd desktop && pnpm test
+cd desktop && npx eslint src --ext .ts,.tsx
 ```
 
 To regenerate protocol types after upgrading codex:
 
 ```bash
-cd ui/desktop && codex app-server generate-ts --out src/codex/protocol
+cd desktop && codex app-server generate-ts --out src/codex/protocol
 ```
 
 ## Structure
 
 ```
-ui/desktop/               # Electron app (the whole product)
-├── src/main.ts           # Electron main; spawns codex app-server
-├── src/codex/            # codex bridge, protocol types, chat engine
-├── src/acp/              # legacy seams, codex-backed or stubbed
-└── src/components/       # UI (unchanged goose look & feel)
+desktop/               # Electron app (the whole product)
+├── src/main.ts        # Electron main; spawns codex app-server
+├── src/codex/         # codex bridge, protocol types, chat engine
+├── src/acp/           # legacy seams, codex-backed or stubbed
+└── src/components/    # UI (unchanged goose look & feel)
+sdk/                   # @aaif/goose-sdk — types for the legacy acp seams
 ```
 
 ## Rules
@@ -62,7 +63,7 @@ ui/desktop/               # Electron app (the whole product)
 - MCP: servers are configured in codex `config.toml` (`mcp_servers.*`) via
   `config/batchWrite`; status/tools via `mcpServerStatus/list`
 - UI Desktop: Use local `src/types/*` types. Do not import generated OpenAPI
-  types/client code from `ui/desktop/src/api`
+  types/client code from `desktop/src/api`
 - UI prefs that have no codex home live in `localStorage` (`src/acp/config.ts`)
 
 ## Code Quality
@@ -76,12 +77,12 @@ ui/desktop/               # Electron app (the whole product)
 
 ## Never
 
-- Never: Recreate `ui/desktop/src/api` or add `@hey-api/openapi-ts` to `ui/desktop`
+- Never: Recreate `desktop/src/api` or add `@hey-api/openapi-ts` to `desktop`
 - Never: Hand-edit files under `src/codex/protocol/` — they are generated
 - Never: Reintroduce a goose-owned backend (ACP server, message store, MCP client)
 
 ## Entry Points
 
-- UI: ui/desktop/src/main.ts
-- Codex bridge: ui/desktop/src/codex/bridge.ts
-- Chat engine: ui/desktop/src/codex/engine/controller.ts
+- UI: desktop/src/main.ts
+- Codex bridge: desktop/src/codex/bridge.ts
+- Chat engine: desktop/src/codex/engine/controller.ts
