@@ -144,6 +144,16 @@ export type RedactedThinkingContent = {
   data: string;
 };
 
+export type PlanStep = {
+  status: 'pending' | 'inProgress' | 'completed';
+  step: string;
+};
+
+export type PlanContent = {
+  explanation: string | null;
+  steps: PlanStep[];
+};
+
 export type ToolConfirmationRequest = {
   arguments: JsonObject;
   id: string;
@@ -190,6 +200,7 @@ export type MessageMetadata = {
   steer?: boolean;
   usage?: MessageUsage | null;
   userVisible: boolean;
+  workGroupId?: string;
 };
 
 export type MessageContent =
@@ -201,6 +212,7 @@ export type MessageContent =
   | (ActionRequired & { type: 'actionRequired' })
   | (FrontendToolRequest & { type: 'frontendToolRequest' })
   | (ThinkingContent & { type: 'thinking' })
+  | (PlanContent & { type: 'plan' })
   | (RedactedThinkingContent & { type: 'redactedThinking' })
   | (SystemNotificationContent & { type: 'systemNotification' });
 
@@ -341,6 +353,13 @@ export function getThinkingContent(message: Message): string | null {
   }
 
   return parts.length > 0 ? parts.join('') : null;
+}
+
+export function getPlanContent(message: Message): PlanContent | null {
+  const content = message.content.find(
+    (candidate): candidate is PlanContent & { type: 'plan' } => candidate.type === 'plan'
+  );
+  return content ?? null;
 }
 
 export function getToolRequests(message: Message): (ToolRequest & { type: 'toolRequest' })[] {

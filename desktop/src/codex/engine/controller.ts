@@ -16,12 +16,13 @@ import { codex } from '../client';
 import type { Thread } from '../protocol/v2/Thread';
 import type { ThreadItem } from '../protocol/v2/ThreadItem';
 import type { TurnError } from '../protocol/v2/TurnError';
+import type { TurnPlanUpdatedNotification } from '../protocol/v2/TurnPlanUpdatedNotification';
 import { mapThreadToMessages, type MappingState } from './mapItems';
 import { enforceSkillPolicy } from './skillPolicy';
 
 interface ThreadEntry extends MappingState {
   thread: Thread | null;
-  activeTurnId: string | null;
+  activeTurnWorkGroupId: string | null;
   finish: ((error?: string) => void) | null;
 }
 
@@ -56,7 +57,9 @@ function entryFor(threadId: string): ThreadEntry {
       streams: {},
       createdAt: new Map(),
       approvals: new Map(),
+      turnPlans: new Map(),
       activeTurnId: null,
+      activeTurnWorkGroupId: null,
       finish: null,
     };
     threads.set(threadId, entry);
@@ -90,6 +93,12 @@ function upsertItem(entry: ThreadEntry, item: ThreadItem): void {
   const index = entry.items.findIndex((existing) => existing.id === item.id);
   if (index === -1) entry.items.push(item);
   else entry.items[index] = item;
+
+  if (item.type === 'userMessage' && entry.activeTurnId) {
+    entry.activeTurnWorkGroupId = `work-${item.clientId ?? item.id}`;
+    const plan = entry.turnPlans.get(entry.activeTurnId);
+    if (plan) plan.workGroupId = entry.activeTurnWorkGroupId;
+  }
 }
 
 function appendStream(
@@ -185,17 +194,31 @@ function handleEvent(msg: ServerMessage): void {
     }
     case 'turn/started': {
       entry.activeTurnId = (params!.turn as { id: string }).id;
+      entry.activeTurnWorkGroupId = null;
       acpChatSessionActions.setChatState(threadId, ChatState.Streaming);
       break;
     }
     case 'turn/completed': {
       const turn = params!.turn as { id: string; error: TurnError | null };
       if (entry.activeTurnId === turn.id) entry.activeTurnId = null;
+      entry.activeTurnWorkGroupId = null;
       acpChatSessionActions.setChatState(threadId, ChatState.Idle);
       publish(threadId);
       const finish = entry.finish;
       entry.finish = null;
       finish?.(turn.error?.message);
+      break;
+    }
+    case 'turn/plan/updated': {
+      const update = params as unknown as TurnPlanUpdatedNotification;
+      const existing = entry.turnPlans.get(update.turnId);
+      entry.turnPlans.set(update.turnId, {
+        explanation: update.explanation,
+        steps: update.plan,
+        workGroupId:
+          entry.activeTurnWorkGroupId ?? existing?.workGroupId ?? `work-${update.turnId}`,
+      });
+      publish(threadId);
       break;
     }
     case 'item/started':
@@ -282,10 +305,7 @@ async function loadSession(sessionId: string, options: AcpLoadSessionOptions = {
     const items = read.thread.turns.flatMap((turn) => turn.items);
     seedEntry(read.thread, items);
     publish(sessionId);
-    acpChatSessionActions.finishSessionLoad(
-      sessionId,
-      threadToSession(read.thread, items.length)
-    );
+    acpChatSessionActions.finishSessionLoad(sessionId, threadToSession(read.thread, items.length));
     sessionLoadedEvents(sessionId, options);
   } catch (error) {
     acpChatSessionActions.failSessionLoad(sessionId, errorMessage(error));
@@ -327,7 +347,9 @@ async function submitMessage(
   } catch (error) {
     entry.finish = null;
     const submitError = 'Submit error: ' + errorMessage(error);
-    if (acpChatSessionActions.finishPromptAttemptIfCurrent(sessionId, promptAttemptId, submitError)) {
+    if (
+      acpChatSessionActions.finishPromptAttemptIfCurrent(sessionId, promptAttemptId, submitError)
+    ) {
       void options.onFinish(submitError);
     }
   }

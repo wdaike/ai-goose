@@ -18,10 +18,16 @@ import { cn } from '../utils';
 import { useChatSession } from '../hooks/useChatSession';
 import { acpUpdateWorkingDir } from '../acp/sessions';
 import { useNavigation } from '../hooks/useNavigation';
-import { getTextAndImageContent, type Message, type UserInput } from '../types/message';
+import {
+  getPlanContent,
+  getTextAndImageContent,
+  type Message,
+  type UserInput,
+} from '../types/message';
 import { useAutoSubmit } from '../hooks/useAutoSubmit';
 import SessionActionsHeader from './SessionActionsHeader';
 import { isAcpRecovering, subscribeToAcpRecovery } from '../acp/acpConnection';
+import PlanSteps from './PlanSteps';
 
 const i18n = defineMessages({
   failedToLoadSession: {
@@ -167,6 +173,15 @@ export default function BaseChat({
       }, [])
       .reverse();
   }, [messages]);
+
+  const activePlan = useMemo(() => {
+    if (chatState === ChatState.Idle) return null;
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const plan = getPlanContent(messages[i]);
+      if (plan) return plan;
+    }
+    return null;
+  }, [chatState, messages]);
 
   const sessionModel = session?.model_config?.model_name ?? null;
   const sessionProvider = session?.provider_name ?? null;
@@ -372,6 +387,12 @@ export default function BaseChat({
         {acpRecovering && (
           <div role="status" className="mx-4 mb-2 text-sm text-text-secondary">
             {intl.formatMessage(i18n.reconnecting)}
+          </div>
+        )}
+
+        {activePlan && (
+          <div className="relative z-30 mx-4 mb-2 flex justify-center">
+            <PlanSteps plan={activePlan} />
           </div>
         )}
 

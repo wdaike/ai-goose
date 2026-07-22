@@ -1,5 +1,6 @@
 import type { Message, MessageContent } from '../../types/message';
 import type { ThreadItem } from '../protocol/v2/ThreadItem';
+import type { TurnPlanStep } from '../protocol/v2/TurnPlanStep';
 
 export interface ItemStreams {
   agentText?: string;
@@ -15,11 +16,19 @@ export interface PendingApprovalInfo {
   prompt?: string;
 }
 
+export interface TurnPlanInfo {
+  explanation: string | null;
+  steps: TurnPlanStep[];
+  workGroupId: string;
+}
+
 export interface MappingState {
+  activeTurnId: string | null;
   items: ThreadItem[];
   streams: Record<string, ItemStreams>;
   createdAt: Map<string, number>;
   approvals: Map<string, PendingApprovalInfo>;
+  turnPlans: Map<string, TurnPlanInfo>;
 }
 
 const VISIBLE = { userVisible: true, agentVisible: true } as const;
@@ -33,8 +42,19 @@ function created(state: MappingState, itemId: string): number {
   return value;
 }
 
-function assistantMessage(state: MappingState, id: string, content: MessageContent[]): Message {
-  return { id, role: 'assistant', created: created(state, id), content, metadata: { ...VISIBLE } };
+function assistantMessage(
+  state: MappingState,
+  id: string,
+  content: MessageContent[],
+  workGroupId?: string
+): Message {
+  return {
+    id,
+    role: 'assistant',
+    created: created(state, id),
+    content,
+    metadata: { ...VISIBLE, ...(workGroupId ? { workGroupId } : {}) },
+  };
 }
 
 function toolMessages(
@@ -42,16 +62,22 @@ function toolMessages(
   item: ThreadItem & { id: string },
   toolName: string,
   args: Record<string, unknown>,
-  result: { done: boolean; error?: string; output?: string }
+  result: { done: boolean; error?: string; output?: string },
+  workGroupId?: string
 ): Message[] {
   const messages: Message[] = [
-    assistantMessage(state, item.id, [
-      {
-        type: 'toolRequest',
-        id: item.id,
-        toolCall: { status: 'success', value: { name: toolName, arguments: args } },
-      },
-    ]),
+    assistantMessage(
+      state,
+      item.id,
+      [
+        {
+          type: 'toolRequest',
+          id: item.id,
+          toolCall: { status: 'success', value: { name: toolName, arguments: args } },
+        },
+      ],
+      workGroupId
+    ),
   ];
   if (result.done) {
     messages.push({
@@ -79,7 +105,22 @@ function toolMessages(
   return messages;
 }
 
-function mapItem(state: MappingState, item: ThreadItem): Message[] {
+function dynamicToolArguments(value: unknown, tool: string): Record<string, unknown> {
+  const args =
+    value && typeof value === 'object' && !Array.isArray(value)
+      ? (value as Record<string, unknown>)
+      : { input: value };
+  if (tool !== 'exec' && tool !== 'exec_command') return args;
+  const command = typeof value === 'string' ? value : (args.input ?? args.cmd ?? args.command);
+  return { command: typeof command === 'string' ? command : JSON.stringify(value) };
+}
+
+function mapItem(
+  state: MappingState,
+  item: ThreadItem,
+  workGroupId?: string,
+  agentMessageIsWork = false
+): Message[] {
   const stream = state.streams[item.id];
   switch (item.type) {
     case 'userMessage': {
@@ -112,7 +153,14 @@ function mapItem(state: MappingState, item: ThreadItem): Message[] {
     case 'agentMessage': {
       const text = item.text || stream?.agentText || '';
       if (!text) return [];
-      return [assistantMessage(state, item.id, [{ type: 'text', text }])];
+      return [
+        assistantMessage(
+          state,
+          item.id,
+          [{ type: 'text', text }],
+          item.phase === 'commentary' || agentMessageIsWork ? workGroupId : undefined
+        ),
+      ];
     }
     case 'plan': {
       const text = item.text || stream?.planText || '';
@@ -120,12 +168,7 @@ function mapItem(state: MappingState, item: ThreadItem): Message[] {
       return [assistantMessage(state, item.id, [{ type: 'text', text }])];
     }
     case 'reasoning': {
-      const summary = item.summary.length ? item.summary : (stream?.reasoningSummary ?? []);
-      const text = summary.filter(Boolean).join('\n\n');
-      if (!text) return [];
-      return [
-        assistantMessage(state, item.id, [{ type: 'thinking', thinking: text, signature: '' }]),
-      ];
+      return [];
     }
     case 'commandExecution': {
       const done = item.status !== 'inProgress';
@@ -134,12 +177,13 @@ function mapItem(state: MappingState, item: ThreadItem): Message[] {
         state,
         item,
         'shell',
-        { command: item.command },
+        { command: item.command, command_actions: item.commandActions },
         {
           done,
           error: item.status === 'failed' && !output ? '命令执行失败' : undefined,
           output,
-        }
+        },
+        workGroupId
       );
     }
     case 'fileChange': {
@@ -150,7 +194,8 @@ function mapItem(state: MappingState, item: ThreadItem): Message[] {
         item,
         'edit_file',
         { files: item.changes.map((change) => `${change.kind.type} ${change.path}`) },
-        { done, output: diff }
+        { done, output: diff },
+        workGroupId
       );
     }
     case 'mcpToolCall': {
@@ -169,18 +214,127 @@ function mapItem(state: MappingState, item: ThreadItem): Message[] {
         item,
         `${item.server}__${item.tool}`,
         (item.arguments ?? {}) as Record<string, unknown>,
-        { done, error: item.error?.message, output: resultText }
+        { done, error: item.error?.message, output: resultText },
+        workGroupId
+      );
+    }
+    case 'dynamicToolCall': {
+      const output = (item.contentItems ?? [])
+        .filter((content) => content.type === 'inputText')
+        .map((content) => content.text)
+        .join('\n');
+      const isCommand = item.tool === 'exec' || item.tool === 'exec_command';
+      const isFileChange = item.tool === 'apply_patch';
+      const toolName = isCommand
+        ? 'shell'
+        : isFileChange
+          ? 'edit_file'
+          : item.namespace
+            ? `${item.namespace}__${item.tool}`
+            : item.tool;
+      return toolMessages(
+        state,
+        item,
+        toolName,
+        dynamicToolArguments(item.arguments, item.tool),
+        {
+          done: item.status !== 'inProgress',
+          error:
+            item.status === 'failed' || item.success === false
+              ? output || 'Tool call failed'
+              : undefined,
+          output,
+        },
+        workGroupId
       );
     }
     case 'webSearch':
-      return toolMessages(state, item, 'web_search', { query: item.query }, { done: true });
+      return toolMessages(
+        state,
+        item,
+        'web_search',
+        { query: item.query },
+        { done: true },
+        workGroupId
+      );
     default:
       return [];
   }
 }
 
 export function mapThreadToMessages(state: MappingState): Message[] {
-  const messages = state.items.flatMap((item) => mapItem(state, item));
+  let workGroupId: string | undefined;
+  const messages: Message[] = [];
+  const emittedPlanIds = new Set<string>();
+  const plansByWorkGroup = new Map<string, [string, TurnPlanInfo]>();
+  for (const plan of state.turnPlans) {
+    plansByWorkGroup.set(plan[1].workGroupId, plan);
+  }
+  const emitPlan = (groupId: string | undefined) => {
+    if (!groupId) return;
+    const plan = plansByWorkGroup.get(groupId);
+    if (!plan || emittedPlanIds.has(plan[0]) || plan[1].steps.length === 0) return;
+    emittedPlanIds.add(plan[0]);
+    messages.push(
+      assistantMessage(
+        state,
+        `plan-${plan[0]}`,
+        [
+          {
+            type: 'plan',
+            explanation: plan[1].explanation,
+            steps: plan[1].steps,
+          },
+        ],
+        groupId
+      )
+    );
+  };
+
+  const fallbackFinalMessageIds = new Set<string>();
+  let segmentStart = 0;
+  const findFallbackFinal = (segmentEnd: number, isActive: boolean) => {
+    if (isActive) return;
+    const segment = state.items.slice(segmentStart, segmentEnd);
+    if (segment.some((item) => item.type === 'agentMessage' && item.phase === 'final_answer')) {
+      return;
+    }
+    for (let i = segment.length - 1; i >= 0; i--) {
+      const item = segment[i];
+      if (item.type === 'agentMessage' && item.phase === null) {
+        fallbackFinalMessageIds.add(item.id);
+      }
+      break;
+    }
+  };
+
+  state.items.forEach((item, index) => {
+    if (item.type !== 'userMessage' || index === 0) return;
+    findFallbackFinal(index, false);
+    segmentStart = index;
+  });
+  findFallbackFinal(state.items.length, Boolean(state.activeTurnId));
+
+  for (const item of state.items) {
+    if (item.type === 'userMessage') {
+      workGroupId = `work-${item.clientId ?? item.id}`;
+    }
+    if (item.type === 'agentMessage' && item.phase === 'final_answer') {
+      emitPlan(workGroupId);
+    }
+    messages.push(
+      ...mapItem(
+        state,
+        item,
+        workGroupId,
+        item.type === 'agentMessage' && item.phase === null && !fallbackFinalMessageIds.has(item.id)
+      )
+    );
+  }
+
+  for (const [turnId, plan] of state.turnPlans) {
+    if (!emittedPlanIds.has(turnId)) emitPlan(plan.workGroupId);
+  }
 
   for (const approval of state.approvals.values()) {
     messages.push({

@@ -82,6 +82,46 @@ export function identifyToolCallGroups(messages: Message[]): number[][] {
   return groups;
 }
 
+export function identifyWorkGroups(messages: Message[]): number[][] {
+  const groups = new Map<string, number[]>();
+
+  messages.forEach((message, index) => {
+    const id = message.metadata.workGroupId;
+    if (!id) return;
+    const group = groups.get(id) ?? [];
+    group.push(index);
+    groups.set(id, group);
+  });
+
+  return [...groups.values()];
+}
+
+export type WorkGroupEntry =
+  | { type: 'message'; index: number }
+  | { type: 'tools'; indexes: number[] };
+
+export function getWorkGroupEntries(messages: Message[], indexes: number[]): WorkGroupEntry[] {
+  const entries: WorkGroupEntry[] = [];
+  let toolIndexes: number[] = [];
+  const finishTools = () => {
+    if (toolIndexes.length > 0) {
+      entries.push({ type: 'tools', indexes: toolIndexes });
+      toolIndexes = [];
+    }
+  };
+
+  for (const index of indexes) {
+    if (getToolRequests(messages[index]).length > 0) {
+      toolIndexes.push(index);
+    } else {
+      finishTools();
+      entries.push({ type: 'message', index });
+    }
+  }
+  finishTools();
+  return entries;
+}
+
 export function shouldHideTimestamp(messageIndex: number, chains: number[][]): boolean {
   for (const chain of chains) {
     if (chain.includes(messageIndex)) {

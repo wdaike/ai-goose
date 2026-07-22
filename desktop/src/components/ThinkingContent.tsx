@@ -5,10 +5,15 @@ import Expand from './ui/Expand';
 
 interface ThinkingContentProps {
   content: string;
+  inline?: boolean;
   isExpanded: boolean;
 }
 
-export default function ThinkingContent({ content, isExpanded }: ThinkingContentProps) {
+export default function ThinkingContent({
+  content,
+  inline = false,
+  isExpanded,
+}: ThinkingContentProps) {
   const [manualToggle, setManualToggle] = useState<boolean | null>(null);
   const prevIsExpanded = useRef(isExpanded);
 
@@ -20,6 +25,14 @@ export default function ThinkingContent({ content, isExpanded }: ThinkingContent
   }, [isExpanded]);
 
   const expanded = manualToggle !== null ? manualToggle : isExpanded;
+
+  if (inline) {
+    return (
+      <div className="text-sm text-text-secondary">
+        <MarkdownContent content={content} />
+      </div>
+    );
+  }
 
   return (
     <Collapsible open={expanded} onOpenChange={(open) => setManualToggle(open)} className="mb-2">

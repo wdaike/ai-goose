@@ -32,6 +32,7 @@ interface GooseMessageProps {
   toolCallNotifications: Map<string, NotificationEvent[]>;
   append: (value: string) => void;
   isStreaming: boolean;
+  isInWorkGroup?: boolean;
   isInToolCallGroup?: boolean;
   submitElicitationResponse?: (
     elicitationId: string,
@@ -46,6 +47,7 @@ export default function GooseMessage({
   toolCallNotifications,
   append,
   isStreaming,
+  isInWorkGroup = false,
   isInToolCallGroup = false,
   submitElicitationResponse,
 }: GooseMessageProps) {
@@ -125,13 +127,14 @@ export default function GooseMessage({
     <div
       className={cn(
         'goose-message flex justify-start min-w-0',
-        isInToolCallGroup ? 'w-full' : 'w-[90%]'
+        isInToolCallGroup || isInWorkGroup ? 'w-full' : 'w-[90%]'
       )}
     >
       <div className="flex flex-col w-full min-w-0">
         {thinkingContent && (
           <ThinkingContent
             content={thinkingContent}
+            inline={isInWorkGroup}
             isExpanded={
               isStreaming &&
               !displayText.trim() &&
@@ -159,17 +162,19 @@ export default function GooseMessage({
 
             {toolRequests.length === 0 && (
               <div className="relative flex items-center justify-between">
-                {!isStreaming && (
+                {!isStreaming && !isInWorkGroup && (
                   <div className="text-xs font-mono text-text-secondary pt-1 transition-all duration-200 group-hover:-translate-y-4 group-hover:opacity-0">
                     {timestamp}
                   </div>
                 )}
-                {message.content.every((content) => content.type === 'text') && !isStreaming && (
-                  <div className="absolute left-0 pt-1">
-                    <MessageCopyLink text={displayText} contentRef={contentRef} />
-                  </div>
-                )}
-                {!isStreaming && message.metadata.usage && (
+                {message.content.every((content) => content.type === 'text') &&
+                  !isStreaming &&
+                  !isInWorkGroup && (
+                    <div className="absolute left-0 pt-1">
+                      <MessageCopyLink text={displayText} contentRef={contentRef} />
+                    </div>
+                  )}
+                {!isStreaming && !isInWorkGroup && message.metadata.usage && (
                   <div className="pt-1 transition-all duration-200 opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0">
                     <MessageUsageStats usage={message.metadata.usage} />
                   </div>

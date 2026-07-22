@@ -28,6 +28,7 @@ import {
 } from './context_management/CreditsExhaustedNotification';
 import {
   getPendingToolConfirmationIds,
+  getPlanContent,
   getToolRequests,
   getToolResponses,
   type Message,
@@ -36,9 +37,14 @@ import {
 } from '../types/message';
 import LoadingGoose from './LoadingGoose';
 import { ChatType } from '../types/chat';
-import { identifyToolCallGroups } from '../utils/toolCallChaining';
+import {
+  getWorkGroupEntries,
+  identifyToolCallGroups,
+  identifyWorkGroups,
+} from '../utils/toolCallChaining';
 import { getModelDisplayName } from './settings/models/predefinedModelsUtils';
 import ToolCallGroup from './ToolCallGroup';
+import WorkToolActivity from './WorkToolActivity';
 
 const i18n = defineMessages({
   loadingMessages: {
@@ -95,6 +101,26 @@ function getToolCallGroupDuration(messages: Message[], group: number[]): number 
       }
       break;
     }
+  }
+
+  return Math.max(1, Math.round(completedAt - firstMessage.created));
+}
+
+function getWorkGroupDuration(messages: Message[], group: number[]): number {
+  const firstMessage = messages[group[0]];
+  const lastMessageIndex = group[group.length - 1];
+  let completedAt = messages[lastMessageIndex].created;
+
+  for (let i = lastMessageIndex + 1; i < messages.length; i++) {
+    const message = messages[i];
+    if (getToolResponses(message).length > 0) {
+      completedAt = Math.max(completedAt, message.created);
+      continue;
+    }
+    if (message.role === 'assistant') {
+      completedAt = Math.max(completedAt, message.created);
+    }
+    break;
   }
 
   return Math.max(1, Math.round(completedAt - firstMessage.created));
@@ -287,6 +313,12 @@ export default function ProgressiveMessageList({
     [toolCallGroups]
   );
   const groupedMessageIndexes = useMemo(() => new Set(toolCallGroups.flat()), [toolCallGroups]);
+  const workGroups = useMemo(() => identifyWorkGroups(messages), [messages]);
+  const workGroupStarts = useMemo(
+    () => new Map(workGroups.map((group) => [group[0], group])),
+    [workGroups]
+  );
+  const workGroupedMessageIndexes = useMemo(() => new Set(workGroups.flat()), [workGroups]);
   const pendingConfirmationIds = useMemo(() => getPendingToolConfirmationIds(messages), [messages]);
 
   // Render messages up to the current rendered count
@@ -306,6 +338,119 @@ export default function ProgressiveMessageList({
           );
           return null;
         }
+
+        const workGroup = workGroupStarts.get(index);
+        if (workGroup) {
+          const visibleGroupIndexes = workGroup.filter(
+            (messageIndex) =>
+              messageIndex < renderedCount &&
+              messages[messageIndex].metadata.userVisible &&
+              !getPlanContent(messages[messageIndex])
+          );
+
+          if (visibleGroupIndexes.length === 0) return null;
+
+          const lastGroupIndex = workGroup[workGroup.length - 1];
+          const hasEnded = messages.slice(lastGroupIndex + 1).some((candidate) => {
+            return (
+              candidate.metadata.workGroupId !== message.metadata.workGroupId &&
+              getToolResponses(candidate).length === 0
+            );
+          });
+          const hasPendingApproval = workGroup.some((messageIndex) =>
+            getToolRequests(messages[messageIndex]).some((request) =>
+              pendingConfirmationIds.has(request.id)
+            )
+          );
+          const isGroupActive = hasPendingApproval || (isStreamingMessage && !hasEnded);
+          const duration = formatDuration(getWorkGroupDuration(messages, workGroup));
+
+          return (
+            <div
+              key={`work-group-${message.metadata.workGroupId}`}
+              className={`relative ${index === 0 ? 'mt-0' : 'mt-4'} assistant in-chain`}
+            >
+              <ToolCallGroup
+                activeLabel={intl.formatMessage(i18n.working)}
+                completedLabel={intl.formatMessage(i18n.workedFor, { duration })}
+                isActive={isGroupActive}
+              >
+                {getWorkGroupEntries(messages, visibleGroupIndexes).map((entry) => {
+                  if (entry.type === 'tools') {
+                    const toolMessages = entry.indexes.map(
+                      (messageIndex) => messages[messageIndex]
+                    );
+                    const forceExpanded = entry.indexes.some((messageIndex) =>
+                      getToolRequests(messages[messageIndex]).some((request) =>
+                        pendingConfirmationIds.has(request.id)
+                      )
+                    );
+                    return (
+                      <WorkToolActivity
+                        key={`tools-${entry.indexes[0]}`}
+                        forceExpanded={forceExpanded}
+                        messages={toolMessages}
+                      >
+                        {entry.indexes.map((messageIndex) => {
+                          const groupedMessage = messages[messageIndex];
+                          return (
+                            <div
+                              key={
+                                groupedMessage.id ?? `msg-${messageIndex}-${groupedMessage.created}`
+                              }
+                              className="relative assistant in-chain"
+                              data-testid="message-container"
+                            >
+                              <GooseMessage
+                                sessionId={chat.sessionId}
+                                message={groupedMessage}
+                                messages={messages}
+                                append={append}
+                                toolCallNotifications={toolCallNotifications}
+                                isStreaming={
+                                  isGroupActive &&
+                                  messageIndex ===
+                                    visibleGroupIndexes[visibleGroupIndexes.length - 1]
+                                }
+                                isInWorkGroup
+                                submitElicitationResponse={submitElicitationResponse}
+                              />
+                            </div>
+                          );
+                        })}
+                      </WorkToolActivity>
+                    );
+                  }
+
+                  const groupedMessage = messages[entry.index];
+                  return (
+                    <div
+                      key={groupedMessage.id ?? `msg-${entry.index}-${groupedMessage.created}`}
+                      className="relative assistant in-chain"
+                      data-testid="message-container"
+                    >
+                      <GooseMessage
+                        sessionId={chat.sessionId}
+                        message={groupedMessage}
+                        messages={messages}
+                        append={append}
+                        toolCallNotifications={toolCallNotifications}
+                        isStreaming={
+                          isGroupActive &&
+                          entry.index === visibleGroupIndexes[visibleGroupIndexes.length - 1]
+                        }
+                        isInWorkGroup
+                        submitElicitationResponse={submitElicitationResponse}
+                      />
+                    </div>
+                  );
+                })}
+              </ToolCallGroup>
+            </div>
+          );
+        }
+
+        if (workGroupedMessageIndexes.has(index)) return null;
 
         const toolCallGroup = toolCallGroupStarts.get(index);
         if (toolCallGroup) {
@@ -458,6 +603,8 @@ export default function ProgressiveMessageList({
     onMessageUpdate,
     toolCallGroupStarts,
     groupedMessageIndexes,
+    workGroupStarts,
+    workGroupedMessageIndexes,
     pendingConfirmationIds,
     submitElicitationResponse,
     getPreviousResolvedModel,

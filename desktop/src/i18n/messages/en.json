@@ -2057,6 +2057,9 @@
   "permissionSetting.permissionRulesDescription": {
     "defaultMessage": "Hidden instructions that will be passed to the provider to help direct and add context to your responses."
   },
+  "planSteps.progress": {
+    "defaultMessage": "Step {current} / {total}"
+  },
   "pluginsSettings.add": {
     "defaultMessage": "Add"
   },
@@ -3151,5 +3154,26 @@
   },
   "userMessage.forkSessionTitle": {
     "defaultMessage": "Create a new session with the edited message"
+  },
+  "workToolActivity.editedFiles": {
+    "defaultMessage": "Edited files"
+  },
+  "workToolActivity.listedFiles": {
+    "defaultMessage": "Listed files"
+  },
+  "workToolActivity.ranCommands": {
+    "defaultMessage": "{count,plural,one{Ran a command} other{Ran # commands}}"
+  },
+  "workToolActivity.readFiles": {
+    "defaultMessage": "Read files"
+  },
+  "workToolActivity.searchedFiles": {
+    "defaultMessage": "Searched files"
+  },
+  "workToolActivity.searchedWeb": {
+    "defaultMessage": "Searched the web"
+  },
+  "workToolActivity.usedTools": {
+    "defaultMessage": "{count,plural,one{Used a tool} other{Used # tools}}"
   }
 }
