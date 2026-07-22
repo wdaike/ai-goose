@@ -643,18 +643,6 @@ pub struct GetSessionInfoResponse {
     pub session: SessionInfo,
 }
 
-/// Truncate a session conversation from the given message timestamp onward.
-#[derive(Debug, Default, Clone, Serialize, Deserialize, JsonSchema, JsonRpcRequest)]
-#[request(
-    method = "_goose/unstable/session/conversation/truncate",
-    response = EmptyResponse
-)]
-#[serde(rename_all = "camelCase")]
-pub struct TruncateSessionConversationRequest {
-    pub session_id: String,
-    pub truncate_from: i64,
-}
-
 /// Update the project association for a session.
 #[derive(Debug, Default, Clone, Serialize, Deserialize, JsonSchema, JsonRpcRequest)]
 #[request(method = "_goose/unstable/session/project/update", response = EmptyResponse)]
@@ -687,68 +675,6 @@ pub struct ArchiveSessionRequest {
 #[serde(rename_all = "camelCase")]
 pub struct UnarchiveSessionRequest {
     pub session_id: String,
-}
-
-/// Export a session as a JSON string.
-#[derive(Debug, Default, Clone, Serialize, Deserialize, JsonSchema, JsonRpcRequest)]
-#[request(method = "_goose/unstable/session/export", response = ExportSessionResponse)]
-#[serde(rename_all = "camelCase")]
-pub struct ExportSessionRequest {
-    pub session_id: String,
-}
-
-/// Export session response — raw JSON of the goose session with `conversation`.
-#[derive(Debug, Default, Clone, Serialize, Deserialize, JsonSchema, JsonRpcResponse)]
-pub struct ExportSessionResponse {
-    pub data: String,
-}
-
-/// Import a session from a JSON string or share link.
-#[derive(Debug, Default, Clone, Serialize, Deserialize, JsonSchema, JsonRpcRequest)]
-#[request(method = "_goose/unstable/session/import", response = ImportSessionResponse)]
-#[serde(rename_all = "camelCase")]
-pub struct ImportSessionRequest {
-    pub input: String,
-    pub source: SessionImportSource,
-}
-
-#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum SessionImportSource {
-    #[default]
-    Auto,
-    Json,
-    Nostr,
-}
-
-#[derive(Debug, Default, Clone, Serialize, Deserialize, JsonSchema, JsonRpcRequest)]
-#[request(
-    method = "_goose/unstable/session/share/nostr",
-    response = ShareSessionNostrResponse
-)]
-#[serde(rename_all = "camelCase")]
-pub struct ShareSessionNostrRequest {
-    pub session_id: String,
-    pub relays: Vec<String>,
-}
-
-#[derive(Debug, Default, Clone, Serialize, Deserialize, JsonSchema, JsonRpcResponse)]
-#[serde(rename_all = "camelCase")]
-pub struct ShareSessionNostrResponse {
-    pub deeplink: String,
-    pub nevent: String,
-    pub event_id: String,
-    pub relays: Vec<String>,
-}
-
-/// Import session response — metadata about the newly created session.
-#[derive(Debug, Default, Clone, Serialize, Deserialize, JsonSchema, JsonRpcResponse)]
-#[serde(rename_all = "camelCase")]
-pub struct ImportSessionResponse {
-    pub session_id: String,
-    pub title: Option<String>,
-    pub updated_at: Option<String>,
-    pub message_count: u64,
 }
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize, JsonSchema)]

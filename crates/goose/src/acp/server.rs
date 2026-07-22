@@ -21,7 +21,7 @@ use crate::execution::manager::{AgentManager, AgentManagerGetResult, RuntimeCont
 use crate::mcp_utils::ToolResult;
 use crate::session::session_manager::SessionUsageTotals;
 use crate::session::{
-    EnabledExtensionsState, ExtensionData, ExtensionState, Session, SessionManager, SessionType,
+    EnabledExtensionsState, ExtensionData, ExtensionState, Session, SessionManager,
 };
 use crate::source_roots::SourceRoot;
 use crate::utils::sanitize_unicode_tags;
@@ -802,7 +802,6 @@ impl GooseAcpAgent {
         mut session: Session,
         cwd: std::path::PathBuf,
         mcp_servers: Vec<McpServer>,
-        include_messages_on_reload: bool,
     ) -> Result<Session, agent_client_protocol::Error> {
         let config = Config::global();
         let mut builder = self.session_manager.update(&session.id);
@@ -838,7 +837,7 @@ impl GooseAcpAgent {
 
             session = self
                 .session_manager
-                .get_session(&session_id, include_messages_on_reload)
+                .get_session(&session_id, false)
                 .await
                 .internal_err_ctx("Failed to reload session")?;
         }

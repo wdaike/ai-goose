@@ -1,15 +1,8 @@
-use crate::session::message_to_markdown;
 use anyhow::{Context, Result};
 
 use cliclack::{confirm, multiselect, select};
 use etcetera::home_dir;
-#[cfg(feature = "nostr")]
-use goose::config::Config;
-#[cfg(feature = "nostr")]
-use goose::session::nostr_share;
-use goose::session::{
-    generate_diagnostics, DiagnosticsLevel, Session, SessionManager, SessionType,
-};
+use goose::session::{generate_diagnostics, DiagnosticsLevel, Session, SessionManager};
 use goose::utils::safe_truncate;
 use regex::Regex;
 use std::fs;
@@ -223,110 +216,6 @@ pub async fn handle_session_list(
     Ok(())
 }
 
-pub async fn handle_session_export(
-    session_id: String,
-    output_path: Option<PathBuf>,
-    format: String,
-    nostr: bool,
-    #[cfg_attr(not(feature = "nostr"), allow(unused_variables))] relays: Vec<String>,
-) -> Result<()> {
-    let session_manager = SessionManager::instance();
-    let session = match session_manager.get_session(&session_id, true).await {
-        Ok(session) => session,
-        Err(e) => {
-            return Err(anyhow::anyhow!(
-                "Session '{}' not found or failed to read: {}",
-                session_id,
-                e
-            ));
-        }
-    };
-
-    let output = match format.as_str() {
-        "json" => serde_json::to_string_pretty(&session)?,
-        "yaml" => serde_yaml::to_string(&session)?,
-        "markdown" => {
-            let conversation = session
-                .conversation
-                .ok_or_else(|| anyhow::anyhow!("Session has no messages"))?;
-            export_session_to_markdown(conversation.messages().to_vec(), &session.name)
-        }
-        _ => return Err(anyhow::anyhow!("Unsupported format: {}", format)),
-    };
-
-    #[cfg(feature = "nostr")]
-    if nostr {
-        if format != "json" {
-            return Err(anyhow::anyhow!(
-                "Nostr session sharing only supports --format json"
-            ));
-        }
-        if output_path.is_some() {
-            return Err(anyhow::anyhow!(
-                "Nostr session sharing cannot be combined with --output"
-            ));
-        }
-
-        let relays = nostr_share::resolve_relays(relays, Config::global());
-        let share = nostr_share::publish_session_json(&output, relays).await?;
-        println!("Session published to Nostr relays:");
-        for relay in &share.relays {
-            println!("- {}", relay);
-        }
-        println!("\nShare link:");
-        println!("{}", share.deeplink);
-        return Ok(());
-    }
-    #[cfg(not(feature = "nostr"))]
-    if nostr {
-        return Err(anyhow::anyhow!("goose was not built with nostr support"));
-    }
-
-    if let Some(output_path) = output_path {
-        fs::write(&output_path, output).with_context(|| {
-            format!("Failed to write to output file: {}", output_path.display())
-        })?;
-        println!("Session exported to {}", output_path.display());
-    } else {
-        println!("{}", output);
-    }
-
-    Ok(())
-}
-
-pub async fn handle_session_import(input: String, nostr: bool) -> Result<()> {
-    let json = if nostr || input.starts_with("goose://sessions/nostr") {
-        #[cfg(feature = "nostr")]
-        {
-            nostr_share::import_session_json_from_deeplink(&input).await?
-        }
-        #[cfg(not(feature = "nostr"))]
-        return Err(anyhow::anyhow!("goose was not built with nostr support"));
-    } else {
-        fs::read_to_string(&input)
-            .with_context(|| format!("Failed to read session import file: {input}"))?
-    };
-
-    let format = goose::session::import_formats::detect_format(&json);
-    let label = match format {
-        goose::session::import_formats::ImportFormat::Goose => "goose",
-        goose::session::import_formats::ImportFormat::ClaudeCode => "Claude Code",
-        goose::session::import_formats::ImportFormat::Codex => "Codex",
-        goose::session::import_formats::ImportFormat::Pi => "Pi",
-    };
-    println!("Detected format: {}", label);
-
-    let session_manager = SessionManager::instance();
-    let session = session_manager
-        .import_session(&json, Some(SessionType::User))
-        .await?;
-
-    println!("Session imported:");
-    println!("{} - {}", session.id, session.name);
-
-    Ok(())
-}
-
 pub async fn handle_diagnostics(session_id: &str, output_path: Option<PathBuf>) -> Result<()> {
     println!(
         "Generating diagnostics report for session '{}'...",
@@ -365,77 +254,6 @@ pub async fn handle_diagnostics(session_id: &str, output_path: Option<PathBuf>) 
     Ok(())
 }
 
-fn export_session_to_markdown(
-    messages: Vec<goose::conversation::message::Message>,
-    session_name: &String,
-) -> String {
-    let mut markdown_output = String::new();
-
-    markdown_output.push_str(&format!("# Session Export: {}\n\n", session_name));
-
-    if messages.is_empty() {
-        markdown_output.push_str("*(This session has no messages)*\n");
-        return markdown_output;
-    }
-
-    markdown_output.push_str(&format!("*Total messages: {}*\n\n---\n\n", messages.len()));
-
-    // Track if the last message had tool requests to properly handle tool responses
-    let mut skip_next_if_tool_response = false;
-
-    for message in &messages {
-        // Check if this is a User message containing only ToolResponses
-        let is_only_tool_response = message.role == rmcp::model::Role::User
-            && message.content.iter().all(|content| {
-                matches!(
-                    content,
-                    goose::conversation::message::MessageContent::ToolResponse(_)
-                )
-            });
-
-        // If the previous message had tool requests and this one is just tool responses,
-        // don't create a new User section - we'll attach the responses to the tool calls
-        if skip_next_if_tool_response && is_only_tool_response {
-            // Export the tool responses without a User heading
-            markdown_output.push_str(&message_to_markdown(message, false));
-            markdown_output.push_str("\n\n---\n\n");
-            skip_next_if_tool_response = false;
-            continue;
-        }
-
-        // Reset the skip flag - we'll update it below if needed
-        skip_next_if_tool_response = false;
-
-        // Output the role prefix except for tool response-only messages
-        if !is_only_tool_response {
-            let role_prefix = match message.role {
-                rmcp::model::Role::User => "### User:\n",
-                rmcp::model::Role::Assistant => "### Assistant:\n",
-            };
-            markdown_output.push_str(role_prefix);
-        }
-
-        // Add the message content
-        markdown_output.push_str(&message_to_markdown(message, false));
-        markdown_output.push_str("\n\n---\n\n");
-
-        // Check if this message has any tool requests, to handle the next message differently
-        if message.content.iter().any(|content| {
-            matches!(
-                content,
-                goose::conversation::message::MessageContent::ToolRequest(_)
-            )
-        }) {
-            skip_next_if_tool_response = true;
-        }
-    }
-
-    markdown_output
-}
-
-/// Prompt the user to interactively select a session
-///
-/// Shows a list of available sessions and lets the user select one
 pub async fn prompt_interactive_session_selection(
     session_manager: &SessionManager,
 ) -> Result<String> {

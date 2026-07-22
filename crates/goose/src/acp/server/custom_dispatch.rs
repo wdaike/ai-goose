@@ -279,44 +279,12 @@ impl GooseAcpAgent {
         self.on_onboarding_import_apply(req).await
     }
 
-    #[custom_method(ExportSessionRequest)]
-    async fn dispatch_export_session(
-        &self,
-        req: ExportSessionRequest,
-    ) -> Result<ExportSessionResponse, agent_client_protocol::Error> {
-        self.on_export_session(req).await
-    }
-
-    #[custom_method(ImportSessionRequest)]
-    async fn dispatch_import_session(
-        &self,
-        req: ImportSessionRequest,
-    ) -> Result<ImportSessionResponse, agent_client_protocol::Error> {
-        self.on_import_session(req).await
-    }
-
-    #[custom_method(ShareSessionNostrRequest)]
-    async fn dispatch_share_session_nostr(
-        &self,
-        req: ShareSessionNostrRequest,
-    ) -> Result<ShareSessionNostrResponse, agent_client_protocol::Error> {
-        self.on_share_session_nostr(req).await
-    }
-
     #[custom_method(GetSessionInfoRequest)]
     async fn dispatch_get_session_info(
         &self,
         req: GetSessionInfoRequest,
     ) -> Result<GetSessionInfoResponse, agent_client_protocol::Error> {
         self.on_get_session_info(req).await
-    }
-
-    #[custom_method(TruncateSessionConversationRequest)]
-    async fn dispatch_truncate_session_conversation(
-        &self,
-        req: TruncateSessionConversationRequest,
-    ) -> Result<EmptyResponse, agent_client_protocol::Error> {
-        self.on_truncate_session_conversation(req).await
     }
 
     #[custom_method(UpdateSessionProjectRequest)]

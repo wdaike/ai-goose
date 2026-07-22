@@ -1,9 +1,6 @@
 use anyhow::{anyhow, Result};
-use chrono;
 use goose::config::Config;
-use goose::conversation::message::{Message, MessageContent, MessageMetadata};
 use goose::session::{SessionManager, SessionType};
-use rmcp::model::Role;
 
 use crate::session::{build_session, SessionBuilderConfig};
 
@@ -234,17 +231,10 @@ pub async fn handle_term_log(command: String) -> Result<()> {
         )
     })?;
 
-    let message = Message::new(
-        Role::User,
-        chrono::Utc::now().timestamp_millis(),
-        vec![MessageContent::text(command)],
-    )
-    .with_metadata(MessageMetadata::user_only())
-    .with_generated_id();
-
-    let session_manager = SessionManager::instance();
-    session_manager.add_message(&session_id, &message).await?;
-
+    // Codex owns conversation storage, so terminal command buffering is no
+    // longer persisted; the command is only used to keep the session's working
+    // directory current.
+    let _ = (session_id, command);
     Ok(())
 }
 
@@ -267,46 +257,6 @@ pub async fn handle_term_run(prompt: Vec<String>) -> Result<()> {
         .apply()
         .await?;
 
-    let session = session_manager.get_session(&session_id, true).await?;
-    let user_messages_after_last_assistant: Vec<&Message> =
-        if let Some(conv) = &session.conversation {
-            conv.messages()
-                .iter()
-                .rev()
-                .take_while(|m| m.role != Role::Assistant)
-                .collect()
-        } else {
-            Vec::new()
-        };
-
-    if let Some(oldest_user) = user_messages_after_last_assistant.last() {
-        if let Some(message_id) = oldest_user.id.as_deref() {
-            session_manager
-                .truncate_conversation_from_message(&session_id, message_id)
-                .await?;
-        } else {
-            session_manager
-                .truncate_conversation(&session_id, oldest_user.created)
-                .await?;
-        }
-    }
-
-    let prompt_with_context = if user_messages_after_last_assistant.is_empty() {
-        prompt
-    } else {
-        let history = user_messages_after_last_assistant
-            .iter()
-            .rev() // back to chronological order
-            .map(|m| m.as_concat_text())
-            .collect::<Vec<_>>()
-            .join("\n");
-
-        format!(
-            "<shell_history>\n{}\n</shell_history>\n\n{}",
-            history, prompt
-        )
-    };
-
     let config = SessionBuilderConfig {
         session_id: Some(session_id),
         resume: true,
@@ -316,7 +266,7 @@ pub async fn handle_term_run(prompt: Vec<String>) -> Result<()> {
     };
 
     let mut session = build_session(config).await;
-    session.headless(prompt_with_context).await?;
+    session.headless(prompt).await?;
 
     Ok(())
 }

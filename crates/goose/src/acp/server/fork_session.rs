@@ -8,7 +8,6 @@ impl GooseAcpAgent {
         args: ForkSessionRequest,
     ) -> Result<ForkSessionResponse, agent_client_protocol::Error> {
         validate_absolute_cwd(&args.cwd)?;
-        let conversation_before = conversation_before_from_meta(args.meta.as_ref())?;
         let source_session_id = &*args.session_id.0;
 
         let source = self
@@ -29,13 +28,6 @@ impl GooseAcpAgent {
             .internal_err()?;
         let new_session_id = new_session.id.clone();
 
-        if let Some(conversation_before) = conversation_before {
-            self.session_manager
-                .truncate_conversation(&new_session_id, conversation_before)
-                .await
-                .internal_err()?;
-        }
-
         let new_session = self
             .session_manager
             .get_session(&new_session_id, false)
@@ -43,12 +35,7 @@ impl GooseAcpAgent {
             .internal_err()?;
 
         let goose_session = self
-            .prepare_session_for_activation(
-                new_session.clone(),
-                args.cwd.clone(),
-                args.mcp_servers,
-                false,
-            )
+            .prepare_session_for_activation(new_session.clone(), args.cwd.clone(), args.mcp_servers)
             .await?;
 
         let (agent, extension_results) = self.prepare_acp_session_agent(cx, &goose_session).await?;
@@ -75,72 +62,5 @@ impl GooseAcpAgent {
         }
         self.notify_session_setup(cx, &goose_session).await?;
         Ok(response)
-    }
-}
-
-fn conversation_before_from_meta(
-    meta: Option<&Meta>,
-) -> Result<Option<i64>, agent_client_protocol::Error> {
-    let Some(value) = meta.and_then(|meta| meta.get("conversationBefore")) else {
-        return Ok(None);
-    };
-    if value.is_null() {
-        return Ok(None);
-    }
-
-    value.as_i64().map(Some).ok_or_else(|| {
-        agent_client_protocol::Error::invalid_params()
-            .data("conversationBefore must be an integer timestamp")
-    })
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    fn meta_with_conversation_before(value: serde_json::Value) -> Meta {
-        let mut meta = Meta::new();
-        meta.insert("conversationBefore".to_string(), value);
-        meta
-    }
-
-    #[test]
-    fn conversation_before_from_meta_returns_none_when_absent() {
-        assert_eq!(conversation_before_from_meta(None).unwrap(), None);
-        assert_eq!(
-            conversation_before_from_meta(Some(&Meta::new())).unwrap(),
-            None
-        );
-    }
-
-    #[test]
-    fn conversation_before_from_meta_treats_null_as_absent() {
-        let meta = meta_with_conversation_before(serde_json::Value::Null);
-
-        assert_eq!(conversation_before_from_meta(Some(&meta)).unwrap(), None);
-    }
-
-    #[test]
-    fn conversation_before_from_meta_reads_integer_timestamp() {
-        let meta = meta_with_conversation_before(serde_json::json!(1_718_000_000));
-
-        assert_eq!(
-            conversation_before_from_meta(Some(&meta)).unwrap(),
-            Some(1_718_000_000)
-        );
-    }
-
-    #[test]
-    fn conversation_before_from_meta_rejects_non_integer_timestamp() {
-        for value in [
-            serde_json::json!("1718000000"),
-            serde_json::json!(1718000000.5),
-            serde_json::json!(true),
-            serde_json::json!({ "created": 1718000000 }),
-        ] {
-            assert!(
-                conversation_before_from_meta(Some(&meta_with_conversation_before(value))).is_err()
-            );
-        }
     }
 }

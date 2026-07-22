@@ -16,10 +16,11 @@ use codex_app_server_protocol::{
     LoginAccountResponse, LogoutAccountResponse, McpResourceReadParams, McpResourceReadResponse,
     McpServerStatus, McpServerToolCallParams, McpServerToolCallResponse, ModelListParams,
     ModelListResponse, PatchApplyStatus, RequestId, SandboxMode, ServerNotification,
-    ThreadCompactStartParams, ThreadCompactStartResponse, ThreadItem, ThreadResumeParams,
-    ThreadResumeResponse, ThreadStartParams, ThreadStartResponse, ThreadTokenUsage,
-    ThreadUnsubscribeParams, ThreadUnsubscribeResponse, TurnInterruptParams, TurnInterruptResponse,
-    TurnStartParams, TurnStartResponse, TurnStatus, TurnSteerParams, TurnSteerResponse, UserInput,
+    ThreadCompactStartParams, ThreadCompactStartResponse, ThreadItem, ThreadReadParams,
+    ThreadReadResponse, ThreadResumeParams, ThreadResumeResponse, ThreadStartParams,
+    ThreadStartResponse, ThreadTokenUsage, ThreadUnsubscribeParams, ThreadUnsubscribeResponse,
+    TurnInterruptParams, TurnInterruptResponse, TurnStartParams, TurnStartResponse, TurnStatus,
+    TurnSteerParams, TurnSteerResponse, UserInput,
 };
 use codex_config::{CloudConfigBundleLoader, LoaderOverrides};
 use codex_core_api::{
@@ -298,9 +299,6 @@ impl CodexAgentCore {
         let mut events = runtime.events.subscribe();
         let input = message_to_codex_input(&user_message);
 
-        session_manager
-            .add_message(&session_config.id, &user_message)
-            .await?;
         let response = runtime
             .request
             .request_typed::<TurnStartResponse>(ClientRequest::TurnStart {
@@ -380,7 +378,6 @@ impl CodexAgentCore {
                         if event.thread_id == thread_id && event.turn_id == turn_id =>
                     {
                         if let Some(message) = tool_request_from_item(&event.item)? {
-                            session_manager.add_message(&session_id, &message).await?;
                             yield AgentEvent::Message(message);
                         }
                     }
@@ -390,7 +387,6 @@ impl CodexAgentCore {
                         if let ThreadItem::AgentMessage { text, .. } = &event.item {
                             completed_agent_text = Some(text.clone());
                         } else if let Some(message) = tool_response_from_item(&event.item)? {
-                            session_manager.add_message(&session_id, &message).await?;
                             yield AgentEvent::Message(message);
                         }
                     }
@@ -431,9 +427,9 @@ impl CodexAgentCore {
                             .filter(|text: &String| !text.is_empty())
                             .or_else(|| (!agent_text.is_empty()).then_some(agent_text));
                         if let Some(text) = text {
-                            let message = Message::assistant().with_generated_id().with_text(text);
-                            session_manager.add_message(&session_id, &message).await?;
                             if !streamed_agent_text {
+                                let message =
+                                    Message::assistant().with_generated_id().with_text(text);
                                 yield AgentEvent::Message(message);
                             }
                         }
@@ -706,6 +702,46 @@ impl CodexAgentCore {
             .await
             .get(session_id)
             .map(|thread| thread.thread_id.clone())
+    }
+
+    /// The full conversation for a session, read from Codex's thread rollout.
+    /// Codex owns conversation storage; goose keeps no message copy of its own.
+    pub(crate) async fn read_conversation(
+        &self,
+        session: &Session,
+    ) -> Result<crate::conversation::Conversation> {
+        let Some(thread_id) = self.stored_thread_id(session).await else {
+            return Ok(crate::conversation::Conversation::new_unvalidated(
+                Vec::new(),
+            ));
+        };
+        let runtime = self.runtime.get_or_try_init(CodexRuntime::new).await?;
+        let response = runtime
+            .request
+            .request_typed::<ThreadReadResponse>(ClientRequest::ThreadRead {
+                request_id: next_request_id(),
+                params: ThreadReadParams {
+                    thread_id,
+                    include_turns: true,
+                },
+            })
+            .await
+            .map_err(|error| anyhow!(error.to_string()))?;
+
+        let mut messages = Vec::new();
+        for turn in response.thread.turns {
+            for item in &turn.items {
+                messages.extend(item_to_messages(item)?);
+            }
+        }
+        Ok(crate::conversation::Conversation::new_unvalidated(messages))
+    }
+
+    async fn stored_thread_id(&self, session: &Session) -> Option<String> {
+        if let Some(thread_id) = self.thread_id_for_session(&session.id).await {
+            return Some(thread_id);
+        }
+        CodexSessionState::from_extension_data(&session.extension_data).map(|state| state.thread_id)
     }
 
     pub(crate) async fn list_models(&self) -> Result<Vec<CodexModel>> {
@@ -1033,6 +1069,55 @@ fn tool_request_message(
                 serde_json::Value::Bool(true),
             )]))),
         )
+}
+
+/// Expand one rollout item into the goose messages that replay it: plain
+/// content (user text, agent text, reasoning) as a single message, tool
+/// activity as a request followed by its response.
+fn item_to_messages(item: &ThreadItem) -> Result<Vec<Message>> {
+    match item {
+        ThreadItem::UserMessage { content, .. } => {
+            let mut message = Message::user().with_generated_id();
+            for input in content {
+                match input {
+                    UserInput::Text { text, .. } => message = message.with_text(text),
+                    UserInput::Image { url, .. } => {
+                        message = message.with_text(url);
+                    }
+                    _ => {}
+                }
+            }
+            Ok(vec![message])
+        }
+        ThreadItem::AgentMessage { text, .. } if !text.is_empty() => Ok(vec![Message::assistant()
+            .with_generated_id()
+            .with_text(text)]),
+        ThreadItem::Reasoning {
+            summary, content, ..
+        } => {
+            let text = summary
+                .iter()
+                .chain(content.iter())
+                .cloned()
+                .collect::<Vec<_>>()
+                .join("\n");
+            if text.is_empty() {
+                Ok(Vec::new())
+            } else {
+                Ok(vec![Message::assistant().with_thinking(text, "")])
+            }
+        }
+        _ => {
+            let mut messages = Vec::new();
+            if let Some(request) = tool_request_from_item(item)? {
+                messages.push(request);
+            }
+            if let Some(response) = tool_response_from_item(item)? {
+                messages.push(response);
+            }
+            Ok(messages)
+        }
+    }
 }
 
 fn tool_request_from_item(item: &ThreadItem) -> Result<Option<Message>> {

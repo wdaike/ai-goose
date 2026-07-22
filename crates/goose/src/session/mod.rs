@@ -1,12 +1,6 @@
 mod diagnostics;
 pub mod extension_data;
-pub mod import_formats;
-mod last_message_snippet;
-mod legacy;
-#[cfg(feature = "nostr")]
-pub mod nostr_share;
 pub mod session_manager;
-mod session_naming;
 
 pub use diagnostics::{
     config_path, generate_diagnostics, get_system_info, read_capped, read_tail,

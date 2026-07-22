@@ -157,16 +157,22 @@ impl Agent {
             .await
             .unwrap_or(false)
         {
-            let _ = self
-                .config
-                .session_manager
-                .add_message(session_id, &message)
-                .await;
+            // Codex records the steered input in its own rollout.
         }
     }
 
     pub async fn invalidate_codex_session(&self, session: &Session) {
         self.codex_core.invalidate_session(session).await;
+    }
+
+    /// The conversation for a session, read from Codex's thread rollout.
+    pub async fn read_conversation(&self, session_id: &str) -> Result<Conversation> {
+        let session = self
+            .config
+            .session_manager
+            .get_session(session_id, false)
+            .await?;
+        self.codex_core.read_conversation(&session).await
     }
 
     pub async fn list_models(&self) -> Result<Vec<crate::codex::CodexModel>> {
@@ -213,10 +219,6 @@ impl Agent {
             .await?;
         self.codex_core
             .reset_session(&self.config.session_manager, &session)
-            .await?;
-        self.config
-            .session_manager
-            .replace_conversation(session_id, &Conversation::default())
             .await?;
         self.config
             .session_manager

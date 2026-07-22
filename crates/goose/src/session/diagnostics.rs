@@ -230,7 +230,7 @@ fn was_truncated(content: &str) -> bool {
 }
 
 pub async fn generate_diagnostics(
-    session_manager: &SessionManager,
+    _session_manager: &SessionManager,
     session_id: &str,
     level: DiagnosticsLevel,
 ) -> anyhow::Result<DiagnosticsReport> {
@@ -240,12 +240,10 @@ pub async fn generate_diagnostics(
     let is_full = matches!(level, DiagnosticsLevel::Full);
     let mut errors = Vec::new();
 
-    let session = if is_full {
-        let session_data = session_manager.export_session(session_id).await?;
-        Some(serde_json::from_str(&session_data)?)
-    } else {
-        None
-    };
+    // Codex owns conversation storage; the diagnostics bundle no longer embeds
+    // a goose-side session export.
+    let _ = session_id;
+    let session = None;
 
     let config = if is_full {
         let config_yaml = if config_path.exists() {

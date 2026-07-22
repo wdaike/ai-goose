@@ -1,10 +1,7 @@
-use anyhow::{Context, Result};
+use anyhow::Result;
 use goose::config::Config;
-use goose::conversation::message::Message;
-use goose::conversation::Conversation;
 use std::fs;
 use std::io::Read;
-use std::io::Write;
 use std::path::PathBuf;
 use std::process::Command;
 use tempfile::Builder;
@@ -65,27 +62,6 @@ fn resolve_editor_or_default_from_sources(
 ) -> String {
     resolve_editor_from_sources(config_editor, visual, editor_env)
         .unwrap_or_else(resolve_editor_default)
-}
-
-/// Open a YAML temp file with the user's editor to edit a conversation.
-/// Returns the edited conversation, or an error if the editor failed or YAML was invalid.
-pub fn edit_conversation(conversation: &Conversation) -> Result<Conversation> {
-    let yaml = serde_yaml::to_string(conversation.messages())?;
-
-    let mut tmp = NamedTempFile::with_suffix(".yaml")?;
-    tmp.write_all(yaml.as_bytes())?;
-    tmp.flush()?;
-
-    let editor = resolve_editor_or_default();
-    let path = tmp.path().to_path_buf();
-
-    launch_editor(&editor, &path).with_context(|| format!("failed to launch editor '{editor}'"))?;
-
-    let edited = std::fs::read_to_string(&path)?;
-    let messages: Vec<Message> =
-        serde_yaml::from_str(&edited).context("invalid YAML — session unchanged")?;
-
-    Ok(Conversation::new_unvalidated(messages))
 }
 
 /// Build the markdown template content for the editor prompt.

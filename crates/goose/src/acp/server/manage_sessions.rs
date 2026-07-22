@@ -115,72 +115,6 @@ impl GooseAcpAgent {
         Ok(EmptyResponse {})
     }
 
-    pub(super) async fn on_export_session(
-        &self,
-        req: ExportSessionRequest,
-    ) -> Result<ExportSessionResponse, agent_client_protocol::Error> {
-        let data = self
-            .session_manager
-            .export_session(&req.session_id)
-            .await
-            .internal_err()?;
-        Ok(ExportSessionResponse { data })
-    }
-
-    pub(super) async fn on_import_session(
-        &self,
-        req: ImportSessionRequest,
-    ) -> Result<ImportSessionResponse, agent_client_protocol::Error> {
-        let is_nostr = match req.source {
-            SessionImportSource::Auto => is_nostr_session_link(&req.input),
-            SessionImportSource::Json => false,
-            SessionImportSource::Nostr => true,
-        };
-        let (data, session_type) = if is_nostr {
-            (
-                import_nostr_session_json(&req.input).await?,
-                Some(SessionType::User),
-            )
-        } else {
-            (req.input, None)
-        };
-
-        let session = self
-            .session_manager
-            .import_session(&data, session_type)
-            .await
-            .internal_err()?;
-
-        let msg_count = session.message_count as u64;
-
-        Ok(ImportSessionResponse {
-            session_id: session.id,
-            title: Some(session.name),
-            updated_at: Some(session.updated_at.to_rfc3339()),
-            message_count: msg_count,
-        })
-    }
-
-    pub(super) async fn on_share_session_nostr(
-        &self,
-        req: ShareSessionNostrRequest,
-    ) -> Result<ShareSessionNostrResponse, agent_client_protocol::Error> {
-        let data = self
-            .session_manager
-            .export_session(&req.session_id)
-            .await
-            .internal_err()?;
-
-        let share = publish_session_to_nostr(&data, req.relays).await?;
-
-        Ok(ShareSessionNostrResponse {
-            deeplink: share.deeplink,
-            nevent: share.nevent,
-            event_id: share.event_id,
-            relays: share.relays,
-        })
-    }
-
     pub(super) async fn on_get_session_info(
         &self,
         req: GetSessionInfoRequest,
@@ -204,24 +138,6 @@ impl GooseAcpAgent {
         Ok(GetSessionInfoResponse {
             session: build_session_info(session),
         })
-    }
-
-    pub(super) async fn on_truncate_session_conversation(
-        &self,
-        req: TruncateSessionConversationRequest,
-    ) -> Result<EmptyResponse, agent_client_protocol::Error> {
-        let session_id = req.session_id.trim();
-        if session_id.is_empty() {
-            return Err(
-                agent_client_protocol::Error::invalid_params().data("sessionId cannot be empty")
-            );
-        }
-
-        self.session_manager
-            .truncate_conversation(session_id, req.truncate_from)
-            .await
-            .internal_err()?;
-        Ok(EmptyResponse {})
     }
 
     pub(super) async fn on_update_session_project(
@@ -280,56 +196,4 @@ impl GooseAcpAgent {
             .internal_err()?;
         Ok(EmptyResponse {})
     }
-}
-
-fn is_nostr_session_link(input: &str) -> bool {
-    input.trim_start().starts_with("goose://sessions/nostr")
-}
-
-#[cfg(feature = "nostr")]
-async fn import_nostr_session_json(deeplink: &str) -> Result<String, agent_client_protocol::Error> {
-    crate::session::nostr_share::import_session_json_from_deeplink(deeplink)
-        .await
-        .invalid_params_err()
-}
-
-#[cfg(not(feature = "nostr"))]
-async fn import_nostr_session_json(
-    _deeplink: &str,
-) -> Result<String, agent_client_protocol::Error> {
-    Err(agent_client_protocol::Error::invalid_params()
-        .data("Nostr session import is not available in this build"))
-}
-
-#[cfg(feature = "nostr")]
-async fn publish_session_to_nostr(
-    data: &str,
-    relays: Vec<String>,
-) -> Result<NostrSessionShare, agent_client_protocol::Error> {
-    let relays = crate::session::nostr_share::resolve_relays(relays, Config::global());
-    let share = crate::session::nostr_share::publish_session_json(data, relays)
-        .await
-        .internal_err()?;
-    Ok(NostrSessionShare {
-        deeplink: share.deeplink,
-        nevent: share.nevent,
-        event_id: share.event_id,
-        relays: share.relays,
-    })
-}
-
-#[cfg(not(feature = "nostr"))]
-async fn publish_session_to_nostr(
-    _data: &str,
-    _relays: Vec<String>,
-) -> Result<NostrSessionShare, agent_client_protocol::Error> {
-    Err(agent_client_protocol::Error::invalid_params()
-        .data("Nostr session sharing is not available in this build"))
-}
-
-struct NostrSessionShare {
-    deeplink: String,
-    nevent: String,
-    event_id: String,
-    relays: Vec<String>,
 }

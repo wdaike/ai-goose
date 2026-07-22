@@ -504,53 +504,6 @@ enum SessionCommand {
         )]
         regex: Option<String>,
     },
-    #[command(about = "Export a session")]
-    Export {
-        #[command(flatten)]
-        identifier: Option<Identifier>,
-
-        #[arg(
-            short,
-            long,
-            help = "Output file path (default: stdout)",
-            long_help = "Path to save the exported Markdown. If not provided, output will be sent to stdout"
-        )]
-        output: Option<PathBuf>,
-
-        #[arg(
-            long = "format",
-            value_name = "FORMAT",
-            help = "Output format (markdown, json, yaml)",
-            default_value = "markdown"
-        )]
-        format: String,
-
-        #[arg(
-            long = "nostr",
-            help = "Publish the JSON session export as an encrypted Nostr event and print a Goose share link"
-        )]
-        nostr: bool,
-
-        #[arg(
-            long = "relay",
-            value_name = "RELAY",
-            help = "Nostr relay URL to publish to (can be specified multiple times)",
-            action = clap::ArgAction::Append
-        )]
-        relays: Vec<String>,
-    },
-    #[command(
-        about = "Import a session from JSON, a Claude Code / Codex / Pi .jsonl, or an encrypted Nostr share link"
-    )]
-    Import {
-        #[arg(
-            help = "Path to a goose session export, a Claude Code, Codex, or Pi .jsonl transcript, or a goose://sessions/nostr share link"
-        )]
-        input: String,
-
-        #[arg(long = "nostr", help = "Treat input as an encrypted Nostr share link")]
-        nostr: bool,
-    },
     #[command(name = "diagnostics")]
     Diagnostics {
         #[command(flatten)]
@@ -1169,41 +1122,6 @@ async fn handle_session_subcommand(command: SessionCommand) -> Result<()> {
             };
             handle_session_remove(session_id, name, regex).await?;
         }
-        SessionCommand::Export {
-            identifier,
-            output,
-            format,
-            nostr,
-            relays,
-        } => {
-            let session_manager = SessionManager::instance();
-            let session_identifier = if let Some(id) = identifier {
-                lookup_session_id(id).await?
-            } else {
-                match crate::commands::session::prompt_interactive_session_selection(
-                    &session_manager,
-                )
-                .await
-                {
-                    Ok(id) => id,
-                    Err(e) => {
-                        eprintln!("Error: {}", e);
-                        return Ok(());
-                    }
-                }
-            };
-            crate::commands::session::handle_session_export(
-                session_identifier,
-                output,
-                format,
-                nostr,
-                relays,
-            )
-            .await?;
-        }
-        SessionCommand::Import { input, nostr } => {
-            crate::commands::session::handle_session_import(input, nostr).await?;
-        }
         SessionCommand::Diagnostics { identifier, output } => {
             let session_manager = SessionManager::instance();
             let session_id = if let Some(id) = identifier {
@@ -1231,7 +1149,7 @@ async fn handle_interactive_session(
     identifier: Option<Identifier>,
     resume: bool,
     fork: bool,
-    edit: bool,
+    _edit: bool,
     history: bool,
     session_opts: SessionOptions,
     extension_opts: ExtensionOptions,
@@ -1266,31 +1184,14 @@ async fn handle_interactive_session(
     let goose_mode = Config::global().get_goose_mode().unwrap_or_default();
     let mut session_id = get_or_create_session_id(identifier, resume, false, goose_mode).await?;
 
-    if edit || fork {
+    if fork {
         if let Some(ref id) = session_id {
             let session_manager = SessionManager::instance();
-            let original = session_manager.get_session(id, true).await?;
-
-            let target_id = if fork {
-                let copied = session_manager
-                    .copy_session(id, original.name.clone())
-                    .await?;
-                let copied_id = copied.id.clone();
-                session_id = Some(copied.id);
-                copied_id
-            } else {
-                id.clone()
-            };
-
-            if edit {
-                let conversation = original
-                    .conversation
-                    .ok_or_else(|| anyhow::anyhow!("session has no messages to edit"))?;
-                let edited = crate::session::editor::edit_conversation(&conversation)?;
-                session_manager
-                    .replace_conversation(&target_id, &edited)
-                    .await?;
-            }
+            let original = session_manager.get_session(id, false).await?;
+            let copied = session_manager
+                .copy_session(id, original.name.clone())
+                .await?;
+            session_id = Some(copied.id);
         }
     }
 

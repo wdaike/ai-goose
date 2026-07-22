@@ -1,7 +1,6 @@
 mod builder;
 mod completion;
 pub mod editor;
-mod export;
 mod input;
 mod output;
 mod paste;
@@ -13,7 +12,6 @@ use std::str::FromStr;
 use tokio::signal::ctrl_c;
 use tokio_util::task::AbortOnDropHandle;
 
-pub use self::export::message_to_markdown;
 pub use builder::{build_session, SessionBuilderConfig};
 use console::Color;
 use goose::agents::AgentEvent;
@@ -197,12 +195,9 @@ impl CliSession {
         stats: bool,
     ) -> Self {
         let messages = agent
-            .config
-            .session_manager
-            .get_session(&session_id, true)
+            .read_conversation(&session_id)
             .await
-            .map(|session| session.conversation.unwrap_or_default())
-            .unwrap();
+            .unwrap_or_default();
 
         CliSession {
             agent,

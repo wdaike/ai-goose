@@ -28,29 +28,17 @@ fn send_replay_content_chunk(
 
 fn replay_conversation_to_client(
     cx: &ConnectionTo<Client>,
-    session: &Session,
+    session_id_str: &str,
+    messages: &[crate::conversation::message::Message],
     supports_goose_custom_notifications: bool,
 ) -> Result<HashMap<String, crate::conversation::message::ToolRequest>, agent_client_protocol::Error>
 {
-    let session_id = SessionId::new(session.id.clone());
-    let sid = sid_short(session_id.0.as_ref());
-
-    let messages = session
-        .conversation
-        .as_ref()
-        .map(|c| c.messages().to_vec())
-        .unwrap_or_default();
-    debug!(
-        target: "perf",
-        sid = %sid,
-        messages = messages.len(),
-            "perf: load_session messages loaded"
-    );
+    let session_id = SessionId::new(session_id_str.to_string());
 
     let mut replay_tool_requests =
         HashMap::<String, crate::conversation::message::ToolRequest>::new();
 
-    for message in &messages {
+    for message in messages {
         if !message.metadata.user_visible {
             continue;
         }
@@ -156,7 +144,7 @@ fn replay_conversation_to_client(
         if supports_goose_custom_notifications {
             if let Some(usage) = &message.metadata.usage {
                 cx.send_notification(GooseSessionNotification {
-                    session_id: session.id.clone(),
+                    session_id: session_id_str.to_string(),
                     update: GooseSessionUpdate::MessageUsage(message_usage_update(
                         message.id.clone(),
                         usage,
@@ -184,7 +172,7 @@ impl GooseAcpAgent {
 
         let mut session = self
             .session_manager
-            .get_session(&session_id_str, true)
+            .get_session(&session_id_str, false)
             .await
             .map_err(|_| {
                 agent_client_protocol::Error::resource_not_found(Some(session_id_str.clone()))
@@ -192,21 +180,26 @@ impl GooseAcpAgent {
             })?;
 
         session = self
-            .prepare_session_for_activation(session, args.cwd.clone(), args.mcp_servers, true)
+            .prepare_session_for_activation(session, args.cwd.clone(), args.mcp_servers)
             .await?;
 
+        let (agent, extension_results) = self.prepare_acp_session_agent(cx, &session).await?;
+        let messages = agent
+            .read_conversation(&session_id_str)
+            .await
+            .internal_err_ctx("Failed to read conversation")?;
         let replay_tool_requests = replay_conversation_to_client(
             cx,
-            &session,
+            &session_id_str,
+            messages.messages(),
             self.supports_goose_custom_notifications(),
         )?;
-        let (agent, extension_results) = self.prepare_acp_session_agent(cx, &session).await?;
         self.register_acp_session(session_id_str.clone(), agent.clone(), replay_tool_requests)
             .await;
 
         session = self
             .session_manager
-            .get_session(&session_id_str, true)
+            .get_session(&session_id_str, false)
             .await
             .internal_err_ctx("Failed to reload session")?;
 
