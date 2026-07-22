@@ -1,6 +1,5 @@
 import type {
   CanonicalModelInfoDto,
-  CustomProviderCreateRequest_unstable,
   CustomProviderReadResponse_unstable,
   ProviderSecretDto,
   ProviderTemplateCatalogEntryDto,
@@ -11,194 +10,234 @@ import type {
   ThinkingEffort,
   UpdateCustomProviderRequest,
 } from '../types/providers';
-import { getAcpClient } from './acpConnection';
+import { codex } from '../codex/client';
+import { setThreadModelOverride } from '../codex/engine/controller';
+import type { Model } from '../codex/protocol/v2/Model';
 
 export type { CanonicalModelInfoDto, ProviderSecretDto };
 
-function updateRequestToCreate(
-  request: UpdateCustomProviderRequest
-): CustomProviderCreateRequest_unstable {
+export const CODEX_PROVIDER_ID = 'codex';
+
+let cachedModels: Model[] | null = null;
+
+async function listCodexModels(): Promise<Model[]> {
+  if (!cachedModels) {
+    const response = await codex.modelList();
+    cachedModels = response.data.filter((model) => !model.hidden);
+  }
+  return cachedModels;
+}
+
+interface CodexModelProvider {
+  name?: string;
+  base_url?: string;
+  env_key?: string;
+  wire_api?: string;
+  experimental_bearer_token?: string;
+}
+
+interface CodexConfigView {
+  model: string | null;
+  modelProvider: string | null;
+  modelProviders: Record<string, CodexModelProvider>;
+}
+
+async function readCodexConfig(): Promise<CodexConfigView> {
+  const response = (await window.codex.request('config/read', { includeLayers: true })) as {
+    config: { model: string | null; model_provider: string | null };
+    layers: Array<{ config: { model_providers?: Record<string, CodexModelProvider> } | null }> | null;
+  };
+  const modelProviders: Record<string, CodexModelProvider> = {};
+  for (const layer of response.layers ?? []) {
+    Object.assign(modelProviders, layer.config?.model_providers ?? {});
+  }
   return {
-    engine: request.engine,
-    displayName: request.display_name,
-    apiUrl: request.api_url,
-    apiKey: request.api_key || null,
-    models: request.models,
-    supportsStreaming: request.supports_streaming ?? null,
-    headers: request.headers ?? undefined,
-    requiresAuth: request.requires_auth ?? true,
-    catalogProviderId: request.catalog_provider_id ?? null,
-    basePath: request.base_path ?? null,
-    preservesThinking: request.preserves_thinking ?? null,
+    model: response.config.model,
+    modelProvider: response.config.model_provider,
+    modelProviders,
   };
 }
 
 export async function acpListProviderDetails(): Promise<ProviderDetails[]> {
-  const client = await getAcpClient();
-  const { entries } = await client.goose.providersList_unstable({});
-  return entries.map((entry) => ({
-    name: entry.providerId,
-    is_configured: entry.configured,
-    provider_type: entry.providerType as ProviderDetails['provider_type'],
-    metadata: {
-      name: entry.providerId,
-      display_name: entry.providerName,
-      description: entry.description,
-      default_model: entry.defaultModel,
-      model_doc_link: '',
-      model_selection_hint: entry.modelSelectionHint ?? null,
-      config_keys: entry.configKeys.map((key) => ({
-        name: key.name,
-        required: key.required,
-        secret: key.secret,
-        default: key.default ?? null,
-        oauth_flow: key.oauthFlow ?? false,
-        device_code_flow: key.deviceCodeFlow ?? false,
-        primary: key.primary ?? false,
-      })),
-      known_models: entry.models.map((model) => ({
-        name: model.id,
-        context_limit: model.contextLimit ?? 0,
-        reasoning: model.reasoning ?? undefined,
-      })),
-      setup_steps: entry.setupSteps,
+  const [models, config] = await Promise.all([listCodexModels(), readCodexConfig()]);
+  const defaultModel = models.find((model) => model.isDefault) ?? models[0];
+  const details: ProviderDetails[] = [
+    {
+      name: CODEX_PROVIDER_ID,
+      is_configured: true,
+      provider_type: 'Builtin',
+      metadata: {
+        name: CODEX_PROVIDER_ID,
+        display_name: 'Codex',
+        description: 'OpenAI Codex',
+        default_model: defaultModel?.id ?? '',
+        model_doc_link: '',
+        model_selection_hint: null,
+        config_keys: [],
+        known_models: models.map((model) => ({
+          name: model.id,
+          context_limit: 0,
+          reasoning: undefined,
+        })),
+        setup_steps: [],
+      },
     },
-  }));
+  ];
+  for (const [providerId, provider] of Object.entries(config.modelProviders)) {
+    const knownModels =
+      config.modelProvider === providerId && config.model
+        ? [{ name: config.model, context_limit: 0, reasoning: undefined }]
+        : [];
+    details.push({
+      name: providerId,
+      is_configured: true,
+      provider_type: 'Custom',
+      metadata: {
+        name: providerId,
+        display_name: provider.name ?? providerId,
+        description: provider.base_url ?? '',
+        default_model: knownModels[0]?.name ?? '',
+        model_doc_link: '',
+        model_selection_hint: null,
+        config_keys: [],
+        known_models: knownModels,
+        setup_steps: [],
+      },
+    });
+  }
+  return details;
 }
 
 export async function acpListProviderModels(providerId: string) {
-  const client = await getAcpClient();
-  const { entries } = await client.goose.providersList_unstable({ providerIds: [providerId] });
-  return entries.find((e) => e.providerId === providerId)?.models ?? [];
+  if (providerId !== CODEX_PROVIDER_ID) {
+    const config = await readCodexConfig();
+    const model = config.modelProvider === providerId ? config.model : null;
+    return model
+      ? [{ id: model, contextLimit: null as number | null, reasoning: undefined as boolean | undefined }]
+      : [];
+  }
+  const models = await listCodexModels();
+  return models.map((model) => ({
+    id: model.id,
+    contextLimit: null as number | null,
+    reasoning: undefined as boolean | undefined,
+  }));
 }
 
 export async function acpListProviderCatalogEntries(
-  format?: string
+  _format?: string
 ): Promise<ProviderTemplateCatalogEntryDto[]> {
-  const client = await getAcpClient();
-  const { providers } = await client.goose.providersCatalogList_unstable(format ? { format } : {});
-  return providers;
+  return [];
 }
 
 export async function acpGetProviderTemplate(providerId: string): Promise<ProviderTemplateDto> {
-  const client = await getAcpClient();
-  const { template } = await client.goose.providersCatalogTemplate_unstable({ providerId });
-  return template;
+  throw new Error(`Provider templates are not available with codex: ${providerId}`);
 }
 
 export async function acpGetCustomProvider(
   providerId: string
 ): Promise<CustomProviderReadResponse_unstable> {
-  const client = await getAcpClient();
-  return client.goose.providersCustomRead_unstable({ providerId });
+  throw new Error(`Custom providers are not available with codex: ${providerId}`);
 }
 
 export async function acpCreateCustomProviderFromRequest(
   request: UpdateCustomProviderRequest
 ): Promise<{ provider_name: string }> {
-  const client = await getAcpClient();
-  const response = await client.goose.providersCustomCreate_unstable(
-    updateRequestToCreate(request)
-  );
-  return { provider_name: response.providerId };
+  const providerId = request.display_name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  const provider: CodexModelProvider = {
+    name: request.display_name,
+    base_url: request.api_url,
+    wire_api: 'responses',
+    ...(request.api_key ? { experimental_bearer_token: request.api_key } : {}),
+  };
+  await window.codex.request('config/batchWrite', {
+    edits: [
+      { keyPath: `model_providers.${providerId}`, value: provider, mergeStrategy: 'replace' },
+    ],
+    reloadUserConfig: true,
+  });
+  return { provider_name: providerId };
 }
 
 export async function acpUpdateCustomProviderFromRequest(
-  providerId: string,
-  request: UpdateCustomProviderRequest
+  _providerId: string,
+  _request: UpdateCustomProviderRequest
 ): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.providersCustomUpdate_unstable({
-    providerId,
-    ...updateRequestToCreate(request),
-  });
+  throw new Error('Custom providers are not available with codex');
 }
 
-export async function acpDeleteCustomProvider(providerId: string): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.providersCustomDelete_unstable({ providerId });
+export async function acpDeleteCustomProvider(_providerId: string): Promise<void> {}
+
+export async function acpReadProviderConfig(_providerId: string) {
+  return [] as { key: string; value: string; isSet?: boolean }[];
 }
 
-export async function acpReadProviderConfig(providerId: string) {
-  const client = await getAcpClient();
-  const { fields } = await client.goose.providersConfigRead_unstable({ providerId });
-  return fields;
-}
-
-export async function acpDeleteProviderConfig(providerId: string): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.providersConfigDelete_unstable({ providerId });
-}
+export async function acpDeleteProviderConfig(_providerId: string): Promise<void> {}
 
 export async function acpSaveProviderConfig(
-  providerId: string,
-  fields: { key: string; value: string }[]
-): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.providersConfigSave_unstable({ providerId, fields });
-}
+  _providerId: string,
+  _fields: { key: string; value: string }[]
+): Promise<void> {}
 
-export async function acpAuthenticateProvider(providerId: string): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.providersConfigAuthenticate_unstable({ providerId });
-}
+export async function acpAuthenticateProvider(_providerId: string): Promise<void> {}
 
 export async function acpListProviderSecrets(): Promise<ProviderSecretDto[]> {
-  const client = await getAcpClient();
-  const { secrets } = await client.goose.providersSecretsList_unstable({});
-  return secrets;
+  return [];
 }
 
-export async function acpDeleteProviderSecret(id: string): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.providersSecretsDelete_unstable({ id });
-}
+export async function acpDeleteProviderSecret(_id: string): Promise<void> {}
 
 export async function acpGetCanonicalModelInfo(
-  provider: string,
-  model: string
+  _provider: string,
+  _model: string
 ): Promise<CanonicalModelInfoDto | null> {
-  const client = await getAcpClient();
-  const { modelInfo } = await client.goose.providersCanonicalModelInfo_unstable({
-    provider,
-    model,
-  });
-  return modelInfo ?? null;
+  return null;
 }
 
 export async function acpReadDefaults(): Promise<{
   providerId: string | null;
   modelId: string | null;
 }> {
-  const client = await getAcpClient();
-  const response = await client.goose.defaultsRead_unstable({});
-  return {
-    providerId: response.providerId ?? null,
-    modelId: response.modelId ?? null,
-  };
+  const config = await readCodexConfig();
+  return { providerId: config.modelProvider ?? CODEX_PROVIDER_ID, modelId: config.model };
 }
 
 export async function acpSaveDefaults(providerId: string, modelId?: string | null): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.defaultsSave_unstable({ providerId, modelId: modelId ?? null });
+  await window.codex.request('config/batchWrite', {
+    edits: [
+      { keyPath: 'model', value: modelId ?? null, mergeStrategy: 'replace' },
+      {
+        keyPath: 'model_provider',
+        value: providerId === CODEX_PROVIDER_ID ? null : providerId,
+        mergeStrategy: 'replace',
+      },
+    ],
+    reloadUserConfig: true,
+  });
 }
 
 export async function acpClearDefaults(): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.defaultsClear_unstable({});
+  await acpSaveDefaults(CODEX_PROVIDER_ID, null);
 }
 
+const EFFORT_KEY = 'goose-thinking-effort';
+
 export async function acpReadThinkingEffort(): Promise<ThinkingEffort | null> {
-  const client = await getAcpClient();
-  const response = await client.goose.preferencesRead_unstable({ keys: ['gooseThinkingEffort'] });
-  const value = response.values.find((v) => v.key === 'gooseThinkingEffort')?.value;
-  return typeof value === 'string' ? (value as ThinkingEffort) : null;
+  const value = window.localStorage.getItem(EFFORT_KEY);
+  return value ? (value as ThinkingEffort) : null;
 }
 
 export async function acpSaveThinkingEffort(effort: ThinkingEffort): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.preferencesSave_unstable({
-    values: [{ key: 'gooseThinkingEffort', value: effort }],
+  window.localStorage.setItem(EFFORT_KEY, effort);
+  const codexEffort = effort === 'off' ? 'minimal' : effort === 'max' ? 'xhigh' : effort;
+  await window.codex.request('config/batchWrite', {
+    edits: [
+      { keyPath: 'model_reasoning_effort', value: codexEffort, mergeStrategy: 'replace' },
+    ],
+    reloadUserConfig: true,
   });
 }
 
@@ -207,82 +246,15 @@ export type AppliedSessionProviderModel = {
   modelId?: string;
 };
 
-function extractAppliedSessionProviderModel(configOptions: unknown): AppliedSessionProviderModel {
-  if (!Array.isArray(configOptions)) {
-    return {};
-  }
-
-  const applied: AppliedSessionProviderModel = {};
-
-  for (const option of configOptions) {
-    if (!option || typeof option !== 'object') {
-      continue;
-    }
-
-    const id = 'id' in option ? option.id : undefined;
-    if (id !== 'provider' && id !== 'model') {
-      continue;
-    }
-
-    const currentValue = selectCurrentValue(option);
-    if (typeof currentValue !== 'string') {
-      continue;
-    }
-
-    if (id === 'provider') {
-      applied.providerId = currentValue;
-    } else {
-      applied.modelId = currentValue;
-    }
-  }
-
-  return applied;
-}
-
-function selectCurrentValue(kind: unknown): unknown {
-  if (!kind || typeof kind !== 'object') {
-    return undefined;
-  }
-
-  if ('type' in kind && kind.type === 'select' && 'currentValue' in kind) {
-    return kind.currentValue;
-  }
-
-  return undefined;
-}
-
-/**
- * Switch the provider (and model) for an active session via ACP config options.
- *
- * Changing the provider on the server resets the session's model, so the model
- * is applied as a follow-up step when supplied.
- */
 export async function acpSetSessionProviderModel(
   sessionId: string,
   providerId: string,
   modelId?: string | null,
-  thinkingEffort?: ThinkingEffort | null
+  thinkingEffort?: string | null
 ): Promise<AppliedSessionProviderModel> {
-  const client = await getAcpClient();
-  let response = await client.setSessionConfigOption({
-    sessionId,
-    configId: 'provider',
-    value: providerId,
-  });
-  if (modelId) {
-    response = await client.setSessionConfigOption({
-      sessionId,
-      configId: 'model',
-      value: modelId,
-    });
-  }
-  if (thinkingEffort != null) {
-    response = await client.setSessionConfigOption({
-      sessionId,
-      configId: 'thinking_effort',
-      value: thinkingEffort,
-    });
-  }
-
-  return extractAppliedSessionProviderModel(response.configOptions);
+  // Provider selection is global codex config; `reloadUserConfig` hot-reloads
+  // it into loaded threads, so the active session picks it up too.
+  await acpSaveDefaults(providerId, modelId ?? null);
+  setThreadModelOverride(sessionId, modelId ?? null, thinkingEffort ?? null);
+  return { providerId, modelId: modelId ?? undefined };
 }

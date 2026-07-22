@@ -336,14 +336,34 @@ const appConfigAPI: AppConfigAPI = {
   getAll: () => ({ ...config, GOOSE_LOCALE: getAppLocale() }),
 };
 
+const codexAPI = {
+  request: (method: string, params: unknown): Promise<unknown> =>
+    ipcRenderer.invoke('codex:request', method, params),
+  notify: (method: string, params: unknown): void => {
+    ipcRenderer.send('codex:notify', method, params);
+  },
+  respond: (id: number | string, result: unknown): void => {
+    ipcRenderer.send('codex:respond', id, result);
+  },
+  onEvent: (handler: (msg: unknown) => void): (() => void) => {
+    const listener = (_event: Electron.IpcRendererEvent, msg: unknown) => handler(msg);
+    ipcRenderer.on('codex:event', listener);
+    return () => ipcRenderer.removeListener('codex:event', listener);
+  },
+};
+
+export type CodexAPI = typeof codexAPI;
+
 // Expose the APIs
 contextBridge.exposeInMainWorld('electron', electronAPI);
 contextBridge.exposeInMainWorld('appConfig', appConfigAPI);
+contextBridge.exposeInMainWorld('codex', codexAPI);
 
 // Type declaration for TypeScript
 declare global {
   interface Window {
     electron: ElectronAPI;
     appConfig: AppConfigAPI;
+    codex: CodexAPI;
   }
 }

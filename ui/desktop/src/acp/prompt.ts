@@ -1,6 +1,9 @@
+import { v7 as uuidv7 } from 'uuid';
 import type { ContentBlock, PromptResponse } from '@agentclientprotocol/sdk';
-import type { SteerSessionRequest_unstable, SteerSessionResponse_unstable } from '@aaif/goose-sdk';
+import type { SteerSessionResponse_unstable } from '@aaif/goose-sdk';
 import type { Message } from '../types/message';
+import { codex } from '../codex/client';
+import { getActiveTurnId } from '../codex/engine/controller';
 import { getAcpClient } from './acpConnection';
 
 export async function acpPromptSession(
@@ -24,12 +27,19 @@ export async function acpSteerSession(
   message: Message,
   expectedRunId: string
 ): Promise<SteerSessionResponse_unstable> {
-  const client = await getAcpClient();
-  return client.goose.sessionSteer_unstable({
-    sessionId,
-    expectedRunId,
-    prompt: messageToAcpPromptContent(message) as unknown as SteerSessionRequest_unstable['prompt'],
+  const expectedTurnId = getActiveTurnId(sessionId) ?? expectedRunId;
+  const text = message.content
+    .map((content) => (content.type === 'text' ? content.text : ''))
+    .filter(Boolean)
+    .join('\n');
+  const clientUserMessageId = uuidv7();
+  await codex.turnSteer({
+    threadId: sessionId,
+    expectedTurnId,
+    clientUserMessageId,
+    input: [{ type: 'text', text, text_elements: [] }],
   });
+  return { messageId: clientUserMessageId } as SteerSessionResponse_unstable;
 }
 
 export function messageToAcpPromptContent(message: Message): ContentBlock[] {

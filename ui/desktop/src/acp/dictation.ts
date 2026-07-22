@@ -3,7 +3,6 @@ import type {
   DictationLocalModelStatus,
   DictationProviderStatusEntry,
 } from '@aaif/goose-sdk';
-import { getAcpClient } from './acpConnection';
 
 export type { DictationProviderStatusEntry };
 
@@ -11,47 +10,31 @@ export type DictationProviders = Record<string, DictationProviderStatusEntry>;
 export type LocalDictationModel = DictationLocalModelStatus;
 export type LocalDictationDownloadProgress = DictationDownloadProgress;
 
+// Dictation is not wired to codex yet (`thread/realtime/*` is the native path).
 export async function getDictationConfig(): Promise<DictationProviders> {
-  const client = await getAcpClient();
-  const response = await client.goose.dictationConfig_unstable({});
-  return response.providers ?? {};
+  return {};
 }
 
 export async function transcribeDictation(
-  audio: string,
-  mimeType: string,
-  provider: string
+  _audio: string,
+  _mimeType: string,
+  _provider: string
 ): Promise<string> {
-  const client = await getAcpClient();
-  const response = await client.goose.dictationTranscribe_unstable({ audio, mimeType, provider });
-  return response.text;
+  throw new Error('Dictation is not available');
 }
 
 export async function listLocalDictationModels(): Promise<LocalDictationModel[]> {
-  const client = await getAcpClient();
-  const response = await client.goose.dictationModelsList_unstable({});
-  return response.models;
+  return [];
 }
 
-export async function downloadLocalDictationModel(modelId: string): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.dictationModelsDownload_unstable({ modelId });
-}
+export async function downloadLocalDictationModel(_modelId: string): Promise<void> {}
 
 export async function getLocalDictationModelDownloadProgress(
-  modelId: string
+  _modelId: string
 ): Promise<LocalDictationDownloadProgress | null> {
-  const client = await getAcpClient();
-  const response = await client.goose.dictationModelsDownloadProgress_unstable({ modelId });
-  return response.progress ?? null;
+  return null;
 }
 
-export async function cancelLocalDictationModelDownload(modelId: string): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.dictationModelsCancel_unstable({ modelId });
-}
+export async function cancelLocalDictationModelDownload(_modelId: string): Promise<void> {}
 
-export async function deleteLocalDictationModel(modelId: string): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.dictationModelsDelete_unstable({ modelId });
-}
+export async function deleteLocalDictationModel(_modelId: string): Promise<void> {}

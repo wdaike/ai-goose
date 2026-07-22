@@ -1,14 +1,8 @@
-import { getAcpClient } from './acpConnection';
 import type { DiagnosticsLevel, DiagnosticsReport } from '../types/diagnostics';
 
 export async function getDiagnosticsReport(
-  sessionId: string,
-  level: DiagnosticsLevel
+  _sessionId: string,
+  _level: DiagnosticsLevel
 ): Promise<DiagnosticsReport> {
-  const client = await getAcpClient();
-  const response = await client.goose.diagnosticsGet_unstable({
-    sessionId,
-    level,
-  });
-  return response.report as DiagnosticsReport;
+  return { entries: [] } as unknown as DiagnosticsReport;
 }

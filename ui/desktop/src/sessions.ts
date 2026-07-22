@@ -4,7 +4,7 @@ import { DEFAULT_CHAT_TITLE } from './contexts/ChatContext';
 import type { setViewType } from './hooks/useNavigation';
 import type { FixedExtensionEntry } from './components/ConfigContext';
 import { AppEvents } from './constants/events';
-import { acpChatSessionController } from './acp/chatSessionController';
+import { codexChatSessionController as acpChatSessionController } from './codex/engine/controller';
 import { getConfiguredGooseExtensions, gooseExtensionName } from './acp/extensions';
 
 export function getSessionDisplayName(session: Session): string {

@@ -1,6 +1,4 @@
 import type {
-  ForkSessionRequest,
-  ListSessionsRequest,
   LoadSessionResponse,
   NewSessionRequest,
   SessionInfo,
@@ -22,6 +20,22 @@ interface GooseSessionInfoMeta {
   sessionType?: Session['session_type'];
   userSetName?: boolean;
   lastMessageSnippet?: string;
+}
+
+import { codex } from '../codex/client';
+import type { Thread } from '../codex/protocol/v2/Thread';
+
+function threadToListItem(thread: Thread): SessionListItem {
+  const iso = (seconds: number) => new Date(seconds * 1000).toISOString();
+  return {
+    id: thread.id,
+    name: thread.name || thread.preview.slice(0, 80) || DEFAULT_CHAT_TITLE,
+    workingDir: thread.cwd,
+    updatedAt: iso(thread.updatedAt),
+    messageCount: 0,
+    createdAt: iso(thread.createdAt),
+    userSetName: Boolean(thread.name),
+  };
 }
 
 export interface SessionListItem {
@@ -103,48 +117,23 @@ export function sessionInfoToSession(s: SessionInfo, loadMeta: LoadSessionMeta =
   };
 }
 
-function sessionInfoToListItem(s: SessionInfo): SessionListItem {
-  const meta = sessionInfoMeta(s);
-  return {
-    id: String(s.sessionId),
-    name: s.title ?? DEFAULT_CHAT_TITLE,
-    workingDir: s.cwd,
-    updatedAt: s.updatedAt ?? '',
-    messageCount: meta.messageCount ?? 0,
-    lastMessageAt: meta.lastMessageAt,
-    createdAt: meta.createdAt ?? s.updatedAt ?? '',
-    archivedAt: meta.archivedAt,
-    projectId: meta.projectId,
-    providerId: meta.providerId,
-    modelId: meta.modelId,
-    userSetName: meta.userSetName,
-  };
-}
-
 export interface SessionListFilter {
   keyword?: string;
 }
-
-const SESSION_LIST_TYPES = ['user', 'scheduled'] as const;
 
 export async function acpListSessions(
   cursor?: string | null,
   filter?: SessionListFilter
 ): Promise<SessionListPage> {
-  const client = await getAcpClient();
-  const request: ListSessionsRequest = {};
-  if (cursor) {
-    request.cursor = cursor;
-  }
-  const meta: Record<string, unknown> = { types: SESSION_LIST_TYPES };
-  const keyword = filter?.keyword?.trim();
-  if (keyword) {
-    meta.query = keyword;
-  }
-  request._meta = meta;
-  const response = await client.listSessions(request);
+  const response = await codex.threadList({
+    cursor: cursor ?? null,
+    limit: 50,
+    searchTerm: filter?.keyword?.trim() || null,
+    sortKey: 'updated_at',
+    sourceKinds: ['appServer'],
+  });
   return {
-    sessions: response.sessions.map(sessionInfoToListItem),
+    sessions: response.data.map(threadToListItem),
     nextCursor: response.nextCursor ?? null,
   };
 }
@@ -153,16 +142,17 @@ export async function acpListRecentSessions(maxSessions: number): Promise<Sessio
   if (maxSessions <= 0) {
     return [];
   }
-
-  const client = await getAcpClient();
-  const response = await client.listSessions({ _meta: { types: SESSION_LIST_TYPES } });
-  return response.sessions.slice(0, maxSessions).map(sessionInfoToListItem);
+  const response = await codex.threadList({
+    limit: maxSessions,
+    sortKey: 'updated_at',
+    sourceKinds: ['appServer'],
+  });
+  return response.data.map(threadToListItem);
 }
 
 export async function acpGetSessionListItem(sessionId: string): Promise<SessionListItem> {
-  const client = await getAcpClient();
-  const response = await client.goose.sessionInfo_unstable({ sessionId });
-  return sessionInfoToListItem(response.session);
+  const { thread } = await codex.threadRead({ threadId: sessionId });
+  return threadToListItem(thread);
 }
 
 export async function acpLoadSession(sessionId: string): Promise<AcpLoadSessionResult> {
@@ -233,8 +223,7 @@ export async function acpNewSession(
 }
 
 export async function acpDeleteSession(sessionId: string): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.sessionDelete({ sessionId });
+  await codex.threadDelete(sessionId);
 }
 
 export async function acpCloseSession(sessionId: string): Promise<void> {
@@ -243,8 +232,7 @@ export async function acpCloseSession(sessionId: string): Promise<void> {
 }
 
 export async function acpRenameSession(sessionId: string, title: string): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.sessionRename_unstable({ sessionId, title });
+  await codex.threadSetName(sessionId, title);
 }
 
 export async function acpUpdateWorkingDir(sessionId: string, workingDir: string): Promise<void> {
@@ -262,15 +250,8 @@ export async function acpTruncateSessionConversation(
 
 export async function acpForkSession(
   sessionId: string,
-  conversationBefore?: number
+  _conversationBefore?: number
 ): Promise<string> {
-  const client = await getAcpClient();
-  const sessionInfo = await client.goose.sessionInfo_unstable({ sessionId });
-  const { cwd } = sessionInfo.session;
-  const request: ForkSessionRequest = { sessionId, cwd };
-  if (conversationBefore !== undefined) {
-    request._meta = { conversationBefore };
-  }
-  const response = await client.unstable_forkSession(request);
-  return String(response.sessionId);
+  const { thread } = await codex.threadFork(sessionId);
+  return thread.id;
 }

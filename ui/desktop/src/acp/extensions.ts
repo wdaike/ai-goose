@@ -1,6 +1,5 @@
 import type { ExtensionConfig, ExtensionEntry } from '../types/extensions';
 import type { GooseExtension, GooseExtensionEntry } from '@aaif/goose-sdk';
-import { getAcpClient } from './acpConnection';
 
 export type ConfiguredExtensionEntry = ExtensionEntry & { configKey?: string };
 
@@ -13,156 +12,128 @@ export function gooseExtensionName(extension: GooseExtension): string {
   return extension.type === 'mcp' ? extension.server.name : extension.name;
 }
 
-function headersToRecord(headers: { name: string; value: string }[] = []) {
-  return Object.fromEntries(headers.map(({ name, value }) => [name, value]));
+interface CodexMcpServer {
+  command?: string;
+  args?: string[];
+  env?: Record<string, string>;
+  url?: string;
+  http_headers?: Record<string, string>;
+  enabled?: boolean;
+  startup_timeout_sec?: number;
 }
 
-function availableToolsOrUndefined(availableTools?: string[] | null): string[] | undefined {
-  return availableTools?.length ? availableTools : undefined;
+interface ConfigLayer {
+  name: unknown;
+  config: { mcp_servers?: Record<string, CodexMcpServer> } | null;
 }
 
-export function gooseExtensionToExtensionConfig(extension: GooseExtension): ExtensionConfig | null {
-  switch (extension.type) {
-    case 'builtin':
-    case 'platform':
-      return {
-        ...extension,
-        description: extension.description ?? '',
-        available_tools: availableToolsOrUndefined(extension.available_tools),
-      };
-    case 'mcp': {
-      const server = extension.server;
-      if ('command' in server) {
-        return {
-          type: 'stdio',
-          name: server.name,
-          description: extension.description ?? '',
-          cmd: server.command,
-          args: server.args,
-          env_keys: extension.envKeys ?? [],
-          timeout: extension.timeout,
-          bundled: extension.bundled,
-          available_tools: availableToolsOrUndefined(extension.available_tools),
-        };
-      }
-      if ('url' in server) {
-        return {
-          type: 'streamable_http',
-          name: server.name,
-          description: extension.description ?? '',
-          uri: server.url,
-          headers: headersToRecord(server.headers),
-          env_keys: extension.envKeys ?? [],
-          timeout: extension.timeout,
-          socket: extension.socket,
-          bundled: extension.bundled,
-          available_tools: availableToolsOrUndefined(extension.available_tools),
-        };
-      }
-      return null;
-    }
+async function readMcpServers(): Promise<Record<string, CodexMcpServer>> {
+  const response = (await window.codex.request('config/read', { includeLayers: true })) as {
+    layers: ConfigLayer[] | null;
+  };
+  const merged: Record<string, CodexMcpServer> = {};
+  for (const layer of response.layers ?? []) {
+    Object.assign(merged, layer.config?.mcp_servers ?? {});
   }
+  return merged;
 }
 
-function gooseExtensionEntryToExtensionEntry(
-  entry: GooseExtensionEntry
-): ConfiguredExtensionEntry | null {
-  const config = gooseExtensionToExtensionConfig(entry.extension);
-  if (!config) {
-    return null;
+function serverToEntry(name: string, server: CodexMcpServer): ConfiguredExtensionEntry | null {
+  const enabled = server.enabled !== false;
+  if (server.command) {
+    return {
+      type: 'stdio',
+      name,
+      description: '',
+      cmd: server.command,
+      args: server.args ?? [],
+      env_keys: Object.keys(server.env ?? {}),
+      timeout: server.startup_timeout_sec,
+      enabled,
+      configKey: name,
+    };
   }
-  return { ...config, enabled: entry.enabled, configKey: entry.configKey ?? undefined };
+  if (server.url) {
+    return {
+      type: 'streamable_http',
+      name,
+      description: '',
+      uri: server.url,
+      headers: server.http_headers ?? {},
+      env_keys: [],
+      timeout: server.startup_timeout_sec,
+      enabled,
+      configKey: name,
+    };
+  }
+  return null;
 }
 
 export async function getConfiguredGooseExtensions(): Promise<GooseExtensionEntry[]> {
-  const client = await getAcpClient();
-  const response = await client.goose.configExtensionsList_unstable({});
-  return response.extensions;
+  // Codex owns MCP server startup; nothing to inject at session creation.
+  return [];
 }
 
 export async function getConfiguredExtensions(): Promise<ConfiguredExtensionsResponse> {
-  const client = await getAcpClient();
-  const response = await client.goose.configExtensionsList_unstable({});
+  const servers = await readMcpServers();
   return {
-    extensions: response.extensions
-      .map(gooseExtensionEntryToExtensionEntry)
+    extensions: Object.entries(servers)
+      .map(([name, server]) => serverToEntry(name, server))
       .filter((entry): entry is ConfiguredExtensionEntry => entry !== null),
-    warnings: response.warnings ?? [],
+    warnings: [],
   };
 }
 
-export function extensionConfigToGooseExtension(config: ExtensionConfig): GooseExtension | null {
+export function extensionConfigToGooseExtension(_config: ExtensionConfig): GooseExtension | null {
+  return null;
+}
+
+function extensionConfigToCodexServer(config: ExtensionConfig): CodexMcpServer | null {
   switch (config.type) {
-    case 'builtin':
-      return {
-        type: 'builtin',
-        name: config.name,
-        description: config.description,
-        display_name: config.display_name,
-        timeout: config.timeout,
-        bundled: config.bundled,
-        available_tools: availableToolsOrUndefined(config.available_tools),
-      };
-    case 'platform':
-      return {
-        type: 'platform',
-        name: config.name,
-        description: config.description,
-        display_name: config.display_name,
-        bundled: config.bundled,
-        available_tools: availableToolsOrUndefined(config.available_tools),
-      };
     case 'stdio':
       return {
-        type: 'mcp',
-        server: { name: config.name, command: config.cmd, args: config.args ?? [], env: [] },
-        envKeys: config.env_keys ?? [],
-        description: config.description,
-        timeout: config.timeout,
-        bundled: config.bundled,
-        available_tools: availableToolsOrUndefined(config.available_tools),
+        command: config.cmd,
+        args: config.args ?? [],
+        ...(config.timeout ? { startup_timeout_sec: config.timeout } : {}),
       };
     case 'streamable_http':
       return {
-        type: 'mcp',
-        server: {
-          type: 'http',
-          name: config.name,
-          url: config.uri,
-          headers: Object.entries(config.headers ?? {}).map(([name, value]) => ({ name, value })),
-        },
-        envKeys: config.env_keys ?? [],
-        description: config.description,
-        timeout: config.timeout,
-        socket: config.socket,
-        bundled: config.bundled,
-        available_tools: availableToolsOrUndefined(config.available_tools),
+        url: config.uri,
+        ...(Object.keys(config.headers ?? {}).length ? { http_headers: config.headers } : {}),
+        ...(config.timeout ? { startup_timeout_sec: config.timeout } : {}),
       };
-    case 'sse':
-    case 'frontend':
-    case 'inline_python':
+    default:
       return null;
   }
 }
 
+async function writeMcpServer(name: string, value: CodexMcpServer | null): Promise<void> {
+  await window.codex.request('config/batchWrite', {
+    edits: [{ keyPath: `mcp_servers.${name}`, value, mergeStrategy: 'replace' }],
+    reloadUserConfig: true,
+  });
+}
+
 export async function addConfigExtension(config: ExtensionConfig, enabled: boolean): Promise<void> {
-  const extension = extensionConfigToGooseExtension(config);
-  if (!extension) {
-    throw new Error(`Unsupported extension type for ACP: ${config.type}`);
+  const server = extensionConfigToCodexServer(config);
+  if (!server) {
+    throw new Error(`Unsupported extension type for codex: ${config.type}`);
   }
-  const client = await getAcpClient();
-  await client.goose.configExtensionsAdd_unstable({ extension, enabled });
+  await writeMcpServer(config.name, { ...server, ...(enabled ? {} : { enabled: false }) });
 }
 
 export async function removeConfigExtension(configKey: string): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.configExtensionsRemove_unstable({ configKey });
+  await writeMcpServer(configKey, null);
 }
 
 export async function setConfigExtensionEnabled(
   configKey: string,
   enabled: boolean
 ): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.configExtensionsSetEnabled_unstable({ configKey, enabled });
+  await window.codex.request('config/batchWrite', {
+    edits: [
+      { keyPath: `mcp_servers.${configKey}.enabled`, value: enabled, mergeStrategy: 'upsert' },
+    ],
+    reloadUserConfig: true,
+  });
 }

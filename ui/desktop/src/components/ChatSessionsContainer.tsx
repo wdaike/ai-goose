@@ -4,7 +4,7 @@ import BaseChat from './BaseChat';
 import { ChatType } from '../types/chat';
 import { UserInput } from '../types/message';
 import { subscribeToAcpRecovery } from '../acp/acpConnection';
-import { acpChatSessionController } from '../acp/chatSessionController';
+import { codexChatSessionController as acpChatSessionController } from '../codex/engine/controller';
 
 interface ChatSessionsContainerProps {
   setChat: (chat: ChatType) => void;

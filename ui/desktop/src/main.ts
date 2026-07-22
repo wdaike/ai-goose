@@ -8,7 +8,6 @@ import {
   ipcMain,
   Menu,
   MenuItem,
-  net,
   Notification,
   powerMonitor,
   powerSaveBlocker,
@@ -26,10 +25,8 @@ import path from 'node:path';
 import os from 'node:os';
 import { execFileSync, spawn, execFile } from 'child_process';
 import 'dotenv/config';
-import { checkBackendStatus } from './backendStatus';
-import { startGooseServe } from './gooseServe';
+import { registerCodexBridge } from './codex/bridge';
 import { GooseServeLeaseRegistry, type GooseServeLease } from './gooseServeLeaseRegistry';
-import { acpWebSocketUrlFromHttpBase, normalizeAcpHttpBaseUrl } from './acp/url';
 import { expandTilde } from './utils/pathUtils';
 import log from './utils/logger';
 import { ensureWinShims } from './utils/winShims';
@@ -168,7 +165,6 @@ function translateMenuLabels(items: MenuItem[]): void {
 
 // Settings management
 const SETTINGS_FILE = path.join(app.getPath('userData'), 'settings.json');
-const STARTUP_LOGS_DIR = path.join(app.getPath('userData'), 'logs', 'startup');
 const validLanguageSettings = new Set<Settings['language']>([
   'system',
   'en',
@@ -299,10 +295,6 @@ interface BackendCertificateTrust {
   fingerprint: string | null;
 }
 
-interface BackendCertificateTrustRegistration {
-  trust: BackendCertificateTrust;
-  release: () => void;
-}
 
 const trustedBackendCertificates = new Set<BackendCertificateTrust>();
 
@@ -322,22 +314,6 @@ function normalizeFingerprint(fp: string): string {
   return fp.toUpperCase();
 }
 
-function trustBackendCertificate(
-  hostname: string,
-  fingerprint: string | null
-): BackendCertificateTrustRegistration {
-  const trust: BackendCertificateTrust = {
-    hostname: normalizeHostname(hostname),
-    fingerprint: fingerprint ? normalizeFingerprint(fingerprint) : null,
-  };
-  trustedBackendCertificates.add(trust);
-  return {
-    trust,
-    release: () => {
-      trustedBackendCertificates.delete(trust);
-    },
-  };
-}
 
 function getBackendCertificateTrusts(hostname: string): BackendCertificateTrust[] {
   const normalizedHostname = normalizeHostname(hostname);
@@ -384,6 +360,9 @@ app.on('certificate-error', (event, _webContents, url, _error, certificate, call
 app.whenReady().then(() => {
   appConfig.GOOSE_LOCALE = getConfiguredGooseLocale();
 });
+
+const codexBridge = registerCodexBridge();
+app.on('will-quit', () => codexBridge.stop());
 
 // Main-process net.fetch: pin to the exact cert once known.
 app.whenReady().then(() => {
@@ -940,155 +919,11 @@ const createChat = async (
     }
   }
 
-  const serverSecret = externalBackend ? externalBackend.secret : GENERATED_SECRET;
   let workingDir = dir || os.homedir();
   let gooseServeLease: GooseServeLease | null = null;
 
-  if (externalBackend) {
-    let externalCertificateTrust: BackendCertificateTrustRegistration | null = null;
-
-    try {
-      const externalBaseUrl = normalizeAcpHttpBaseUrl(externalBackend.url);
-      const externalBase = new URL(externalBaseUrl);
-      if (externalBase.protocol === 'https:') {
-        externalCertificateTrust = trustBackendCertificate(
-          externalBase.hostname,
-          externalBackend.certFingerprint ?? null
-        );
-      }
-
-      const externalBackendReady = await checkBackendStatus({
-        baseUrl: externalBaseUrl,
-        serverSecret,
-        fetch: net.fetch as unknown as typeof globalThis.fetch,
-      });
-      if (!externalBackendReady) {
-        externalCertificateTrust?.release();
-        const canDisableExternalBackend = externalBackend.source === 'settings';
-        const response = dialog.showMessageBoxSync({
-          type: 'error',
-          title: 'External Backend Unreachable',
-          message: `Could not connect to external backend at ${externalBaseUrl}`,
-          detail:
-            'The external backend must be running and the configured secret must match GOOSE_SERVER__SECRET_KEY on the server.',
-          buttons: canDisableExternalBackend
-            ? ['Disable External Backend & Retry', 'Quit']
-            : ['Quit'],
-          defaultId: 0,
-          cancelId: canDisableExternalBackend ? 1 : 0,
-        });
-
-        if (canDisableExternalBackend && response === 0) {
-          updateSettings((s) => {
-            if (s.externalGoosed) {
-              s.externalGoosed.enabled = false;
-            }
-          });
-          return createChat(app, options);
-        }
-
-        app.quit();
-        return;
-      }
-
-      const leaseCertificateTrust = externalCertificateTrust;
-      externalCertificateTrust = null;
-      gooseServeLease = gooseServeLeases.createExternal(
-        acpWebSocketUrlFromHttpBase(externalBaseUrl, serverSecret),
-        serverSecret,
-        leaseCertificateTrust ? async () => leaseCertificateTrust.release() : undefined
-      );
-    } catch (error) {
-      externalCertificateTrust?.release();
-      log.error('External ACP backend is misconfigured', error);
-      const canDisableExternalBackend = externalBackend.source === 'settings';
-      const response = dialog.showMessageBoxSync({
-        type: 'error',
-        title: 'External Backend Misconfigured',
-        message: 'The external backend URL is invalid.',
-        detail: errorMessage(error),
-        buttons: canDisableExternalBackend
-          ? ['Disable External Backend & Retry', 'Quit']
-          : ['Quit'],
-        defaultId: 0,
-        cancelId: canDisableExternalBackend ? 1 : 0,
-      });
-
-      if (canDisableExternalBackend && response === 0) {
-        updateSettings((s) => {
-          if (s.externalGoosed) {
-            s.externalGoosed.enabled = false;
-          }
-        });
-        return createChat(app, options);
-      }
-
-      app.quit();
-      return;
-    }
-  } else {
-    const localCertificateTrust = trustBackendCertificate('127.0.0.1', null);
-
-    let gooseServeResult: Awaited<ReturnType<typeof startGooseServe>>;
-    try {
-      gooseServeResult = await startGooseServe({
-        serverSecret,
-        dir: workingDir,
-        tls: true,
-        env: {
-          GOOSE_PATH_ROOT: appConfig.GOOSE_PATH_ROOT as string | undefined,
-        },
-        isPackaged: app.isPackaged,
-        resourcesPath: app.isPackaged ? process.resourcesPath : undefined,
-        logger: log,
-        diagnosticsDir: STARTUP_LOGS_DIR,
-        readinessFetch: net.fetch as unknown as typeof globalThis.fetch,
-      });
-      if (!gooseServeResult.certFingerprint) {
-        await gooseServeResult.cleanup();
-        throw new Error(
-          'goose serve started with TLS but did not return a certificate fingerprint'
-        );
-      }
-
-      const localCertFingerprint = normalizeFingerprint(gooseServeResult.certFingerprint);
-      if (
-        localCertificateTrust.trust.fingerprint &&
-        localCertificateTrust.trust.fingerprint !== localCertFingerprint
-      ) {
-        await gooseServeResult.cleanup();
-        throw new Error('goose serve TLS certificate fingerprint did not match readiness probe');
-      }
-      localCertificateTrust.trust.fingerprint = localCertFingerprint;
-    } catch (error) {
-      localCertificateTrust.release();
-      log.error('goose serve failed to start', error);
-      dialog.showMessageBoxSync({
-        type: 'error',
-        title: 'Goose Failed to Start',
-        message: 'The backend server failed to start.',
-        detail: [
-          'Backend: goose serve',
-          'Readiness check: HTTPS GET /status',
-          `Startup error:\n${errorMessage(error)}`,
-        ].join('\n\n'),
-        buttons: ['OK'],
-      });
-      app.quit();
-      return;
-    }
-
-    workingDir = gooseServeResult.workingDir;
-    const cleanupGooseServe = gooseServeResult.cleanup;
-    gooseServeResult.cleanup = async () => {
-      try {
-        await cleanupGooseServe();
-      } finally {
-        localCertificateTrust.release();
-      }
-    };
-    gooseServeLease = gooseServeLeases.create(gooseServeResult, serverSecret);
-  }
+  // The Codex runtime is spawned in-process via the codex bridge; the legacy
+  // goose serve backend is no longer started.
 
   const cleanupUnregisteredGooseServeLease = async () => {
     if (!gooseServeLease) {

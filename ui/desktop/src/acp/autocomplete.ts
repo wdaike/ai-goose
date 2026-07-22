@@ -1,6 +1,5 @@
 import type { AgentMention, AvailableCommand } from '@aaif/goose-sdk';
 import type { DisplayItem } from '../components/MentionPopover';
-import { getAcpClient } from './acpConnection';
 
 type SlashCommandItemType = Extract<DisplayItem['itemType'], 'Builtin' | 'Recipe' | 'Skill'>;
 type AutocompleteDisplayItem = DisplayItem;
@@ -16,11 +15,6 @@ function stringMetaValue(meta: AvailableCommand['_meta'], key: string): string |
   return typeof value === 'string' && value.trim() ? value : undefined;
 }
 
-function cwdParam(cwd: string): { cwd?: string } {
-  const trimmed = cwd.trim();
-  return trimmed ? { cwd: trimmed } : {};
-}
-
 export function availableCommandToDisplayItem(
   command: AvailableCommand
 ): AutocompleteDisplayItem | null {
@@ -28,14 +22,9 @@ export function availableCommandToDisplayItem(
   if (!isSlashCommandItemType(commandType)) {
     return null;
   }
-
-  const sourcePath = stringMetaValue(command._meta, 'sourcePath');
-  const extra =
-    commandType === 'Recipe' ? (sourcePath ?? command.description) : command.description;
-
   return {
     name: command.name,
-    extra,
+    extra: command.description,
     itemType: commandType,
     relativePath: command.name,
   };
@@ -43,7 +32,6 @@ export function availableCommandToDisplayItem(
 
 export function agentMentionToDisplayItem(agent: AgentMention): AutocompleteDisplayItem {
   const mention = agent.mention.trim() || `@${agent.name}`;
-
   return {
     name: agent.name,
     extra: agent.description,
@@ -54,21 +42,25 @@ export function agentMentionToDisplayItem(agent: AgentMention): AutocompleteDisp
 }
 
 export async function listSlashCommandItems(cwd: string): Promise<AutocompleteDisplayItem[]> {
-  const client = await getAcpClient();
-  const response = await client.goose.slashCommandsList_unstable(cwdParam(cwd));
-  return response.availableCommands
-    .map(availableCommandToDisplayItem)
-    .filter((item): item is AutocompleteDisplayItem => item !== null);
+  const response = (await window.codex.request('skills/list', {
+    cwds: cwd.trim() ? [cwd.trim()] : [],
+  })) as {
+    data: Array<{ skills: Array<{ name: string; description: string; enabled: boolean }> }>;
+  };
+  return response.data
+    .flatMap((entry) => entry.skills)
+    .filter((skill) => skill.enabled)
+    .map((skill) => ({
+      name: skill.name,
+      extra: skill.description,
+      itemType: 'Skill' as const,
+      relativePath: skill.name,
+    }));
 }
 
 export async function listAgentMentionItems(
-  cwd: string,
-  sessionId?: string
+  _cwd: string,
+  _sessionId?: string
 ): Promise<AutocompleteDisplayItem[]> {
-  const client = await getAcpClient();
-  const response = await client.goose.agentMentionsList_unstable({
-    ...cwdParam(cwd),
-    ...(sessionId ? { sessionId } : {}),
-  });
-  return response.agents.map(agentMentionToDisplayItem);
+  return [];
 }

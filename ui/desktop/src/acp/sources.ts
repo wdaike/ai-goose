@@ -1,43 +1,21 @@
-import type { SourceEntry, SourceType } from '@aaif/goose-sdk';
-import { getAcpClient } from './acpConnection';
-
-const SKILL_SOURCE_TYPES: SourceType[] = ['skill', 'builtinSkill'];
-const inFlightSkillSourceLoads = new Map<string, Promise<SourceEntry[]>>();
+import type { SourceEntry } from '@aaif/goose-sdk';
 
 export async function listSkillSources(projectDir: string): Promise<SourceEntry[]> {
-  const inFlightLoad = inFlightSkillSourceLoads.get(projectDir);
-  if (inFlightLoad) {
-    return inFlightLoad;
-  }
-
-  const load = loadSkillSources(projectDir);
-  inFlightSkillSourceLoads.set(projectDir, load);
-
-  try {
-    return await load;
-  } finally {
-    if (inFlightSkillSourceLoads.get(projectDir) === load) {
-      inFlightSkillSourceLoads.delete(projectDir);
-    }
-  }
-}
-
-async function loadSkillSources(projectDir: string): Promise<SourceEntry[]> {
-  const client = await getAcpClient();
-  const responses = await Promise.all(
-    SKILL_SOURCE_TYPES.map((type) =>
-      client.goose.sourcesList_unstable({
-        type,
-        projectDir,
-      })
-    )
-  );
-
-  return responses
-    .flatMap((response) => response.sources)
-    .sort(
-      (a, b) =>
-        a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }) ||
-        a.path.localeCompare(b.path)
-    );
+  const response = (await window.codex.request('skills/list', {
+    cwds: [projectDir],
+  })) as {
+    data: Array<{
+      skills: Array<{ name: string; description: string; path: string; enabled: boolean }>;
+    }>;
+  };
+  return response.data
+    .flatMap((entry) => entry.skills)
+    .filter((skill) => skill.enabled)
+    .map((skill) => ({
+      type: 'skill',
+      name: skill.name,
+      description: skill.description,
+      content: '',
+      path: skill.path,
+    })) as SourceEntry[];
 }

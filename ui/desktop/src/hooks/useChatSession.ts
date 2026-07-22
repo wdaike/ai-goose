@@ -15,7 +15,10 @@ import {
 import { errorMessage } from '../utils/conversionUtils';
 import type { UseChatSessionParams, UseChatSessionResult } from './useChatSessionTypes';
 import { resolveAcpElicitationRequest } from '../acp/elicitationRequests';
-import { acpChatSessionController } from '../acp/chatSessionController';
+import {
+  codexChatSessionController as acpChatSessionController,
+  getActiveTurnId,
+} from '../codex/engine/controller';
 import {
   acpChatSessionActions,
   acpChatSessionStore,
@@ -220,6 +223,7 @@ export function useChatSession({
       }
 
       const activeRunId =
+        getActiveTurnId(sessionId) ??
         acpChatSessionStore.getSnapshot(sessionId)?.activeRunId ??
         getCurrentSnapshot()?.activeRunId;
       if (!activeRunId) {

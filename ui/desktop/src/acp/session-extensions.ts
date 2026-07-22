@@ -1,28 +1,26 @@
 import type { ExtensionConfig } from '../types/extensions';
-import { getAcpClient } from './acpConnection';
-import { extensionConfigToGooseExtension, gooseExtensionToExtensionConfig } from './extensions';
+import {
+  addConfigExtension,
+  getConfiguredExtensions,
+  setConfigExtensionEnabled,
+} from './extensions';
 
-export async function getSessionExtensions(sessionId: string): Promise<ExtensionConfig[]> {
-  const client = await getAcpClient();
-  const response = await client.goose.sessionExtensionsList_unstable({ sessionId });
-  return response.extensions
-    .map(gooseExtensionToExtensionConfig)
-    .filter((config): config is ExtensionConfig => config !== null);
+// Codex owns MCP servers globally; session-scoped extension state maps onto
+// the global config.
+export async function getSessionExtensions(_sessionId: string): Promise<ExtensionConfig[]> {
+  const { extensions } = await getConfiguredExtensions();
+  return extensions
+    .filter((entry) => entry.enabled)
+    .map(({ enabled: _enabled, configKey: _configKey, ...config }) => config as ExtensionConfig);
 }
 
 export async function addSessionExtension(
-  sessionId: string,
+  _sessionId: string,
   config: ExtensionConfig
 ): Promise<void> {
-  const extension = extensionConfigToGooseExtension(config);
-  if (!extension) {
-    throw new Error(`Unsupported extension type for ACP: ${config.type}`);
-  }
-  const client = await getAcpClient();
-  await client.goose.sessionExtensionsAdd_unstable({ sessionId, extension });
+  await addConfigExtension(config, true);
 }
 
-export async function removeSessionExtension(sessionId: string, name: string): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.sessionExtensionsRemove_unstable({ sessionId, name });
+export async function removeSessionExtension(_sessionId: string, name: string): Promise<void> {
+  await setConfigExtensionEnabled(name, false);
 }
