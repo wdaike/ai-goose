@@ -1022,14 +1022,23 @@
   "headersSection.value": {
     "defaultMessage": "Value"
   },
-  "hub.goodAfternoon": {
-    "defaultMessage": "Good afternoon"
+  "hub.headline": {
+    "defaultMessage": "What should we build in {project}?"
   },
-  "hub.goodEvening": {
-    "defaultMessage": "Good evening"
+  "hub.local": {
+    "defaultMessage": "Local"
   },
-  "hub.goodMorning": {
-    "defaultMessage": "Good morning"
+  "hub.suggestionBuild": {
+    "defaultMessage": "Build a new feature, app, or tool"
+  },
+  "hub.suggestionExplore": {
+    "defaultMessage": "Explore and understand code"
+  },
+  "hub.suggestionFix": {
+    "defaultMessage": "Fix issues and failures"
+  },
+  "hub.suggestionReview": {
+    "defaultMessage": "Review code and suggest changes"
   },
   "huggingFaceModelSearch.download": {
     "defaultMessage": "Download"
@@ -2017,6 +2026,18 @@
   },
   "permissionModal.saveChanges": {
     "defaultMessage": "Save Changes"
+  },
+  "permissionModeChip.approve": {
+    "defaultMessage": "Manual approval"
+  },
+  "permissionModeChip.chatOnly": {
+    "defaultMessage": "Chat only"
+  },
+  "permissionModeChip.fullAccess": {
+    "defaultMessage": "Full access"
+  },
+  "permissionModeChip.smartApprove": {
+    "defaultMessage": "Smart approval"
   },
   "permissionRulesModal.description": {
     "defaultMessage": "Configure tool permissions for extensions to control how they interact with your system."

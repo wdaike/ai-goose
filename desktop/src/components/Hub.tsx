@@ -1,13 +1,16 @@
 /**
  * Hub Component
  *
- * The empty-chat landing screen. Visually it's "Pair with no messages yet" —
- * a large time + greeting above a centered, narrower ChatInput. Submitting
- * creates a session and navigates to /pair so the rest of the chat lifecycle
- * lives there.
+ * The empty-chat landing screen, styled after ChatGPT's Codex home: a
+ * centered logo, a "What should we build in {project}?" headline, a row of
+ * suggestion cards that prefill the input, and a folder/Local/branch chip
+ * bar above the ChatInput. Submitting creates a session and navigates to
+ * /pair so the rest of the chat lifecycle lives there.
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Bug, GitBranch, Hammer, Laptop, RefreshCcwDot, Telescope } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { defineMessages, useIntl } from '../i18n';
 import { AppEvents } from '../constants/events';
 import ChatInput from './ChatInput';
@@ -19,6 +22,8 @@ import { useConfig } from './ConfigContext';
 import { getInitialWorkingDir } from '../utils/workingDir';
 import { createSession } from '../sessions';
 import LoadingGoose from './LoadingGoose';
+import { Goose } from './icons/Goose';
+import { DirSwitcher } from './bottom_menu/DirSwitcher';
 import { UserInput } from '../types/message';
 import {
   createNextChatExtensionDraft,
@@ -27,25 +32,69 @@ import {
 } from '../utils/nextChatExtensions';
 
 const i18n = defineMessages({
-  goodMorning: { id: 'hub.goodMorning', defaultMessage: 'Good morning' },
-  goodAfternoon: { id: 'hub.goodAfternoon', defaultMessage: 'Good afternoon' },
-  goodEvening: { id: 'hub.goodEvening', defaultMessage: 'Good evening' },
+  headline: {
+    id: 'hub.headline',
+    defaultMessage: 'What should we build in {project}?',
+  },
+  local: { id: 'hub.local', defaultMessage: 'Local' },
+  suggestionExplore: {
+    id: 'hub.suggestionExplore',
+    defaultMessage: 'Explore and understand code',
+  },
+  suggestionBuild: {
+    id: 'hub.suggestionBuild',
+    defaultMessage: 'Build a new feature, app, or tool',
+  },
+  suggestionReview: {
+    id: 'hub.suggestionReview',
+    defaultMessage: 'Review code and suggest changes',
+  },
+  suggestionFix: {
+    id: 'hub.suggestionFix',
+    defaultMessage: 'Fix issues and failures',
+  },
 });
 
-function useClock(): { time: string; meridiem: string; hour: number } {
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const interval = setInterval(() => setNow(new Date()), 30_000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const hour = now.getHours();
-  const minutes = now.getMinutes();
-  const meridiem = hour >= 12 ? 'PM' : 'AM';
-  const displayHour = ((hour + 11) % 12) + 1;
-  const time = `${displayHour}:${String(minutes).padStart(2, '0')}`;
-  return { time, meridiem, hour };
+interface Suggestion {
+  key: string;
+  label: keyof typeof i18n;
+  icon: LucideIcon;
+  iconClass: string;
+  prompt: string;
 }
+
+const SUGGESTIONS: Suggestion[] = [
+  {
+    key: 'explore',
+    label: 'suggestionExplore',
+    icon: Telescope,
+    iconClass: 'text-blue-200',
+    prompt: 'Explore this codebase and explain how it is structured.',
+  },
+  {
+    key: 'build',
+    label: 'suggestionBuild',
+    icon: Hammer,
+    iconClass: 'text-block-teal',
+    prompt: 'Help me build a new feature: ',
+  },
+  {
+    key: 'review',
+    label: 'suggestionReview',
+    icon: RefreshCcwDot,
+    iconClass: 'text-green-200',
+    prompt: 'Review my current changes and suggest improvements.',
+  },
+  {
+    key: 'fix',
+    label: 'suggestionFix',
+    icon: Bug,
+    iconClass: 'text-block-orange',
+    prompt: 'Find and fix failing tests or broken behavior in this project.',
+  },
+];
+
+const leafDirName = (dir: string) => dir.replace(/[\\/]+$/, '').split(/[\\/]/).pop() || dir;
 
 export default function Hub({
   setView,
@@ -55,22 +104,34 @@ export default function Hub({
   const intl = useIntl();
   const { extensionsList } = useConfig();
   const [workingDir, setWorkingDir] = useState(getInitialWorkingDir());
+  const [gitBranch, setGitBranch] = useState<string | null>(null);
+  const [draft, setDraft] = useState('');
   const [isCreatingSession, setIsCreatingSession] = useState(false);
   const [nextChatExtensionDraft, setNextChatExtensionDraft] =
     useState<NextChatExtensionDraft | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const { time, meridiem, hour } = useClock();
 
-  const greeting = useMemo(() => {
-    if (hour < 12) return intl.formatMessage(i18n.goodMorning);
-    if (hour < 18) return intl.formatMessage(i18n.goodAfternoon);
-    return intl.formatMessage(i18n.goodEvening);
-  }, [intl, hour]);
+  const projectName = useMemo(() => leafDirName(workingDir), [workingDir]);
 
   const draftForMenu = useMemo(
     () => nextChatExtensionDraft ?? createNextChatExtensionDraft(extensionsList),
     [extensionsList, nextChatExtensionDraft]
   );
+
+  useEffect(() => {
+    let cancelled = false;
+    window.electron
+      .getGitBranch(workingDir)
+      .then((branch) => {
+        if (!cancelled) setGitBranch(branch);
+      })
+      .catch(() => {
+        if (!cancelled) setGitBranch(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [workingDir]);
 
   // rAF is more reliable than autoFocus across async render boundaries.
   useEffect(() => {
@@ -79,6 +140,16 @@ export default function Hub({
     });
     return () => cancelAnimationFrame(frameId);
   }, []);
+
+  const handleSuggestionClick = (suggestion: Suggestion) => {
+    setDraft(suggestion.prompt);
+    requestAnimationFrame(() => {
+      const textarea = inputRef.current;
+      if (!textarea) return;
+      textarea.focus();
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    });
+  };
 
   const handleNextChatExtensionDraftChange = useCallback((draft: NextChatExtensionDraft) => {
     setNextChatExtensionDraft(draft);
@@ -122,13 +193,60 @@ export default function Hub({
 
   return (
     <div className="flex flex-col h-full min-h-0 items-center justify-center px-6 relative">
-      <div className="w-full max-w-2xl">
-        <div className="mb-6 flex items-baseline justify-center gap-2">
-          <span className="text-2xl font-medium text-text-primary">{greeting}</span>
-          <span className="text-2xl font-light tabular-nums text-text-tertiary">
-            {time}
-            <span className="ml-1 text-base">{meridiem}</span>
+      <div className="w-full max-w-3xl">
+        <div className="mb-5 flex justify-center">
+          <Goose className="size-12 text-text-secondary" />
+        </div>
+
+        <h1 className="mb-10 text-center text-3xl font-normal text-text-primary">
+          {intl.formatMessage(i18n.headline, {
+            project: (
+              <span className="underline decoration-border-secondary decoration-2 underline-offset-8">
+                {projectName}
+              </span>
+            ),
+          })}
+        </h1>
+
+        <div className="mb-12 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {SUGGESTIONS.map((suggestion) => {
+            const Icon = suggestion.icon;
+            return (
+              <button
+                key={suggestion.key}
+                onClick={() => handleSuggestionClick(suggestion)}
+                className="flex flex-col items-start gap-8 rounded-2xl border border-border-primary bg-background-secondary/40 p-4 text-left transition-colors hover:bg-background-secondary"
+              >
+                <Icon className={`size-5 ${suggestion.iconClass}`} />
+                <span className="text-[15px] leading-snug text-text-primary">
+                  {intl.formatMessage(i18n[suggestion.label])}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mb-2 flex items-center gap-1 rounded-2xl border border-border-primary bg-background-secondary/40 px-3 py-2">
+          <DirSwitcher
+            className=""
+            sessionId={undefined}
+            workingDir={workingDir}
+            onWorkingDirChange={setWorkingDir}
+          />
+          <span className="mx-2 h-4 w-px bg-border-primary" />
+          <span className="flex items-center gap-1.5 text-xs text-text-primary/70">
+            <Laptop size={16} />
+            {intl.formatMessage(i18n.local)}
           </span>
+          {gitBranch && (
+            <>
+              <span className="mx-2 h-4 w-px bg-border-primary" />
+              <span className="flex items-center gap-1.5 text-xs text-text-primary/70">
+                <GitBranch size={16} />
+                <span className="max-w-[200px] truncate">{gitBranch}</span>
+              </span>
+            </>
+          )}
         </div>
 
         <ChatInputCard>
@@ -137,7 +255,7 @@ export default function Hub({
             handleSubmit={handleSubmit}
             chatState={isCreatingSession ? ChatState.LoadingConversation : ChatState.Idle}
             onStop={() => {}}
-            initialValue=""
+            initialValue={draft}
             setView={setView}
             totalTokens={0}
             accumulatedInputTokens={0}
@@ -150,6 +268,7 @@ export default function Hub({
             inputRef={inputRef}
             nextChatExtensionDraft={draftForMenu}
             onNextChatExtensionDraftChange={handleNextChatExtensionDraftChange}
+            hideDirSwitcher
           />
         </ChatInputCard>
       </div>

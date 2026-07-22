@@ -17,6 +17,7 @@ import { SessionIndicators } from '../SessionIndicators';
 import EnvironmentBadge from '../GooseSidebar/EnvironmentBadge';
 import { Goose } from '../icons/Goose';
 import { acpListSessions, acpRenameSession, type SessionListItem } from '../../acp/sessions';
+import { codex } from '../../codex/client';
 import { cn } from '../../utils';
 import { groupSessionsByProject, type ProjectGroup } from '../../utils/projectSessions';
 import { defineMessages, useIntl } from '../../i18n';
@@ -139,6 +140,13 @@ const SessionRow: React.FC<SessionRowProps> = ({ session, active, status, onClic
   );
 };
 
+const accountDisplayName = (account: Awaited<ReturnType<typeof codex.accountRead>>['account']) => {
+  if (!account) return null;
+  if (account.type === 'chatgpt') return account.email.split('@')[0];
+  if (account.type === 'apiKey') return 'API key';
+  return 'Bedrock';
+};
+
 export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
   const intl = useIntl();
   const { isNavExpanded } = useNavigationContext();
@@ -167,6 +175,20 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
   } = useNavigationSessions();
 
   const [sessionStatuses, setSessionStatuses] = useState<Map<string, SessionStatus>>(new Map());
+  const [accountName, setAccountName] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    codex
+      .accountRead()
+      .then(({ account }) => {
+        if (!cancelled) setAccountName(accountDisplayName(account));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const [query, setQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchResults, setSearchResults] = useState<SessionListItem[] | null>(null);
@@ -386,12 +408,21 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
       <div className="flex items-center gap-2 border-t border-border-primary px-3 py-2.5">
         <button
           onClick={() => handleNavClick(SETTINGS_NAV_ITEM.path)}
+          title={getNavItemLabel(SETTINGS_NAV_ITEM, intl)}
           className="no-drag flex min-w-0 flex-1 items-center gap-2 rounded-lg px-1 py-1 text-[13px] text-text-primary transition-colors hover:bg-background-tertiary/60"
         >
-          <span className="flex size-6 flex-shrink-0 items-center justify-center rounded-full bg-background-tertiary">
-            <Settings className="size-3.5 text-text-secondary" />
+          {accountName ? (
+            <span className="flex size-6 flex-shrink-0 items-center justify-center rounded-full bg-block-teal text-[10px] font-semibold uppercase text-white">
+              {accountName.slice(0, 2)}
+            </span>
+          ) : (
+            <span className="flex size-6 flex-shrink-0 items-center justify-center rounded-full bg-background-tertiary">
+              <Settings className="size-3.5 text-text-secondary" />
+            </span>
+          )}
+          <span className="truncate">
+            {accountName ?? getNavItemLabel(SETTINGS_NAV_ITEM, intl)}
           </span>
-          <span className="truncate">{getNavItemLabel(SETTINGS_NAV_ITEM, intl)}</span>
         </button>
         <a
           href={DOCS_URL}

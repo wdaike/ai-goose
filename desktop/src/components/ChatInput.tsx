@@ -12,6 +12,7 @@ import { LocalMessageStorage } from '../utils/localMessageStorage';
 import { DirSwitcher } from './bottom_menu/DirSwitcher';
 import ModelsBottomBar from './settings/models/bottom_bar/ModelsBottomBar';
 import { BottomMenuExtensionSelection } from './bottom_menu/BottomMenuExtensionSelection';
+import { PermissionModeChip } from './bottom_menu/PermissionModeChip';
 import { cn } from '../utils';
 import { AlertType, useAlerts } from './alerts';
 import { useModelAndProvider } from './ModelAndProviderContext';
@@ -184,6 +185,8 @@ interface ChatInputProps {
   latestInference?: Message['metadata']['inference'] | null;
   nextChatExtensionDraft?: NextChatExtensionDraft;
   onNextChatExtensionDraftChange?: (draft: NextChatExtensionDraft) => void;
+  /** Hide the working-dir switcher when the parent renders its own (e.g. Hub's chip bar). */
+  hideDirSwitcher?: boolean;
 }
 
 export default function ChatInput({
@@ -216,6 +219,7 @@ export default function ChatInput({
   latestInference,
   nextChatExtensionDraft,
   onNextChatExtensionDraftChange,
+  hideDirSwitcher = false,
 }: ChatInputProps) {
   const [_value, setValue] = useState(initialValue);
   const [displayValue, setDisplayValue] = useState(initialValue); // For immediate visual feedback
@@ -1663,6 +1667,9 @@ export default function ChatInput({
           <TooltipContent>Attach file</TooltipContent>
         </Tooltip>
 
+        {/* Left: permission mode (ChatGPT-style "Full access" pill) */}
+        {!isBottomBarNarrow && <PermissionModeChip onClick={() => setView('settings')} />}
+
         {/* Left: extension selector */}
         {!isBottomBarNarrow && (
           <BottomMenuExtensionSelection
@@ -1673,7 +1680,7 @@ export default function ChatInput({
         )}
 
         {/* Left: working directory (leaf folder name only) */}
-        {!isBottomBarNarrow && (
+        {!isBottomBarNarrow && !hideDirSwitcher && (
           <DirSwitcher
             className=""
             sessionId={sessionId ?? undefined}

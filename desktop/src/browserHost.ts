@@ -198,6 +198,7 @@ const browserElectron: ElectronAPI = {
   },
   listRecentDirs: async () => readJson<string[]>(recentDirectoriesKey, []),
   listGitWorktreeDirs: async () => [],
+  getGitBranch: async () => null,
 };
 
 const browserAppConfig: AppConfigAPI = {

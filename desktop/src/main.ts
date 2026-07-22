@@ -268,6 +268,29 @@ function listGitWorktreeDirs(dir: string): Promise<string[]> {
   });
 }
 
+function getGitBranch(dir: string): Promise<string | null> {
+  return new Promise((resolve) => {
+    if (!dir?.trim()) {
+      resolve(null);
+      return;
+    }
+
+    execFile(
+      'git',
+      ['-C', dir, 'rev-parse', '--abbrev-ref', 'HEAD'],
+      { timeout: 3000 },
+      (error, stdout) => {
+        if (error) {
+          resolve(null);
+          return;
+        }
+        const branch = stdout.trim();
+        resolve(branch || null);
+      }
+    );
+  });
+}
+
 async function configureProxy() {
   const httpsProxy = process.env.HTTPS_PROXY || process.env.https_proxy;
   const httpProxy = process.env.HTTP_PROXY || process.env.http_proxy;
@@ -1555,6 +1578,10 @@ ipcMain.handle('list-recent-dirs', () => {
 
 ipcMain.handle('list-git-worktree-dirs', async (_event, dir: string) => {
   return await listGitWorktreeDirs(dir);
+});
+
+ipcMain.handle('get-git-branch', async (_event, dir: string) => {
+  return await getGitBranch(dir);
 });
 
 ipcMain.handle('get-setting', (_event, key: SettingKey) => {

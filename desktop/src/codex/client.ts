@@ -12,6 +12,7 @@ import type { SkillsListParams } from './protocol/v2/SkillsListParams';
 import type { SkillsListResponse } from './protocol/v2/SkillsListResponse';
 import type { SkillsConfigWriteParams } from './protocol/v2/SkillsConfigWriteParams';
 import type { SkillsConfigWriteResponse } from './protocol/v2/SkillsConfigWriteResponse';
+import type { GetAccountResponse } from './protocol/v2/GetAccountResponse';
 
 export interface ThreadResponse {
   thread: Thread;
@@ -50,6 +51,7 @@ export const codex = {
   turnInterrupt: (params: TurnInterruptParams) =>
     request<Record<string, never>>('turn/interrupt', params),
   modelList: () => request<ModelListResponse>('model/list', {}),
+  accountRead: () => request<GetAccountResponse>('account/read', {}),
   skillsList: (params: SkillsListParams) => request<SkillsListResponse>('skills/list', params),
   skillsConfigWrite: (params: SkillsConfigWriteParams) =>
     request<SkillsConfigWriteResponse>('skills/config/write', params),
