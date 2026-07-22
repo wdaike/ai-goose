@@ -2,6 +2,19 @@
 
 goose is an AI agent framework in Rust with CLI and Electron desktop interfaces.
 
+## Architecture
+
+goose is a thin layer over OpenAI's Codex app-server, which it embeds in-process
+(`codex-*` crates, pinned in `crates/goose/Cargo.toml`). Codex owns inference,
+tool execution, the MCP client, prompt assembly (including `AGENTS.md`
+discovery), and conversation storage (thread rollout). goose owns the ACP
+server the desktop/CLI talk to, session metadata, config, and platform glue.
+
+`crates/goose/src/codex.rs` is the boundary: it drives Codex over the app-server
+protocol (`thread/start`, `turn/start`, `mcpServer/tool/call`, `thread/read`, …)
+and maps Codex thread items to goose messages. Don't reintroduce a parallel
+implementation of anything Codex already provides — route to it instead.
+
 ## Setup
 ```bash
 source bin/activate-hermit
@@ -21,7 +34,6 @@ just release-binary           # release binary
 ```bash
 cargo test                   # all tests
 cargo test -p goose          # specific crate
-cargo test --package goose --test mcp_integration_test
 just record-mcp-tests        # record MCP
 ```
 
@@ -41,14 +53,17 @@ cd ui/desktop && pnpm test   # test UI
 ## Structure
 ```
 crates/
-├── goose              # core logic
-├── goose-acp-macros   # ACP proc macros
-├── goose-cli          # CLI entry
-├── goose-mcp          # MCP extensions
-├── goose-test         # test utilities
-└── goose-test-support # test helpers
+├── goose                 # core logic + Codex runtime boundary (codex.rs)
+├── goose-acp-macros      # ACP proc macros
+├── goose-cli             # CLI entry
+├── goose-types           # shared conversation/model/permission types
+├── goose-sdk-types       # ACP custom request/notification types
+├── goose-download-manager
+├── goose-test            # test utilities
+└── goose-test-support    # test helpers
 
-ui/desktop/            # Electron app
+ui/desktop/               # Electron app
+ui/text/                  # Ink terminal UI
 ```
 
 ## Development Loop
@@ -68,10 +83,9 @@ ui/desktop/            # Electron app
 ## Rules
 
 - Test: Prefer tests/ folder, e.g. crates/goose/tests/
-- Test: When adding features, update goose-self-test.yaml, rebuild, then run `goose run --recipe goose-self-test.yaml` to validate
 - Error: Use anyhow::Result
-- Provider: Implement Provider trait see providers/base.rs
-- MCP: Extensions in crates/goose-mcp/
+- Codex: Inference, tools, MCP, and conversation storage belong to the embedded Codex runtime — extend `crates/goose/src/codex.rs` rather than reimplementing them
+- MCP: goose has no MCP client of its own; tools come from Codex's MCP servers (stdio / streamable_http), surfaced via `mcpServerStatus/list` and `mcpServer/tool/call`
 - UI Desktop: Use ACP SDK types or local `src/types/*` types. Do not import generated OpenAPI types/client code from `ui/desktop/src/api`
 
 ## Code Quality
