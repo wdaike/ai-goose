@@ -291,6 +291,42 @@ function getGitBranch(dir: string): Promise<string | null> {
   });
 }
 
+/** Parse a git remote URL (ssh or https) into an "owner/repo" label. */
+function parseGitRemoteRepo(url: string): string | null {
+  const trimmed = url.trim().replace(/\.git$/, '');
+  if (!trimmed) return null;
+
+  const sshMatch = trimmed.match(/^[^@]+@[^:]+:(.+)$/);
+  const path = sshMatch
+    ? sshMatch[1]
+    : trimmed.replace(/^[a-z+]+:\/\/[^/]+\//i, '');
+  const parts = path.split('/').filter(Boolean);
+  if (parts.length < 2) return null;
+  return parts.slice(-2).join('/');
+}
+
+function getGitRemoteRepo(dir: string): Promise<string | null> {
+  return new Promise((resolve) => {
+    if (!dir?.trim()) {
+      resolve(null);
+      return;
+    }
+
+    execFile(
+      'git',
+      ['-C', dir, 'remote', 'get-url', 'origin'],
+      { timeout: 3000 },
+      (error, stdout) => {
+        if (error) {
+          resolve(null);
+          return;
+        }
+        resolve(parseGitRemoteRepo(stdout));
+      }
+    );
+  });
+}
+
 async function configureProxy() {
   const httpsProxy = process.env.HTTPS_PROXY || process.env.https_proxy;
   const httpProxy = process.env.HTTP_PROXY || process.env.http_proxy;
@@ -851,6 +887,7 @@ let appConfig = {
   GOOSE_DEFAULT_MODEL: defaultModel,
   GOOSE_PREDEFINED_MODELS: predefinedModels,
   GOOSE_PATH_ROOT: resolveGoosePathRoot(),
+  GOOSE_HOME_DIR: os.homedir(),
   GOOSE_WORKING_DIR: '',
   // Start with the env-var override; the OS region locale is filled in after app.ready
   // (see updateLocaleFromSystem below) since getSystemLocale() cannot be called earlier.
@@ -1582,6 +1619,10 @@ ipcMain.handle('list-git-worktree-dirs', async (_event, dir: string) => {
 
 ipcMain.handle('get-git-branch', async (_event, dir: string) => {
   return await getGitBranch(dir);
+});
+
+ipcMain.handle('get-git-remote-repo', async (_event, dir: string) => {
+  return await getGitRemoteRepo(dir);
 });
 
 ipcMain.handle('get-setting', (_event, key: SettingKey) => {

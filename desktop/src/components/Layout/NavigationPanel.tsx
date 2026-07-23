@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ChevronDown, ChevronRight, CircleHelp, Folder, Search, Settings } from 'lucide-react';
+import { CircleHelp, FolderGit2, MessageCircle, Search, Settings } from 'lucide-react';
+import { FolderClosed, FolderOpened } from '../icons/Folder';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/Tooltip';
 import { motion } from 'framer-motion';
 import { useNavigationContext } from './NavigationContext';
 import { useConfig } from '../ConfigContext';
@@ -16,7 +18,12 @@ import { InlineEditText } from '../common/InlineEditText';
 import { SessionIndicators } from '../SessionIndicators';
 import EnvironmentBadge from '../GooseSidebar/EnvironmentBadge';
 import { Goose } from '../icons/Goose';
-import { acpListSessions, acpRenameSession, type SessionListItem } from '../../acp/sessions';
+import {
+  acpCountSessionsForDir,
+  acpListSessions,
+  acpRenameSession,
+  type SessionListItem,
+} from '../../acp/sessions';
 import { codex } from '../../codex/client';
 import { cn } from '../../utils';
 import { groupSessionsByProject, type ProjectGroup } from '../../utils/projectSessions';
@@ -61,12 +68,26 @@ const i18n = defineMessages({
     id: 'navigationPanel.help',
     defaultMessage: 'Help',
   },
+  showMore: {
+    id: 'navigationPanel.showMore',
+    defaultMessage: 'Show more',
+  },
+  projectThreads: {
+    id: 'navigationPanel.projectThreads',
+    defaultMessage: '{count, plural, one {# thread} other {# threads}}',
+  },
+  projectThreadsCapped: {
+    id: 'navigationPanel.projectThreadsCapped',
+    defaultMessage: '{count, number}+ threads',
+  },
 });
+
+const SESSIONS_PER_PROJECT = 5;
 
 const rowClass = (active: boolean) =>
   cn(
-    'no-drag flex w-full flex-row items-center gap-2.5 rounded-lg px-2 py-1.5 outline-none',
-    'text-[13px] transition-colors',
+    'no-drag flex w-full flex-row items-center gap-2.5 rounded-full px-3 py-2 outline-none',
+    'text-sm transition-colors',
     active
       ? 'bg-background-tertiary text-text-primary'
       : 'text-text-primary hover:bg-background-tertiary/60'
@@ -83,7 +104,7 @@ const NavRow: React.FC<NavRowProps> = ({ item, active, onClick }) => {
   const Icon = item.icon;
   return (
     <button onClick={onClick} className={rowClass(active)}>
-      <Icon className="size-4 flex-shrink-0 text-text-secondary" />
+      <Icon className="size-[18px] flex-shrink-0" />
       <span className="flex-1 truncate text-left">{getNavItemLabel(item, intl)}</span>
       {item.getTag && <span className="font-mono text-xs text-text-tertiary">{item.getTag()}</span>}
     </button>
@@ -109,7 +130,7 @@ const SessionRow: React.FC<SessionRowProps> = ({ session, active, status, onClic
     <div
       onClick={() => !isEditing && onClick()}
       className={cn(
-        'no-drag flex cursor-pointer items-center gap-2 rounded-lg py-1.5 pl-8 pr-2 text-[13px]',
+        'no-drag flex cursor-pointer items-center gap-2 rounded-full py-2 pl-10 pr-3 text-sm',
         'transition-colors',
         active
           ? 'bg-background-tertiary text-text-primary'
@@ -131,11 +152,94 @@ const SessionRow: React.FC<SessionRowProps> = ({ session, active, status, onClic
         disabled={isStreaming}
         singleClickEdit={false}
         className="flex-1 truncate !px-0 !py-0 text-inherit hover:bg-transparent"
-        editClassName="!text-[13px]"
+        editClassName="!text-sm"
         onEditStart={() => setIsEditing(true)}
         onEditEnd={() => setIsEditing(false)}
       />
       <SessionIndicators isStreaming={isStreaming} hasUnread={hasUnread} hasError={hasError} />
+    </div>
+  );
+};
+
+interface ProjectInfo {
+  threadCount: number;
+  threadCountCapped: boolean;
+  gitRepo: string | null;
+}
+
+// Cached for the app's lifetime: thread counts drift a little while the app is
+// open, but the hover card is a glance surface and refetching on every hover
+// would hammer thread/list.
+const projectInfoCache = new Map<string, Promise<ProjectInfo>>();
+
+const fetchProjectInfo = (path: string): Promise<ProjectInfo> => {
+  const cached = projectInfoCache.get(path);
+  if (cached) return cached;
+
+  const promise = Promise.all([
+    acpCountSessionsForDir(path),
+    window.electron.getGitRemoteRepo(path).catch(() => null),
+  ]).then(([{ count, capped }, gitRepo]) => ({
+    threadCount: count,
+    threadCountCapped: capped,
+    gitRepo,
+  }));
+  promise.catch(() => projectInfoCache.delete(path));
+  projectInfoCache.set(path, promise);
+  return promise;
+};
+
+const abbreviateHome = (path: string): string => {
+  const homeDir = (window.appConfig?.get('GOOSE_HOME_DIR') as string | undefined) ?? '';
+  return homeDir && path.startsWith(homeDir) ? `~${path.slice(homeDir.length)}` : path;
+};
+
+const ProjectHoverInfo: React.FC<{ group: ProjectGroup }> = ({ group }) => {
+  const intl = useIntl();
+  const [info, setInfo] = useState<ProjectInfo | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchProjectInfo(group.path)
+      .then((result) => {
+        if (!cancelled) setInfo(result);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [group.path]);
+
+  return (
+    <div className="flex w-72 flex-col text-sm">
+      <div className="flex items-center gap-2.5 px-3 pb-2 pt-3">
+        <FolderClosed className="size-[18px] flex-shrink-0" />
+        <span className="truncate text-[15px] font-medium text-text-primary">{group.label}</span>
+      </div>
+      <div className="flex items-center gap-2.5 px-3 pb-3 text-text-secondary">
+        <MessageCircle className="size-[18px] flex-shrink-0" />
+        <span>
+          {info
+            ? intl.formatMessage(
+                info.threadCountCapped ? i18n.projectThreadsCapped : i18n.projectThreads,
+                { count: info.threadCount }
+              )
+            : '…'}
+        </span>
+      </div>
+      <div className="border-t border-border-primary" />
+      <div className="flex flex-col gap-2 px-3 py-3 text-text-secondary">
+        {info?.gitRepo && (
+          <div className="flex items-center gap-2.5">
+            <FolderGit2 className="size-[18px] flex-shrink-0" />
+            <span className="truncate">{info.gitRepo}</span>
+          </div>
+        )}
+        <div className="flex items-center gap-2.5">
+          <FolderClosed className="size-[18px] flex-shrink-0" />
+          <span className="truncate">{abbreviateHome(group.path)}</span>
+        </div>
+      </div>
     </div>
   );
 };
@@ -194,6 +298,7 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
   const [searchResults, setSearchResults] = useState<SessionListItem[] | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [collapsedProjects, setCollapsedProjects] = useState<Set<string>>(new Set());
+  const [fullyShownProjects, setFullyShownProjects] = useState<Set<string>>(new Set());
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -354,38 +459,51 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
       </div>
 
       <div className="mt-4 flex min-h-0 flex-1 flex-col">
-        <div className="px-4 pb-1 text-xs text-text-tertiary">
+        <div className="px-5 pb-1.5 text-sm text-text-tertiary">
           {intl.formatMessage(i18n.projects)}
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
           {isSearching && groups.length === 0 ? (
-            <div className="px-2 py-1.5 text-xs text-text-tertiary">
+            <div className="px-3 py-2 text-sm text-text-tertiary">
               {intl.formatMessage(i18n.searching)}
             </div>
           ) : groups.length === 0 ? (
-            <div className="px-2 py-1.5 text-xs text-text-tertiary">
+            <div className="px-3 py-2 text-sm text-text-tertiary">
               {intl.formatMessage(keyword ? i18n.noResults : i18n.noChats)}
             </div>
           ) : (
             groups.map((group) => {
               const isCollapsed = collapsedProjects.has(group.path) && !keyword;
+              const showAll = fullyShownProjects.has(group.path) || Boolean(keyword);
+              const visibleSessions = showAll
+                ? group.sessions
+                : group.sessions.slice(0, SESSIONS_PER_PROJECT);
+              const hasMore = !showAll && group.sessions.length > visibleSessions.length;
               return (
                 <React.Fragment key={group.path}>
-                  <button
-                    onClick={() => toggleProject(group.path)}
-                    className={rowClass(false)}
-                    title={group.path}
-                  >
-                    {isCollapsed ? (
-                      <ChevronRight className="size-3.5 flex-shrink-0 text-text-tertiary" />
-                    ) : (
-                      <ChevronDown className="size-3.5 flex-shrink-0 text-text-tertiary" />
-                    )}
-                    <Folder className="size-4 flex-shrink-0 text-text-secondary" />
-                    <span className="flex-1 truncate text-left">{group.label}</span>
-                  </button>
+                  <Tooltip delayDuration={400}>
+                    <TooltipTrigger asChild>
+                      <button onClick={() => toggleProject(group.path)} className={rowClass(false)}>
+                        {isCollapsed ? (
+                          <FolderClosed className="size-[18px] flex-shrink-0" />
+                        ) : (
+                          <FolderOpened className="size-[18px] flex-shrink-0" />
+                        )}
+                        <span className="flex-1 truncate text-left">{group.label}</span>
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="right"
+                      align="start"
+                      sideOffset={10}
+                      className="rounded-2xl border border-border-primary bg-background-secondary p-0 text-text-primary shadow-lg"
+                      hideArrow
+                    >
+                      <ProjectHoverInfo group={group} />
+                    </TooltipContent>
+                  </Tooltip>
                   {!isCollapsed &&
-                    group.sessions.map((session) => (
+                    visibleSessions.map((session) => (
                       <SessionRow
                         key={session.id}
                         session={session}
@@ -398,6 +516,16 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
                         onRenamed={fetchSessions}
                       />
                     ))}
+                  {!isCollapsed && hasMore && (
+                    <button
+                      onClick={() =>
+                        setFullyShownProjects((prev) => new Set(prev).add(group.path))
+                      }
+                      className="no-drag flex w-full rounded-full py-2 pl-10 pr-3 text-sm text-text-tertiary transition-colors hover:bg-background-tertiary/60 hover:text-text-primary"
+                    >
+                      {intl.formatMessage(i18n.showMore)}
+                    </button>
+                  )}
                 </React.Fragment>
               );
             })

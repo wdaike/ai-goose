@@ -169,6 +169,7 @@ export type ElectronAPI = {
   listRecentDirs: () => Promise<string[]>;
   listGitWorktreeDirs: (dir: string) => Promise<string[]>;
   getGitBranch: (dir: string) => Promise<string | null>;
+  getGitRemoteRepo: (dir: string) => Promise<string | null>;
 };
 
 export type AppConfigAPI = {
@@ -323,6 +324,7 @@ const electronAPI: ElectronAPI = {
   listRecentDirs: () => ipcRenderer.invoke('list-recent-dirs'),
   listGitWorktreeDirs: (dir: string) => ipcRenderer.invoke('list-git-worktree-dirs', dir),
   getGitBranch: (dir: string) => ipcRenderer.invoke('get-git-branch', dir),
+  getGitRemoteRepo: (dir: string) => ipcRenderer.invoke('get-git-remote-repo', dir),
 };
 
 function getAppLocale(): unknown {

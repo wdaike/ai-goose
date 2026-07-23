@@ -130,7 +130,6 @@ export async function acpListSessions(
     limit: 50,
     searchTerm: filter?.keyword?.trim() || null,
     sortKey: 'updated_at',
-    sourceKinds: ['appServer'],
   });
   return {
     sessions: response.data.map(threadToListItem),
@@ -145,9 +144,32 @@ export async function acpListRecentSessions(maxSessions: number): Promise<Sessio
   const response = await codex.threadList({
     limit: maxSessions,
     sortKey: 'updated_at',
-    sourceKinds: ['appServer'],
   });
   return response.data.map(threadToListItem);
+}
+
+const COUNT_PAGE_SIZE = 100;
+const COUNT_MAX = 1000;
+
+/** Count threads whose cwd matches `workingDir`, capped at COUNT_MAX. */
+export async function acpCountSessionsForDir(
+  workingDir: string
+): Promise<{ count: number; capped: boolean }> {
+  let count = 0;
+  let cursor: string | null = null;
+  while (count < COUNT_MAX) {
+    const response = await codex.threadList({
+      cursor,
+      limit: COUNT_PAGE_SIZE,
+      cwd: workingDir,
+      sortKey: 'updated_at',
+      useStateDbOnly: true,
+    });
+    count += response.data.length;
+    cursor = response.nextCursor ?? null;
+    if (!cursor) return { count, capped: false };
+  }
+  return { count: COUNT_MAX, capped: true };
 }
 
 export async function acpGetSessionListItem(sessionId: string): Promise<SessionListItem> {
