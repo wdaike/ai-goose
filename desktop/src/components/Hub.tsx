@@ -81,7 +81,7 @@ const SUGGESTIONS: Suggestion[] = [
     key: 'build',
     label: 'suggestionBuild',
     icon: Hammer,
-    iconClass: 'text-block-teal',
+    iconClass: 'text-purple-500',
     prompt: 'Help me build a new feature: ',
   },
   {
@@ -100,7 +100,11 @@ const SUGGESTIONS: Suggestion[] = [
   },
 ];
 
-const leafDirName = (dir: string) => dir.replace(/[\\/]+$/, '').split(/[\\/]/).pop() || dir;
+const leafDirName = (dir: string) =>
+  dir
+    .replace(/[\\/]+$/, '')
+    .split(/[\\/]/)
+    .pop() || dir;
 
 export default function Hub({
   setView,
@@ -123,9 +127,7 @@ export default function Hub({
       const lastSessionDir = await acpListSessions()
         .then(({ sessions }) => sessions[0]?.workingDir)
         .catch(() => undefined);
-      const dir =
-        lastSessionDir ||
-        (await window.electron.listRecentDirs().catch(() => []))[0];
+      const dir = lastSessionDir || (await window.electron.listRecentDirs().catch(() => []))[0];
       if (!cancelled && dir) setWorkingDir(dir);
     };
     void applyLastUsedDir();
@@ -224,42 +226,46 @@ export default function Hub({
   };
 
   return (
-    <div className="flex flex-col h-full min-h-0 items-center justify-center px-6 relative">
-      <div className="w-full max-w-4xl">
-        <div className="mb-5 flex justify-center">
-          <CodexCloud className="size-12 text-text-secondary" />
-        </div>
+    <div className="relative flex h-full min-h-0 flex-col items-center overflow-y-auto px-6 pb-4">
+      <div className="flex min-h-[360px] w-full max-w-4xl flex-1 items-end pb-24">
+        <div className="w-full">
+          <div className="mb-8 flex justify-center">
+            <CodexCloud className="size-12 text-text-secondary" />
+          </div>
 
-        <h1 className="mb-10 text-center text-3xl font-normal text-text-primary">
-          {isInProject
-            ? intl.formatMessage(i18n.headline, {
-                project: (
-                  <span className="underline decoration-border-secondary decoration-2 underline-offset-8">
-                    {projectName}
+          <h1 className="mb-12 text-center text-3xl font-normal text-text-primary">
+            {isInProject
+              ? intl.formatMessage(i18n.headline, {
+                  project: (
+                    <span className="underline decoration-border-secondary decoration-2 underline-offset-8">
+                      {projectName}
+                    </span>
+                  ),
+                })
+              : intl.formatMessage(i18n.headlineNoProject)}
+          </h1>
+
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            {SUGGESTIONS.map((suggestion) => {
+              const Icon = suggestion.icon;
+              return (
+                <button
+                  key={suggestion.key}
+                  onClick={() => handleSuggestionClick(suggestion)}
+                  className="flex flex-col items-start gap-8 rounded-2xl border border-border-primary bg-background-secondary/40 p-4 text-left transition-colors hover:bg-background-secondary"
+                >
+                  <Icon className={`size-5 ${suggestion.iconClass}`} />
+                  <span className="text-[15px] leading-snug text-text-primary">
+                    {intl.formatMessage(i18n[suggestion.label])}
                   </span>
-                ),
-              })
-            : intl.formatMessage(i18n.headlineNoProject)}
-        </h1>
-
-        <div className="mb-12 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {SUGGESTIONS.map((suggestion) => {
-            const Icon = suggestion.icon;
-            return (
-              <button
-                key={suggestion.key}
-                onClick={() => handleSuggestionClick(suggestion)}
-                className="flex flex-col items-start gap-8 rounded-2xl border border-border-primary bg-background-secondary/40 p-4 text-left transition-colors hover:bg-background-secondary"
-              >
-                <Icon className={`size-5 ${suggestion.iconClass}`} />
-                <span className="text-[15px] leading-snug text-text-primary">
-                  {intl.formatMessage(i18n[suggestion.label])}
-                </span>
-              </button>
-            );
-          })}
+                </button>
+              );
+            })}
+          </div>
         </div>
+      </div>
 
+      <div className="w-full max-w-4xl shrink-0">
         <div className="mb-2 flex items-center gap-1 rounded-2xl border border-border-primary bg-background-secondary/40 px-3 py-2">
           <DirSwitcher
             className=""

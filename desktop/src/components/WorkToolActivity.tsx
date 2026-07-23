@@ -171,7 +171,7 @@ export default function WorkToolActivity({
           className={cn('h-4 w-4 shrink-0 transition-transform', isExpanded && 'rotate-90')}
         />
       </CollapsibleTrigger>
-      <CollapsibleContent className="pt-2 pl-6">
+      <CollapsibleContent className="pt-2">
         <div className="flex flex-col gap-2">{children}</div>
       </CollapsibleContent>
     </Collapsible>

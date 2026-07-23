@@ -118,9 +118,27 @@ export function applyAppearance(settings?: AppearanceSettings): void {
 
   root.style.setProperty('--appearance-accent', theme.accent);
   root.style.setProperty('--color-background-primary', theme.background);
+  root.style.setProperty(
+    '--color-background-secondary',
+    `color-mix(in srgb, ${theme.foreground} 3%, ${theme.background})`
+  );
+  root.style.setProperty(
+    '--color-background-tertiary',
+    `color-mix(in srgb, ${theme.foreground} 8%, ${theme.background})`
+  );
   root.style.setProperty('--color-text-primary', theme.foreground);
+  root.style.setProperty(
+    '--color-text-secondary',
+    `color-mix(in srgb, ${theme.foreground} 62%, ${theme.background})`
+  );
+  root.style.setProperty(
+    '--color-text-tertiary',
+    `color-mix(in srgb, ${theme.foreground} 45%, ${theme.background})`
+  );
   root.style.setProperty('--color-background-info', theme.accent);
+  root.style.setProperty('--color-text-info', theme.accent);
   root.style.setProperty('--color-border-info', theme.accent);
+  root.style.setProperty('--color-ring-info', theme.accent);
 
   root.style.setProperty('--font-sans', s.uiFont);
   root.style.setProperty('--font-mono', s.codeFont);

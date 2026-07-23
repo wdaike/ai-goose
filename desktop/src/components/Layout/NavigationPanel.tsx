@@ -403,7 +403,7 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.15 }}
       className={cn(
-        'flex h-full flex-col bg-background-secondary outline-none',
+        'flex h-full flex-col bg-[var(--sidebar)] backdrop-blur-xl outline-none',
         'border-r border-border-primary',
         className
       )}
@@ -516,9 +516,7 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
                     ))}
                   {!isCollapsed && hasMore && (
                     <button
-                      onClick={() =>
-                        setFullyShownProjects((prev) => new Set(prev).add(group.path))
-                      }
+                      onClick={() => setFullyShownProjects((prev) => new Set(prev).add(group.path))}
                       className="no-drag flex w-full rounded-full py-2 pl-10 pr-3 text-sm text-text-tertiary transition-colors hover:bg-background-tertiary/60 hover:text-text-primary"
                     >
                       {intl.formatMessage(i18n.showMore)}

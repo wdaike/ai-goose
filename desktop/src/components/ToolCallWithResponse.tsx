@@ -136,6 +136,46 @@ function getToolResultContent(toolResult: Record<string, unknown>): ContentBlock
   });
 }
 
+function ShellCommandCard({
+  command,
+  isCancelled,
+  toolResponse,
+}: {
+  command: unknown;
+  isCancelled: boolean;
+  toolResponse?: ToolResponseMessageContent;
+}) {
+  const result = toolResponse?.toolResult as Record<string, unknown> | undefined;
+  const output =
+    result?.status === 'success'
+      ? getToolResultContent(result)
+          .flatMap((item) =>
+            'text' in item && typeof item.text === 'string' ? [item.text.trimEnd()] : []
+          )
+          .filter(Boolean)
+          .join('\n')
+      : result?.status === 'error' && typeof result.error === 'string'
+        ? result.error
+        : '';
+
+  return (
+    <div className="w-full overflow-hidden rounded-xl border border-border-primary bg-background-secondary/70 text-text-secondary">
+      <div className="px-3 pt-2.5 text-sm font-medium">Shell</div>
+      <div className="max-h-80 overflow-auto px-3 pt-4 pb-5 font-mono text-xs leading-5">
+        <div className="flex min-w-0 items-start">
+          <span className="mr-2 select-none text-text-tertiary">$</span>
+          <pre className="min-w-0 flex-1 whitespace-pre-wrap break-words font-mono">
+            {typeof command === 'string' ? command : JSON.stringify(command)}
+          </pre>
+        </div>
+        {!isCancelled && output && (
+          <pre className="mt-1 whitespace-pre-wrap break-words font-mono">{output}</pre>
+        )}
+      </div>
+    </div>
+  );
+}
+
 interface McpAppWrapperProps {
   toolRequest: ToolRequestMessageContent;
   toolResponse?: ToolResponseMessageContent;
@@ -238,6 +278,16 @@ export default function ToolCallWithResponse({
   const structuredFileChanges = getStructuredFileChanges(toolCall);
   if (structuredFileChanges && !showInlineApproval) {
     return <FileChangeCard changes={structuredFileChanges} />;
+  }
+
+  if (getToolName(toolCall.name) === 'shell' && !showInlineApproval) {
+    return (
+      <ShellCommandCard
+        command={toolCall.arguments?.command}
+        isCancelled={isCancelledMessage}
+        toolResponse={toolResponse}
+      />
+    );
   }
 
   return (

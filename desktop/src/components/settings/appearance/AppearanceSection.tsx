@@ -229,9 +229,15 @@ function ThemeMockup({ dark }: { dark: boolean }) {
           dark ? 'bg-[#2a2a2a]' : 'bg-white'
         )}
       >
-        <div className={cn('mb-2.5 h-1.5 w-3/5 rounded-full', dark ? 'bg-[#4a4a4a]' : 'bg-[#dcdcdc]')} />
-        <div className={cn('mb-1.5 h-1 w-4/5 rounded-full', dark ? 'bg-[#3d3d3d]' : 'bg-[#e8e8e8]')} />
-        <div className={cn('mb-1.5 h-1 w-2/3 rounded-full', dark ? 'bg-[#3d3d3d]' : 'bg-[#e8e8e8]')} />
+        <div
+          className={cn('mb-2.5 h-1.5 w-3/5 rounded-full', dark ? 'bg-[#4a4a4a]' : 'bg-[#dcdcdc]')}
+        />
+        <div
+          className={cn('mb-1.5 h-1 w-4/5 rounded-full', dark ? 'bg-[#3d3d3d]' : 'bg-[#e8e8e8]')}
+        />
+        <div
+          className={cn('mb-1.5 h-1 w-2/3 rounded-full', dark ? 'bg-[#3d3d3d]' : 'bg-[#e8e8e8]')}
+        />
         <div className={cn('h-1 w-3/4 rounded-full', dark ? 'bg-[#3d3d3d]' : 'bg-[#e8e8e8]')} />
       </div>
     </div>
@@ -357,7 +363,9 @@ function DiffPane({
             'flex items-center',
             line.changed &&
               markers === 'color' &&
-              (removed ? 'bg-red-500/10 dark:bg-red-500/15' : 'bg-emerald-500/10 dark:bg-emerald-500/15')
+              (removed
+                ? 'bg-red-500/10 dark:bg-red-500/15'
+                : 'bg-emerald-500/10 dark:bg-emerald-500/15')
           )}
         >
           <span
@@ -462,15 +470,20 @@ export default function AppearanceSection() {
     () =>
       JSON.stringify(settings.themes) === JSON.stringify(CODEX_THEME_PRESET) &&
       settings.uiFont === DEFAULT_APPEARANCE.uiFont &&
-      settings.codeFont === DEFAULT_APPEARANCE.codeFont,
+      settings.codeFont === DEFAULT_APPEARANCE.codeFont &&
+      settings.translucentSidebar === DEFAULT_APPEARANCE.translucentSidebar &&
+      settings.contrast === DEFAULT_APPEARANCE.contrast &&
+      settings.pointerCursors === DEFAULT_APPEARANCE.pointerCursors &&
+      settings.reduceMotion === DEFAULT_APPEARANCE.reduceMotion &&
+      settings.uiFontSize === DEFAULT_APPEARANCE.uiFontSize &&
+      settings.codeFontSize === DEFAULT_APPEARANCE.codeFontSize &&
+      settings.diffMarkers === DEFAULT_APPEARANCE.diffMarkers &&
+      settings.fontSmoothing === DEFAULT_APPEARANCE.fontSmoothing,
     [settings]
   );
 
   const handleCopyTheme = () => {
-    const { themes, uiFont, codeFont, translucentSidebar, contrast } = settings;
-    navigator.clipboard.writeText(
-      JSON.stringify({ themes, uiFont, codeFont, translucentSidebar, contrast }, null, 2)
-    );
+    navigator.clipboard.writeText(JSON.stringify(settings, null, 2));
   };
 
   const handleImportFile = async (file: File) => {
@@ -498,9 +511,8 @@ export default function AppearanceSection() {
   const handlePresetChange = (value: string) => {
     if (value === 'codex') {
       update({
+        ...DEFAULT_APPEARANCE,
         themes: cloneThemePreset(),
-        uiFont: DEFAULT_APPEARANCE.uiFont,
-        codeFont: DEFAULT_APPEARANCE.codeFont,
       });
     }
   };

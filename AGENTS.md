@@ -60,6 +60,9 @@ sdk/                   # @aaif/goose-sdk — types for the legacy acp seams
 
 - Codex: All backend behavior belongs to `codex app-server` — extend
   `src/codex/engine/` rather than reimplementing anything Codex provides
+- Open source first: Before building custom functionality, evaluate mature
+  open-source solutions and the project's existing dependencies. Reuse them
+  when they satisfy the requirements, and only implement the uncovered gaps.
 - MCP: servers are configured in codex `config.toml` (`mcp_servers.*`) via
   `config/batchWrite`; status/tools via `mcpServerStatus/list`
 - UI Desktop: Use local `src/types/*` types. Do not import generated OpenAPI
