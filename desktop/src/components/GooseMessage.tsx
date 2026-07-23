@@ -19,7 +19,7 @@ import {
 } from '../types/message';
 import ToolCallConfirmation from './ToolCallConfirmation';
 import ElicitationRequest from './ElicitationRequest';
-import MessageCopyLink from './MessageCopyLink';
+import MessageActions from './MessageActions';
 import MessageUsageStats from './MessageUsageStats';
 import { cn } from '../utils';
 import { identifyConsecutiveToolCalls, shouldHideTimestamp } from '../utils/toolCallChaining';
@@ -160,22 +160,21 @@ export default function GooseMessage({
               </div>
             )}
 
-            {toolRequests.length === 0 && (
-              <div className="relative flex items-center justify-between">
-                {!isStreaming && !isInWorkGroup && (
-                  <div className="text-xs font-mono text-text-secondary pt-1 transition-all duration-200 group-hover:-translate-y-4 group-hover:opacity-0">
+            {toolRequests.length === 0 && !isStreaming && !isInWorkGroup && (
+              <div className="relative flex items-center justify-between pt-1.5">
+                {message.content.every((content) => content.type === 'text') ? (
+                  <MessageActions
+                    text={displayText}
+                    contentRef={contentRef}
+                    className="-ml-1.5 opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+                  />
+                ) : (
+                  <div className="text-xs font-mono text-text-secondary" title={timestamp}>
                     {timestamp}
                   </div>
                 )}
-                {message.content.every((content) => content.type === 'text') &&
-                  !isStreaming &&
-                  !isInWorkGroup && (
-                    <div className="absolute left-0 pt-1">
-                      <MessageCopyLink text={displayText} contentRef={contentRef} />
-                    </div>
-                  )}
-                {!isStreaming && !isInWorkGroup && message.metadata.usage && (
-                  <div className="pt-1 transition-all duration-200 opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0">
+                {message.metadata.usage && (
+                  <div className="transition-all duration-200 opacity-0 group-hover:opacity-100">
                     <MessageUsageStats usage={message.metadata.usage} />
                   </div>
                 )}
