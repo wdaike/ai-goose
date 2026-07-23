@@ -33,6 +33,14 @@ export interface MappingState {
 
 const VISIBLE = { userVisible: true, agentVisible: true } as const;
 
+const TOOL_ITEM_TYPES = new Set<string>([
+  'commandExecution',
+  'fileChange',
+  'mcpToolCall',
+  'dynamicToolCall',
+  'webSearch',
+]);
+
 function created(state: MappingState, itemId: string): number {
   let value = state.createdAt.get(itemId);
   if (value === undefined) {
@@ -291,29 +299,37 @@ export function mapThreadToMessages(state: MappingState): Message[] {
     );
   };
 
-  const fallbackFinalMessageIds = new Set<string>();
+  // For models that never set message phases, texts followed by tool activity in
+  // the same turn are progress commentary; texts after the last tool call are the
+  // final answer. Restored threads can lack tool items entirely (codex does not
+  // reconstruct dynamic tool calls from rollout history), in which case nothing
+  // is grouped and the turn renders flat.
+  const fallbackWorkMessageIds = new Set<string>();
   let segmentStart = 0;
-  const findFallbackFinal = (segmentEnd: number, isActive: boolean) => {
-    if (isActive) return;
+  const markFallbackWork = (segmentEnd: number, isActive: boolean) => {
     const segment = state.items.slice(segmentStart, segmentEnd);
-    if (segment.some((item) => item.type === 'agentMessage' && item.phase === 'final_answer')) {
+    if (
+      !isActive &&
+      segment.some((item) => item.type === 'agentMessage' && item.phase === 'final_answer')
+    ) {
       return;
     }
-    for (let i = segment.length - 1; i >= 0; i--) {
-      const item = segment[i];
-      if (item.type === 'agentMessage' && item.phase === null) {
-        fallbackFinalMessageIds.add(item.id);
-      }
-      break;
-    }
+    let lastToolOffset = -1;
+    segment.forEach((item, offset) => {
+      if (TOOL_ITEM_TYPES.has(item.type)) lastToolOffset = offset;
+    });
+    segment.forEach((item, offset) => {
+      if (item.type !== 'agentMessage' || item.phase !== null) return;
+      if (isActive || offset < lastToolOffset) fallbackWorkMessageIds.add(item.id);
+    });
   };
 
   state.items.forEach((item, index) => {
     if (item.type !== 'userMessage' || index === 0) return;
-    findFallbackFinal(index, false);
+    markFallbackWork(index, false);
     segmentStart = index;
   });
-  findFallbackFinal(state.items.length, Boolean(state.activeTurnId));
+  markFallbackWork(state.items.length, Boolean(state.activeTurnId));
 
   for (const item of state.items) {
     if (item.type === 'userMessage') {
@@ -327,7 +343,7 @@ export function mapThreadToMessages(state: MappingState): Message[] {
         state,
         item,
         workGroupId,
-        item.type === 'agentMessage' && item.phase === null && !fallbackFinalMessageIds.has(item.id)
+        item.type === 'agentMessage' && item.phase === null && fallbackWorkMessageIds.has(item.id)
       )
     );
   }
