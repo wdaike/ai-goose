@@ -16,7 +16,7 @@ const i18n = defineMessages({
   },
   allSet: {
     id: 'onboardingSuccess.allSet',
-    defaultMessage: "You're all set to start using goose.",
+    defaultMessage: "You're all set to start using iCodex.",
   },
   privacyTitle: {
     id: 'onboardingSuccess.privacyTitle',
@@ -25,7 +25,7 @@ const i18n = defineMessages({
   privacyDescription: {
     id: 'onboardingSuccess.privacyDescription',
     defaultMessage:
-      'Anonymous usage data helps improve goose. We never collect your conversations, code, or personal data.',
+      'Anonymous usage data helps improve iCodex. We never collect your conversations, code, or personal data.',
   },
   learnMore: {
     id: 'onboardingSuccess.learnMore',

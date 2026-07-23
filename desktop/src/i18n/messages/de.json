@@ -33,7 +33,7 @@
     "defaultMessage": "Delete \"{name}\"? This cannot be undone."
   },
   "appsView.description": {
-    "defaultMessage": "Anwendungen von Ihren MCP-Servern und Apps, die goose selbst erstellt hat. Sie können über die Chat-Oberfläche neue Apps anfordern, die dann hier erscheinen."
+    "defaultMessage": "Anwendungen von Ihren MCP-Servern und Apps, die iCodex selbst erstellt hat. Sie können über die Chat-Oberfläche neue Apps anfordern, die dann hier erscheinen."
   },
   "appsView.errorLoading": {
     "defaultMessage": "Fehler beim Laden der Apps: {error}"
@@ -51,7 +51,7 @@
     "defaultMessage": "Apps werden geladen..."
   },
   "appsView.noAppsDescription": {
-    "defaultMessage": "Öffnen Sie einen Chat und bitten Sie goose um die gewünschte App. goose kann eine für Sie erstellen, die dann hier erscheint. Oder wenn jemand eine App geteilt hat, können Sie sie über die Schaltfläche oben importieren."
+    "defaultMessage": "Öffnen Sie einen Chat und bitten Sie iCodex um die gewünschte App. iCodex kann eine für Sie erstellen, die dann hier erscheint. Oder wenn jemand eine App geteilt hat, können Sie sie über die Schaltfläche oben importieren."
   },
   "appsView.noAppsTitle": {
     "defaultMessage": "Keine Apps verfügbar"
@@ -90,7 +90,7 @@
     "defaultMessage": "Anmeldeinformation gelöscht"
   },
   "authSettings.description": {
-    "defaultMessage": "Verwalten Sie die lokal von goose gespeicherten Anbieter-Anmeldeinformationen."
+    "defaultMessage": "Verwalten Sie die lokal von iCodex gespeicherten Anbieter-Anmeldeinformationen."
   },
   "authSettings.empty": {
     "defaultMessage": "Es wurden keine lokal gespeicherten Anbieter-Anmeldeinformationen gefunden."
@@ -174,10 +174,13 @@
     "defaultMessage": "Starten"
   },
   "chat.notification.taskComplete.body": {
-    "defaultMessage": "Klicken Sie hier, um Goose wieder in den Vordergrund zu holen."
+    "defaultMessage": "Klicken Sie hier, um iCodex wieder in den Vordergrund zu holen."
   },
   "chat.notification.taskComplete.title": {
-    "defaultMessage": "Goose hat die Aufgabe abgeschlossen."
+    "defaultMessage": "iCodex hat die Aufgabe abgeschlossen."
+  },
+  "chat.requestFailed": {
+    "defaultMessage": "Anfrage fehlgeschlagen"
   },
   "chatInput.contextWindow": {
     "defaultMessage": "Kontextfenster"
@@ -225,13 +228,13 @@
     "defaultMessage": "Warten auf das Speichern der Bilder..."
   },
   "chatSettings.modeDescription": {
-    "defaultMessage": "Wählen Sie den Standardmodus, den Goose für neue Sitzungen verwendet. Bestehende Sitzungen behalten ihren aktuellen Modus bei."
+    "defaultMessage": "Wählen Sie den Standardmodus, den iCodex für neue Sitzungen verwendet. Bestehende Sitzungen behalten ihren aktuellen Modus bei."
   },
   "chatSettings.modeTitle": {
     "defaultMessage": "Standardmodus"
   },
   "chatSettings.responseStylesDescription": {
-    "defaultMessage": "Wählen Sie, wie Goose seine Antworten formatieren und gestalten soll"
+    "defaultMessage": "Wählen Sie, wie iCodex seine Antworten formatieren und gestalten soll"
   },
   "chatSettings.responseStylesTitle": {
     "defaultMessage": "Antwortstile"
@@ -252,10 +255,10 @@
     "defaultMessage": "Konfigurationseditor"
   },
   "configSettings.description": {
-    "defaultMessage": "Bearbeiten Sie Ihre goose-Konfigurationseinstellungen"
+    "defaultMessage": "Bearbeiten Sie Ihre iCodex-Konfigurationseinstellungen"
   },
   "configSettings.descriptionWithProvider": {
-    "defaultMessage": "Bearbeiten Sie Ihre goose-Konfigurationseinstellungen (aktuelle Einstellungen für {provider})"
+    "defaultMessage": "Bearbeiten Sie Ihre iCodex-Konfigurationseinstellungen (aktuelle Einstellungen für {provider})"
   },
   "configSettings.done": {
     "defaultMessage": "Fertig"
@@ -327,7 +330,7 @@
     "defaultMessage": "Max. Durchgänge"
   },
   "conversationLimitsDropdown.maxTurnsDescription": {
-    "defaultMessage": "Maximale Anzahl an Agentendurchgängen, bevor Goose eine Benutzereingabe anfordert"
+    "defaultMessage": "Maximale Anzahl an Agentendurchgängen, bevor iCodex eine Benutzereingabe anfordert"
   },
   "costTracker.costUnavailable": {
     "defaultMessage": "Kostendaten für {model} nicht verfügbar ({inputTokens} Eingabe, {outputTokens} Ausgabe-Token)"
@@ -513,7 +516,7 @@
     "defaultMessage": "{name}-Einstellungen bearbeiten"
   },
   "defaultCardButtons.getStarted": {
-    "defaultMessage": "Loslegen mit goose!"
+    "defaultMessage": "Loslegen mit iCodex!"
   },
   "defaultProviderSetupForm.apiHostLabel": {
     "defaultMessage": "API-Host"
@@ -663,7 +666,7 @@
     "defaultMessage": "Die Informationsanfrage wurde abgebrochen."
   },
   "elicitationRequest.defaultMessage": {
-    "defaultMessage": "Goose benötigt einige Informationen von Ihnen."
+    "defaultMessage": "iCodex benötigt einige Informationen von Ihnen."
   },
   "elicitationRequest.expired": {
     "defaultMessage": "Diese Anfrage ist abgelaufen. Die Erweiterung muss erneut nachfragen."
@@ -708,7 +711,7 @@
     "defaultMessage": "Ein Fehler ist aufgetreten."
   },
   "errorBoundary.errorWithVersion": {
-    "defaultMessage": "In Goose v{version} ist ein Fehler aufgetreten."
+    "defaultMessage": "In iCodex v{version} ist ein Fehler aufgetreten."
   },
   "errorBoundary.heading": {
     "defaultMessage": "Honk!"
@@ -858,19 +861,19 @@
     "defaultMessage": "AA:BB:CC:... oder sha256/base64"
   },
   "externalBackendSection.description": {
-    "defaultMessage": "Standardmäßig startet goose einen Server für Sie. Verwenden Sie dies, um eine Verbindung zu einem externen goose-Server herzustellen"
+    "defaultMessage": "Standardmäßig startet iCodex einen Server für Sie. Verwenden Sie dies, um eine Verbindung zu einem externen iCodex-Server herzustellen"
   },
   "externalBackendSection.fingerprintRequiresHttps": {
     "defaultMessage": "Certificate fingerprint requires an https URL"
   },
   "externalBackendSection.restartNote": {
-    "defaultMessage": "Änderungen werden erst nach einem Neustart von Goose wirksam. Neue Chat-Fenster verbinden sich mit dem externen Server."
+    "defaultMessage": "Änderungen werden erst nach einem Neustart von iCodex wirksam. Neue Chat-Fenster verbinden sich mit dem externen Server."
   },
   "externalBackendSection.secretKey": {
     "defaultMessage": "Geheimer Schlüssel"
   },
   "externalBackendSection.secretKeyHelp": {
-    "defaultMessage": "Der auf dem Goose-Server konfigurierte geheime Schlüssel (GOOSE_SERVER__SECRET_KEY)"
+    "defaultMessage": "Der auf dem iCodex-Server konfigurierte geheime Schlüssel (GOOSE_SERVER__SECRET_KEY)"
   },
   "externalBackendSection.secretKeyPlaceholder": {
     "defaultMessage": "Geben Sie den geheimen Schlüssel des Servers ein"
@@ -879,10 +882,10 @@
     "defaultMessage": "Server-URL"
   },
   "externalBackendSection.serverUrlHelp": {
-    "defaultMessage": "Enter the HTTP(S) base URL. Goose checks /status and connects to /acp under this base."
+    "defaultMessage": "Enter the HTTP(S) base URL. iCodex checks /status and connects to /acp under this base."
   },
   "externalBackendSection.title": {
-    "defaultMessage": "Goose-Server"
+    "defaultMessage": "iCodex-Server"
   },
   "externalBackendSection.urlBaseError": {
     "defaultMessage": "URL must be the backend base URL before /acp, without query parameters or fragments"
@@ -897,7 +900,7 @@
     "defaultMessage": "Externen Server verwenden"
   },
   "externalBackendSection.useExternalServerDescription": {
-    "defaultMessage": "Verbindung zu einem anderswo laufenden goose-Server herstellen (erfordert Neustart der App)"
+    "defaultMessage": "Verbindung zu einem anderswo laufenden iCodex-Server herstellen (erfordert Neustart der App)"
   },
   "fileChangeCard.document": {
     "defaultMessage": "Dokument"
@@ -917,11 +920,26 @@
   "fileChangeCard.showMoreFiles": {
     "defaultMessage": "{count} weitere Dateien anzeigen"
   },
+  "filesPanel.backToFiles": {
+    "defaultMessage": "Zurück zu den Dateien"
+  },
+  "filesPanel.binaryFile": {
+    "defaultMessage": "Binärdateien können nicht in der Vorschau angezeigt werden."
+  },
   "filesPanel.closePanel": {
     "defaultMessage": "Panel schließen"
   },
   "filesPanel.emptyDirectory": {
     "defaultMessage": "Leeres Verzeichnis"
+  },
+  "filesPanel.failedToReadFile": {
+    "defaultMessage": "Vorschau dieser Datei nicht möglich"
+  },
+  "filesPanel.fileTooLarge": {
+    "defaultMessage": "Diese Datei ist zu groß für die Vorschau."
+  },
+  "filesPanel.loadingFile": {
+    "defaultMessage": "Datei wird geladen…"
   },
   "filesPanel.refresh": {
     "defaultMessage": "Aktualisieren"
@@ -936,7 +954,7 @@
     "defaultMessage": "Entwickler"
   },
   "goosehintsModal.dialogDescription": {
-    "defaultMessage": "Stellen Sie zusätzlichen Kontext zu Ihrem Projekt bereit, um die Kommunikation mit Goose zu verbessern"
+    "defaultMessage": "Stellen Sie zusätzlichen Kontext zu Ihrem Projekt bereit, um die Kommunikation mit iCodex zu verbessern"
   },
   "goosehintsModal.dialogTitle": {
     "defaultMessage": "Projekt-Hinweise konfigurieren (.goosehints)"
@@ -957,7 +975,7 @@
     "defaultMessage": ".goosehints-Datei gefunden unter: {filePath}"
   },
   "goosehintsModal.helpText1": {
-    "defaultMessage": ".goosehints ist eine Textdatei, mit der zusätzlicher Kontext zu Ihrem Projekt bereitgestellt und die Kommunikation mit Goose verbessert wird."
+    "defaultMessage": ".goosehints ist eine Textdatei, mit der zusätzlicher Kontext zu Ihrem Projekt bereitgestellt und die Kommunikation mit iCodex verbessert wird."
   },
   "goosehintsModal.helpText2": {
     "defaultMessage": "Bitte stellen Sie sicher, dass die Erweiterung {bold} auf der Erweiterungsseite aktiviert ist. Diese Erweiterung ist erforderlich, um .goosehints zu verwenden. Sie müssen Ihre Sitzung neu starten, damit Aktualisierungen an .goosehints wirksam werden."
@@ -984,13 +1002,13 @@
     "defaultMessage": "Konfigurieren"
   },
   "goosehintsSection.description": {
-    "defaultMessage": "Konfigurieren Sie die .goosehints-Datei Ihres Projekts, um Goose zusätzlichen Kontext bereitzustellen"
+    "defaultMessage": "Konfigurieren Sie die .goosehints-Datei Ihres Projekts, um iCodex zusätzlichen Kontext bereitzustellen"
   },
   "goosehintsSection.title": {
     "defaultMessage": "Projekt-Hinweise (.goosehints)"
   },
   "groupedExtensionLoadingToast.askGoose": {
-    "defaultMessage": "goose fragen"
+    "defaultMessage": "iCodex fragen"
   },
   "groupedExtensionLoadingToast.collapseDetails": {
     "defaultMessage": "Details einklappen"
@@ -1122,7 +1140,7 @@
     "defaultMessage": "Hugging Face"
   },
   "imagePreview.altText": {
-    "defaultMessage": "goose-Bild"
+    "defaultMessage": "iCodex-Bild"
   },
   "imagePreview.clickToCollapse": {
     "defaultMessage": "Zum Einklappen klicken"
@@ -1185,13 +1203,13 @@
     "defaultMessage": "Anwendungstastenkürzel"
   },
   "keyboardShortcuts.categoryApplicationDescription": {
-    "defaultMessage": "Diese Tastenkürzel funktionieren, wenn Goose die aktive Anwendung ist"
+    "defaultMessage": "Diese Tastenkürzel funktionieren, wenn iCodex die aktive Anwendung ist"
   },
   "keyboardShortcuts.categoryGlobal": {
     "defaultMessage": "Globale Tastenkürzel"
   },
   "keyboardShortcuts.categoryGlobalDescription": {
-    "defaultMessage": "Diese Tastenkürzel funktionieren systemweit, auch wenn Goose nicht im Fokus ist"
+    "defaultMessage": "Diese Tastenkürzel funktionieren systemweit, auch wenn iCodex nicht im Fokus ist"
   },
   "keyboardShortcuts.categorySearch": {
     "defaultMessage": "Such-Tastenkürzel"
@@ -1233,10 +1251,10 @@
     "defaultMessage": "Rückwärts suchen"
   },
   "keyboardShortcuts.focusWindowDescription": {
-    "defaultMessage": "Goose-Fenster von überall in den Vordergrund holen"
+    "defaultMessage": "iCodex-Fenster von überall in den Vordergrund holen"
   },
   "keyboardShortcuts.focusWindowLabel": {
-    "defaultMessage": "Goose-Fenster fokussieren"
+    "defaultMessage": "iCodex-Fenster fokussieren"
   },
   "keyboardShortcuts.loading": {
     "defaultMessage": "Wird geladen..."
@@ -1248,7 +1266,7 @@
     "defaultMessage": "Neuer Chat"
   },
   "keyboardShortcuts.newChatWindowDescription": {
-    "defaultMessage": "Ein neues Goose-Fenster öffnen"
+    "defaultMessage": "Ein neues iCodex-Fenster öffnen"
   },
   "keyboardShortcuts.newChatWindowLabel": {
     "defaultMessage": "Neues Chat-Fenster"
@@ -1287,7 +1305,7 @@
     "defaultMessage": "Auf Standard zurücksetzen"
   },
   "keyboardShortcuts.restartDescription": {
-    "defaultMessage": "Änderungen an Anwendungstastenkürzeln (wie Neuer Chat, Einstellungen usw.) erfordern einen Neustart von Goose, um wirksam zu werden. Globale Tastenkürzel (Fenster fokussieren, Schnellstart) funktionieren sofort."
+    "defaultMessage": "Änderungen an Anwendungstastenkürzeln (wie Neuer Chat, Einstellungen usw.) erfordern einen Neustart von iCodex, um wirksam zu werden. Globale Tastenkürzel (Fenster fokussieren, Schnellstart) funktionieren sofort."
   },
   "keyboardShortcuts.restartRequired": {
     "defaultMessage": "Neustart erforderlich"
@@ -1317,28 +1335,28 @@
     "defaultMessage": "Navigation umschalten"
   },
   "launcher.placeholder": {
-    "defaultMessage": "Frag goose irgendetwas..."
+    "defaultMessage": "Frag iCodex irgendetwas..."
   },
   "loadingGoose.compacting": {
-    "defaultMessage": "goose komprimiert die Unterhaltung..."
+    "defaultMessage": "komprimiert"
   },
   "loadingGoose.idle": {
-    "defaultMessage": "goose arbeitet daran…"
+    "defaultMessage": "Denkt nach..."
   },
   "loadingGoose.loadingConversation": {
-    "defaultMessage": "Unterhaltung wird geladen..."
+    "defaultMessage": "lädt…"
   },
   "loadingGoose.restartingAgent": {
-    "defaultMessage": "Sitzung wird neu gestartet..."
+    "defaultMessage": "startet neu…"
   },
   "loadingGoose.streaming": {
-    "defaultMessage": "goose arbeitet daran…"
+    "defaultMessage": "Denkt nach..."
   },
   "loadingGoose.thinking": {
-    "defaultMessage": "goose denkt nach…"
+    "defaultMessage": "Denkt nach..."
   },
   "loadingGoose.waiting": {
-    "defaultMessage": "goose wartet…"
+    "defaultMessage": "wartet"
   },
   "localInferenceSettings.deleteConfirm": {
     "defaultMessage": "Dieses Modell löschen? Sie können es später erneut herunterladen."
@@ -2043,7 +2061,7 @@
     "defaultMessage": "Der Server startet möglicherweise gerade oder ist vorübergehend nicht verfügbar."
   },
   "onboardingGuard.checkProviderErrorTitle": {
-    "defaultMessage": "Verbindung zum Goose-Server nicht möglich"
+    "defaultMessage": "Verbindung zum iCodex-Server nicht möglich"
   },
   "onboardingGuard.retry": {
     "defaultMessage": "Erneut versuchen"
@@ -2052,10 +2070,10 @@
     "defaultMessage": "Ihr lokaler KI-Agent. Verbinden Sie einen KI-Modellanbieter, um zu beginnen."
   },
   "onboardingGuard.welcomeTitle": {
-    "defaultMessage": "Willkommen bei goose"
+    "defaultMessage": "Willkommen bei iCodex"
   },
   "onboardingSuccess.allSet": {
-    "defaultMessage": "Sie können jetzt mit goose loslegen."
+    "defaultMessage": "Sie können jetzt mit iCodex loslegen."
   },
   "onboardingSuccess.connectedTo": {
     "defaultMessage": "Verbunden mit {providerName}"
@@ -2070,7 +2088,7 @@
     "defaultMessage": "Lokales Modell bereit"
   },
   "onboardingSuccess.privacyDescription": {
-    "defaultMessage": "Anonyme Nutzungsdaten helfen, goose zu verbessern. Wir erfassen niemals Ihre Konversationen, Ihren Code oder Ihre persönlichen Daten."
+    "defaultMessage": "Anonyme Nutzungsdaten helfen, iCodex zu verbessern. Wir erfassen niemals Ihre Konversationen, Ihren Code oder Ihre persönlichen Daten."
   },
   "onboardingSuccess.privacyTitle": {
     "defaultMessage": "Datenschutz"
@@ -2169,7 +2187,7 @@
     "defaultMessage": "Keine Skills installiert"
   },
   "pluginsSettings.noSkillsDescription": {
-    "defaultMessage": "Skills werden aus SKILL.md-Dateien im goose-Skills-Verzeichnis geladen."
+    "defaultMessage": "Skills werden aus SKILL.md-Dateien im iCodex-Skills-Verzeichnis geladen."
   },
   "pluginsSettings.saveChanges": {
     "defaultMessage": "Änderungen speichern"
@@ -2226,10 +2244,10 @@
     "defaultMessage": "Sitzungsmetriken (Dauer, Anzahl der Interaktionen, Token-Nutzung)"
   },
   "privacyInfoModal.collectVersion": {
-    "defaultMessage": "goose-Version und Installationsmethode"
+    "defaultMessage": "iCodex-Version und Installationsmethode"
   },
   "privacyInfoModal.description": {
-    "defaultMessage": "Anonyme Nutzungsdaten helfen uns zu verstehen, wie goose genutzt wird, und Verbesserungsbereiche zu identifizieren."
+    "defaultMessage": "Anonyme Nutzungsdaten helfen uns zu verstehen, wie iCodex genutzt wird, und Verbesserungsbereiche zu identifizieren."
   },
   "privacyInfoModal.neverCollect": {
     "defaultMessage": "Wir erfassen niemals Ihre Konversationen, Ihren Code, Tool-Argumente, Fehlermeldungen oder persönliche Daten. Sie können diese Einstellung jederzeit in den Einstellungen ändern."
@@ -2322,7 +2340,7 @@
     "defaultMessage": "Anmeldung läuft..."
   },
   "providerConfigurationModal.addApiKeyDescription": {
-    "defaultMessage": "Fügen Sie Ihre API-Schlüssel für diesen Anbieter hinzu, um ihn in goose zu integrieren"
+    "defaultMessage": "Fügen Sie Ihre API-Schlüssel für diesen Anbieter hinzu, um ihn in iCodex zu integrieren"
   },
   "providerConfigurationModal.browserWindowHint": {
     "defaultMessage": "Es öffnet sich ein Browserfenster, in dem Sie die Anmeldung abschließen können."
@@ -2358,7 +2376,7 @@
     "defaultMessage": "Fehler"
   },
   "providerConfigurationModal.externalSetupIntro": {
-    "defaultMessage": "Dieser Anbieter wird außerhalb von goose konfiguriert. Befolgen Sie diese Schritte:"
+    "defaultMessage": "Dieser Anbieter wird außerhalb von iCodex konfiguriert. Befolgen Sie diese Schritte:"
   },
   "providerConfigurationModal.goBack": {
     "defaultMessage": "Zurück"
@@ -2442,7 +2460,7 @@
     "defaultMessage": "Anbieter werden geladen..."
   },
   "providerSettings.onboardingDescription": {
-    "defaultMessage": "Wählen Sie einen KI-Modellanbieter aus, um mit goose zu beginnen. Sie benötigen API-Schlüssel, die von jedem Anbieter generiert werden und die verschlüsselt und lokal gespeichert werden. Sie können Ihren Anbieter jederzeit in den Einstellungen ändern."
+    "defaultMessage": "Wählen Sie einen KI-Modellanbieter aus, um mit iCodex zu beginnen. Sie benötigen API-Schlüssel, die von jedem Anbieter generiert werden und die verschlüsselt und lokal gespeichert werden. Sie können Ihren Anbieter jederzeit in den Einstellungen ändern."
   },
   "providerSettings.otherProviders": {
     "defaultMessage": "Andere Anbieter"
@@ -2631,7 +2649,7 @@
     "defaultMessage": "Streaming"
   },
   "settings.appearance.description": {
-    "defaultMessage": "Konfigurieren Sie, wie goose auf Ihrem System angezeigt wird"
+    "defaultMessage": "Konfigurieren Sie, wie iCodex auf Ihrem System angezeigt wird"
   },
   "settings.appearance.title": {
     "defaultMessage": "Darstellung"
@@ -2646,13 +2664,13 @@
     "defaultMessage": "Kostenverfolgung"
   },
   "settings.dockIcon.description": {
-    "defaultMessage": "goose im Dock anzeigen"
+    "defaultMessage": "iCodex im Dock anzeigen"
   },
   "settings.dockIcon.title": {
     "defaultMessage": "Dock-Symbol"
   },
   "settings.help.description": {
-    "defaultMessage": "Helfen Sie uns, goose zu verbessern, indem Sie Probleme melden oder neue Funktionen anfordern"
+    "defaultMessage": "Helfen Sie uns, iCodex zu verbessern, indem Sie Probleme melden oder neue Funktionen anfordern"
   },
   "settings.help.reportBug": {
     "defaultMessage": "Fehler melden"
@@ -2664,7 +2682,7 @@
     "defaultMessage": "Hilfe & Feedback"
   },
   "settings.language.description": {
-    "defaultMessage": "Wählen Sie die Anzeigesprache für goose"
+    "defaultMessage": "Wählen Sie die Anzeigesprache für iCodex"
   },
   "settings.language.english": {
     "defaultMessage": "English"
@@ -2721,7 +2739,7 @@
     "defaultMessage": "Chinesisch (traditionell)"
   },
   "settings.menuBarIcon.description": {
-    "defaultMessage": "goose in der Menüleiste anzeigen"
+    "defaultMessage": "iCodex in der Menüleiste anzeigen"
   },
   "settings.menuBarIcon.title": {
     "defaultMessage": "Menüleisten-Symbol"
@@ -2742,7 +2760,7 @@
     "defaultMessage": "Klicken Sie auf Benachrichtigungen"
   },
   "settings.notifications.modal.macStep3": {
-    "defaultMessage": "Suchen und wählen Sie goose in der Anwendungsliste aus"
+    "defaultMessage": "Suchen und wählen Sie iCodex in der Anwendungsliste aus"
   },
   "settings.notifications.modal.macStep4": {
     "defaultMessage": "Aktivieren Sie Benachrichtigungen und passen Sie die Einstellungen nach Wunsch an"
@@ -2760,7 +2778,7 @@
     "defaultMessage": "Gehen Sie zu System > Benachrichtigungen"
   },
   "settings.notifications.modal.winStep3": {
-    "defaultMessage": "Suchen und wählen Sie goose in der Anwendungsliste aus"
+    "defaultMessage": "Suchen und wählen Sie iCodex in der Anwendungsliste aus"
   },
   "settings.notifications.modal.winStep4": {
     "defaultMessage": "Schalten Sie Benachrichtigungen ein und passen Sie die Einstellungen nach Wunsch an"
@@ -2769,7 +2787,7 @@
     "defaultMessage": "Einstellungen öffnen"
   },
   "settings.notifications.task.description": {
-    "defaultMessage": "Benachrichtigen, wenn Goose eine Aufgabe abschließt, während sich das Fenster im Hintergrund befindet"
+    "defaultMessage": "Benachrichtigen, wenn iCodex eine Aufgabe abschließt, während sich das Fenster im Hintergrund befindet"
   },
   "settings.notifications.task.title": {
     "defaultMessage": "Benachrichtigungen bei Aufgabenabschluss"
@@ -2778,19 +2796,19 @@
     "defaultMessage": "Benachrichtigungen"
   },
   "settings.preventSleep.description": {
-    "defaultMessage": "Halten Sie Ihren Computer wach, während goose eine Aufgabe ausführt (der Bildschirm kann sich weiterhin sperren)"
+    "defaultMessage": "Halten Sie Ihren Computer wach, während iCodex eine Aufgabe ausführt (der Bildschirm kann sich weiterhin sperren)"
   },
   "settings.preventSleep.title": {
     "defaultMessage": "Energiesparmodus verhindern"
   },
   "settings.theme.description": {
-    "defaultMessage": "Passen Sie das Erscheinungsbild von goose an"
+    "defaultMessage": "Passen Sie das Erscheinungsbild von iCodex an"
   },
   "settings.theme.title": {
     "defaultMessage": "Design"
   },
   "settings.updates.description": {
-    "defaultMessage": "Suchen und installieren Sie Updates, damit goose stets optimal läuft"
+    "defaultMessage": "Suchen und installieren Sie Updates, damit iCodex stets optimal läuft"
   },
   "settings.updates.title": {
     "defaultMessage": "Updates"
@@ -3015,10 +3033,10 @@
     "defaultMessage": "Anderen Anbieter verwenden"
   },
   "telemetryConsentPrompt.description": {
-    "defaultMessage": "Möchten Sie anonyme Nutzungsdaten teilen, um goose zu verbessern? Wir erfassen niemals Ihre Unterhaltungen, Ihren Code oder Ihre persönlichen Daten."
+    "defaultMessage": "Möchten Sie anonyme Nutzungsdaten teilen, um iCodex zu verbessern? Wir erfassen niemals Ihre Unterhaltungen, Ihren Code oder Ihre persönlichen Daten."
   },
   "telemetryConsentPrompt.heading": {
-    "defaultMessage": "Helfen Sie, goose zu verbessern"
+    "defaultMessage": "Helfen Sie, iCodex zu verbessern"
   },
   "telemetryConsentPrompt.learnMore": {
     "defaultMessage": "Mehr erfahren"
@@ -3042,7 +3060,7 @@
     "defaultMessage": "Datenschutz"
   },
   "telemetrySettings.toggleDescription": {
-    "defaultMessage": "Helfen Sie, goose zu verbessern, indem Sie anonyme Nutzungsstatistiken teilen."
+    "defaultMessage": "Helfen Sie, iCodex zu verbessern, indem Sie anonyme Nutzungsstatistiken teilen."
   },
   "telemetrySettings.toggleLabel": {
     "defaultMessage": "Anonyme Nutzungsdaten"
@@ -3126,10 +3144,10 @@
     "defaultMessage": "{toolName} erlauben?"
   },
   "toolConfirmation.gooseWouldLikeToCallWithName": {
-    "defaultMessage": "Goose möchte {toolName} aufrufen. Erlauben?"
+    "defaultMessage": "iCodex möchte {toolName} aufrufen. Erlauben?"
   },
   "updateSection.autoDownload": {
-    "defaultMessage": "Goose lädt das Update im Hintergrund herunter und installiert es beim nächsten Beenden oder Neustart."
+    "defaultMessage": "iCodex lädt das Update im Hintergrund herunter und installiert es beim nächsten Beenden oder Neustart."
   },
   "updateSection.autoDownloadDisabledByEnv": {
     "defaultMessage": "Automatische Downloads sind über die Umgebungsvariable GOOSE_DISABLE_AUTO_DOWNLOAD deaktiviert."
@@ -3153,7 +3171,7 @@
     "defaultMessage": "Automatische Update-Downloads deaktivieren"
   },
   "updateSection.disableAutoDownloadDesc": {
-    "defaultMessage": "Wenn aktiviert, benachrichtigt Goose Sie über neue Versionen, lädt sie aber nicht automatisch herunter."
+    "defaultMessage": "Wenn aktiviert, benachrichtigt iCodex Sie über neue Versionen, lädt sie aber nicht automatisch herunter."
   },
   "updateSection.downloadNow": {
     "defaultMessage": "Jetzt herunterladen"
@@ -3186,7 +3204,7 @@
     "defaultMessage": "Für diese Update-Methode ist eine manuelle Installation erforderlich."
   },
   "updateSection.readyInstallAuto": {
-    "defaultMessage": "✓ Update ist bereit. Starten Sie Goose neu, um die Installation abzuschließen, oder beenden Sie es, wenn Sie fertig sind."
+    "defaultMessage": "✓ Update ist bereit. Starten Sie iCodex neu, um die Installation abzuschließen, oder beenden Sie es, wenn Sie fertig sind."
   },
   "updateSection.readyInstallManual": {
     "defaultMessage": "✓ Update ist bereit! Klicken Sie auf \"Installieren & Neustarten\", um die Installationsanweisungen zu erhalten."

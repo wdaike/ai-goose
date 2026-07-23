@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=Goose
-Exec=/usr/lib/Goose/Goose %U
-Icon=/usr/share/pixmaps/Goose.png
+Name=iCodex
+Exec=/usr/lib/iCodex/iCodex %U
+Icon=/usr/share/pixmaps/iCodex.png
 Terminal=false
 Type=Application
 Categories=Development;
-MimeType=x-scheme-handler/goose;
+MimeType=x-scheme-handler/icodex;

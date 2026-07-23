@@ -34,9 +34,11 @@ type ColorTokenKey = Exclude<McpUiStyleVariableKey, BaseTokenKey>;
 // ---------------------------------------------------------------------------
 const baseTokens: Pick<ThemeTokens, BaseTokenKey> = {
   // Typography — families
+  // ChatGPT's font stacks (system UI fonts + emoji fallbacks)
   '--font-sans':
-    '-apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif',
-  '--font-mono': 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
+    'ui-sans-serif, -apple-system, system-ui, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"',
+  '--font-mono':
+    'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
 
   // Typography — weights
   '--font-weight-normal': '400',

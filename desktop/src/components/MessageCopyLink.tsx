@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Copy } from './icons';
 import { defineMessages, useIntl } from '../i18n';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/Tooltip';
 
 const i18n = defineMessages({
   copied: {
@@ -62,12 +63,25 @@ export default function MessageCopyLink({ text, contentRef }: MessageCopyLinkPro
   };
 
   return (
-    <button
-      onClick={handleCopy}
-      className="flex font-mono items-center gap-1 text-xs text-text-secondary hover:cursor-pointer hover:text-text-primary transition-all duration-200 opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0"
-    >
-      <Copy className="h-3 w-3" />
-      <span>{copied ? intl.formatMessage(i18n.copied) : intl.formatMessage(i18n.copy)}</span>
-    </button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="flex size-8 items-center justify-center rounded-[10px] text-text-secondary opacity-0 transition-colors hover:bg-background-tertiary hover:text-text-primary focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-primary group-hover:opacity-100"
+          aria-label={copied ? intl.formatMessage(i18n.copied) : intl.formatMessage(i18n.copy)}
+        >
+          <Copy className="size-4" />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent
+        side="top"
+        sideOffset={2}
+        hideArrow
+        className="rounded-[10px] bg-background-tertiary px-2.5 py-1 text-sm leading-5 text-text-primary shadow-lg"
+      >
+        {copied ? intl.formatMessage(i18n.copied) : intl.formatMessage(i18n.copy)}
+      </TooltipContent>
+    </Tooltip>
   );
 }

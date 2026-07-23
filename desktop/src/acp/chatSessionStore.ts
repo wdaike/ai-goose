@@ -99,7 +99,7 @@ export interface AcpChatSessionActions {
     promptAttemptId: string
   ): AcpChatSessionSnapshot | undefined;
   waitForPromptCancellation(sessionId: string, promptAttemptId: string): Promise<void>;
-  finishPromptAttemptIfCurrent(sessionId: string, promptAttemptId: string, error?: string): boolean;
+  finishPromptAttemptIfCurrent(sessionId: string, promptAttemptId: string): boolean;
   clearActivePromptAttempt(sessionId: string): AcpChatSessionSnapshot | undefined;
   isCurrentPromptAttempt(sessionId: string, promptAttemptId: string): boolean;
 }
@@ -381,8 +381,7 @@ function createAcpChatSessionStoreInternal(): AcpChatSessionStoreInternal {
 
   const finishPromptAttemptIfCurrent: AcpChatSessionActions['finishPromptAttemptIfCurrent'] = (
     sessionId,
-    promptAttemptId,
-    error
+    promptAttemptId
   ) => {
     const entry = sessionsById.get(sessionId);
     if (!entry || entry.activePromptAttemptId !== promptAttemptId) {
@@ -397,7 +396,6 @@ function createAcpChatSessionStoreInternal(): AcpChatSessionStoreInternal {
     discardPendingLocalSteerMessages(entry);
     entry.progressMessage = undefined;
     entry.chatState = ChatState.Idle;
-    entry.sessionLoadError = error;
     notify(sessionId, entry);
     return true;
   };

@@ -320,8 +320,8 @@ export function mapThreadToMessages(state: MappingState): Message[] {
   // For models that never set message phases, texts followed by tool activity in
   // the same turn are progress commentary; texts after the last tool call are the
   // final answer. Restored threads can lack tool items entirely (codex does not
-  // reconstruct dynamic tool calls from rollout history), in which case nothing
-  // is grouped and the turn renders flat.
+  // reconstruct dynamic tool calls from rollout history); multiple phase-less
+  // texts in one turn are still commentary, so group all but the final one.
   const fallbackWorkMessageIds = new Set<string>();
   let segmentStart = 0;
   const markFallbackWork = (segmentEnd: number, isActive: boolean) => {
@@ -332,13 +332,18 @@ export function mapThreadToMessages(state: MappingState): Message[] {
     ) {
       return;
     }
-    let lastToolOffset = -1;
+    let boundary = -1;
     segment.forEach((item, offset) => {
-      if (TOOL_ITEM_TYPES.has(item.type)) lastToolOffset = offset;
+      if (TOOL_ITEM_TYPES.has(item.type)) boundary = offset;
     });
+    if (boundary === -1) {
+      segment.forEach((item, offset) => {
+        if (item.type === 'agentMessage' && item.phase === null) boundary = offset;
+      });
+    }
     segment.forEach((item, offset) => {
       if (item.type !== 'agentMessage' || item.phase !== null) return;
-      if (isActive || offset < lastToolOffset) fallbackWorkMessageIds.add(item.id);
+      if (isActive || offset < boundary) fallbackWorkMessageIds.add(item.id);
     });
   };
 

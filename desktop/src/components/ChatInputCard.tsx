@@ -15,7 +15,7 @@ export const ChatInputCard: React.FC<{
 }> = ({ className, children }) => (
   <div
     className={cn(
-      'rounded-3xl border border-border-primary shadow-md overflow-hidden bg-background-secondary',
+      'rounded-[28px] border border-border-primary shadow-sm overflow-hidden bg-background-secondary',
       className
     )}
   >

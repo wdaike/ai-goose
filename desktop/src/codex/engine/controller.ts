@@ -12,12 +12,16 @@ import type {
   AcpLoadSessionOptions,
   AcpSubmitMessageOptions,
 } from '../../acp/chatSessionController';
+import { acpReadConfig } from '../../acp/config';
 import { codex } from '../client';
+import type { AskForApproval } from '../protocol/v2/AskForApproval';
+import type { SandboxPolicy } from '../protocol/v2/SandboxPolicy';
 import type { Thread } from '../protocol/v2/Thread';
 import type { ThreadItem } from '../protocol/v2/ThreadItem';
 import type { TurnError } from '../protocol/v2/TurnError';
 import type { TurnPlanUpdatedNotification } from '../protocol/v2/TurnPlanUpdatedNotification';
 import { mapThreadToMessages, type MappingState } from './mapItems';
+import { restoreDynamicToolCalls } from './restoreToolCalls';
 import { enforceSkillPolicy } from './skillPolicy';
 
 interface ThreadEntry extends MappingState {
@@ -289,6 +293,14 @@ async function createSession(cwd: string): Promise<Session> {
   return session;
 }
 
+async function readAndResumeThread(threadId: string) {
+  const [read] = await Promise.all([
+    codex.threadRead({ threadId, includeTurns: true }),
+    codex.threadResume({ threadId }),
+  ]);
+  return read;
+}
+
 async function loadSession(sessionId: string, options: AcpLoadSessionOptions = {}): Promise<void> {
   ensureSubscribed();
   if (threads.get(sessionId)?.thread) {
@@ -297,12 +309,19 @@ async function loadSession(sessionId: string, options: AcpLoadSessionOptions = {
   }
   acpChatSessionActions.startSessionLoad(sessionId);
   try {
-    const [read] = await Promise.all([
-      codex.threadRead({ threadId: sessionId, includeTurns: true }),
-      codex.threadResume({ threadId: sessionId }),
-    ]);
+    let read;
+    try {
+      read = await readAndResumeThread(sessionId);
+    } catch (error) {
+      if (!/\barchived\b/i.test(errorMessage(error))) throw error;
+      await codex.threadUnarchive(sessionId);
+      read = await readAndResumeThread(sessionId);
+    }
     void applySkillPolicy(read.thread.cwd);
-    const items = read.thread.turns.flatMap((turn) => turn.items);
+    const items = await restoreDynamicToolCalls(
+      read.thread.path,
+      read.thread.turns.flatMap((turn) => turn.items)
+    );
     seedEntry(read.thread, items);
     publish(sessionId);
     acpChatSessionActions.finishSessionLoad(sessionId, threadToSession(read.thread, items.length));
@@ -310,6 +329,31 @@ async function loadSession(sessionId: string, options: AcpLoadSessionOptions = {
   } catch (error) {
     acpChatSessionActions.failSessionLoad(sessionId, errorMessage(error));
   }
+}
+
+interface PermissionPolicies {
+  approvalPolicy: AskForApproval;
+  sandboxPolicy: SandboxPolicy;
+}
+
+const WORKSPACE_WRITE: SandboxPolicy = {
+  type: 'workspaceWrite',
+  writableRoots: [],
+  networkAccess: true,
+  excludeTmpdirEnvVar: false,
+  excludeSlashTmp: false,
+};
+
+const MODE_POLICIES: Record<string, PermissionPolicies> = {
+  auto: { approvalPolicy: 'never', sandboxPolicy: { type: 'dangerFullAccess' } },
+  approve: { approvalPolicy: 'untrusted', sandboxPolicy: WORKSPACE_WRITE },
+  smart_approve: { approvalPolicy: 'on-request', sandboxPolicy: WORKSPACE_WRITE },
+  chat: { approvalPolicy: 'never', sandboxPolicy: { type: 'readOnly', networkAccess: false } },
+};
+
+async function permissionPolicies(): Promise<PermissionPolicies> {
+  const mode = (await acpReadConfig('GOOSE_MODE')) as string | null;
+  return MODE_POLICIES[mode ?? 'auto'] ?? MODE_POLICIES.auto;
 }
 
 async function submitMessage(
@@ -332,24 +376,31 @@ async function submitMessage(
 
   const entry = entryFor(sessionId);
   entry.finish = (error?: string) => {
-    if (acpChatSessionActions.finishPromptAttemptIfCurrent(sessionId, promptAttemptId, error)) {
+    if (acpChatSessionActions.finishPromptAttemptIfCurrent(sessionId, promptAttemptId)) {
       void options.onFinish(error);
     }
   };
 
   try {
     const override = modelOverrides.get(sessionId);
-    await codex.turnStart({
+    const policies = await permissionPolicies();
+    const params = {
       threadId: sessionId,
-      input: [{ type: 'text', text, text_elements: [] }],
+      input: [{ type: 'text' as const, text, text_elements: [] }],
+      ...policies,
       ...(override?.model ? { model: override.model } : {}),
-    });
+    };
+    try {
+      await codex.turnStart(params);
+    } catch (error) {
+      if (!/thread not found/i.test(errorMessage(error))) throw error;
+      await codex.threadResume({ threadId: sessionId });
+      await codex.turnStart(params);
+    }
   } catch (error) {
     entry.finish = null;
     const submitError = 'Submit error: ' + errorMessage(error);
-    if (
-      acpChatSessionActions.finishPromptAttemptIfCurrent(sessionId, promptAttemptId, submitError)
-    ) {
+    if (acpChatSessionActions.finishPromptAttemptIfCurrent(sessionId, promptAttemptId)) {
       void options.onFinish(submitError);
     }
   }

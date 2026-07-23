@@ -195,9 +195,7 @@ async function submitMessage(
     }
 
     const submitError = 'Submit error: ' + errorMessage(error);
-    if (
-      acpChatSessionActions.finishPromptAttemptIfCurrent(sessionId, promptAttemptId, submitError)
-    ) {
+    if (acpChatSessionActions.finishPromptAttemptIfCurrent(sessionId, promptAttemptId)) {
       void options.onFinish(submitError);
     }
   }

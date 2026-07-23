@@ -22,9 +22,11 @@ export function availableCommandToDisplayItem(
   if (!isSlashCommandItemType(commandType)) {
     return null;
   }
+  const sourcePath =
+    commandType === 'Recipe' ? stringMetaValue(command._meta, 'sourcePath') : undefined;
   return {
     name: command.name,
-    extra: command.description,
+    extra: sourcePath ?? command.description,
     itemType: commandType,
     relativePath: command.name,
   };

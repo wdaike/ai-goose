@@ -76,7 +76,7 @@ const i18n = defineMessages({
   },
   noSkillsDescription: {
     id: 'pluginsSettings.noSkillsDescription',
-    defaultMessage: 'Skills are loaded from SKILL.md files in the goose skills directory.',
+    defaultMessage: 'Skills are loaded from SKILL.md files in the iCodex skills directory.',
   },
   noMatches: {
     id: 'pluginsSettings.noMatches',

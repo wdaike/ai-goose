@@ -105,10 +105,10 @@ export async function addExtensionFromDeepLink(
 ) {
   const parsedUrl = new URL(url);
 
-  if (parsedUrl.protocol !== 'goose:') {
+  if (parsedUrl.protocol !== 'icodex:') {
     toastService.handleError(
       'Invalid Protocol',
-      'Failed to install extension: Invalid protocol: URL must use the goose:// scheme',
+      'Failed to install extension: Invalid protocol: URL must use the icodex:// scheme',
       { shouldThrow: true }
     );
   }

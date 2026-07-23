@@ -183,8 +183,6 @@
   --text-inverse: var(--color-white);
   --text-danger: var(--color-red-200);
 
-  --color-inline-code: #c2410c;
-
   /* Search highlighting */
   --highlight-color: rgba(255, 213, 0, 0.5);
   --highlight-current: rgba(252, 213, 3, 0.6);
@@ -209,8 +207,6 @@
   /* Legacy aliases */
   --text-inverse: var(--color-black);
   --text-danger: var(--color-red-100);
-
-  --color-inline-code: #ff7235;
 
   /* Search highlighting */
   --highlight-color: rgba(255, 213, 0, 0.5);
@@ -288,6 +284,15 @@
   100% {
     transform: translate(0, 0);
   }
+}
+
+/* Codex cloud lottie animation (Hub new-chat logo) — recolor to theme */
+.codex-cloud path[stroke] {
+  stroke: currentColor;
+}
+
+.codex-cloud path[fill] {
+  fill: currentColor;
 }
 
 /* Non-blocking sidebar animations */
@@ -512,20 +517,17 @@ body {
   -webkit-app-region: no-drag;
 }
 
+/* ChatGPT-style inline code: inherited text color on a soft gray pill */
 .bg-inline-code {
-  border-radius: 4px;
-  color: var(--color-inline-code);
-  background-color: var(--color-neutral-50);
-  font-family: monospace;
-  font-size: 12px;
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  background-color: var(--color-background-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.875em;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  padding: 2px 4px;
-}
-
-.dark .bg-inline-code {
-  background-color: var(--color-neutral-900);
+  padding: 2px 6px;
 }
 
 .bg-inline-code:before {

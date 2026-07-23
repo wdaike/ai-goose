@@ -229,11 +229,7 @@ describe('acpChatSessionStore', () => {
     acpChatSessionActions.startPromptAttempt(currentSessionId, 'attempt-b');
 
     expect(
-      acpChatSessionActions.finishPromptAttemptIfCurrent(
-        currentSessionId,
-        'attempt-a',
-        'late error'
-      )
+      acpChatSessionActions.finishPromptAttemptIfCurrent(currentSessionId, 'attempt-a')
     ).toBe(false);
 
     expect(acpChatSessionStore.getSnapshot(currentSessionId)).toMatchObject({
@@ -248,6 +244,22 @@ describe('acpChatSessionStore', () => {
     expect(acpChatSessionStore.getSnapshot(currentSessionId)).toMatchObject({
       activePromptAttemptId: null,
       chatState: ChatState.Idle,
+    });
+  });
+
+  it('does not treat a failed prompt as a session load failure', () => {
+    const currentSessionId = sessionId('session-1');
+
+    acpChatSessionActions.finishSessionLoad(currentSessionId, session(currentSessionId));
+    acpChatSessionActions.startPromptAttempt(currentSessionId, 'attempt-1');
+
+    expect(
+      acpChatSessionActions.finishPromptAttemptIfCurrent(currentSessionId, 'attempt-1')
+    ).toBe(true);
+    expect(acpChatSessionStore.getSnapshot(currentSessionId)).toMatchObject({
+      activePromptAttemptId: null,
+      chatState: ChatState.Idle,
+      sessionLoadError: undefined,
     });
   });
 

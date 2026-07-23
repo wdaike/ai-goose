@@ -1,6 +1,3 @@
-import GooseLogo from './GooseLogo';
-import AnimatedIcons from './AnimatedIcons';
-import FlyingBird from './FlyingBird';
 import { ChatState } from '../types/chatState';
 import { defineMessages, useIntl } from '../i18n';
 
@@ -12,45 +9,33 @@ interface LoadingGooseProps {
 const i18n = defineMessages({
   loadingConversation: {
     id: 'loadingGoose.loadingConversation',
-    defaultMessage: 'loading conversation...',
+    defaultMessage: 'loading…',
   },
   thinking: {
     id: 'loadingGoose.thinking',
-    defaultMessage: 'goose is thinking…',
+    defaultMessage: 'Thinking...',
   },
   streaming: {
     id: 'loadingGoose.streaming',
-    defaultMessage: 'goose is working on it…',
+    defaultMessage: 'Thinking...',
   },
   waiting: {
     id: 'loadingGoose.waiting',
-    defaultMessage: 'goose is waiting…',
+    defaultMessage: 'waiting',
   },
   compacting: {
     id: 'loadingGoose.compacting',
-    defaultMessage: 'goose is compacting the conversation...',
+    defaultMessage: 'compacting',
   },
   idle: {
     id: 'loadingGoose.idle',
-    defaultMessage: 'goose is working on it…',
+    defaultMessage: 'Thinking...',
   },
   restartingAgent: {
     id: 'loadingGoose.restartingAgent',
-    defaultMessage: 'restarting session...',
+    defaultMessage: 'restarting…',
   },
 });
-
-const STATE_ICONS: Record<ChatState, React.ReactNode> = {
-  [ChatState.LoadingConversation]: <AnimatedIcons className="flex-shrink-0" cycleInterval={600} />,
-  [ChatState.Thinking]: <AnimatedIcons className="flex-shrink-0" cycleInterval={600} />,
-  [ChatState.Streaming]: <FlyingBird className="flex-shrink-0" cycleInterval={150} />,
-  [ChatState.WaitingForUserInput]: (
-    <AnimatedIcons className="flex-shrink-0" cycleInterval={600} variant="waiting" />
-  ),
-  [ChatState.Compacting]: <AnimatedIcons className="flex-shrink-0" cycleInterval={600} />,
-  [ChatState.Idle]: <GooseLogo size="small" hover={false} />,
-  [ChatState.RestartingAgent]: <AnimatedIcons className="flex-shrink-0" cycleInterval={600} />,
-};
 
 const STATE_MESSAGE_KEYS: Record<ChatState, keyof typeof i18n> = {
   [ChatState.LoadingConversation]: 'loadingConversation',
@@ -65,15 +50,10 @@ const STATE_MESSAGE_KEYS: Record<ChatState, keyof typeof i18n> = {
 const LoadingGoose = ({ message, chatState = ChatState.Idle }: LoadingGooseProps) => {
   const intl = useIntl();
   const displayMessage = message || intl.formatMessage(i18n[STATE_MESSAGE_KEYS[chatState]]);
-  const icon = STATE_ICONS[chatState];
 
   return (
     <div className="w-full animate-fade-slide-up">
-      <div
-        data-testid="loading-indicator"
-        className="flex items-center gap-2 text-xs text-text-primary py-2"
-      >
-        {icon}
+      <div data-testid="loading-indicator" className="text-xs text-text-secondary py-2">
         {displayMessage}
       </div>
     </div>

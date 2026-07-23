@@ -11,6 +11,7 @@ import {
 import { FolderClosed } from '../icons/Folder';
 import { toast } from 'react-toastify';
 import { defineMessages, useIntl } from '../../i18n';
+import { acpListRecentSessions } from '../../acp/sessions';
 
 const i18n = defineMessages({
   failedToUpdateWorkingDir: {
@@ -70,8 +71,12 @@ export const DirSwitcher: React.FC<DirSwitcherProps> = ({
   const homeDir = (window.appConfig?.get('GOOSE_HOME_DIR') as string | undefined) ?? '';
 
   const refreshMenuData = useCallback(async () => {
-    const recent = await window.electron.listRecentDirs().catch(() => []);
-    setRecentDirs(recent);
+    const [recent, sessions] = await Promise.all([
+      window.electron.listRecentDirs().catch(() => [] as string[]),
+      acpListRecentSessions(100).catch(() => []),
+    ]);
+    const sessionDirs = sessions.map((session) => session.workingDir);
+    setRecentDirs([...new Set([...sessionDirs, ...recent])]);
   }, []);
 
   useEffect(() => {
@@ -86,7 +91,7 @@ export const DirSwitcher: React.FC<DirSwitcherProps> = ({
 
   const applyDirectoryChange = async (newDir: string) => {
     window.electron.addRecentDir(newDir);
-    setRecentDirs((previous) => [newDir, ...previous.filter((dir) => dir !== newDir)].slice(0, 10));
+    setRecentDirs((previous) => [newDir, ...previous.filter((dir) => dir !== newDir)]);
 
     if (sessionId) {
       onRestartStart?.();

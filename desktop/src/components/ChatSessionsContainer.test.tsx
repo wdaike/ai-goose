@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import ChatSessionsContainer from './ChatSessionsContainer';
 import { subscribeToAcpRecovery } from '../acp/acpConnection';
-import { acpChatSessionController } from '../acp/chatSessionController';
+import { codexChatSessionController } from '../codex/engine/controller';
 
 vi.mock('react-router-dom', () => ({
   useSearchParams: () => [new URLSearchParams('resumeSessionId=session-1')],
@@ -16,8 +16,8 @@ vi.mock('../acp/acpConnection', () => ({
   subscribeToAcpRecovery: vi.fn(),
 }));
 
-vi.mock('../acp/chatSessionController', () => ({
-  acpChatSessionController: {
+vi.mock('../codex/engine/controller', () => ({
+  codexChatSessionController: {
     restoreSession: vi.fn().mockResolvedValue(undefined),
   },
 }));
@@ -43,8 +43,8 @@ describe('ChatSessionsContainer', () => {
 
     onRecoveryChanged?.(false);
 
-    expect(acpChatSessionController.restoreSession).toHaveBeenCalledTimes(2);
-    expect(acpChatSessionController.restoreSession).toHaveBeenCalledWith('session-1');
-    expect(acpChatSessionController.restoreSession).toHaveBeenCalledWith('session-2');
+    expect(codexChatSessionController.restoreSession).toHaveBeenCalledTimes(2);
+    expect(codexChatSessionController.restoreSession).toHaveBeenCalledWith('session-1');
+    expect(codexChatSessionController.restoreSession).toHaveBeenCalledWith('session-2');
   });
 });

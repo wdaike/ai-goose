@@ -20,6 +20,17 @@ vi.mock('electron', () => ({
   },
 }));
 
+// lottie-web probes for a 2d canvas context at import time; jsdom has no canvas
+vi.mock('lottie-web', () => ({
+  default: {
+    loadAnimation: vi.fn(() => ({
+      play: vi.fn(),
+      goToAndStop: vi.fn(),
+      destroy: vi.fn(),
+    })),
+  },
+}));
+
 // This is the standard set up to ensure that React Testing Library's
 // automatic cleanup runs after each test.
 afterEach(() => {

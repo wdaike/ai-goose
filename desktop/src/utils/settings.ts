@@ -55,8 +55,8 @@ export type SettingKey = keyof Settings;
 export const defaultKeyboardShortcuts: DefaultKeyboardShortcuts = {
   focusWindow: 'CommandOrControl+Alt+G',
   quickLauncher: 'CommandOrControl+Alt+Shift+G',
-  newChat: 'CommandOrControl+T',
-  newChatWindow: 'CommandOrControl+N',
+  newChat: 'CommandOrControl+N',
+  newChatWindow: 'CommandOrControl+Shift+N',
   openDirectory: 'CommandOrControl+O',
   settings: 'CommandOrControl+,',
   find: 'CommandOrControl+F',
@@ -84,7 +84,7 @@ export const defaultSettings: Settings = {
   // UI preferences
   theme: 'light',
   useSystemTheme: true,
-  language: 'system',
+  language: 'en',
   responseStyle: 'concise',
   showPricing: true,
   seenAnnouncementIds: [],

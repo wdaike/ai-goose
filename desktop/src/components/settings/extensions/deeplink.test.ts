@@ -20,7 +20,7 @@ describe('addExtensionFromDeepLink', () => {
   describe('header parsing', () => {
     it('should preserve = characters in header values', async () => {
       const url =
-        'goose://extension?name=Remote&url=https%3A%2F%2Fexample.com%2Fmcp&header=Authorization%3DBasic%20abc%3D%3D';
+        'icodex://extension?name=Remote&url=https%3A%2F%2Fexample.com%2Fmcp&header=Authorization%3DBasic%20abc%3D%3D';
 
       await addExtensionFromDeepLink(url, mockAddExtension, mockSetView);
 
@@ -37,7 +37,7 @@ describe('addExtensionFromDeepLink', () => {
 
     it('should handle header values without = characters', async () => {
       const url =
-        'goose://extension?name=Remote&url=https%3A%2F%2Fexample.com%2Fmcp&header=X-Token%3Dabc123';
+        'icodex://extension?name=Remote&url=https%3A%2F%2Fexample.com%2Fmcp&header=X-Token%3Dabc123';
 
       await addExtensionFromDeepLink(url, mockAddExtension, mockSetView);
 
@@ -53,7 +53,7 @@ describe('addExtensionFromDeepLink', () => {
 
     it('should handle multiple headers', async () => {
       const url =
-        'goose://extension?name=Remote&url=https%3A%2F%2Fexample.com%2Fmcp&header=Authorization%3DBearer%20tok%3D%3D&header=X-Key%3Dval';
+        'icodex://extension?name=Remote&url=https%3A%2F%2Fexample.com%2Fmcp&header=Authorization%3DBearer%20tok%3D%3D&header=X-Key%3Dval';
 
       await addExtensionFromDeepLink(url, mockAddExtension, mockSetView);
 
@@ -72,7 +72,7 @@ describe('addExtensionFromDeepLink', () => {
 
     it('should handle header with empty value', async () => {
       const url =
-        'goose://extension?name=Remote&url=https%3A%2F%2Fexample.com%2Fmcp&header=X-Empty%3D';
+        'icodex://extension?name=Remote&url=https%3A%2F%2Fexample.com%2Fmcp&header=X-Empty%3D';
 
       await addExtensionFromDeepLink(url, mockAddExtension, mockSetView);
 
@@ -89,7 +89,7 @@ describe('addExtensionFromDeepLink', () => {
 
   describe('stdio command validation', () => {
     it('should allow goose for bundled MCP deeplinks', async () => {
-      const url = 'goose://extension?cmd=goose&arg=mcp&arg=memory&name=Memory&description=Memory';
+      const url = 'icodex://extension?cmd=goose&arg=mcp&arg=memory&name=Memory&description=Memory';
 
       await addExtensionFromDeepLink(url, mockAddExtension, mockSetView);
 
@@ -109,7 +109,7 @@ describe('addExtensionFromDeepLink', () => {
         throw new Error('Invalid command');
       });
 
-      const url = 'goose://extension?cmd=goosed&arg=mcp&arg=memory&name=Memory&description=Memory';
+      const url = 'icodex://extension?cmd=goosed&arg=mcp&arg=memory&name=Memory&description=Memory';
 
       await expect(addExtensionFromDeepLink(url, mockAddExtension, mockSetView)).rejects.toThrow(
         'Invalid command'

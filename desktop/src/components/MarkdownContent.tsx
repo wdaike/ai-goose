@@ -5,28 +5,8 @@ import remarkBreaks from 'remark-breaks';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-// Improved oneDark theme for better comment contrast and readability
-const customOneDarkTheme = {
-  ...oneDark,
-  'code[class*="language-"]': {
-    ...oneDark['code[class*="language-"]'],
-    color: '#e6e6e6',
-    fontSize: '14px',
-  },
-  'pre[class*="language-"]': {
-    ...oneDark['pre[class*="language-"]'],
-    color: '#e6e6e6',
-    fontSize: '14px',
-  },
-  comment: { ...oneDark.comment, color: '#a0a0a0', fontStyle: 'italic' },
-  prolog: { ...oneDark.prolog, color: '#a0a0a0' },
-  doctype: { ...oneDark.doctype, color: '#a0a0a0' },
-  cdata: { ...oneDark.cdata, color: '#a0a0a0' },
-};
-
 import { Check, Copy } from './icons';
+import CodeViewer from './CodeViewer';
 import { wrapHTMLInCodeBlock } from '../utils/htmlSecurity';
 import { isProtocolSafe, getProtocol, BLOCKED_PROTOCOLS } from '../utils/urlSecurity';
 import { ConfirmationModal } from './ui/ConfirmationModal';
@@ -67,9 +47,7 @@ const i18n = defineMessages({
   },
 });
 
-interface CodeProps extends React.ClassAttributes<HTMLElement>, React.HTMLAttributes<HTMLElement> {
-  inline?: boolean;
-}
+type CodeProps = React.ClassAttributes<HTMLElement> & React.HTMLAttributes<HTMLElement>;
 
 interface MarkdownContentProps {
   content: string;
@@ -111,69 +89,47 @@ const CodeBlock = memo(function CodeBlock({
     };
   }, []);
 
-  // Memoize the SyntaxHighlighter component to prevent re-rendering
-  // Only re-render if language or children change
-  const memoizedSyntaxHighlighter = useMemo(() => {
-    // For very large code blocks, consider truncating or lazy loading
-    const isLargeCodeBlock = children.length > 10000; // 10KB threshold
-
-    if (isLargeCodeBlock) {
-      console.log(`Large code block detected (${children.length} chars), consider optimization`);
-    }
-
-    return (
-      <SyntaxHighlighter
-        style={customOneDarkTheme}
+  const memoizedCodeViewer = useMemo(
+    () => (
+      <CodeViewer
+        code={children}
         language={language}
-        PreTag="div"
-        customStyle={{
-          margin: 0,
-          width: '100%',
-          maxWidth: '100%',
-        }}
-        codeTagProps={{
-          style: {
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-all',
-            overflowWrap: 'break-word',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '14px',
-          },
-        }}
-        // Performance optimizations for SyntaxHighlighter
-        showLineNumbers={false} // Disable line numbers for better performance
-        wrapLines={false} // Disable line wrapping for better performance
-        lineProps={undefined} // Don't add extra props to each line
-      >
-        {children}
-      </SyntaxHighlighter>
-    );
-  }, [language, children]);
+        wrapLongLines
+        surface="secondary"
+        fontSize={14}
+      />
+    ),
+    [language, children]
+  );
 
   return (
     <div className="relative group w-full">
       <button
         onClick={handleCopy}
-        className="absolute right-2 bottom-2 p-1.5 rounded-lg bg-gray-700/50 text-gray-300 font-sans text-sm
+        className="absolute right-2 bottom-2 p-1.5 rounded-lg bg-background-tertiary/80 text-text-secondary font-sans text-sm
                  opacity-0 group-hover:opacity-100 transition-opacity duration-200
-                 hover:bg-gray-600/50 hover:text-gray-100 z-10"
+                 hover:bg-background-tertiary hover:text-text-primary z-10"
         title={intl.formatMessage(i18n.copyCode)}
       >
         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
       </button>
-      <div className="w-full overflow-x-auto">{memoizedSyntaxHighlighter}</div>
+      <div className="w-full overflow-hidden rounded-lg">{memoizedCodeViewer}</div>
     </div>
   );
 });
 
 const MarkdownCode = memo(
   React.forwardRef(function MarkdownCode(
-    { inline, className, children, ...props }: CodeProps,
+    { className, children, ...props }: CodeProps,
     ref: React.Ref<HTMLElement>
   ) {
     const match = /language-(\w+)/.exec(className || '');
-    return !inline && match ? (
-      <CodeBlock language={match[1]}>{String(children).replace(/\n$/, '')}</CodeBlock>
+    const text = String(children);
+    // react-markdown v9+ dropped the `inline` prop: fenced blocks are detected
+    // by their language class or by the newline fenced content always carries.
+    const isBlock = Boolean(match) || text.includes('\n');
+    return isBlock ? (
+      <CodeBlock language={match?.[1] ?? 'text'}>{text.replace(/\n$/, '')}</CodeBlock>
     ) : (
       <code ref={ref} {...props} className="break-all bg-inline-code whitespace-pre-wrap font-mono">
         {children}
@@ -239,8 +195,9 @@ const MarkdownContent = memo(function MarkdownContent({
   return (
     <>
       <div
-        className={`w-full overflow-x-hidden prose prose-sm text-text-primary dark:prose-invert max-w-full word-break font-sans
-        prose-pre:p-0 prose-pre:m-0 !p-0
+        className={`w-full overflow-x-hidden prose prose-base text-text-primary dark:prose-invert max-w-full word-break font-sans
+        prose-p:leading-7 prose-li:leading-7
+        prose-pre:m-0 prose-pre:rounded-none prose-pre:bg-transparent prose-pre:p-0 !p-0
         prose-code:break-all prose-code:whitespace-pre-wrap prose-code:font-mono
         prose-a:break-all prose-a:overflow-wrap-anywhere
         prose-table:table prose-table:w-full
@@ -248,9 +205,9 @@ const MarkdownContent = memo(function MarkdownContent({
         prose-td:border prose-td:border-border-primary prose-td:p-2
         prose-th:border prose-th:border-border-primary prose-th:p-2
         prose-thead:bg-background-primary
-        prose-h1:text-2xl prose-h1:font-normal prose-h1:mb-5 prose-h1:mt-0 prose-h1:font-sans
-        prose-h2:text-xl prose-h2:font-normal prose-h2:mb-4 prose-h2:mt-4 prose-h2:font-sans
-        prose-h3:text-lg prose-h3:font-normal prose-h3:mb-3 prose-h3:mt-3 prose-h3:font-sans
+        prose-h1:text-2xl prose-h1:font-semibold prose-h1:mb-5 prose-h1:mt-0 prose-h1:font-sans
+        prose-h2:text-xl prose-h2:font-semibold prose-h2:mb-4 prose-h2:mt-4 prose-h2:font-sans
+        prose-h3:text-lg prose-h3:font-semibold prose-h3:mb-3 prose-h3:mt-3 prose-h3:font-sans
         prose-p:mt-0 prose-p:mb-2 prose-p:font-sans
         prose-ol:my-2 prose-ol:font-sans
         prose-ul:mt-0 prose-ul:mb-3 prose-ul:font-sans

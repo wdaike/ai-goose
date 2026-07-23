@@ -15,7 +15,6 @@ import AnnouncementModal from './components/AnnouncementModal';
 import TelemetryConsentPrompt from './components/TelemetryConsentPrompt';
 import OnboardingGuard from './components/onboarding/OnboardingGuard';
 import { createSession } from './sessions';
-import { acpListSessions, acpDeleteSession } from './acp/sessions';
 
 import { ChatType } from './types/chat';
 import Hub from './components/Hub';
@@ -299,25 +298,18 @@ export function AppInner() {
   }, []);
 
   useEffect(() => {
-    acpListSessions()
-      .then(({ sessions }) => {
-        const phantom = sessions.filter((s) => s.messageCount === 0 && !s.userSetName);
-        for (const s of phantom) {
-          acpDeleteSession(s.id).catch(() => {});
-        }
-      })
-      .catch(() => {});
-  }, []);
-
-  useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const isMac = window.electron.platform === 'darwin';
-      if ((isMac ? event.metaKey : event.ctrlKey) && event.key === 'n') {
+      if ((isMac ? event.metaKey : event.ctrlKey) && event.key.toLowerCase() === 'n') {
         event.preventDefault();
-        try {
-          window.electron.createChatWindow({ dir: getInitialWorkingDir() });
-        } catch (error) {
-          console.error('Error creating new window:', error);
+        if (event.shiftKey) {
+          try {
+            window.electron.createChatWindow({});
+          } catch (error) {
+            console.error('Error creating new window:', error);
+          }
+        } else {
+          navigate('/');
         }
       }
     };
@@ -325,7 +317,7 @@ export function AppInner() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [navigate]);
 
   // Prevent default drag and drop behavior globally to avoid opening files in new windows
   // but allow our React components to handle drops in designated areas

@@ -5,7 +5,7 @@ import type { Session } from '../types/session';
 import type { FixedExtensionEntry } from '../components/ConfigContext';
 import type { GooseExtension, GooseExtensionEntry } from '@aaif/goose-sdk';
 import { getConfiguredGooseExtensions } from '../acp/extensions';
-import { acpChatSessionController } from '../acp/chatSessionController';
+import { codexChatSessionController } from '../codex/engine/controller';
 
 vi.mock('../acp/extensions', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../acp/extensions')>();
@@ -15,8 +15,8 @@ vi.mock('../acp/extensions', async (importOriginal) => {
   };
 });
 
-vi.mock('../acp/chatSessionController', () => ({
-  acpChatSessionController: {
+vi.mock('../codex/engine/controller', () => ({
+  codexChatSessionController: {
     createSession: vi.fn(),
   },
 }));
@@ -54,7 +54,7 @@ const gooseExtensionEntry = (name: string): GooseExtensionEntry => ({
 });
 
 const mockedGetConfiguredGooseExtensions = vi.mocked(getConfiguredGooseExtensions);
-const mockedCreateAcpSession = vi.mocked(acpChatSessionController.createSession);
+const mockedCreateAcpSession = vi.mocked(codexChatSessionController.createSession);
 
 describe('createSession ACP session extensions', () => {
   beforeEach(() => {

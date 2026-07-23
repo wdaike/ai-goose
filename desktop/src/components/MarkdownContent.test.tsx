@@ -172,6 +172,17 @@ console.log('Hello, World!');
         expect(screen.getByText('console.log()')).toBeInTheDocument();
       });
     });
+
+    it('renders fenced blocks without a language tag as code blocks, not inline code', async () => {
+      const content = '```\ncargo run\n```';
+
+      const { container } = renderWithIntl(<MarkdownContent content={content} />);
+
+      await waitFor(() => {
+        expect(screen.getByText(/cargo run/)).toBeInTheDocument();
+      });
+      expect(container.querySelector('code.bg-inline-code')).toBeNull();
+    });
   });
 
   describe('Markdown Features', () => {
@@ -392,6 +403,7 @@ Another very long URL: https://www.example.com/very/long/path/with/many/segments
       expect(markdownContainer).toBeInTheDocument();
       expect(markdownContainer).toHaveClass('prose-a:break-all');
       expect(markdownContainer).toHaveClass('prose-a:overflow-wrap-anywhere');
+      expect(markdownContainer).toHaveClass('prose-pre:bg-transparent', 'prose-pre:rounded-none');
     });
   });
 

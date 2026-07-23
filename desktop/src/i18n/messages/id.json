@@ -33,7 +33,7 @@
     "defaultMessage": "Delete \"{name}\"? This cannot be undone."
   },
   "appsView.description": {
-    "defaultMessage": "Aplikasi dari server MCP Anda dan Aplikasi yang dibuat oleh goose sendiri. Anda dapat memintanya membuat aplikasi baru melalui antarmuka obrolan dan aplikasi tersebut akan muncul di sini."
+    "defaultMessage": "Aplikasi dari server MCP Anda dan Aplikasi yang dibuat oleh iCodex sendiri. Anda dapat memintanya membuat aplikasi baru melalui antarmuka obrolan dan aplikasi tersebut akan muncul di sini."
   },
   "appsView.errorLoading": {
     "defaultMessage": "Kesalahan saat memuat aplikasi: {error}"
@@ -51,7 +51,7 @@
     "defaultMessage": "Memuat aplikasi..."
   },
   "appsView.noAppsDescription": {
-    "defaultMessage": "Buka obrolan dan mintalah goose membuat aplikasi yang Anda inginkan. goose dapat membuatkannya untuk Anda dan aplikasi tersebut akan muncul di sini. Atau jika seseorang membagikan sebuah aplikasi, Anda dapat mengimpornya menggunakan tombol di atas."
+    "defaultMessage": "Buka obrolan dan mintalah iCodex membuat aplikasi yang Anda inginkan. iCodex dapat membuatkannya untuk Anda dan aplikasi tersebut akan muncul di sini. Atau jika seseorang membagikan sebuah aplikasi, Anda dapat mengimpornya menggunakan tombol di atas."
   },
   "appsView.noAppsTitle": {
     "defaultMessage": "Tidak ada aplikasi yang tersedia"
@@ -90,7 +90,7 @@
     "defaultMessage": "Kredensial dihapus"
   },
   "authSettings.description": {
-    "defaultMessage": "Kelola kredensial penyedia yang disimpan secara lokal oleh goose."
+    "defaultMessage": "Kelola kredensial penyedia yang disimpan secara lokal oleh iCodex."
   },
   "authSettings.empty": {
     "defaultMessage": "Tidak ditemukan kredensial penyedia yang tersimpan secara lokal."
@@ -174,10 +174,13 @@
     "defaultMessage": "Jalankan"
   },
   "chat.notification.taskComplete.body": {
-    "defaultMessage": "Klik di sini untuk membawa Goose kembali ke fokus."
+    "defaultMessage": "Klik di sini untuk membawa iCodex kembali ke fokus."
   },
   "chat.notification.taskComplete.title": {
-    "defaultMessage": "Goose telah menyelesaikan tugas."
+    "defaultMessage": "iCodex telah menyelesaikan tugas."
+  },
+  "chat.requestFailed": {
+    "defaultMessage": "Permintaan gagal"
   },
   "chatInput.contextWindow": {
     "defaultMessage": "Jendela konteks"
@@ -225,13 +228,13 @@
     "defaultMessage": "Menunggu gambar disimpan..."
   },
   "chatSettings.modeDescription": {
-    "defaultMessage": "Pilih mode default yang digunakan Goose untuk sesi baru. Sesi yang sudah ada tetap menggunakan mode saat ini."
+    "defaultMessage": "Pilih mode default yang digunakan iCodex untuk sesi baru. Sesi yang sudah ada tetap menggunakan mode saat ini."
   },
   "chatSettings.modeTitle": {
     "defaultMessage": "Mode Default"
   },
   "chatSettings.responseStylesDescription": {
-    "defaultMessage": "Pilih bagaimana Goose memformat dan menata respons-nya"
+    "defaultMessage": "Pilih bagaimana iCodex memformat dan menata respons-nya"
   },
   "chatSettings.responseStylesTitle": {
     "defaultMessage": "Gaya Respons"
@@ -252,10 +255,10 @@
     "defaultMessage": "Editor Konfigurasi"
   },
   "configSettings.description": {
-    "defaultMessage": "Edit pengaturan konfigurasi goose Anda"
+    "defaultMessage": "Edit pengaturan konfigurasi iCodex Anda"
   },
   "configSettings.descriptionWithProvider": {
-    "defaultMessage": "Edit pengaturan konfigurasi goose Anda (pengaturan saat ini untuk {provider})"
+    "defaultMessage": "Edit pengaturan konfigurasi iCodex Anda (pengaturan saat ini untuk {provider})"
   },
   "configSettings.done": {
     "defaultMessage": "Selesai"
@@ -327,7 +330,7 @@
     "defaultMessage": "Giliran Maksimum"
   },
   "conversationLimitsDropdown.maxTurnsDescription": {
-    "defaultMessage": "Giliran agen maksimum sebelum Goose meminta masukan pengguna"
+    "defaultMessage": "Giliran agen maksimum sebelum iCodex meminta masukan pengguna"
   },
   "costTracker.costUnavailable": {
     "defaultMessage": "Data biaya tidak tersedia untuk {model} ({inputTokens} token masukan, {outputTokens} token keluaran)"
@@ -513,7 +516,7 @@
     "defaultMessage": "Edit pengaturan {name}"
   },
   "defaultCardButtons.getStarted": {
-    "defaultMessage": "Mulai dengan goose!"
+    "defaultMessage": "Mulai dengan iCodex!"
   },
   "defaultProviderSetupForm.apiHostLabel": {
     "defaultMessage": "Host API"
@@ -663,7 +666,7 @@
     "defaultMessage": "Permintaan informasi dibatalkan."
   },
   "elicitationRequest.defaultMessage": {
-    "defaultMessage": "Goose memerlukan beberapa informasi dari Anda."
+    "defaultMessage": "iCodex memerlukan beberapa informasi dari Anda."
   },
   "elicitationRequest.expired": {
     "defaultMessage": "Permintaan ini telah kedaluwarsa. Ekstensi perlu menanyakan lagi."
@@ -708,7 +711,7 @@
     "defaultMessage": "Terjadi kesalahan."
   },
   "errorBoundary.errorWithVersion": {
-    "defaultMessage": "Terjadi kesalahan di Goose v{version}."
+    "defaultMessage": "Terjadi kesalahan di iCodex v{version}."
   },
   "errorBoundary.heading": {
     "defaultMessage": "Honk!"
@@ -858,19 +861,19 @@
     "defaultMessage": "AA:BB:CC:... atau sha256/base64"
   },
   "externalBackendSection.description": {
-    "defaultMessage": "Secara bawaan goose menjalankan server untuk Anda, gunakan ini untuk terhubung ke server goose eksternal"
+    "defaultMessage": "Secara bawaan iCodex menjalankan server untuk Anda, gunakan ini untuk terhubung ke server iCodex eksternal"
   },
   "externalBackendSection.fingerprintRequiresHttps": {
     "defaultMessage": "Certificate fingerprint requires an https URL"
   },
   "externalBackendSection.restartNote": {
-    "defaultMessage": "Perubahan memerlukan mulai ulang Goose agar berlaku. Jendela obrolan baru akan terhubung ke server eksternal."
+    "defaultMessage": "Perubahan memerlukan mulai ulang iCodex agar berlaku. Jendela obrolan baru akan terhubung ke server eksternal."
   },
   "externalBackendSection.secretKey": {
     "defaultMessage": "Kunci Rahasia"
   },
   "externalBackendSection.secretKeyHelp": {
-    "defaultMessage": "Kunci rahasia yang dikonfigurasi pada server Goose (GOOSE_SERVER__SECRET_KEY)"
+    "defaultMessage": "Kunci rahasia yang dikonfigurasi pada server iCodex (GOOSE_SERVER__SECRET_KEY)"
   },
   "externalBackendSection.secretKeyPlaceholder": {
     "defaultMessage": "Masukkan kunci rahasia server"
@@ -879,10 +882,10 @@
     "defaultMessage": "URL Server"
   },
   "externalBackendSection.serverUrlHelp": {
-    "defaultMessage": "Enter the HTTP(S) base URL. Goose checks /status and connects to /acp under this base."
+    "defaultMessage": "Enter the HTTP(S) base URL. iCodex checks /status and connects to /acp under this base."
   },
   "externalBackendSection.title": {
-    "defaultMessage": "Server Goose"
+    "defaultMessage": "Server iCodex"
   },
   "externalBackendSection.urlBaseError": {
     "defaultMessage": "URL must be the backend base URL before /acp, without query parameters or fragments"
@@ -897,7 +900,7 @@
     "defaultMessage": "Gunakan server eksternal"
   },
   "externalBackendSection.useExternalServerDescription": {
-    "defaultMessage": "Terhubung ke server goose yang berjalan di tempat lain (memerlukan mulai ulang aplikasi)"
+    "defaultMessage": "Terhubung ke server iCodex yang berjalan di tempat lain (memerlukan mulai ulang aplikasi)"
   },
   "fileChangeCard.document": {
     "defaultMessage": "Dokumen"
@@ -917,11 +920,26 @@
   "fileChangeCard.showMoreFiles": {
     "defaultMessage": "Tampilkan {count} file lagi"
   },
+  "filesPanel.backToFiles": {
+    "defaultMessage": "Kembali ke file"
+  },
+  "filesPanel.binaryFile": {
+    "defaultMessage": "File biner tidak dapat dipratinjau."
+  },
   "filesPanel.closePanel": {
     "defaultMessage": "Tutup panel"
   },
   "filesPanel.emptyDirectory": {
     "defaultMessage": "Direktori kosong"
+  },
+  "filesPanel.failedToReadFile": {
+    "defaultMessage": "Tidak dapat mempratinjau file ini"
+  },
+  "filesPanel.fileTooLarge": {
+    "defaultMessage": "File ini terlalu besar untuk dipratinjau."
+  },
+  "filesPanel.loadingFile": {
+    "defaultMessage": "Memuat file…"
   },
   "filesPanel.refresh": {
     "defaultMessage": "Muat ulang"
@@ -936,7 +954,7 @@
     "defaultMessage": "Pengembang"
   },
   "goosehintsModal.dialogDescription": {
-    "defaultMessage": "Berikan konteks tambahan tentang proyek Anda untuk meningkatkan komunikasi dengan Goose"
+    "defaultMessage": "Berikan konteks tambahan tentang proyek Anda untuk meningkatkan komunikasi dengan iCodex"
   },
   "goosehintsModal.dialogTitle": {
     "defaultMessage": "Konfigurasikan Petunjuk Proyek (.goosehints)"
@@ -957,7 +975,7 @@
     "defaultMessage": "File .goosehints ditemukan di: {filePath}"
   },
   "goosehintsModal.helpText1": {
-    "defaultMessage": ".goosehints adalah file teks yang digunakan untuk memberikan konteks tambahan tentang proyek Anda dan meningkatkan komunikasi dengan Goose."
+    "defaultMessage": ".goosehints adalah file teks yang digunakan untuk memberikan konteks tambahan tentang proyek Anda dan meningkatkan komunikasi dengan iCodex."
   },
   "goosehintsModal.helpText2": {
     "defaultMessage": "Pastikan ekstensi {bold} diaktifkan di halaman ekstensi. Ekstensi ini diperlukan untuk menggunakan .goosehints. Anda perlu memulai ulang sesi agar pembaruan .goosehints berlaku."
@@ -984,13 +1002,13 @@
     "defaultMessage": "Konfigurasikan"
   },
   "goosehintsSection.description": {
-    "defaultMessage": "Konfigurasikan file .goosehints proyek Anda untuk memberikan konteks tambahan ke Goose"
+    "defaultMessage": "Konfigurasikan file .goosehints proyek Anda untuk memberikan konteks tambahan ke iCodex"
   },
   "goosehintsSection.title": {
     "defaultMessage": "Petunjuk Proyek (.goosehints)"
   },
   "groupedExtensionLoadingToast.askGoose": {
-    "defaultMessage": "Tanya goose"
+    "defaultMessage": "Tanya iCodex"
   },
   "groupedExtensionLoadingToast.collapseDetails": {
     "defaultMessage": "Ciutkan detail"
@@ -1122,7 +1140,7 @@
     "defaultMessage": "Hugging Face"
   },
   "imagePreview.altText": {
-    "defaultMessage": "gambar goose"
+    "defaultMessage": "gambar iCodex"
   },
   "imagePreview.clickToCollapse": {
     "defaultMessage": "Klik untuk menciutkan"
@@ -1185,13 +1203,13 @@
     "defaultMessage": "Pintasan Aplikasi"
   },
   "keyboardShortcuts.categoryApplicationDescription": {
-    "defaultMessage": "Pintasan ini berfungsi saat Goose menjadi aplikasi aktif"
+    "defaultMessage": "Pintasan ini berfungsi saat iCodex menjadi aplikasi aktif"
   },
   "keyboardShortcuts.categoryGlobal": {
     "defaultMessage": "Pintasan Global"
   },
   "keyboardShortcuts.categoryGlobalDescription": {
-    "defaultMessage": "Pintasan ini berfungsi di seluruh sistem, bahkan saat Goose tidak difokuskan"
+    "defaultMessage": "Pintasan ini berfungsi di seluruh sistem, bahkan saat iCodex tidak difokuskan"
   },
   "keyboardShortcuts.categorySearch": {
     "defaultMessage": "Pintasan Pencarian"
@@ -1233,10 +1251,10 @@
     "defaultMessage": "Cari Sebelumnya"
   },
   "keyboardShortcuts.focusWindowDescription": {
-    "defaultMessage": "Bawa jendela Goose ke depan dari mana saja"
+    "defaultMessage": "Bawa jendela iCodex ke depan dari mana saja"
   },
   "keyboardShortcuts.focusWindowLabel": {
-    "defaultMessage": "Fokuskan Jendela Goose"
+    "defaultMessage": "Fokuskan Jendela iCodex"
   },
   "keyboardShortcuts.loading": {
     "defaultMessage": "Memuat..."
@@ -1248,7 +1266,7 @@
     "defaultMessage": "Obrolan Baru"
   },
   "keyboardShortcuts.newChatWindowDescription": {
-    "defaultMessage": "Buka jendela Goose baru"
+    "defaultMessage": "Buka jendela iCodex baru"
   },
   "keyboardShortcuts.newChatWindowLabel": {
     "defaultMessage": "Jendela Obrolan Baru"
@@ -1287,7 +1305,7 @@
     "defaultMessage": "Atur Ulang ke Default"
   },
   "keyboardShortcuts.restartDescription": {
-    "defaultMessage": "Perubahan pada pintasan aplikasi (seperti Obrolan Baru, Pengaturan, dll.) memerlukan memulai ulang Goose agar berlaku. Pintasan global (Fokuskan Jendela, Peluncur Cepat) berfungsi segera."
+    "defaultMessage": "Perubahan pada pintasan aplikasi (seperti Obrolan Baru, Pengaturan, dll.) memerlukan memulai ulang iCodex agar berlaku. Pintasan global (Fokuskan Jendela, Peluncur Cepat) berfungsi segera."
   },
   "keyboardShortcuts.restartRequired": {
     "defaultMessage": "Perlu Memulai Ulang"
@@ -1317,28 +1335,28 @@
     "defaultMessage": "Alihkan Navigasi"
   },
   "launcher.placeholder": {
-    "defaultMessage": "Tanyakan apa saja kepada goose..."
+    "defaultMessage": "Tanyakan apa saja kepada iCodex..."
   },
   "loadingGoose.compacting": {
-    "defaultMessage": "goose sedang meringkas percakapan..."
+    "defaultMessage": "memadatkan"
   },
   "loadingGoose.idle": {
-    "defaultMessage": "goose sedang mengerjakannya…"
+    "defaultMessage": "Berpikir..."
   },
   "loadingGoose.loadingConversation": {
-    "defaultMessage": "memuat percakapan..."
+    "defaultMessage": "memuat…"
   },
   "loadingGoose.restartingAgent": {
-    "defaultMessage": "memulai ulang sesi..."
+    "defaultMessage": "memulai ulang…"
   },
   "loadingGoose.streaming": {
-    "defaultMessage": "goose sedang mengerjakannya…"
+    "defaultMessage": "Berpikir..."
   },
   "loadingGoose.thinking": {
-    "defaultMessage": "goose sedang berpikir…"
+    "defaultMessage": "Berpikir..."
   },
   "loadingGoose.waiting": {
-    "defaultMessage": "goose sedang menunggu…"
+    "defaultMessage": "menunggu"
   },
   "localInferenceSettings.deleteConfirm": {
     "defaultMessage": "Hapus model ini? Anda dapat mengunduhnya kembali nanti."
@@ -2043,7 +2061,7 @@
     "defaultMessage": "Server mungkin sedang dimulai atau tidak tersedia untuk sementara."
   },
   "onboardingGuard.checkProviderErrorTitle": {
-    "defaultMessage": "Tidak dapat terhubung ke server Goose"
+    "defaultMessage": "Tidak dapat terhubung ke server iCodex"
   },
   "onboardingGuard.retry": {
     "defaultMessage": "Coba Lagi"
@@ -2052,10 +2070,10 @@
     "defaultMessage": "Agen AI lokal Anda. Hubungkan penyedia model AI untuk memulai."
   },
   "onboardingGuard.welcomeTitle": {
-    "defaultMessage": "Selamat datang di goose"
+    "defaultMessage": "Selamat datang di iCodex"
   },
   "onboardingSuccess.allSet": {
-    "defaultMessage": "Anda siap untuk mulai menggunakan goose."
+    "defaultMessage": "Anda siap untuk mulai menggunakan iCodex."
   },
   "onboardingSuccess.connectedTo": {
     "defaultMessage": "Terhubung ke {providerName}"
@@ -2070,7 +2088,7 @@
     "defaultMessage": "Model lokal siap"
   },
   "onboardingSuccess.privacyDescription": {
-    "defaultMessage": "Data penggunaan anonim membantu meningkatkan goose. Kami tidak pernah mengumpulkan percakapan, kode, atau data pribadi Anda."
+    "defaultMessage": "Data penggunaan anonim membantu meningkatkan iCodex. Kami tidak pernah mengumpulkan percakapan, kode, atau data pribadi Anda."
   },
   "onboardingSuccess.privacyTitle": {
     "defaultMessage": "Privasi"
@@ -2169,7 +2187,7 @@
     "defaultMessage": "Tidak ada skill terpasang"
   },
   "pluginsSettings.noSkillsDescription": {
-    "defaultMessage": "Skill dimuat dari berkas SKILL.md di direktori skill goose."
+    "defaultMessage": "Skill dimuat dari berkas SKILL.md di direktori skill iCodex."
   },
   "pluginsSettings.saveChanges": {
     "defaultMessage": "Simpan Perubahan"
@@ -2226,10 +2244,10 @@
     "defaultMessage": "Metrik sesi (durasi, jumlah interaksi, penggunaan token)"
   },
   "privacyInfoModal.collectVersion": {
-    "defaultMessage": "Versi goose dan metode instalasi"
+    "defaultMessage": "Versi iCodex dan metode instalasi"
   },
   "privacyInfoModal.description": {
-    "defaultMessage": "Data penggunaan anonim membantu kami memahami cara goose digunakan dan mengidentifikasi area yang dapat ditingkatkan."
+    "defaultMessage": "Data penggunaan anonim membantu kami memahami cara iCodex digunakan dan mengidentifikasi area yang dapat ditingkatkan."
   },
   "privacyInfoModal.neverCollect": {
     "defaultMessage": "Kami tidak pernah mengumpulkan percakapan, kode, argumen alat, pesan kesalahan, atau data pribadi Anda. Anda dapat mengubah pengaturan ini kapan saja di Pengaturan."
@@ -2322,7 +2340,7 @@
     "defaultMessage": "Sedang masuk..."
   },
   "providerConfigurationModal.addApiKeyDescription": {
-    "defaultMessage": "Tambahkan kunci API Anda untuk penyedia ini agar terintegrasi ke dalam goose"
+    "defaultMessage": "Tambahkan kunci API Anda untuk penyedia ini agar terintegrasi ke dalam iCodex"
   },
   "providerConfigurationModal.browserWindowHint": {
     "defaultMessage": "Jendela browser akan terbuka agar Anda dapat menyelesaikan proses masuk."
@@ -2358,7 +2376,7 @@
     "defaultMessage": "Kesalahan"
   },
   "providerConfigurationModal.externalSetupIntro": {
-    "defaultMessage": "Penyedia ini dikonfigurasi di luar goose. Ikuti langkah-langkah berikut:"
+    "defaultMessage": "Penyedia ini dikonfigurasi di luar iCodex. Ikuti langkah-langkah berikut:"
   },
   "providerConfigurationModal.goBack": {
     "defaultMessage": "Kembali"
@@ -2442,7 +2460,7 @@
     "defaultMessage": "Memuat penyedia..."
   },
   "providerSettings.onboardingDescription": {
-    "defaultMessage": "Pilih penyedia model AI untuk memulai dengan goose. Anda perlu menggunakan kunci API yang dihasilkan oleh setiap penyedia yang akan dienkripsi dan disimpan secara lokal. Anda dapat mengubah penyedia kapan saja di pengaturan."
+    "defaultMessage": "Pilih penyedia model AI untuk memulai dengan iCodex. Anda perlu menggunakan kunci API yang dihasilkan oleh setiap penyedia yang akan dienkripsi dan disimpan secara lokal. Anda dapat mengubah penyedia kapan saja di pengaturan."
   },
   "providerSettings.otherProviders": {
     "defaultMessage": "Penyedia lain"
@@ -2631,7 +2649,7 @@
     "defaultMessage": "Streaming"
   },
   "settings.appearance.description": {
-    "defaultMessage": "Konfigurasikan tampilan goose di sistem Anda"
+    "defaultMessage": "Konfigurasikan tampilan iCodex di sistem Anda"
   },
   "settings.appearance.title": {
     "defaultMessage": "Tampilan"
@@ -2646,13 +2664,13 @@
     "defaultMessage": "Pelacakan Biaya"
   },
   "settings.dockIcon.description": {
-    "defaultMessage": "Tampilkan goose di dock"
+    "defaultMessage": "Tampilkan iCodex di dock"
   },
   "settings.dockIcon.title": {
     "defaultMessage": "Ikon dock"
   },
   "settings.help.description": {
-    "defaultMessage": "Bantu kami meningkatkan goose dengan melaporkan masalah atau meminta fitur baru"
+    "defaultMessage": "Bantu kami meningkatkan iCodex dengan melaporkan masalah atau meminta fitur baru"
   },
   "settings.help.reportBug": {
     "defaultMessage": "Laporkan Bug"
@@ -2664,7 +2682,7 @@
     "defaultMessage": "Bantuan & masukan"
   },
   "settings.language.description": {
-    "defaultMessage": "Pilih bahasa tampilan untuk goose"
+    "defaultMessage": "Pilih bahasa tampilan untuk iCodex"
   },
   "settings.language.english": {
     "defaultMessage": "English"
@@ -2721,7 +2739,7 @@
     "defaultMessage": "Bahasa Tionghoa (Tradisional)"
   },
   "settings.menuBarIcon.description": {
-    "defaultMessage": "Tampilkan goose di bilah menu"
+    "defaultMessage": "Tampilkan iCodex di bilah menu"
   },
   "settings.menuBarIcon.title": {
     "defaultMessage": "Ikon bilah menu"
@@ -2742,7 +2760,7 @@
     "defaultMessage": "Klik Notifications"
   },
   "settings.notifications.modal.macStep3": {
-    "defaultMessage": "Temukan dan pilih goose di daftar aplikasi"
+    "defaultMessage": "Temukan dan pilih iCodex di daftar aplikasi"
   },
   "settings.notifications.modal.macStep4": {
     "defaultMessage": "Aktifkan notifikasi dan sesuaikan pengaturan sesuai keinginan"
@@ -2760,7 +2778,7 @@
     "defaultMessage": "Buka System > Notifications"
   },
   "settings.notifications.modal.winStep3": {
-    "defaultMessage": "Temukan dan pilih goose di daftar aplikasi"
+    "defaultMessage": "Temukan dan pilih iCodex di daftar aplikasi"
   },
   "settings.notifications.modal.winStep4": {
     "defaultMessage": "Aktifkan notifikasi dan sesuaikan pengaturan sesuai keinginan"
@@ -2769,7 +2787,7 @@
     "defaultMessage": "Buka Pengaturan"
   },
   "settings.notifications.task.description": {
-    "defaultMessage": "Beri tahu saat Goose menyelesaikan tugas selagi jendela berada di latar belakang"
+    "defaultMessage": "Beri tahu saat iCodex menyelesaikan tugas selagi jendela berada di latar belakang"
   },
   "settings.notifications.task.title": {
     "defaultMessage": "Notifikasi penyelesaian tugas"
@@ -2778,19 +2796,19 @@
     "defaultMessage": "Notifikasi"
   },
   "settings.preventSleep.description": {
-    "defaultMessage": "Jaga komputer Anda tetap menyala saat goose menjalankan tugas (layar tetap dapat terkunci)"
+    "defaultMessage": "Jaga komputer Anda tetap menyala saat iCodex menjalankan tugas (layar tetap dapat terkunci)"
   },
   "settings.preventSleep.title": {
     "defaultMessage": "Cegah Tidur"
   },
   "settings.theme.description": {
-    "defaultMessage": "Sesuaikan tampilan dan nuansa goose"
+    "defaultMessage": "Sesuaikan tampilan dan nuansa iCodex"
   },
   "settings.theme.title": {
     "defaultMessage": "Tema"
   },
   "settings.updates.description": {
-    "defaultMessage": "Periksa dan instal pembaruan agar goose berjalan optimal"
+    "defaultMessage": "Periksa dan instal pembaruan agar iCodex berjalan optimal"
   },
   "settings.updates.title": {
     "defaultMessage": "Pembaruan"
@@ -3015,10 +3033,10 @@
     "defaultMessage": "Gunakan penyedia lain"
   },
   "telemetryConsentPrompt.description": {
-    "defaultMessage": "Apakah Anda ingin membagikan data penggunaan anonim untuk membantu meningkatkan goose? Kami tidak pernah mengumpulkan percakapan, kode, atau data pribadi Anda."
+    "defaultMessage": "Apakah Anda ingin membagikan data penggunaan anonim untuk membantu meningkatkan iCodex? Kami tidak pernah mengumpulkan percakapan, kode, atau data pribadi Anda."
   },
   "telemetryConsentPrompt.heading": {
-    "defaultMessage": "Bantu tingkatkan goose"
+    "defaultMessage": "Bantu tingkatkan iCodex"
   },
   "telemetryConsentPrompt.learnMore": {
     "defaultMessage": "Pelajari lebih lanjut"
@@ -3042,7 +3060,7 @@
     "defaultMessage": "Privasi"
   },
   "telemetrySettings.toggleDescription": {
-    "defaultMessage": "Bantu tingkatkan goose dengan membagikan statistik penggunaan anonim."
+    "defaultMessage": "Bantu tingkatkan iCodex dengan membagikan statistik penggunaan anonim."
   },
   "telemetrySettings.toggleLabel": {
     "defaultMessage": "Data penggunaan anonim"
@@ -3126,10 +3144,10 @@
     "defaultMessage": "Izinkan {toolName}?"
   },
   "toolConfirmation.gooseWouldLikeToCallWithName": {
-    "defaultMessage": "Goose ingin memanggil {toolName}. Izinkan?"
+    "defaultMessage": "iCodex ingin memanggil {toolName}. Izinkan?"
   },
   "updateSection.autoDownload": {
-    "defaultMessage": "Goose akan mengunduh pembaruan di latar belakang dan menginstalnya saat Anda keluar atau memulai ulang berikutnya."
+    "defaultMessage": "iCodex akan mengunduh pembaruan di latar belakang dan menginstalnya saat Anda keluar atau memulai ulang berikutnya."
   },
   "updateSection.autoDownloadDisabledByEnv": {
     "defaultMessage": "Pengunduhan otomatis dinonaktifkan melalui variabel lingkungan GOOSE_DISABLE_AUTO_DOWNLOAD."
@@ -3153,7 +3171,7 @@
     "defaultMessage": "Nonaktifkan pengunduhan pembaruan otomatis"
   },
   "updateSection.disableAutoDownloadDesc": {
-    "defaultMessage": "Saat diaktifkan, Goose akan memberi tahu Anda tentang versi baru tetapi tidak akan mengunduhnya secara otomatis."
+    "defaultMessage": "Saat diaktifkan, iCodex akan memberi tahu Anda tentang versi baru tetapi tidak akan mengunduhnya secara otomatis."
   },
   "updateSection.downloadNow": {
     "defaultMessage": "Unduh Sekarang"
@@ -3186,7 +3204,7 @@
     "defaultMessage": "Instalasi manual diperlukan untuk metode pembaruan ini."
   },
   "updateSection.readyInstallAuto": {
-    "defaultMessage": "✓ Pembaruan sudah siap. Mulai ulang Goose untuk menyelesaikan pemasangan, atau keluar saat Anda selesai."
+    "defaultMessage": "✓ Pembaruan sudah siap. Mulai ulang iCodex untuk menyelesaikan pemasangan, atau keluar saat Anda selesai."
   },
   "updateSection.readyInstallManual": {
     "defaultMessage": "✓ Pembaruan sudah siap! Klik \"Install & Restart\" untuk petunjuk pemasangan."

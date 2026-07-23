@@ -47,11 +47,15 @@ function isSlashCommand(message: string): boolean {
 const i18n = defineMessages({
   notificationTitle: {
     id: 'chat.notification.taskComplete.title',
-    defaultMessage: 'Goose finished the task.',
+    defaultMessage: 'iCodex finished the task.',
   },
   notificationBody: {
     id: 'chat.notification.taskComplete.body',
-    defaultMessage: 'Click here to bring Goose back into focus.',
+    defaultMessage: 'Click here to bring iCodex back into focus.',
+  },
+  requestFailed: {
+    id: 'chat.requestFailed',
+    defaultMessage: 'Request failed',
   },
 });
 
@@ -110,7 +114,14 @@ export function useChatSession({
 
   const onFinish = useCallback(
     async (error?: string): Promise<void> => {
-      if (!error) {
+      if (error) {
+        const { toastError } = await import('../toasts');
+        toastError({
+          title: intl.formatMessage(i18n.requestFailed),
+          msg: error,
+          traceback: error,
+        });
+      } else {
         try {
           const [notificationsEnabled, anyWindowFocused] = await Promise.all([
             window.electron.getSetting('enableNotifications'),

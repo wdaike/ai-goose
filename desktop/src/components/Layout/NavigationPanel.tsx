@@ -17,7 +17,6 @@ import { AppEvents } from '../../constants/events';
 import { InlineEditText } from '../common/InlineEditText';
 import { SessionIndicators } from '../SessionIndicators';
 import EnvironmentBadge from '../GooseSidebar/EnvironmentBadge';
-import { Goose } from '../icons/Goose';
 import {
   acpCountSessionsForDir,
   acpListSessions,
@@ -412,10 +411,9 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
       {/* Drag region clearing the window controls. */}
       <div className="h-[52px]" />
 
-      <div className="flex items-center gap-1 px-3 pb-2">
+      <div className="flex items-center gap-1 pl-5 pr-3 pb-2">
         <span className="flex items-center gap-1.5 text-[15px] font-semibold text-text-primary">
-          <Goose className="size-4" />
-          goose
+          iCodex
         </span>
         <EnvironmentBadge />
         <div className="flex-1" />

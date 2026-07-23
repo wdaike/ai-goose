@@ -1,6 +1,6 @@
 # AGENTS Instructions
 
-goose is an Electron desktop frontend for OpenAI's Codex app-server. There is
+iCodex is an Electron desktop frontend for OpenAI's Codex app-server. There is
 no Rust code and no backend of our own.
 
 ## Architecture
@@ -52,7 +52,7 @@ desktop/               # Electron app (the whole product)
 ├── src/main.ts        # Electron main; spawns codex app-server
 ├── src/codex/         # codex bridge, protocol types, chat engine
 ├── src/acp/           # legacy seams, codex-backed or stubbed
-└── src/components/    # UI (unchanged goose look & feel)
+└── src/components/    # UI (unchanged iCodex look & feel)
 sdk/                   # @aaif/goose-sdk — types for the legacy acp seams
 ```
 
@@ -79,7 +79,7 @@ sdk/                   # @aaif/goose-sdk — types for the legacy acp seams
 
 - Never: Recreate `desktop/src/api` or add `@hey-api/openapi-ts` to `desktop`
 - Never: Hand-edit files under `src/codex/protocol/` — they are generated
-- Never: Reintroduce a goose-owned backend (ACP server, message store, MCP client)
+- Never: Reintroduce an iCodex-owned backend (ACP server, message store, MCP client)
 
 ## Entry Points
 

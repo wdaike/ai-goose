@@ -1,6 +1,5 @@
-import { AppEvents } from '../constants/events';
 import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
-import { ArrowUp, Bug, Plus, ScrollText } from 'lucide-react';
+import { ArrowUp, Plus } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/Tooltip';
 import { Button } from './ui/button';
 import type { View } from '../utils/navigationUtils';
@@ -9,28 +8,21 @@ import { Close, Microphone } from './icons';
 import { ChatState } from '../types/chatState';
 import debounce from 'lodash/debounce';
 import { LocalMessageStorage } from '../utils/localMessageStorage';
-import { DirSwitcher } from './bottom_menu/DirSwitcher';
 import ModelPickerPill from './bottom_menu/ModelPickerPill';
 import { PermissionModeChip } from './bottom_menu/PermissionModeChip';
 import { cn } from '../utils';
-import { AlertType, useAlerts } from './alerts';
 import { useModelAndProvider } from './ModelAndProviderContext';
-import { acpListProviderDetails } from '../acp/providers';
 import { useAudioRecorder } from '../hooks/useAudioRecorder';
 import { toastError } from '../toasts';
 import MentionPopover, { DisplayItemWithMatch } from './MentionPopover';
-import { ContextWindowIndicator } from './bottom_menu/ContextWindowIndicator';
 import { DroppedFile, useFileDrop } from '../hooks/useFileDrop';
 import { MessageQueue, QueuedMessage } from './MessageQueue';
 import { detectInterruption } from '../utils/interruptionDetector';
-import { DiagnosticsModal } from './ui/Diagnostics';
 import type { Message } from '../types/message';
 import { getInitialWorkingDir } from '../utils/workingDir';
-import { getPredefinedModelsFromEnv } from './settings/models/predefinedModelsUtils';
-import { trackFileAttached, trackVoiceDictation, trackDiagnosticsOpened } from '../utils/analytics';
+import { trackFileAttached, trackVoiceDictation } from '../utils/analytics';
 import { UserInput, ImageData } from '../types/message';
 import { compressImageDataUrl } from '../utils/conversionUtils';
-import { fetchCanonicalModelInfo } from '../utils/canonical';
 import { defineMessages, useIntl } from '../i18n';
 import TurndownService from 'turndown';
 import type { NextChatExtensionDraft } from '../utils/nextChatExtensions';
@@ -76,19 +68,6 @@ const removeQueuedMessage = (messages: QueuedMessage[], messageId: string): Queu
 
 const MAX_IMAGES_PER_MESSAGE = 10;
 
-const TOKEN_LIMIT_DEFAULT = 128000; // fallback for custom models that the backend doesn't know about
-
-const getContextAlertType = (totalTokens: number, tokenLimit: number): AlertType => {
-  const percentage = tokenLimit ? (totalTokens / tokenLimit) * 100 : 0;
-
-  if (percentage > 90) return AlertType.Error;
-  if (percentage > 75) return AlertType.Warning;
-  return AlertType.Info;
-};
-
-// Manual compact trigger message - must match backend constant
-const MANUAL_COMPACT_TRIGGER = '/compact';
-
 const i18n = defineMessages({
   placeholder: {
     id: 'chatInput.placeholder',
@@ -109,10 +88,6 @@ const i18n = defineMessages({
   unknownType: {
     id: 'chatInput.unknownType',
     defaultMessage: 'Unknown type',
-  },
-  contextWindow: {
-    id: 'chatInput.contextWindow',
-    defaultMessage: 'Context window',
   },
   waitingForImages: {
     id: 'chatInput.waitingForImages',
@@ -182,8 +157,6 @@ interface ChatInputProps {
   latestInference?: Message['metadata']['inference'] | null;
   nextChatExtensionDraft?: NextChatExtensionDraft;
   onNextChatExtensionDraftChange?: (draft: NextChatExtensionDraft) => void;
-  /** Hide the working-dir switcher when the parent renders its own (e.g. Hub's chip bar). */
-  hideDirSwitcher?: boolean;
 }
 
 export default function ChatInput({
@@ -199,7 +172,7 @@ export default function ChatInput({
   droppedFiles = [],
   onFilesProcessed,
   setView,
-  totalTokens,
+  totalTokens: _totalTokens,
   accumulatedInputTokens: _accumulatedInputTokens,
   accumulatedOutputTokens: _accumulatedOutputTokens,
   accumulatedCost: _accumulatedCost,
@@ -207,7 +180,7 @@ export default function ChatInput({
   disableAnimation = false,
   initialPrompt,
   append: _append,
-  onWorkingDirChange,
+  onWorkingDirChange: _onWorkingDirChange,
   inputRef,
   sessionModel,
   sessionProvider,
@@ -216,7 +189,6 @@ export default function ChatInput({
   latestInference: _latestInference,
   nextChatExtensionDraft: _nextChatExtensionDraft,
   onNextChatExtensionDraftChange: _onNextChatExtensionDraftChange,
-  hideDirSwitcher = false,
 }: ChatInputProps) {
   const [_value, setValue] = useState(initialValue);
   const [displayValue, setDisplayValue] = useState(initialValue); // For immediate visual feedback
@@ -271,13 +243,8 @@ export default function ChatInput({
     setLastInterruption(null);
   }, []);
 
-  const { alerts, addAlert, clearAlerts } = useAlerts();
   const intl = useIntl();
-  const {
-    getCurrentModelAndProvider,
-    currentModel: configModel,
-    currentProvider: configProvider,
-  } = useModelAndProvider();
+  const { currentModel: configModel, currentProvider: configProvider } = useModelAndProvider();
 
   // Local override for when the user changes the model in the modal,
   // before the session object is re-fetched from the backend.
@@ -285,7 +252,6 @@ export default function ChatInput({
     null
   );
   const effectiveModel = modelOverride?.model ?? sessionModel ?? configModel;
-  const effectiveProvider = modelOverride?.provider ?? sessionProvider ?? configProvider;
 
   // Clear override when the underlying data catches up (session props for
   // active chats, config defaults for Hub / no-session contexts).
@@ -301,30 +267,7 @@ export default function ChatInput({
       setModelOverride(null);
     }
   }, [sessionModel, sessionProvider, configModel, configProvider, sessionId, modelOverride]);
-  const [tokenLimit, setTokenLimit] = useState<number>(TOKEN_LIMIT_DEFAULT);
-  const [isTokenLimitLoaded, setIsTokenLimitLoaded] = useState(false);
-  const [diagnosticsOpen, setDiagnosticsOpen] = useState(false);
-  const [workingDirOverride, setWorkingDirOverride] = useState<string | null>(null);
-  const currentWorkingDir = workingDirOverride ?? workingDir ?? getInitialWorkingDir();
-
-  // Hide non-essential bottom-bar controls when the chat input is narrow.
-  // Only the model selector, mic, and send button remain visible.
-  const bottomBarRef = useRef<HTMLDivElement>(null);
-  const [isBottomBarNarrow, setIsBottomBarNarrow] = useState(false);
-  useEffect(() => {
-    const el = bottomBarRef.current;
-    if (!el) return;
-    const observer = new ResizeObserver((entries) => {
-      const width = entries[0]?.contentRect.width ?? 0;
-      setIsBottomBarNarrow(width < 480);
-    });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    setWorkingDirOverride(null);
-  }, [sessionId, workingDir]);
+  const currentWorkingDir = workingDir ?? getInitialWorkingDir();
 
   // Save queue state (paused/interrupted) to storage
   useEffect(() => {
@@ -562,99 +505,6 @@ export default function ChatInput({
     }
   }, [textAreaRef]);
 
-  // Load providers and get current model's token limit
-  const loadProviderDetails = async () => {
-    try {
-      // Reset token limit loaded state
-      setIsTokenLimitLoaded(false);
-
-      // Use effective model/provider (includes overrides from in-session model changes),
-      // fall back to config defaults
-      let model = effectiveModel;
-      let provider = effectiveProvider;
-      if (!model || !provider) {
-        const configModelAndProvider = await getCurrentModelAndProvider();
-        model = configModelAndProvider.model;
-        provider = configModelAndProvider.provider;
-      }
-      if (!model || !provider) {
-        setIsTokenLimitLoaded(true);
-        return;
-      }
-
-      // Priority 1: Check predefined models from environment
-      const predefinedModels = getPredefinedModelsFromEnv();
-      const predefinedModel = predefinedModels.find((m) => m.name === model);
-      if (predefinedModel?.context_limit) {
-        setTokenLimit(predefinedModel.context_limit);
-        setIsTokenLimitLoaded(true);
-        return;
-      }
-
-      // Priority 2: Check canonical model info (source of truth)
-      const canonicalInfo = await fetchCanonicalModelInfo(provider, model);
-      if (canonicalInfo?.contextLimit) {
-        setTokenLimit(canonicalInfo.contextLimit);
-        setIsTokenLimitLoaded(true);
-        return;
-      }
-
-      // Priority 3: Fall back to provider metadata known_models (may be outdated)
-      const providers = await acpListProviderDetails();
-      const currentProvider = providers.find((p) => p.name === provider);
-      if (currentProvider?.metadata?.known_models) {
-        const modelConfig = currentProvider.metadata.known_models.find((m) => m.name === model);
-        if (modelConfig?.context_limit) {
-          setTokenLimit(modelConfig.context_limit);
-          setIsTokenLimitLoaded(true);
-          return;
-        }
-      }
-
-      // Priority 4: Use default if nothing else found
-      setTokenLimit(TOKEN_LIMIT_DEFAULT);
-      setIsTokenLimitLoaded(true);
-    } catch (err) {
-      console.error('Error loading providers or token limit:', err);
-      // Set default limit on error
-      setTokenLimit(TOKEN_LIMIT_DEFAULT);
-      setIsTokenLimitLoaded(true);
-    }
-  };
-
-  // Initial load and refresh when model changes (effective model includes overrides,
-  // config model is the fallback for Hub/no-session contexts)
-  useEffect(() => {
-    loadProviderDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [effectiveModel, effectiveProvider, configModel, configProvider]);
-
-  // Handle token usage alerts
-  useEffect(() => {
-    clearAlerts();
-
-    // Show alert when either there is registered token usage, or we know the limit
-    if ((totalTokens && totalTokens > 0) || (isTokenLimitLoaded && tokenLimit)) {
-      addAlert({
-        type: getContextAlertType(totalTokens || 0, tokenLimit),
-        message: intl.formatMessage(i18n.contextWindow),
-        progress: {
-          current: totalTokens || 0,
-          total: tokenLimit,
-        },
-        showCompactButton: true,
-        compactButtonDisabled: !totalTokens || isLoading,
-        onCompact: () => {
-          window.dispatchEvent(new CustomEvent(AppEvents.HIDE_ALERT_POPOVER));
-          handleSubmit({ msg: MANUAL_COMPACT_TRIGGER, images: [] });
-        },
-        compactIcon: <ScrollText size={12} />,
-      });
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalTokens, tokenLimit, isTokenLimitLoaded, isLoading, addAlert, clearAlerts]);
-
   // Cleanup effect for component unmount - prevent memory leaks
   useEffect(() => {
     return () => {
@@ -665,11 +515,8 @@ export default function ChatInput({
         window.clearTimeout(timeoutId);
       });
       timeouts.clear();
-
-      // Clear alerts to prevent memory leaks
-      clearAlerts();
     };
-  }, [clearAlerts]);
+  }, []);
 
   const maxHeight = 10 * 24;
 
@@ -1449,7 +1296,7 @@ export default function ChatInput({
 
   return (
     <div
-      className={`flex flex-col relative h-auto p-4 transition-colors ${
+      className={`flex flex-col relative h-auto p-1.5 transition-colors ${
         disableAnimation ? '' : 'page-transition'
       } ${
         isFocused
@@ -1507,7 +1354,7 @@ export default function ChatInput({
               maxHeight: `${maxHeight}px`,
               overflowY: 'auto',
             }}
-            className="w-full outline-none border-none focus:ring-0 bg-transparent px-3 pt-2 pb-2 text-[15px] leading-6 resize-none text-text-primary placeholder:text-text-tertiary"
+            className="w-full outline-none border-none focus:ring-0 bg-transparent px-3 pt-2.5 pb-1.5 text-base leading-6 resize-none text-text-primary placeholder:text-text-tertiary"
           />
 
           {/* Recording/transcribing status indicator (floats above the bottom bar) */}
@@ -1634,13 +1481,10 @@ export default function ChatInput({
         </div>
       )}
 
-      {/* Bottom action bar. Single flat row; no dividers. Left side: attach
-          + working dir + extensions. Right side (after spacer): context
-          indicator, diagnostics, model, mic, send. When the bar is narrow
-          (e.g. on a small window), the secondary controls drop out so the
-          model selector + send button always stay visible. */}
-      <div ref={bottomBarRef} className="flex flex-row items-center gap-2 px-3 py-2 relative">
-        {/* Left: attach */}
+      {/* Bottom action bar — 1:1 ChatGPT composer layout. Left: attach +
+          permission mode. Right: model picker, mic, send. */}
+      <div className="flex flex-row items-center gap-1 px-2 pb-2 pt-1 relative">
+        {/* Left: attach — plain icon, no ring */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -1648,70 +1492,24 @@ export default function ChatInput({
               onClick={handleFileSelect}
               disabled={isFilePickerOpen}
               variant="ghost"
-              size="sm"
+              size="default"
               shape="round"
               className={cn(
-                'border border-border-secondary text-text-secondary hover:text-text-primary transition-colors',
+                'text-text-primary transition-colors',
                 isFilePickerOpen ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
               )}
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-5 h-5" strokeWidth={1.75} />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Attach file</TooltipContent>
         </Tooltip>
 
         {/* Left: permission mode (ChatGPT-style "Full access" pill) */}
-        {!isBottomBarNarrow && <PermissionModeChip onClick={() => setView('settings')} />}
-
-        {/* Left: working directory (leaf folder name only) */}
-        {!isBottomBarNarrow && !hideDirSwitcher && (
-          <DirSwitcher
-            className=""
-            sessionId={sessionId ?? undefined}
-            workingDir={currentWorkingDir}
-            onWorkingDirChange={async (newDir) => {
-              await onWorkingDirChange?.(newDir);
-              setWorkingDirOverride(newDir);
-            }}
-          />
-        )}
+        <PermissionModeChip onClick={() => setView('settings')} />
 
         {/* Spacer */}
         <div className="flex-1" />
-
-        {!isBottomBarNarrow && (
-          <>
-            {/* Right: context window indicator */}
-            <ContextWindowIndicator
-              totalTokens={totalTokens || 0}
-              tokenLimit={tokenLimit}
-              alerts={alerts}
-            />
-
-            {/* Right: diagnostics */}
-            {sessionId && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      trackDiagnosticsOpened();
-                      setDiagnosticsOpen(true);
-                    }}
-                    variant="ghost"
-                    size="sm"
-                    shape="round"
-                    className="text-text-primary/70 hover:text-text-primary cursor-pointer transition-colors"
-                  >
-                    <Bug className="w-4 h-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Generate diagnostics bundle</TooltipContent>
-              </Tooltip>
-            )}
-          </>
-        )}
 
         {/* Right: model + effort selector (ChatGPT-style pill) */}
         <ModelPickerPill
@@ -1728,7 +1526,7 @@ export default function ChatInput({
               <Button
                 type="button"
                 variant="ghost"
-                size="sm"
+                size="default"
                 shape="round"
                 onClick={() => {
                   if (!isEnabled) return;
@@ -1754,7 +1552,7 @@ export default function ChatInput({
                   !isEnabled && 'opacity-50 cursor-not-allowed'
                 )}
               >
-                <Microphone size={16} />
+                <Microphone size={18} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -1772,7 +1570,7 @@ export default function ChatInput({
           <Button
             type="button"
             onClick={handleStop}
-            size="sm"
+            size="default"
             shape="round"
             variant="ghost"
             aria-label="Stop"
@@ -1786,7 +1584,7 @@ export default function ChatInput({
               <span>
                 <Button
                   type="button"
-                  size="sm"
+                  size="default"
                   shape="round"
                   variant="ghost"
                   disabled={isSubmitButtonDisabled}
@@ -1794,11 +1592,11 @@ export default function ChatInput({
                   onClick={onFormSubmit}
                   className={cn(
                     isSubmitButtonDisabled
-                      ? 'bg-background-tertiary text-text-secondary cursor-not-allowed opacity-60'
+                      ? 'bg-background-inverse/40 text-text-inverse cursor-not-allowed'
                       : 'bg-background-inverse text-text-inverse hover:bg-background-inverse/90 hover:cursor-pointer'
                   )}
                 >
-                  <ArrowUp className="w-4 h-4" strokeWidth={2.25} />
+                  <ArrowUp className="w-5 h-5" strokeWidth={2.25} />
                 </Button>
               </span>
             </TooltipTrigger>
@@ -1806,13 +1604,6 @@ export default function ChatInput({
               <p>{getSubmitButtonTooltip()}</p>
             </TooltipContent>
           </Tooltip>
-        )}
-        {sessionId && diagnosticsOpen && (
-          <DiagnosticsModal
-            isOpen={diagnosticsOpen}
-            onClose={() => setDiagnosticsOpen(false)}
-            sessionId={sessionId}
-          />
         )}
         <MentionPopover
           ref={mentionPopoverRef}

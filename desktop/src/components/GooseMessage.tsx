@@ -124,12 +124,7 @@ export default function GooseMessage({
   const pendingConfirmationIds = getPendingToolConfirmationIds(messages);
 
   return (
-    <div
-      className={cn(
-        'goose-message flex justify-start min-w-0',
-        isInToolCallGroup || isInWorkGroup ? 'w-full' : 'w-[90%]'
-      )}
-    >
+    <div className={cn('goose-message flex w-full min-w-0 justify-start')}>
       <div className="flex flex-col w-full min-w-0">
         {thinkingContent && (
           <ThinkingContent

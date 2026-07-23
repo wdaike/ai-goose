@@ -19,8 +19,8 @@ let cfg = {
   // Protocol registration
   protocols: [
     {
-      name: 'GooseProtocol',
-      schemes: ['goose'],
+      name: 'iCodexProtocol',
+      schemes: ['icodex'],
     },
   ],
   // macOS Info.plist extensions for drag-and-drop support
@@ -36,9 +36,9 @@ let cfg = {
     ],
     // Usage descriptions for macOS TCC (Transparency, Consent, and Control)
     NSCalendarsUsageDescription:
-      'Goose needs access to your calendars to help manage and query calendar events.',
+      'iCodex needs access to your calendars to help manage and query calendar events.',
     NSRemindersUsageDescription:
-      'Goose needs access to your reminders to help manage and query reminders.',
+      'iCodex needs access to your reminders to help manage and query reminders.',
   },
 };
 
@@ -87,8 +87,8 @@ module.exports = {
     {
       name: '@electron-forge/maker-deb',
       config: {
-        name: 'Goose',
-        bin: 'Goose',
+        name: 'iCodex',
+        bin: 'iCodex',
         maintainer: 'AAIF (Agentic AI Foundation)',
         homepage: 'https://goose-docs.ai/',
         categories: ['Development'],
@@ -103,8 +103,8 @@ module.exports = {
     {
       name: '@electron-forge/maker-rpm',
       config: {
-        name: 'Goose',
-        bin: 'Goose',
+        name: 'iCodex',
+        bin: 'iCodex',
         maintainer: 'AAIF (Agentic AI Foundation)',
         homepage: 'https://goose-docs.ai/',
         categories: ['Development'],
@@ -120,7 +120,7 @@ module.exports = {
       name: '@electron-forge/maker-flatpak',
       config: {
         options: {
-          id: 'io.github.block.Goose', // NOTE: kept for backwards compat with existing installs
+          id: 'io.github.aaif.iCodex',
           categories: ['Development'],
           icon: {
             scalable: 'src/images/icon.svg',
@@ -129,7 +129,7 @@ module.exports = {
           homepage: 'https://goose-docs.ai/',
           runtimeVersion: '25.08',
           baseVersion: '25.08',
-          bin: 'Goose',
+          bin: 'iCodex',
           modules: [
             {
               name: 'libbz2-shim',

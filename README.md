@@ -1,6 +1,6 @@
-# goose
+# iCodex
 
-goose is an Electron desktop frontend for OpenAI's [Codex](https://github.com/openai/codex) app-server. Codex owns everything backend-shaped — inference, tool execution, MCP, conversation storage, config — while goose provides the desktop UI.
+iCodex is an Electron desktop frontend for OpenAI's [Codex](https://github.com/openai/codex) app-server. Codex owns everything backend-shaped — inference, tool execution, MCP, conversation storage, config — while iCodex provides the desktop UI.
 
 ## How it works
 

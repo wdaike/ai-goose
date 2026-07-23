@@ -245,7 +245,7 @@ export async function acpNewSession(
 }
 
 export async function acpDeleteSession(sessionId: string): Promise<void> {
-  await codex.threadDelete(sessionId);
+  await codex.threadArchive(sessionId);
 }
 
 export async function acpCloseSession(sessionId: string): Promise<void> {

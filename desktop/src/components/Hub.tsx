@@ -22,8 +22,9 @@ import { useConfig } from './ConfigContext';
 import { getInitialWorkingDir } from '../utils/workingDir';
 import { useWorkspacePanelsSafe } from '../contexts/WorkspacePanelsContext';
 import { createSession } from '../sessions';
+import { acpListSessions } from '../acp/sessions';
 import LoadingGoose from './LoadingGoose';
-import { Goose } from './icons/Goose';
+import { CodexCloud } from './icons/CodexCloud';
 import { DirSwitcher } from './bottom_menu/DirSwitcher';
 import { UserInput } from '../types/message';
 import {
@@ -116,6 +117,23 @@ export default function Hub({
     useState<NextChatExtensionDraft | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  useEffect(() => {
+    let cancelled = false;
+    const applyLastUsedDir = async () => {
+      const lastSessionDir = await acpListSessions()
+        .then(({ sessions }) => sessions[0]?.workingDir)
+        .catch(() => undefined);
+      const dir =
+        lastSessionDir ||
+        (await window.electron.listRecentDirs().catch(() => []))[0];
+      if (!cancelled && dir) setWorkingDir(dir);
+    };
+    void applyLastUsedDir();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const workspacePanels = useWorkspacePanelsSafe();
   const setPanelsWorkingDir = workspacePanels?.setWorkingDir;
   useEffect(() => {
@@ -184,6 +202,7 @@ export default function Hub({
           : { allExtensions: extensionsList };
 
       const session = await createSession(workingDir, sessionOptions);
+      window.electron.addRecentDir(workingDir);
       setNextChatExtensionDraft(null);
 
       window.dispatchEvent(new CustomEvent(AppEvents.SESSION_CREATED));
@@ -206,9 +225,9 @@ export default function Hub({
 
   return (
     <div className="flex flex-col h-full min-h-0 items-center justify-center px-6 relative">
-      <div className="w-full max-w-3xl">
+      <div className="w-full max-w-4xl">
         <div className="mb-5 flex justify-center">
-          <Goose className="size-12 text-text-secondary" />
+          <CodexCloud className="size-12 text-text-secondary" />
         </div>
 
         <h1 className="mb-10 text-center text-3xl font-normal text-text-primary">
@@ -283,7 +302,6 @@ export default function Hub({
             inputRef={inputRef}
             nextChatExtensionDraft={draftForMenu}
             onNextChatExtensionDraftChange={handleNextChatExtensionDraftChange}
-            hideDirSwitcher
           />
         </ChatInputCard>
       </div>

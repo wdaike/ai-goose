@@ -4,9 +4,9 @@ import MarkdownContent from './MarkdownContent';
 import { getTextAndImageContent, type Message } from '../types/message';
 import MessageCopyLink from './MessageCopyLink';
 import { formatMessageTimestamp } from '../utils/timeUtils';
-import Edit from './icons/Edit';
-import { Button } from './ui/button';
 import { defineMessages, useIntl } from '../i18n';
+import { Pencil } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/Tooltip';
 
 const i18n = defineMessages({
   editPlaceholder: {
@@ -33,6 +33,10 @@ const i18n = defineMessages({
   cancelAriaLabel: {
     id: 'userMessage.cancelAriaLabel',
     defaultMessage: 'Cancel editing',
+  },
+  send: {
+    id: 'chatInput.send',
+    defaultMessage: 'Send',
   },
   editInPlace: {
     id: 'userMessage.editInPlace',
@@ -136,25 +140,18 @@ export default function UserMessage({ message, onMessageUpdate }: UserMessagePro
     window.electron.logInfo(`Content changed: ${newContent}`);
   }, []);
 
-  const handleSave = useCallback(
-    (editType: 'fork' | 'edit' = 'fork') => {
-      if (editContent.trim().length === 0) {
-        setError(intl.formatMessage(i18n.emptyError));
-        return;
-      }
+  const handleSave = useCallback(() => {
+    if (editContent.trim().length === 0) {
+      setError(intl.formatMessage(i18n.emptyError));
+      return;
+    }
 
-      setIsEditing(false);
+    setIsEditing(false);
 
-      if (editType === 'edit' && editContent.trim() === textContent.trim()) {
-        return;
-      }
-
-      if (onMessageUpdate && message.id) {
-        onMessageUpdate(message.id, editContent, editType);
-      }
-    },
-    [editContent, textContent, onMessageUpdate, message.id, intl]
-  );
+    if (onMessageUpdate && message.id) {
+      onMessageUpdate(message.id, editContent, 'fork');
+    }
+  }, [editContent, onMessageUpdate, message.id, intl]);
 
   // Handle cancel action
   const handleCancel = useCallback(() => {
@@ -195,20 +192,20 @@ export default function UserMessage({ message, onMessageUpdate }: UserMessagePro
     <div className="w-full mt-[16px] opacity-0 animate-[appear_150ms_ease-in_forwards]">
       <div className="flex flex-col group">
         {isEditing ? (
-          // Truly wide, centered, in-place edit box replacing the bubble
-          <div className="w-full max-w-4xl mx-auto text-text-primary rounded-xl border border-border-primary shadow-lg py-4 px-4 my-2 transition-all duration-200 ease-in-out">
+          <div
+            className="flex min-h-[120px] w-full flex-col rounded-[26px] bg-background-secondary px-4 pb-4 pt-4 text-text-primary"
+            data-testid="user-message-editor"
+          >
             <textarea
               ref={textareaRef}
               value={editContent}
               onChange={handleContentChange}
               onKeyDown={handleKeyDown}
-              className="w-full resize-none bg-transparent text-text-primary placeholder:text-text-secondary border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 text-base leading-relaxed"
+              className="block w-full resize-none overflow-y-auto border-none bg-transparent p-0 text-base leading-6 text-text-primary outline-none placeholder:text-text-secondary focus:outline-none focus:ring-0"
               style={{
-                minHeight: '120px',
-                maxHeight: '300px',
-                padding: '16px',
+                minHeight: '24px',
+                maxHeight: '240px',
                 fontFamily: 'inherit',
-                lineHeight: '1.6',
                 wordBreak: 'break-word',
                 overflowWrap: 'break-word',
               }}
@@ -216,56 +213,45 @@ export default function UserMessage({ message, onMessageUpdate }: UserMessagePro
               aria-label={intl.formatMessage(i18n.editAriaLabel)}
               aria-describedby={error ? `error-${message.id}` : undefined}
             />
-            {/* Error message */}
             {error && (
               <div
                 id={`error-${message.id}`}
-                className="text-red-400 text-xs mt-2 mb-2"
+                className="mt-2 text-xs text-text-danger"
                 role="alert"
                 aria-live="polite"
               >
                 {error}
               </div>
             )}
-            <div className="flex justify-between items-center mt-4">
-              <div className="text-xs text-text-secondary">
-                {intl.formatMessage(i18n.editInPlaceDescription, {
-                  b: (chunks: React.ReactNode) => <span className="font-semibold">{chunks}</span>,
-                })}
-              </div>
-              <div className="flex gap-3">
-                <Button
-                  onClick={handleCancel}
-                  variant="ghost"
-                  aria-label={intl.formatMessage(i18n.cancelAriaLabel)}
-                >
-                  {intl.formatMessage(i18n.cancel)}
-                </Button>
-                <Button
-                  onClick={() => handleSave('edit')}
-                  variant="secondary"
-                  aria-label={intl.formatMessage(i18n.editInPlaceAriaLabel)}
-                  title={intl.formatMessage(i18n.editInPlaceTitle)}
-                >
-                  {intl.formatMessage(i18n.editInPlace)}
-                </Button>
-                <Button
-                  onClick={() => handleSave('fork')}
-                  aria-label={intl.formatMessage(i18n.forkSessionAriaLabel)}
-                  title={intl.formatMessage(i18n.forkSessionTitle)}
-                >
-                  {intl.formatMessage(i18n.forkSession)}
-                </Button>
-              </div>
+            <div className="mt-auto flex justify-end gap-2 pt-4">
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="h-[34px] rounded-full border border-border-secondary bg-transparent px-3.5 text-base font-medium text-text-primary transition-colors hover:bg-background-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-primary"
+                aria-label={intl.formatMessage(i18n.cancelAriaLabel)}
+              >
+                {intl.formatMessage(i18n.cancel)}
+              </button>
+              <button
+                type="button"
+                onClick={handleSave}
+                className="h-[34px] rounded-full bg-background-inverse px-3.5 text-base font-medium text-text-inverse transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-inverse disabled:cursor-not-allowed disabled:opacity-40"
+                aria-label={intl.formatMessage(i18n.send)}
+                disabled={editContent.trim().length === 0}
+              >
+                {intl.formatMessage(i18n.send)}
+              </button>
             </div>
           </div>
         ) : (
-          // Normal message display
           <div className="message flex justify-end w-full">
             <div className="flex-col max-w-[85%] w-fit">
               <div className="flex flex-col group">
                 {textContent.trim() && (
-                  <div className="flex bg-text-primary text-background-primary rounded-xl py-2.5 px-4">
+                  <div
+                    className="flex rounded-3xl bg-background-secondary px-4 py-2.5 text-text-primary"
+                    data-testid="user-message-bubble"
+                  >
                     <div ref={contentRef}>
                       <MarkdownContent
                         content={textContent}
@@ -283,31 +269,32 @@ export default function UserMessage({ message, onMessageUpdate }: UserMessagePro
                   </div>
                 )}
 
-                <div className="relative h-[22px] flex justify-end text-right">
-                  <div className="absolute w-40 font-mono right-0 text-xs text-text-secondary pt-1 transition-all duration-200 group-hover:-translate-y-4 group-hover:opacity-0">
-                    {timestamp}
-                  </div>
-                  <div className="absolute right-0 pt-1 flex items-center gap-2">
-                    <button
-                      onClick={handleEditClick}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          handleEditClick();
-                        }
-                      }}
-                      className="flex items-center gap-1 text-xs text-text-secondary hover:cursor-pointer hover:text-text-primary transition-all duration-200 opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 rounded"
-                      aria-label={intl.formatMessage(i18n.editMessageAriaLabel, {
-                        preview: `${textContent.substring(0, 50)}${textContent.length > 50 ? '...' : ''}`,
-                      })}
-                      aria-expanded={isEditing}
-                      title={intl.formatMessage(i18n.editMessageTitle)}
+                <div className="mt-1 flex h-8 items-center justify-end gap-2 text-right">
+                  <time className="text-sm tabular-nums text-text-secondary">{timestamp}</time>
+                  <MessageCopyLink text={textContent} contentRef={contentRef} />
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={handleEditClick}
+                        className="flex size-8 items-center justify-center rounded-[10px] text-text-secondary opacity-0 transition-colors hover:bg-background-tertiary hover:text-text-primary focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-primary group-hover:opacity-100"
+                        aria-label={intl.formatMessage(i18n.editMessageAriaLabel, {
+                          preview: `${textContent.substring(0, 50)}${textContent.length > 50 ? '...' : ''}`,
+                        })}
+                        aria-expanded={isEditing}
+                      >
+                        <Pencil className="size-[18px]" strokeWidth={1.8} aria-hidden="true" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      sideOffset={2}
+                      hideArrow
+                      className="rounded-[10px] bg-background-tertiary px-2.5 py-1 text-sm leading-5 text-text-primary shadow-lg"
                     >
-                      <Edit className="h-3 w-3" />
-                      <span>{intl.formatMessage(i18n.editButton)}</span>
-                    </button>
-                    <MessageCopyLink text={textContent} contentRef={contentRef} />
-                  </div>
+                      {intl.formatMessage(i18n.editButton)}
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
             </div>

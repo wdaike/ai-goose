@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { defineMessages, useIntl } from '../i18n';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SearchView } from './conversation/SearchView';
-import LoadingGoose from './LoadingGoose';
 import ProgressiveMessageList from './ProgressiveMessageList';
+import LoadingGoose from './LoadingGoose';
 import { MainPanelLayout } from './Layout/MainPanelLayout';
 import ChatInput from './ChatInput';
 import { ChatInputCard } from './ChatInputCard';
@@ -44,6 +44,8 @@ const i18n = defineMessages({
     defaultMessage: 'Connection lost. Reconnecting…',
   },
 });
+
+const CHAT_CONTENT_WIDTH = 'mx-auto w-[calc(100%_-_2rem)] max-w-4xl sm:w-[calc(100%_-_4rem)]';
 
 interface BaseChatProps {
   setChat: (chat: ChatType) => void;
@@ -129,7 +131,7 @@ export default function BaseChat({
   );
 
   // noAutoSubmit only suppresses auto-submitting the initial prompt of a fresh session
-  // (goose://new-session?prompt=...). Once the conversation has messages, later flows
+  // (icodex://new-session?prompt=...). Once the conversation has messages, later flows
   // such as forks or resumes should auto-submit normally.
   const suppressInitialAutoSubmit = noAutoSubmit && messages.length === 0;
   const canAutoSubmit = !acpRecovering && !suppressInitialAutoSubmit;
@@ -183,6 +185,16 @@ export default function BaseChat({
       }, [])
       .reverse();
   }, [messages]);
+
+  const awaitingResponse = useMemo(() => {
+    if (chatState === ChatState.Idle || chatState === ChatState.LoadingConversation) return false;
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const message = messages[i];
+      if (!message.metadata.userVisible) continue;
+      return message.role === 'user';
+    }
+    return false;
+  }, [chatState, messages]);
 
   const activePlan = useMemo(() => {
     if (chatState === ChatState.Idle) return null;
@@ -363,23 +375,27 @@ export default function BaseChat({
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             data-drop-zone="true"
-            paddingX={6}
             paddingY={0}
           >
             {messages.length > 0 ? (
               <>
                 <SearchView>
-                  <ProgressiveMessageList
-                    messages={messages}
-                    chat={{ sessionId }}
-                    toolCallNotifications={toolCallNotifications}
-                    append={(text: string) => handleSubmit({ msg: text, images: [] })}
-                    isUserMessage={(m: Message) => m.role === 'user'}
-                    isStreamingMessage={chatState !== ChatState.Idle}
-                    onRenderingComplete={handleRenderingComplete}
-                    onMessageUpdate={onMessageUpdate}
-                    submitElicitationResponse={submitElicitationResponse}
-                  />
+                  <div className={CHAT_CONTENT_WIDTH} data-testid="chat-content">
+                    <ProgressiveMessageList
+                      messages={messages}
+                      chat={{ sessionId }}
+                      toolCallNotifications={toolCallNotifications}
+                      append={(text: string) => handleSubmit({ msg: text, images: [] })}
+                      isUserMessage={(m: Message) => m.role === 'user'}
+                      isStreamingMessage={chatState !== ChatState.Idle}
+                      onRenderingComplete={handleRenderingComplete}
+                      onMessageUpdate={onMessageUpdate}
+                      submitElicitationResponse={submitElicitationResponse}
+                    />
+                    {awaitingResponse && (
+                      <LoadingGoose chatState={chatState} message={progressMessage} />
+                    )}
+                  </div>
                 </SearchView>
 
                 <div className="block h-8" />
@@ -387,11 +403,6 @@ export default function BaseChat({
             ) : null}
           </ScrollArea>
 
-          {chatState !== ChatState.Idle && (
-            <div className="absolute bottom-1 left-4 z-20 pointer-events-none">
-              <LoadingGoose chatState={chatState} message={progressMessage} />
-            </div>
-          )}
         </div>
 
         {acpRecovering && (
@@ -408,7 +419,8 @@ export default function BaseChat({
 
         <ChatInputCard
           className={cn(
-            'relative z-10 mx-4 mb-4',
+            'relative z-10 mb-4',
+            CHAT_CONTENT_WIDTH,
             !disableAnimation && 'animate-[fadein_400ms_ease-in_forwards]'
           )}
         >

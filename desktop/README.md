@@ -1,4 +1,4 @@
-# goose Desktop App
+# iCodex Desktop App
 
 Electron + React desktop frontend for OpenAI's Codex app-server. See the repo root [AGENTS.md](../AGENTS.md) for architecture.
 

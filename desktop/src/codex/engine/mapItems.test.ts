@@ -194,9 +194,10 @@ describe('mapThreadToMessages', () => {
     expect(byId.get('answer-1')?.metadata.workGroupId).toBeUndefined();
   });
 
-  it('renders restored threads without tool items flat instead of folding texts', () => {
+  it('folds all but the last text of restored threads that lost their tool items', () => {
     // thread/read does not reconstruct dynamic tool calls from rollout history,
-    // so restored turns may contain only reasoning and agent messages.
+    // so restored turns may contain only reasoning and agent messages. The
+    // intermediate texts are still progress commentary and belong in the group.
     const items = [
       {
         type: 'userMessage',
@@ -225,7 +226,7 @@ describe('mapThreadToMessages', () => {
     const messages = mapThreadToMessages(state(items));
     const byId = new Map(messages.map((message) => [message.id, message]));
 
-    expect(byId.get('progress-1')?.metadata.workGroupId).toBeUndefined();
+    expect(byId.get('progress-1')?.metadata.workGroupId).toBe('work-user-1');
     expect(byId.get('answer-1')?.metadata.workGroupId).toBeUndefined();
   });
 
