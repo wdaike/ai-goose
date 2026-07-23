@@ -2591,24 +2591,6 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Hủy"
   },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "Bạn có chắc chắn muốn xóa phiên \"{name}\" không? Hành động này không thể hoàn tác."
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "Không thể xóa phiên: {error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "Xóa phiên"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "Xóa phiên"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "Đã xóa phiên làm việc thành công"
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "Đang xóa..."
-  },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Không thể nhân bản phiên: {error}"
   },

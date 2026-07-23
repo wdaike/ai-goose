@@ -1,9 +1,10 @@
 import { useMemo, useState, type ReactNode } from 'react';
-import { BookOpen, ChevronRight, Pencil, Search, Terminal, Wrench } from 'lucide-react';
+import { BookOpen, ChevronRight, Pencil, Search, Wrench } from 'lucide-react';
 import { defineMessages, useIntl } from '../i18n';
 import type { Message } from '../types/message';
 import { getToolRequests } from '../types/message';
 import { cn } from '../utils';
+import { Terminal } from './icons/toolcalls';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 
 const i18n = defineMessages({

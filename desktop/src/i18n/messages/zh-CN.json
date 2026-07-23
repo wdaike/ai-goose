@@ -2588,26 +2588,17 @@
   "sessionActionsHeader.actionsLabel": {
     "defaultMessage": "Session actions"
   },
+  "sessionActionsHeader.archiveFailed": {
+    "defaultMessage": "归档聊天失败：{error}"
+  },
+  "sessionActionsHeader.archiveSession": {
+    "defaultMessage": "归档聊天"
+  },
+  "sessionActionsHeader.archived": {
+    "defaultMessage": "聊天已归档"
+  },
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Cancel"
-  },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "确定要删除会话“{name}”吗？此操作无法撤销。"
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "删除会话失败：{error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "删除会话"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "删除会话"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "会话删除成功"
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "正在删除..."
   },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Failed to duplicate session: {error}"

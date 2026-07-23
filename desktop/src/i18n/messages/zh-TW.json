@@ -2588,26 +2588,17 @@
   "sessionActionsHeader.actionsLabel": {
     "defaultMessage": "工作階段動作"
   },
+  "sessionActionsHeader.archiveFailed": {
+    "defaultMessage": "封存聊天失敗：{error}"
+  },
+  "sessionActionsHeader.archiveSession": {
+    "defaultMessage": "封存聊天"
+  },
+  "sessionActionsHeader.archived": {
+    "defaultMessage": "聊天已封存"
+  },
   "sessionActionsHeader.cancel": {
     "defaultMessage": "取消"
-  },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "您確定要刪除工作階段「{name}」嗎？此動作無法復原。"
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "刪除工作階段失敗：{error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "刪除工作階段"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "刪除工作階段"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "已成功刪除工作階段"
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "正在刪除..."
   },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "複製工作階段失敗：{error}"

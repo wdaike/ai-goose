@@ -5,11 +5,13 @@ import { ConfigProvider } from './components/ConfigContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import SuspenseLoader from './suspense-loader';
 import { applyThemeTokens } from './theme/theme-tokens';
+import { initAppearance } from './appearance/appearance';
 import { currentLocale, currentMessageLocale, loadMessages } from './i18n';
 import './styles/main.css';
 
-// Apply theme tokens to :root before first paint.
+// Apply theme tokens and appearance overrides to :root before first paint.
 applyThemeTokens();
+initAppearance();
 
 const App = lazy(() => import('./App'));
 

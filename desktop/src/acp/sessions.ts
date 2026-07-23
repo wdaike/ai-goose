@@ -25,6 +25,30 @@ interface GooseSessionInfoMeta {
 import { codex } from '../codex/client';
 import type { Thread } from '../codex/protocol/v2/Thread';
 
+// Codex can only archive threads that still have a rollout file on disk.
+// Stale state-db rows without one fail `thread/archive` forever, so we
+// tombstone those ids locally and drop them from list results.
+const HIDDEN_THREADS_KEY = 'goose-hidden-threads';
+
+function readHiddenThreadIds(): Set<string> {
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(HIDDEN_THREADS_KEY) ?? '[]');
+    return new Set(Array.isArray(parsed) ? parsed.filter((id) => typeof id === 'string') : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function hideThread(threadId: string): void {
+  const ids = readHiddenThreadIds();
+  ids.add(threadId);
+  window.localStorage.setItem(HIDDEN_THREADS_KEY, JSON.stringify([...ids]));
+}
+
+function isMissingRolloutError(error: unknown): boolean {
+  return error instanceof Error && error.message.includes('no rollout found');
+}
+
 function threadToListItem(thread: Thread): SessionListItem {
   const iso = (seconds: number) => new Date(seconds * 1000).toISOString();
   return {
@@ -131,8 +155,9 @@ export async function acpListSessions(
     searchTerm: filter?.keyword?.trim() || null,
     sortKey: 'updated_at',
   });
+  const hidden = readHiddenThreadIds();
   return {
-    sessions: response.data.map(threadToListItem),
+    sessions: response.data.filter((t) => !hidden.has(t.id)).map(threadToListItem),
     nextCursor: response.nextCursor ?? null,
   };
 }
@@ -145,7 +170,8 @@ export async function acpListRecentSessions(maxSessions: number): Promise<Sessio
     limit: maxSessions,
     sortKey: 'updated_at',
   });
-  return response.data.map(threadToListItem);
+  const hidden = readHiddenThreadIds();
+  return response.data.filter((t) => !hidden.has(t.id)).map(threadToListItem);
 }
 
 const COUNT_PAGE_SIZE = 100;
@@ -157,6 +183,7 @@ export async function acpCountSessionsForDir(
 ): Promise<{ count: number; capped: boolean }> {
   let count = 0;
   let cursor: string | null = null;
+  const hidden = readHiddenThreadIds();
   while (count < COUNT_MAX) {
     const response = await codex.threadList({
       cursor,
@@ -165,7 +192,7 @@ export async function acpCountSessionsForDir(
       sortKey: 'updated_at',
       useStateDbOnly: true,
     });
-    count += response.data.length;
+    count += response.data.filter((t) => !hidden.has(t.id)).length;
     cursor = response.nextCursor ?? null;
     if (!cursor) return { count, capped: false };
   }
@@ -244,8 +271,13 @@ export async function acpNewSession(
   };
 }
 
-export async function acpDeleteSession(sessionId: string): Promise<void> {
-  await codex.threadArchive(sessionId);
+export async function acpArchiveSession(sessionId: string): Promise<void> {
+  try {
+    await codex.threadArchive(sessionId);
+  } catch (error) {
+    if (!isMissingRolloutError(error)) throw error;
+    hideThread(sessionId);
+  }
 }
 
 export async function acpCloseSession(sessionId: string): Promise<void> {

@@ -18,8 +18,10 @@ import {
   KeyRound,
   Puzzle,
   Search,
+  SunMedium,
   type LucideIcon,
 } from 'lucide-react';
+import AppearanceSection from './appearance/AppearanceSection';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import ChatSettingsSection from './chat/ChatSettingsSection';
 import KeyboardShortcutsSection from './keyboard/KeyboardShortcutsSection';
@@ -72,6 +74,10 @@ const i18n = defineMessages({
     id: 'settingsView.tabChat',
     defaultMessage: 'Chat',
   },
+  tabAppearance: {
+    id: 'settingsView.tabAppearance',
+    defaultMessage: 'Appearance',
+  },
   tabExternalBackend: {
     id: 'settingsView.tabExternalBackend',
     defaultMessage: 'External Backend',
@@ -102,6 +108,7 @@ type SettingsTab =
   | 'models'
   | 'local-inference'
   | 'chat'
+  | 'appearance'
   | 'app'
   | 'plugins'
   | 'sharing'
@@ -132,6 +139,12 @@ const NAV_GROUPS: NavGroup[] = [
         testId: 'settings-local-inference-tab',
       },
       { tab: 'chat', label: 'tabChat', icon: MessageSquare, testId: 'settings-chat-tab' },
+      {
+        tab: 'appearance',
+        label: 'tabAppearance',
+        icon: SunMedium,
+        testId: 'settings-appearance-tab',
+      },
       { tab: 'app', label: 'tabApp', icon: Monitor, testId: 'settings-app-tab' },
     ],
   },
@@ -215,6 +228,7 @@ export default function SettingsView({
         tools: 'chat',
         app: 'app',
         chat: 'chat',
+        appearance: 'appearance',
         extensions: 'plugins',
         skills: 'plugins',
         plugins: 'plugins',
@@ -343,6 +357,7 @@ export default function SettingsView({
               {activeTab === 'models' && <ModelsSection setView={setView} />}
               {activeTab === 'local-inference' && localInference && <LocalInferenceSection />}
               {activeTab === 'chat' && <ChatSettingsSection />}
+              {activeTab === 'appearance' && <AppearanceSection />}
               {activeTab === 'plugins' && (
                 <PluginsSettingsSection
                   deepLinkConfig={viewOptions.deepLinkConfig}

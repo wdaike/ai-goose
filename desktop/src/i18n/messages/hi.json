@@ -2591,24 +2591,6 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Cancel"
   },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "क्या आप वाकई सत्र \"{name}\" हटाना चाहते हैं? इस कार्रवाई को वापस नहीं किया जा सकता।"
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "सत्र हटाने में विफल: {error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "सत्र हटाएँ"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "सत्र हटाएँ"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "सत्र सफलतापूर्वक हटा दिया गया"
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "हटाया जा रहा है..."
-  },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Failed to duplicate session: {error}"
   },

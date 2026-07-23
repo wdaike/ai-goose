@@ -2591,24 +2591,6 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Batal"
   },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "Adakah anda pasti mahu memadam sesi \"{name}\"? Tindakan ini tidak boleh dibuat asal."
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "Gagal memadam sesi: {error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "Padam sesi"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "Padam Sesi"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "Sesi berjaya dipadam"
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "Memadam..."
-  },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Gagal menduplikasi sesi: {error}"
   },

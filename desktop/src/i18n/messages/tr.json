@@ -2591,24 +2591,6 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Cancel"
   },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "\"{name}\" oturumunu silmek istediğinizden emin misiniz? Bu eylem geri alınamaz."
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "Oturum silinemedi: {error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "Oturumu sil"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "Oturumu Sil"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "Oturum başarıyla silindi"
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "Siliniyor..."
-  },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Failed to duplicate session: {error}"
   },

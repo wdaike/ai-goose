@@ -2591,24 +2591,6 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Annulla"
   },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "Sei sicuro di voler eliminare la sessione \"{name}\"? Questa azione non può essere annullata."
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "Impossibile eliminare la sessione: {error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "Elimina sessione"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "Elimina sessione"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "Sessione eliminata correttamente"
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "Eliminazione..."
-  },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Impossibile duplicare la sessione: {error}"
   },

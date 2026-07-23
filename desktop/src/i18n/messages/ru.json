@@ -2591,24 +2591,6 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Cancel"
   },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "Удалить сеанс «{name}»? Это действие нельзя отменить."
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "Не удалось удалить сессию: {error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "Удалить сеанс"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "Удалить сеанс"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "Сеанс успешно удален"
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "Удаление..."
-  },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Failed to duplicate session: {error}"
   },

@@ -2591,24 +2591,6 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Annuler"
   },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "Voulez-vous vraiment supprimer la session « {name} » ? Cette action est irréversible."
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "Échec de la suppression de la session : {error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "Supprimer la session"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "Supprimer la session"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "Session supprimée avec succès"
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "Suppression..."
-  },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Échec de la duplication de la session : {error}"
   },

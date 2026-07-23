@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { applyThemeTokens, buildMcpHostStyles } from '../theme/theme-tokens';
+import { applyAppearance } from '../appearance/appearance';
 import type { McpUiHostStyles } from '@modelcontextprotocol/ext-apps/app-bridge';
 
 type ThemePreference = 'light' | 'dark' | 'system';
@@ -143,6 +144,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   useEffect(() => {
     applyThemeToDocument(resolvedTheme);
     applyThemeTokens(resolvedTheme);
+    applyAppearance();
   }, [resolvedTheme]);
 
   const value: ThemeContextValue = {

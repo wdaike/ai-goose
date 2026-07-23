@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState, type KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Copy, Edit2, LoaderCircle, MoreHorizontal, Trash2 } from 'lucide-react';
+import { Archive, Copy, Edit2, LoaderCircle, MoreHorizontal } from 'lucide-react';
 import { FolderClosed } from './icons/Folder';
 import { toast } from 'react-toastify';
 import { AppEvents } from '../constants/events';
 import { defineMessages, useIntl } from '../i18n';
-import { acpDeleteSession, acpForkSession, acpRenameSession } from '../acp/sessions';
+import { acpArchiveSession, acpForkSession, acpRenameSession } from '../acp/sessions';
 import { getSessionDisplayName } from '../sessions';
 import type { Session } from '../types/session';
 import { errorMessage } from '../utils/conversionUtils';
@@ -34,9 +34,9 @@ const i18n = defineMessages({
     id: 'sessionActionsHeader.duplicateSession',
     defaultMessage: 'Duplicate chat',
   },
-  deleteSession: {
-    id: 'sessionActionsHeader.deleteSession',
-    defaultMessage: 'Delete chat',
+  archiveSession: {
+    id: 'sessionActionsHeader.archiveSession',
+    defaultMessage: 'Archive chat',
   },
   renameTitle: {
     id: 'sessionActionsHeader.renameTitle',
@@ -74,25 +74,13 @@ const i18n = defineMessages({
     id: 'sessionActionsHeader.duplicateFailed',
     defaultMessage: 'Failed to duplicate session: {error}',
   },
-  deleteTitle: {
-    id: 'sessionActionsHeader.deleteTitle',
-    defaultMessage: 'Delete Session',
+  archived: {
+    id: 'sessionActionsHeader.archived',
+    defaultMessage: 'Chat archived',
   },
-  deleteConfirm: {
-    id: 'sessionActionsHeader.deleteConfirm',
-    defaultMessage: 'Delete "{name}"? This cannot be undone.',
-  },
-  deleting: {
-    id: 'sessionActionsHeader.deleting',
-    defaultMessage: 'Deleting...',
-  },
-  deleted: {
-    id: 'sessionActionsHeader.deleted',
-    defaultMessage: 'Session deleted',
-  },
-  deleteFailed: {
-    id: 'sessionActionsHeader.deleteFailed',
-    defaultMessage: 'Failed to delete session: {error}',
+  archiveFailed: {
+    id: 'sessionActionsHeader.archiveFailed',
+    defaultMessage: 'Failed to archive chat: {error}',
   },
 });
 
@@ -113,8 +101,7 @@ export default function SessionActionsHeader({
   const [renameValue, setRenameValue] = useState('');
   const [isRenaming, setIsRenaming] = useState(false);
   const [isDuplicating, setIsDuplicating] = useState(false);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isArchiving, setIsArchiving] = useState(false);
 
   const title = useMemo(() => (session ? getSessionDisplayName(session) : ''), [session]);
 
@@ -182,28 +169,27 @@ export default function SessionActionsHeader({
     }
   }, [intl, isDuplicating, session]);
 
-  const handleDelete = useCallback(async () => {
-    if (!session || isDeleting) return;
+  const handleArchive = useCallback(async () => {
+    if (!session || isArchiving) return;
 
-    setIsDeleting(true);
+    setIsArchiving(true);
     try {
-      await acpDeleteSession(session.id);
+      await acpArchiveSession(session.id);
       window.dispatchEvent(
         new CustomEvent(AppEvents.SESSION_DELETED, { detail: { sessionId: session.id } })
       );
-      setIsDeleteOpen(false);
-      toast.success(intl.formatMessage(i18n.deleted));
+      toast.success(intl.formatMessage(i18n.archived));
       navigate('/');
     } catch (error) {
       toast.error(
-        intl.formatMessage(i18n.deleteFailed, {
+        intl.formatMessage(i18n.archiveFailed, {
           error: errorMessage(error, 'Unknown error'),
         })
       );
     } finally {
-      setIsDeleting(false);
+      setIsArchiving(false);
     }
-  }, [intl, isDeleting, navigate, session]);
+  }, [intl, isArchiving, navigate, session]);
 
   const handleRenameKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
@@ -256,12 +242,13 @@ export default function SessionActionsHeader({
               )}
               {intl.formatMessage(i18n.duplicateSession)}
             </DropdownMenuItem>
-            <DropdownMenuItem
-              className="text-text-danger focus:text-text-danger"
-              onSelect={() => setIsDeleteOpen(true)}
-            >
-              <Trash2 className="size-4" />
-              {intl.formatMessage(i18n.deleteSession)}
+            <DropdownMenuItem disabled={isArchiving} onSelect={() => void handleArchive()}>
+              {isArchiving ? (
+                <LoaderCircle className="size-4 animate-spin" />
+              ) : (
+                <Archive className="size-4" />
+              )}
+              {intl.formatMessage(i18n.archiveSession)}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -297,26 +284,6 @@ export default function SessionActionsHeader({
         </DialogContent>
       </Dialog>
 
-      <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>{intl.formatMessage(i18n.deleteTitle)}</DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-text-secondary">
-            {intl.formatMessage(i18n.deleteConfirm, { name: title })}
-          </p>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteOpen(false)} disabled={isDeleting}>
-              {intl.formatMessage(i18n.cancel)}
-            </Button>
-            <Button variant="destructive" onClick={() => void handleDelete()} disabled={isDeleting}>
-              {isDeleting
-                ? intl.formatMessage(i18n.deleting)
-                : intl.formatMessage(i18n.deleteSession)}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

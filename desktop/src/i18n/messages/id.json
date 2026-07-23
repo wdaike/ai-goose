@@ -2591,24 +2591,6 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Batal"
   },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "Apakah Anda yakin ingin menghapus sesi \"{name}\"? Tindakan ini tidak dapat dibatalkan."
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "Gagal menghapus sesi: {error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "Hapus sesi"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "Hapus Sesi"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "Sesi berhasil dihapus"
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "Menghapus..."
-  },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Gagal menggandakan sesi: {error}"
   },

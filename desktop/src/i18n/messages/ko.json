@@ -2591,24 +2591,6 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "취소"
   },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "\"{name}\" 세션을 삭제하시겠습니까? 이 작업은 취소할 수 없습니다."
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "세션 삭제 실패: {error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "세션 삭제"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "세션 삭제"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "세션이 삭제되었습니다."
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "삭제 중..."
-  },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "세션 복제 실패: {error}"
   },

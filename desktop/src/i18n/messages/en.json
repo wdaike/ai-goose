@@ -23,6 +23,111 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "Toggle side panel"
   },
+  "appearance.accent": {
+    "defaultMessage": "Accent"
+  },
+  "appearance.background": {
+    "defaultMessage": "Background"
+  },
+  "appearance.codeFont": {
+    "defaultMessage": "Code font"
+  },
+  "appearance.codeFontSize": {
+    "defaultMessage": "Code font size"
+  },
+  "appearance.codeFontSize.desc": {
+    "defaultMessage": "Adjust the base size used for code across chats and diffs"
+  },
+  "appearance.contrast": {
+    "defaultMessage": "Contrast"
+  },
+  "appearance.copyTheme": {
+    "defaultMessage": "Copy theme"
+  },
+  "appearance.darkTheme": {
+    "defaultMessage": "Dark theme"
+  },
+  "appearance.diffMarkers": {
+    "defaultMessage": "Diff markers"
+  },
+  "appearance.diffMarkers.color": {
+    "defaultMessage": "Color"
+  },
+  "appearance.diffMarkers.desc": {
+    "defaultMessage": "Show changes using colors or +/− markers"
+  },
+  "appearance.diffMarkers.plain": {
+    "defaultMessage": "+/-"
+  },
+  "appearance.fontSmoothing": {
+    "defaultMessage": "Font smoothing"
+  },
+  "appearance.fontSmoothing.desc": {
+    "defaultMessage": "Use native macOS font anti-aliasing"
+  },
+  "appearance.foreground": {
+    "defaultMessage": "Foreground"
+  },
+  "appearance.import": {
+    "defaultMessage": "Import"
+  },
+  "appearance.lightTheme": {
+    "defaultMessage": "Light theme"
+  },
+  "appearance.pointerCursors": {
+    "defaultMessage": "Use pointer cursors"
+  },
+  "appearance.pointerCursors.desc": {
+    "defaultMessage": "Change the cursor to a pointer when hovering over interactive elements"
+  },
+  "appearance.preferences.section": {
+    "defaultMessage": "Preferences"
+  },
+  "appearance.preset.codex": {
+    "defaultMessage": "Codex"
+  },
+  "appearance.preset.custom": {
+    "defaultMessage": "Custom"
+  },
+  "appearance.reduceMotion": {
+    "defaultMessage": "Reduce motion"
+  },
+  "appearance.reduceMotion.desc": {
+    "defaultMessage": "Reduce animations or match your system"
+  },
+  "appearance.reduceMotion.off": {
+    "defaultMessage": "Off"
+  },
+  "appearance.reduceMotion.on": {
+    "defaultMessage": "On"
+  },
+  "appearance.reduceMotion.system": {
+    "defaultMessage": "System"
+  },
+  "appearance.theme.dark": {
+    "defaultMessage": "Dark"
+  },
+  "appearance.theme.light": {
+    "defaultMessage": "Light"
+  },
+  "appearance.theme.section": {
+    "defaultMessage": "Theme"
+  },
+  "appearance.theme.system": {
+    "defaultMessage": "System"
+  },
+  "appearance.translucentSidebar": {
+    "defaultMessage": "Translucent sidebar"
+  },
+  "appearance.uiFont": {
+    "defaultMessage": "UI font"
+  },
+  "appearance.uiFontSize": {
+    "defaultMessage": "UI font size"
+  },
+  "appearance.uiFontSize.desc": {
+    "defaultMessage": "Adjust the base size used for the iCodex UI"
+  },
   "appsView.customApp": {
     "defaultMessage": "Custom app"
   },
@@ -2585,26 +2690,17 @@
   "sessionActionsHeader.actionsLabel": {
     "defaultMessage": "Session actions"
   },
+  "sessionActionsHeader.archiveFailed": {
+    "defaultMessage": "Failed to archive chat: {error}"
+  },
+  "sessionActionsHeader.archiveSession": {
+    "defaultMessage": "Archive chat"
+  },
+  "sessionActionsHeader.archived": {
+    "defaultMessage": "Chat archived"
+  },
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Cancel"
-  },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "Delete \"{name}\"? This cannot be undone."
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "Failed to delete session: {error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "Delete chat"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "Delete Session"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "Session deleted"
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "Deleting..."
   },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Failed to duplicate session: {error}"
@@ -2833,6 +2929,9 @@
   },
   "settingsView.tabApp": {
     "defaultMessage": "App"
+  },
+  "settingsView.tabAppearance": {
+    "defaultMessage": "Appearance"
   },
   "settingsView.tabAuth": {
     "defaultMessage": "Auth"

@@ -2591,24 +2591,6 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "キャンセル"
   },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "セッション「{name}」を削除してもよろしいですか？この操作は元に戻せません。"
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "セッションの削除に失敗しました: {error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "セッションを削除"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "セッションを削除"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "セッションを削除しました"
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "削除中..."
-  },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "セッションを複製できませんでした: {error}"
   },

@@ -2591,24 +2591,6 @@
   "sessionActionsHeader.cancel": {
     "defaultMessage": "Abbrechen"
   },
-  "sessionActionsHeader.deleteConfirm": {
-    "defaultMessage": "Möchten Sie die Sitzung \"{name}\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
-  },
-  "sessionActionsHeader.deleteFailed": {
-    "defaultMessage": "Sitzung konnte nicht gelöscht werden: {error}"
-  },
-  "sessionActionsHeader.deleteSession": {
-    "defaultMessage": "Sitzung löschen"
-  },
-  "sessionActionsHeader.deleteTitle": {
-    "defaultMessage": "Sitzung löschen"
-  },
-  "sessionActionsHeader.deleted": {
-    "defaultMessage": "Sitzung erfolgreich gelöscht"
-  },
-  "sessionActionsHeader.deleting": {
-    "defaultMessage": "Wird gelöscht..."
-  },
   "sessionActionsHeader.duplicateFailed": {
     "defaultMessage": "Sitzung konnte nicht dupliziert werden: {error}"
   },

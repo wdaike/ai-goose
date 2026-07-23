@@ -37,7 +37,7 @@ vi.mock('./utils/costDatabase', () => ({
 
 vi.mock('./acp/sessions', () => ({
   acpListSessions: vi.fn().mockResolvedValue({ sessions: [], nextCursor: null }),
-  acpDeleteSession: vi.fn().mockResolvedValue(undefined),
+  acpArchiveSession: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock('./sessions', () => ({
