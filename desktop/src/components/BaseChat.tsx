@@ -14,6 +14,7 @@ import { ChatState } from '../types/chatState';
 import { ChatType } from '../types/chat';
 import { useIsMobile } from '../hooks/use-mobile';
 import { useNavigationContextSafe } from './Layout/NavigationContext';
+import { useWorkspacePanelsSafe } from '../contexts/WorkspacePanelsContext';
 import { cn } from '../utils';
 import { useChatSession } from '../hooks/useChatSession';
 import { acpUpdateWorkingDir } from '../acp/sessions';
@@ -106,6 +107,15 @@ export default function BaseChat({
     sessionId,
     onStreamFinish,
   });
+
+  const workspacePanels = useWorkspacePanelsSafe();
+  const setPanelsWorkingDir = workspacePanels?.setWorkingDir;
+  const sessionWorkingDir = session?.working_dir;
+  useEffect(() => {
+    if (isActiveSession && sessionWorkingDir && setPanelsWorkingDir) {
+      setPanelsWorkingDir(sessionWorkingDir);
+    }
+  }, [isActiveSession, sessionWorkingDir, setPanelsWorkingDir]);
 
   const handleWorkingDirChange = useCallback(
     async (newDir: string) => {

@@ -17,6 +17,12 @@
   "appLayout.openNavigation": {
     "defaultMessage": "Buka navigasi"
   },
+  "appLayout.toggleBottomPanel": {
+    "defaultMessage": "Togol panel bawah"
+  },
+  "appLayout.toggleSidePanel": {
+    "defaultMessage": "Togol panel sisi"
+  },
   "appsView.customApp": {
     "defaultMessage": "Apl tersuai"
   },
@@ -638,26 +644,17 @@
   "dictationSettings.voiceDictationProvider": {
     "defaultMessage": "Pembekal Imlak Suara"
   },
-  "dirSwitcher.chooseDirectory": {
-    "defaultMessage": "Pilih direktori…"
-  },
-  "dirSwitcher.currentDirectory": {
-    "defaultMessage": "Direktori semasa"
-  },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "Gagal mengemas kini direktori kerja"
   },
-  "dirSwitcher.gitWorktrees": {
-    "defaultMessage": "Git worktrees"
+  "dirSwitcher.newProject": {
+    "defaultMessage": "Projek baharu"
   },
-  "dirSwitcher.noWorktreesFound": {
-    "defaultMessage": "Tiada worktree dijumpai"
+  "dirSwitcher.noProject": {
+    "defaultMessage": "Jangan bekerja dalam projek"
   },
-  "dirSwitcher.openInFinder": {
-    "defaultMessage": "Buka dalam pengurus fail"
-  },
-  "dirSwitcher.recentDirectories": {
-    "defaultMessage": "Direktori terkini"
+  "dirSwitcher.searchProjects": {
+    "defaultMessage": "Cari projek"
   },
   "elicitationRequest.accept": {
     "defaultMessage": "Terima"
@@ -902,6 +899,36 @@
   "externalBackendSection.useExternalServerDescription": {
     "defaultMessage": "Sambung ke pelayan goose yang berjalan di tempat lain (memerlukan memulakan semula aplikasi)"
   },
+  "fileChangeCard.document": {
+    "defaultMessage": "Dokumen"
+  },
+  "fileChangeCard.editedFiles": {
+    "defaultMessage": "{count,plural,other{Menyunting # fail}}"
+  },
+  "fileChangeCard.openIn": {
+    "defaultMessage": "Buka dalam"
+  },
+  "fileChangeCard.review": {
+    "defaultMessage": "Semak"
+  },
+  "fileChangeCard.showMore": {
+    "defaultMessage": "Tunjukkan {count} lagi"
+  },
+  "fileChangeCard.showMoreFiles": {
+    "defaultMessage": "Tunjukkan {count} fail lagi"
+  },
+  "filesPanel.closePanel": {
+    "defaultMessage": "Tutup panel"
+  },
+  "filesPanel.emptyDirectory": {
+    "defaultMessage": "Direktori kosong"
+  },
+  "filesPanel.refresh": {
+    "defaultMessage": "Muat semula"
+  },
+  "filesPanel.title": {
+    "defaultMessage": "Fail"
+  },
   "goosehintsModal.close": {
     "defaultMessage": "Tutup"
   },
@@ -1022,14 +1049,26 @@
   "headersSection.value": {
     "defaultMessage": "Nilai"
   },
-  "hub.goodAfternoon": {
-    "defaultMessage": "Selamat tengah hari"
+  "hub.headline": {
+    "defaultMessage": "Apa yang akan kita bina dalam {project}?"
   },
-  "hub.goodEvening": {
-    "defaultMessage": "Selamat petang"
+  "hub.headlineNoProject": {
+    "defaultMessage": "Apa yang akan kita bina?"
   },
-  "hub.goodMorning": {
-    "defaultMessage": "Selamat pagi"
+  "hub.local": {
+    "defaultMessage": "Setempat"
+  },
+  "hub.suggestionBuild": {
+    "defaultMessage": "Bina ciri, aplikasi atau alat baharu"
+  },
+  "hub.suggestionExplore": {
+    "defaultMessage": "Teroka dan fahami kod"
+  },
+  "hub.suggestionFix": {
+    "defaultMessage": "Baiki isu dan kegagalan"
+  },
+  "hub.suggestionReview": {
+    "defaultMessage": "Semak kod dan cadangkan perubahan"
   },
   "huggingFaceModelSearch.download": {
     "defaultMessage": "Muat Turun"
@@ -1544,6 +1583,18 @@
   "mentionPopover.scanningFiles": {
     "defaultMessage": "Mengimbas fail..."
   },
+  "messageActions.badResponse": {
+    "defaultMessage": "Respons buruk"
+  },
+  "messageActions.copied": {
+    "defaultMessage": "Disalin!"
+  },
+  "messageActions.copy": {
+    "defaultMessage": "Salin"
+  },
+  "messageActions.goodResponse": {
+    "defaultMessage": "Respons baik"
+  },
   "messageCopyLink.copied": {
     "defaultMessage": "Disalin!"
   },
@@ -1726,6 +1777,39 @@
   },
   "modelAndProviderContext.unknownProviderTitle": {
     "defaultMessage": "Carian nama penyedia"
+  },
+  "modelPickerPill.advanced": {
+    "defaultMessage": "Lanjutan"
+  },
+  "modelPickerPill.effort": {
+    "defaultMessage": "Usaha"
+  },
+  "modelPickerPill.effortHigh": {
+    "defaultMessage": "Tinggi"
+  },
+  "modelPickerPill.effortLow": {
+    "defaultMessage": "Rendah"
+  },
+  "modelPickerPill.effortMax": {
+    "defaultMessage": "Maks"
+  },
+  "modelPickerPill.effortMedium": {
+    "defaultMessage": "Sederhana"
+  },
+  "modelPickerPill.loadingModel": {
+    "defaultMessage": "Memuatkan…"
+  },
+  "modelPickerPill.model": {
+    "defaultMessage": "Model"
+  },
+  "modelPickerPill.selectModel": {
+    "defaultMessage": "Pilih model"
+  },
+  "modelPickerPill.speed": {
+    "defaultMessage": "Kelajuan"
+  },
+  "modelPickerPill.standard": {
+    "defaultMessage": "Standard"
   },
   "modelSettingsButtons.configureProviders": {
     "defaultMessage": "Konfigurasikan penyedia"
@@ -1934,6 +2018,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "Tiada sembang yang sepadan"
   },
+  "navigationPanel.projectThreads": {
+    "defaultMessage": "{count,plural,other{# bebenang}}"
+  },
+  "navigationPanel.projectThreadsCapped": {
+    "defaultMessage": "{count, number}+ bebenang"
+  },
   "navigationPanel.projects": {
     "defaultMessage": "Projek"
   },
@@ -1942,6 +2032,9 @@
   },
   "navigationPanel.searching": {
     "defaultMessage": "Mencari..."
+  },
+  "navigationPanel.showMore": {
+    "defaultMessage": "Tunjukkan lagi"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Sesi tanpa tajuk"
@@ -2018,6 +2111,18 @@
   "permissionModal.saveChanges": {
     "defaultMessage": "Simpan Perubahan"
   },
+  "permissionModeChip.approve": {
+    "defaultMessage": "Kelulusan manual"
+  },
+  "permissionModeChip.chatOnly": {
+    "defaultMessage": "Sembang sahaja"
+  },
+  "permissionModeChip.fullAccess": {
+    "defaultMessage": "Akses penuh"
+  },
+  "permissionModeChip.smartApprove": {
+    "defaultMessage": "Kelulusan pintar"
+  },
   "permissionRulesModal.description": {
     "defaultMessage": "Konfigurasikan kebenaran alat untuk sambungan bagi mengawal cara ia berinteraksi dengan sistem anda."
   },
@@ -2035,6 +2140,9 @@
   },
   "permissionSetting.permissionRulesDescription": {
     "defaultMessage": "Arahan tersembunyi yang akan dihantar kepada penyedia untuk membantu mengarah dan menambah konteks pada respons anda."
+  },
+  "planSteps.progress": {
+    "defaultMessage": "Langkah {current} / {total}"
   },
   "pluginsSettings.add": {
     "defaultMessage": "Tambah"
@@ -2942,6 +3050,15 @@
   "telemetrySettings.updateError": {
     "defaultMessage": "Gagal mengemas kini tetapan telemetri."
   },
+  "terminalPanel.closePanel": {
+    "defaultMessage": "Tutup panel"
+  },
+  "terminalPanel.closeTab": {
+    "defaultMessage": "Tutup terminal"
+  },
+  "terminalPanel.newTerminal": {
+    "defaultMessage": "Terminal baharu"
+  },
   "themeSelector.dark": {
     "defaultMessage": "Gelap"
   },
@@ -3130,5 +3247,26 @@
   },
   "userMessage.forkSessionTitle": {
     "defaultMessage": "Cipta sesi baharu dengan mesej yang disunting"
+  },
+  "workToolActivity.editedFiles": {
+    "defaultMessage": "Fail disunting"
+  },
+  "workToolActivity.listedFiles": {
+    "defaultMessage": "Fail disenaraikan"
+  },
+  "workToolActivity.ranCommands": {
+    "defaultMessage": "{count,plural,other{Menjalankan # perintah}}"
+  },
+  "workToolActivity.readFiles": {
+    "defaultMessage": "Fail dibaca"
+  },
+  "workToolActivity.searchedFiles": {
+    "defaultMessage": "Fail dicari"
+  },
+  "workToolActivity.searchedWeb": {
+    "defaultMessage": "Mencari di web"
+  },
+  "workToolActivity.usedTools": {
+    "defaultMessage": "{count,plural,other{Menggunakan # alat}}"
   }
 }

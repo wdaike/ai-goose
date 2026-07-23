@@ -17,6 +17,12 @@
   "appLayout.openNavigation": {
     "defaultMessage": "ナビゲーションを開く"
   },
+  "appLayout.toggleBottomPanel": {
+    "defaultMessage": "下部パネルを切り替え"
+  },
+  "appLayout.toggleSidePanel": {
+    "defaultMessage": "サイドパネルを切り替え"
+  },
   "appsView.customApp": {
     "defaultMessage": "カスタムアプリ"
   },
@@ -638,26 +644,17 @@
   "dictationSettings.voiceDictationProvider": {
     "defaultMessage": "音声入力プロバイダー"
   },
-  "dirSwitcher.chooseDirectory": {
-    "defaultMessage": "ディレクトリを選択…"
-  },
-  "dirSwitcher.currentDirectory": {
-    "defaultMessage": "現在のディレクトリ"
-  },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "作業ディレクトリの更新に失敗しました"
   },
-  "dirSwitcher.gitWorktrees": {
-    "defaultMessage": "Git worktree"
+  "dirSwitcher.newProject": {
+    "defaultMessage": "新しいプロジェクト"
   },
-  "dirSwitcher.noWorktreesFound": {
-    "defaultMessage": "worktreeが見つかりません"
+  "dirSwitcher.noProject": {
+    "defaultMessage": "プロジェクトで作業しない"
   },
-  "dirSwitcher.openInFinder": {
-    "defaultMessage": "ファイルマネージャーで開く"
-  },
-  "dirSwitcher.recentDirectories": {
-    "defaultMessage": "最近のディレクトリ"
+  "dirSwitcher.searchProjects": {
+    "defaultMessage": "プロジェクトを検索"
   },
   "elicitationRequest.accept": {
     "defaultMessage": "承諾"
@@ -902,6 +899,36 @@
   "externalBackendSection.useExternalServerDescription": {
     "defaultMessage": "別の場所で実行中の goose サーバーに接続します（アプリの再起動が必要）"
   },
+  "fileChangeCard.document": {
+    "defaultMessage": "ドキュメント"
+  },
+  "fileChangeCard.editedFiles": {
+    "defaultMessage": "{count,plural,other{# 件のファイルを編集}}"
+  },
+  "fileChangeCard.openIn": {
+    "defaultMessage": "で開く"
+  },
+  "fileChangeCard.review": {
+    "defaultMessage": "レビュー"
+  },
+  "fileChangeCard.showMore": {
+    "defaultMessage": "さらに {count} 件表示"
+  },
+  "fileChangeCard.showMoreFiles": {
+    "defaultMessage": "さらに {count} 件のファイルを表示"
+  },
+  "filesPanel.closePanel": {
+    "defaultMessage": "パネルを閉じる"
+  },
+  "filesPanel.emptyDirectory": {
+    "defaultMessage": "空のディレクトリ"
+  },
+  "filesPanel.refresh": {
+    "defaultMessage": "更新"
+  },
+  "filesPanel.title": {
+    "defaultMessage": "ファイル"
+  },
   "goosehintsModal.close": {
     "defaultMessage": "閉じる"
   },
@@ -1022,14 +1049,26 @@
   "headersSection.value": {
     "defaultMessage": "値"
   },
-  "hub.goodAfternoon": {
-    "defaultMessage": "こんにちは"
+  "hub.headline": {
+    "defaultMessage": "{project} で何を作りますか?"
   },
-  "hub.goodEvening": {
-    "defaultMessage": "こんばんは"
+  "hub.headlineNoProject": {
+    "defaultMessage": "何を作りますか?"
   },
-  "hub.goodMorning": {
-    "defaultMessage": "おはようございます"
+  "hub.local": {
+    "defaultMessage": "ローカル"
+  },
+  "hub.suggestionBuild": {
+    "defaultMessage": "新しい機能・アプリ・ツールを作る"
+  },
+  "hub.suggestionExplore": {
+    "defaultMessage": "コードを探索して理解する"
+  },
+  "hub.suggestionFix": {
+    "defaultMessage": "問題や不具合を修正する"
+  },
+  "hub.suggestionReview": {
+    "defaultMessage": "コードをレビューして変更を提案する"
   },
   "huggingFaceModelSearch.download": {
     "defaultMessage": "ダウンロード"
@@ -1544,6 +1583,18 @@
   "mentionPopover.scanningFiles": {
     "defaultMessage": "ファイルをスキャン中..."
   },
+  "messageActions.badResponse": {
+    "defaultMessage": "悪い応答"
+  },
+  "messageActions.copied": {
+    "defaultMessage": "コピーしました!"
+  },
+  "messageActions.copy": {
+    "defaultMessage": "コピー"
+  },
+  "messageActions.goodResponse": {
+    "defaultMessage": "良い応答"
+  },
   "messageCopyLink.copied": {
     "defaultMessage": "コピーしました！"
   },
@@ -1726,6 +1777,39 @@
   },
   "modelAndProviderContext.unknownProviderTitle": {
     "defaultMessage": "プロバイダー名の確認"
+  },
+  "modelPickerPill.advanced": {
+    "defaultMessage": "詳細設定"
+  },
+  "modelPickerPill.effort": {
+    "defaultMessage": "エフォート"
+  },
+  "modelPickerPill.effortHigh": {
+    "defaultMessage": "高"
+  },
+  "modelPickerPill.effortLow": {
+    "defaultMessage": "低"
+  },
+  "modelPickerPill.effortMax": {
+    "defaultMessage": "最大"
+  },
+  "modelPickerPill.effortMedium": {
+    "defaultMessage": "中"
+  },
+  "modelPickerPill.loadingModel": {
+    "defaultMessage": "読み込み中…"
+  },
+  "modelPickerPill.model": {
+    "defaultMessage": "モデル"
+  },
+  "modelPickerPill.selectModel": {
+    "defaultMessage": "モデルを選択"
+  },
+  "modelPickerPill.speed": {
+    "defaultMessage": "速度"
+  },
+  "modelPickerPill.standard": {
+    "defaultMessage": "標準"
   },
   "modelSettingsButtons.configureProviders": {
     "defaultMessage": "プロバイダーを設定"
@@ -1934,6 +2018,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "一致するチャットはありません"
   },
+  "navigationPanel.projectThreads": {
+    "defaultMessage": "{count,plural,other{# 件のスレッド}}"
+  },
+  "navigationPanel.projectThreadsCapped": {
+    "defaultMessage": "{count, number}+ 件のスレッド"
+  },
   "navigationPanel.projects": {
     "defaultMessage": "プロジェクト"
   },
@@ -1942,6 +2032,9 @@
   },
   "navigationPanel.searching": {
     "defaultMessage": "検索中..."
+  },
+  "navigationPanel.showMore": {
+    "defaultMessage": "もっと見る"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "無題のセッション"
@@ -2018,6 +2111,18 @@
   "permissionModal.saveChanges": {
     "defaultMessage": "変更を保存"
   },
+  "permissionModeChip.approve": {
+    "defaultMessage": "手動承認"
+  },
+  "permissionModeChip.chatOnly": {
+    "defaultMessage": "チャットのみ"
+  },
+  "permissionModeChip.fullAccess": {
+    "defaultMessage": "フルアクセス"
+  },
+  "permissionModeChip.smartApprove": {
+    "defaultMessage": "スマート承認"
+  },
   "permissionRulesModal.description": {
     "defaultMessage": "拡張機能のツール権限を設定して、システムとのやり取りを制御します。"
   },
@@ -2035,6 +2140,9 @@
   },
   "permissionSetting.permissionRulesDescription": {
     "defaultMessage": "レスポンスの方向づけやコンテキスト追加のためにプロバイダーへ渡される非表示の指示です。"
+  },
+  "planSteps.progress": {
+    "defaultMessage": "ステップ {current} / {total}"
   },
   "pluginsSettings.add": {
     "defaultMessage": "追加"
@@ -2942,6 +3050,15 @@
   "telemetrySettings.updateError": {
     "defaultMessage": "テレメトリ設定を更新できませんでした。"
   },
+  "terminalPanel.closePanel": {
+    "defaultMessage": "パネルを閉じる"
+  },
+  "terminalPanel.closeTab": {
+    "defaultMessage": "ターミナルを閉じる"
+  },
+  "terminalPanel.newTerminal": {
+    "defaultMessage": "新しいターミナル"
+  },
   "themeSelector.dark": {
     "defaultMessage": "ダーク"
   },
@@ -3130,5 +3247,26 @@
   },
   "userMessage.forkSessionTitle": {
     "defaultMessage": "編集したメッセージで新しいセッションを作成"
+  },
+  "workToolActivity.editedFiles": {
+    "defaultMessage": "ファイルを編集"
+  },
+  "workToolActivity.listedFiles": {
+    "defaultMessage": "ファイルを一覧表示"
+  },
+  "workToolActivity.ranCommands": {
+    "defaultMessage": "{count,plural,other{# 件のコマンドを実行}}"
+  },
+  "workToolActivity.readFiles": {
+    "defaultMessage": "ファイルを読み取り"
+  },
+  "workToolActivity.searchedFiles": {
+    "defaultMessage": "ファイルを検索"
+  },
+  "workToolActivity.searchedWeb": {
+    "defaultMessage": "ウェブを検索"
+  },
+  "workToolActivity.usedTools": {
+    "defaultMessage": "{count,plural,other{# 件のツールを使用}}"
   }
 }

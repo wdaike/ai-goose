@@ -17,6 +17,12 @@
   "appLayout.openNavigation": {
     "defaultMessage": "नेविगेशन खोलें"
   },
+  "appLayout.toggleBottomPanel": {
+    "defaultMessage": "निचला पैनल टॉगल करें"
+  },
+  "appLayout.toggleSidePanel": {
+    "defaultMessage": "साइड पैनल टॉगल करें"
+  },
   "appsView.customApp": {
     "defaultMessage": "कस्टम ऐप"
   },
@@ -638,26 +644,17 @@
   "dictationSettings.voiceDictationProvider": {
     "defaultMessage": "वॉयस डिक्टेशन प्रदाता"
   },
-  "dirSwitcher.chooseDirectory": {
-    "defaultMessage": "निर्देशिका चुनें..."
-  },
-  "dirSwitcher.currentDirectory": {
-    "defaultMessage": "वर्तमान निर्देशिका"
-  },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "कार्यशील निर्देशिका अद्यतन करने में विफल"
   },
-  "dirSwitcher.gitWorktrees": {
-    "defaultMessage": "गिट वर्कट्रीज़"
+  "dirSwitcher.newProject": {
+    "defaultMessage": "नया प्रोजेक्ट"
   },
-  "dirSwitcher.noWorktreesFound": {
-    "defaultMessage": "कोई कार्यवृक्ष नहीं मिला"
+  "dirSwitcher.noProject": {
+    "defaultMessage": "किसी प्रोजेक्ट में काम न करें"
   },
-  "dirSwitcher.openInFinder": {
-    "defaultMessage": "फ़ाइल प्रबंधक में खोलें"
-  },
-  "dirSwitcher.recentDirectories": {
-    "defaultMessage": "हाल की निर्देशिकाएँ"
+  "dirSwitcher.searchProjects": {
+    "defaultMessage": "प्रोजेक्ट खोजें"
   },
   "elicitationRequest.accept": {
     "defaultMessage": "स्वीकार करो"
@@ -902,6 +899,36 @@
   "externalBackendSection.useExternalServerDescription": {
     "defaultMessage": "कहीं और चल रहे goose सर्वर से कनेक्ट करें (ऐप पुनरारंभ की आवश्यकता है)"
   },
+  "fileChangeCard.document": {
+    "defaultMessage": "दस्तावेज़"
+  },
+  "fileChangeCard.editedFiles": {
+    "defaultMessage": "{count,plural,one{1 फ़ाइल संपादित की} other{# फ़ाइलें संपादित कीं}}"
+  },
+  "fileChangeCard.openIn": {
+    "defaultMessage": "इसमें खोलें"
+  },
+  "fileChangeCard.review": {
+    "defaultMessage": "समीक्षा"
+  },
+  "fileChangeCard.showMore": {
+    "defaultMessage": "{count} और दिखाएँ"
+  },
+  "fileChangeCard.showMoreFiles": {
+    "defaultMessage": "{count} और फ़ाइलें दिखाएँ"
+  },
+  "filesPanel.closePanel": {
+    "defaultMessage": "पैनल बंद करें"
+  },
+  "filesPanel.emptyDirectory": {
+    "defaultMessage": "खाली डायरेक्टरी"
+  },
+  "filesPanel.refresh": {
+    "defaultMessage": "रीफ़्रेश करें"
+  },
+  "filesPanel.title": {
+    "defaultMessage": "फ़ाइलें"
+  },
   "goosehintsModal.close": {
     "defaultMessage": "बंद करें"
   },
@@ -1022,14 +1049,26 @@
   "headersSection.value": {
     "defaultMessage": "मूल्य"
   },
-  "hub.goodAfternoon": {
-    "defaultMessage": "शुभ दोपहर"
+  "hub.headline": {
+    "defaultMessage": "{project} में हम क्या बनाएँ?"
   },
-  "hub.goodEvening": {
-    "defaultMessage": "शुभ संध्या"
+  "hub.headlineNoProject": {
+    "defaultMessage": "हम क्या बनाएँ?"
   },
-  "hub.goodMorning": {
-    "defaultMessage": "सुप्रभात"
+  "hub.local": {
+    "defaultMessage": "लोकल"
+  },
+  "hub.suggestionBuild": {
+    "defaultMessage": "कोई नया फ़ीचर, ऐप या टूल बनाएँ"
+  },
+  "hub.suggestionExplore": {
+    "defaultMessage": "कोड को एक्सप्लोर करें और समझें"
+  },
+  "hub.suggestionFix": {
+    "defaultMessage": "समस्याएँ और विफलताएँ ठीक करें"
+  },
+  "hub.suggestionReview": {
+    "defaultMessage": "कोड की समीक्षा करें और बदलाव सुझाएँ"
   },
   "huggingFaceModelSearch.download": {
     "defaultMessage": "डाउनलोड करें"
@@ -1544,6 +1583,18 @@
   "mentionPopover.scanningFiles": {
     "defaultMessage": "फ़ाइलें स्कैन की जा रही हैं..."
   },
+  "messageActions.badResponse": {
+    "defaultMessage": "खराब जवाब"
+  },
+  "messageActions.copied": {
+    "defaultMessage": "कॉपी हो गया!"
+  },
+  "messageActions.copy": {
+    "defaultMessage": "कॉपी करें"
+  },
+  "messageActions.goodResponse": {
+    "defaultMessage": "अच्छा जवाब"
+  },
   "messageCopyLink.copied": {
     "defaultMessage": "नकल की गई!"
   },
@@ -1726,6 +1777,39 @@
   },
   "modelAndProviderContext.unknownProviderTitle": {
     "defaultMessage": "प्रदाता का नाम लुकअप"
+  },
+  "modelPickerPill.advanced": {
+    "defaultMessage": "उन्नत"
+  },
+  "modelPickerPill.effort": {
+    "defaultMessage": "प्रयास"
+  },
+  "modelPickerPill.effortHigh": {
+    "defaultMessage": "उच्च"
+  },
+  "modelPickerPill.effortLow": {
+    "defaultMessage": "निम्न"
+  },
+  "modelPickerPill.effortMax": {
+    "defaultMessage": "अधिकतम"
+  },
+  "modelPickerPill.effortMedium": {
+    "defaultMessage": "मध्यम"
+  },
+  "modelPickerPill.loadingModel": {
+    "defaultMessage": "लोड हो रहा है…"
+  },
+  "modelPickerPill.model": {
+    "defaultMessage": "मॉडल"
+  },
+  "modelPickerPill.selectModel": {
+    "defaultMessage": "मॉडल चुनें"
+  },
+  "modelPickerPill.speed": {
+    "defaultMessage": "गति"
+  },
+  "modelPickerPill.standard": {
+    "defaultMessage": "मानक"
   },
   "modelSettingsButtons.configureProviders": {
     "defaultMessage": "प्रदाताओं को कॉन्फ़िगर करें"
@@ -1934,6 +2018,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "कोई मेल खाती चैट नहीं"
   },
+  "navigationPanel.projectThreads": {
+    "defaultMessage": "{count,plural,one{# थ्रेड} other{# थ्रेड}}"
+  },
+  "navigationPanel.projectThreadsCapped": {
+    "defaultMessage": "{count, number}+ थ्रेड"
+  },
   "navigationPanel.projects": {
     "defaultMessage": "प्रोजेक्ट"
   },
@@ -1942,6 +2032,9 @@
   },
   "navigationPanel.searching": {
     "defaultMessage": "खोजा जा रहा है..."
+  },
+  "navigationPanel.showMore": {
+    "defaultMessage": "और दिखाएँ"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "शीर्षकहीन सत्र"
@@ -2018,6 +2111,18 @@
   "permissionModal.saveChanges": {
     "defaultMessage": "परिवर्तन सहेजें"
   },
+  "permissionModeChip.approve": {
+    "defaultMessage": "मैनुअल अनुमोदन"
+  },
+  "permissionModeChip.chatOnly": {
+    "defaultMessage": "केवल चैट"
+  },
+  "permissionModeChip.fullAccess": {
+    "defaultMessage": "पूर्ण पहुँच"
+  },
+  "permissionModeChip.smartApprove": {
+    "defaultMessage": "स्मार्ट अनुमोदन"
+  },
   "permissionRulesModal.description": {
     "defaultMessage": "एक्सटेंशन के लिए टूल अनुमतियाँ कॉन्फ़िगर करें ताकि यह नियंत्रित किया जा सके कि वे आपके सिस्टम के साथ कैसे इंटरैक्ट करते हैं।"
   },
@@ -2035,6 +2140,9 @@
   },
   "permissionSetting.permissionRulesDescription": {
     "defaultMessage": "छिपे हुए निर्देश जो आपकी प्रतिक्रियाओं को निर्देशित करने और संदर्भ जोड़ने में सहायता के लिए प्रदाता को भेजे जाएंगे।"
+  },
+  "planSteps.progress": {
+    "defaultMessage": "चरण {current} / {total}"
   },
   "pluginsSettings.add": {
     "defaultMessage": "जोड़ें"
@@ -2942,6 +3050,15 @@
   "telemetrySettings.updateError": {
     "defaultMessage": "टेलीमेट्री सेटिंग अपडेट करने में विफल."
   },
+  "terminalPanel.closePanel": {
+    "defaultMessage": "पैनल बंद करें"
+  },
+  "terminalPanel.closeTab": {
+    "defaultMessage": "टर्मिनल बंद करें"
+  },
+  "terminalPanel.newTerminal": {
+    "defaultMessage": "नया टर्मिनल"
+  },
   "themeSelector.dark": {
     "defaultMessage": "अंधेरा"
   },
@@ -3130,5 +3247,26 @@
   },
   "userMessage.forkSessionTitle": {
     "defaultMessage": "संपादित संदेश के साथ एक नया सत्र बनाएं"
+  },
+  "workToolActivity.editedFiles": {
+    "defaultMessage": "फ़ाइलें संपादित कीं"
+  },
+  "workToolActivity.listedFiles": {
+    "defaultMessage": "फ़ाइलें सूचीबद्ध कीं"
+  },
+  "workToolActivity.ranCommands": {
+    "defaultMessage": "{count,plural,one{एक कमांड चलाया} other{# कमांड चलाए}}"
+  },
+  "workToolActivity.readFiles": {
+    "defaultMessage": "फ़ाइलें पढ़ीं"
+  },
+  "workToolActivity.searchedFiles": {
+    "defaultMessage": "फ़ाइलें खोजीं"
+  },
+  "workToolActivity.searchedWeb": {
+    "defaultMessage": "वेब पर खोजा"
+  },
+  "workToolActivity.usedTools": {
+    "defaultMessage": "{count,plural,one{एक टूल इस्तेमाल किया} other{# टूल इस्तेमाल किए}}"
   }
 }

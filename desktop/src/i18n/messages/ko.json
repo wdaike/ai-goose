@@ -17,6 +17,12 @@
   "appLayout.openNavigation": {
     "defaultMessage": "탐색 열기"
   },
+  "appLayout.toggleBottomPanel": {
+    "defaultMessage": "하단 패널 전환"
+  },
+  "appLayout.toggleSidePanel": {
+    "defaultMessage": "사이드 패널 전환"
+  },
   "appsView.customApp": {
     "defaultMessage": "사용자 지정 앱"
   },
@@ -638,26 +644,17 @@
   "dictationSettings.voiceDictationProvider": {
     "defaultMessage": "음성 받아쓰기 제공업체"
   },
-  "dirSwitcher.chooseDirectory": {
-    "defaultMessage": "디렉터리 선택…"
-  },
-  "dirSwitcher.currentDirectory": {
-    "defaultMessage": "현재 디렉터리"
-  },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "작업 디렉터리를 업데이트하지 못했습니다."
   },
-  "dirSwitcher.gitWorktrees": {
-    "defaultMessage": "Git 워크트리"
+  "dirSwitcher.newProject": {
+    "defaultMessage": "새 프로젝트"
   },
-  "dirSwitcher.noWorktreesFound": {
-    "defaultMessage": "작업 트리를 찾을 수 없습니다."
+  "dirSwitcher.noProject": {
+    "defaultMessage": "프로젝트 없이 작업"
   },
-  "dirSwitcher.openInFinder": {
-    "defaultMessage": "파일 관리자에서 열기"
-  },
-  "dirSwitcher.recentDirectories": {
-    "defaultMessage": "최근 디렉터리"
+  "dirSwitcher.searchProjects": {
+    "defaultMessage": "프로젝트 검색"
   },
   "elicitationRequest.accept": {
     "defaultMessage": "수락"
@@ -902,6 +899,36 @@
   "externalBackendSection.useExternalServerDescription": {
     "defaultMessage": "다른 곳에서 실행 중인 goose 서버에 연결합니다. 앱을 다시 시작해야 합니다."
   },
+  "fileChangeCard.document": {
+    "defaultMessage": "문서"
+  },
+  "fileChangeCard.editedFiles": {
+    "defaultMessage": "{count,plural,other{파일 #개 편집됨}}"
+  },
+  "fileChangeCard.openIn": {
+    "defaultMessage": "다음에서 열기"
+  },
+  "fileChangeCard.review": {
+    "defaultMessage": "리뷰"
+  },
+  "fileChangeCard.showMore": {
+    "defaultMessage": "{count}개 더 보기"
+  },
+  "fileChangeCard.showMoreFiles": {
+    "defaultMessage": "파일 {count}개 더 보기"
+  },
+  "filesPanel.closePanel": {
+    "defaultMessage": "패널 닫기"
+  },
+  "filesPanel.emptyDirectory": {
+    "defaultMessage": "빈 디렉터리"
+  },
+  "filesPanel.refresh": {
+    "defaultMessage": "새로 고침"
+  },
+  "filesPanel.title": {
+    "defaultMessage": "파일"
+  },
   "goosehintsModal.close": {
     "defaultMessage": "닫기"
   },
@@ -1022,14 +1049,26 @@
   "headersSection.value": {
     "defaultMessage": "값"
   },
-  "hub.goodAfternoon": {
-    "defaultMessage": "좋은 오후예요"
+  "hub.headline": {
+    "defaultMessage": "{project}에서 무엇을 만들까요?"
   },
-  "hub.goodEvening": {
-    "defaultMessage": "좋은 저녁이에요"
+  "hub.headlineNoProject": {
+    "defaultMessage": "무엇을 만들까요?"
   },
-  "hub.goodMorning": {
-    "defaultMessage": "좋은 아침이에요"
+  "hub.local": {
+    "defaultMessage": "로컬"
+  },
+  "hub.suggestionBuild": {
+    "defaultMessage": "새 기능, 앱 또는 도구 만들기"
+  },
+  "hub.suggestionExplore": {
+    "defaultMessage": "코드 탐색 및 이해"
+  },
+  "hub.suggestionFix": {
+    "defaultMessage": "문제와 오류 수정"
+  },
+  "hub.suggestionReview": {
+    "defaultMessage": "코드 리뷰 및 변경 제안"
   },
   "huggingFaceModelSearch.download": {
     "defaultMessage": "다운로드"
@@ -1544,6 +1583,18 @@
   "mentionPopover.scanningFiles": {
     "defaultMessage": "파일을 스캔하는 중..."
   },
+  "messageActions.badResponse": {
+    "defaultMessage": "나쁜 응답"
+  },
+  "messageActions.copied": {
+    "defaultMessage": "복사됨!"
+  },
+  "messageActions.copy": {
+    "defaultMessage": "복사"
+  },
+  "messageActions.goodResponse": {
+    "defaultMessage": "좋은 응답"
+  },
   "messageCopyLink.copied": {
     "defaultMessage": "복사되었습니다!"
   },
@@ -1726,6 +1777,39 @@
   },
   "modelAndProviderContext.unknownProviderTitle": {
     "defaultMessage": "제공업체 이름 조회"
+  },
+  "modelPickerPill.advanced": {
+    "defaultMessage": "고급"
+  },
+  "modelPickerPill.effort": {
+    "defaultMessage": "노력"
+  },
+  "modelPickerPill.effortHigh": {
+    "defaultMessage": "높음"
+  },
+  "modelPickerPill.effortLow": {
+    "defaultMessage": "낮음"
+  },
+  "modelPickerPill.effortMax": {
+    "defaultMessage": "최대"
+  },
+  "modelPickerPill.effortMedium": {
+    "defaultMessage": "중간"
+  },
+  "modelPickerPill.loadingModel": {
+    "defaultMessage": "로드 중…"
+  },
+  "modelPickerPill.model": {
+    "defaultMessage": "모델"
+  },
+  "modelPickerPill.selectModel": {
+    "defaultMessage": "모델 선택"
+  },
+  "modelPickerPill.speed": {
+    "defaultMessage": "속도"
+  },
+  "modelPickerPill.standard": {
+    "defaultMessage": "표준"
   },
   "modelSettingsButtons.configureProviders": {
     "defaultMessage": "제공업체 설정"
@@ -1934,6 +2018,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "일치하는 채팅이 없습니다"
   },
+  "navigationPanel.projectThreads": {
+    "defaultMessage": "{count,plural,other{스레드 #개}}"
+  },
+  "navigationPanel.projectThreadsCapped": {
+    "defaultMessage": "{count, number}+개의 스레드"
+  },
   "navigationPanel.projects": {
     "defaultMessage": "프로젝트"
   },
@@ -1942,6 +2032,9 @@
   },
   "navigationPanel.searching": {
     "defaultMessage": "검색 중..."
+  },
+  "navigationPanel.showMore": {
+    "defaultMessage": "더 보기"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "제목 없는 세션"
@@ -2018,6 +2111,18 @@
   "permissionModal.saveChanges": {
     "defaultMessage": "변경 사항 저장"
   },
+  "permissionModeChip.approve": {
+    "defaultMessage": "수동 승인"
+  },
+  "permissionModeChip.chatOnly": {
+    "defaultMessage": "채팅만"
+  },
+  "permissionModeChip.fullAccess": {
+    "defaultMessage": "전체 접근"
+  },
+  "permissionModeChip.smartApprove": {
+    "defaultMessage": "스마트 승인"
+  },
   "permissionRulesModal.description": {
     "defaultMessage": "익스텐션이 시스템과 상호 작용하는 방식을 제어하려면 도구 권한을 구성하세요."
   },
@@ -2035,6 +2140,9 @@
   },
   "permissionSetting.permissionRulesDescription": {
     "defaultMessage": "응답에 컨텍스트를 추가하고 지시하는 데 도움이 되도록 제공업체에게 전달되는 숨겨진 지침입니다."
+  },
+  "planSteps.progress": {
+    "defaultMessage": "단계 {current} / {total}"
   },
   "pluginsSettings.add": {
     "defaultMessage": "추가"
@@ -2942,6 +3050,15 @@
   "telemetrySettings.updateError": {
     "defaultMessage": "원격 분석 설정을 업데이트하지 못했습니다."
   },
+  "terminalPanel.closePanel": {
+    "defaultMessage": "패널 닫기"
+  },
+  "terminalPanel.closeTab": {
+    "defaultMessage": "터미널 닫기"
+  },
+  "terminalPanel.newTerminal": {
+    "defaultMessage": "새 터미널"
+  },
   "themeSelector.dark": {
     "defaultMessage": "다크"
   },
@@ -3130,5 +3247,26 @@
   },
   "userMessage.forkSessionTitle": {
     "defaultMessage": "편집한 메시지로 새 세션 만들기"
+  },
+  "workToolActivity.editedFiles": {
+    "defaultMessage": "파일 편집함"
+  },
+  "workToolActivity.listedFiles": {
+    "defaultMessage": "파일 나열함"
+  },
+  "workToolActivity.ranCommands": {
+    "defaultMessage": "{count,plural,other{명령 #개 실행}}"
+  },
+  "workToolActivity.readFiles": {
+    "defaultMessage": "파일 읽음"
+  },
+  "workToolActivity.searchedFiles": {
+    "defaultMessage": "파일 검색함"
+  },
+  "workToolActivity.searchedWeb": {
+    "defaultMessage": "웹 검색함"
+  },
+  "workToolActivity.usedTools": {
+    "defaultMessage": "{count,plural,other{도구 #개 사용}}"
   }
 }

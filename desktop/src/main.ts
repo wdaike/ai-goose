@@ -26,6 +26,7 @@ import os from 'node:os';
 import { execFileSync, spawn, execFile } from 'child_process';
 import 'dotenv/config';
 import { CODEX_HOME, registerCodexBridge } from './codex/bridge';
+import { registerTerminalManager } from './terminalManager';
 import { GooseServeLeaseRegistry, type GooseServeLease } from './gooseServeLeaseRegistry';
 import { expandTilde } from './utils/pathUtils';
 import log from './utils/logger';
@@ -422,6 +423,8 @@ app.whenReady().then(() => {
 
 const codexBridge = registerCodexBridge();
 app.on('will-quit', () => codexBridge.stop());
+
+registerTerminalManager();
 
 // Main-process net.fetch: pin to the exact cert once known.
 app.whenReady().then(() => {
@@ -2042,6 +2045,22 @@ ipcMain.handle('list-files', async (_event, dirPath, extension) => {
     return files;
   } catch (error) {
     console.error('Error listing files:', error);
+    return [];
+  }
+});
+
+ipcMain.handle('list-directory', async (_event, dirPath: string) => {
+  try {
+    const expandedPath = expandTilde(dirPath);
+    const entries = await fs.readdir(expandedPath, { withFileTypes: true });
+    return entries
+      .filter((entry) => entry.isDirectory() || entry.isFile() || entry.isSymbolicLink())
+      .map((entry) => ({ name: entry.name, isDirectory: entry.isDirectory() }))
+      .sort((a, b) =>
+        a.isDirectory === b.isDirectory ? a.name.localeCompare(b.name) : a.isDirectory ? -1 : 1
+      );
+  } catch (error) {
+    console.error('Error listing directory:', error);
     return [];
   }
 });

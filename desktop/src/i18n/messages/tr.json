@@ -17,6 +17,12 @@
   "appLayout.openNavigation": {
     "defaultMessage": "Gezinmeyi aç"
   },
+  "appLayout.toggleBottomPanel": {
+    "defaultMessage": "Alt paneli aç/kapat"
+  },
+  "appLayout.toggleSidePanel": {
+    "defaultMessage": "Yan paneli aç/kapat"
+  },
   "appsView.customApp": {
     "defaultMessage": "Özel uygulama"
   },
@@ -638,26 +644,17 @@
   "dictationSettings.voiceDictationProvider": {
     "defaultMessage": "Ses Dikte Sağlayıcısı"
   },
-  "dirSwitcher.chooseDirectory": {
-    "defaultMessage": "Dizin seç…"
-  },
-  "dirSwitcher.currentDirectory": {
-    "defaultMessage": "Geçerli dizin"
-  },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "Çalışma dizini güncellenemedi"
   },
-  "dirSwitcher.gitWorktrees": {
-    "defaultMessage": "Git çalışma ağaçları"
+  "dirSwitcher.newProject": {
+    "defaultMessage": "Yeni proje"
   },
-  "dirSwitcher.noWorktreesFound": {
-    "defaultMessage": "Hiçbir çalışma ağacı bulunamadı"
+  "dirSwitcher.noProject": {
+    "defaultMessage": "Bir projede çalışma"
   },
-  "dirSwitcher.openInFinder": {
-    "defaultMessage": "Dosya yöneticisinde aç"
-  },
-  "dirSwitcher.recentDirectories": {
-    "defaultMessage": "Son dizinler"
+  "dirSwitcher.searchProjects": {
+    "defaultMessage": "Projelerde ara"
   },
   "elicitationRequest.accept": {
     "defaultMessage": "Kabul et"
@@ -902,6 +899,36 @@
   "externalBackendSection.useExternalServerDescription": {
     "defaultMessage": "Başka bir yerde çalışan bir goose sunucusuna bağlanın (uygulamanın yeniden başlatılmasını gerektirir)"
   },
+  "fileChangeCard.document": {
+    "defaultMessage": "Belge"
+  },
+  "fileChangeCard.editedFiles": {
+    "defaultMessage": "{count,plural,one{1 dosya düzenlendi} other{# dosya düzenlendi}}"
+  },
+  "fileChangeCard.openIn": {
+    "defaultMessage": "Şununla aç"
+  },
+  "fileChangeCard.review": {
+    "defaultMessage": "İncele"
+  },
+  "fileChangeCard.showMore": {
+    "defaultMessage": "{count} tane daha göster"
+  },
+  "fileChangeCard.showMoreFiles": {
+    "defaultMessage": "{count} dosya daha göster"
+  },
+  "filesPanel.closePanel": {
+    "defaultMessage": "Paneli kapat"
+  },
+  "filesPanel.emptyDirectory": {
+    "defaultMessage": "Boş dizin"
+  },
+  "filesPanel.refresh": {
+    "defaultMessage": "Yenile"
+  },
+  "filesPanel.title": {
+    "defaultMessage": "Dosyalar"
+  },
   "goosehintsModal.close": {
     "defaultMessage": "Kapat"
   },
@@ -1022,14 +1049,26 @@
   "headersSection.value": {
     "defaultMessage": "Değer"
   },
-  "hub.goodAfternoon": {
-    "defaultMessage": "İyi günler"
+  "hub.headline": {
+    "defaultMessage": "{project} içinde ne inşa edelim?"
   },
-  "hub.goodEvening": {
-    "defaultMessage": "İyi akşamlar"
+  "hub.headlineNoProject": {
+    "defaultMessage": "Ne inşa edelim?"
   },
-  "hub.goodMorning": {
-    "defaultMessage": "Günaydın"
+  "hub.local": {
+    "defaultMessage": "Yerel"
+  },
+  "hub.suggestionBuild": {
+    "defaultMessage": "Yeni bir özellik, uygulama veya araç oluştur"
+  },
+  "hub.suggestionExplore": {
+    "defaultMessage": "Kodu keşfet ve anla"
+  },
+  "hub.suggestionFix": {
+    "defaultMessage": "Sorunları ve hataları düzelt"
+  },
+  "hub.suggestionReview": {
+    "defaultMessage": "Kodu incele ve değişiklik öner"
   },
   "huggingFaceModelSearch.download": {
     "defaultMessage": "İndir"
@@ -1544,6 +1583,18 @@
   "mentionPopover.scanningFiles": {
     "defaultMessage": "Dosyalar taranıyor..."
   },
+  "messageActions.badResponse": {
+    "defaultMessage": "Kötü yanıt"
+  },
+  "messageActions.copied": {
+    "defaultMessage": "Kopyalandı!"
+  },
+  "messageActions.copy": {
+    "defaultMessage": "Kopyala"
+  },
+  "messageActions.goodResponse": {
+    "defaultMessage": "İyi yanıt"
+  },
   "messageCopyLink.copied": {
     "defaultMessage": "Kopyalandı!"
   },
@@ -1726,6 +1777,39 @@
   },
   "modelAndProviderContext.unknownProviderTitle": {
     "defaultMessage": "Sağlayıcı adı araması"
+  },
+  "modelPickerPill.advanced": {
+    "defaultMessage": "Gelişmiş"
+  },
+  "modelPickerPill.effort": {
+    "defaultMessage": "Efor"
+  },
+  "modelPickerPill.effortHigh": {
+    "defaultMessage": "Yüksek"
+  },
+  "modelPickerPill.effortLow": {
+    "defaultMessage": "Düşük"
+  },
+  "modelPickerPill.effortMax": {
+    "defaultMessage": "Maks"
+  },
+  "modelPickerPill.effortMedium": {
+    "defaultMessage": "Orta"
+  },
+  "modelPickerPill.loadingModel": {
+    "defaultMessage": "Yükleniyor…"
+  },
+  "modelPickerPill.model": {
+    "defaultMessage": "Model"
+  },
+  "modelPickerPill.selectModel": {
+    "defaultMessage": "Model seç"
+  },
+  "modelPickerPill.speed": {
+    "defaultMessage": "Hız"
+  },
+  "modelPickerPill.standard": {
+    "defaultMessage": "Standart"
   },
   "modelSettingsButtons.configureProviders": {
     "defaultMessage": "Sağlayıcıları yapılandırma"
@@ -1934,6 +2018,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "Eşleşen sohbet yok"
   },
+  "navigationPanel.projectThreads": {
+    "defaultMessage": "{count,plural,one{# konu} other{# konu}}"
+  },
+  "navigationPanel.projectThreadsCapped": {
+    "defaultMessage": "{count, number}+ konu"
+  },
   "navigationPanel.projects": {
     "defaultMessage": "Projeler"
   },
@@ -1942,6 +2032,9 @@
   },
   "navigationPanel.searching": {
     "defaultMessage": "Aranıyor..."
+  },
+  "navigationPanel.showMore": {
+    "defaultMessage": "Daha fazla göster"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Başlıksız oturum"
@@ -2018,6 +2111,18 @@
   "permissionModal.saveChanges": {
     "defaultMessage": "Değişiklikleri Kaydet"
   },
+  "permissionModeChip.approve": {
+    "defaultMessage": "Manuel onay"
+  },
+  "permissionModeChip.chatOnly": {
+    "defaultMessage": "Yalnızca sohbet"
+  },
+  "permissionModeChip.fullAccess": {
+    "defaultMessage": "Tam erişim"
+  },
+  "permissionModeChip.smartApprove": {
+    "defaultMessage": "Akıllı onay"
+  },
   "permissionRulesModal.description": {
     "defaultMessage": "Uzantıların sisteminizle nasıl etkileşime gireceğini kontrol etmek için araç izinlerini yapılandırın."
   },
@@ -2035,6 +2140,9 @@
   },
   "permissionSetting.permissionRulesDescription": {
     "defaultMessage": "Yanıtlarınızı yönlendirmeye ve bağlam eklemeye yardımcı olmak için sağlayıcıya iletilecek gizli talimatlar."
+  },
+  "planSteps.progress": {
+    "defaultMessage": "Adım {current} / {total}"
   },
   "pluginsSettings.add": {
     "defaultMessage": "Ekle"
@@ -2942,6 +3050,15 @@
   "telemetrySettings.updateError": {
     "defaultMessage": "Telemetri ayarları güncellenemedi."
   },
+  "terminalPanel.closePanel": {
+    "defaultMessage": "Paneli kapat"
+  },
+  "terminalPanel.closeTab": {
+    "defaultMessage": "Terminali kapat"
+  },
+  "terminalPanel.newTerminal": {
+    "defaultMessage": "Yeni terminal"
+  },
   "themeSelector.dark": {
     "defaultMessage": "Karanlık"
   },
@@ -3130,5 +3247,26 @@
   },
   "userMessage.forkSessionTitle": {
     "defaultMessage": "Düzenlenen mesajla yeni bir oturum oluşturun"
+  },
+  "workToolActivity.editedFiles": {
+    "defaultMessage": "Dosyalar düzenlendi"
+  },
+  "workToolActivity.listedFiles": {
+    "defaultMessage": "Dosyalar listelendi"
+  },
+  "workToolActivity.ranCommands": {
+    "defaultMessage": "{count,plural,one{# komut çalıştırıldı} other{# komut çalıştırıldı}}"
+  },
+  "workToolActivity.readFiles": {
+    "defaultMessage": "Dosyalar okundu"
+  },
+  "workToolActivity.searchedFiles": {
+    "defaultMessage": "Dosyalarda arandı"
+  },
+  "workToolActivity.searchedWeb": {
+    "defaultMessage": "Web'de arandı"
+  },
+  "workToolActivity.usedTools": {
+    "defaultMessage": "{count,plural,one{# araç kullanıldı} other{# araç kullanıldı}}"
   }
 }

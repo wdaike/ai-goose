@@ -17,6 +17,12 @@
   "appLayout.openNavigation": {
     "defaultMessage": "Открыть навигацию"
   },
+  "appLayout.toggleBottomPanel": {
+    "defaultMessage": "Переключить нижнюю панель"
+  },
+  "appLayout.toggleSidePanel": {
+    "defaultMessage": "Переключить боковую панель"
+  },
   "appsView.customApp": {
     "defaultMessage": "Пользовательское приложение"
   },
@@ -638,26 +644,17 @@
   "dictationSettings.voiceDictationProvider": {
     "defaultMessage": "Провайдер голосовой диктовки"
   },
-  "dirSwitcher.chooseDirectory": {
-    "defaultMessage": "Выбрать каталог…"
-  },
-  "dirSwitcher.currentDirectory": {
-    "defaultMessage": "Текущий каталог"
-  },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "Не удалось обновить рабочий каталог"
   },
-  "dirSwitcher.gitWorktrees": {
-    "defaultMessage": "Git worktrees"
+  "dirSwitcher.newProject": {
+    "defaultMessage": "Новый проект"
   },
-  "dirSwitcher.noWorktreesFound": {
-    "defaultMessage": "Git worktrees не найдены"
+  "dirSwitcher.noProject": {
+    "defaultMessage": "Не работать в проекте"
   },
-  "dirSwitcher.openInFinder": {
-    "defaultMessage": "Открыть в файловом менеджере"
-  },
-  "dirSwitcher.recentDirectories": {
-    "defaultMessage": "Недавние каталоги"
+  "dirSwitcher.searchProjects": {
+    "defaultMessage": "Поиск проектов"
   },
   "elicitationRequest.accept": {
     "defaultMessage": "Принять"
@@ -902,6 +899,36 @@
   "externalBackendSection.useExternalServerDescription": {
     "defaultMessage": "Подключиться к серверу goose, запущенному в другом месте (требуется перезапуск приложения)"
   },
+  "fileChangeCard.document": {
+    "defaultMessage": "Документ"
+  },
+  "fileChangeCard.editedFiles": {
+    "defaultMessage": "{count,plural,one{Изменён # файл} few{Изменено # файла} other{Изменено # файлов}}"
+  },
+  "fileChangeCard.openIn": {
+    "defaultMessage": "Открыть в"
+  },
+  "fileChangeCard.review": {
+    "defaultMessage": "Проверка"
+  },
+  "fileChangeCard.showMore": {
+    "defaultMessage": "Показать ещё {count}"
+  },
+  "fileChangeCard.showMoreFiles": {
+    "defaultMessage": "Показать ещё {count} файлов"
+  },
+  "filesPanel.closePanel": {
+    "defaultMessage": "Закрыть панель"
+  },
+  "filesPanel.emptyDirectory": {
+    "defaultMessage": "Пустой каталог"
+  },
+  "filesPanel.refresh": {
+    "defaultMessage": "Обновить"
+  },
+  "filesPanel.title": {
+    "defaultMessage": "Файлы"
+  },
   "goosehintsModal.close": {
     "defaultMessage": "Закрыть"
   },
@@ -1022,14 +1049,26 @@
   "headersSection.value": {
     "defaultMessage": "Значение"
   },
-  "hub.goodAfternoon": {
-    "defaultMessage": "Добрый день"
+  "hub.headline": {
+    "defaultMessage": "Что построим в {project}?"
   },
-  "hub.goodEvening": {
-    "defaultMessage": "Добрый вечер"
+  "hub.headlineNoProject": {
+    "defaultMessage": "Что построим?"
   },
-  "hub.goodMorning": {
-    "defaultMessage": "Доброе утро"
+  "hub.local": {
+    "defaultMessage": "Локально"
+  },
+  "hub.suggestionBuild": {
+    "defaultMessage": "Создать новую функцию, приложение или инструмент"
+  },
+  "hub.suggestionExplore": {
+    "defaultMessage": "Изучить и понять код"
+  },
+  "hub.suggestionFix": {
+    "defaultMessage": "Исправить проблемы и сбои"
+  },
+  "hub.suggestionReview": {
+    "defaultMessage": "Проверить код и предложить изменения"
   },
   "huggingFaceModelSearch.download": {
     "defaultMessage": "Скачать"
@@ -1544,6 +1583,18 @@
   "mentionPopover.scanningFiles": {
     "defaultMessage": "Сканирование файлов..."
   },
+  "messageActions.badResponse": {
+    "defaultMessage": "Плохой ответ"
+  },
+  "messageActions.copied": {
+    "defaultMessage": "Скопировано!"
+  },
+  "messageActions.copy": {
+    "defaultMessage": "Копировать"
+  },
+  "messageActions.goodResponse": {
+    "defaultMessage": "Хороший ответ"
+  },
   "messageCopyLink.copied": {
     "defaultMessage": "Скопировано!"
   },
@@ -1726,6 +1777,39 @@
   },
   "modelAndProviderContext.unknownProviderTitle": {
     "defaultMessage": "Поиск имени провайдера"
+  },
+  "modelPickerPill.advanced": {
+    "defaultMessage": "Расширенные"
+  },
+  "modelPickerPill.effort": {
+    "defaultMessage": "Усилие"
+  },
+  "modelPickerPill.effortHigh": {
+    "defaultMessage": "Высокий"
+  },
+  "modelPickerPill.effortLow": {
+    "defaultMessage": "Низкий"
+  },
+  "modelPickerPill.effortMax": {
+    "defaultMessage": "Макс"
+  },
+  "modelPickerPill.effortMedium": {
+    "defaultMessage": "Средний"
+  },
+  "modelPickerPill.loadingModel": {
+    "defaultMessage": "Загрузка…"
+  },
+  "modelPickerPill.model": {
+    "defaultMessage": "Модель"
+  },
+  "modelPickerPill.selectModel": {
+    "defaultMessage": "Выбрать модель"
+  },
+  "modelPickerPill.speed": {
+    "defaultMessage": "Скорость"
+  },
+  "modelPickerPill.standard": {
+    "defaultMessage": "Стандарт"
   },
   "modelSettingsButtons.configureProviders": {
     "defaultMessage": "Настроить провайдеров"
@@ -1934,6 +2018,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "Подходящих чатов нет"
   },
+  "navigationPanel.projectThreads": {
+    "defaultMessage": "{count,plural,one{# тред} few{# треда} other{# тредов}}"
+  },
+  "navigationPanel.projectThreadsCapped": {
+    "defaultMessage": "{count, number}+ тредов"
+  },
   "navigationPanel.projects": {
     "defaultMessage": "Проекты"
   },
@@ -1942,6 +2032,9 @@
   },
   "navigationPanel.searching": {
     "defaultMessage": "Поиск..."
+  },
+  "navigationPanel.showMore": {
+    "defaultMessage": "Показать ещё"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Безымянный сеанс"
@@ -2018,6 +2111,18 @@
   "permissionModal.saveChanges": {
     "defaultMessage": "Сохранить изменения"
   },
+  "permissionModeChip.approve": {
+    "defaultMessage": "Ручное одобрение"
+  },
+  "permissionModeChip.chatOnly": {
+    "defaultMessage": "Только чат"
+  },
+  "permissionModeChip.fullAccess": {
+    "defaultMessage": "Полный доступ"
+  },
+  "permissionModeChip.smartApprove": {
+    "defaultMessage": "Умное одобрение"
+  },
   "permissionRulesModal.description": {
     "defaultMessage": "Настройте разрешения на инструменты для расширений, чтобы управлять их взаимодействием с системой."
   },
@@ -2035,6 +2140,9 @@
   },
   "permissionSetting.permissionRulesDescription": {
     "defaultMessage": "Скрытые инструкции, которые будут переданы провайдеру, чтобы направлять ответы и добавлять к ним контекст."
+  },
+  "planSteps.progress": {
+    "defaultMessage": "Шаг {current} / {total}"
   },
   "pluginsSettings.add": {
     "defaultMessage": "Добавить"
@@ -2942,6 +3050,15 @@
   "telemetrySettings.updateError": {
     "defaultMessage": "Не удалось обновить настройки телеметрии."
   },
+  "terminalPanel.closePanel": {
+    "defaultMessage": "Закрыть панель"
+  },
+  "terminalPanel.closeTab": {
+    "defaultMessage": "Закрыть терминал"
+  },
+  "terminalPanel.newTerminal": {
+    "defaultMessage": "Новый терминал"
+  },
   "themeSelector.dark": {
     "defaultMessage": "Темная"
   },
@@ -3130,5 +3247,26 @@
   },
   "userMessage.forkSessionTitle": {
     "defaultMessage": "Создать новый сеанс с измененным сообщением"
+  },
+  "workToolActivity.editedFiles": {
+    "defaultMessage": "Файлы изменены"
+  },
+  "workToolActivity.listedFiles": {
+    "defaultMessage": "Файлы перечислены"
+  },
+  "workToolActivity.ranCommands": {
+    "defaultMessage": "{count,plural,one{Выполнена # команда} few{Выполнено # команды} other{Выполнено # команд}}"
+  },
+  "workToolActivity.readFiles": {
+    "defaultMessage": "Файлы прочитаны"
+  },
+  "workToolActivity.searchedFiles": {
+    "defaultMessage": "Поиск по файлам"
+  },
+  "workToolActivity.searchedWeb": {
+    "defaultMessage": "Поиск в интернете"
+  },
+  "workToolActivity.usedTools": {
+    "defaultMessage": "{count,plural,one{Использован # инструмент} few{Использовано # инструмента} other{Использовано # инструментов}}"
   }
 }

@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { View, ViewOptions } from '../utils/navigationUtils';
 import { useConfig } from './ConfigContext';
 import { getInitialWorkingDir } from '../utils/workingDir';
+import { useWorkspacePanelsSafe } from '../contexts/WorkspacePanelsContext';
 import { createSession } from '../sessions';
 import LoadingGoose from './LoadingGoose';
 import { Goose } from './icons/Goose';
@@ -114,6 +115,12 @@ export default function Hub({
   const [nextChatExtensionDraft, setNextChatExtensionDraft] =
     useState<NextChatExtensionDraft | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const workspacePanels = useWorkspacePanelsSafe();
+  const setPanelsWorkingDir = workspacePanels?.setWorkingDir;
+  useEffect(() => {
+    setPanelsWorkingDir?.(workingDir);
+  }, [workingDir, setPanelsWorkingDir]);
 
   const projectName = useMemo(() => leafDirName(workingDir), [workingDir]);
   const homeDir = (window.appConfig?.get('GOOSE_HOME_DIR') as string | undefined) ?? '';

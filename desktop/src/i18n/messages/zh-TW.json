@@ -17,6 +17,12 @@
   "appLayout.openNavigation": {
     "defaultMessage": "開啟導覽列"
   },
+  "appLayout.toggleBottomPanel": {
+    "defaultMessage": "切換底部面板"
+  },
+  "appLayout.toggleSidePanel": {
+    "defaultMessage": "切換側邊面板"
+  },
   "appsView.customApp": {
     "defaultMessage": "自訂應用程式"
   },
@@ -638,26 +644,17 @@
   "dictationSettings.voiceDictationProvider": {
     "defaultMessage": "語音聽寫供應商"
   },
-  "dirSwitcher.chooseDirectory": {
-    "defaultMessage": "選擇目錄…"
-  },
-  "dirSwitcher.currentDirectory": {
-    "defaultMessage": "目前目錄"
-  },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "無法更新工作目錄"
   },
-  "dirSwitcher.gitWorktrees": {
-    "defaultMessage": "Git 工作樹"
+  "dirSwitcher.newProject": {
+    "defaultMessage": "新增專案"
   },
-  "dirSwitcher.noWorktreesFound": {
-    "defaultMessage": "找不到工作樹"
+  "dirSwitcher.noProject": {
+    "defaultMessage": "不在專案中工作"
   },
-  "dirSwitcher.openInFinder": {
-    "defaultMessage": "在檔案管理員中開啟"
-  },
-  "dirSwitcher.recentDirectories": {
-    "defaultMessage": "最近的目錄"
+  "dirSwitcher.searchProjects": {
+    "defaultMessage": "搜尋專案"
   },
   "elicitationRequest.accept": {
     "defaultMessage": "接受"
@@ -902,6 +899,36 @@
   "externalBackendSection.useExternalServerDescription": {
     "defaultMessage": "連線至在其他位置執行的 goose 伺服器（需要重新啟動應用程式）"
   },
+  "fileChangeCard.document": {
+    "defaultMessage": "文件"
+  },
+  "fileChangeCard.editedFiles": {
+    "defaultMessage": "{count,plural,other{已編輯 # 個檔案}}"
+  },
+  "fileChangeCard.openIn": {
+    "defaultMessage": "開啟方式"
+  },
+  "fileChangeCard.review": {
+    "defaultMessage": "審查"
+  },
+  "fileChangeCard.showMore": {
+    "defaultMessage": "顯示更多 {count} 項"
+  },
+  "fileChangeCard.showMoreFiles": {
+    "defaultMessage": "顯示更多 {count} 個檔案"
+  },
+  "filesPanel.closePanel": {
+    "defaultMessage": "關閉面板"
+  },
+  "filesPanel.emptyDirectory": {
+    "defaultMessage": "空目錄"
+  },
+  "filesPanel.refresh": {
+    "defaultMessage": "重新整理"
+  },
+  "filesPanel.title": {
+    "defaultMessage": "檔案"
+  },
   "goosehintsModal.close": {
     "defaultMessage": "關閉"
   },
@@ -1022,14 +1049,26 @@
   "headersSection.value": {
     "defaultMessage": "值"
   },
-  "hub.goodAfternoon": {
-    "defaultMessage": "午安"
+  "hub.headline": {
+    "defaultMessage": "我們要在 {project} 中打造什麼?"
   },
-  "hub.goodEvening": {
-    "defaultMessage": "晚安"
+  "hub.headlineNoProject": {
+    "defaultMessage": "我們要打造什麼?"
   },
-  "hub.goodMorning": {
-    "defaultMessage": "早安"
+  "hub.local": {
+    "defaultMessage": "本機"
+  },
+  "hub.suggestionBuild": {
+    "defaultMessage": "打造新功能、應用程式或工具"
+  },
+  "hub.suggestionExplore": {
+    "defaultMessage": "探索並理解程式碼"
+  },
+  "hub.suggestionFix": {
+    "defaultMessage": "修復問題與故障"
+  },
+  "hub.suggestionReview": {
+    "defaultMessage": "審查程式碼並提出修改建議"
   },
   "huggingFaceModelSearch.download": {
     "defaultMessage": "下載"
@@ -1544,6 +1583,18 @@
   "mentionPopover.scanningFiles": {
     "defaultMessage": "正在掃描檔案…"
   },
+  "messageActions.badResponse": {
+    "defaultMessage": "回應不佳"
+  },
+  "messageActions.copied": {
+    "defaultMessage": "已複製!"
+  },
+  "messageActions.copy": {
+    "defaultMessage": "複製"
+  },
+  "messageActions.goodResponse": {
+    "defaultMessage": "回應良好"
+  },
   "messageCopyLink.copied": {
     "defaultMessage": "已複製！"
   },
@@ -1726,6 +1777,39 @@
   },
   "modelAndProviderContext.unknownProviderTitle": {
     "defaultMessage": "供應商名稱查詢"
+  },
+  "modelPickerPill.advanced": {
+    "defaultMessage": "進階"
+  },
+  "modelPickerPill.effort": {
+    "defaultMessage": "推理強度"
+  },
+  "modelPickerPill.effortHigh": {
+    "defaultMessage": "高"
+  },
+  "modelPickerPill.effortLow": {
+    "defaultMessage": "低"
+  },
+  "modelPickerPill.effortMax": {
+    "defaultMessage": "最大"
+  },
+  "modelPickerPill.effortMedium": {
+    "defaultMessage": "中"
+  },
+  "modelPickerPill.loadingModel": {
+    "defaultMessage": "載入中…"
+  },
+  "modelPickerPill.model": {
+    "defaultMessage": "模型"
+  },
+  "modelPickerPill.selectModel": {
+    "defaultMessage": "選擇模型"
+  },
+  "modelPickerPill.speed": {
+    "defaultMessage": "速度"
+  },
+  "modelPickerPill.standard": {
+    "defaultMessage": "標準"
   },
   "modelSettingsButtons.configureProviders": {
     "defaultMessage": "設定供應商"
@@ -1934,6 +2018,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "沒有相符的對話"
   },
+  "navigationPanel.projectThreads": {
+    "defaultMessage": "{count,plural,other{# 個對話}}"
+  },
+  "navigationPanel.projectThreadsCapped": {
+    "defaultMessage": "{count, number}+ 個對話"
+  },
   "navigationPanel.projects": {
     "defaultMessage": "專案"
   },
@@ -1942,6 +2032,9 @@
   },
   "navigationPanel.searching": {
     "defaultMessage": "正在搜尋..."
+  },
+  "navigationPanel.showMore": {
+    "defaultMessage": "顯示更多"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "未命名工作階段"
@@ -2018,6 +2111,18 @@
   "permissionModal.saveChanges": {
     "defaultMessage": "儲存變更"
   },
+  "permissionModeChip.approve": {
+    "defaultMessage": "手動核准"
+  },
+  "permissionModeChip.chatOnly": {
+    "defaultMessage": "僅聊天"
+  },
+  "permissionModeChip.fullAccess": {
+    "defaultMessage": "完整存取"
+  },
+  "permissionModeChip.smartApprove": {
+    "defaultMessage": "智慧核准"
+  },
   "permissionRulesModal.description": {
     "defaultMessage": "為擴充功能設定工具權限，以控制它們與您系統互動的方式。"
   },
@@ -2035,6 +2140,9 @@
   },
   "permissionSetting.permissionRulesDescription": {
     "defaultMessage": "將傳遞給提供者的隱藏指示，用於引導並為您的回應補充背景資訊。"
+  },
+  "planSteps.progress": {
+    "defaultMessage": "第 {current} / {total} 步"
   },
   "pluginsSettings.add": {
     "defaultMessage": "新增"
@@ -2942,6 +3050,15 @@
   "telemetrySettings.updateError": {
     "defaultMessage": "無法更新遙測設定。"
   },
+  "terminalPanel.closePanel": {
+    "defaultMessage": "關閉面板"
+  },
+  "terminalPanel.closeTab": {
+    "defaultMessage": "關閉終端機"
+  },
+  "terminalPanel.newTerminal": {
+    "defaultMessage": "新增終端機"
+  },
   "themeSelector.dark": {
     "defaultMessage": "深色"
   },
@@ -3130,5 +3247,26 @@
   },
   "userMessage.forkSessionTitle": {
     "defaultMessage": "以編輯後的訊息建立新的工作階段"
+  },
+  "workToolActivity.editedFiles": {
+    "defaultMessage": "已編輯檔案"
+  },
+  "workToolActivity.listedFiles": {
+    "defaultMessage": "已列出檔案"
+  },
+  "workToolActivity.ranCommands": {
+    "defaultMessage": "{count,plural,other{執行了 # 個命令}}"
+  },
+  "workToolActivity.readFiles": {
+    "defaultMessage": "已讀取檔案"
+  },
+  "workToolActivity.searchedFiles": {
+    "defaultMessage": "已搜尋檔案"
+  },
+  "workToolActivity.searchedWeb": {
+    "defaultMessage": "已搜尋網頁"
+  },
+  "workToolActivity.usedTools": {
+    "defaultMessage": "{count,plural,other{使用了 # 個工具}}"
   }
 }

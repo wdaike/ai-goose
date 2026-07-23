@@ -2,11 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { IpcRendererEvent } from 'electron';
 import { Outlet, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, PanelLeft } from 'lucide-react';
+import { Menu, PanelBottom, PanelLeft, PanelRight } from 'lucide-react';
 import { defineMessages, useIntl } from '../../i18n';
 import { Button } from '../ui/button';
 import ChatSessionsContainer from '../ChatSessionsContainer';
 import { useChatContext } from '../../contexts/ChatContext';
+import {
+  WorkspacePanelsProvider,
+  useWorkspacePanels,
+} from '../../contexts/WorkspacePanelsContext';
+import FilesPanel from '../workspace/FilesPanel';
+import TerminalPanel from '../workspace/TerminalPanel';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/Tooltip';
 import { NavigationProvider, useNavigationContext } from './NavigationContext';
 import { Navigation } from './NavigationPanel';
 import { NAV_DIMENSIONS, Z_INDEX } from './constants';
@@ -22,7 +29,46 @@ const i18n = defineMessages({
     id: 'appLayout.collapseNavigation',
     defaultMessage: 'Collapse navigation',
   },
+  toggleBottomPanel: {
+    id: 'appLayout.toggleBottomPanel',
+    defaultMessage: 'Toggle bottom panel',
+  },
+  toggleSidePanel: {
+    id: 'appLayout.toggleSidePanel',
+    defaultMessage: 'Toggle side panel',
+  },
 });
+
+const PanelToggleButton: React.FC<{
+  label: string;
+  shortcut: string;
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}> = ({ label, shortcut, active, onClick, children }) => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <Button
+        onClick={onClick}
+        className={cn(
+          'no-drag text-text-secondary hover:!bg-background-tertiary hover:text-text-primary',
+          active && 'text-text-primary'
+        )}
+        variant="ghost"
+        size="sm"
+        shape="round"
+        aria-label={label}
+        aria-pressed={active}
+      >
+        {children}
+      </Button>
+    </TooltipTrigger>
+    <TooltipContent side="bottom" className="flex items-center gap-2">
+      {label}
+      <span className="text-text-secondary">{shortcut}</span>
+    </TooltipContent>
+  </Tooltip>
+);
 
 interface AppLayoutContentProps {
   activeSessions: Array<{
@@ -55,6 +101,9 @@ const AppLayoutContent: React.FC<AppLayoutContentProps> = ({ activeSessions }) =
   }, [safeIsMacOS]);
 
   const { isNavExpanded, setIsNavExpanded } = useNavigationContext();
+  const { isBottomPanelOpen, isSidePanelOpen, toggleBottomPanel, toggleSidePanel } =
+    useWorkspacePanels();
+  const modKey = safeIsMacOS ? '⌘' : 'Ctrl+';
 
   if (!chatContext) {
     throw new Error('AppLayoutContent must be used within ChatProvider');
@@ -88,6 +137,28 @@ const AppLayoutContent: React.FC<AppLayoutContentProps> = ({ activeSessions }) =
         </Button>
       </div>
 
+      <div
+        style={{ zIndex: Z_INDEX.HEADER }}
+        className={cn('absolute right-3 flex items-center gap-1', headerTop)}
+      >
+        <PanelToggleButton
+          label={intl.formatMessage(i18n.toggleBottomPanel)}
+          shortcut={`${modKey}J`}
+          active={isBottomPanelOpen}
+          onClick={toggleBottomPanel}
+        >
+          <PanelBottom className="w-4 h-4" />
+        </PanelToggleButton>
+        <PanelToggleButton
+          label={intl.formatMessage(i18n.toggleSidePanel)}
+          shortcut={`${modKey}P`}
+          active={isSidePanelOpen}
+          onClick={toggleSidePanel}
+        >
+          <PanelRight className="w-4 h-4" />
+        </PanelToggleButton>
+      </div>
+
       {/* Main content with navigation. The sidebar is flush with the window
           edge and separated from the canvas by a hairline, like Codex. */}
       <div className="flex flex-1 w-full h-full min-h-0 flex-row">
@@ -107,14 +178,22 @@ const AppLayoutContent: React.FC<AppLayoutContentProps> = ({ activeSessions }) =
           </div>
         </motion.div>
 
-        {/* Main content — no border / no card; just flows on the canvas. */}
-        <div className="flex-1 overflow-hidden min-h-0">
-          <Outlet />
-          {/* Always render ChatSessionsContainer to keep SSE connections alive.
-              When navigating away from /pair, hide it with CSS */}
-          <div className={isOnPairRoute ? 'contents' : 'hidden'}>
-            <ChatSessionsContainer setChat={setChat} activeSessions={activeSessions} />
+        {/* Main content — no border / no card; just flows on the canvas.
+            Column so the terminal panel can dock under both the chat and
+            the files side panel, like Codex. */}
+        <div className="flex flex-1 min-w-0 min-h-0 flex-col">
+          <div className="flex flex-1 min-h-0 flex-row">
+            <div className="flex-1 overflow-hidden min-h-0 min-w-0">
+              <Outlet />
+              {/* Always render ChatSessionsContainer to keep SSE connections alive.
+                  When navigating away from /pair, hide it with CSS */}
+              <div className={isOnPairRoute ? 'contents' : 'hidden'}>
+                <ChatSessionsContainer setChat={setChat} activeSessions={activeSessions} />
+              </div>
+            </div>
+            <FilesPanel />
           </div>
+          <TerminalPanel />
         </div>
       </div>
     </div>
@@ -132,7 +211,9 @@ interface AppLayoutProps {
 export const AppLayout: React.FC<AppLayoutProps> = ({ activeSessions }) => {
   return (
     <NavigationProvider>
-      <AppLayoutContent activeSessions={activeSessions} />
+      <WorkspacePanelsProvider>
+        <AppLayoutContent activeSessions={activeSessions} />
+      </WorkspacePanelsProvider>
     </NavigationProvider>
   );
 };

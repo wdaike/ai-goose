@@ -16,5 +16,6 @@ allowBuilds:
   electron: true
   electron-winstaller: true
   esbuild: true
+  node-pty: true
 # Electron Forge resolves @electron/node-gyp from git.
 blockExoticSubdeps: false

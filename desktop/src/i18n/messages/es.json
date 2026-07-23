@@ -17,6 +17,12 @@
   "appLayout.openNavigation": {
     "defaultMessage": "Abrir navegación"
   },
+  "appLayout.toggleBottomPanel": {
+    "defaultMessage": "Alternar panel inferior"
+  },
+  "appLayout.toggleSidePanel": {
+    "defaultMessage": "Alternar panel lateral"
+  },
   "appsView.customApp": {
     "defaultMessage": "App personalizada"
   },
@@ -638,26 +644,17 @@
   "dictationSettings.voiceDictationProvider": {
     "defaultMessage": "Proveedor de dictado por voz"
   },
-  "dirSwitcher.chooseDirectory": {
-    "defaultMessage": "Elegir directorio…"
-  },
-  "dirSwitcher.currentDirectory": {
-    "defaultMessage": "Directorio actual"
-  },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "No se pudo actualizar el directorio de trabajo"
   },
-  "dirSwitcher.gitWorktrees": {
-    "defaultMessage": "Worktrees de Git"
+  "dirSwitcher.newProject": {
+    "defaultMessage": "Nuevo proyecto"
   },
-  "dirSwitcher.noWorktreesFound": {
-    "defaultMessage": "No se encontraron worktrees"
+  "dirSwitcher.noProject": {
+    "defaultMessage": "No trabajar en un proyecto"
   },
-  "dirSwitcher.openInFinder": {
-    "defaultMessage": "Abrir en el gestor de archivos"
-  },
-  "dirSwitcher.recentDirectories": {
-    "defaultMessage": "Directorios recientes"
+  "dirSwitcher.searchProjects": {
+    "defaultMessage": "Buscar proyectos"
   },
   "elicitationRequest.accept": {
     "defaultMessage": "Aceptar"
@@ -902,6 +899,36 @@
   "externalBackendSection.useExternalServerDescription": {
     "defaultMessage": "Conéctate a un servidor goose que se ejecuta en otro lugar (requiere reiniciar la app)"
   },
+  "fileChangeCard.document": {
+    "defaultMessage": "Documento"
+  },
+  "fileChangeCard.editedFiles": {
+    "defaultMessage": "{count,plural,one{1 archivo editado} other{# archivos editados}}"
+  },
+  "fileChangeCard.openIn": {
+    "defaultMessage": "Abrir en"
+  },
+  "fileChangeCard.review": {
+    "defaultMessage": "Revisar"
+  },
+  "fileChangeCard.showMore": {
+    "defaultMessage": "Mostrar {count} más"
+  },
+  "fileChangeCard.showMoreFiles": {
+    "defaultMessage": "Mostrar {count} archivos más"
+  },
+  "filesPanel.closePanel": {
+    "defaultMessage": "Cerrar panel"
+  },
+  "filesPanel.emptyDirectory": {
+    "defaultMessage": "Directorio vacío"
+  },
+  "filesPanel.refresh": {
+    "defaultMessage": "Actualizar"
+  },
+  "filesPanel.title": {
+    "defaultMessage": "Archivos"
+  },
   "goosehintsModal.close": {
     "defaultMessage": "Cerrar"
   },
@@ -1022,14 +1049,26 @@
   "headersSection.value": {
     "defaultMessage": "Valor"
   },
-  "hub.goodAfternoon": {
-    "defaultMessage": "Buenas tardes"
+  "hub.headline": {
+    "defaultMessage": "¿Qué construimos en {project}?"
   },
-  "hub.goodEvening": {
-    "defaultMessage": "Buenas noches"
+  "hub.headlineNoProject": {
+    "defaultMessage": "¿Qué construimos?"
   },
-  "hub.goodMorning": {
-    "defaultMessage": "Buenos días"
+  "hub.local": {
+    "defaultMessage": "Local"
+  },
+  "hub.suggestionBuild": {
+    "defaultMessage": "Crear una nueva función, app o herramienta"
+  },
+  "hub.suggestionExplore": {
+    "defaultMessage": "Explorar y entender el código"
+  },
+  "hub.suggestionFix": {
+    "defaultMessage": "Corregir errores y fallos"
+  },
+  "hub.suggestionReview": {
+    "defaultMessage": "Revisar el código y sugerir cambios"
   },
   "huggingFaceModelSearch.download": {
     "defaultMessage": "Descargar"
@@ -1544,6 +1583,18 @@
   "mentionPopover.scanningFiles": {
     "defaultMessage": "Escaneando archivos..."
   },
+  "messageActions.badResponse": {
+    "defaultMessage": "Mala respuesta"
+  },
+  "messageActions.copied": {
+    "defaultMessage": "¡Copiado!"
+  },
+  "messageActions.copy": {
+    "defaultMessage": "Copiar"
+  },
+  "messageActions.goodResponse": {
+    "defaultMessage": "Buena respuesta"
+  },
   "messageCopyLink.copied": {
     "defaultMessage": "¡Copiado!"
   },
@@ -1726,6 +1777,39 @@
   },
   "modelAndProviderContext.unknownProviderTitle": {
     "defaultMessage": "Búsqueda del nombre del proveedor"
+  },
+  "modelPickerPill.advanced": {
+    "defaultMessage": "Avanzado"
+  },
+  "modelPickerPill.effort": {
+    "defaultMessage": "Esfuerzo"
+  },
+  "modelPickerPill.effortHigh": {
+    "defaultMessage": "Alto"
+  },
+  "modelPickerPill.effortLow": {
+    "defaultMessage": "Bajo"
+  },
+  "modelPickerPill.effortMax": {
+    "defaultMessage": "Máx"
+  },
+  "modelPickerPill.effortMedium": {
+    "defaultMessage": "Medio"
+  },
+  "modelPickerPill.loadingModel": {
+    "defaultMessage": "Cargando…"
+  },
+  "modelPickerPill.model": {
+    "defaultMessage": "Modelo"
+  },
+  "modelPickerPill.selectModel": {
+    "defaultMessage": "Seleccionar modelo"
+  },
+  "modelPickerPill.speed": {
+    "defaultMessage": "Velocidad"
+  },
+  "modelPickerPill.standard": {
+    "defaultMessage": "Estándar"
   },
   "modelSettingsButtons.configureProviders": {
     "defaultMessage": "Configurar proveedores"
@@ -1934,6 +2018,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "No hay chats coincidentes"
   },
+  "navigationPanel.projectThreads": {
+    "defaultMessage": "{count,plural,one{# hilo} other{# hilos}}"
+  },
+  "navigationPanel.projectThreadsCapped": {
+    "defaultMessage": "{count, number}+ hilos"
+  },
   "navigationPanel.projects": {
     "defaultMessage": "Proyectos"
   },
@@ -1942,6 +2032,9 @@
   },
   "navigationPanel.searching": {
     "defaultMessage": "Buscando..."
+  },
+  "navigationPanel.showMore": {
+    "defaultMessage": "Mostrar más"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Sesión sin título"
@@ -2018,6 +2111,18 @@
   "permissionModal.saveChanges": {
     "defaultMessage": "Guardar cambios"
   },
+  "permissionModeChip.approve": {
+    "defaultMessage": "Aprobación manual"
+  },
+  "permissionModeChip.chatOnly": {
+    "defaultMessage": "Solo chat"
+  },
+  "permissionModeChip.fullAccess": {
+    "defaultMessage": "Acceso completo"
+  },
+  "permissionModeChip.smartApprove": {
+    "defaultMessage": "Aprobación inteligente"
+  },
   "permissionRulesModal.description": {
     "defaultMessage": "Configura los permisos de herramientas de las extensiones para controlar cómo interactúan con tu sistema."
   },
@@ -2035,6 +2140,9 @@
   },
   "permissionSetting.permissionRulesDescription": {
     "defaultMessage": "Instrucciones ocultas que se pasarán al proveedor para ayudar a dirigir y añadir contexto a tus respuestas."
+  },
+  "planSteps.progress": {
+    "defaultMessage": "Paso {current} / {total}"
   },
   "pluginsSettings.add": {
     "defaultMessage": "Añadir"
@@ -2942,6 +3050,15 @@
   "telemetrySettings.updateError": {
     "defaultMessage": "No se pudieron actualizar los ajustes de telemetría."
   },
+  "terminalPanel.closePanel": {
+    "defaultMessage": "Cerrar panel"
+  },
+  "terminalPanel.closeTab": {
+    "defaultMessage": "Cerrar terminal"
+  },
+  "terminalPanel.newTerminal": {
+    "defaultMessage": "Nueva terminal"
+  },
   "themeSelector.dark": {
     "defaultMessage": "Oscuro"
   },
@@ -3130,5 +3247,26 @@
   },
   "userMessage.forkSessionTitle": {
     "defaultMessage": "Crear una nueva sesión con el mensaje editado"
+  },
+  "workToolActivity.editedFiles": {
+    "defaultMessage": "Archivos editados"
+  },
+  "workToolActivity.listedFiles": {
+    "defaultMessage": "Archivos listados"
+  },
+  "workToolActivity.ranCommands": {
+    "defaultMessage": "{count,plural,one{Ejecutó un comando} other{Ejecutó # comandos}}"
+  },
+  "workToolActivity.readFiles": {
+    "defaultMessage": "Archivos leídos"
+  },
+  "workToolActivity.searchedFiles": {
+    "defaultMessage": "Archivos buscados"
+  },
+  "workToolActivity.searchedWeb": {
+    "defaultMessage": "Buscó en la web"
+  },
+  "workToolActivity.usedTools": {
+    "defaultMessage": "{count,plural,one{Usó una herramienta} other{Usó # herramientas}}"
   }
 }

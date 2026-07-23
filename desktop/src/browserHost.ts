@@ -135,6 +135,17 @@ const browserElectron: ElectronAPI = {
   writeFile: async () => false,
   ensureDirectory: async () => false,
   listFiles: async () => [],
+  listDirectory: async () => [],
+  terminal: {
+    create: async () => {
+      throw new Error('Terminals are unavailable in the browser');
+    },
+    write: () => undefined,
+    resize: () => undefined,
+    kill: () => undefined,
+    onData: () => () => undefined,
+    onExit: () => () => undefined,
+  },
   getAllowedExtensions: async () => ['json', 'jsonl', 'md', 'txt', 'png', 'jpg', 'jpeg', 'webp'],
   getPathForFile: (file) => file.name,
   setMenuBarIcon: async () => false,

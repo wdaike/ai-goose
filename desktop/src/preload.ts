@@ -115,6 +115,8 @@ export type ElectronAPI = {
   writeFile: (directory: string, content: string) => Promise<boolean>;
   ensureDirectory: (dirPath: string) => Promise<boolean>;
   listFiles: (dirPath: string, extension?: string) => Promise<string[]>;
+  listDirectory: (dirPath: string) => Promise<DirectoryEntry[]>;
+  terminal: TerminalAPI;
   getAllowedExtensions: () => Promise<string[]>;
   getPathForFile: (file: File) => string;
   setMenuBarIcon: (show: boolean) => Promise<boolean>;
@@ -177,6 +179,20 @@ export type AppConfigAPI = {
   getAll: () => Record<string, unknown>;
 };
 
+export type DirectoryEntry = {
+  name: string;
+  isDirectory: boolean;
+};
+
+export type TerminalAPI = {
+  create: (options: { cwd?: string; cols?: number; rows?: number }) => Promise<string>;
+  write: (id: string, data: string) => void;
+  resize: (id: string, cols: number, rows: number) => void;
+  kill: (id: string) => void;
+  onData: (callback: (id: string, data: string) => void) => () => void;
+  onExit: (callback: (id: string, exitCode: number) => void) => () => void;
+};
+
 const electronAPI: ElectronAPI = {
   platform: process.platform,
   arch: process.arch,
@@ -210,6 +226,27 @@ const electronAPI: ElectronAPI = {
   ensureDirectory: (dirPath: string) => ipcRenderer.invoke('ensure-directory', dirPath),
   listFiles: (dirPath: string, extension?: string) =>
     ipcRenderer.invoke('list-files', dirPath, extension),
+  listDirectory: (dirPath: string) => ipcRenderer.invoke('list-directory', dirPath),
+  terminal: {
+    create: (options: { cwd?: string; cols?: number; rows?: number }) =>
+      ipcRenderer.invoke('terminal:create', options),
+    write: (id: string, data: string) => ipcRenderer.send('terminal:input', id, data),
+    resize: (id: string, cols: number, rows: number) =>
+      ipcRenderer.send('terminal:resize', id, cols, rows),
+    kill: (id: string) => ipcRenderer.send('terminal:kill', id),
+    onData: (callback: (id: string, data: string) => void) => {
+      const listener = (_event: Electron.IpcRendererEvent, id: string, data: string) =>
+        callback(id, data);
+      ipcRenderer.on('terminal:data', listener);
+      return () => ipcRenderer.removeListener('terminal:data', listener);
+    },
+    onExit: (callback: (id: string, exitCode: number) => void) => {
+      const listener = (_event: Electron.IpcRendererEvent, id: string, exitCode: number) =>
+        callback(id, exitCode);
+      ipcRenderer.on('terminal:exit', listener);
+      return () => ipcRenderer.removeListener('terminal:exit', listener);
+    },
+  },
   getPathForFile: (file: File) => webUtils.getPathForFile(file),
   getAllowedExtensions: () => ipcRenderer.invoke('get-allowed-extensions'),
   setMenuBarIcon: (show: boolean) => ipcRenderer.invoke('set-menu-bar-icon', show),

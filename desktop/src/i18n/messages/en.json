@@ -17,6 +17,12 @@
   "appLayout.openNavigation": {
     "defaultMessage": "Open navigation"
   },
+  "appLayout.toggleBottomPanel": {
+    "defaultMessage": "Toggle bottom panel"
+  },
+  "appLayout.toggleSidePanel": {
+    "defaultMessage": "Toggle side panel"
+  },
   "appsView.customApp": {
     "defaultMessage": "Custom app"
   },
@@ -910,6 +916,18 @@
   },
   "fileChangeCard.showMoreFiles": {
     "defaultMessage": "Show {count} more files"
+  },
+  "filesPanel.closePanel": {
+    "defaultMessage": "Close panel"
+  },
+  "filesPanel.emptyDirectory": {
+    "defaultMessage": "Empty directory"
+  },
+  "filesPanel.refresh": {
+    "defaultMessage": "Refresh"
+  },
+  "filesPanel.title": {
+    "defaultMessage": "Files"
   },
   "goosehintsModal.close": {
     "defaultMessage": "Close"
@@ -2001,7 +2019,7 @@
     "defaultMessage": "No matching chats"
   },
   "navigationPanel.projectThreads": {
-    "defaultMessage": "{count, plural, one {# thread} other {# threads}}"
+    "defaultMessage": "{count,plural,one{# thread} other{# threads}}"
   },
   "navigationPanel.projectThreadsCapped": {
     "defaultMessage": "{count, number}+ threads"
@@ -3031,6 +3049,15 @@
   },
   "telemetrySettings.updateError": {
     "defaultMessage": "Failed to update telemetry settings."
+  },
+  "terminalPanel.closePanel": {
+    "defaultMessage": "Close panel"
+  },
+  "terminalPanel.closeTab": {
+    "defaultMessage": "Close terminal"
+  },
+  "terminalPanel.newTerminal": {
+    "defaultMessage": "New terminal"
   },
   "themeSelector.dark": {
     "defaultMessage": "Dark"

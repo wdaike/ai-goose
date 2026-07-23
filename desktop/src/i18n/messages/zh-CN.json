@@ -17,6 +17,12 @@
   "appLayout.openNavigation": {
     "defaultMessage": "展开导航"
   },
+  "appLayout.toggleBottomPanel": {
+    "defaultMessage": "切换底部面板"
+  },
+  "appLayout.toggleSidePanel": {
+    "defaultMessage": "切换侧边面板"
+  },
   "appsView.customApp": {
     "defaultMessage": "自定义应用"
   },
@@ -638,26 +644,17 @@
   "dictationSettings.voiceDictationProvider": {
     "defaultMessage": "语音输入提供商"
   },
-  "dirSwitcher.chooseDirectory": {
-    "defaultMessage": "选择目录…"
-  },
-  "dirSwitcher.currentDirectory": {
-    "defaultMessage": "当前目录"
-  },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "更新工作目录失败"
   },
-  "dirSwitcher.gitWorktrees": {
-    "defaultMessage": "Git 工作树"
+  "dirSwitcher.newProject": {
+    "defaultMessage": "新建项目"
   },
-  "dirSwitcher.noWorktreesFound": {
-    "defaultMessage": "未找到工作树"
+  "dirSwitcher.noProject": {
+    "defaultMessage": "不在项目中工作"
   },
-  "dirSwitcher.openInFinder": {
-    "defaultMessage": "在文件管理器中打开"
-  },
-  "dirSwitcher.recentDirectories": {
-    "defaultMessage": "最近的目录"
+  "dirSwitcher.searchProjects": {
+    "defaultMessage": "搜索项目"
   },
   "elicitationRequest.accept": {
     "defaultMessage": "接受"
@@ -902,6 +899,36 @@
   "externalBackendSection.useExternalServerDescription": {
     "defaultMessage": "连接到运行在其他位置的 goose 服务器（需要重启应用）"
   },
+  "fileChangeCard.document": {
+    "defaultMessage": "文档"
+  },
+  "fileChangeCard.editedFiles": {
+    "defaultMessage": "{count,plural,other{编辑了 # 个文件}}"
+  },
+  "fileChangeCard.openIn": {
+    "defaultMessage": "打开方式"
+  },
+  "fileChangeCard.review": {
+    "defaultMessage": "审查"
+  },
+  "fileChangeCard.showMore": {
+    "defaultMessage": "显示更多 {count} 项"
+  },
+  "fileChangeCard.showMoreFiles": {
+    "defaultMessage": "显示更多 {count} 个文件"
+  },
+  "filesPanel.closePanel": {
+    "defaultMessage": "关闭面板"
+  },
+  "filesPanel.emptyDirectory": {
+    "defaultMessage": "空目录"
+  },
+  "filesPanel.refresh": {
+    "defaultMessage": "刷新"
+  },
+  "filesPanel.title": {
+    "defaultMessage": "文件"
+  },
   "goosehintsModal.close": {
     "defaultMessage": "关闭"
   },
@@ -1022,14 +1049,26 @@
   "headersSection.value": {
     "defaultMessage": "值"
   },
-  "hub.goodAfternoon": {
-    "defaultMessage": "下午好"
+  "hub.headline": {
+    "defaultMessage": "我们要在 {project} 中构建什么?"
   },
-  "hub.goodEvening": {
-    "defaultMessage": "晚上好"
+  "hub.headlineNoProject": {
+    "defaultMessage": "我们要构建什么?"
   },
-  "hub.goodMorning": {
-    "defaultMessage": "早上好"
+  "hub.local": {
+    "defaultMessage": "本地"
+  },
+  "hub.suggestionBuild": {
+    "defaultMessage": "构建新功能、应用或工具"
+  },
+  "hub.suggestionExplore": {
+    "defaultMessage": "探索并理解代码"
+  },
+  "hub.suggestionFix": {
+    "defaultMessage": "修复问题和故障"
+  },
+  "hub.suggestionReview": {
+    "defaultMessage": "审查代码并提出修改建议"
   },
   "huggingFaceModelSearch.download": {
     "defaultMessage": "下载"
@@ -1544,6 +1583,18 @@
   "mentionPopover.scanningFiles": {
     "defaultMessage": "正在扫描文件…"
   },
+  "messageActions.badResponse": {
+    "defaultMessage": "回答不佳"
+  },
+  "messageActions.copied": {
+    "defaultMessage": "已复制!"
+  },
+  "messageActions.copy": {
+    "defaultMessage": "复制"
+  },
+  "messageActions.goodResponse": {
+    "defaultMessage": "回答很好"
+  },
   "messageCopyLink.copied": {
     "defaultMessage": "已复制！"
   },
@@ -1726,6 +1777,39 @@
   },
   "modelAndProviderContext.unknownProviderTitle": {
     "defaultMessage": "提供商名称查找"
+  },
+  "modelPickerPill.advanced": {
+    "defaultMessage": "高级"
+  },
+  "modelPickerPill.effort": {
+    "defaultMessage": "推理力度"
+  },
+  "modelPickerPill.effortHigh": {
+    "defaultMessage": "高"
+  },
+  "modelPickerPill.effortLow": {
+    "defaultMessage": "低"
+  },
+  "modelPickerPill.effortMax": {
+    "defaultMessage": "最大"
+  },
+  "modelPickerPill.effortMedium": {
+    "defaultMessage": "中"
+  },
+  "modelPickerPill.loadingModel": {
+    "defaultMessage": "加载中…"
+  },
+  "modelPickerPill.model": {
+    "defaultMessage": "模型"
+  },
+  "modelPickerPill.selectModel": {
+    "defaultMessage": "选择模型"
+  },
+  "modelPickerPill.speed": {
+    "defaultMessage": "速度"
+  },
+  "modelPickerPill.standard": {
+    "defaultMessage": "标准"
   },
   "modelSettingsButtons.configureProviders": {
     "defaultMessage": "配置提供商"
@@ -1934,6 +2018,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "没有匹配的对话"
   },
+  "navigationPanel.projectThreads": {
+    "defaultMessage": "{count,plural,other{# 个对话}}"
+  },
+  "navigationPanel.projectThreadsCapped": {
+    "defaultMessage": "{count, number}+ 个对话"
+  },
   "navigationPanel.projects": {
     "defaultMessage": "项目"
   },
@@ -1942,6 +2032,9 @@
   },
   "navigationPanel.searching": {
     "defaultMessage": "正在搜索..."
+  },
+  "navigationPanel.showMore": {
+    "defaultMessage": "显示更多"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "未命名会话"
@@ -2018,6 +2111,18 @@
   "permissionModal.saveChanges": {
     "defaultMessage": "保存更改"
   },
+  "permissionModeChip.approve": {
+    "defaultMessage": "手动批准"
+  },
+  "permissionModeChip.chatOnly": {
+    "defaultMessage": "仅聊天"
+  },
+  "permissionModeChip.fullAccess": {
+    "defaultMessage": "完全访问"
+  },
+  "permissionModeChip.smartApprove": {
+    "defaultMessage": "智能批准"
+  },
   "permissionRulesModal.description": {
     "defaultMessage": "为扩展配置工具权限，控制它们与你的系统的交互方式。"
   },
@@ -2035,6 +2140,9 @@
   },
   "permissionSetting.permissionRulesDescription": {
     "defaultMessage": "传给提供商的隐藏指令，用于引导并为回复补充上下文。"
+  },
+  "planSteps.progress": {
+    "defaultMessage": "第 {current} / {total} 步"
   },
   "pluginsSettings.add": {
     "defaultMessage": "添加"
@@ -2942,6 +3050,15 @@
   "telemetrySettings.updateError": {
     "defaultMessage": "更新遥测设置失败。"
   },
+  "terminalPanel.closePanel": {
+    "defaultMessage": "关闭面板"
+  },
+  "terminalPanel.closeTab": {
+    "defaultMessage": "关闭终端"
+  },
+  "terminalPanel.newTerminal": {
+    "defaultMessage": "新建终端"
+  },
   "themeSelector.dark": {
     "defaultMessage": "深色"
   },
@@ -3130,5 +3247,26 @@
   },
   "userMessage.forkSessionTitle": {
     "defaultMessage": "用编辑过的消息创建新会话"
+  },
+  "workToolActivity.editedFiles": {
+    "defaultMessage": "已编辑文件"
+  },
+  "workToolActivity.listedFiles": {
+    "defaultMessage": "已列出文件"
+  },
+  "workToolActivity.ranCommands": {
+    "defaultMessage": "{count,plural,other{运行了 # 条命令}}"
+  },
+  "workToolActivity.readFiles": {
+    "defaultMessage": "已读取文件"
+  },
+  "workToolActivity.searchedFiles": {
+    "defaultMessage": "已搜索文件"
+  },
+  "workToolActivity.searchedWeb": {
+    "defaultMessage": "已搜索网页"
+  },
+  "workToolActivity.usedTools": {
+    "defaultMessage": "{count,plural,other{使用了 # 个工具}}"
   }
 }
