@@ -36,6 +36,10 @@ const i18n = defineMessages({
     id: 'hub.headline',
     defaultMessage: 'What should we build in {project}?',
   },
+  headlineNoProject: {
+    id: 'hub.headlineNoProject',
+    defaultMessage: 'What should we build?',
+  },
   local: { id: 'hub.local', defaultMessage: 'Local' },
   suggestionExplore: {
     id: 'hub.suggestionExplore',
@@ -112,6 +116,8 @@ export default function Hub({
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const projectName = useMemo(() => leafDirName(workingDir), [workingDir]);
+  const homeDir = (window.appConfig?.get('GOOSE_HOME_DIR') as string | undefined) ?? '';
+  const isInProject = workingDir !== homeDir;
 
   const draftForMenu = useMemo(
     () => nextChatExtensionDraft ?? createNextChatExtensionDraft(extensionsList),
@@ -199,13 +205,15 @@ export default function Hub({
         </div>
 
         <h1 className="mb-10 text-center text-3xl font-normal text-text-primary">
-          {intl.formatMessage(i18n.headline, {
-            project: (
-              <span className="underline decoration-border-secondary decoration-2 underline-offset-8">
-                {projectName}
-              </span>
-            ),
-          })}
+          {isInProject
+            ? intl.formatMessage(i18n.headline, {
+                project: (
+                  <span className="underline decoration-border-secondary decoration-2 underline-offset-8">
+                    {projectName}
+                  </span>
+                ),
+              })
+            : intl.formatMessage(i18n.headlineNoProject)}
         </h1>
 
         <div className="mb-12 grid grid-cols-2 gap-3 lg:grid-cols-4">

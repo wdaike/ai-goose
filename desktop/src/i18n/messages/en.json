@@ -638,26 +638,17 @@
   "dictationSettings.voiceDictationProvider": {
     "defaultMessage": "Voice Dictation Provider"
   },
-  "dirSwitcher.chooseDirectory": {
-    "defaultMessage": "Choose directory…"
-  },
-  "dirSwitcher.currentDirectory": {
-    "defaultMessage": "Current directory"
-  },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "Failed to update working directory"
   },
-  "dirSwitcher.gitWorktrees": {
-    "defaultMessage": "Git worktrees"
+  "dirSwitcher.newProject": {
+    "defaultMessage": "New project"
   },
-  "dirSwitcher.noWorktreesFound": {
-    "defaultMessage": "No worktrees found"
+  "dirSwitcher.noProject": {
+    "defaultMessage": "Don't work in a project"
   },
-  "dirSwitcher.openInFinder": {
-    "defaultMessage": "Open in file manager"
-  },
-  "dirSwitcher.recentDirectories": {
-    "defaultMessage": "Recent directories"
+  "dirSwitcher.searchProjects": {
+    "defaultMessage": "Search projects"
   },
   "elicitationRequest.accept": {
     "defaultMessage": "Accept"
@@ -902,6 +893,24 @@
   "externalBackendSection.useExternalServerDescription": {
     "defaultMessage": "Connect to an ACP-compatible backend running elsewhere."
   },
+  "fileChangeCard.document": {
+    "defaultMessage": "Document"
+  },
+  "fileChangeCard.editedFiles": {
+    "defaultMessage": "{count,plural,one{Edited 1 file} other{Edited # files}}"
+  },
+  "fileChangeCard.openIn": {
+    "defaultMessage": "Open in"
+  },
+  "fileChangeCard.review": {
+    "defaultMessage": "Review"
+  },
+  "fileChangeCard.showMore": {
+    "defaultMessage": "Show {count} more"
+  },
+  "fileChangeCard.showMoreFiles": {
+    "defaultMessage": "Show {count} more files"
+  },
   "goosehintsModal.close": {
     "defaultMessage": "Close"
   },
@@ -1024,6 +1033,9 @@
   },
   "hub.headline": {
     "defaultMessage": "What should we build in {project}?"
+  },
+  "hub.headlineNoProject": {
+    "defaultMessage": "What should we build?"
   },
   "hub.local": {
     "defaultMessage": "Local"
@@ -1553,6 +1565,18 @@
   "mentionPopover.scanningFiles": {
     "defaultMessage": "Scanning files..."
   },
+  "messageActions.badResponse": {
+    "defaultMessage": "Bad response"
+  },
+  "messageActions.copied": {
+    "defaultMessage": "Copied!"
+  },
+  "messageActions.copy": {
+    "defaultMessage": "Copy"
+  },
+  "messageActions.goodResponse": {
+    "defaultMessage": "Good response"
+  },
   "messageCopyLink.copied": {
     "defaultMessage": "Copied!"
   },
@@ -1735,6 +1759,39 @@
   },
   "modelAndProviderContext.unknownProviderTitle": {
     "defaultMessage": "Provider name lookup"
+  },
+  "modelPickerPill.advanced": {
+    "defaultMessage": "Advanced"
+  },
+  "modelPickerPill.effort": {
+    "defaultMessage": "Effort"
+  },
+  "modelPickerPill.effortHigh": {
+    "defaultMessage": "High"
+  },
+  "modelPickerPill.effortLow": {
+    "defaultMessage": "Low"
+  },
+  "modelPickerPill.effortMax": {
+    "defaultMessage": "Max"
+  },
+  "modelPickerPill.effortMedium": {
+    "defaultMessage": "Medium"
+  },
+  "modelPickerPill.loadingModel": {
+    "defaultMessage": "Loading…"
+  },
+  "modelPickerPill.model": {
+    "defaultMessage": "Model"
+  },
+  "modelPickerPill.selectModel": {
+    "defaultMessage": "Select model"
+  },
+  "modelPickerPill.speed": {
+    "defaultMessage": "Speed"
+  },
+  "modelPickerPill.standard": {
+    "defaultMessage": "Standard"
   },
   "modelSettingsButtons.configureProviders": {
     "defaultMessage": "Configure providers"
@@ -1926,7 +1983,7 @@
     "defaultMessage": "Apps"
   },
   "navigation.itemHome": {
-    "defaultMessage": "New Chat"
+    "defaultMessage": "New chat"
   },
   "navigation.itemScheduler": {
     "defaultMessage": "Scheduler"
@@ -1943,6 +2000,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "No matching chats"
   },
+  "navigationPanel.projectThreads": {
+    "defaultMessage": "{count, plural, one {# thread} other {# threads}}"
+  },
+  "navigationPanel.projectThreadsCapped": {
+    "defaultMessage": "{count, number}+ threads"
+  },
   "navigationPanel.projects": {
     "defaultMessage": "Projects"
   },
@@ -1951,6 +2014,9 @@
   },
   "navigationPanel.searching": {
     "defaultMessage": "Searching..."
+  },
+  "navigationPanel.showMore": {
+    "defaultMessage": "Show more"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Untitled session"

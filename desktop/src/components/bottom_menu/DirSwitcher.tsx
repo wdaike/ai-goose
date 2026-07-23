@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Check, FolderDot, FolderOpen, GitBranch, Plus } from 'lucide-react';
+import { Check, ChevronRight, Plus, Search, X } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/Tooltip';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
+import { FolderClosed } from '../icons/Folder';
 import { toast } from 'react-toastify';
 import { defineMessages, useIntl } from '../../i18n';
 
@@ -17,49 +17,22 @@ const i18n = defineMessages({
     id: 'dirSwitcher.failedToUpdateWorkingDir',
     defaultMessage: 'Failed to update working directory',
   },
-  currentDirectory: {
-    id: 'dirSwitcher.currentDirectory',
-    defaultMessage: 'Current directory',
+  searchProjects: {
+    id: 'dirSwitcher.searchProjects',
+    defaultMessage: 'Search projects',
   },
-  gitWorktrees: {
-    id: 'dirSwitcher.gitWorktrees',
-    defaultMessage: 'Git worktrees',
+  newProject: {
+    id: 'dirSwitcher.newProject',
+    defaultMessage: 'New project',
   },
-  recentDirectories: {
-    id: 'dirSwitcher.recentDirectories',
-    defaultMessage: 'Recent directories',
-  },
-  chooseDirectory: {
-    id: 'dirSwitcher.chooseDirectory',
-    defaultMessage: 'Choose directory…',
-  },
-  openInFinder: {
-    id: 'dirSwitcher.openInFinder',
-    defaultMessage: 'Open in file manager',
-  },
-  noWorktreesFound: {
-    id: 'dirSwitcher.noWorktreesFound',
-    defaultMessage: 'No worktrees found',
+  noProject: {
+    id: 'dirSwitcher.noProject',
+    defaultMessage: "Don't work in a project",
   },
 });
 
-const splitDirPath = (dir: string): { name: string; parent: string } => {
-  const normalized = dir.replace(/[\\/]+$/, '');
-  const parts = normalized.split(/[\\/]/);
-  const name = parts.pop() || dir;
-  const parent = parts.join('/');
-  return { name, parent };
-};
-
-const DirNameLabel: React.FC<{ dir: string }> = ({ dir }) => {
-  const { name, parent } = splitDirPath(dir);
-  return (
-    <div className="flex flex-col min-w-0 flex-1">
-      <span className="truncate text-sm text-text-primary">{name}</span>
-      {parent && <span className="truncate text-xs text-text-secondary/70">{parent}</span>}
-    </div>
-  );
-};
+const leafName = (dir: string): string =>
+  dir.replace(/[\\/]+$/, '').split(/[\\/]/).pop() || dir;
 
 interface DirSwitcherProps {
   className: string;
@@ -70,6 +43,14 @@ interface DirSwitcherProps {
   onRestartEnd?: () => void;
 }
 
+/**
+ * ChatGPT-Codex-style project picker for the chat input's bottom bar.
+ *
+ * The trigger is a "<folder> <name>" pill; the popover is a searchable list
+ * of projects (recent working directories) with a check on the current one,
+ * plus "New project" (directory chooser) and "Don't work in a project"
+ * (drops back to the home directory), mirroring the Codex composer.
+ */
 export const DirSwitcher: React.FC<DirSwitcherProps> = ({
   className,
   sessionId,
@@ -83,31 +64,24 @@ export const DirSwitcher: React.FC<DirSwitcherProps> = ({
   const [isDirectoryChooserOpen, setIsDirectoryChooserOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [recentDirs, setRecentDirs] = useState<string[]>([]);
-  const [worktreeDirs, setWorktreeDirs] = useState<string[]>([]);
-  const refreshVersionRef = useRef(0);
+  const [query, setQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const homeDir = (window.appConfig?.get('GOOSE_HOME_DIR') as string | undefined) ?? '';
 
   const refreshMenuData = useCallback(async () => {
-    const version = ++refreshVersionRef.current;
-    setRecentDirs([]);
-    setWorktreeDirs([]);
-
-    const [recent, worktrees] = await Promise.all([
-      window.electron.listRecentDirs().catch(() => []),
-      window.electron.listGitWorktreeDirs(workingDir).catch(() => []),
-    ]);
-
-    if (version !== refreshVersionRef.current) return;
-
+    const recent = await window.electron.listRecentDirs().catch(() => []);
     setRecentDirs(recent);
-    setWorktreeDirs(worktrees);
-  }, [workingDir]);
+  }, []);
 
   useEffect(() => {
-    if (!isMenuOpen) {
-      return;
-    }
-
+    if (!isMenuOpen) return;
+    setQuery('');
     void refreshMenuData();
+    // Radix moves focus to the menu content on open; steal it for the search
+    // field afterwards so typing filters immediately, like the Codex picker.
+    const focusTimer = window.setTimeout(() => searchInputRef.current?.focus(), 0);
+    return () => window.clearTimeout(focusTimer);
   }, [isMenuOpen, refreshMenuData]);
 
   const applyDirectoryChange = async (newDir: string) => {
@@ -150,12 +124,8 @@ export const DirSwitcher: React.FC<DirSwitcherProps> = ({
   };
 
   const handleSelectDirectory = async (newDir: string) => {
-    if (newDir === workingDir) {
-      setIsMenuOpen(false);
-      return;
-    }
-
     setIsMenuOpen(false);
+    if (!newDir || newDir === workingDir) return;
     await applyDirectoryChange(newDir);
   };
 
@@ -175,15 +145,25 @@ export const DirSwitcher: React.FC<DirSwitcherProps> = ({
     }
   };
 
-  const filteredWorktreeDirs = useMemo(
-    () => worktreeDirs.filter((dir) => dir && dir !== workingDir),
-    [worktreeDirs, workingDir]
-  );
+  const isInProject = workingDir !== homeDir;
 
-  const filteredRecentDirs = useMemo(
-    () => recentDirs.filter((dir) => dir && dir !== workingDir),
-    [recentDirs, workingDir]
-  );
+  const projects = useMemo(() => {
+    const all = isInProject ? [workingDir, ...recentDirs] : recentDirs;
+    const deduped = [...new Set(all)].filter((dir) => dir && dir !== homeDir);
+    const trimmed = query.trim().toLowerCase();
+    if (!trimmed) return deduped;
+    return deduped.filter((dir) => leafName(dir).toLowerCase().includes(trimmed));
+  }, [recentDirs, workingDir, homeDir, isInProject, query]);
+
+  const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    // Keep typed characters in the input instead of feeding Radix's typeahead,
+    // but let Escape (close) and the arrow keys (list navigation) through.
+    if (event.key === 'Escape' || event.key === 'ArrowDown' || event.key === 'ArrowUp') return;
+    event.stopPropagation();
+    if (event.key === 'Enter' && projects.length > 0) {
+      void handleSelectDirectory(projects[0]);
+    }
+  };
 
   return (
     <TooltipProvider>
@@ -197,72 +177,70 @@ export const DirSwitcher: React.FC<DirSwitcherProps> = ({
           <TooltipTrigger asChild>
             <DropdownMenuTrigger asChild>
               <button
-                className={`z-[100] ${isDirectoryChooserOpen ? 'opacity-50' : 'hover:cursor-pointer hover:text-text-primary'} text-text-primary/70 text-xs flex items-center transition-colors pl-1 [&>svg]:size-4 ${className}`}
+                className={`flex min-w-0 items-center gap-1.5 rounded-full bg-background-tertiary px-3 py-1.5 text-sm text-text-primary transition-colors ${isDirectoryChooserOpen ? 'opacity-50' : 'hover:cursor-pointer hover:bg-background-tertiary/70'} ${className}`}
                 onClick={handleDirectoryClick}
                 disabled={isDirectoryChooserOpen}
               >
-                <FolderDot className="mr-1" size={16} />
-                <div className="max-w-[200px] truncate">
-                  {workingDir.replace(/\/+$/, '').split('/').pop() || workingDir}
-                </div>
+                <FolderClosed className="h-4 w-4 flex-shrink-0" />
+                <span className="max-w-[200px] truncate">
+                  {isInProject ? leafName(workingDir) : intl.formatMessage(i18n.noProject)}
+                </span>
               </button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
-          <DropdownMenuContent className="w-[28rem]" side="top" align="start">
-            <DropdownMenuLabel>{intl.formatMessage(i18n.currentDirectory)}</DropdownMenuLabel>
-            <DropdownMenuItem
-              onSelect={() => void window.electron.openDirectoryInExplorer(workingDir)}
-            >
-              <FolderOpen className="mr-2 h-4 w-4 flex-shrink-0" />
-              <DirNameLabel dir={workingDir} />
-              <Check className="ml-auto h-4 w-4 flex-shrink-0" />
-            </DropdownMenuItem>
+          <DropdownMenuContent
+            side="top"
+            align="start"
+            className="w-72 rounded-2xl p-1.5"
+          >
+            {/* Search row */}
+            <div className="flex items-center gap-2 px-2.5 py-2">
+              <Search className="h-4 w-4 flex-shrink-0 text-text-secondary" />
+              <input
+                ref={searchInputRef}
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                placeholder={intl.formatMessage(i18n.searchProjects)}
+                className="w-full bg-transparent text-sm text-text-primary outline-none placeholder:text-text-secondary"
+              />
+            </div>
 
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel>{intl.formatMessage(i18n.gitWorktrees)}</DropdownMenuLabel>
-            {filteredWorktreeDirs.length > 0 ? (
-              filteredWorktreeDirs.map((dir) => (
+            {/* Project list */}
+            <div className="max-h-64 overflow-y-auto">
+              {projects.map((dir) => (
                 <DropdownMenuItem
-                  key={`worktree-${dir}`}
+                  key={dir}
+                  className="rounded-lg px-2.5 py-2"
                   onSelect={() => void handleSelectDirectory(dir)}
                 >
-                  <GitBranch className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <DirNameLabel dir={dir} />
+                  <FolderClosed className="h-4 w-4 flex-shrink-0" />
+                  <span className="truncate">{leafName(dir)}</span>
+                  {dir === workingDir && <Check className="ml-auto h-4 w-4 flex-shrink-0" />}
                 </DropdownMenuItem>
-              ))
-            ) : (
-              <DropdownMenuItem disabled>
-                <GitBranch className="mr-2 h-4 w-4" />
-                <span>{intl.formatMessage(i18n.noWorktreesFound)}</span>
-              </DropdownMenuItem>
-            )}
-
-            {filteredRecentDirs.length > 0 && (
-              <>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>{intl.formatMessage(i18n.recentDirectories)}</DropdownMenuLabel>
-                {filteredRecentDirs.map((dir) => (
-                  <DropdownMenuItem
-                    key={`recent-${dir}`}
-                    onSelect={() => void handleSelectDirectory(dir)}
-                  >
-                    <FolderDot className="mr-2 h-4 w-4 flex-shrink-0" />
-                    <DirNameLabel dir={dir} />
-                  </DropdownMenuItem>
-                ))}
-              </>
-            )}
+              ))}
+            </div>
 
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={() => void handleDirectoryChange()}>
-              <Plus className="mr-2 h-4 w-4" />
-              <span>{intl.formatMessage(i18n.chooseDirectory)}</span>
-            </DropdownMenuItem>
+
+            {/* New project */}
             <DropdownMenuItem
-              onSelect={() => void window.electron.openDirectoryInExplorer(workingDir)}
+              className="rounded-lg px-2.5 py-2"
+              onSelect={() => void handleDirectoryChange()}
             >
-              <FolderOpen className="mr-2 h-4 w-4" />
-              <span>{intl.formatMessage(i18n.openInFinder)}</span>
+              <Plus className="h-4 w-4 flex-shrink-0" />
+              <span>{intl.formatMessage(i18n.newProject)}</span>
+              <ChevronRight className="ml-auto h-4 w-4 flex-shrink-0" />
+            </DropdownMenuItem>
+
+            {/* Don't work in a project */}
+            <DropdownMenuItem
+              className="rounded-lg px-2.5 py-2"
+              onSelect={() => void handleSelectDirectory(homeDir)}
+            >
+              <X className="h-4 w-4 flex-shrink-0" />
+              <span>{intl.formatMessage(i18n.noProject)}</span>
+              {!isInProject && <Check className="ml-auto h-4 w-4 flex-shrink-0" />}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

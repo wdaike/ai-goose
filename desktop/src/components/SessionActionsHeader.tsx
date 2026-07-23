@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Copy, Edit2, Folder, LoaderCircle, MoreHorizontal, Trash2 } from 'lucide-react';
+import { Copy, Edit2, LoaderCircle, MoreHorizontal, Trash2 } from 'lucide-react';
+import { FolderClosed } from './icons/Folder';
 import { toast } from 'react-toastify';
 import { AppEvents } from '../constants/events';
 import { defineMessages, useIntl } from '../i18n';
@@ -228,7 +229,7 @@ export default function SessionActionsHeader({
         // Must outrank .titlebar-drag-region or the drag overlay swallows the clicks.
         style={{ zIndex: Z_INDEX.HEADER }}
       >
-        <Folder className="size-4 flex-shrink-0 text-text-secondary" />
+        <FolderClosed className="size-4 flex-shrink-0 text-text-secondary" />
         <span className="truncate text-[13px] font-medium text-text-primary" title={title}>
           {title}
         </span>

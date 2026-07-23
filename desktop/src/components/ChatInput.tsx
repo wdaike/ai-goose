@@ -10,8 +10,7 @@ import { ChatState } from '../types/chatState';
 import debounce from 'lodash/debounce';
 import { LocalMessageStorage } from '../utils/localMessageStorage';
 import { DirSwitcher } from './bottom_menu/DirSwitcher';
-import ModelsBottomBar from './settings/models/bottom_bar/ModelsBottomBar';
-import { BottomMenuExtensionSelection } from './bottom_menu/BottomMenuExtensionSelection';
+import ModelPickerPill from './bottom_menu/ModelPickerPill';
 import { PermissionModeChip } from './bottom_menu/PermissionModeChip';
 import { cn } from '../utils';
 import { AlertType, useAlerts } from './alerts';
@@ -20,8 +19,6 @@ import { acpListProviderDetails } from '../acp/providers';
 import { useAudioRecorder } from '../hooks/useAudioRecorder';
 import { toastError } from '../toasts';
 import MentionPopover, { DisplayItemWithMatch } from './MentionPopover';
-import { COST_TRACKING_ENABLED } from '../updates';
-import { CostTracker } from './bottom_menu/CostTracker';
 import { ContextWindowIndicator } from './bottom_menu/ContextWindowIndicator';
 import { DroppedFile, useFileDrop } from '../hooks/useFileDrop';
 import { MessageQueue, QueuedMessage } from './MessageQueue';
@@ -203,9 +200,9 @@ export default function ChatInput({
   onFilesProcessed,
   setView,
   totalTokens,
-  accumulatedInputTokens,
-  accumulatedOutputTokens,
-  accumulatedCost,
+  accumulatedInputTokens: _accumulatedInputTokens,
+  accumulatedOutputTokens: _accumulatedOutputTokens,
+  accumulatedCost: _accumulatedCost,
   messages = [],
   disableAnimation = false,
   initialPrompt,
@@ -216,9 +213,9 @@ export default function ChatInput({
   sessionProvider,
   sessionLoaded,
   workingDir,
-  latestInference,
-  nextChatExtensionDraft,
-  onNextChatExtensionDraftChange,
+  latestInference: _latestInference,
+  nextChatExtensionDraft: _nextChatExtensionDraft,
+  onNextChatExtensionDraftChange: _onNextChatExtensionDraftChange,
   hideDirSwitcher = false,
 }: ChatInputProps) {
   const [_value, setValue] = useState(initialValue);
@@ -275,9 +272,6 @@ export default function ChatInput({
   }, []);
 
   const { alerts, addAlert, clearAlerts } = useAlerts();
-  const dropdownRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(
-    null
-  ) as React.RefObject<HTMLDivElement>;
   const intl = useIntl();
   const {
     getCurrentModelAndProvider,
@@ -1670,15 +1664,6 @@ export default function ChatInput({
         {/* Left: permission mode (ChatGPT-style "Full access" pill) */}
         {!isBottomBarNarrow && <PermissionModeChip onClick={() => setView('settings')} />}
 
-        {/* Left: extension selector */}
-        {!isBottomBarNarrow && (
-          <BottomMenuExtensionSelection
-            sessionId={sessionId}
-            nextChatExtensionDraft={nextChatExtensionDraft}
-            onNextChatExtensionDraftChange={onNextChatExtensionDraftChange}
-          />
-        )}
-
         {/* Left: working directory (leaf folder name only) */}
         {!isBottomBarNarrow && !hideDirSwitcher && (
           <DirSwitcher
@@ -1697,17 +1682,6 @@ export default function ChatInput({
 
         {!isBottomBarNarrow && (
           <>
-            {/* Right: cost tracker (when enabled) */}
-            {COST_TRACKING_ENABLED && (
-              <CostTracker
-                inputTokens={accumulatedInputTokens}
-                outputTokens={accumulatedOutputTokens}
-                accumulatedCost={accumulatedCost}
-                model={effectiveModel}
-                provider={effectiveProvider}
-              />
-            )}
-
             {/* Right: context window indicator */}
             <ContextWindowIndicator
               totalTokens={totalTokens || 0}
@@ -1739,21 +1713,13 @@ export default function ChatInput({
           </>
         )}
 
-        {/* Right: model + reasoning selector */}
-        <Tooltip>
-          <div>
-            <ModelsBottomBar
-              sessionId={sessionId}
-              dropdownRef={dropdownRef}
-              setView={setView}
-              sessionModel={effectiveModel}
-              sessionProvider={effectiveProvider}
-              latestInference={latestInference}
-              onModelChanged={setModelOverride}
-              sessionLoaded={sessionLoaded}
-            />
-          </div>
-        </Tooltip>
+        {/* Right: model + effort selector (ChatGPT-style pill) */}
+        <ModelPickerPill
+          sessionId={sessionId}
+          model={effectiveModel}
+          sessionLoaded={sessionLoaded}
+          onModelChanged={setModelOverride}
+        />
 
         {/* Right: mic — ghost icon, no background when idle */}
         {dictationProvider && (
