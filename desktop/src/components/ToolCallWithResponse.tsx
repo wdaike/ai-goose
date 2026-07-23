@@ -18,6 +18,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { ContentBlock } from '../types/message';
 
 import McpAppRenderer from './McpApps/McpAppRenderer';
+import FileChangeCard, { getStructuredFileChanges } from './FileChangeCard';
 import ToolApprovalButtons from './ToolApprovalButtons';
 import { defineMessages, useIntl } from '../i18n';
 
@@ -233,6 +234,11 @@ export default function ToolCallWithResponse({
   const shouldShowMcpContent = !isPendingApproval;
 
   const showInlineApproval = isPendingApproval && confirmationContent && sessionId;
+
+  const structuredFileChanges = getStructuredFileChanges(toolCall);
+  if (structuredFileChanges && !showInlineApproval) {
+    return <FileChangeCard changes={structuredFileChanges} />;
+  }
 
   return (
     <>

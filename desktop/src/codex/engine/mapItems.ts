@@ -113,6 +113,16 @@ function toolMessages(
   return messages;
 }
 
+function diffLineStats(diff: string): { added: number; removed: number } {
+  let added = 0;
+  let removed = 0;
+  for (const line of diff.split('\n')) {
+    if (line.startsWith('+') && !line.startsWith('+++')) added++;
+    else if (line.startsWith('-') && !line.startsWith('---')) removed++;
+  }
+  return { added, removed };
+}
+
 function dynamicToolArguments(value: unknown, tool: string): Record<string, unknown> {
   const args =
     value && typeof value === 'object' && !Array.isArray(value)
@@ -201,7 +211,15 @@ function mapItem(
         state,
         item,
         'edit_file',
-        { files: item.changes.map((change) => `${change.kind.type} ${change.path}`) },
+        {
+          files: item.changes.map((change) => `${change.kind.type} ${change.path}`),
+          file_changes: item.changes.map((change) => ({
+            path: change.path,
+            kind: change.kind.type,
+            ...diffLineStats(change.diff),
+            diff: change.diff,
+          })),
+        },
         { done, output: diff },
         workGroupId
       );
