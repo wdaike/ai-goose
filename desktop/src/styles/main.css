@@ -58,7 +58,9 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    3. MCP SEMANTIC TOKEN REGISTRATION — @theme inline {}
    Registers every McpUiStyleVariableKey so Tailwind generates utility classes.
-   Self-referential var() for colors, `initial` for non-color tokens.
+   Keys that back a Tailwind utility namespace (colors, fonts, font weights,
+   shadows) are self-referential var() so utilities resolve at runtime; keys
+   with no namespace stay `initial` (registration only, no utilities).
    Actual values are set at runtime by theme-tokens.ts (the single source of truth).
    ═══════════════════════════════════════════════════════════════════════════ */
 @theme inline {
@@ -110,12 +112,12 @@
   --color-ring-warning: var(--color-ring-warning);
 
   /* Typography */
-  --font-sans: initial;
-  --font-mono: initial;
-  --font-weight-normal: initial;
-  --font-weight-medium: initial;
-  --font-weight-semibold: initial;
-  --font-weight-bold: initial;
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-weight-normal: var(--font-weight-normal);
+  --font-weight-medium: var(--font-weight-medium);
+  --font-weight-semibold: var(--font-weight-semibold);
+  --font-weight-bold: var(--font-weight-bold);
   --font-text-xs-size: initial;
   --font-text-sm-size: initial;
   --font-text-md-size: initial;
@@ -151,10 +153,10 @@
   --border-width-regular: initial;
 
   /* Shadows */
-  --shadow-hairline: initial;
-  --shadow-sm: initial;
-  --shadow-md: initial;
-  --shadow-lg: initial;
+  --shadow-hairline: var(--shadow-hairline);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

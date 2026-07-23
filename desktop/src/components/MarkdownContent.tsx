@@ -96,7 +96,6 @@ const CodeBlock = memo(function CodeBlock({
         language={language}
         wrapLongLines
         surface="secondary"
-        fontSize={14}
       />
     ),
     [language, children]

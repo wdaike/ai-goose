@@ -58,6 +58,51 @@ export const DEFAULT_APPEARANCE: AppearanceSettings = {
 };
 
 const STORAGE_KEY = 'appearance-settings';
+const CODEX_THEME_PREFIX = 'codex-theme-v1:';
+
+type CodexThemeExport = {
+  variant?: 'light' | 'dark';
+  theme?: {
+    accent?: string;
+    surface?: string;
+    ink?: string;
+    contrast?: number;
+    opaqueWindows?: boolean;
+    fonts?: { ui?: string; code?: string };
+  };
+};
+
+export type ThemeImport = Partial<Omit<AppearanceSettings, 'themes'>> & {
+  themes?: { light?: Partial<ThemeColors>; dark?: Partial<ThemeColors> };
+};
+
+/**
+ * Parse a ChatGPT/Codex desktop `codex-theme-v1:{...}` theme export. Imported
+ * fonts get the default stacks appended so locally missing fonts fall back to
+ * the stock look. Throws on any other format.
+ */
+export function parseThemeImport(text: string): ThemeImport {
+  const trimmed = text.trim();
+  if (!trimmed.startsWith(CODEX_THEME_PREFIX)) {
+    throw new Error(`Theme import must start with "${CODEX_THEME_PREFIX}"`);
+  }
+  const { variant = 'light', theme = {} } = JSON.parse(
+    trimmed.slice(CODEX_THEME_PREFIX.length)
+  ) as CodexThemeExport;
+  return {
+    themes: {
+      [variant]: {
+        ...(theme.accent && { accent: theme.accent }),
+        ...(theme.surface && { background: theme.surface }),
+        ...(theme.ink && { foreground: theme.ink }),
+      },
+    },
+    ...(theme.fonts?.ui && { uiFont: `${theme.fonts.ui}, ${DEFAULT_UI_FONT}` }),
+    ...(theme.fonts?.code && { codeFont: `${theme.fonts.code}, ${DEFAULT_CODE_FONT}` }),
+    ...(typeof theme.contrast === 'number' && { contrast: theme.contrast }),
+    ...(typeof theme.opaqueWindows === 'boolean' && { translucentSidebar: !theme.opaqueWindows }),
+  };
+}
 
 export function cloneThemePreset(): AppearanceSettings['themes'] {
   return {

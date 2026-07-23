@@ -80,7 +80,6 @@ interface CodeViewerProps {
   showLineNumbers?: boolean;
   wrapLongLines?: boolean;
   surface?: 'primary' | 'secondary';
-  fontSize?: number;
 }
 
 const CodeViewer = memo(function CodeViewer({
@@ -90,8 +89,8 @@ const CodeViewer = memo(function CodeViewer({
   showLineNumbers = false,
   wrapLongLines = false,
   surface = 'secondary',
-  fontSize = 13,
 }: CodeViewerProps) {
+  const fontSize = 'var(--code-font-size, 13px)';
   const theme = useDocumentTheme();
   const backgroundColor =
     surface === 'primary' ? 'var(--color-background-primary)' : 'var(--color-background-secondary)';

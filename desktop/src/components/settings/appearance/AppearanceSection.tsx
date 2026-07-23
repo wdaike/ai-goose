@@ -11,6 +11,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '../../ui/dropdown-menu';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../ui/dialog';
 import {
   AppearanceSettings,
   CODEX_THEME_PRESET,
@@ -20,6 +21,7 @@ import {
   ThemeColors,
   cloneThemePreset,
   loadAppearance,
+  parseThemeImport,
   saveAppearance,
 } from '../../../appearance/appearance';
 import { cn } from '../../../utils';
@@ -32,6 +34,8 @@ const i18n = defineMessages({
   lightTheme: { id: 'appearance.lightTheme', defaultMessage: 'Light theme' },
   darkTheme: { id: 'appearance.darkTheme', defaultMessage: 'Dark theme' },
   import: { id: 'appearance.import', defaultMessage: 'Import' },
+  importThemeTitle: { id: 'appearance.importTheme.title', defaultMessage: 'Import theme' },
+  importThemeCancel: { id: 'appearance.importTheme.cancel', defaultMessage: 'Cancel' },
   copyTheme: { id: 'appearance.copyTheme', defaultMessage: 'Copy theme' },
   presetCodex: { id: 'appearance.preset.codex', defaultMessage: 'Codex' },
   presetCustom: { id: 'appearance.preset.custom', defaultMessage: 'Custom' },
@@ -446,7 +450,8 @@ export default function AppearanceSection() {
   const intl = useIntl();
   const { userThemePreference, setUserThemePreference, resolvedTheme } = useTheme();
   const [settings, setSettings] = useState<AppearanceSettings>(loadAppearance);
-  const importInputRef = useRef<HTMLInputElement>(null);
+  const [importOpen, setImportOpen] = useState(false);
+  const [importText, setImportText] = useState('');
 
   const update = (partial: Partial<AppearanceSettings>) => {
     setSettings((prev) => {
@@ -486,26 +491,32 @@ export default function AppearanceSection() {
     navigator.clipboard.writeText(JSON.stringify(settings, null, 2));
   };
 
-  const handleImportFile = async (file: File) => {
+  const importParsed = useMemo(() => {
     try {
-      const parsed = JSON.parse(await file.text()) as Partial<AppearanceSettings>;
-      update({
-        ...(parsed.themes && {
-          themes: {
-            light: { ...settings.themes.light, ...parsed.themes.light },
-            dark: { ...settings.themes.dark, ...parsed.themes.dark },
-          },
-        }),
-        ...(typeof parsed.uiFont === 'string' && { uiFont: parsed.uiFont }),
-        ...(typeof parsed.codeFont === 'string' && { codeFont: parsed.codeFont }),
-        ...(typeof parsed.translucentSidebar === 'boolean' && {
-          translucentSidebar: parsed.translucentSidebar,
-        }),
-        ...(typeof parsed.contrast === 'number' && { contrast: parsed.contrast }),
-      });
-    } catch (error) {
-      console.warn('[Appearance] Failed to import theme:', error);
+      return parseThemeImport(importText);
+    } catch {
+      return null;
     }
+  }, [importText]);
+
+  const handleImportTheme = () => {
+    if (!importParsed) return;
+    update({
+      ...(importParsed.themes && {
+        themes: {
+          light: { ...settings.themes.light, ...importParsed.themes.light },
+          dark: { ...settings.themes.dark, ...importParsed.themes.dark },
+        },
+      }),
+      ...(typeof importParsed.uiFont === 'string' && { uiFont: importParsed.uiFont }),
+      ...(typeof importParsed.codeFont === 'string' && { codeFont: importParsed.codeFont }),
+      ...(typeof importParsed.translucentSidebar === 'boolean' && {
+        translucentSidebar: importParsed.translucentSidebar,
+      }),
+      ...(typeof importParsed.contrast === 'number' && { contrast: importParsed.contrast }),
+    });
+    setImportOpen(false);
+    setImportText('');
   };
 
   const handlePresetChange = (value: string) => {
@@ -550,22 +561,11 @@ export default function AppearanceSection() {
             </h3>
             <div className="flex items-center gap-1">
               <button
-                onClick={() => importInputRef.current?.click()}
+                onClick={() => setImportOpen(true)}
                 className="h-8 rounded-lg px-3 text-sm text-text-secondary transition-colors hover:text-text-primary"
               >
                 {intl.formatMessage(i18n.import)}
               </button>
-              <input
-                ref={importInputRef}
-                type="file"
-                accept="application/json,.json"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) handleImportFile(file);
-                  e.target.value = '';
-                }}
-              />
               <button
                 onClick={handleCopyTheme}
                 className="h-8 rounded-lg px-3 text-sm text-text-secondary transition-colors hover:text-text-primary"
@@ -719,6 +719,48 @@ export default function AppearanceSection() {
           </ThemeRow>
         </SettingsGroup>
       </SettingsSection>
+
+      <Dialog
+        open={importOpen}
+        onOpenChange={(open) => {
+          setImportOpen(open);
+          if (!open) setImportText('');
+        }}
+      >
+        <DialogContent className="rounded-3xl sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-semibold">
+              {intl.formatMessage(i18n.importThemeTitle)}
+            </DialogTitle>
+          </DialogHeader>
+          <input
+            value={importText}
+            onChange={(e) => setImportText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleImportTheme();
+            }}
+            placeholder="codex-theme-v1:{…}"
+            spellCheck={false}
+            autoFocus
+            className="h-11 w-full truncate rounded-full border border-border-secondary bg-background-primary px-4 font-mono text-sm text-text-primary outline-none placeholder:text-text-tertiary focus:border-[var(--appearance-accent,#339CFF)] focus:ring-1 focus:ring-[var(--appearance-accent,#339CFF)]"
+          />
+          <div className="flex items-center justify-end gap-2">
+            <button
+              onClick={() => setImportOpen(false)}
+              className="h-10 rounded-full px-4 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary"
+            >
+              {intl.formatMessage(i18n.importThemeCancel)}
+            </button>
+            <button
+              onClick={handleImportTheme}
+              disabled={!importParsed}
+              className="h-10 rounded-full bg-background-inverse px-4 text-sm font-medium text-text-inverse transition-opacity disabled:opacity-40"
+            >
+              {intl.formatMessage(i18n.importThemeTitle)}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

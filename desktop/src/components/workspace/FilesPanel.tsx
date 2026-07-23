@@ -372,7 +372,6 @@ export default function FilesPanel() {
               language={languageFromFilePath(selectedFile.path)}
               showLineNumbers
               surface="primary"
-              fontSize={12}
               className="flex-1 min-h-0"
             />
           ) : preview?.kind === 'image' ? (
