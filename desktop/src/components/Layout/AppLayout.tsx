@@ -16,6 +16,7 @@ import TerminalPanel from '../workspace/TerminalPanel';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/Tooltip';
 import { NavigationProvider, useNavigationContext } from './NavigationContext';
 import { Navigation } from './NavigationPanel';
+import { ResizeHandle, useResizableWidth } from './ResizeHandle';
 import { NAV_DIMENSIONS, Z_INDEX } from './constants';
 import { cn } from '../../utils';
 import { UserInput } from '../../types/message';
@@ -101,6 +102,13 @@ const AppLayoutContent: React.FC<AppLayoutContentProps> = ({ activeSessions }) =
   }, [safeIsMacOS]);
 
   const { isNavExpanded, setIsNavExpanded } = useNavigationContext();
+  const nav = useResizableWidth({
+    storageKey: 'nav_width',
+    defaultWidth: NAV_DIMENSIONS.NAV_WIDTH,
+    min: 200,
+    max: 480,
+    side: 'left',
+  });
   const { isBottomPanelOpen, isSidePanelOpen, toggleBottomPanel, toggleSidePanel } =
     useWorkspacePanels();
   const modKey = safeIsMacOS ? '⌘' : 'Ctrl+';
@@ -165,18 +173,22 @@ const AppLayoutContent: React.FC<AppLayoutContentProps> = ({ activeSessions }) =
         <motion.div
           key="nav"
           initial={false}
-          animate={{ width: isNavExpanded ? NAV_DIMENSIONS.NAV_WIDTH : 0 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 40 }}
+          animate={{ width: isNavExpanded ? nav.width : 0 }}
+          transition={nav.isDragging ? { duration: 0 } : { type: 'spring', stiffness: 400, damping: 40 }}
           style={{ height: '100%' }}
           className="relative flex-shrink-0 overflow-hidden h-full"
         >
-          <div
-            className="w-full h-full overflow-hidden"
-            style={{ width: NAV_DIMENSIONS.NAV_WIDTH }}
-          >
+          <div className="w-full h-full overflow-hidden" style={{ width: nav.width }}>
             <Navigation />
           </div>
         </motion.div>
+        {isNavExpanded && (
+          <ResizeHandle
+            isDragging={nav.isDragging}
+            className="h-full flex-shrink-0"
+            {...nav.handleProps}
+          />
+        )}
 
         {/* Main content — no border / no card; just flows on the canvas.
             Column so the terminal panel can dock under both the chat and

@@ -31,10 +31,47 @@ vi.mock('lottie-web', () => ({
   },
 }));
 
+// jsdom together with Node's experimental global `localStorage` can leave the
+// bare `localStorage` identifier undefined. Components read and write it
+// directly (a codebase-wide convention), so back it with an in-memory store.
+class MemoryStorage implements Storage {
+  private store = new Map<string, string>();
+  get length(): number {
+    return this.store.size;
+  }
+  clear(): void {
+    this.store.clear();
+  }
+  getItem(key: string): string | null {
+    return this.store.has(key) ? (this.store.get(key) as string) : null;
+  }
+  setItem(key: string, value: string): void {
+    this.store.set(key, String(value));
+  }
+  removeItem(key: string): void {
+    this.store.delete(key);
+  }
+  key(index: number): string | null {
+    return Array.from(this.store.keys())[index] ?? null;
+  }
+}
+const memoryLocalStorage = new MemoryStorage();
+Object.defineProperty(globalThis, 'localStorage', {
+  configurable: true,
+  writable: true,
+  value: memoryLocalStorage,
+});
+Object.defineProperty(window, 'localStorage', {
+  configurable: true,
+  writable: true,
+  value: memoryLocalStorage,
+});
+
 // This is the standard set up to ensure that React Testing Library's
 // automatic cleanup runs after each test.
 afterEach(() => {
   cleanup();
+  memoryLocalStorage.clear();
 });
 
 // Mock console methods to avoid noise in tests

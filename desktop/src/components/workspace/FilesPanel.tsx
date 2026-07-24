@@ -17,6 +17,7 @@ import { cn } from '../../utils';
 import type { DirectoryEntry } from '../../preload';
 import { codex } from '../../codex/client';
 import CodeViewer, { languageFromFilePath } from '../CodeViewer';
+import { ResizeHandle, useResizableWidth } from '../Layout/ResizeHandle';
 
 const MAX_TEXT_PREVIEW_BYTES = 1024 * 1024;
 const MAX_IMAGE_PREVIEW_BYTES = 10 * 1024 * 1024;
@@ -242,6 +243,13 @@ export default function FilesPanel() {
   const [previewError, setPreviewError] = useState<string | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
   const rootEntries = useDirectoryEntries(workingDir, isSidePanelOpen, refreshToken);
+  const panel = useResizableWidth({
+    storageKey: 'files_panel_width',
+    defaultWidth: 320,
+    min: 240,
+    max: 720,
+    side: 'right',
+  });
 
   const handleRefresh = useCallback(() => {
     if (selectedFile) {
@@ -304,11 +312,14 @@ export default function FilesPanel() {
 
   return (
     <div
-      className={cn(
-        'flex flex-shrink-0 flex-col min-h-0 border-l border-border-primary bg-background-primary transition-[width] duration-200',
-        selectedFile ? 'w-[min(520px,42vw)]' : 'w-[280px]'
-      )}
+      className="relative flex flex-shrink-0 flex-col min-h-0 border-l border-border-primary bg-background-primary"
+      style={{ width: panel.width }}
     >
+      <ResizeHandle
+        isDragging={panel.isDragging}
+        className="absolute inset-y-0 -left-1"
+        {...panel.handleProps}
+      />
       <div className="flex items-center gap-1.5 px-3 pb-1.5 pt-[46px]">
         {selectedFile ? (
           <button
