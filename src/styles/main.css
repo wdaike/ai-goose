@@ -493,6 +493,17 @@
   background-color: var(--color-neutral-500);
 }
 
+/* Pin the app to the viewport. Without this, the full-screen root (100vw/100vh)
+   leaks bottom/right scrollbars whenever the OS uses space-consuming scrollbars,
+   because 100vw/100vh include the scrollbar gutter but html/body/#root default to
+   overflow: visible. */
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   background-color: var(--color-background-primary);
   -webkit-font-smoothing: antialiased;

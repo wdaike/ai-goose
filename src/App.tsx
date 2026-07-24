@@ -190,7 +190,7 @@ const ConfigureProvidersRoute = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-screen h-screen bg-background-primary">
+    <div className="w-full h-full bg-background-primary">
       <ProviderSettings
         onClose={() => navigate('/settings', { state: { section: 'models' } })}
         isOnboarding={false}
@@ -461,7 +461,7 @@ export function AppInner() {
         pauseOnHover
       />
       <ExtensionInstallModal addExtension={addExtension} setView={setView} />
-      <div className="relative w-screen h-screen overflow-hidden bg-background-secondary flex flex-col">
+      <div className="relative w-full h-full overflow-hidden bg-background-secondary flex flex-col">
         <div className="titlebar-drag-region" />
         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
           <Routes>

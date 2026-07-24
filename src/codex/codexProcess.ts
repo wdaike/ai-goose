@@ -75,10 +75,10 @@ function migrateLegacyConfig(): string {
   try {
     legacy = yaml.parse(fs.readFileSync(LEGACY_GOOSE_CONFIG, 'utf8')) ?? {};
   } catch {
-    return '';
+    // No legacy config to migrate; still emit the defaults below.
   }
 
-  const lines: string[] = [];
+  const lines: string[] = ['web_search = "live"'];
 
   const effort = EFFORT_MAP[legacy.GOOSE_THINKING_EFFORT ?? ''];
   if (effort) lines.push(`model_reasoning_effort = ${tomlString(effort)}`);
