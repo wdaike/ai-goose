@@ -11,6 +11,7 @@ import { wrapHTMLInCodeBlock } from '../utils/htmlSecurity';
 import { isProtocolSafe, getProtocol, BLOCKED_PROTOCOLS } from '../utils/urlSecurity';
 import { ConfirmationModal } from './ui/ConfirmationModal';
 import { defineMessages, useIntl } from '../i18n';
+import MermaidDiagram from './MermaidDiagram';
 
 const i18n = defineMessages({
   copyCode: {
@@ -90,14 +91,7 @@ const CodeBlock = memo(function CodeBlock({
   }, []);
 
   const memoizedCodeViewer = useMemo(
-    () => (
-      <CodeViewer
-        code={children}
-        language={language}
-        wrapLongLines
-        surface="secondary"
-      />
-    ),
+    () => <CodeViewer code={children} language={language} wrapLongLines surface="secondary" />,
     [language, children]
   );
 
@@ -127,8 +121,15 @@ const MarkdownCode = memo(
     // react-markdown v9+ dropped the `inline` prop: fenced blocks are detected
     // by their language class or by the newline fenced content always carries.
     const isBlock = Boolean(match) || text.includes('\n');
-    return isBlock ? (
-      <CodeBlock language={match?.[1] ?? 'text'}>{text.replace(/\n$/, '')}</CodeBlock>
+    const language = match?.[1] ?? 'text';
+    const blockContent = text.replace(/\n$/, '');
+    return language.toLowerCase() === 'mermaid' ? (
+      <MermaidDiagram
+        definition={blockContent}
+        fallback={<CodeBlock language={language}>{blockContent}</CodeBlock>}
+      />
+    ) : isBlock ? (
+      <CodeBlock language={language}>{blockContent}</CodeBlock>
     ) : (
       <code ref={ref} {...props} className="break-all bg-inline-code whitespace-pre-wrap font-mono">
         {children}

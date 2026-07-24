@@ -4,6 +4,15 @@ import { screen, waitFor } from '@testing-library/dom';
 import MarkdownContent from './MarkdownContent';
 import { IntlTestWrapper } from '../i18n/test-utils';
 
+const mermaidMocks = vi.hoisted(() => ({
+  initialize: vi.fn(),
+  render: vi.fn(),
+}));
+
+vi.mock('mermaid', () => ({
+  default: mermaidMocks,
+}));
+
 const renderWithIntl = (ui: React.ReactElement, options?: RenderOptions) =>
   render(ui, { wrapper: IntlTestWrapper, ...options });
 
@@ -147,6 +156,62 @@ console.log(html);
   });
 
   describe('Code Block Functionality', () => {
+    it('renders Mermaid code blocks as diagrams', async () => {
+      mermaidMocks.render.mockResolvedValueOnce({
+        svg: '<svg data-testid="rendered-mermaid"><text>Architecture</text></svg>',
+      });
+      const content = `\`\`\`mermaid
+graph TB
+  UI --> Engine
+\`\`\``;
+
+      renderWithIntl(<MarkdownContent content={content} />);
+
+      expect(await screen.findByTestId('rendered-mermaid')).toBeInTheDocument();
+      expect(mermaidMocks.initialize).toHaveBeenCalledWith(
+        expect.objectContaining({
+          securityLevel: 'strict',
+          startOnLoad: false,
+          suppressErrorRendering: true,
+        })
+      );
+      expect(mermaidMocks.render).toHaveBeenCalledWith(
+        expect.stringMatching(/^mermaid-/),
+        'graph TB\n  UI --> Engine',
+        expect.any(HTMLDivElement)
+      );
+      expect(screen.queryByTestId('code-viewer')).not.toBeInTheDocument();
+    });
+
+    it('falls back to source code and retries when Mermaid content changes', async () => {
+      mermaidMocks.render.mockRejectedValueOnce(new Error('Invalid diagram'));
+      const content = `\`\`\`mermaid
+not a valid diagram
+\`\`\``;
+
+      const { rerender } = renderWithIntl(<MarkdownContent content={content} />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('code-viewer')).toHaveAttribute('data-language', 'mermaid');
+      });
+      expect(screen.getByText(/not a valid diagram/)).toBeInTheDocument();
+
+      mermaidMocks.render.mockResolvedValueOnce({
+        svg: '<svg data-testid="recovered-mermaid"><text>Recovered</text></svg>',
+      });
+      rerender(
+        <MarkdownContent
+          content={`\`\`\`mermaid
+graph LR
+  A --> B
+\`\`\``}
+        />
+      );
+
+      expect(await screen.findByTestId('recovered-mermaid')).toBeInTheDocument();
+      expect(screen.queryByTestId('code-viewer')).not.toBeInTheDocument();
+    });
+
     it('renders code blocks with syntax highlighting', async () => {
       const content = `\`\`\`javascript
 console.log('Hello, World!');

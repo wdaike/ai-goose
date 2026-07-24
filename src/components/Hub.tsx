@@ -207,7 +207,7 @@ export default function Hub({
       window.electron.addRecentDir(workingDir);
       setNextChatExtensionDraft(null);
 
-      window.dispatchEvent(new CustomEvent(AppEvents.SESSION_CREATED));
+      window.dispatchEvent(new CustomEvent(AppEvents.SESSION_CREATED, { detail: { session } }));
       window.dispatchEvent(
         new CustomEvent(AppEvents.ADD_ACTIVE_SESSION, {
           detail: { sessionId: session.id, initialMessage: { msg: userMessage, images } },

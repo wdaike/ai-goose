@@ -1,7 +1,8 @@
-import { memo, useEffect, useState } from 'react';
+import { memo } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { cn } from '../utils';
+import { useDocumentTheme } from '../hooks/useDocumentTheme';
 
 const LANGUAGE_BY_EXTENSION: Record<string, string> = {
   bash: 'bash',
@@ -52,25 +53,6 @@ export function languageFromFilePath(path: string): string {
 
   const extension = fileName.includes('.') ? fileName.split('.').pop()! : '';
   return LANGUAGE_BY_EXTENSION[extension] ?? 'text';
-}
-
-function isDarkDocumentTheme(): boolean {
-  return document.documentElement.classList.contains('dark');
-}
-
-function useDocumentTheme(): 'light' | 'dark' {
-  const [theme, setTheme] = useState<'light' | 'dark'>(() =>
-    isDarkDocumentTheme() ? 'dark' : 'light'
-  );
-
-  useEffect(() => {
-    const syncTheme = () => setTheme(isDarkDocumentTheme() ? 'dark' : 'light');
-    const observer = new MutationObserver(syncTheme);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    return () => observer.disconnect();
-  }, []);
-
-  return theme;
 }
 
 interface CodeViewerProps {
