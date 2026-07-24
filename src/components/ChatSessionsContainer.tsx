@@ -1,10 +1,7 @@
-import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import BaseChat from './BaseChat';
 import { ChatType } from '../types/chat';
 import { UserInput } from '../types/message';
-import { subscribeToAcpRecovery } from '../acp/acpConnection';
-import { codexChatSessionController as acpChatSessionController } from '../codex/engine/controller';
 
 interface ChatSessionsContainerProps {
   setChat: (chat: ChatType) => void;
@@ -34,20 +31,6 @@ export default function ChatSessionsContainer({
   if (currentSessionId && !activeSessions.some((s) => s.sessionId === currentSessionId)) {
     sessionsToRender = [...activeSessions, { sessionId: currentSessionId }];
   }
-
-  const sessionIdsRef = useRef<string[]>([]);
-  sessionIdsRef.current = sessionsToRender.map((session) => session.sessionId);
-
-  useEffect(() => {
-    return subscribeToAcpRecovery((recovering) => {
-      if (recovering) {
-        return;
-      }
-      for (const sessionId of sessionIdsRef.current) {
-        void acpChatSessionController.restoreSession(sessionId);
-      }
-    });
-  }, []);
 
   // Always render active sessions to keep SSE connections alive, even when not on /pair route
   if (!currentSessionId && activeSessions.length === 0) {

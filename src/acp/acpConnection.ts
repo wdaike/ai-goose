@@ -13,10 +13,8 @@ import type {
 } from '@agentclientprotocol/sdk';
 
 // The legacy goose serve backend is gone; all data flows through the codex
-// bridge (`window.codex`). These stubs keep the recovery-aware UI surfaces
-// compiling with a permanently-healthy connection state.
-
-type AcpRecoveryListener = (recovering: boolean) => void;
+// bridge (`window.codex`). These stubs remain only so the not-yet-migrated
+// ACP client call sites keep compiling.
 
 interface RemovedAcpClient {
   prompt(params: PromptRequest): Promise<PromptResponse>;
@@ -43,14 +41,4 @@ export async function getAcpClient(): Promise<RemovedAcpClient> {
 
 export async function getAcpInitializeResponse(): Promise<InitializeResponse> {
   throw new Error('The ACP backend has been removed; use the codex bridge');
-}
-
-export function reconnectAcpAfterSystemResume(): void {}
-
-export function isAcpRecovering(): boolean {
-  return false;
-}
-
-export function subscribeToAcpRecovery(_listener: AcpRecoveryListener): () => void {
-  return () => {};
 }
