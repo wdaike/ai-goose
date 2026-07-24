@@ -2,13 +2,16 @@ import type {
   AppConfigAPI,
   CreateChatWindowOptions,
   ElectronAPI,
+  FileResponse,
   MessageBoxOptions,
   UpdaterEvent,
 } from './preload';
+import { codex } from './codex/client';
+import { installBrowserCodex } from './codex/browserCodex';
 import { defaultSettings, type SettingKey, type Settings } from './utils/settings';
 
 type BrowserEnvironment = {
-  VITE_GOOSE_ACP_URL?: string;
+  VITE_GOOSE_CODEX_BASE?: string;
   VITE_GOOSE_SECRET_KEY?: string;
   VITE_GOOSE_WORKING_DIR?: string;
   VITE_GOOSE_VERSION?: string;
@@ -45,26 +48,46 @@ function getQueryValue(key: string): string | undefined {
   return new URLSearchParams(window.location.search).get(key) ?? undefined;
 }
 
-function getAcpUrl(): string | null {
-  const configuredUrl = getQueryValue('acpUrl') ?? environment.VITE_GOOSE_ACP_URL;
-  if (!configuredUrl) return null;
-
-  const secret = getQueryValue('token') ?? environment.VITE_GOOSE_SECRET_KEY;
-  if (!secret) return configuredUrl;
-
-  const url = new URL(configuredUrl);
-  if (!url.searchParams.has('token')) {
-    url.searchParams.set('token', secret);
-  }
-  return url.toString();
+function getSecretKey(): string | null {
+  return getQueryValue('token') ?? environment.VITE_GOOSE_SECRET_KEY ?? null;
 }
 
-function getSecretKey(): string | null {
-  const explicit = getQueryValue('token') ?? environment.VITE_GOOSE_SECRET_KEY;
-  if (explicit) return explicit;
+function getCodexBase(): string {
+  return getQueryValue('codexBase') ?? environment.VITE_GOOSE_CODEX_BASE ?? '/codex';
+}
 
-  const acpUrl = getAcpUrl();
-  return acpUrl ? new URL(acpUrl).searchParams.get('token') : null;
+const utf8 = { encoder: new TextEncoder(), decoder: new TextDecoder() };
+
+function bytesToBase64(bytes: Uint8Array): string {
+  let binary = '';
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary);
+}
+
+function base64ToBytes(value: string): Uint8Array {
+  const binary = atob(value);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+async function codexReadFile(filePath: string): Promise<FileResponse> {
+  try {
+    const { dataBase64 } = await codex.fsReadFile({ path: filePath });
+    return {
+      file: utf8.decoder.decode(base64ToBytes(dataBase64)),
+      filePath,
+      error: null,
+      found: true,
+    };
+  } catch (error) {
+    return {
+      file: '',
+      filePath,
+      error: error instanceof Error ? error.message : String(error),
+      found: false,
+    };
+  }
 }
 
 function emit(channel: string, ...args: unknown[]): void {
@@ -126,16 +149,43 @@ const browserElectron: ElectronAPI = {
   checkForOllama: async () => false,
   selectFileOrDirectory: async () => null,
   getBinaryPath: async () => '',
-  readFile: async (filePath) => ({
-    file: '',
-    filePath,
-    error: 'Direct filesystem access is unavailable in the browser',
-    found: false,
-  }),
-  writeFile: async () => false,
-  ensureDirectory: async () => false,
-  listFiles: async () => [],
-  listDirectory: async () => [],
+  readFile: (filePath) => codexReadFile(filePath),
+  writeFile: async (filePath, content) => {
+    try {
+      await codex.fsWriteFile({
+        path: filePath,
+        dataBase64: bytesToBase64(utf8.encoder.encode(content)),
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  },
+  ensureDirectory: async (dirPath) => {
+    try {
+      await codex.fsCreateDirectory({ path: dirPath, recursive: true });
+      return true;
+    } catch {
+      return false;
+    }
+  },
+  listFiles: async (dirPath, extension) => {
+    try {
+      const { entries } = await codex.fsReadDirectory({ path: dirPath });
+      const files = entries.filter((entry) => entry.isFile).map((entry) => entry.fileName);
+      return extension ? files.filter((name) => name.endsWith(extension)) : files;
+    } catch {
+      return [];
+    }
+  },
+  listDirectory: async (dirPath) => {
+    try {
+      const { entries } = await codex.fsReadDirectory({ path: dirPath });
+      return entries.map((entry) => ({ name: entry.fileName, isDirectory: entry.isDirectory }));
+    } catch {
+      return [];
+    }
+  },
   terminal: {
     create: async () => {
       throw new Error('Terminals are unavailable in the browser');
@@ -157,8 +207,6 @@ const browserElectron: ElectronAPI = {
   setSetting: async <K extends SettingKey>(key: K, value: Settings[K]): Promise<void> => {
     writeJson(`${settingsPrefix}${key}`, value);
   },
-  getSecretKey: async () => getSecretKey(),
-  getAcpUrl: async () => getAcpUrl(),
   setWakelock: async (enable) => {
     await browserElectron.setSetting('enableWakelock', enable);
     return false;
@@ -196,9 +244,6 @@ const browserElectron: ElectronAPI = {
   getAutoDownloadDisabled: async () => true,
   closeWindow: () => window.close(),
   openDirectoryInExplorer: async () => false,
-  launchApp: async () => undefined,
-  refreshApp: async () => undefined,
-  closeApp: async () => undefined,
   addRecentDir: async (directory) => {
     const directories = readJson<string[]>(recentDirectoriesKey, []);
     writeJson(recentDirectoriesKey, [
@@ -222,4 +267,5 @@ export function installBrowserHost(): void {
   if (window.electron) return;
   window.electron = browserElectron;
   window.appConfig = browserAppConfig;
+  installBrowserCodex(getCodexBase(), getSecretKey());
 }

@@ -23,51 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "Togol panel sisi"
   },
-  "appsView.customApp": {
-    "defaultMessage": "Apl tersuai"
-  },
-  "appsView.deleteApp": {
-    "defaultMessage": "Delete app"
-  },
-  "appsView.deleteConfirm": {
-    "defaultMessage": "Delete \"{name}\"? This cannot be undone."
-  },
-  "appsView.description": {
-    "defaultMessage": "Aplikasi daripada pelayan MCP anda dan Apl yang dibina oleh iCodex sendiri. Anda boleh memintanya mencipta apl baharu melalui antara muka sembang dan ia akan muncul di sini."
-  },
-  "appsView.errorLoading": {
-    "defaultMessage": "Ralat memuatkan apl: {error}"
-  },
-  "appsView.errorPrefix": {
-    "defaultMessage": "Error: {error}"
-  },
-  "appsView.importApp": {
-    "defaultMessage": "Import Apl"
-  },
-  "appsView.launch": {
-    "defaultMessage": "Lancarkan"
-  },
-  "appsView.loading": {
-    "defaultMessage": "Memuatkan apl..."
-  },
-  "appsView.noAppsDescription": {
-    "defaultMessage": "Buka sembang dan minta iCodex untuk apl yang anda mahukan. Ia boleh membina satu untuk anda dan ia akan muncul di sini. Atau jika seseorang berkongsi apl, anda boleh mengimportnya menggunakan butang di atas."
-  },
-  "appsView.noAppsTitle": {
-    "defaultMessage": "Tiada apl tersedia"
-  },
-  "appsView.retiredChatApp": {
-    "defaultMessage": "Chat app retired"
-  },
-  "appsView.retiredChatAppDetail": {
-    "defaultMessage": "We removed this feature because MCP sampling is no longer supported."
-  },
-  "appsView.retry": {
-    "defaultMessage": "Cuba semula"
-  },
-  "appsView.title": {
-    "defaultMessage": "Apl"
-  },
   "authSettings.activeProviderWarning": {
     "defaultMessage": "Ini ialah pembekal aktif. Permintaan baharu mungkin gagal sehingga anda mengkonfigurasi kelayakan lain."
   },
@@ -851,57 +806,6 @@
   "extensionTimeoutField.timeoutLabel": {
     "defaultMessage": "Had Masa"
   },
-  "externalBackendSection.certFingerprint": {
-    "defaultMessage": "Cap Jari Sijil (pilihan)"
-  },
-  "externalBackendSection.certFingerprintHelp": {
-    "defaultMessage": "Sematkan cap jari sijil TLS tertentu. Jika ditinggalkan, sijil akan dipercayai pada penggunaan pertama (TOFU)."
-  },
-  "externalBackendSection.certFingerprintPlaceholder": {
-    "defaultMessage": "AA:BB:CC:... atau sha256/base64"
-  },
-  "externalBackendSection.description": {
-    "defaultMessage": "Secara lalai iCodex melancarkan pelayan untuk anda, gunakan ini untuk menyambung ke pelayan iCodex luaran"
-  },
-  "externalBackendSection.fingerprintRequiresHttps": {
-    "defaultMessage": "Certificate fingerprint requires an https URL"
-  },
-  "externalBackendSection.restartNote": {
-    "defaultMessage": "Perubahan memerlukan memulakan semula iCodex untuk berkuat kuasa. Tetingkap sembang baharu akan menyambung ke pelayan luaran."
-  },
-  "externalBackendSection.secretKey": {
-    "defaultMessage": "Kunci Rahsia"
-  },
-  "externalBackendSection.secretKeyHelp": {
-    "defaultMessage": "Kunci rahsia yang dikonfigurasikan pada pelayan iCodex (GOOSE_SERVER__SECRET_KEY)"
-  },
-  "externalBackendSection.secretKeyPlaceholder": {
-    "defaultMessage": "Masukkan kunci rahsia pelayan"
-  },
-  "externalBackendSection.serverUrl": {
-    "defaultMessage": "URL Pelayan"
-  },
-  "externalBackendSection.serverUrlHelp": {
-    "defaultMessage": "Enter the HTTP(S) base URL. iCodex checks /status and connects to /acp under this base."
-  },
-  "externalBackendSection.title": {
-    "defaultMessage": "Pelayan iCodex"
-  },
-  "externalBackendSection.urlBaseError": {
-    "defaultMessage": "URL must be the backend base URL before /acp, without query parameters or fragments"
-  },
-  "externalBackendSection.urlFormatError": {
-    "defaultMessage": "Format URL tidak sah"
-  },
-  "externalBackendSection.urlProtocolError": {
-    "defaultMessage": "URL mesti menggunakan protokol http atau https"
-  },
-  "externalBackendSection.useExternalServer": {
-    "defaultMessage": "Gunakan pelayan luaran"
-  },
-  "externalBackendSection.useExternalServerDescription": {
-    "defaultMessage": "Sambung ke pelayan iCodex yang berjalan di tempat lain (memerlukan memulakan semula aplikasi)"
-  },
   "fileChangeCard.document": {
     "defaultMessage": "Dokumen"
   },
@@ -1537,54 +1441,6 @@
   },
   "markdownContent.thisWillOpen": {
     "defaultMessage": "Ini akan membuka: {href}"
-  },
-  "mcpAppRenderer.appFallbackTitle": {
-    "defaultMessage": "Apl"
-  },
-  "mcpAppRenderer.cancelButton": {
-    "defaultMessage": "Batal"
-  },
-  "mcpAppRenderer.close": {
-    "defaultMessage": "Tutup"
-  },
-  "mcpAppRenderer.exitFullscreen": {
-    "defaultMessage": "Keluar skrin penuh"
-  },
-  "mcpAppRenderer.exitFullscreenTitle": {
-    "defaultMessage": "Keluar skrin penuh (Esc)"
-  },
-  "mcpAppRenderer.failedToInitSandbox": {
-    "defaultMessage": "Gagal memulakan proksi kotak pasir"
-  },
-  "mcpAppRenderer.failedToLoadResource": {
-    "defaultMessage": "Gagal memuatkan sumber"
-  },
-  "mcpAppRenderer.fullscreen": {
-    "defaultMessage": "Skrin penuh"
-  },
-  "mcpAppRenderer.invalidUrl": {
-    "defaultMessage": "URL tidak sah"
-  },
-  "mcpAppRenderer.movePipWindow": {
-    "defaultMessage": "Alihkan tetingkap Gambar-dalam-Gambar (gunakan kekunci anak panah)"
-  },
-  "mcpAppRenderer.openButton": {
-    "defaultMessage": "Buka"
-  },
-  "mcpAppRenderer.openExternalLinkTitle": {
-    "defaultMessage": "Buka Pautan Luaran"
-  },
-  "mcpAppRenderer.openLinkDetail": {
-    "defaultMessage": "Ini akan membuka: {url}"
-  },
-  "mcpAppRenderer.openProtocolLink": {
-    "defaultMessage": "Buka pautan {protocol}?"
-  },
-  "mcpAppRenderer.pictureInPicture": {
-    "defaultMessage": "Gambar-dalam-Gambar"
-  },
-  "mcpAppRenderer.playingInPip": {
-    "defaultMessage": "Bermain dalam Gambar-dalam-Gambar"
   },
   "mentionPopover.itemsFound": {
     "defaultMessage": "{count,plural,one{# item dijumpai} other{# item dijumpai}}"
@@ -2825,9 +2681,6 @@
   "settingsView.tabChat": {
     "defaultMessage": "Sembang"
   },
-  "settingsView.tabExternalBackend": {
-    "defaultMessage": "Backend Luaran"
-  },
   "settingsView.tabKeyboard": {
     "defaultMessage": "Papan Kekunci"
   },
@@ -2869,15 +2722,6 @@
   },
   "spellcheckToggle.title": {
     "defaultMessage": "Dayakan Semakan Ejaan"
-  },
-  "standaloneAppView.failedToLoad": {
-    "defaultMessage": "Gagal Memuatkan Aplikasi"
-  },
-  "standaloneAppView.initializing": {
-    "defaultMessage": "Memulakan aplikasi..."
-  },
-  "standaloneAppView.missingParams": {
-    "defaultMessage": "Parameter yang diperlukan tiada"
   },
   "stringUtils.configuredProvider": {
     "defaultMessage": "Penyedia {name} telah dikonfigurasikan"

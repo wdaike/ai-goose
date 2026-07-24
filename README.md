@@ -22,13 +22,21 @@ See [AGENTS.md](AGENTS.md) for the full architecture and contribution rules.
 Requires Node.js 24+, pnpm 10+, and the `codex` binary on `PATH`.
 
 ```bash
-./start.sh            # install deps if needed, then run the app
+./start-desktop.sh    # Electron desktop app
+./start-web.sh        # browser app on http://127.0.0.1:5173
 ```
+
+Both install deps on first run. The web host serves the renderer and the codex
+bridge on one port; set `GOOSE_WEB_TOKEN` to require a token, or leave it unset
+for token-free loopback access.
 
 ```bash
 cd desktop
 pnpm install
-pnpm run start-gui    # run the app
+pnpm run start-gui    # desktop app
+pnpm run start-web    # browser app
+pnpm run build:web    # build the static web bundle (dist-web)
+pnpm run serve-web    # serve the built bundle + codex bridge
 pnpm run typecheck
 pnpm test
 ```

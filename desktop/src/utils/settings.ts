@@ -1,10 +1,3 @@
-export interface ExternalBackendConfig {
-  enabled: boolean;
-  url: string;
-  secret: string;
-  certFingerprint?: string;
-}
-
 export interface KeyboardShortcuts {
   focusWindow: string | null;
   quickLauncher: string | null;
@@ -36,8 +29,6 @@ export interface Settings {
   enableWakelock: boolean;
   enableNotifications: boolean;
   spellcheckEnabled: boolean;
-  // Key is kept as `externalGoosed` for backward compat with persisted user settings.
-  externalGoosed: ExternalBackendConfig;
   globalShortcut?: string | null;
   keyboardShortcuts: KeyboardShortcuts;
 
@@ -75,11 +66,6 @@ export const defaultSettings: Settings = {
   enableNotifications: true,
   spellcheckEnabled: true,
   keyboardShortcuts: defaultKeyboardShortcuts,
-  externalGoosed: {
-    enabled: false,
-    url: '',
-    secret: '',
-  },
 
   // UI preferences
   theme: 'light',

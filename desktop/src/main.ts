@@ -27,16 +27,13 @@ import { execFileSync, spawn, execFile } from 'child_process';
 import 'dotenv/config';
 import { CODEX_HOME, registerCodexBridge } from './codex/bridge';
 import { registerTerminalManager } from './terminalManager';
-import { GooseServeLeaseRegistry, type GooseServeLease } from './gooseServeLeaseRegistry';
 import { expandTilde } from './utils/pathUtils';
 import log from './utils/logger';
 import { ensureWinShims } from './utils/winShims';
 import { addRecentDir, loadRecentDirs } from './utils/recentDirs';
-import { formatAppName, errorMessage, formatErrorForLogging } from './utils/conversionUtils';
-import { isRetiredGooseChatApp } from './utils/retiredApps';
+import { errorMessage, formatErrorForLogging } from './utils/conversionUtils';
 import type { Settings, SettingKey } from './utils/settings';
 import { defaultSettings, getKeyboardShortcuts } from './utils/settings';
-import * as crypto from 'crypto';
 import * as yaml from 'yaml';
 import windowStateKeeper from 'electron-window-state';
 import {
@@ -48,7 +45,6 @@ import {
   updateTrayMenu,
 } from './utils/autoUpdater';
 import { UPDATES_ENABLED } from './updates';
-import type { GooseApp } from './types/apps';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { BLOCKED_PROTOCOLS, WEB_PROTOCOLS } from './utils/urlSecurity';
 import { buildCSP } from './utils/csp';
@@ -203,10 +199,6 @@ function getSettings(): Settings {
     return {
       ...defaultSettings,
       ...stored,
-      externalGoosed: {
-        ...defaultSettings.externalGoosed,
-        ...(stored.externalGoosed ?? {}),
-      },
       keyboardShortcuts: {
         ...defaultSettings.keyboardShortcuts,
         ...(stored.keyboardShortcuts ?? {}),
@@ -298,9 +290,7 @@ function parseGitRemoteRepo(url: string): string | null {
   if (!trimmed) return null;
 
   const sshMatch = trimmed.match(/^[^@]+@[^:]+:(.+)$/);
-  const path = sshMatch
-    ? sshMatch[1]
-    : trimmed.replace(/^[a-z+]+:\/\/[^/]+\//i, '');
+  const path = sshMatch ? sshMatch[1] : trimmed.replace(/^[a-z+]+:\/\/[^/]+\//i, '');
   const parts = path.split('/').filter(Boolean);
   if (parts.length < 2) return null;
   return parts.slice(-2).join('/');
@@ -355,7 +345,6 @@ interface BackendCertificateTrust {
   fingerprint: string | null;
 }
 
-
 const trustedBackendCertificates = new Set<BackendCertificateTrust>();
 
 function normalizeHostname(hostname: string): string {
@@ -373,7 +362,6 @@ function normalizeFingerprint(fp: string): string {
   }
   return fp.toUpperCase();
 }
-
 
 function getBackendCertificateTrusts(hostname: string): BackendCertificateTrust[] {
   const normalizedHostname = normalizeHostname(hostname);
@@ -803,87 +791,6 @@ const resolveGoosePathRoot = (): string | undefined => {
   return undefined;
 };
 
-const GENERATED_SECRET = crypto.randomBytes(32).toString('hex');
-
-interface ExternalBackend {
-  source: 'env' | 'settings';
-  url: string;
-  secret: string;
-  certFingerprint?: string;
-}
-
-const getExternalBackendUrlFromEnv = (): string | null => {
-  if (!process.env.GOOSE_EXTERNAL_BACKEND) {
-    return null;
-  }
-
-  const configuredUrl = process.env.GOOSE_EXTERNAL_BACKEND_URL?.trim();
-  if (configuredUrl) {
-    return configuredUrl;
-  }
-
-  return `http://127.0.0.1:${process.env.GOOSE_PORT || '3000'}`;
-};
-
-const getExternalBackendFromEnv = (): ExternalBackend | null => {
-  const url = getExternalBackendUrlFromEnv();
-  if (!url) {
-    return null;
-  }
-
-  const secret = process.env.GOOSE_SERVER__SECRET_KEY;
-  if (!secret) {
-    throw new Error(
-      'GOOSE_SERVER__SECRET_KEY must be set when using GOOSE_EXTERNAL_BACKEND. ' +
-        'Set it to the same value on both the server and the desktop client.'
-    );
-  }
-
-  return {
-    source: 'env',
-    url,
-    secret,
-  };
-};
-
-const getServerSecret = (settings: Settings): string => {
-  if (settings.externalGoosed?.enabled && settings.externalGoosed.secret) {
-    return settings.externalGoosed.secret;
-  }
-  return GENERATED_SECRET;
-};
-
-const getActiveExternalBackend = (settings: Settings): ExternalBackend | null => {
-  const envBackend = getExternalBackendFromEnv();
-  if (envBackend) {
-    return envBackend;
-  }
-
-  if (settings.externalGoosed?.enabled && settings.externalGoosed.url) {
-    return {
-      source: 'settings',
-      url: settings.externalGoosed.url,
-      secret: getServerSecret(settings),
-      certFingerprint: settings.externalGoosed.certFingerprint,
-    };
-  }
-
-  return null;
-};
-
-const getExternalBackendForCsp = (settings: Settings) => {
-  const envUrl = getExternalBackendUrlFromEnv();
-  if (!envUrl) {
-    return settings.externalGoosed;
-  }
-
-  return {
-    ...settings.externalGoosed,
-    enabled: true,
-    url: envUrl,
-  };
-};
-
 let appConfig = {
   GOOSE_CODEX_HOME: CODEX_HOME,
   GOOSE_DEFAULT_PROVIDER: defaultProvider,
@@ -901,9 +808,6 @@ let appConfig = {
 };
 
 const windowMap = new Map<number, BrowserWindow>();
-const appWindows = new Map<string, BrowserWindow>();
-
-const gooseServeLeases = new GooseServeLeaseRegistry(log);
 
 const windowPowerSaveBlockers = new Map<number, number>(); // windowId -> blockerId
 // Track pending initial messages per window
@@ -933,134 +837,56 @@ const createChat = async (
   } = options;
   const settings = getSettings();
 
-  let externalBackend: ExternalBackend | null;
-  try {
-    externalBackend = getActiveExternalBackend(settings);
-  } catch (error) {
-    dialog.showMessageBoxSync({
-      type: 'error',
-      title: 'External Backend Misconfigured',
-      message: 'The external backend environment is invalid.',
-      detail: errorMessage(error),
-      buttons: ['Quit'],
-    });
-    app.quit();
-    return;
-  }
-
-  if (externalBackend?.certFingerprint) {
-    const url = externalBackend.url;
-    const usesHttps = (() => {
-      try {
-        return new URL(url).protocol === 'https:';
-      } catch {
-        return false;
-      }
-    })();
-
-    if (!usesHttps) {
-      const response = dialog.showMessageBoxSync({
-        type: 'error',
-        title: 'External Backend Misconfigured',
-        message: 'Certificate fingerprint requires an HTTPS external backend URL.',
-        detail: 'Use an https:// URL or remove the configured certificate fingerprint.',
-        buttons: ['Disable External Backend & Retry', 'Quit'],
-        defaultId: 0,
-        cancelId: 1,
-      });
-
-      if (response === 0) {
-        updateSettings((s) => {
-          if (s.externalGoosed) {
-            s.externalGoosed.enabled = false;
-          }
-        });
-        return createChat(app, options);
-      }
-
-      app.quit();
-      return;
-    }
-  }
-
   let workingDir = dir || os.homedir();
-  let gooseServeLease: GooseServeLease | null = null;
 
-  // The Codex runtime is spawned in-process via the codex bridge; the legacy
-  // goose serve backend is no longer started.
+  // The Codex runtime is spawned in-process via the codex bridge.
 
-  const cleanupUnregisteredGooseServeLease = async () => {
-    if (!gooseServeLease) {
-      return;
-    }
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 940,
+    defaultHeight: 800,
+  });
 
-    const lease = gooseServeLease;
-    gooseServeLease = null;
-    await gooseServeLeases.cleanupLease(lease);
-  };
-
-  let mainWindowState: ReturnType<typeof windowStateKeeper>;
-  let mainWindow: BrowserWindow;
-  try {
-    mainWindowState = windowStateKeeper({
-      defaultWidth: 940,
-      defaultHeight: 800,
-    });
-
-    mainWindow = new BrowserWindow({
-      show: false,
-      titleBarStyle: process.platform === 'darwin' ? 'hidden' : 'default',
-      trafficLightPosition: process.platform === 'darwin' ? { x: 20, y: 16 } : undefined,
-      vibrancy: process.platform === 'darwin' ? 'window' : undefined,
-      frame: process.platform !== 'darwin',
-      // windowStateKeeper persists the outer window bounds (getBounds), so the
-      // window must be restored by outer bounds too. With useContentSize the saved
-      // outer height is reapplied as the content height, growing the window by the
-      // frame height on every launch on framed platforms (#9363).
-      x: mainWindowState.x,
-      y: mainWindowState.y,
-      width: mainWindowState.width,
-      height: mainWindowState.height,
-      minWidth: 480,
-      minHeight: 400,
-      resizable: true,
-      icon: path.join(__dirname, '../images/icon.icns'),
-      webPreferences: {
-        spellcheck: settings.spellcheckEnabled ?? true,
-        preload: path.join(__dirname, 'preload.js'),
-        webSecurity: true,
-        nodeIntegration: false,
-        contextIsolation: true,
-        additionalArguments: [
-          JSON.stringify({
-            ...appConfig,
-            GOOSE_LOCALE: getConfiguredGooseLocale(),
-            GOOSE_WORKING_DIR: workingDir,
-            REQUEST_DIR: dir,
-            GOOSE_VERSION: version,
-            scheduledJobId: scheduledJobId,
-            SECURITY_ML_MODEL_MAPPING: process.env.SECURITY_ML_MODEL_MAPPING,
-            SECURITY_PROMPT_ENABLED_OVERRIDE: process.env.SECURITY_PROMPT_ENABLED_OVERRIDE,
-            SECURITY_COMMAND_CLASSIFIER_ENABLED_OVERRIDE:
-              process.env.SECURITY_COMMAND_CLASSIFIER_ENABLED_OVERRIDE,
-          }),
-        ],
-        partition: 'persist:goose',
-      },
-    });
-  } catch (error) {
-    await cleanupUnregisteredGooseServeLease();
-    throw error;
-  }
-
-  if (gooseServeLease) {
-    const lease = gooseServeLease;
-    mainWindow.once('closed', () => {
-      void gooseServeLeases.releaseWindow(mainWindow.id);
-    });
-    gooseServeLeases.attachWindow(mainWindow.id, lease);
-    gooseServeLease = null;
-  }
+  const mainWindow = new BrowserWindow({
+    show: false,
+    titleBarStyle: process.platform === 'darwin' ? 'hidden' : 'default',
+    trafficLightPosition: process.platform === 'darwin' ? { x: 20, y: 16 } : undefined,
+    vibrancy: process.platform === 'darwin' ? 'window' : undefined,
+    frame: process.platform !== 'darwin',
+    // windowStateKeeper persists the outer window bounds (getBounds), so the
+    // window must be restored by outer bounds too. With useContentSize the saved
+    // outer height is reapplied as the content height, growing the window by the
+    // frame height on every launch on framed platforms (#9363).
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+    minWidth: 480,
+    minHeight: 400,
+    resizable: true,
+    icon: path.join(__dirname, '../images/icon.icns'),
+    webPreferences: {
+      spellcheck: settings.spellcheckEnabled ?? true,
+      preload: path.join(__dirname, 'preload.js'),
+      webSecurity: true,
+      nodeIntegration: false,
+      contextIsolation: true,
+      additionalArguments: [
+        JSON.stringify({
+          ...appConfig,
+          GOOSE_LOCALE: getConfiguredGooseLocale(),
+          GOOSE_WORKING_DIR: workingDir,
+          REQUEST_DIR: dir,
+          GOOSE_VERSION: version,
+          scheduledJobId: scheduledJobId,
+          SECURITY_ML_MODEL_MAPPING: process.env.SECURITY_ML_MODEL_MAPPING,
+          SECURITY_PROMPT_ENABLED_OVERRIDE: process.env.SECURITY_PROMPT_ENABLED_OVERRIDE,
+          SECURITY_COMMAND_CLASSIFIER_ENABLED_OVERRIDE:
+            process.env.SECURITY_COMMAND_CLASSIFIER_ENABLED_OVERRIDE,
+        }),
+      ],
+      partition: 'persist:goose',
+    },
+  });
 
   if (!app.isPackaged) {
     installExtension(REACT_DEVELOPER_TOOLS, {
@@ -1640,7 +1466,6 @@ const validSettingKeys: Set<string> = new Set([
   'enableWakelock',
   'enableNotifications',
   'spellcheckEnabled',
-  'externalGoosed',
   'globalShortcut',
   'keyboardShortcuts',
   'theme',
@@ -1681,22 +1506,6 @@ ipcMain.handle('set-setting', (_event, key: SettingKey, value: unknown) => {
   if (key === 'disableAutoDownload') {
     setAutoDownloadDisabled(value as boolean);
   }
-});
-
-ipcMain.handle('get-secret-key', (event) => {
-  const windowId = BrowserWindow.fromWebContents(event.sender)?.id;
-  if (!windowId) {
-    return null;
-  }
-  return gooseServeLeases.getSecretKey(windowId) ?? null;
-});
-
-ipcMain.handle('get-acp-url', async (event) => {
-  const windowId = BrowserWindow.fromWebContents(event.sender)?.id;
-  if (!windowId) {
-    return null;
-  }
-  return gooseServeLeases.getAcpUrl(windowId) ?? null;
 });
 
 // Handle menu bar icon visibility
@@ -2153,11 +1962,10 @@ async function appMain() {
   // Add CSP headers to all sessions, recomputed on every response so external
   // backend settings take effect without restarting the app.
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-    const currentSettings = getSettings();
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': buildCSP(getExternalBackendForCsp(currentSettings)),
+        'Content-Security-Policy': buildCSP(),
       },
     });
   });
@@ -2681,113 +2489,6 @@ async function appMain() {
       return false;
     }
   });
-
-  ipcMain.handle('launch-app', async (event, gooseApp: GooseApp) => {
-    try {
-      if (isRetiredGooseChatApp(gooseApp)) {
-        throw new Error('This built-in Chat app is no longer supported.');
-      }
-
-      const launchingWindow = BrowserWindow.fromWebContents(event.sender);
-      if (!launchingWindow) {
-        throw new Error('Could not find launching window');
-      }
-
-      const launchingWindowId = launchingWindow.id;
-      const launchingGooseServeLease = gooseServeLeases.get(launchingWindowId);
-      if (!launchingGooseServeLease) {
-        throw new Error('No backend lease found for launching window');
-      }
-
-      const workingDir = app.getPath('home');
-      const appWindow = new BrowserWindow({
-        title: formatAppName(gooseApp.name),
-        width: gooseApp.width ?? 800,
-        height: gooseApp.height ?? 600,
-        resizable: gooseApp.resizable ?? true,
-        useContentSize: true,
-        webPreferences: {
-          preload: path.join(__dirname, 'preload.js'),
-          nodeIntegration: false,
-          contextIsolation: true,
-          webSecurity: true,
-          additionalArguments: [
-            JSON.stringify({
-              ...appConfig,
-              GOOSE_LOCALE: getConfiguredGooseLocale(),
-              GOOSE_WORKING_DIR: workingDir,
-              GOOSE_VERSION: version,
-            }),
-          ],
-          partition: 'persist:goose',
-        },
-      });
-
-      gooseServeLeases.attachWindow(appWindow.id, launchingGooseServeLease);
-
-      appWindows.set(gooseApp.name, appWindow);
-
-      appWindow.on('closed', () => {
-        void gooseServeLeases.releaseWindow(appWindow.id);
-        appWindows.delete(gooseApp.name);
-      });
-
-      const extensionName = gooseApp.mcpServers?.[0] ?? '';
-
-      const url = getAppUrl();
-
-      const searchParams = new URLSearchParams();
-      searchParams.set('resourceUri', gooseApp.uri);
-      searchParams.set('extensionName', extensionName);
-      searchParams.set('appName', gooseApp.name);
-      searchParams.set('workingDir', workingDir);
-
-      url.hash = `/standalone-app?${searchParams.toString()}`;
-      await appWindow.loadURL(formatUrl(url));
-      appWindow.show();
-    } catch (error) {
-      console.error('Failed to launch app:', error);
-      throw error;
-    }
-  });
-
-  ipcMain.handle('refresh-app', async (_event, gooseApp: GooseApp) => {
-    try {
-      const appWindow = appWindows.get(gooseApp.name);
-      if (!appWindow || appWindow.isDestroyed()) {
-        console.log(`App window for '${gooseApp.name}' not found or destroyed, skipping refresh`);
-        return;
-      }
-
-      // Bring to front first
-      if (appWindow.isMinimized()) {
-        appWindow.restore();
-      }
-      appWindow.show();
-      appWindow.focus();
-
-      // Then reload
-      await appWindow.webContents.reload();
-    } catch (error) {
-      console.error('Failed to refresh app:', error);
-      throw error;
-    }
-  });
-
-  ipcMain.handle('close-app', async (_event, appName: string) => {
-    try {
-      const appWindow = appWindows.get(appName);
-      if (!appWindow || appWindow.isDestroyed()) {
-        console.log(`App window for '${appName}' not found or destroyed, skipping close`);
-        return;
-      }
-
-      appWindow.close();
-    } catch (error) {
-      console.error('Failed to close app:', error);
-      throw error;
-    }
-  });
 }
 
 app.whenReady().then(async () => {
@@ -2830,12 +2531,6 @@ async function getAllowList(): Promise<string[]> {
 }
 
 app.on('will-quit', async () => {
-  const gooseServeLeaseCount = gooseServeLeases.activeLeaseCount();
-  if (gooseServeLeaseCount > 0) {
-    log.info(`App quitting, cleaning up ${gooseServeLeaseCount} backend lease(s)`);
-    await gooseServeLeases.cleanupAll();
-  }
-
   for (const [windowId, blockerId] of windowPowerSaveBlockers.entries()) {
     try {
       powerSaveBlocker.stop(blockerId);

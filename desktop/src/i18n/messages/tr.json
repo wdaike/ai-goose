@@ -23,51 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "Yan paneli aç/kapat"
   },
-  "appsView.customApp": {
-    "defaultMessage": "Özel uygulama"
-  },
-  "appsView.deleteApp": {
-    "defaultMessage": "Delete app"
-  },
-  "appsView.deleteConfirm": {
-    "defaultMessage": "Delete \"{name}\"? This cannot be undone."
-  },
-  "appsView.description": {
-    "defaultMessage": "MCP sunucularınızdaki uygulamalar ve iCodex tarafından oluşturulan Uygulamalar. Sohbet arayüzü aracılığıyla yeni uygulamalar oluşturmasını isteyebilirsiniz; bunlar burada görünecektir."
-  },
-  "appsView.errorLoading": {
-    "defaultMessage": "Uygulamalar yüklenirken hata oluştu: {error}"
-  },
-  "appsView.errorPrefix": {
-    "defaultMessage": "Error: {error}"
-  },
-  "appsView.importApp": {
-    "defaultMessage": "Uygulamayı İçe Aktar"
-  },
-  "appsView.launch": {
-    "defaultMessage": "Başlat"
-  },
-  "appsView.loading": {
-    "defaultMessage": "Uygulamalar yükleniyor..."
-  },
-  "appsView.noAppsDescription": {
-    "defaultMessage": "Bir sohbet açın ve istediğiniz uygulamayı iCodex'a sorun. Sizin için bir uygulama oluşturabilir ve bu uygulama burada görünür. Birisi bir uygulama paylaştıysa yukarıdaki düğmeyi kullanarak içe aktarabilirsiniz."
-  },
-  "appsView.noAppsTitle": {
-    "defaultMessage": "Kullanılabilir uygulama yok"
-  },
-  "appsView.retiredChatApp": {
-    "defaultMessage": "Chat app retired"
-  },
-  "appsView.retiredChatAppDetail": {
-    "defaultMessage": "We removed this feature because MCP sampling is no longer supported."
-  },
-  "appsView.retry": {
-    "defaultMessage": "Yeniden dene"
-  },
-  "appsView.title": {
-    "defaultMessage": "Uygulamalar"
-  },
   "authSettings.activeProviderWarning": {
     "defaultMessage": "Bu etkin sağlayıcıdır. Başka bir kimlik bilgisi yapılandırana kadar yeni istekler başarısız olabilir."
   },
@@ -851,57 +806,6 @@
   "extensionTimeoutField.timeoutLabel": {
     "defaultMessage": "Zaman aşımı"
   },
-  "externalBackendSection.certFingerprint": {
-    "defaultMessage": "Sertifika Parmak İzi (isteğe bağlı)"
-  },
-  "externalBackendSection.certFingerprintHelp": {
-    "defaultMessage": "Belirli bir TLS sertifikası parmak izini sabitleyin. Atlanırsa, sertifikaya ilk kullanımda güvenilir (TOFU)."
-  },
-  "externalBackendSection.certFingerprintPlaceholder": {
-    "defaultMessage": "AA:BB:CC:... veya sha256/base64"
-  },
-  "externalBackendSection.description": {
-    "defaultMessage": "Varsayılan olarak iCodex sizin için bir sunucu başlatır; harici bir iCodex sunucusuna bağlanmak için bunu kullanın"
-  },
-  "externalBackendSection.fingerprintRequiresHttps": {
-    "defaultMessage": "Certificate fingerprint requires an https URL"
-  },
-  "externalBackendSection.restartNote": {
-    "defaultMessage": "Değişikliklerin etkili olması için iCodex'nin yeniden başlatılması gerekir. Yeni sohbet pencereleri harici sunucuya bağlanacaktır."
-  },
-  "externalBackendSection.secretKey": {
-    "defaultMessage": "Gizli Anahtar"
-  },
-  "externalBackendSection.secretKeyHelp": {
-    "defaultMessage": "iCodex sunucusunda yapılandırılan gizli anahtar (GOOSE_SERVER__SECRET_KEY)"
-  },
-  "externalBackendSection.secretKeyPlaceholder": {
-    "defaultMessage": "Sunucunun gizli anahtarını girin"
-  },
-  "externalBackendSection.serverUrl": {
-    "defaultMessage": "Sunucu URL'si"
-  },
-  "externalBackendSection.serverUrlHelp": {
-    "defaultMessage": "Enter the HTTP(S) base URL. iCodex checks /status and connects to /acp under this base."
-  },
-  "externalBackendSection.title": {
-    "defaultMessage": "iCodex Sunucu"
-  },
-  "externalBackendSection.urlBaseError": {
-    "defaultMessage": "URL must be the backend base URL before /acp, without query parameters or fragments"
-  },
-  "externalBackendSection.urlFormatError": {
-    "defaultMessage": "Geçersiz URL biçimi"
-  },
-  "externalBackendSection.urlProtocolError": {
-    "defaultMessage": "URL, http veya https protokolünü kullanmalıdır"
-  },
-  "externalBackendSection.useExternalServer": {
-    "defaultMessage": "Harici sunucu kullan"
-  },
-  "externalBackendSection.useExternalServerDescription": {
-    "defaultMessage": "Başka bir yerde çalışan bir iCodex sunucusuna bağlanın (uygulamanın yeniden başlatılmasını gerektirir)"
-  },
   "fileChangeCard.document": {
     "defaultMessage": "Belge"
   },
@@ -1537,54 +1441,6 @@
   },
   "markdownContent.thisWillOpen": {
     "defaultMessage": "Bu açılacak: {href}"
-  },
-  "mcpAppRenderer.appFallbackTitle": {
-    "defaultMessage": "Uygulama"
-  },
-  "mcpAppRenderer.cancelButton": {
-    "defaultMessage": "İptal"
-  },
-  "mcpAppRenderer.close": {
-    "defaultMessage": "Kapat"
-  },
-  "mcpAppRenderer.exitFullscreen": {
-    "defaultMessage": "Tam ekrandan çık"
-  },
-  "mcpAppRenderer.exitFullscreenTitle": {
-    "defaultMessage": "Tam ekrandan çık (Esc)"
-  },
-  "mcpAppRenderer.failedToInitSandbox": {
-    "defaultMessage": "Korumalı alan proxy'si başlatılamadı"
-  },
-  "mcpAppRenderer.failedToLoadResource": {
-    "defaultMessage": "Kaynak yüklenemedi"
-  },
-  "mcpAppRenderer.fullscreen": {
-    "defaultMessage": "Tam ekran"
-  },
-  "mcpAppRenderer.invalidUrl": {
-    "defaultMessage": "Geçersiz URL"
-  },
-  "mcpAppRenderer.movePipWindow": {
-    "defaultMessage": "Resim İçinde Resim penceresini taşıyın (ok tuşlarını kullanın)"
-  },
-  "mcpAppRenderer.openButton": {
-    "defaultMessage": "Açık"
-  },
-  "mcpAppRenderer.openExternalLinkTitle": {
-    "defaultMessage": "Dış Bağlantıyı Aç"
-  },
-  "mcpAppRenderer.openLinkDetail": {
-    "defaultMessage": "Bu açılacak: {url}"
-  },
-  "mcpAppRenderer.openProtocolLink": {
-    "defaultMessage": "{protocol} bağlantısı açılsın mı?"
-  },
-  "mcpAppRenderer.pictureInPicture": {
-    "defaultMessage": "Resim İçinde Resim"
-  },
-  "mcpAppRenderer.playingInPip": {
-    "defaultMessage": "Resim İçinde Resim'de Oynatma"
   },
   "mentionPopover.itemsFound": {
     "defaultMessage": "{count,plural,one{# öğe bulundu} other{# öğe bulundu}}"
@@ -2825,9 +2681,6 @@
   "settingsView.tabChat": {
     "defaultMessage": "Sohbet"
   },
-  "settingsView.tabExternalBackend": {
-    "defaultMessage": "Harici Arka Uç"
-  },
   "settingsView.tabKeyboard": {
     "defaultMessage": "Klavye"
   },
@@ -2869,15 +2722,6 @@
   },
   "spellcheckToggle.title": {
     "defaultMessage": "Yazım Denetimini Etkinleştir"
-  },
-  "standaloneAppView.failedToLoad": {
-    "defaultMessage": "Uygulama Yüklenemedi"
-  },
-  "standaloneAppView.initializing": {
-    "defaultMessage": "Uygulama başlatılıyor..."
-  },
-  "standaloneAppView.missingParams": {
-    "defaultMessage": "Gerekli parametreler eksik"
   },
   "stringUtils.configuredProvider": {
     "defaultMessage": "{name} sağlayıcısı yapılandırıldı"

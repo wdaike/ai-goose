@@ -1,7 +1,6 @@
 import { ScrollArea } from '../ui/scroll-area';
 import { View, ViewOptions } from '../../utils/navigationUtils';
 import ModelsSection from './models/ModelsSection';
-import ExternalBackendSection from './app/ExternalBackendSection';
 import AppSettingsSection from './app/AppSettingsSection';
 import ConfigSettings from './config/ConfigSettings';
 import PluginsSettingsSection from './plugins/PluginsSettingsSection';
@@ -10,7 +9,6 @@ import { Z_INDEX } from '../Layout/constants';
 import {
   ArrowLeft,
   Bot,
-  Share2,
   Monitor,
   MessageSquare,
   Keyboard,
@@ -78,10 +76,6 @@ const i18n = defineMessages({
     id: 'settingsView.tabAppearance',
     defaultMessage: 'Appearance',
   },
-  tabExternalBackend: {
-    id: 'settingsView.tabExternalBackend',
-    defaultMessage: 'External Backend',
-  },
   tabPrompts: {
     id: 'settingsView.tabPrompts',
     defaultMessage: 'Prompts',
@@ -111,7 +105,6 @@ type SettingsTab =
   | 'appearance'
   | 'app'
   | 'plugins'
-  | 'sharing'
   | 'keyboard'
   | 'auth';
 
@@ -156,12 +149,6 @@ const NAV_GROUPS: NavGroup[] = [
         label: 'tabPlugins',
         icon: Puzzle,
         testId: 'settings-plugins-tab',
-      },
-      {
-        tab: 'sharing',
-        label: 'tabExternalBackend',
-        icon: Share2,
-        testId: 'settings-sharing-tab',
       },
     ],
   },
@@ -223,7 +210,6 @@ export default function SettingsView({
         update: 'app',
         models: 'models',
         modes: 'chat',
-        sharing: 'sharing',
         styles: 'chat',
         tools: 'chat',
         app: 'app',
@@ -365,7 +351,6 @@ export default function SettingsView({
                   initialTab={viewOptions.section === 'skills' ? 'skills' : 'mcps'}
                 />
               )}
-              {activeTab === 'sharing' && <ExternalBackendSection />}
               {activeTab === 'keyboard' && <KeyboardShortcutsSection />}
               {activeTab === 'auth' && <AuthSettingsSection />}
               {activeTab === 'app' && (

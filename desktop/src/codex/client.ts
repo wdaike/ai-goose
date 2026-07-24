@@ -15,6 +15,14 @@ import type { SkillsConfigWriteResponse } from './protocol/v2/SkillsConfigWriteR
 import type { GetAccountResponse } from './protocol/v2/GetAccountResponse';
 import type { FsReadFileParams } from './protocol/v2/FsReadFileParams';
 import type { FsReadFileResponse } from './protocol/v2/FsReadFileResponse';
+import type { FsReadDirectoryParams } from './protocol/v2/FsReadDirectoryParams';
+import type { FsReadDirectoryResponse } from './protocol/v2/FsReadDirectoryResponse';
+import type { FsWriteFileParams } from './protocol/v2/FsWriteFileParams';
+import type { FsWriteFileResponse } from './protocol/v2/FsWriteFileResponse';
+import type { FsCreateDirectoryParams } from './protocol/v2/FsCreateDirectoryParams';
+import type { FsCreateDirectoryResponse } from './protocol/v2/FsCreateDirectoryResponse';
+import type { FsGetMetadataParams } from './protocol/v2/FsGetMetadataParams';
+import type { FsGetMetadataResponse } from './protocol/v2/FsGetMetadataResponse';
 import type { ConfigReadParams } from './protocol/v2/ConfigReadParams';
 import type { ConfigReadResponse } from './protocol/v2/ConfigReadResponse';
 import type { ConfigBatchWriteParams } from './protocol/v2/ConfigBatchWriteParams';
@@ -64,6 +72,13 @@ export const codex = {
   skillsConfigWrite: (params: SkillsConfigWriteParams) =>
     request<SkillsConfigWriteResponse>('skills/config/write', params),
   fsReadFile: (params: FsReadFileParams) => request<FsReadFileResponse>('fs/readFile', params),
+  fsReadDirectory: (params: FsReadDirectoryParams) =>
+    request<FsReadDirectoryResponse>('fs/readDirectory', params),
+  fsWriteFile: (params: FsWriteFileParams) => request<FsWriteFileResponse>('fs/writeFile', params),
+  fsCreateDirectory: (params: FsCreateDirectoryParams) =>
+    request<FsCreateDirectoryResponse>('fs/createDirectory', params),
+  fsGetMetadata: (params: FsGetMetadataParams) =>
+    request<FsGetMetadataResponse>('fs/getMetadata', params),
   configRead: (params: ConfigReadParams = {}) => request<ConfigReadResponse>('config/read', params),
   configBatchWrite: (params: ConfigBatchWriteParams) =>
     request<Record<string, never>>('config/batchWrite', params),

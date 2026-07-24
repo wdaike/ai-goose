@@ -23,51 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "サイドパネルを切り替え"
   },
-  "appsView.customApp": {
-    "defaultMessage": "カスタムアプリ"
-  },
-  "appsView.deleteApp": {
-    "defaultMessage": "Delete app"
-  },
-  "appsView.deleteConfirm": {
-    "defaultMessage": "Delete \"{name}\"? This cannot be undone."
-  },
-  "appsView.description": {
-    "defaultMessage": "MCPサーバーのアプリケーションと、iCodex自身が作成したアプリです。チャット画面で新しいアプリの作成を依頼すると、ここに表示されます。"
-  },
-  "appsView.errorLoading": {
-    "defaultMessage": "アプリの読み込みエラー: {error}"
-  },
-  "appsView.errorPrefix": {
-    "defaultMessage": "Error: {error}"
-  },
-  "appsView.importApp": {
-    "defaultMessage": "アプリをインポート"
-  },
-  "appsView.launch": {
-    "defaultMessage": "起動"
-  },
-  "appsView.loading": {
-    "defaultMessage": "アプリを読み込み中..."
-  },
-  "appsView.noAppsDescription": {
-    "defaultMessage": "チャットを開き、欲しいアプリをiCodexに依頼してください。iCodexが作成したアプリがここに表示されます。誰かから共有されたアプリがある場合は、上のボタンでインポートできます。"
-  },
-  "appsView.noAppsTitle": {
-    "defaultMessage": "利用可能なアプリはありません"
-  },
-  "appsView.retiredChatApp": {
-    "defaultMessage": "Chat app retired"
-  },
-  "appsView.retiredChatAppDetail": {
-    "defaultMessage": "We removed this feature because MCP sampling is no longer supported."
-  },
-  "appsView.retry": {
-    "defaultMessage": "再試行"
-  },
-  "appsView.title": {
-    "defaultMessage": "アプリ"
-  },
   "authSettings.activeProviderWarning": {
     "defaultMessage": "これは現在使用中のプロバイダーです。別の認証情報を設定するまで、新しいリクエストが失敗する可能性があります。"
   },
@@ -851,57 +806,6 @@
   "extensionTimeoutField.timeoutLabel": {
     "defaultMessage": "タイムアウト"
   },
-  "externalBackendSection.certFingerprint": {
-    "defaultMessage": "証明書フィンガープリント（任意）"
-  },
-  "externalBackendSection.certFingerprintHelp": {
-    "defaultMessage": "特定の TLS 証明書フィンガープリントを固定します。省略した場合、証明書は初回使用時に信頼されます（TOFU）。"
-  },
-  "externalBackendSection.certFingerprintPlaceholder": {
-    "defaultMessage": "AA:BB:CC:... または sha256/base64"
-  },
-  "externalBackendSection.description": {
-    "defaultMessage": "デフォルトでは iCodex がサーバーを起動します。外部の iCodex サーバーに接続する場合に使用してください。"
-  },
-  "externalBackendSection.fingerprintRequiresHttps": {
-    "defaultMessage": "Certificate fingerprint requires an https URL"
-  },
-  "externalBackendSection.restartNote": {
-    "defaultMessage": "変更を有効にするには iCodex の再起動が必要です。新しいチャットウィンドウは外部サーバーに接続します。"
-  },
-  "externalBackendSection.secretKey": {
-    "defaultMessage": "シークレットキー"
-  },
-  "externalBackendSection.secretKeyHelp": {
-    "defaultMessage": "iCodex サーバーに設定されたシークレットキー（GOOSE_SERVER__SECRET_KEY）"
-  },
-  "externalBackendSection.secretKeyPlaceholder": {
-    "defaultMessage": "サーバーのシークレットキーを入力"
-  },
-  "externalBackendSection.serverUrl": {
-    "defaultMessage": "サーバーURL"
-  },
-  "externalBackendSection.serverUrlHelp": {
-    "defaultMessage": "Enter the HTTP(S) base URL. iCodex checks /status and connects to /acp under this base."
-  },
-  "externalBackendSection.title": {
-    "defaultMessage": "iCodex Server"
-  },
-  "externalBackendSection.urlBaseError": {
-    "defaultMessage": "URL must be the backend base URL before /acp, without query parameters or fragments"
-  },
-  "externalBackendSection.urlFormatError": {
-    "defaultMessage": "URL形式が無効です"
-  },
-  "externalBackendSection.urlProtocolError": {
-    "defaultMessage": "URLは http または https プロトコルを使用する必要があります"
-  },
-  "externalBackendSection.useExternalServer": {
-    "defaultMessage": "外部サーバーを使用"
-  },
-  "externalBackendSection.useExternalServerDescription": {
-    "defaultMessage": "別の場所で実行中の iCodex サーバーに接続します（アプリの再起動が必要）"
-  },
   "fileChangeCard.document": {
     "defaultMessage": "ドキュメント"
   },
@@ -1537,54 +1441,6 @@
   },
   "markdownContent.thisWillOpen": {
     "defaultMessage": "次を開きます: {href}"
-  },
-  "mcpAppRenderer.appFallbackTitle": {
-    "defaultMessage": "アプリ"
-  },
-  "mcpAppRenderer.cancelButton": {
-    "defaultMessage": "キャンセル"
-  },
-  "mcpAppRenderer.close": {
-    "defaultMessage": "閉じる"
-  },
-  "mcpAppRenderer.exitFullscreen": {
-    "defaultMessage": "フルスクリーンを終了"
-  },
-  "mcpAppRenderer.exitFullscreenTitle": {
-    "defaultMessage": "フルスクリーンを終了（Esc）"
-  },
-  "mcpAppRenderer.failedToInitSandbox": {
-    "defaultMessage": "サンドボックスプロキシの初期化に失敗しました"
-  },
-  "mcpAppRenderer.failedToLoadResource": {
-    "defaultMessage": "リソースの読み込みに失敗しました"
-  },
-  "mcpAppRenderer.fullscreen": {
-    "defaultMessage": "フルスクリーン"
-  },
-  "mcpAppRenderer.invalidUrl": {
-    "defaultMessage": "無効なURL"
-  },
-  "mcpAppRenderer.movePipWindow": {
-    "defaultMessage": "ピクチャ・イン・ピクチャウィンドウを移動（矢印キーを使用）"
-  },
-  "mcpAppRenderer.openButton": {
-    "defaultMessage": "開く"
-  },
-  "mcpAppRenderer.openExternalLinkTitle": {
-    "defaultMessage": "外部リンクを開く"
-  },
-  "mcpAppRenderer.openLinkDetail": {
-    "defaultMessage": "次を開きます: {url}"
-  },
-  "mcpAppRenderer.openProtocolLink": {
-    "defaultMessage": "{protocol}リンクを開きますか？"
-  },
-  "mcpAppRenderer.pictureInPicture": {
-    "defaultMessage": "ピクチャ・イン・ピクチャ"
-  },
-  "mcpAppRenderer.playingInPip": {
-    "defaultMessage": "ピクチャ・イン・ピクチャで再生中"
   },
   "mentionPopover.itemsFound": {
     "defaultMessage": "{count,plural,one{# 件見つかりました} other{# 件見つかりました}}"
@@ -2825,9 +2681,6 @@
   "settingsView.tabChat": {
     "defaultMessage": "チャット"
   },
-  "settingsView.tabExternalBackend": {
-    "defaultMessage": "外部バックエンド"
-  },
   "settingsView.tabKeyboard": {
     "defaultMessage": "キーボード"
   },
@@ -2869,15 +2722,6 @@
   },
   "spellcheckToggle.title": {
     "defaultMessage": "スペルチェックを有効にする"
-  },
-  "standaloneAppView.failedToLoad": {
-    "defaultMessage": "アプリを読み込めませんでした"
-  },
-  "standaloneAppView.initializing": {
-    "defaultMessage": "アプリを初期化中..."
-  },
-  "standaloneAppView.missingParams": {
-    "defaultMessage": "必須パラメータが不足しています"
   },
   "stringUtils.configuredProvider": {
     "defaultMessage": "{name}プロバイダーが設定されています"

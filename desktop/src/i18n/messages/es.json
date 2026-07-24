@@ -23,51 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "Alternar panel lateral"
   },
-  "appsView.customApp": {
-    "defaultMessage": "App personalizada"
-  },
-  "appsView.deleteApp": {
-    "defaultMessage": "Delete app"
-  },
-  "appsView.deleteConfirm": {
-    "defaultMessage": "Delete \"{name}\"? This cannot be undone."
-  },
-  "appsView.description": {
-    "defaultMessage": "Aplicaciones de tus servidores MCP y Apps creadas por iCodex. Puedes pedirle que cree nuevas apps desde la interfaz de chat y aparecerán aquí."
-  },
-  "appsView.errorLoading": {
-    "defaultMessage": "Error al cargar las apps: {error}"
-  },
-  "appsView.errorPrefix": {
-    "defaultMessage": "Error: {error}"
-  },
-  "appsView.importApp": {
-    "defaultMessage": "Importar App"
-  },
-  "appsView.launch": {
-    "defaultMessage": "Abrir"
-  },
-  "appsView.loading": {
-    "defaultMessage": "Cargando apps..."
-  },
-  "appsView.noAppsDescription": {
-    "defaultMessage": "Abre un chat y pídele a iCodex la app que quieras tener. Puede crearte una y aparecerá aquí. O si alguien compartió una app, puedes importarla con el botón de arriba."
-  },
-  "appsView.noAppsTitle": {
-    "defaultMessage": "No hay apps disponibles"
-  },
-  "appsView.retiredChatApp": {
-    "defaultMessage": "Chat app retired"
-  },
-  "appsView.retiredChatAppDetail": {
-    "defaultMessage": "We removed this feature because MCP sampling is no longer supported."
-  },
-  "appsView.retry": {
-    "defaultMessage": "Reintentar"
-  },
-  "appsView.title": {
-    "defaultMessage": "Apps"
-  },
   "authSettings.activeProviderWarning": {
     "defaultMessage": "Este es el proveedor activo. Las nuevas solicitudes pueden fallar hasta que configures otra credencial."
   },
@@ -851,57 +806,6 @@
   "extensionTimeoutField.timeoutLabel": {
     "defaultMessage": "Tiempo de espera"
   },
-  "externalBackendSection.certFingerprint": {
-    "defaultMessage": "Huella del certificado (opcional)"
-  },
-  "externalBackendSection.certFingerprintHelp": {
-    "defaultMessage": "Fija una huella de certificado TLS específica. Si se omite, el certificado se confía en el primer uso (TOFU)."
-  },
-  "externalBackendSection.certFingerprintPlaceholder": {
-    "defaultMessage": "AA:BB:CC:... o sha256/base64"
-  },
-  "externalBackendSection.description": {
-    "defaultMessage": "Por defecto iCodex lanza un servidor por ti; usa esto para conectarte a un servidor iCodex externo"
-  },
-  "externalBackendSection.fingerprintRequiresHttps": {
-    "defaultMessage": "Certificate fingerprint requires an https URL"
-  },
-  "externalBackendSection.restartNote": {
-    "defaultMessage": "Los cambios requieren reiniciar iCodex para que surtan efecto. Las nuevas ventanas de chat se conectarán al servidor externo."
-  },
-  "externalBackendSection.secretKey": {
-    "defaultMessage": "Secret Key"
-  },
-  "externalBackendSection.secretKeyHelp": {
-    "defaultMessage": "La clave secreta configurada en el servidor iCodex (GOOSE_SERVER__SECRET_KEY)"
-  },
-  "externalBackendSection.secretKeyPlaceholder": {
-    "defaultMessage": "Introduce la secret key del servidor"
-  },
-  "externalBackendSection.serverUrl": {
-    "defaultMessage": "URL del servidor"
-  },
-  "externalBackendSection.serverUrlHelp": {
-    "defaultMessage": "Enter the HTTP(S) base URL. iCodex checks /status and connects to /acp under this base."
-  },
-  "externalBackendSection.title": {
-    "defaultMessage": "iCodex Server"
-  },
-  "externalBackendSection.urlBaseError": {
-    "defaultMessage": "URL must be the backend base URL before /acp, without query parameters or fragments"
-  },
-  "externalBackendSection.urlFormatError": {
-    "defaultMessage": "Formato de URL inválido"
-  },
-  "externalBackendSection.urlProtocolError": {
-    "defaultMessage": "La URL debe usar el protocolo http o https"
-  },
-  "externalBackendSection.useExternalServer": {
-    "defaultMessage": "Usar servidor externo"
-  },
-  "externalBackendSection.useExternalServerDescription": {
-    "defaultMessage": "Conéctate a un servidor iCodex que se ejecuta en otro lugar (requiere reiniciar la app)"
-  },
   "fileChangeCard.document": {
     "defaultMessage": "Documento"
   },
@@ -1537,54 +1441,6 @@
   },
   "markdownContent.thisWillOpen": {
     "defaultMessage": "Esto abrirá: {href}"
-  },
-  "mcpAppRenderer.appFallbackTitle": {
-    "defaultMessage": "App"
-  },
-  "mcpAppRenderer.cancelButton": {
-    "defaultMessage": "Cancelar"
-  },
-  "mcpAppRenderer.close": {
-    "defaultMessage": "Cerrar"
-  },
-  "mcpAppRenderer.exitFullscreen": {
-    "defaultMessage": "Salir de pantalla completa"
-  },
-  "mcpAppRenderer.exitFullscreenTitle": {
-    "defaultMessage": "Salir de pantalla completa (Esc)"
-  },
-  "mcpAppRenderer.failedToInitSandbox": {
-    "defaultMessage": "No se pudo inicializar el proxy del sandbox"
-  },
-  "mcpAppRenderer.failedToLoadResource": {
-    "defaultMessage": "No se pudo cargar el recurso"
-  },
-  "mcpAppRenderer.fullscreen": {
-    "defaultMessage": "Pantalla completa"
-  },
-  "mcpAppRenderer.invalidUrl": {
-    "defaultMessage": "URL no válida"
-  },
-  "mcpAppRenderer.movePipWindow": {
-    "defaultMessage": "Mover la ventana de imagen en imagen (usa las teclas de flecha)"
-  },
-  "mcpAppRenderer.openButton": {
-    "defaultMessage": "Abrir"
-  },
-  "mcpAppRenderer.openExternalLinkTitle": {
-    "defaultMessage": "Abrir enlace externo"
-  },
-  "mcpAppRenderer.openLinkDetail": {
-    "defaultMessage": "Esto abrirá: {url}"
-  },
-  "mcpAppRenderer.openProtocolLink": {
-    "defaultMessage": "¿Abrir enlace {protocol}?"
-  },
-  "mcpAppRenderer.pictureInPicture": {
-    "defaultMessage": "Imagen en imagen"
-  },
-  "mcpAppRenderer.playingInPip": {
-    "defaultMessage": "Reproduciendo en imagen en imagen"
   },
   "mentionPopover.itemsFound": {
     "defaultMessage": "{count,plural,one{# elemento encontrado} other{# elementos encontrados}}"
@@ -2825,9 +2681,6 @@
   "settingsView.tabChat": {
     "defaultMessage": "Chat"
   },
-  "settingsView.tabExternalBackend": {
-    "defaultMessage": "Backend externo"
-  },
   "settingsView.tabKeyboard": {
     "defaultMessage": "Teclado"
   },
@@ -2869,15 +2722,6 @@
   },
   "spellcheckToggle.title": {
     "defaultMessage": "Activar corrección ortográfica"
-  },
-  "standaloneAppView.failedToLoad": {
-    "defaultMessage": "No se pudo cargar la app"
-  },
-  "standaloneAppView.initializing": {
-    "defaultMessage": "Inicializando la app..."
-  },
-  "standaloneAppView.missingParams": {
-    "defaultMessage": "Faltan parámetros requeridos"
   },
   "stringUtils.configuredProvider": {
     "defaultMessage": "El proveedor {name} está configurado"

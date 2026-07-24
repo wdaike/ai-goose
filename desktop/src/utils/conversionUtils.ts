@@ -79,11 +79,3 @@ export async function compressImageDataUrl(dataUrl: string): Promise<string> {
     img.src = dataUrl;
   });
 }
-
-export function formatAppName(name: string): string {
-  return name
-    .split(/[-_\s]+/)
-    .filter((word) => word.length > 0)
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
-}

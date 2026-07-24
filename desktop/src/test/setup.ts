@@ -108,11 +108,6 @@ const mockSettings: Record<string, unknown> = {
     findPrevious: 'CommandOrControl+Shift+G',
     alwaysOnTop: 'CommandOrControl+Shift+T',
   },
-  externalGoosed: {
-    enabled: false,
-    url: '',
-    secret: '',
-  },
   theme: 'light',
   useSystemTheme: true,
   language: 'system',

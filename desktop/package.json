@@ -15,7 +15,9 @@
     "clean-vite-cache": "node scripts/clean-vite-cache.js",
     "start-gui": "pnpm run i18n:compile && electron-forge start",
     "start-gui-debug": "pnpm run build-goose-sdk && pnpm run i18n:compile && electron-forge start -- --inspect=9229",
-    "start-web": "pnpm run build-goose-sdk && pnpm run i18n:compile && vite --config vite.renderer.config.mts --host 127.0.0.1 --port ${GOOSE_WEB_PORT:-5173} --strictPort",
+    "start-web": "pnpm run build-goose-sdk && pnpm run i18n:compile && tsx src/web/host-entry.ts",
+    "build:web": "pnpm run build-goose-sdk && pnpm run i18n:compile && vite build --config vite.renderer.config.mts --outDir dist-web",
+    "serve-web": "GOOSE_WEB_MODE=prod tsx src/web/host-entry.ts",
     "start:test-error": "GOOSE_TEST_ERROR=true electron-forge start",
     "package": "pnpm run build-goose-sdk && pnpm run i18n:compile && electron-forge package",
     "make": "pnpm run build-goose-sdk && pnpm run i18n:compile && electron-forge make",
@@ -159,6 +161,7 @@
     "postcss": "^8.5.6",
     "prettier": "^3.8.1",
     "tailwindcss": "^4.2.1",
+    "tsx": "^4.21.0",
     "typescript": "~5.9.3",
     "vite": "^7.3.1",
     "vitest": "^4.0.18"

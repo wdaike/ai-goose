@@ -23,51 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "사이드 패널 전환"
   },
-  "appsView.customApp": {
-    "defaultMessage": "사용자 지정 앱"
-  },
-  "appsView.deleteApp": {
-    "defaultMessage": "Delete app"
-  },
-  "appsView.deleteConfirm": {
-    "defaultMessage": "Delete \"{name}\"? This cannot be undone."
-  },
-  "appsView.description": {
-    "defaultMessage": "MCP 서버의 애플리케이션과 iCodex 자체에서 구축한 앱입니다. 채팅 인터페이스를 통해 새 앱을 생성하도록 요청할 수 있으며 여기에 표시됩니다."
-  },
-  "appsView.errorLoading": {
-    "defaultMessage": "앱 로딩 오류: {error}"
-  },
-  "appsView.errorPrefix": {
-    "defaultMessage": "Error: {error}"
-  },
-  "appsView.importApp": {
-    "defaultMessage": "앱 가져오기"
-  },
-  "appsView.launch": {
-    "defaultMessage": "실행"
-  },
-  "appsView.loading": {
-    "defaultMessage": "앱 로드 중..."
-  },
-  "appsView.noAppsDescription": {
-    "defaultMessage": "채팅을 열고 원하는 앱을 iCodex에 요청하세요. iCodex가 앱을 만들어 주면 여기에 표시됩니다. 또는 누군가가 앱을 공유한 경우 위 버튼을 사용하여 가져올 수 있습니다."
-  },
-  "appsView.noAppsTitle": {
-    "defaultMessage": "사용 가능한 앱이 없습니다."
-  },
-  "appsView.retiredChatApp": {
-    "defaultMessage": "Chat app retired"
-  },
-  "appsView.retiredChatAppDetail": {
-    "defaultMessage": "We removed this feature because MCP sampling is no longer supported."
-  },
-  "appsView.retry": {
-    "defaultMessage": "다시 시도"
-  },
-  "appsView.title": {
-    "defaultMessage": "앱"
-  },
   "authSettings.activeProviderWarning": {
     "defaultMessage": "현재 사용 중인 제공업체입니다. 다른 자격 증명을 설정할 때까지 새 요청이 실패할 수 있습니다."
   },
@@ -851,57 +806,6 @@
   "extensionTimeoutField.timeoutLabel": {
     "defaultMessage": "시간 초과"
   },
-  "externalBackendSection.certFingerprint": {
-    "defaultMessage": "인증서 지문(선택 사항)"
-  },
-  "externalBackendSection.certFingerprintHelp": {
-    "defaultMessage": "특정 TLS 인증서 지문을 고정하세요. 생략할 경우 최초 사용 시 인증서를 신뢰합니다(TOFU)."
-  },
-  "externalBackendSection.certFingerprintPlaceholder": {
-    "defaultMessage": "AA:BB:CC:... 또는 sha256/base64"
-  },
-  "externalBackendSection.description": {
-    "defaultMessage": "기본적으로 iCodex가 서버를 자동으로 실행합니다. 외부 iCodex 서버에 연결하려면 이 옵션을 사용하세요."
-  },
-  "externalBackendSection.fingerprintRequiresHttps": {
-    "defaultMessage": "Certificate fingerprint requires an https URL"
-  },
-  "externalBackendSection.restartNote": {
-    "defaultMessage": "변경 사항을 적용하려면 iCodex를 다시 시작해야 합니다. 새 채팅 창은 외부 서버에 연결됩니다."
-  },
-  "externalBackendSection.secretKey": {
-    "defaultMessage": "비밀 키"
-  },
-  "externalBackendSection.secretKeyHelp": {
-    "defaultMessage": "iCodex 서버에 설정된 비밀 키 (GOOSE_SERVER__SECRET_KEY)"
-  },
-  "externalBackendSection.secretKeyPlaceholder": {
-    "defaultMessage": "서버의 비밀 키를 입력하세요"
-  },
-  "externalBackendSection.serverUrl": {
-    "defaultMessage": "서버 URL"
-  },
-  "externalBackendSection.serverUrlHelp": {
-    "defaultMessage": "Enter the HTTP(S) base URL. iCodex checks /status and connects to /acp under this base."
-  },
-  "externalBackendSection.title": {
-    "defaultMessage": "iCodex 서버"
-  },
-  "externalBackendSection.urlBaseError": {
-    "defaultMessage": "URL must be the backend base URL before /acp, without query parameters or fragments"
-  },
-  "externalBackendSection.urlFormatError": {
-    "defaultMessage": "잘못된 URL 형식입니다."
-  },
-  "externalBackendSection.urlProtocolError": {
-    "defaultMessage": "URL은 반드시 http 또는 https 프로토콜을 사용해야 합니다."
-  },
-  "externalBackendSection.useExternalServer": {
-    "defaultMessage": "외부 서버 사용"
-  },
-  "externalBackendSection.useExternalServerDescription": {
-    "defaultMessage": "다른 곳에서 실행 중인 iCodex 서버에 연결합니다. 앱을 다시 시작해야 합니다."
-  },
   "fileChangeCard.document": {
     "defaultMessage": "문서"
   },
@@ -1537,54 +1441,6 @@
   },
   "markdownContent.thisWillOpen": {
     "defaultMessage": "열립니다: {href}"
-  },
-  "mcpAppRenderer.appFallbackTitle": {
-    "defaultMessage": "앱"
-  },
-  "mcpAppRenderer.cancelButton": {
-    "defaultMessage": "취소"
-  },
-  "mcpAppRenderer.close": {
-    "defaultMessage": "닫기"
-  },
-  "mcpAppRenderer.exitFullscreen": {
-    "defaultMessage": "전체 화면 종료"
-  },
-  "mcpAppRenderer.exitFullscreenTitle": {
-    "defaultMessage": "전체 화면 종료(Esc)"
-  },
-  "mcpAppRenderer.failedToInitSandbox": {
-    "defaultMessage": "샌드박스 프록시를 초기화하지 못했습니다."
-  },
-  "mcpAppRenderer.failedToLoadResource": {
-    "defaultMessage": "리소스를 로드하지 못했습니다."
-  },
-  "mcpAppRenderer.fullscreen": {
-    "defaultMessage": "전체 화면"
-  },
-  "mcpAppRenderer.invalidUrl": {
-    "defaultMessage": "유효하지 않은 URL"
-  },
-  "mcpAppRenderer.movePipWindow": {
-    "defaultMessage": "Picture-in-Picture 창 이동(화살표 키 사용)"
-  },
-  "mcpAppRenderer.openButton": {
-    "defaultMessage": "열기"
-  },
-  "mcpAppRenderer.openExternalLinkTitle": {
-    "defaultMessage": "외부 링크 열기"
-  },
-  "mcpAppRenderer.openLinkDetail": {
-    "defaultMessage": "열립니다: {url}"
-  },
-  "mcpAppRenderer.openProtocolLink": {
-    "defaultMessage": "{protocol} 링크를 열까요?"
-  },
-  "mcpAppRenderer.pictureInPicture": {
-    "defaultMessage": "PIP(Picture-in-Picture)"
-  },
-  "mcpAppRenderer.playingInPip": {
-    "defaultMessage": "PIP(Picture-in-Picture)에서 재생 중"
   },
   "mentionPopover.itemsFound": {
     "defaultMessage": "{count,plural,one{#개 항목 발견} other{#개 항목 발견}}"
@@ -2825,9 +2681,6 @@
   "settingsView.tabChat": {
     "defaultMessage": "채팅"
   },
-  "settingsView.tabExternalBackend": {
-    "defaultMessage": "외부 백엔드"
-  },
   "settingsView.tabKeyboard": {
     "defaultMessage": "키보드"
   },
@@ -2869,15 +2722,6 @@
   },
   "spellcheckToggle.title": {
     "defaultMessage": "맞춤법 검사 켜기"
-  },
-  "standaloneAppView.failedToLoad": {
-    "defaultMessage": "앱을 로드하지 못했습니다."
-  },
-  "standaloneAppView.initializing": {
-    "defaultMessage": "앱 초기화 중..."
-  },
-  "standaloneAppView.missingParams": {
-    "defaultMessage": "필수 매개변수가 누락되었습니다."
   },
   "stringUtils.configuredProvider": {
     "defaultMessage": "{name} 제공업체가 구성되었습니다."

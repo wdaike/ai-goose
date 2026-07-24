@@ -23,51 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "साइड पैनल टॉगल करें"
   },
-  "appsView.customApp": {
-    "defaultMessage": "कस्टम ऐप"
-  },
-  "appsView.deleteApp": {
-    "defaultMessage": "Delete app"
-  },
-  "appsView.deleteConfirm": {
-    "defaultMessage": "Delete \"{name}\"? This cannot be undone."
-  },
-  "appsView.description": {
-    "defaultMessage": "आपके MCP सर्वर से एप्लिकेशन और iCodex द्वारा निर्मित ऐप्स। आप इसे चैट इंटरफ़ेस के माध्यम से नए ऐप्स बनाने के लिए कह सकते हैं और वे यहां दिखाई देंगे।"
-  },
-  "appsView.errorLoading": {
-    "defaultMessage": "ऐप्स लोड करने में त्रुटि: {error}"
-  },
-  "appsView.errorPrefix": {
-    "defaultMessage": "Error: {error}"
-  },
-  "appsView.importApp": {
-    "defaultMessage": "ऐप आयात करें"
-  },
-  "appsView.launch": {
-    "defaultMessage": "लॉन्च करें"
-  },
-  "appsView.loading": {
-    "defaultMessage": "ऐप्स लोड हो रहे हैं..."
-  },
-  "appsView.noAppsDescription": {
-    "defaultMessage": "चैट खोलें और iCodex से उस ऐप के बारे में पूछें जो आप चाहते हैं। यह आपके लिए एक निर्माण कर सकता है और वह यहां दिखाई देगा। या यदि किसी ने कोई ऐप साझा किया है, तो आप ऊपर दिए गए बटन का उपयोग करके इसे आयात कर सकते हैं।"
-  },
-  "appsView.noAppsTitle": {
-    "defaultMessage": "कोई ऐप्स उपलब्ध नहीं"
-  },
-  "appsView.retiredChatApp": {
-    "defaultMessage": "Chat app retired"
-  },
-  "appsView.retiredChatAppDetail": {
-    "defaultMessage": "We removed this feature because MCP sampling is no longer supported."
-  },
-  "appsView.retry": {
-    "defaultMessage": "पुनः प्रयास करें"
-  },
-  "appsView.title": {
-    "defaultMessage": "ऐप्स"
-  },
   "authSettings.activeProviderWarning": {
     "defaultMessage": "यह सक्रिय प्रदाता है. जब तक आप कोई अन्य क्रेडेंशियल कॉन्फ़िगर नहीं करते तब तक नए अनुरोध विफल हो सकते हैं।"
   },
@@ -851,57 +806,6 @@
   "extensionTimeoutField.timeoutLabel": {
     "defaultMessage": "समयबाह्य"
   },
-  "externalBackendSection.certFingerprint": {
-    "defaultMessage": "प्रमाणपत्र फ़िंगरप्रिंट (वैकल्पिक)"
-  },
-  "externalBackendSection.certFingerprintHelp": {
-    "defaultMessage": "एक विशिष्ट टीएलएस प्रमाणपत्र फ़िंगरप्रिंट पिन करें। यदि छोड़ा गया है, तो प्रमाणपत्र पहले उपयोग पर विश्वसनीय है (TOFU)।"
-  },
-  "externalBackendSection.certFingerprintPlaceholder": {
-    "defaultMessage": "AA:BB:CC:... या sha256/base64"
-  },
-  "externalBackendSection.description": {
-    "defaultMessage": "डिफ़ॉल्ट रूप से iCodex आपके लिए एक सर्वर लॉन्च करता है, बाहरी iCodex सर्वर से कनेक्ट करने के लिए इसका उपयोग करें"
-  },
-  "externalBackendSection.fingerprintRequiresHttps": {
-    "defaultMessage": "Certificate fingerprint requires an https URL"
-  },
-  "externalBackendSection.restartNote": {
-    "defaultMessage": "परिवर्तनों को प्रभावी होने के लिए iCodex को पुनः आरंभ करने की आवश्यकता है। नई चैट विंडो बाहरी सर्वर से कनेक्ट होंगी."
-  },
-  "externalBackendSection.secretKey": {
-    "defaultMessage": "गुप्त कुंजी"
-  },
-  "externalBackendSection.secretKeyHelp": {
-    "defaultMessage": "गुप्त सर्वर पर कॉन्फ़िगर की गई गुप्त कुंजी (GOOSE_SERVER__SECRET_KEY)"
-  },
-  "externalBackendSection.secretKeyPlaceholder": {
-    "defaultMessage": "सर्वर की गुप्त कुंजी दर्ज करें"
-  },
-  "externalBackendSection.serverUrl": {
-    "defaultMessage": "सर्वर URL"
-  },
-  "externalBackendSection.serverUrlHelp": {
-    "defaultMessage": "Enter the HTTP(S) base URL. iCodex checks /status and connects to /acp under this base."
-  },
-  "externalBackendSection.title": {
-    "defaultMessage": "iCodex सर्वर"
-  },
-  "externalBackendSection.urlBaseError": {
-    "defaultMessage": "URL must be the backend base URL before /acp, without query parameters or fragments"
-  },
-  "externalBackendSection.urlFormatError": {
-    "defaultMessage": "अमान्य URL प्रारूप"
-  },
-  "externalBackendSection.urlProtocolError": {
-    "defaultMessage": "URL को http या https प्रोटोकॉल का उपयोग करना चाहिए"
-  },
-  "externalBackendSection.useExternalServer": {
-    "defaultMessage": "बाहरी सर्वर का प्रयोग करें"
-  },
-  "externalBackendSection.useExternalServerDescription": {
-    "defaultMessage": "कहीं और चल रहे iCodex सर्वर से कनेक्ट करें (ऐप पुनरारंभ की आवश्यकता है)"
-  },
   "fileChangeCard.document": {
     "defaultMessage": "दस्तावेज़"
   },
@@ -1537,54 +1441,6 @@
   },
   "markdownContent.thisWillOpen": {
     "defaultMessage": "यह खुलेगा: {href}"
-  },
-  "mcpAppRenderer.appFallbackTitle": {
-    "defaultMessage": "ऐप"
-  },
-  "mcpAppRenderer.cancelButton": {
-    "defaultMessage": "रद्द करें"
-  },
-  "mcpAppRenderer.close": {
-    "defaultMessage": "बंद करें"
-  },
-  "mcpAppRenderer.exitFullscreen": {
-    "defaultMessage": "फ़ुलस्क्रीन से बाहर निकलें"
-  },
-  "mcpAppRenderer.exitFullscreenTitle": {
-    "defaultMessage": "फ़ुलस्क्रीन से बाहर निकलें (Esc)"
-  },
-  "mcpAppRenderer.failedToInitSandbox": {
-    "defaultMessage": "सैंडबॉक्स प्रॉक्सी आरंभ करने में विफल"
-  },
-  "mcpAppRenderer.failedToLoadResource": {
-    "defaultMessage": "संसाधन लोड करने में विफल"
-  },
-  "mcpAppRenderer.fullscreen": {
-    "defaultMessage": "फ़ुलस्क्रीन"
-  },
-  "mcpAppRenderer.invalidUrl": {
-    "defaultMessage": "अमान्य URL"
-  },
-  "mcpAppRenderer.movePipWindow": {
-    "defaultMessage": "पिक्चर-इन-पिक्चर विंडो को स्थानांतरित करें (तीर कुंजियों का उपयोग करें)"
-  },
-  "mcpAppRenderer.openButton": {
-    "defaultMessage": "खुला"
-  },
-  "mcpAppRenderer.openExternalLinkTitle": {
-    "defaultMessage": "बाहरी लिंक खोलें"
-  },
-  "mcpAppRenderer.openLinkDetail": {
-    "defaultMessage": "यह खुलेगा: {url}"
-  },
-  "mcpAppRenderer.openProtocolLink": {
-    "defaultMessage": "{protocol} लिंक खोलें?"
-  },
-  "mcpAppRenderer.pictureInPicture": {
-    "defaultMessage": "चित्र-में-चित्र"
-  },
-  "mcpAppRenderer.playingInPip": {
-    "defaultMessage": "पिक्चर-इन-पिक्चर में बजाना"
   },
   "mentionPopover.itemsFound": {
     "defaultMessage": "{count,plural,one{# आइटम मिला} other{# आइटम मिले}}"
@@ -2825,9 +2681,6 @@
   "settingsView.tabChat": {
     "defaultMessage": "बातचीत"
   },
-  "settingsView.tabExternalBackend": {
-    "defaultMessage": "बाहरी बैकएंड"
-  },
   "settingsView.tabKeyboard": {
     "defaultMessage": "कीबोर्ड"
   },
@@ -2869,15 +2722,6 @@
   },
   "spellcheckToggle.title": {
     "defaultMessage": "वर्तनी जांच सक्षम करें"
-  },
-  "standaloneAppView.failedToLoad": {
-    "defaultMessage": "ऐप लोड करने में विफल"
-  },
-  "standaloneAppView.initializing": {
-    "defaultMessage": "ऐप प्रारंभ किया जा रहा है..."
-  },
-  "standaloneAppView.missingParams": {
-    "defaultMessage": "आवश्यक पैरामीटर गुम हैं"
   },
   "stringUtils.configuredProvider": {
     "defaultMessage": "{name} प्रदाता कॉन्फ़िगर किया गया है"

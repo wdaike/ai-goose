@@ -23,51 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "切换侧边面板"
   },
-  "appsView.customApp": {
-    "defaultMessage": "自定义应用"
-  },
-  "appsView.deleteApp": {
-    "defaultMessage": "Delete app"
-  },
-  "appsView.deleteConfirm": {
-    "defaultMessage": "Delete \"{name}\"? This cannot be undone."
-  },
-  "appsView.description": {
-    "defaultMessage": "来自你 MCP 服务器的应用，以及 iCodex 自己构建的应用。你可以通过聊天界面让它创建新应用，新应用会显示在这里。"
-  },
-  "appsView.errorLoading": {
-    "defaultMessage": "加载应用出错：{error}"
-  },
-  "appsView.errorPrefix": {
-    "defaultMessage": "Error: {error}"
-  },
-  "appsView.importApp": {
-    "defaultMessage": "导入应用"
-  },
-  "appsView.launch": {
-    "defaultMessage": "启动"
-  },
-  "appsView.loading": {
-    "defaultMessage": "正在加载应用…"
-  },
-  "appsView.noAppsDescription": {
-    "defaultMessage": "打开聊天，告诉 iCodex 你想要什么应用，它可以为你构建一个，然后出现在这里。或者如果有人分享了一个应用，你可以用上面的按钮导入。"
-  },
-  "appsView.noAppsTitle": {
-    "defaultMessage": "暂无可用应用"
-  },
-  "appsView.retiredChatApp": {
-    "defaultMessage": "Chat app retired"
-  },
-  "appsView.retiredChatAppDetail": {
-    "defaultMessage": "We removed this feature because MCP sampling is no longer supported."
-  },
-  "appsView.retry": {
-    "defaultMessage": "重试"
-  },
-  "appsView.title": {
-    "defaultMessage": "应用"
-  },
   "authSettings.activeProviderWarning": {
     "defaultMessage": "这是当前正在使用的提供商。在配置其他凭据之前，新的请求可能会失败。"
   },
@@ -851,57 +806,6 @@
   "extensionTimeoutField.timeoutLabel": {
     "defaultMessage": "超时"
   },
-  "externalBackendSection.certFingerprint": {
-    "defaultMessage": "证书指纹（可选）"
-  },
-  "externalBackendSection.certFingerprintHelp": {
-    "defaultMessage": "固定特定的 TLS 证书指纹。若留空，将在首次使用时信任（TOFU）。"
-  },
-  "externalBackendSection.certFingerprintPlaceholder": {
-    "defaultMessage": "AA:BB:CC:… 或 sha256/base64"
-  },
-  "externalBackendSection.description": {
-    "defaultMessage": "默认情况下 iCodex 会为你启动一个服务器，此选项用于连接到外部的 iCodex 服务器"
-  },
-  "externalBackendSection.fingerprintRequiresHttps": {
-    "defaultMessage": "Certificate fingerprint requires an https URL"
-  },
-  "externalBackendSection.restartNote": {
-    "defaultMessage": "更改需要重启 iCodex 才能生效。新的聊天窗口将连接到外部服务器。"
-  },
-  "externalBackendSection.secretKey": {
-    "defaultMessage": "密钥"
-  },
-  "externalBackendSection.secretKeyHelp": {
-    "defaultMessage": "在 iCodex 服务器上配置的密钥（GOOSE_SERVER__SECRET_KEY）"
-  },
-  "externalBackendSection.secretKeyPlaceholder": {
-    "defaultMessage": "输入服务器的密钥"
-  },
-  "externalBackendSection.serverUrl": {
-    "defaultMessage": "服务器地址"
-  },
-  "externalBackendSection.serverUrlHelp": {
-    "defaultMessage": "Enter the HTTP(S) base URL. iCodex checks /status and connects to /acp under this base."
-  },
-  "externalBackendSection.title": {
-    "defaultMessage": "iCodex 服务器"
-  },
-  "externalBackendSection.urlBaseError": {
-    "defaultMessage": "URL must be the backend base URL before /acp, without query parameters or fragments"
-  },
-  "externalBackendSection.urlFormatError": {
-    "defaultMessage": "URL 格式无效"
-  },
-  "externalBackendSection.urlProtocolError": {
-    "defaultMessage": "URL 必须使用 http 或 https 协议"
-  },
-  "externalBackendSection.useExternalServer": {
-    "defaultMessage": "使用外部服务器"
-  },
-  "externalBackendSection.useExternalServerDescription": {
-    "defaultMessage": "连接到运行在其他位置的 iCodex 服务器（需要重启应用）"
-  },
   "fileChangeCard.document": {
     "defaultMessage": "文档"
   },
@@ -1537,54 +1441,6 @@
   },
   "markdownContent.thisWillOpen": {
     "defaultMessage": "这将打开：{href}"
-  },
-  "mcpAppRenderer.appFallbackTitle": {
-    "defaultMessage": "应用"
-  },
-  "mcpAppRenderer.cancelButton": {
-    "defaultMessage": "取消"
-  },
-  "mcpAppRenderer.close": {
-    "defaultMessage": "关闭"
-  },
-  "mcpAppRenderer.exitFullscreen": {
-    "defaultMessage": "退出全屏"
-  },
-  "mcpAppRenderer.exitFullscreenTitle": {
-    "defaultMessage": "退出全屏（Esc）"
-  },
-  "mcpAppRenderer.failedToInitSandbox": {
-    "defaultMessage": "初始化沙箱代理失败"
-  },
-  "mcpAppRenderer.failedToLoadResource": {
-    "defaultMessage": "加载资源失败"
-  },
-  "mcpAppRenderer.fullscreen": {
-    "defaultMessage": "全屏"
-  },
-  "mcpAppRenderer.invalidUrl": {
-    "defaultMessage": "URL 无效"
-  },
-  "mcpAppRenderer.movePipWindow": {
-    "defaultMessage": "移动画中画窗口（使用方向键）"
-  },
-  "mcpAppRenderer.openButton": {
-    "defaultMessage": "打开"
-  },
-  "mcpAppRenderer.openExternalLinkTitle": {
-    "defaultMessage": "打开外部链接"
-  },
-  "mcpAppRenderer.openLinkDetail": {
-    "defaultMessage": "这将打开：{url}"
-  },
-  "mcpAppRenderer.openProtocolLink": {
-    "defaultMessage": "打开 {protocol} 链接？"
-  },
-  "mcpAppRenderer.pictureInPicture": {
-    "defaultMessage": "画中画"
-  },
-  "mcpAppRenderer.playingInPip": {
-    "defaultMessage": "正在以画中画播放"
   },
   "mentionPopover.itemsFound": {
     "defaultMessage": "{count,plural,one{找到 # 项} other{找到 # 项}}"
@@ -2834,9 +2690,6 @@
   "settingsView.tabChat": {
     "defaultMessage": "聊天"
   },
-  "settingsView.tabExternalBackend": {
-    "defaultMessage": "外部后端"
-  },
   "settingsView.tabKeyboard": {
     "defaultMessage": "键盘"
   },
@@ -2878,15 +2731,6 @@
   },
   "spellcheckToggle.title": {
     "defaultMessage": "启用拼写检查"
-  },
-  "standaloneAppView.failedToLoad": {
-    "defaultMessage": "加载应用失败"
-  },
-  "standaloneAppView.initializing": {
-    "defaultMessage": "正在初始化应用…"
-  },
-  "standaloneAppView.missingParams": {
-    "defaultMessage": "缺少必需参数"
   },
   "stringUtils.configuredProvider": {
     "defaultMessage": "{name} 提供商已配置"

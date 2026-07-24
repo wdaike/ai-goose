@@ -14,10 +14,8 @@ import { cn, snakeToTitleCase } from '../utils';
 import { LoadingStatus } from './ui/Dot';
 import { ChevronRight, ExternalLink } from 'lucide-react';
 import { TooltipWrapper } from './settings/providers/subcomponents/buttons/TooltipWrapper';
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { ContentBlock } from '../types/message';
 
-import McpAppRenderer from './McpApps/McpAppRenderer';
 import FileChangeCard, { getStructuredFileChanges } from './FileChangeCard';
 import ToolApprovalButtons from './ToolApprovalButtons';
 import { defineMessages, useIntl } from '../i18n';
@@ -71,17 +69,6 @@ type ToolResultWithMeta = {
   status?: string;
   value?: ToolResultValue & {
     _meta?: UiMeta;
-  };
-};
-
-type ToolRequestWithMeta = ToolRequestMessageContent & {
-  _meta?: UiMeta;
-  toolCall: {
-    status: 'success';
-    value: {
-      name: string;
-      arguments?: Record<string, unknown>;
-    };
   };
 };
 
@@ -176,71 +163,6 @@ function ShellCommandCard({
   );
 }
 
-interface McpAppWrapperProps {
-  toolRequest: ToolRequestMessageContent;
-  toolResponse?: ToolResponseMessageContent;
-  sessionId: string;
-  append?: (value: string) => void;
-}
-
-function McpAppWrapper({
-  toolRequest,
-  toolResponse,
-  sessionId,
-  append,
-}: McpAppWrapperProps): React.ReactNode {
-  const requestWithMeta = toolRequest as ToolRequestWithMeta;
-  let resourceUri = requestWithMeta._meta?.ui?.resourceUri;
-
-  if (!resourceUri && toolResponse) {
-    const resultWithMeta = toolResponse.toolResult as ToolResultWithMeta;
-    if (resultWithMeta?.status === 'success' && resultWithMeta.value) {
-      resourceUri = resultWithMeta.value._meta?.ui?.resourceUri;
-    }
-  }
-
-  // Tool names are formatted as "{extension_name}__{tool_name}".
-  // Extension names can contain underscores (special chars like parentheses are normalized to "_"),
-  // so we must use lastIndexOf to find the delimiter.
-  // e.g., "my_server(local)" -> "my_server_local_" -> "my_server_local___get_time"
-  const toolCallName =
-    requestWithMeta.toolCall.status === 'success' ? requestWithMeta.toolCall.value.name : '';
-  const delimiterIndex = toolCallName.lastIndexOf('__');
-  const extensionName = delimiterIndex === -1 ? '' : toolCallName.substring(0, delimiterIndex);
-  const toolName =
-    delimiterIndex === -1 ? toolCallName : toolCallName.substring(delimiterIndex + 2);
-
-  const toolArguments =
-    requestWithMeta.toolCall.status === 'success'
-      ? requestWithMeta.toolCall.value.arguments
-      : undefined;
-
-  const toolInput = { arguments: toolArguments || {} };
-
-  const resultWithMeta = toolResponse?.toolResult as ToolResultWithMeta | undefined;
-  const toolResult =
-    resultWithMeta?.status === 'success' && resultWithMeta.value
-      ? (resultWithMeta.value as unknown as CallToolResult)
-      : undefined;
-
-  if (!resourceUri) return null;
-  if (requestWithMeta.toolCall.status !== 'success') return null;
-
-  return (
-    <div className="mt-3">
-      <McpAppRenderer
-        resourceUri={resourceUri}
-        toolInput={toolInput}
-        toolResult={toolResult}
-        extensionName={extensionName}
-        toolName={toolName}
-        sessionId={sessionId}
-        append={append}
-      />
-    </div>
-  );
-}
-
 export default function ToolCallWithResponse({
   sessionId,
   isCancelledMessage,
@@ -249,7 +171,6 @@ export default function ToolCallWithResponse({
   notifications,
   isStreamingMessage,
   isPendingApproval,
-  append,
   confirmationContent,
   isApprovalClicked,
 }: ToolCallWithResponseProps) {
@@ -265,13 +186,6 @@ export default function ToolCallWithResponse({
     return null;
   }
 
-  const requestWithMeta = toolRequest as ToolRequestWithMeta;
-  const resultWithMeta = toolResponse?.toolResult as ToolResultWithMeta;
-  const hasMcpAppResourceURI = Boolean(
-    requestWithMeta._meta?.ui?.resourceUri || resultWithMeta?.value?._meta?.ui?.resourceUri
-  );
-
-  const shouldShowMcpContent = !isPendingApproval;
 
   const showInlineApproval = isPendingApproval && confirmationContent && sessionId;
 
@@ -329,16 +243,6 @@ export default function ToolCallWithResponse({
           </div>
         )}
       </div>
-
-      {/* MCP App */}
-      {shouldShowMcpContent && hasMcpAppResourceURI && sessionId && (
-        <McpAppWrapper
-          toolRequest={toolRequest}
-          toolResponse={toolResponse}
-          sessionId={sessionId}
-          append={append}
-        />
-      )}
     </>
   );
 }

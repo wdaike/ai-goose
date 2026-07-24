@@ -38,8 +38,6 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { FeaturesProvider } from './contexts/FeaturesContext';
 import PermissionSettingsView from './components/settings/permission/PermissionSetting';
 
-import AppsView from './components/apps/AppsView';
-import StandaloneAppView from './components/apps/StandaloneAppView';
 import { View, ViewOptions } from './utils/navigationUtils';
 
 import { useNavigation } from './hooks/useNavigation';
@@ -48,7 +46,6 @@ import { getInitialWorkingDir } from './utils/workingDir';
 import { usePageViewTracking } from './hooks/useAnalytics';
 import { trackErrorWithContext } from './utils/analytics';
 import { AppEvents } from './constants/events';
-import { registerPlatformEventHandlers } from './utils/platform_events';
 import { reconnectAcpAfterSystemResume } from './acp/acpConnection';
 
 function PageViewTracker() {
@@ -441,11 +438,6 @@ export function AppInner() {
     };
   }, [navigate]);
 
-  // Register platform event handlers for app lifecycle management
-  useEffect(() => {
-    return registerPlatformEventHandlers();
-  }, []);
-
   if (fatalError) {
     return <ErrorUI error={errorMessage(fatalError)} />;
   }
@@ -475,7 +467,6 @@ export function AppInner() {
           <Routes>
             <Route path="launcher" element={<LauncherView />} />
             <Route path="configure-providers" element={<ConfigureProvidersRoute />} />
-            <Route path="standalone-app" element={<StandaloneAppView />} />
             <Route
               path="/"
               element={
@@ -497,7 +488,6 @@ export function AppInner() {
                 }
               />
               <Route path="settings" element={<SettingsRoute />} />
-              <Route path="apps" element={<AppsView />} />
               <Route path="permission" element={<PermissionRoute />} />
             </Route>
           </Routes>

@@ -23,51 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "Переключить боковую панель"
   },
-  "appsView.customApp": {
-    "defaultMessage": "Пользовательское приложение"
-  },
-  "appsView.deleteApp": {
-    "defaultMessage": "Delete app"
-  },
-  "appsView.deleteConfirm": {
-    "defaultMessage": "Delete \"{name}\"? This cannot be undone."
-  },
-  "appsView.description": {
-    "defaultMessage": "Приложения с ваших MCP-серверов и приложения, созданные самим iCodex. Вы можете попросить его создать новые приложения через чат, и они появятся здесь."
-  },
-  "appsView.errorLoading": {
-    "defaultMessage": "Ошибка загрузки приложений: {error}"
-  },
-  "appsView.errorPrefix": {
-    "defaultMessage": "Error: {error}"
-  },
-  "appsView.importApp": {
-    "defaultMessage": "Импортировать приложение"
-  },
-  "appsView.launch": {
-    "defaultMessage": "Запустить"
-  },
-  "appsView.loading": {
-    "defaultMessage": "Загрузка приложений..."
-  },
-  "appsView.noAppsDescription": {
-    "defaultMessage": "Откройте чат и попросите iCodex создать нужное приложение. Он может собрать его для вас, после чего оно появится здесь. Если кто-то поделился приложением, импортируйте его кнопкой выше."
-  },
-  "appsView.noAppsTitle": {
-    "defaultMessage": "Нет доступных приложений"
-  },
-  "appsView.retiredChatApp": {
-    "defaultMessage": "Chat app retired"
-  },
-  "appsView.retiredChatAppDetail": {
-    "defaultMessage": "We removed this feature because MCP sampling is no longer supported."
-  },
-  "appsView.retry": {
-    "defaultMessage": "Повторить"
-  },
-  "appsView.title": {
-    "defaultMessage": "Приложения"
-  },
   "authSettings.activeProviderWarning": {
     "defaultMessage": "Это активный провайдер. Новые запросы могут завершаться ошибкой, пока вы не настроите другие учетные данные."
   },
@@ -851,57 +806,6 @@
   "extensionTimeoutField.timeoutLabel": {
     "defaultMessage": "Тайм-аут"
   },
-  "externalBackendSection.certFingerprint": {
-    "defaultMessage": "Отпечаток сертификата (необязательно)"
-  },
-  "externalBackendSection.certFingerprintHelp": {
-    "defaultMessage": "Закрепите конкретный отпечаток TLS-сертификата. Если не указано, сертификат будет доверен при первом использовании (TOFU)."
-  },
-  "externalBackendSection.certFingerprintPlaceholder": {
-    "defaultMessage": "AA:BB:CC:... or sha256/base64"
-  },
-  "externalBackendSection.description": {
-    "defaultMessage": "По умолчанию iCodex запускает сервер за вас; используйте это для подключения к внешнему серверу iCodex"
-  },
-  "externalBackendSection.fingerprintRequiresHttps": {
-    "defaultMessage": "Certificate fingerprint requires an https URL"
-  },
-  "externalBackendSection.restartNote": {
-    "defaultMessage": "Чтобы изменения вступили в силу, требуется перезапуск iCodex. Новые окна чата будут подключаться к внешнему серверу."
-  },
-  "externalBackendSection.secretKey": {
-    "defaultMessage": "Секретный ключ"
-  },
-  "externalBackendSection.secretKeyHelp": {
-    "defaultMessage": "Секретный ключ, настроенный на сервере iCodex (GOOSE_SERVER__SECRET_KEY)"
-  },
-  "externalBackendSection.secretKeyPlaceholder": {
-    "defaultMessage": "Введите секретный ключ сервера"
-  },
-  "externalBackendSection.serverUrl": {
-    "defaultMessage": "URL сервера"
-  },
-  "externalBackendSection.serverUrlHelp": {
-    "defaultMessage": "Enter the HTTP(S) base URL. iCodex checks /status and connects to /acp under this base."
-  },
-  "externalBackendSection.title": {
-    "defaultMessage": "Сервер iCodex"
-  },
-  "externalBackendSection.urlBaseError": {
-    "defaultMessage": "URL must be the backend base URL before /acp, without query parameters or fragments"
-  },
-  "externalBackendSection.urlFormatError": {
-    "defaultMessage": "Неверный формат URL"
-  },
-  "externalBackendSection.urlProtocolError": {
-    "defaultMessage": "URL должен использовать протокол http или https"
-  },
-  "externalBackendSection.useExternalServer": {
-    "defaultMessage": "Использовать внешний сервер"
-  },
-  "externalBackendSection.useExternalServerDescription": {
-    "defaultMessage": "Подключиться к серверу iCodex, запущенному в другом месте (требуется перезапуск приложения)"
-  },
   "fileChangeCard.document": {
     "defaultMessage": "Документ"
   },
@@ -1537,54 +1441,6 @@
   },
   "markdownContent.thisWillOpen": {
     "defaultMessage": "Будет открыто: {href}"
-  },
-  "mcpAppRenderer.appFallbackTitle": {
-    "defaultMessage": "Приложение"
-  },
-  "mcpAppRenderer.cancelButton": {
-    "defaultMessage": "Отмена"
-  },
-  "mcpAppRenderer.close": {
-    "defaultMessage": "Закрыть"
-  },
-  "mcpAppRenderer.exitFullscreen": {
-    "defaultMessage": "Выйти из полноэкранного режима"
-  },
-  "mcpAppRenderer.exitFullscreenTitle": {
-    "defaultMessage": "Выйти из полноэкранного режима (Esc)"
-  },
-  "mcpAppRenderer.failedToInitSandbox": {
-    "defaultMessage": "Не удалось инициализировать прокси песочницы"
-  },
-  "mcpAppRenderer.failedToLoadResource": {
-    "defaultMessage": "Не удалось загрузить ресурс"
-  },
-  "mcpAppRenderer.fullscreen": {
-    "defaultMessage": "Полный экран"
-  },
-  "mcpAppRenderer.invalidUrl": {
-    "defaultMessage": "Неверный URL"
-  },
-  "mcpAppRenderer.movePipWindow": {
-    "defaultMessage": "Переместить окно «картинка в картинке» (используйте стрелки)"
-  },
-  "mcpAppRenderer.openButton": {
-    "defaultMessage": "Открыть"
-  },
-  "mcpAppRenderer.openExternalLinkTitle": {
-    "defaultMessage": "Открыть внешнюю ссылку"
-  },
-  "mcpAppRenderer.openLinkDetail": {
-    "defaultMessage": "Будет открыто: {url}"
-  },
-  "mcpAppRenderer.openProtocolLink": {
-    "defaultMessage": "Открыть ссылку {protocol}?"
-  },
-  "mcpAppRenderer.pictureInPicture": {
-    "defaultMessage": "Картинка в картинке"
-  },
-  "mcpAppRenderer.playingInPip": {
-    "defaultMessage": "Воспроизведение в режиме «картинка в картинке»"
   },
   "mentionPopover.itemsFound": {
     "defaultMessage": "{count, plural, one {Найден # элемент} few {Найдено # элемента} many {Найдено # элементов} other {Найдено # элемента}}"
@@ -2825,9 +2681,6 @@
   "settingsView.tabChat": {
     "defaultMessage": "Чат"
   },
-  "settingsView.tabExternalBackend": {
-    "defaultMessage": "Внешний бэкенд"
-  },
   "settingsView.tabKeyboard": {
     "defaultMessage": "Клавиатура"
   },
@@ -2869,15 +2722,6 @@
   },
   "spellcheckToggle.title": {
     "defaultMessage": "Включить проверку орфографии"
-  },
-  "standaloneAppView.failedToLoad": {
-    "defaultMessage": "Не удалось загрузить приложение"
-  },
-  "standaloneAppView.initializing": {
-    "defaultMessage": "Инициализация приложения..."
-  },
-  "standaloneAppView.missingParams": {
-    "defaultMessage": "Отсутствуют обязательные параметры"
   },
   "stringUtils.configuredProvider": {
     "defaultMessage": "Провайдер {name} настроен"
