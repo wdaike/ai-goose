@@ -247,9 +247,20 @@ export default function UserMessage({ message, onMessageUpdate }: UserMessagePro
           <div className="message flex justify-end w-full">
             <div className="flex-col max-w-[85%] w-fit">
               <div className="flex flex-col group">
+                {imagePaths.length > 0 && (
+                  <div
+                    className="flex flex-wrap justify-end gap-2 mb-2"
+                    data-testid="user-message-images"
+                  >
+                    {imagePaths.map((imagePath, index) => (
+                      <ImagePreview key={index} src={imagePath} />
+                    ))}
+                  </div>
+                )}
+
                 {textContent.trim() && (
                   <div
-                    className="flex rounded-3xl bg-background-secondary px-4 py-2.5 text-text-primary"
+                    className="flex w-fit max-w-full self-end rounded-3xl bg-background-secondary px-4 py-2.5 text-text-primary"
                     data-testid="user-message-bubble"
                   >
                     <div ref={contentRef}>
@@ -258,14 +269,6 @@ export default function UserMessage({ message, onMessageUpdate }: UserMessagePro
                         className="!text-inherit prose-a:!text-inherit prose-headings:!text-inherit prose-strong:!text-inherit prose-em:!text-inherit prose-li:!text-inherit prose-p:!text-inherit user-message"
                       />
                     </div>
-                  </div>
-                )}
-
-                {imagePaths.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {imagePaths.map((imagePath, index) => (
-                      <ImagePreview key={index} src={imagePath} />
-                    ))}
                   </div>
                 )}
 

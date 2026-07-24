@@ -14,6 +14,27 @@ function state(items: ThreadItem[]): MappingState {
 }
 
 describe('mapThreadToMessages', () => {
+  it('preserves attached data URL images in user messages', () => {
+    const items = [
+      {
+        type: 'userMessage',
+        id: 'user-1',
+        clientId: null,
+        content: [
+          { type: 'text', text: 'Summarize this image' },
+          { type: 'image', url: 'data:image/png;base64,aW1hZ2UtZGF0YQ==' },
+        ],
+      },
+    ] as ThreadItem[];
+
+    const messages = mapThreadToMessages(state(items));
+
+    expect(messages[0].content).toEqual([
+      { type: 'text', text: 'Summarize this image' },
+      { type: 'image', mimeType: 'image/png', data: 'aW1hZ2UtZGF0YQ==' },
+    ]);
+  });
+
   it('hides reasoning and groups commentary and tools while leaving the answer outside', () => {
     const items = [
       {

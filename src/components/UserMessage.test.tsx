@@ -13,8 +13,8 @@ const message: Message = {
   metadata: { userVisible: true, agentVisible: true },
 };
 
-function renderMessage(onMessageUpdate = vi.fn()) {
-  render(<UserMessage message={message} onMessageUpdate={onMessageUpdate} />, {
+function renderMessage(onMessageUpdate = vi.fn(), currentMessage = message) {
+  render(<UserMessage message={currentMessage} onMessageUpdate={onMessageUpdate} />, {
     wrapper: IntlTestWrapper,
   });
   return onMessageUpdate;
@@ -23,6 +23,23 @@ function renderMessage(onMessageUpdate = vi.fn()) {
 describe('UserMessage editing', () => {
   beforeEach(() => {
     window.electron.logInfo = vi.fn();
+  });
+
+  it('shows attached images above the instruction bubble', () => {
+    renderMessage(vi.fn(), {
+      ...message,
+      content: [
+        { type: 'text', text: 'Summarize this image' },
+        { type: 'image', data: 'aW1hZ2UtZGF0YQ==', mimeType: 'image/png' },
+      ],
+    });
+
+    const images = screen.getByTestId('user-message-images');
+    const bubble = screen.getByTestId('user-message-bubble');
+
+    expect(images.nextElementSibling).toBe(bubble);
+    expect(images).toHaveClass('justify-end', 'mb-2');
+    expect(bubble).toHaveClass('w-fit', 'max-w-full', 'self-end');
   });
 
   it('shows ChatGPT-style icon actions without replacing the timestamp', async () => {

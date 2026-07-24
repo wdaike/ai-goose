@@ -20,6 +20,7 @@ import type { Thread } from '../protocol/v2/Thread';
 import type { ThreadItem } from '../protocol/v2/ThreadItem';
 import type { TurnError } from '../protocol/v2/TurnError';
 import type { TurnPlanUpdatedNotification } from '../protocol/v2/TurnPlanUpdatedNotification';
+import { messageToCodexInput } from './input';
 import { mapThreadToMessages, type MappingState } from './mapItems';
 import { restoreDynamicToolCalls } from './restoreToolCalls';
 import { enforceSkillPolicy } from './skillPolicy';
@@ -365,11 +366,8 @@ async function submitMessage(
   const snapshot = acpChatSessionStore.getSnapshot(sessionId);
   if (snapshot?.activePromptAttemptId) return;
 
-  const text = userMessage.content
-    .map((content) => (content.type === 'text' ? content.text : ''))
-    .filter(Boolean)
-    .join('\n');
-  if (!text) return;
+  const input = messageToCodexInput(userMessage);
+  if (input.length === 0) return;
 
   const promptAttemptId = uuidv7();
   acpChatSessionActions.startPromptAttempt(sessionId, promptAttemptId);
@@ -386,7 +384,7 @@ async function submitMessage(
     const policies = await permissionPolicies();
     const params = {
       threadId: sessionId,
-      input: [{ type: 'text' as const, text, text_elements: [] }],
+      input,
       ...policies,
       ...(override?.model ? { model: override.model } : {}),
     };

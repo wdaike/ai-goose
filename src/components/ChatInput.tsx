@@ -1195,6 +1195,106 @@ export default function ChatInput({
           className="border-b border-border-primary"
         />
       )}
+
+      {/* Combined files and images preview */}
+      {(pastedImages.length > 0 || allDroppedFiles.length > 0) && (
+        <div className="flex flex-wrap gap-2 px-4 pt-4 pb-2">
+          {/* Render pasted images first */}
+          {pastedImages.map((img) => (
+            <div key={img.id} className="relative group w-20 h-20">
+              {img.dataUrl && (
+                <img
+                  src={img.dataUrl}
+                  alt={`Pasted image ${img.id}`}
+                  className={`w-full h-full object-cover rounded border ${img.error ? 'border-red-500' : 'border-border-primary'}`}
+                />
+              )}
+              {img.isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded">
+                  <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white"></div>
+                </div>
+              )}
+              {img.error && !img.isLoading && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-75 rounded p-1 text-center">
+                  <p className="text-red-400 text-[10px] leading-tight break-all">
+                    {img.error.substring(0, 50)}
+                  </p>
+                </div>
+              )}
+              {!img.isLoading && (
+                <Button
+                  type="button"
+                  shape="round"
+                  onClick={() => handleRemovePastedImage(img.id)}
+                  className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity z-10"
+                  aria-label={intl.formatMessage(i18n.removeImage)}
+                  variant="outline"
+                  size="xs"
+                >
+                  <Close />
+                </Button>
+              )}
+            </div>
+          ))}
+
+          {/* Render dropped files after pasted images */}
+          {allDroppedFiles.map((file) => (
+            <div key={file.id} className="relative group">
+              {file.isImage ? (
+                <div className="w-20 h-20">
+                  {file.dataUrl && (
+                    <img
+                      src={file.dataUrl}
+                      alt={file.name}
+                      className={`w-full h-full object-cover rounded border ${file.error ? 'border-red-500' : 'border-border-primary'}`}
+                    />
+                  )}
+                  {file.isLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded">
+                      <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white"></div>
+                    </div>
+                  )}
+                  {file.error && !file.isLoading && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-75 rounded p-1 text-center">
+                      <p className="text-red-400 text-[10px] leading-tight break-all">
+                        {file.error.substring(0, 30)}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 px-3 py-2 bg-bgSubtle border border-border-primary rounded-lg min-w-[120px] max-w-[200px]">
+                  <div className="flex-shrink-0 w-8 h-8 bg-background-primary border border-border-primary rounded flex items-center justify-center text-xs font-mono text-text-secondary">
+                    {file.name.split('.').pop()?.toUpperCase() || 'FILE'}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm text-text-primary truncate" title={file.name}>
+                      {file.name}
+                    </p>
+                    <p className="text-xs text-text-secondary">
+                      {file.type || intl.formatMessage(i18n.unknownType)}
+                    </p>
+                  </div>
+                </div>
+              )}
+              {!file.isLoading && (
+                <Button
+                  type="button"
+                  shape="round"
+                  onClick={() => handleRemoveDroppedFile(file.id)}
+                  className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity z-10"
+                  aria-label={intl.formatMessage(i18n.removeFile)}
+                  variant="outline"
+                  size="xs"
+                >
+                  <Close />
+                </Button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Input row with inline action buttons wrapped in form */}
       <form onSubmit={onFormSubmit} className="relative">
         <div className="relative">
@@ -1244,107 +1344,6 @@ export default function ChatInput({
           )}
         </div>
       </form>
-
-      {/* Combined files and images preview */}
-      {(pastedImages.length > 0 || allDroppedFiles.length > 0) && (
-        <div className="flex flex-wrap gap-2 p-4 mt-2 border-t border-border-primary">
-          {/* Render pasted images first */}
-          {pastedImages.map((img) => (
-            <div key={img.id} className="relative group w-20 h-20">
-              {img.dataUrl && (
-                <img
-                  src={img.dataUrl}
-                  alt={`Pasted image ${img.id}`}
-                  className={`w-full h-full object-cover rounded border ${img.error ? 'border-red-500' : 'border-border-primary'}`}
-                />
-              )}
-              {img.isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded">
-                  <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white"></div>
-                </div>
-              )}
-              {img.error && !img.isLoading && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-75 rounded p-1 text-center">
-                  <p className="text-red-400 text-[10px] leading-tight break-all">
-                    {img.error.substring(0, 50)}
-                  </p>
-                </div>
-              )}
-              {!img.isLoading && (
-                <Button
-                  type="button"
-                  shape="round"
-                  onClick={() => handleRemovePastedImage(img.id)}
-                  className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity z-10"
-                  aria-label={intl.formatMessage(i18n.removeImage)}
-                  variant="outline"
-                  size="xs"
-                >
-                  <Close />
-                </Button>
-              )}
-            </div>
-          ))}
-
-          {/* Render dropped files after pasted images */}
-          {allDroppedFiles.map((file) => (
-            <div key={file.id} className="relative group">
-              {file.isImage ? (
-                // Image preview
-                <div className="w-20 h-20">
-                  {file.dataUrl && (
-                    <img
-                      src={file.dataUrl}
-                      alt={file.name}
-                      className={`w-full h-full object-cover rounded border ${file.error ? 'border-red-500' : 'border-border-primary'}`}
-                    />
-                  )}
-                  {file.isLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded">
-                      <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white"></div>
-                    </div>
-                  )}
-                  {file.error && !file.isLoading && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-75 rounded p-1 text-center">
-                      <p className="text-red-400 text-[10px] leading-tight break-all">
-                        {file.error.substring(0, 30)}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                // File box preview
-                <div className="flex items-center gap-2 px-3 py-2 bg-bgSubtle border border-border-primary rounded-lg min-w-[120px] max-w-[200px]">
-                  <div className="flex-shrink-0 w-8 h-8 bg-background-primary border border-border-primary rounded flex items-center justify-center text-xs font-mono text-text-secondary">
-                    {file.name.split('.').pop()?.toUpperCase() || 'FILE'}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-text-primary truncate" title={file.name}>
-                      {file.name}
-                    </p>
-                    <p className="text-xs text-text-secondary">
-                      {file.type || intl.formatMessage(i18n.unknownType)}
-                    </p>
-                  </div>
-                </div>
-              )}
-              {!file.isLoading && (
-                <Button
-                  type="button"
-                  shape="round"
-                  onClick={() => handleRemoveDroppedFile(file.id)}
-                  className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity z-10"
-                  aria-label={intl.formatMessage(i18n.removeFile)}
-                  variant="outline"
-                  size="xs"
-                >
-                  <Close />
-                </Button>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* Bottom action bar — 1:1 ChatGPT composer layout. Left: attach +
           permission mode. Right: model picker, mic, send. */}

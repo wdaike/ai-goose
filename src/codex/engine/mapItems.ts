@@ -133,6 +133,12 @@ function dynamicToolArguments(value: unknown, tool: string): Record<string, unkn
   return { command: typeof command === 'string' ? command : JSON.stringify(value) };
 }
 
+function imageContentFromDataUrl(url: string): MessageContent | null {
+  const match = url.match(/^data:([^;,]+);base64,(.+)$/);
+  if (!match) return null;
+  return { type: 'image', mimeType: match[1], data: match[2] };
+}
+
 function mapItem(
   state: MappingState,
   item: ThreadItem,
@@ -142,28 +148,35 @@ function mapItem(
   const stream = state.streams[item.id];
   switch (item.type) {
     case 'userMessage': {
-      const text = item.content
-        .map((part) => {
-          switch (part.type) {
-            case 'text':
-              return part.text;
-            case 'skill':
-              return `/${part.name}`;
-            case 'mention':
-              return `@${part.name}`;
-            default:
-              return '';
+      let text = '';
+      const images: MessageContent[] = [];
+      for (const part of item.content) {
+        switch (part.type) {
+          case 'text':
+            text += part.text;
+            break;
+          case 'skill':
+            text += `/${part.name}`;
+            break;
+          case 'mention':
+            text += `@${part.name}`;
+            break;
+          case 'image': {
+            const image = imageContentFromDataUrl(part.url);
+            if (image) images.push(image);
+            break;
           }
-        })
-        .join('');
-      if (!text) return [];
+        }
+      }
+      const content: MessageContent[] = text ? [{ type: 'text', text }, ...images] : images;
+      if (content.length === 0) return [];
       const messageId = item.clientId ?? item.id;
       return [
         {
           id: messageId,
           role: 'user',
           created: created(state, messageId),
-          content: [{ type: 'text', text }],
+          content,
           metadata: { ...VISIBLE },
         },
       ];
