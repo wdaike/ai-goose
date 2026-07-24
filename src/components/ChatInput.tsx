@@ -139,7 +139,6 @@ interface ChatInputProps {
   disableAnimation?: boolean;
   initialPrompt?: string;
   append?: (message: Message) => void;
-  onWorkingDirChange?: (newDir: string) => Promise<void> | void;
   inputRef?: React.RefObject<HTMLTextAreaElement | null>;
   sessionModel?: string | null;
   sessionProvider?: string | null;
@@ -171,7 +170,6 @@ export default function ChatInput({
   disableAnimation = false,
   initialPrompt,
   append: _append,
-  onWorkingDirChange: _onWorkingDirChange,
   inputRef,
   sessionModel,
   sessionProvider,

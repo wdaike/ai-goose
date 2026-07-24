@@ -1,5 +1,5 @@
 import { AppEvents } from '../constants/events';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { defineMessages, useIntl } from '../i18n';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SearchView } from './conversation/SearchView';
@@ -17,7 +17,6 @@ import { useNavigationContextSafe } from './Layout/NavigationContext';
 import { useWorkspacePanelsSafe } from '../contexts/WorkspacePanelsContext';
 import { cn } from '../utils';
 import { useChatSession } from '../hooks/useChatSession';
-import { acpUpdateWorkingDir } from '../acp/sessions';
 import { useNavigation } from '../hooks/useNavigation';
 import {
   getPlanContent,
@@ -27,7 +26,6 @@ import {
 } from '../types/message';
 import { useAutoSubmit } from '../hooks/useAutoSubmit';
 import SessionActionsHeader from './SessionActionsHeader';
-import { isAcpRecovering, subscribeToAcpRecovery } from '../acp/acpConnection';
 import PlanSteps from './PlanSteps';
 
 const i18n = defineMessages({
@@ -38,10 +36,6 @@ const i18n = defineMessages({
   goHome: {
     id: 'baseChat.goHome',
     defaultMessage: 'Go home',
-  },
-  reconnecting: {
-    id: 'baseChat.reconnecting',
-    defaultMessage: 'Connection lost. Reconnecting…',
   },
 });
 
@@ -78,7 +72,6 @@ export default function BaseChat({
   const scrollRef = useRef<ScrollAreaHandle>(null);
   const chatInputRef = useRef<HTMLTextAreaElement>(null);
   const disableAnimation = location.state?.disableAnimation || false;
-  const [acpRecovering, setAcpRecovering] = useState(isAcpRecovering);
   const isMobile = useIsMobile();
   const navContext = useNavigationContextSafe();
   const setView = useNavigation();
@@ -86,8 +79,6 @@ export default function BaseChat({
   const contentClassName = cn('pr-1 pb-10 pt-12', (isMobile || isNavCollapsed) && 'pt-16');
   const { droppedFiles, setDroppedFiles, handleDrop, handleDragOver } = useFileDrop();
   const onStreamFinish = useCallback(() => {}, []);
-
-  useEffect(() => subscribeToAcpRecovery(setAcpRecovering), []);
 
   const {
     session,
@@ -119,22 +110,11 @@ export default function BaseChat({
     }
   }, [isActiveSession, sessionWorkingDir, setPanelsWorkingDir]);
 
-  const handleWorkingDirChange = useCallback(
-    async (newDir: string) => {
-      if (!session) {
-        throw new Error('Cannot update working directory before ACP session is loaded');
-      }
-      await acpUpdateWorkingDir(session.id, newDir);
-      updateSession((currentSession) => ({ ...currentSession, working_dir: newDir }));
-    },
-    [session, updateSession]
-  );
-
   // noAutoSubmit only suppresses auto-submitting the initial prompt of a fresh session
   // (icodex://new-session?prompt=...). Once the conversation has messages, later flows
   // such as forks or resumes should auto-submit normally.
   const suppressInitialAutoSubmit = noAutoSubmit && messages.length === 0;
-  const canAutoSubmit = !acpRecovering && !suppressInitialAutoSubmit;
+  const canAutoSubmit = !suppressInitialAutoSubmit;
 
   useAutoSubmit({
     sessionId,
@@ -405,12 +385,6 @@ export default function BaseChat({
 
         </div>
 
-        {acpRecovering && (
-          <div role="status" className="mx-4 mb-2 text-sm text-text-secondary">
-            {intl.formatMessage(i18n.reconnecting)}
-          </div>
-        )}
-
         {activePlan && (
           <div className="relative z-30 mx-4 mb-2 flex justify-center">
             <PlanSteps plan={activePlan} />
@@ -432,7 +406,7 @@ export default function BaseChat({
             onStop={stopStreaming}
             onSteerQueuedMessage={onSteerQueuedMessage}
             pauseQueueOnStop={pauseQueueOnStop}
-            queueProcessingBlocked={queueProcessingBlocked || acpRecovering}
+            queueProcessingBlocked={queueProcessingBlocked}
             commandHistory={commandHistory}
             initialValue={initialPrompt}
             setView={setView}
@@ -457,7 +431,6 @@ export default function BaseChat({
             sessionProvider={sessionProvider}
             sessionLoaded={sessionLoaded}
             workingDir={session?.working_dir}
-            onWorkingDirChange={handleWorkingDirChange}
             latestInference={latestInference}
             {...customChatInputProps}
           />

@@ -18,6 +18,8 @@ import type { ContentBlock } from '../types/message';
 
 import FileChangeCard, { getStructuredFileChanges } from './FileChangeCard';
 import ToolApprovalButtons from './ToolApprovalButtons';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
+import { Terminal } from './icons/toolcalls';
 import { defineMessages, useIntl } from '../i18n';
 
 const i18n = defineMessages({
@@ -145,21 +147,39 @@ function ShellCommandCard({
         ? result.error
         : '';
 
+  const commandText = typeof command === 'string' ? command : JSON.stringify(command);
+  const isError = result?.status === 'error';
+  const [isOpen, setIsOpen] = useState(isError);
+
   return (
-    <div className="w-full overflow-hidden rounded-xl border border-border-primary bg-background-secondary/70 text-text-secondary">
-      <div className="px-3 pt-2.5 text-sm font-medium">Shell</div>
-      <div className="max-h-80 overflow-auto px-3 pt-4 pb-5 font-mono text-xs leading-5">
-        <div className="flex min-w-0 items-start">
-          <span className="mr-2 select-none text-text-tertiary">$</span>
-          <pre className="min-w-0 flex-1 whitespace-pre-wrap break-words font-mono">
-            {typeof command === 'string' ? command : JSON.stringify(command)}
-          </pre>
+    <Collapsible
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      className="w-full overflow-hidden rounded-xl border border-border-primary bg-background-secondary/70 text-text-secondary"
+    >
+      <CollapsibleTrigger className="group flex w-full cursor-pointer items-center gap-2 px-3 py-2.5 text-left transition-colors hover:bg-background-secondary">
+        <Terminal className="h-4 w-4 shrink-0 text-text-tertiary" />
+        <span className="shrink-0 text-sm font-medium">Shell</span>
+        <span className="min-w-0 flex-1 truncate font-mono text-xs text-text-tertiary">
+          {commandText}
+        </span>
+        <ChevronRight
+          className={cn(
+            'h-4 w-4 shrink-0 text-text-tertiary transition-transform',
+            isOpen && 'rotate-90'
+          )}
+        />
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <div className="max-h-80 overflow-auto border-t border-border-primary px-3 pt-3 pb-5 font-mono text-xs leading-5">
+          {!isCancelled && output ? (
+            <pre className="whitespace-pre-wrap break-words font-mono">{output}</pre>
+          ) : (
+            <span className="text-text-tertiary">No output</span>
+          )}
         </div>
-        {!isCancelled && output && (
-          <pre className="mt-1 whitespace-pre-wrap break-words font-mono">{output}</pre>
-        )}
-      </div>
-    </div>
+      </CollapsibleContent>
+    </Collapsible>
   );
 }
 

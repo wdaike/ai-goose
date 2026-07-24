@@ -245,7 +245,7 @@ const ProjectHoverInfo: React.FC<{ group: ProjectGroup }> = ({ group }) => {
 
 const accountDisplayName = (account: Awaited<ReturnType<typeof codex.accountRead>>['account']) => {
   if (!account) return null;
-  if (account.type === 'chatgpt') return account.email.split('@')[0];
+  if (account.type === 'chatgpt') return account.email?.split('@')[0] ?? 'ChatGPT';
   if (account.type === 'apiKey') return 'API key';
   return 'Bedrock';
 };
