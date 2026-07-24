@@ -17,7 +17,6 @@ import { useNavigationContextSafe } from './Layout/NavigationContext';
 import { useWorkspacePanelsSafe } from '../contexts/WorkspacePanelsContext';
 import { cn } from '../utils';
 import { useChatSession } from '../hooks/useChatSession';
-import { acpUpdateWorkingDir } from '../acp/sessions';
 import { useNavigation } from '../hooks/useNavigation';
 import {
   getPlanContent,
@@ -110,17 +109,6 @@ export default function BaseChat({
       setPanelsWorkingDir(sessionWorkingDir);
     }
   }, [isActiveSession, sessionWorkingDir, setPanelsWorkingDir]);
-
-  const handleWorkingDirChange = useCallback(
-    async (newDir: string) => {
-      if (!session) {
-        throw new Error('Cannot update working directory before ACP session is loaded');
-      }
-      await acpUpdateWorkingDir(session.id, newDir);
-      updateSession((currentSession) => ({ ...currentSession, working_dir: newDir }));
-    },
-    [session, updateSession]
-  );
 
   // noAutoSubmit only suppresses auto-submitting the initial prompt of a fresh session
   // (icodex://new-session?prompt=...). Once the conversation has messages, later flows
@@ -443,7 +431,6 @@ export default function BaseChat({
             sessionProvider={sessionProvider}
             sessionLoaded={sessionLoaded}
             workingDir={session?.working_dir}
-            onWorkingDirChange={handleWorkingDirChange}
             latestInference={latestInference}
             {...customChatInputProps}
           />

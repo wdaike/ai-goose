@@ -1,27 +1,4 @@
-import type {
-  LoadSessionResponse,
-  NewSessionRequest,
-  SessionInfo,
-} from '@agentclientprotocol/sdk';
-import type { GooseExtension } from '../types/goose';
-import { getAcpClient } from './acpConnection';
 import { DEFAULT_CHAT_TITLE } from '../contexts/ChatContext';
-import type { ExtensionLoadResult } from '../types/extensions';
-import type { Session } from '../types/session';
-
-interface GooseSessionInfoMeta {
-  messageCount?: number;
-  createdAt?: string;
-  lastMessageAt?: string;
-  archivedAt?: string;
-  projectId?: string;
-  providerId?: string;
-  modelId?: string;
-  sessionType?: Session['session_type'];
-  userSetName?: boolean;
-  lastMessageSnippet?: string;
-}
-
 import { codex } from '../codex/client';
 import type { Thread } from '../codex/protocol/v2/Thread';
 
@@ -80,65 +57,6 @@ export interface SessionListItem {
 export interface SessionListPage {
   sessions: SessionListItem[];
   nextCursor: string | null;
-}
-
-export interface LoadSessionMeta {
-  extensionResults?: ExtensionLoadResult[] | null;
-  workingDir?: string;
-}
-
-export interface AcpLoadSessionResult {
-  sessionInfo: SessionInfo;
-  response: LoadSessionResponse;
-  meta: LoadSessionMeta;
-}
-
-const inFlightSessionLoads = new Map<string, Promise<AcpLoadSessionResult>>();
-
-function parseSessionResponseMeta(rawMeta: unknown): LoadSessionMeta {
-  const meta = (rawMeta ?? {}) as LoadSessionMeta;
-  return {
-    extensionResults: meta.extensionResults,
-    workingDir: typeof meta.workingDir === 'string' ? meta.workingDir : undefined,
-  };
-}
-
-export function parseLoadMeta(response: LoadSessionResponse): LoadSessionMeta {
-  return parseSessionResponseMeta(response._meta);
-}
-
-function sessionInfoMeta(s: SessionInfo): GooseSessionInfoMeta {
-  return (s._meta ?? {}) as GooseSessionInfoMeta;
-}
-
-export function sessionInfoToSession(s: SessionInfo, loadMeta: LoadSessionMeta = {}): Session {
-  const meta = sessionInfoMeta(s);
-  const createdAt = meta.createdAt ?? s.updatedAt ?? '';
-  const updatedAt = s.updatedAt ?? createdAt;
-  const modelConfig: Session['model_config'] = meta.modelId
-    ? {
-        model_name: meta.modelId,
-        toolshim: false,
-      }
-    : null;
-
-  return {
-    id: String(s.sessionId),
-    name: s.title ?? DEFAULT_CHAT_TITLE,
-    working_dir: loadMeta.workingDir ?? s.cwd,
-    created_at: createdAt,
-    updated_at: updatedAt,
-    last_message_at: meta.lastMessageAt,
-    message_count: meta.messageCount ?? 0,
-    extension_data: {},
-    archived_at: meta.archivedAt,
-    project_id: meta.projectId,
-    provider_name: meta.providerId,
-    model_config: modelConfig,
-    session_type: meta.sessionType,
-    user_set_name: meta.userSetName,
-    last_message_snippet: meta.lastMessageSnippet,
-  };
 }
 
 export interface SessionListFilter {
@@ -204,73 +122,6 @@ export async function acpGetSessionListItem(sessionId: string): Promise<SessionL
   return threadToListItem(thread);
 }
 
-export async function acpLoadSession(sessionId: string): Promise<AcpLoadSessionResult> {
-  const pendingLoad = inFlightSessionLoads.get(sessionId);
-  if (pendingLoad) {
-    return pendingLoad;
-  }
-
-  const loadPromise = loadAcpSession(sessionId);
-  inFlightSessionLoads.set(sessionId, loadPromise);
-  try {
-    return await loadPromise;
-  } finally {
-    if (inFlightSessionLoads.get(sessionId) === loadPromise) {
-      inFlightSessionLoads.delete(sessionId);
-    }
-  }
-}
-
-export function isAcpSessionLoadInFlight(sessionId: string): boolean {
-  return inFlightSessionLoads.has(sessionId);
-}
-
-async function loadAcpSession(sessionId: string): Promise<AcpLoadSessionResult> {
-  const client = await getAcpClient();
-  const initialSessionInfoResponse = await client.goose.sessionInfo_unstable({ sessionId });
-  const initialSessionInfo = initialSessionInfoResponse.session;
-  const response = await client.loadSession({
-    sessionId,
-    cwd: initialSessionInfo.cwd,
-    mcpServers: [],
-  });
-  // Loading can populate missing provider/model metadata.
-  const sessionInfoResponse = await client.goose.sessionInfo_unstable({ sessionId });
-
-  return {
-    sessionInfo: sessionInfoResponse.session,
-    response,
-    meta: parseLoadMeta(response),
-  };
-}
-
-export interface AcpNewSessionResult {
-  sessionId: string;
-  sessionInfo: SessionInfo;
-  meta: LoadSessionMeta;
-}
-
-export async function acpNewSession(
-  cwd: string,
-  gooseExtensions: GooseExtension[]
-): Promise<AcpNewSessionResult> {
-  const client = await getAcpClient();
-  const meta: Record<string, unknown> = { client: 'goose-desktop' };
-  if (gooseExtensions.length > 0) {
-    meta.enabledExtensions = gooseExtensions;
-  }
-  const request: NewSessionRequest = { cwd, mcpServers: [], _meta: meta };
-  const response = await client.newSession(request);
-  const sessionId = String(response.sessionId);
-  const sessionInfoResponse = await client.goose.sessionInfo_unstable({ sessionId });
-
-  return {
-    sessionId,
-    sessionInfo: sessionInfoResponse.session,
-    meta: parseSessionResponseMeta(response._meta),
-  };
-}
-
 export async function acpArchiveSession(sessionId: string): Promise<void> {
   try {
     await codex.threadArchive(sessionId);
@@ -280,26 +131,8 @@ export async function acpArchiveSession(sessionId: string): Promise<void> {
   }
 }
 
-export async function acpCloseSession(sessionId: string): Promise<void> {
-  const client = await getAcpClient();
-  await client.unstable_closeSession({ sessionId });
-}
-
 export async function acpRenameSession(sessionId: string, title: string): Promise<void> {
   await codex.threadSetName(sessionId, title);
-}
-
-export async function acpUpdateWorkingDir(sessionId: string, workingDir: string): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.sessionWorkingDirUpdate_unstable({ sessionId, workingDir });
-}
-
-export async function acpTruncateSessionConversation(
-  sessionId: string,
-  truncateFrom: number
-): Promise<void> {
-  const client = await getAcpClient();
-  await client.goose.sessionConversationTruncate_unstable({ sessionId, truncateFrom });
 }
 
 export async function acpForkSession(
