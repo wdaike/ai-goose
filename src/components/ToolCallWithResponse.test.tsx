@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import type { ToolRequestMessageContent, ToolResponseMessageContent } from '../types/message';
 import ToolCallWithResponse from './ToolCallWithResponse';
@@ -29,7 +30,7 @@ function shellResponse(output: string): ToolResponseMessageContent {
 }
 
 describe('ToolCallWithResponse shell command', () => {
-  it('renders command and output in a dedicated Shell card', () => {
+  it('renders a collapsed Shell card with the command visible and output hidden', () => {
     render(
       <ToolCallWithResponse
         isCancelledMessage={false}
@@ -41,7 +42,22 @@ describe('ToolCallWithResponse shell command', () => {
 
     expect(screen.getByText('Shell')).toBeInTheDocument();
     expect(screen.getByText('pnpm test')).toBeInTheDocument();
-    expect(screen.getByText('12 tests passed')).toBeInTheDocument();
+    expect(screen.queryByText('12 tests passed')).not.toBeInTheDocument();
     expect(screen.queryByText('Tool Details')).not.toBeInTheDocument();
+  });
+
+  it('reveals the output when the Shell card is expanded', async () => {
+    render(
+      <ToolCallWithResponse
+        isCancelledMessage={false}
+        isPendingApproval={false}
+        toolRequest={shellRequest('pnpm test')}
+        toolResponse={shellResponse('12 tests passed')}
+      />
+    );
+
+    await userEvent.click(screen.getByText('Shell'));
+
+    expect(screen.getByText('12 tests passed')).toBeInTheDocument();
   });
 });
