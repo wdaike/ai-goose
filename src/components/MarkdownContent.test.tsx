@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, type RenderOptions } from '@testing-library/react';
+import { fireEvent, render, type RenderOptions } from '@testing-library/react';
 import { screen, waitFor } from '@testing-library/dom';
 import MarkdownContent from './MarkdownContent';
 import { IntlTestWrapper } from '../i18n/test-utils';
@@ -181,6 +181,19 @@ graph TB
         expect.any(HTMLDivElement)
       );
       expect(screen.queryByTestId('code-viewer')).not.toBeInTheDocument();
+
+      fireEvent.click(screen.getByTestId('mermaid-open-preview'));
+      expect(await screen.findByTestId('mermaid-preview')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '100%' })).toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole('button', { name: '+' }));
+      expect(screen.getByRole('button', { name: '125%' })).toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+      await waitFor(() => {
+        expect(screen.queryByTestId('mermaid-preview')).not.toBeInTheDocument();
+      });
+      expect(screen.getByTestId('rendered-mermaid')).toBeInTheDocument();
     });
 
     it('falls back to source code and retries when Mermaid content changes', async () => {
