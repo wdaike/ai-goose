@@ -9,7 +9,7 @@ is no Rust code and no backend of our own.
 The renderer speaks the app-server v2 protocol directly through a four-verb
 `window.codex` façade (`request`/`notify`/`respond`/`onEvent`). Everything below
 that façade is transport, and all of it lives in one place —
-`desktop/src/codex/codexProcess.ts` — which spawns `codex app-server` (the
+`src/codex/codexProcess.ts` — which spawns `codex app-server` (the
 official binary, from `PATH` or `GOOSE_CODEX_BIN`) and handles the stdio JSONL
 JSON-RPC, request correlation, and forwarding of server-initiated messages via
 an injected `onServerMessage` sink. Two thin adapters back `window.codex` with
@@ -49,12 +49,12 @@ Key renderer modules:
 ## Commands
 
 ```bash
-cd desktop && pnpm install
-cd desktop && pnpm run start-gui   # desktop app (needs `codex` on PATH)
-cd desktop && pnpm run start-web   # browser app on http://127.0.0.1:5173
-cd desktop && pnpm run typecheck
-cd desktop && pnpm test
-cd desktop && npx eslint src --ext .ts,.tsx
+pnpm install
+pnpm run start-gui   # desktop app (needs `codex` on PATH)
+pnpm run start-web   # browser app on http://127.0.0.1:5173
+pnpm run typecheck
+pnpm test
+npx eslint src --ext .ts,.tsx
 ```
 
 `./start-desktop.sh` / `./start-web.sh` at the repo root wrap those with a
@@ -65,22 +65,20 @@ on loopback; set `GOOSE_WEB_TOKEN` to require one. `pnpm run build:web` +
 To regenerate protocol types after upgrading codex:
 
 ```bash
-cd desktop && codex app-server generate-ts --out src/codex/protocol
+codex app-server generate-ts --out src/codex/protocol
 ```
 
 ## Structure
 
 ```
-desktop/               # the whole product
-├── src/main.ts        # Electron main; runs the codex bridge
-├── src/codex/         # codexProcess (transport core), bridge (IPC adapter),
-│                      #   browserCodex (WS/SSE window.codex), client, protocol,
-│                      #   engine (chat controller + item mapping)
-├── src/web/           # single-port Node host for the browser build
-├── src/browserHost.ts # installs window.electron + window.codex in the browser
-├── src/acp/           # legacy seams, codex-backed or stubbed
-└── src/components/    # UI (unchanged iCodex look & feel)
-sdk/                   # @aaif/goose-sdk — types for the legacy acp seams
+src/main.ts        # Electron main; runs the codex bridge
+src/codex/         # codexProcess (transport core), bridge (IPC adapter),
+                   # browserCodex (WS/SSE window.codex), client, protocol,
+                   # engine (chat controller + item mapping)
+src/web/           # single-port Node host for the browser build
+src/browserHost.ts # installs window.electron + window.codex in the browser
+src/acp/           # legacy seams, codex-backed or stubbed
+src/components/    # UI (unchanged iCodex look & feel)
 ```
 
 ## Rules
@@ -93,7 +91,7 @@ sdk/                   # @aaif/goose-sdk — types for the legacy acp seams
 - MCP: servers are configured in codex `config.toml` (`mcp_servers.*`) via
   `config/batchWrite`; status/tools via `mcpServerStatus/list`
 - UI Desktop: Use local `src/types/*` types. Do not import generated OpenAPI
-  types/client code from `desktop/src/api`
+  types/client code from `src/api`
 - UI prefs that have no codex home live in `localStorage` (`src/acp/config.ts`)
 
 ## Code Quality
@@ -107,7 +105,7 @@ sdk/                   # @aaif/goose-sdk — types for the legacy acp seams
 
 ## Never
 
-- Never: Recreate `desktop/src/api` or add `@hey-api/openapi-ts` to `desktop`
+- Never: Recreate `src/api` or add `@hey-api/openapi-ts`
 - Never: Hand-edit files under `src/codex/protocol/` — they are generated
 - Never: Reintroduce an iCodex-owned backend (ACP server, message store, MCP
   client). The web host (`src/web/host.ts`) is not one — it only spawns
@@ -115,9 +113,9 @@ sdk/                   # @aaif/goose-sdk — types for the legacy acp seams
 
 ## Entry Points
 
-- Desktop main: desktop/src/main.ts
-- Transport core: desktop/src/codex/codexProcess.ts
-- Desktop bridge (IPC): desktop/src/codex/bridge.ts
-- Web host (HTTP + SSE): desktop/src/web/host.ts
-- Browser window.codex: desktop/src/codex/browserCodex.ts
-- Chat engine: desktop/src/codex/engine/controller.ts
+- Desktop main: src/main.ts
+- Transport core: src/codex/codexProcess.ts
+- Desktop bridge (IPC): src/codex/bridge.ts
+- Web host (HTTP + SSE): src/web/host.ts
+- Browser window.codex: src/codex/browserCodex.ts
+- Chat engine: src/codex/engine/controller.ts

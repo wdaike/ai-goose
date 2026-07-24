@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd "$(dirname "$0")/desktop"
+cd "$(dirname "$0")"
 
 if [[ -z "${GOOSE_CODEX_BIN:-}" ]] && ! command -v codex >/dev/null; then
   echo "error: codex not found on PATH (install it or set GOOSE_CODEX_BIN)" >&2

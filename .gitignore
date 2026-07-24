@@ -11,9 +11,30 @@ tmp/
 
 # Node
 node_modules
+.vite/
+dist-web/
+out
 
 # Env
 .env
+.env.signing
+
+# Generated binaries
+src/bin/goosed
+src/bin/goose-npm/
+/src/bin/*.exe
+/src/bin/*.cmd
+/src/bin/temporal-service
+src/bin/temporal.db
+/src/platform/windows/bin/*.dll
+/src/platform/windows/bin/*.exe
+
+# Test output
+/playwright-report/
+/test-results/
+
+# Compiled i18n message catalogs
+src/i18n/compiled/
 
 # Claude
 .claude/settings.local.json
