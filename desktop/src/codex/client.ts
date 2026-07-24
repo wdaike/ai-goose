@@ -15,6 +15,11 @@ import type { SkillsConfigWriteResponse } from './protocol/v2/SkillsConfigWriteR
 import type { GetAccountResponse } from './protocol/v2/GetAccountResponse';
 import type { FsReadFileParams } from './protocol/v2/FsReadFileParams';
 import type { FsReadFileResponse } from './protocol/v2/FsReadFileResponse';
+import type { ConfigReadParams } from './protocol/v2/ConfigReadParams';
+import type { ConfigReadResponse } from './protocol/v2/ConfigReadResponse';
+import type { ConfigBatchWriteParams } from './protocol/v2/ConfigBatchWriteParams';
+import type { ListMcpServerStatusParams } from './protocol/v2/ListMcpServerStatusParams';
+import type { ListMcpServerStatusResponse } from './protocol/v2/ListMcpServerStatusResponse';
 
 export interface ThreadResponse {
   thread: Thread;
@@ -59,5 +64,10 @@ export const codex = {
   skillsConfigWrite: (params: SkillsConfigWriteParams) =>
     request<SkillsConfigWriteResponse>('skills/config/write', params),
   fsReadFile: (params: FsReadFileParams) => request<FsReadFileResponse>('fs/readFile', params),
+  configRead: (params: ConfigReadParams = {}) => request<ConfigReadResponse>('config/read', params),
+  configBatchWrite: (params: ConfigBatchWriteParams) =>
+    request<Record<string, never>>('config/batchWrite', params),
+  mcpServerStatusList: (params: ListMcpServerStatusParams = {}) =>
+    request<ListMcpServerStatusResponse>('mcpServerStatus/list', params),
   respond: (requestId: number | string, result: unknown) => window.codex.respond(requestId, result),
 };

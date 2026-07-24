@@ -1,5 +1,7 @@
 import type { ExtensionConfig, ExtensionEntry } from '../types/extensions';
 import type { GooseExtension, GooseExtensionEntry } from '@aaif/goose-sdk';
+import { codex } from '../codex/client';
+import type { JsonValue } from '../codex/protocol/serde_json/JsonValue';
 
 export type ConfiguredExtensionEntry = ExtensionEntry & { configKey?: string };
 
@@ -22,18 +24,12 @@ interface CodexMcpServer {
   startup_timeout_sec?: number;
 }
 
-interface ConfigLayer {
-  name: unknown;
-  config: { mcp_servers?: Record<string, CodexMcpServer> } | null;
-}
-
 async function readMcpServers(): Promise<Record<string, CodexMcpServer>> {
-  const response = (await window.codex.request('config/read', { includeLayers: true })) as {
-    layers: ConfigLayer[] | null;
-  };
+  const response = await codex.configRead({ includeLayers: true });
   const merged: Record<string, CodexMcpServer> = {};
   for (const layer of response.layers ?? []) {
-    Object.assign(merged, layer.config?.mcp_servers ?? {});
+    const layerConfig = layer.config as { mcp_servers?: Record<string, CodexMcpServer> } | null;
+    Object.assign(merged, layerConfig?.mcp_servers ?? {});
   }
   return merged;
 }
@@ -108,8 +104,8 @@ function extensionConfigToCodexServer(config: ExtensionConfig): CodexMcpServer |
 }
 
 async function writeMcpServer(name: string, value: CodexMcpServer | null): Promise<void> {
-  await window.codex.request('config/batchWrite', {
-    edits: [{ keyPath: `mcp_servers.${name}`, value, mergeStrategy: 'replace' }],
+  await codex.configBatchWrite({
+    edits: [{ keyPath: `mcp_servers.${name}`, value: value as JsonValue, mergeStrategy: 'replace' }],
     reloadUserConfig: true,
   });
 }
@@ -130,7 +126,7 @@ export async function setConfigExtensionEnabled(
   configKey: string,
   enabled: boolean
 ): Promise<void> {
-  await window.codex.request('config/batchWrite', {
+  await codex.configBatchWrite({
     edits: [
       { keyPath: `mcp_servers.${configKey}.enabled`, value: enabled, mergeStrategy: 'upsert' },
     ],

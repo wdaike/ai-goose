@@ -1,19 +1,13 @@
 import type { ToolListItem, ToolPermissionEntry, ToolPermissionLevel } from '@aaif/goose-sdk';
+import { codex } from '../codex/client';
 
 export type { ToolListItem, ToolPermissionEntry, ToolPermissionLevel };
-
-interface McpServerStatusEntry {
-  name: string;
-  tools: Record<string, { description?: string | null } | undefined>;
-}
 
 export async function listTools(
   _sessionId: string,
   extensionName?: string
 ): Promise<ToolListItem[]> {
-  const response = (await window.codex.request('mcpServerStatus/list', {})) as {
-    data: McpServerStatusEntry[];
-  };
+  const response = await codex.mcpServerStatusList({});
   return response.data
     .filter((server) => !extensionName || server.name === extensionName)
     .flatMap((server) =>

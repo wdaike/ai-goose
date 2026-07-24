@@ -22,7 +22,7 @@ import type { Message } from '../types/message';
 import { getInitialWorkingDir } from '../utils/workingDir';
 import { trackFileAttached, trackVoiceDictation } from '../utils/analytics';
 import { UserInput, ImageData } from '../types/message';
-import { compressImageDataUrl } from '../utils/conversionUtils';
+import { usePastedImages, MAX_IMAGES_PER_MESSAGE } from '../hooks/usePastedImages';
 import { defineMessages, useIntl } from '../i18n';
 import TurndownService from 'turndown';
 import type { NextChatExtensionDraft } from '../utils/nextChatExtensions';
@@ -47,13 +47,6 @@ turndown.addRule('complexLinks', {
   },
 });
 
-interface PastedImage {
-  id: string;
-  dataUrl: string;
-  isLoading: boolean;
-  error?: string;
-}
-
 const moveQueuedMessageToFront = (
   messages: QueuedMessage[],
   messageId: string
@@ -65,8 +58,6 @@ const moveQueuedMessageToFront = (
 
 const removeQueuedMessage = (messages: QueuedMessage[], messageId: string): QueuedMessage[] =>
   messages.filter((msg) => msg.id !== messageId);
-
-const MAX_IMAGES_PER_MESSAGE = 10;
 
 const i18n = defineMessages({
   placeholder: {
@@ -193,7 +184,6 @@ export default function ChatInput({
   const [_value, setValue] = useState(initialValue);
   const [displayValue, setDisplayValue] = useState(initialValue); // For immediate visual feedback
   const [isFocused, setIsFocused] = useState(false);
-  const [pastedImages, setPastedImages] = useState<PastedImage[]>([]);
   const [isFilePickerOpen, setIsFilePickerOpen] = useState(false);
 
   // Derived state - chatState != Idle means we're in some form of loading state
@@ -244,6 +234,16 @@ export default function ChatInput({
   }, []);
 
   const intl = useIntl();
+  const {
+    pastedImages,
+    addPastedFiles,
+    addPickedFile,
+    removeImage: handleRemovePastedImage,
+    clearImages,
+    toImageData: convertPastedImagesToImageData,
+    hasReadyImage: hasReadyPastedImage,
+    isAnyImageLoading,
+  } = usePastedImages(intl.formatMessage(i18n.failedToReadImage));
   const { currentModel: configModel, currentProvider: configProvider } = useModelAndProvider();
 
   // Local override for when the user changes the model in the modal,
@@ -444,15 +444,15 @@ export default function ChatInput({
   });
   const internalTextAreaRef = useRef<HTMLTextAreaElement>(null);
   const textAreaRef = inputRef || internalTextAreaRef;
-  const timeoutRefsRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
 
   useEffect(() => {
     setValue(initialValue);
     setDisplayValue(initialValue);
-    setPastedImages([]);
+    clearImages();
     setHistoryIndex(-1);
     setIsInGlobalHistory(false);
     setHasUserTyped(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialValue]);
 
   useEffect(() => {
@@ -495,28 +495,11 @@ export default function ChatInput({
     }
   };
 
-  const handleRemovePastedImage = (idToRemove: string) => {
-    setPastedImages((currentImages) => currentImages.filter((img) => img.id !== idToRemove));
-  };
-
   useEffect(() => {
     if (textAreaRef.current) {
       textAreaRef.current.focus();
     }
   }, [textAreaRef]);
-
-  // Cleanup effect for component unmount - prevent memory leaks
-  useEffect(() => {
-    return () => {
-      // Clear all tracked timeouts
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      const timeouts = timeoutRefsRef.current;
-      timeouts.forEach((timeoutId) => {
-        window.clearTimeout(timeoutId);
-      });
-      timeouts.clear();
-    };
-  }, []);
 
   const maxHeight = 10 * 24;
 
@@ -609,20 +592,6 @@ export default function ChatInput({
   };
 
   const convertImagesToImageData = useCallback((): ImageData[] => {
-    const pastedImageData: ImageData[] = pastedImages
-      .filter((img) => img.dataUrl && !img.error && !img.isLoading)
-      .map((img) => {
-        const matches = img.dataUrl.match(/^data:([^;]+);base64,(.+)$/);
-        if (matches) {
-          return {
-            data: matches[2],
-            mimeType: matches[1],
-          };
-        }
-        return null;
-      })
-      .filter((img): img is ImageData => img !== null);
-
     const droppedImageData: ImageData[] = allDroppedFiles
       .filter((file) => file.isImage && file.dataUrl && !file.error && !file.isLoading)
       .map((file) => {
@@ -637,8 +606,8 @@ export default function ChatInput({
       })
       .filter((img): img is ImageData => img !== null);
 
-    return [...pastedImageData, ...droppedImageData];
-  }, [pastedImages, allDroppedFiles]);
+    return [...convertPastedImagesToImageData(), ...droppedImageData];
+  }, [convertPastedImagesToImageData, allDroppedFiles]);
 
   const appendDroppedFilePaths = useCallback(
     (text: string): string => {
@@ -658,14 +627,14 @@ export default function ChatInput({
   const clearInputState = useCallback(() => {
     setDisplayValue('');
     setValue('');
-    setPastedImages([]);
+    clearImages();
     if (onFilesProcessed && droppedFiles.length > 0) {
       onFilesProcessed();
     }
     if (localDroppedFiles.length > 0) {
       setLocalDroppedFiles([]);
     }
-  }, [droppedFiles.length, localDroppedFiles.length, onFilesProcessed, setLocalDroppedFiles]);
+  }, [droppedFiles.length, localDroppedFiles.length, onFilesProcessed, setLocalDroppedFiles, clearImages]);
 
   const handlePaste = async (evt: React.ClipboardEvent<HTMLTextAreaElement>) => {
     if (isRecording) return;
@@ -703,72 +672,8 @@ export default function ChatInput({
       return;
     }
 
-    // Check if adding these images would exceed the limit
-    if (pastedImages.length + imageFiles.length > MAX_IMAGES_PER_MESSAGE) {
-      // Show error message to user
-      setPastedImages((prev) => [
-        ...prev,
-        {
-          id: `error-${Date.now()}`,
-          dataUrl: '',
-          isLoading: false,
-          error: `Cannot paste ${imageFiles.length} image(s). Maximum ${MAX_IMAGES_PER_MESSAGE} images per message allowed. Currently have ${pastedImages.length}.`,
-        },
-      ]);
-
-      // Remove the error message after 5 seconds with cleanup tracking
-      const timeoutId = setTimeout(() => {
-        setPastedImages((prev) => prev.filter((img) => !img.id.startsWith('error-')));
-        timeoutRefsRef.current.delete(timeoutId);
-      }, 5000);
-      timeoutRefsRef.current.add(timeoutId);
-
-      return;
-    }
-
     evt.preventDefault();
-
-    // Process each image file
-    const newImages: PastedImage[] = [];
-
-    for (const file of imageFiles) {
-      const imageId = `img-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-
-      // Add the image with loading state
-      newImages.push({
-        id: imageId,
-        dataUrl: '',
-        isLoading: true,
-      });
-
-      // Process the image asynchronously
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const dataUrl = e.target?.result as string;
-        if (dataUrl) {
-          const compressedDataUrl = await compressImageDataUrl(dataUrl);
-          setPastedImages((prev) =>
-            prev.map((img) =>
-              img.id === imageId ? { ...img, dataUrl: compressedDataUrl, isLoading: false } : img
-            )
-          );
-        }
-      };
-      reader.onerror = () => {
-        console.error('Failed to read image file:', file.name);
-        setPastedImages((prev) =>
-          prev.map((img) =>
-            img.id === imageId
-              ? { ...img, error: intl.formatMessage(i18n.failedToReadImage), isLoading: false }
-              : img
-          )
-        );
-      };
-      reader.readAsDataURL(file);
-    }
-
-    // Add all new images to the existing list
-    setPastedImages((prev) => [...prev, ...newImages]);
+    addPastedFiles(imageFiles);
   };
 
   // Cleanup debounced functions on unmount
@@ -919,7 +824,7 @@ export default function ChatInput({
     !isLoading &&
     !queueProcessingBlocked &&
     (displayValue.trim() ||
-      pastedImages.some((img) => img.dataUrl && !img.error && !img.isLoading) ||
+      hasReadyPastedImage ||
       allDroppedFiles.some((file) => !file.error && !file.isLoading));
 
   const performSubmit = useCallback(
@@ -1045,7 +950,7 @@ export default function ChatInput({
       !isLoading &&
       !queueProcessingBlocked &&
       (displayValue.trim() ||
-        pastedImages.some((img) => img.dataUrl && !img.error && !img.isLoading) ||
+        hasReadyPastedImage ||
         allDroppedFiles.some((file) => !file.error && !file.isLoading));
     if (canSubmit) {
       performSubmit();
@@ -1070,48 +975,11 @@ export default function ChatInput({
     if (isImage) {
       trackFileAttached('file');
 
-      if (pastedImages.length >= MAX_IMAGES_PER_MESSAGE) {
+      if (!addPickedFile(file)) {
         console.warn(`Maximum ${MAX_IMAGES_PER_MESSAGE} images per message`);
         setIsFilePickerOpen(false);
         return;
       }
-
-      const uniqueId = `upload-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-      setPastedImages((prev) => [
-        ...prev,
-        {
-          id: uniqueId,
-          dataUrl: '',
-          isLoading: true,
-          error: undefined,
-        },
-      ]);
-
-      const reader = new FileReader();
-      reader.onload = async (evt) => {
-        const dataUrl = evt.target?.result as string;
-        if (dataUrl) {
-          const compressedDataUrl = await compressImageDataUrl(dataUrl);
-          setPastedImages((prev) =>
-            prev.map((img) =>
-              img.id === uniqueId
-                ? { ...img, dataUrl: compressedDataUrl, isLoading: false, error: undefined }
-                : img
-            )
-          );
-        }
-      };
-      reader.onerror = () => {
-        setPastedImages((prev) =>
-          prev.map((img) =>
-            img.id === uniqueId
-              ? { ...img, isLoading: false, error: intl.formatMessage(i18n.failedToReadImage) }
-              : img
-          )
-        );
-      };
-      reader.readAsDataURL(file);
     } else {
       trackFileAttached('file');
       const path = window.electron.getPathForFile(file);
@@ -1151,9 +1019,8 @@ export default function ChatInput({
 
   const hasSubmittableContent =
     displayValue.trim() ||
-    pastedImages.some((img) => img.dataUrl && !img.error && !img.isLoading) ||
+    hasReadyPastedImage ||
     allDroppedFiles.some((file) => !file.error && !file.isLoading);
-  const isAnyImageLoading = pastedImages.some((img) => img.isLoading);
   const isAnyDroppedFileLoading = allDroppedFiles.some((file) => file.isLoading);
 
   const isSubmitButtonDisabled =

@@ -1,5 +1,6 @@
 import type { AgentMention, AvailableCommand } from '@aaif/goose-sdk';
 import type { DisplayItem } from '../components/MentionPopover';
+import { codex } from '../codex/client';
 
 type SlashCommandItemType = Extract<DisplayItem['itemType'], 'Builtin' | 'Recipe' | 'Skill'>;
 type AutocompleteDisplayItem = DisplayItem;
@@ -44,11 +45,7 @@ export function agentMentionToDisplayItem(agent: AgentMention): AutocompleteDisp
 }
 
 export async function listSlashCommandItems(cwd: string): Promise<AutocompleteDisplayItem[]> {
-  const response = (await window.codex.request('skills/list', {
-    cwds: cwd.trim() ? [cwd.trim()] : [],
-  })) as {
-    data: Array<{ skills: Array<{ name: string; description: string; enabled: boolean }> }>;
-  };
+  const response = await codex.skillsList({ cwds: cwd.trim() ? [cwd.trim()] : [] });
   return response.data
     .flatMap((entry) => entry.skills)
     .filter((skill) => skill.enabled)

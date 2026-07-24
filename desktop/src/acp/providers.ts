@@ -13,6 +13,7 @@ import type {
 import { codex } from '../codex/client';
 import { setThreadModelOverride } from '../codex/engine/controller';
 import type { Model } from '../codex/protocol/v2/Model';
+import type { JsonValue } from '../codex/protocol/serde_json/JsonValue';
 
 export type { CanonicalModelInfoDto, ProviderSecretDto };
 
@@ -43,13 +44,11 @@ interface CodexConfigView {
 }
 
 async function readCodexConfig(): Promise<CodexConfigView> {
-  const response = (await window.codex.request('config/read', { includeLayers: true })) as {
-    config: { model: string | null; model_provider: string | null };
-    layers: Array<{ config: { model_providers?: Record<string, CodexModelProvider> } | null }> | null;
-  };
+  const response = await codex.configRead({ includeLayers: true });
   const modelProviders: Record<string, CodexModelProvider> = {};
   for (const layer of response.layers ?? []) {
-    Object.assign(modelProviders, layer.config?.model_providers ?? {});
+    const layerConfig = layer.config as { model_providers?: Record<string, CodexModelProvider> } | null;
+    Object.assign(modelProviders, layerConfig?.model_providers ?? {});
   }
   return {
     model: response.config.model,
@@ -153,9 +152,9 @@ export async function acpCreateCustomProviderFromRequest(
     wire_api: 'responses',
     ...(request.api_key ? { experimental_bearer_token: request.api_key } : {}),
   };
-  await window.codex.request('config/batchWrite', {
+  await codex.configBatchWrite({
     edits: [
-      { keyPath: `model_providers.${providerId}`, value: provider, mergeStrategy: 'replace' },
+      { keyPath: `model_providers.${providerId}`, value: provider as JsonValue, mergeStrategy: 'replace' },
     ],
     reloadUserConfig: true,
   });
@@ -206,7 +205,7 @@ export async function acpReadDefaults(): Promise<{
 }
 
 export async function acpSaveDefaults(providerId: string, modelId?: string | null): Promise<void> {
-  await window.codex.request('config/batchWrite', {
+  await codex.configBatchWrite({
     edits: [
       { keyPath: 'model', value: modelId ?? null, mergeStrategy: 'replace' },
       {
@@ -233,7 +232,7 @@ export async function acpReadThinkingEffort(): Promise<ThinkingEffort | null> {
 export async function acpSaveThinkingEffort(effort: ThinkingEffort): Promise<void> {
   window.localStorage.setItem(EFFORT_KEY, effort);
   const codexEffort = effort === 'off' ? 'minimal' : effort === 'max' ? 'xhigh' : effort;
-  await window.codex.request('config/batchWrite', {
+  await codex.configBatchWrite({
     edits: [
       { keyPath: 'model_reasoning_effort', value: codexEffort, mergeStrategy: 'replace' },
     ],
