@@ -164,7 +164,7 @@ export function useChatSession({
 
   const handleSubmit = useCallback(
     async (input: UserInput) => {
-      const { msg: userMessage, images } = input;
+      const { msg: userMessage, images, files, skill } = input;
       const currentSnapshot = getCurrentSnapshot();
 
       if (
@@ -180,7 +180,8 @@ export function useChatSession({
 
       const currentMessages = currentSnapshot.messages;
       const hasExistingMessages = currentMessages.length > 0;
-      const hasNewMessage = userMessage.trim().length > 0 || images.length > 0;
+      const hasNewMessage =
+        userMessage.trim().length > 0 || images.length > 0 || Boolean(files?.length);
       const clearsConversation = hasNewMessage && isClearCommand(userMessage);
 
       if (!hasNewMessage && !hasExistingMessages) {
@@ -193,7 +194,7 @@ export function useChatSession({
       }
 
       const newMessage = hasNewMessage
-        ? createUserMessage(userMessage, images)
+        ? createUserMessage(userMessage, images, files, skill)
         : currentMessages[currentMessages.length - 1];
       const messagesForStore = clearsConversation
         ? []
@@ -212,7 +213,7 @@ export function useChatSession({
 
   const onSteerQueuedMessage = useCallback(
     async (input: UserInput): Promise<boolean> => {
-      const { msg: userMessage, images } = input;
+      const { msg: userMessage, images, files, skill } = input;
       const hasTextContent = userMessage.trim().length > 0;
       const hasNewMessage = hasTextContent || images.length > 0;
       if (!hasNewMessage) {
@@ -237,7 +238,7 @@ export function useChatSession({
       }
 
       try {
-        const steeredMessage = createUserMessage(userMessage, images);
+        const steeredMessage = createUserMessage(userMessage, images, files, skill);
         const response = await acpSteerSession(sessionId, steeredMessage, activeRunId);
         const localSteerMessage: Message = {
           ...steeredMessage,

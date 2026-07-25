@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ImagePreview from './ImagePreview';
 import MarkdownContent from './MarkdownContent';
-import { getTextAndImageContent, type Message } from '../types/message';
+import {
+  getFileAttachments,
+  getSkillReference,
+  getTextAndImageContent,
+  type Message,
+} from '../types/message';
+import { FileChip, fileKindLabel } from './ComposerAttachments';
+import { Box } from 'lucide-react';
 import MessageCopyLink from './MessageCopyLink';
 import { formatMessageTimestamp } from '../utils/timeUtils';
 import { defineMessages, useIntl } from '../i18n';
@@ -74,7 +81,13 @@ const i18n = defineMessages({
     id: 'userMessage.editMessageTitle',
     defaultMessage: 'Edit message',
   },
+  file: {
+    id: 'composerAttachments.file',
+    defaultMessage: 'File',
+  },
 });
+
+const skillLabel = (name: string): string => name.split(':').pop() || name;
 
 interface UserMessageProps {
   message: Message;
@@ -90,6 +103,8 @@ export default function UserMessage({ message, onMessageUpdate }: UserMessagePro
   const [error, setError] = useState<string | null>(null);
 
   const { textContent, imagePaths } = getTextAndImageContent(message);
+  const attachments = getFileAttachments(message);
+  const skill = getSkillReference(message);
   const timestamp = formatMessageTimestamp(message.created);
 
   // Effect to handle message content changes and ensure persistence
@@ -258,11 +273,32 @@ export default function UserMessage({ message, onMessageUpdate }: UserMessagePro
                   </div>
                 )}
 
-                {textContent.trim() && (
+                {attachments.length > 0 && (
                   <div
-                    className="flex w-fit max-w-full self-end rounded-3xl bg-background-secondary px-4 py-2.5 text-text-primary"
+                    className="mb-2 flex flex-wrap justify-end gap-2"
+                    data-testid="user-message-attachments"
+                  >
+                    {attachments.map((file) => (
+                      <FileChip
+                        key={file.path}
+                        name={file.name}
+                        detail={fileKindLabel(file.name, intl.formatMessage(i18n.file))}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {(textContent.trim() || skill) && (
+                  <div
+                    className="flex w-fit max-w-full items-baseline gap-1.5 self-end rounded-3xl bg-background-secondary px-4 py-2.5 text-text-primary"
                     data-testid="user-message-bubble"
                   >
+                    {skill && (
+                      <span className="inline-flex shrink-0 items-center gap-1 self-center rounded-md bg-blue-500/10 px-1.5 py-0.5 text-sm font-medium text-blue-600 dark:text-blue-400">
+                        <Box className="h-4 w-4" strokeWidth={1.75} />
+                        {skillLabel(skill)}
+                      </span>
+                    )}
                     <div ref={contentRef}>
                       <MarkdownContent
                         content={textContent}

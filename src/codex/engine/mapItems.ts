@@ -1,4 +1,5 @@
 import type { Message, MessageContent } from '../../types/message';
+import type { TextElement } from '../protocol/v2/TextElement';
 import type { ThreadItem } from '../protocol/v2/ThreadItem';
 import type { TurnPlanStep } from '../protocol/v2/TurnPlanStep';
 
@@ -133,6 +134,32 @@ function dynamicToolArguments(value: unknown, tool: string): Record<string, unkn
   return { command: typeof command === 'string' ? command : JSON.stringify(value) };
 }
 
+function extractTextElements(
+  text: string,
+  elements: TextElement[] | undefined
+): { text: string; elements: Array<{ name: string; path: string }> } {
+  if (!elements?.length) return { text, elements: [] };
+
+  const bytes = new TextEncoder().encode(text);
+  const decoder = new TextDecoder();
+  const ordered = [...elements].sort((a, b) => a.byteRange.start - b.byteRange.start);
+  const extracted: Array<{ name: string; path: string }> = [];
+  let kept = '';
+  let cursor = 0;
+
+  for (const element of ordered) {
+    const { start, end } = element.byteRange;
+    if (start < cursor || end > bytes.length) continue;
+    kept += decoder.decode(bytes.slice(cursor, start));
+    const path = decoder.decode(bytes.slice(start, end));
+    extracted.push({ name: element.placeholder || path.split('/').pop() || path, path });
+    cursor = end;
+  }
+  kept += decoder.decode(bytes.slice(cursor));
+
+  return { text: kept, elements: extracted };
+}
+
 function imageContentFromDataUrl(url: string): MessageContent | null {
   const match = url.match(/^data:([^;,]+);base64,(.+)$/);
   if (!match) return null;
@@ -150,16 +177,24 @@ function mapItem(
     case 'userMessage': {
       let text = '';
       const images: MessageContent[] = [];
+      const attachments: MessageContent[] = [];
       for (const part of item.content) {
         switch (part.type) {
-          case 'text':
-            text += part.text;
+          case 'text': {
+            // Attachment paths live in the prompt text so the model can read them; the
+            // marked spans are lifted back out so the UI shows chips instead of paths.
+            const spans = extractTextElements(part.text, part.text_elements);
+            text += spans.text;
+            for (const span of spans.elements) {
+              attachments.push({ type: 'fileAttachment', name: span.name, path: span.path });
+            }
             break;
+          }
           case 'skill':
-            text += `/${part.name} `;
+            attachments.push({ type: 'skill', name: part.name });
             break;
           case 'mention':
-            text += `@${part.name}`;
+            attachments.push({ type: 'fileAttachment', name: part.name, path: part.path });
             break;
           case 'image': {
             const image = imageContentFromDataUrl(part.url);
@@ -168,7 +203,12 @@ function mapItem(
           }
         }
       }
-      const content: MessageContent[] = text ? [{ type: 'text', text }, ...images] : images;
+      text = text.trim();
+      const content: MessageContent[] = [
+        ...(text ? [{ type: 'text' as const, text }] : []),
+        ...images,
+        ...attachments,
+      ];
       if (content.length === 0) return [];
       const messageId = item.clientId ?? item.id;
       return [

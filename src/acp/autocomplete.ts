@@ -1,6 +1,6 @@
 import type { AgentMention, AvailableCommand } from '../types/goose';
 import type { DisplayItem } from '../components/MentionPopover';
-import { codex } from '../codex/client';
+import { enforceSkillPolicy } from '../codex/engine/skillPolicy';
 
 type SlashCommandItemType = Extract<DisplayItem['itemType'], 'Builtin' | 'Recipe' | 'Skill'>;
 type AutocompleteDisplayItem = DisplayItem;
@@ -45,16 +45,13 @@ export function agentMentionToDisplayItem(agent: AgentMention): AutocompleteDisp
 }
 
 export async function listSlashCommandItems(cwd: string): Promise<AutocompleteDisplayItem[]> {
-  const response = await codex.skillsList({ cwds: cwd.trim() ? [cwd.trim()] : [] });
-  return response.data
-    .flatMap((entry) => entry.skills)
-    .filter((skill) => skill.enabled)
-    .map((skill) => ({
-      name: skill.name,
-      extra: skill.description,
-      itemType: 'Skill' as const,
-      relativePath: skill.name,
-    }));
+  const skills = await enforceSkillPolicy(cwd.trim());
+  return skills.map((skill) => ({
+    name: skill.name,
+    extra: skill.description,
+    itemType: 'Skill' as const,
+    relativePath: skill.name,
+  }));
 }
 
 export async function listAgentMentionItems(

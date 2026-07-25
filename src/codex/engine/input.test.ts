@@ -60,6 +60,49 @@ describe('messageToCodexInput', () => {
     ]);
   });
 
+  it('reads the skill picked in the composer from the message content', () => {
+    const message = createUserMessage('生成 PDF', [], [], 'pdf:pdf');
+    const skill: SkillMetadata = {
+      name: 'pdf:pdf',
+      description: 'Create and inspect PDFs',
+      path: '/skills/pdf/SKILL.md',
+      scope: 'user',
+      enabled: true,
+    };
+
+    expect(explicitSkillName(message)).toBe('pdf:pdf');
+    expect(messageToCodexInput(message, skill)).toEqual([
+      {
+        type: 'skill',
+        name: 'pdf:pdf',
+        path: '/skills/pdf/SKILL.md',
+      },
+      {
+        type: 'text',
+        text: '生成 PDF',
+        text_elements: [],
+      },
+    ]);
+  });
+
+  it('appends attached file paths to the prompt text and marks their spans', () => {
+    const message = createUserMessage('简要总结', [], [{ name: 'report.pdf', path: '/tmp/a b.pdf' }]);
+    const prefixBytes = new TextEncoder().encode('简要总结 ').length;
+
+    expect(messageToCodexInput(message)).toEqual([
+      {
+        type: 'text',
+        text: '简要总结 /tmp/a b.pdf',
+        text_elements: [
+          {
+            byteRange: { start: prefixBytes, end: prefixBytes + '/tmp/a b.pdf'.length },
+            placeholder: 'report.pdf',
+          },
+        ],
+      },
+    ]);
+  });
+
   it('leaves unknown slash commands as text', () => {
     const message = createUserMessage('/not-a-skill keep this', []);
 

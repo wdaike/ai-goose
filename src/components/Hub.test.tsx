@@ -3,6 +3,7 @@ import { IntlProvider } from 'react-intl';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AppEvents } from '../constants/events';
 import type { Session } from '../types/session';
+import type { UserInput } from '../types/message';
 import { createSession } from '../sessions';
 import Hub from './Hub';
 
@@ -26,9 +27,16 @@ vi.mock('../utils/workingDir', () => ({
   getInitialWorkingDir: () => '/tmp/project',
 }));
 
+const submittedInput = vi.hoisted<UserInput>(() => ({
+  msg: 'Hello',
+  images: [],
+  files: [{ name: 'notes.pdf', path: '/tmp/project/notes.pdf' }],
+  skill: 'pdf',
+}));
+
 vi.mock('./ChatInput', () => ({
-  default: ({ handleSubmit }: { handleSubmit: (input: { msg: string; images: [] }) => void }) => (
-    <button onClick={() => handleSubmit({ msg: 'Hello', images: [] })}>Submit</button>
+  default: ({ handleSubmit }: { handleSubmit: (input: UserInput) => void }) => (
+    <button onClick={() => handleSubmit(submittedInput)}>Submit</button>
   ),
 }));
 
@@ -84,5 +92,27 @@ describe('Hub', () => {
     expect((created.mock.calls[0][0] as CustomEvent).detail).toEqual({ session });
 
     window.removeEventListener(AppEvents.SESSION_CREATED, created);
+  });
+
+  it('carries attachments and the selected skill into the new session', async () => {
+    const activated = vi.fn();
+    const setView = vi.fn();
+    window.addEventListener(AppEvents.ADD_ACTIVE_SESSION, activated);
+
+    render(
+      <IntlProvider locale="en">
+        <Hub setView={setView} />
+      </IntlProvider>
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(setView).toHaveBeenCalledOnce());
+    expect(setView.mock.calls[0][1]).toMatchObject({ initialMessage: submittedInput });
+    expect((activated.mock.calls[0][0] as CustomEvent).detail).toEqual({
+      sessionId: session.id,
+      initialMessage: submittedInput,
+    });
+
+    window.removeEventListener(AppEvents.ADD_ACTIVE_SESSION, activated);
   });
 });

@@ -189,8 +189,8 @@ export default function Hub({
   }, []);
 
   const handleSubmit = async (input: UserInput) => {
-    const { msg: userMessage, images } = input;
-    if (!(images.length > 0 || userMessage.trim()) || isCreatingSession) return;
+    const { msg: userMessage, images, files } = input;
+    if (!(images.length > 0 || files?.length || userMessage.trim()) || isCreatingSession) return;
 
     setIsCreatingSession(true);
 
@@ -210,14 +210,14 @@ export default function Hub({
       window.dispatchEvent(new CustomEvent(AppEvents.SESSION_CREATED, { detail: { session } }));
       window.dispatchEvent(
         new CustomEvent(AppEvents.ADD_ACTIVE_SESSION, {
-          detail: { sessionId: session.id, initialMessage: { msg: userMessage, images } },
+          detail: { sessionId: session.id, initialMessage: input },
         })
       );
 
       setView('pair', {
         disableAnimation: true,
         resumeSessionId: session.id,
-        initialMessage: { msg: userMessage, images },
+        initialMessage: input,
       });
     } catch (error) {
       console.error('Failed to create session:', error);

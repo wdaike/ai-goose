@@ -214,7 +214,18 @@ export type MessageContent =
   | (ThinkingContent & { type: 'thinking' })
   | (PlanContent & { type: 'plan' })
   | (RedactedThinkingContent & { type: 'redactedThinking' })
-  | (SystemNotificationContent & { type: 'systemNotification' });
+  | (SystemNotificationContent & { type: 'systemNotification' })
+  | (FileAttachment & { type: 'fileAttachment' })
+  | (SkillReference & { type: 'skill' });
+
+export type FileAttachment = {
+  name: string;
+  path: string;
+};
+
+export type SkillReference = {
+  name: string;
+};
 
 export type Message = {
   content: MessageContent[];
@@ -278,10 +289,21 @@ export interface ImageData {
 export interface UserInput {
   msg: string;
   images: ImageData[];
+  files?: FileAttachment[];
+  skill?: string;
 }
 
-export function createUserMessage(text: string, images?: ImageData[]): Message {
+export function createUserMessage(
+  text: string,
+  images?: ImageData[],
+  files?: FileAttachment[],
+  skill?: string
+): Message {
   const content: Message['content'] = [];
+
+  if (skill) {
+    content.push({ type: 'skill', name: skill });
+  }
 
   if (text.trim()) {
     content.push({ type: 'text', text });
@@ -296,6 +318,10 @@ export function createUserMessage(text: string, images?: ImageData[]): Message {
       });
     });
   }
+
+  files?.forEach((file) => {
+    content.push({ type: 'fileAttachment', name: file.name, path: file.path });
+  });
 
   return {
     id: generateMessageId(),
@@ -331,6 +357,14 @@ export function getTextAndImageContent(message: Message): {
   }
 
   return { textContent, imagePaths };
+}
+
+export function getFileAttachments(message: Message): FileAttachment[] {
+  return message.content.filter((content) => content.type === 'fileAttachment');
+}
+
+export function getSkillReference(message: Message): string | null {
+  return message.content.find((content) => content.type === 'skill')?.name ?? null;
 }
 
 function stripToolCallMarkers(text: string): string {

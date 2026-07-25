@@ -35,6 +35,32 @@ describe('mapThreadToMessages', () => {
     ]);
   });
 
+  it('lifts marked attachment paths and skills out of user message text', () => {
+    const items = [
+      {
+        type: 'userMessage',
+        id: 'user-1',
+        clientId: null,
+        content: [
+          { type: 'skill', name: 'pdf', path: '/home/.icodex/skills/pdf/SKILL.md' },
+          {
+            type: 'text',
+            text: 'Summarize this /tmp/notes.pdf',
+            text_elements: [{ byteRange: { start: 15, end: 29 }, placeholder: 'notes.pdf' }],
+          },
+        ],
+      },
+    ] as ThreadItem[];
+
+    const messages = mapThreadToMessages(state(items));
+
+    expect(messages[0].content).toEqual([
+      { type: 'text', text: 'Summarize this' },
+      { type: 'skill', name: 'pdf' },
+      { type: 'fileAttachment', name: 'notes.pdf', path: '/tmp/notes.pdf' },
+    ]);
+  });
+
   it('hides reasoning and groups commentary and tools while leaving the answer outside', () => {
     const items = [
       {

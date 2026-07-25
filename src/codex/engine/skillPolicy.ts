@@ -1,8 +1,20 @@
 import { codex } from '../client';
 import type { SkillMetadata } from '../protocol/v2/SkillMetadata';
 
-function codexHome(): string {
-  return (window.appConfig?.get('CODEX_HOME') as string) ?? '';
+function parentPath(filePath: string): string {
+  const separatorIndex = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'));
+  return separatorIndex > 0 ? filePath.slice(0, separatorIndex) : '';
+}
+
+async function codexHome(): Promise<string> {
+  const configuredHome = window.appConfig?.get('CODEX_HOME');
+  if (typeof configuredHome === 'string' && configuredHome.trim()) {
+    return configuredHome;
+  }
+
+  const response = await codex.configRead({ includeLayers: true });
+  const userLayer = response.layers?.find((layer) => layer.name.type === 'user');
+  return userLayer?.name.type === 'user' ? parentPath(userLayer.name.file) : '';
 }
 
 function isUnderCodexHome(skillPath: string, home: string): boolean {
@@ -17,9 +29,15 @@ function isUnderCodexHome(skillPath: string, home: string): boolean {
  * Returns the enabled skills that survive the policy.
  */
 export async function enforceSkillPolicy(cwd: string): Promise<SkillMetadata[]> {
-  const home = codexHome();
-  const response = await codex.skillsList({ cwds: cwd ? [cwd] : [] });
+  const [home, response] = await Promise.all([
+    codexHome().catch(() => ''),
+    codex.skillsList({ cwds: cwd ? [cwd] : [] }),
+  ]);
   const skills = response.data.flatMap((entry) => entry.skills);
+  if (!home) {
+    console.warn('Could not resolve CODEX_HOME; skipping external skill policy');
+    return skills.filter((skill) => skill.enabled);
+  }
   const external = skills.filter((skill) => skill.enabled && !isUnderCodexHome(skill.path, home));
   await Promise.all(
     external.map((skill) => codex.skillsConfigWrite({ path: skill.path, enabled: false }))
@@ -32,8 +50,10 @@ export async function enforceSkillPolicy(cwd: string): Promise<SkillMetadata[]> 
  * settings can list and toggle them.
  */
 export async function listManagedSkills(cwd: string): Promise<SkillMetadata[]> {
-  const home = codexHome();
-  const response = await codex.skillsList({ cwds: cwd ? [cwd] : [], forceReload: true });
+  const [home, response] = await Promise.all([
+    codexHome(),
+    codex.skillsList({ cwds: cwd ? [cwd] : [], forceReload: true }),
+  ]);
   const skills = response.data.flatMap((entry) => entry.skills);
   return skills.filter((skill) => isUnderCodexHome(skill.path, home));
 }

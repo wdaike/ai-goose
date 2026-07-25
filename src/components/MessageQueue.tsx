@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import { ImageData } from '../types/message';
+import { FileAttachment, ImageData } from '../types/message';
 import { defineMessages, useIntl } from '../i18n';
 
 const i18n = defineMessages({
@@ -58,6 +58,8 @@ export interface QueuedMessage {
   content: string;
   timestamp: number;
   images: ImageData[];
+  files?: FileAttachment[];
+  skill?: string;
 }
 
 interface MessageQueueProps {

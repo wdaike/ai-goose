@@ -1,10 +1,17 @@
-import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
-import { ArrowUp, Plus } from 'lucide-react';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useCallback,
+} from 'react';
+import { ArrowUp, Box, Plus } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/Tooltip';
 import { Button } from './ui/button';
 import type { View } from '../utils/navigationUtils';
 import Stop from './ui/Stop';
-import { Close, Microphone } from './icons';
+import { Microphone } from './icons';
 import { ChatState } from '../types/chatState';
 import debounce from 'lodash/debounce';
 import { LocalMessageStorage } from '../utils/localMessageStorage';
@@ -14,14 +21,15 @@ import { cn } from '../utils';
 import { useModelAndProvider } from './ModelAndProviderContext';
 import { useAudioRecorder } from '../hooks/useAudioRecorder';
 import { toastError } from '../toasts';
-import MentionPopover, { DisplayItemWithMatch } from './MentionPopover';
+import MentionPopover, { DisplayItem, DisplayItemWithMatch } from './MentionPopover';
+import { ComposerAttachments } from './ComposerAttachments';
 import { DroppedFile, useFileDrop } from '../hooks/useFileDrop';
 import { MessageQueue, QueuedMessage } from './MessageQueue';
 import { detectInterruption } from '../utils/interruptionDetector';
 import type { Message } from '../types/message';
 import { getInitialWorkingDir } from '../utils/workingDir';
 import { trackFileAttached, trackVoiceDictation } from '../utils/analytics';
-import { UserInput, ImageData } from '../types/message';
+import { UserInput, ImageData, FileAttachment } from '../types/message';
 import { usePastedImages, MAX_IMAGES_PER_MESSAGE } from '../hooks/usePastedImages';
 import { defineMessages, useIntl } from '../i18n';
 import TurndownService from 'turndown';
@@ -59,6 +67,8 @@ const moveQueuedMessageToFront = (
 const removeQueuedMessage = (messages: QueuedMessage[], messageId: string): QueuedMessage[] =>
   messages.filter((msg) => msg.id !== messageId);
 
+const skillLabel = (name: string): string => name.split(':').pop() || name;
+
 const i18n = defineMessages({
   placeholder: {
     id: 'chatInput.placeholder',
@@ -68,17 +78,9 @@ const i18n = defineMessages({
     id: 'chatInput.dictationError',
     defaultMessage: 'Dictation Error',
   },
-  removeImage: {
-    id: 'chatInput.removeImage',
-    defaultMessage: 'Remove image',
-  },
-  removeFile: {
-    id: 'chatInput.removeFile',
-    defaultMessage: 'Remove file',
-  },
-  unknownType: {
-    id: 'chatInput.unknownType',
-    defaultMessage: 'Unknown type',
+  removeSkill: {
+    id: 'chatInput.removeSkill',
+    defaultMessage: 'Remove skill',
   },
   waitingForImages: {
     id: 'chatInput.waitingForImages',
@@ -332,7 +334,12 @@ export default function ChatInput({
 
       if (shouldProcessQueue) {
         LocalMessageStorage.addMessage(messageToSend.content);
-        handleSubmit({ msg: messageToSend.content, images: messageToSend.images });
+        handleSubmit({
+          msg: messageToSend.content,
+          images: messageToSend.images,
+          files: messageToSend.files,
+          skill: messageToSend.skill,
+        });
         if (shouldSendAfterStop) {
           clearPendingSendAfterStop(messageToSend.id);
         }
@@ -389,6 +396,14 @@ export default function ChatInput({
     getDisplayFiles: () => DisplayItemWithMatch[];
     selectFile: (index: number) => void;
   }>(null);
+
+  const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
+  const [skillBadgeWidth, setSkillBadgeWidth] = useState(0);
+  const skillBadgeRef = useRef<HTMLButtonElement>(null);
+
+  useLayoutEffect(() => {
+    setSkillBadgeWidth(skillBadgeRef.current?.offsetWidth ?? 0);
+  }, [selectedSkill]);
 
   // Audio recorder hook for voice dictation
   const {
@@ -607,24 +622,24 @@ export default function ChatInput({
     return [...convertPastedImagesToImageData(), ...droppedImageData];
   }, [convertPastedImagesToImageData, allDroppedFiles]);
 
-  const appendDroppedFilePaths = useCallback(
-    (text: string): string => {
-      const droppedFilePaths = allDroppedFiles
+  const attachedFiles = useMemo(
+    (): FileAttachment[] =>
+      allDroppedFiles
         .filter((file) => !file.isImage && !file.error && !file.isLoading)
-        .map((file) => file.path);
-
-      if (droppedFilePaths.length > 0) {
-        const pathsString = droppedFilePaths.join(' ');
-        return text ? `${text} ${pathsString}` : pathsString;
-      }
-      return text;
-    },
+        .map((file) => ({ name: file.name, path: file.path })),
     [allDroppedFiles]
   );
+
+  const hasSubmittableContent =
+    Boolean(displayValue.trim()) ||
+    Boolean(selectedSkill) ||
+    hasReadyPastedImage ||
+    allDroppedFiles.some((file) => !file.error && !file.isLoading);
 
   const clearInputState = useCallback(() => {
     setDisplayValue('');
     setValue('');
+    setSelectedSkill(null);
     clearImages();
     if (onFilesProcessed && droppedFiles.length > 0) {
       onFilesProcessed();
@@ -774,7 +789,7 @@ export default function ChatInput({
     }
 
     const imageData = convertImagesToImageData();
-    const contentToQueue = appendDroppedFilePaths(displayValue.trim());
+    const contentToQueue = displayValue.trim();
 
     const interruptionMatch = detectInterruption(displayValue.trim());
 
@@ -790,6 +805,8 @@ export default function ChatInput({
         content: contentToQueue,
         timestamp: Date.now(),
         images: imageData,
+        files: attachedFiles,
+        skill: selectedSkill ?? undefined,
       };
 
       // Add the interruption message to the front of the queue so it gets sent first
@@ -804,6 +821,8 @@ export default function ChatInput({
       content: contentToQueue,
       timestamp: Date.now(),
       images: imageData,
+      files: attachedFiles,
+      skill: selectedSkill ?? undefined,
     };
     setQueuedMessages((prev) => {
       const newQueue = [...prev, newMessage];
@@ -818,32 +837,24 @@ export default function ChatInput({
     return true;
   };
 
-  const canSubmit =
-    !isLoading &&
-    !queueProcessingBlocked &&
-    (displayValue.trim() ||
-      hasReadyPastedImage ||
-      allDroppedFiles.some((file) => !file.error && !file.isLoading));
+  const canSubmit = !isLoading && !queueProcessingBlocked && hasSubmittableContent;
 
   const performSubmit = useCallback(
     (text?: string) => {
       const imageData = convertImagesToImageData();
-      const textToSend = appendDroppedFilePaths(text ?? displayValue.trim());
+      const textToSend = text ?? displayValue.trim();
 
-      if (textToSend || imageData.length > 0) {
-        // Store original message in history
+      if (textToSend || imageData.length > 0 || attachedFiles.length > 0) {
         if (displayValue.trim()) {
           LocalMessageStorage.addMessage(displayValue);
-        } else {
-          const droppedFilePaths = allDroppedFiles
-            .filter((file) => !file.isImage && !file.error && !file.isLoading)
-            .map((file) => file.path);
-          if (droppedFilePaths.length > 0) {
-            LocalMessageStorage.addMessage(droppedFilePaths.join(' '));
-          }
         }
 
-        handleSubmit({ msg: textToSend, images: imageData });
+        handleSubmit({
+          msg: textToSend,
+          images: imageData,
+          files: attachedFiles,
+          skill: selectedSkill ?? undefined,
+        });
 
         // Auto-resume queue after sending a NON-interruption message (if it was paused due to interruption)
         if (
@@ -865,9 +876,9 @@ export default function ChatInput({
     },
     [
       convertImagesToImageData,
-      appendDroppedFilePaths,
       displayValue,
-      allDroppedFiles,
+      attachedFiles,
+      selectedSkill,
       handleSubmit,
       lastInterruption,
       clearInputState,
@@ -904,6 +915,17 @@ export default function ChatInput({
         setMentionPopover((prev) => ({ ...prev, isOpen: false }));
         return;
       }
+    }
+
+    if (
+      evt.key === 'Backspace' &&
+      selectedSkill &&
+      evt.currentTarget.selectionStart === 0 &&
+      evt.currentTarget.selectionEnd === 0
+    ) {
+      evt.preventDefault();
+      setSelectedSkill(null);
+      return;
     }
 
     handleHistoryNavigation(evt);
@@ -944,12 +966,6 @@ export default function ChatInput({
       handleInterruptionAndQueue();
       return;
     }
-    const canSubmit =
-      !isLoading &&
-      !queueProcessingBlocked &&
-      (displayValue.trim() ||
-        hasReadyPastedImage ||
-        allDroppedFiles.some((file) => !file.error && !file.isLoading));
     if (canSubmit) {
       performSubmit();
     }
@@ -980,10 +996,16 @@ export default function ChatInput({
       }
     } else {
       trackFileAttached('file');
-      const path = window.electron.getPathForFile(file);
-      const newValue = displayValue.trim() ? `${displayValue.trim()} ${path}` : path;
-      setDisplayValue(newValue);
-      setValue(newValue);
+      setLocalDroppedFiles((prev) => [
+        ...prev,
+        {
+          id: `picked-${Date.now()}-${prev.length}`,
+          path: window.electron.getPathForFile(file),
+          name: file.name,
+          type: file.type,
+          isImage: false,
+        },
+      ]);
     }
 
     textAreaRef.current?.focus();
@@ -993,7 +1015,19 @@ export default function ChatInput({
     }
   };
 
-  const handleMentionItemSelect = (itemText: string) => {
+  const handleMentionItemSelect = (itemText: string, item: DisplayItem) => {
+    // Skills become a chip in front of the input instead of literal `/name` text
+    if (item.itemType === 'Skill' && mentionPopover.mentionStart === 0) {
+      const rest = displayValue.slice(1 + mentionPopover.query.length).replace(/^\s+/, '');
+      setSelectedSkill(item.name);
+      setDisplayValue(rest);
+      setValue(rest);
+      setMentionPopover((prev) => ({ ...prev, isOpen: false }));
+      textAreaRef.current?.focus();
+      setTimeout(() => textAreaRef.current?.setSelectionRange(0, 0), 0);
+      return;
+    }
+
     // Replace the @ mention with the file path
     const beforeMention = displayValue.slice(0, mentionPopover.mentionStart);
     const afterMention = displayValue.slice(
@@ -1015,10 +1049,6 @@ export default function ChatInput({
     }, 0);
   };
 
-  const hasSubmittableContent =
-    displayValue.trim() ||
-    hasReadyPastedImage ||
-    allDroppedFiles.some((file) => !file.error && !file.isLoading);
   const isAnyDroppedFileLoading = allDroppedFiles.some((file) => file.isLoading);
 
   const isSubmitButtonDisabled =
@@ -1076,7 +1106,12 @@ export default function ChatInput({
     if (!isLoading) {
       setQueuedMessages((prev) => removeQueuedMessage(prev, messageId));
       LocalMessageStorage.addMessage(messageToSend.content);
-      handleSubmit({ msg: messageToSend.content, images: messageToSend.images });
+      handleSubmit({
+        msg: messageToSend.content,
+        images: messageToSend.images,
+        files: messageToSend.files,
+        skill: messageToSend.skill,
+      });
       return;
     }
 
@@ -1092,6 +1127,8 @@ export default function ChatInput({
         const steerAccepted = await onSteerQueuedMessage({
           msg: messageToSend.content,
           images: messageToSend.images,
+          files: messageToSend.files,
+          skill: messageToSend.skill,
         });
 
         if (steerAccepted) {
@@ -1122,7 +1159,12 @@ export default function ChatInput({
           return newQueue;
         });
         LocalMessageStorage.addMessage(messageToSend.content);
-        handleSubmit({ msg: messageToSend.content, images: messageToSend.images });
+        handleSubmit({
+          msg: messageToSend.content,
+          images: messageToSend.images,
+          files: messageToSend.files,
+          skill: messageToSend.skill,
+        });
         return;
       }
     }
@@ -1146,7 +1188,12 @@ export default function ChatInput({
     if (!isLoading && !queueProcessingBlocked && queuedMessages.length > 0) {
       const nextMessage = queuedMessages[0];
       LocalMessageStorage.addMessage(nextMessage.content);
-      handleSubmit({ msg: nextMessage.content, images: nextMessage.images });
+      handleSubmit({
+        msg: nextMessage.content,
+        images: nextMessage.images,
+        files: nextMessage.files,
+        skill: nextMessage.skill,
+      });
       setQueuedMessages((prev) => {
         const newQueue = prev.slice(1);
         // If queue becomes empty after processing, clear the paused state
@@ -1196,108 +1243,33 @@ export default function ChatInput({
         />
       )}
 
-      {/* Combined files and images preview */}
-      {(pastedImages.length > 0 || allDroppedFiles.length > 0) && (
-        <div className="flex flex-wrap gap-2 px-4 pt-4 pb-2">
-          {/* Render pasted images first */}
-          {pastedImages.map((img) => (
-            <div key={img.id} className="relative group w-20 h-20">
-              {img.dataUrl && (
-                <img
-                  src={img.dataUrl}
-                  alt={`Pasted image ${img.id}`}
-                  className={`w-full h-full object-cover rounded border ${img.error ? 'border-red-500' : 'border-border-primary'}`}
-                />
-              )}
-              {img.isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded">
-                  <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white"></div>
-                </div>
-              )}
-              {img.error && !img.isLoading && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-75 rounded p-1 text-center">
-                  <p className="text-red-400 text-[10px] leading-tight break-all">
-                    {img.error.substring(0, 50)}
-                  </p>
-                </div>
-              )}
-              {!img.isLoading && (
-                <Button
-                  type="button"
-                  shape="round"
-                  onClick={() => handleRemovePastedImage(img.id)}
-                  className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity z-10"
-                  aria-label={intl.formatMessage(i18n.removeImage)}
-                  variant="outline"
-                  size="xs"
-                >
-                  <Close />
-                </Button>
-              )}
-            </div>
-          ))}
-
-          {/* Render dropped files after pasted images */}
-          {allDroppedFiles.map((file) => (
-            <div key={file.id} className="relative group">
-              {file.isImage ? (
-                <div className="w-20 h-20">
-                  {file.dataUrl && (
-                    <img
-                      src={file.dataUrl}
-                      alt={file.name}
-                      className={`w-full h-full object-cover rounded border ${file.error ? 'border-red-500' : 'border-border-primary'}`}
-                    />
-                  )}
-                  {file.isLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded">
-                      <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white"></div>
-                    </div>
-                  )}
-                  {file.error && !file.isLoading && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-75 rounded p-1 text-center">
-                      <p className="text-red-400 text-[10px] leading-tight break-all">
-                        {file.error.substring(0, 30)}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="flex items-center gap-2 px-3 py-2 bg-bgSubtle border border-border-primary rounded-lg min-w-[120px] max-w-[200px]">
-                  <div className="flex-shrink-0 w-8 h-8 bg-background-primary border border-border-primary rounded flex items-center justify-center text-xs font-mono text-text-secondary">
-                    {file.name.split('.').pop()?.toUpperCase() || 'FILE'}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-text-primary truncate" title={file.name}>
-                      {file.name}
-                    </p>
-                    <p className="text-xs text-text-secondary">
-                      {file.type || intl.formatMessage(i18n.unknownType)}
-                    </p>
-                  </div>
-                </div>
-              )}
-              {!file.isLoading && (
-                <Button
-                  type="button"
-                  shape="round"
-                  onClick={() => handleRemoveDroppedFile(file.id)}
-                  className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity z-10"
-                  aria-label={intl.formatMessage(i18n.removeFile)}
-                  variant="outline"
-                  size="xs"
-                >
-                  <Close />
-                </Button>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+      <ComposerAttachments
+        images={pastedImages}
+        files={allDroppedFiles}
+        onRemoveImage={handleRemovePastedImage}
+        onRemoveFile={handleRemoveDroppedFile}
+      />
 
       {/* Input row with inline action buttons wrapped in form */}
       <form onSubmit={onFormSubmit} className="relative">
         <div className="relative">
+          {selectedSkill && (
+            <div className="absolute left-3 top-2.5 z-10 flex h-6 items-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedSkill(null);
+                  textAreaRef.current?.focus();
+                }}
+                ref={skillBadgeRef}
+                title={intl.formatMessage(i18n.removeSkill)}
+                className="inline-flex items-center gap-1 rounded-md bg-blue-500/10 px-1.5 text-[15px] font-medium leading-6 text-blue-600 transition-colors hover:bg-blue-500/20 dark:text-blue-400"
+              >
+                <Box className="h-4 w-4" strokeWidth={1.75} />
+                {skillLabel(selectedSkill)}
+              </button>
+            </div>
+          )}
           <textarea
             data-testid="chat-input"
             autoFocus
@@ -1318,6 +1290,7 @@ export default function ChatInput({
               minHeight: `${minTextareaHeight}px`,
               maxHeight: `${maxHeight}px`,
               overflowY: 'auto',
+              textIndent: selectedSkill ? skillBadgeWidth + 6 : 0,
             }}
             className="w-full outline-none border-none focus:ring-0 bg-transparent px-3 pt-2.5 pb-1.5 text-base leading-6 resize-none text-text-primary placeholder:text-text-tertiary"
           />

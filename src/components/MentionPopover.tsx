@@ -33,6 +33,10 @@ const i18n = defineMessages({
     id: 'mentionPopover.noCommandsFound',
     defaultMessage: 'No commands found matching "{query}"',
   },
+  noCommandsAvailable: {
+    id: 'mentionPopover.noCommandsAvailable',
+    defaultMessage: 'No commands available',
+  },
 });
 
 type CommandItemType = 'Builtin' | 'Recipe' | 'Skill' | 'Agent';
@@ -64,7 +68,7 @@ export interface DisplayItemWithMatch extends DisplayItem {
 interface MentionPopoverProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelect: (filePath: string) => void;
+  onSelect: (insertText: string, item: DisplayItem) => void;
   position: { x: number; y: number };
   query: string;
   isSlashCommand: boolean;
@@ -475,7 +479,7 @@ const MentionPopover = forwardRef<
         getDisplayFiles: () => displayItems,
         selectFile: (index: number) => {
           if (displayItems[index]) {
-            onSelect(getSelectionText(displayItems[index]));
+            onSelect(getSelectionText(displayItems[index]), displayItems[index]);
             onClose();
           }
         },
@@ -556,7 +560,7 @@ const MentionPopover = forwardRef<
     const handleItemClick = (index: number) => {
       if (index >= 0 && index < displayItems.length) {
         onSelectedIndexChange(index);
-        onSelect(getSelectionText(displayItems[index]));
+        onSelect(getSelectionText(displayItems[index]), displayItems[index]);
         onClose();
       }
     };
@@ -612,11 +616,15 @@ const MentionPopover = forwardRef<
                   </div>
                 ))}
 
-                {!isLoading && displayItems.length === 0 && query && (
+                {!isLoading && displayItems.length === 0 && (
                   <div className="p-4 text-center text-text-secondary text-sm">
-                    {intl.formatMessage(isSlashCommand ? i18n.noCommandsFound : i18n.noItemsFound, {
-                      query,
-                    })}
+                    {query
+                      ? intl.formatMessage(isSlashCommand ? i18n.noCommandsFound : i18n.noItemsFound, {
+                          query,
+                        })
+                      : isSlashCommand
+                        ? intl.formatMessage(i18n.noCommandsAvailable)
+                        : null}
                   </div>
                 )}
               </div>
