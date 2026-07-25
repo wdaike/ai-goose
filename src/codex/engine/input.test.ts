@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createUserMessage } from '../../types/message';
-import { messageToCodexInput } from './input';
+import type { SkillMetadata } from '../protocol/v2/SkillMetadata';
+import { explicitSkillName, messageToCodexInput } from './input';
 
 describe('messageToCodexInput', () => {
   it('includes attached images in Codex turn input', () => {
@@ -30,6 +31,43 @@ describe('messageToCodexInput', () => {
       {
         type: 'image',
         url: 'data:image/jpeg;base64,aW1hZ2UtZGF0YQ==',
+      },
+    ]);
+  });
+
+  it('turns an explicit slash command into structured skill input', () => {
+    const message = createUserMessage('/pdf:pdf 生成 PDF', []);
+    const skill: SkillMetadata = {
+      name: 'pdf:pdf',
+      description: 'Create and inspect PDFs',
+      path: '/skills/pdf/SKILL.md',
+      scope: 'user',
+      enabled: true,
+    };
+
+    expect(explicitSkillName(message)).toBe('pdf:pdf');
+    expect(messageToCodexInput(message, skill)).toEqual([
+      {
+        type: 'skill',
+        name: 'pdf:pdf',
+        path: '/skills/pdf/SKILL.md',
+      },
+      {
+        type: 'text',
+        text: '生成 PDF',
+        text_elements: [],
+      },
+    ]);
+  });
+
+  it('leaves unknown slash commands as text', () => {
+    const message = createUserMessage('/not-a-skill keep this', []);
+
+    expect(messageToCodexInput(message)).toEqual([
+      {
+        type: 'text',
+        text: '/not-a-skill keep this',
+        text_elements: [],
       },
     ]);
   });

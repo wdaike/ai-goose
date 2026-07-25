@@ -5,7 +5,7 @@ const isLinuxVulkanBuild = process.env.GOOSE_DESKTOP_LINUX_VARIANT === 'vulkan';
 
 let cfg = {
   asar: true,
-  extraResource: ['src/bin', 'src/images', 'src/app-update.yml'],
+  extraResource: ['src/bin', 'src/images', 'src/app-update.yml', 'src/codex-seed'],
   icon: 'src/images/icon',
   // Windows specific configuration
   win32: {

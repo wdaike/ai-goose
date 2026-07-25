@@ -2,7 +2,7 @@ import { codex } from '../client';
 import type { SkillMetadata } from '../protocol/v2/SkillMetadata';
 
 function codexHome(): string {
-  return (window.appConfig?.get('GOOSE_CODEX_HOME') as string) ?? '';
+  return (window.appConfig?.get('CODEX_HOME') as string) ?? '';
 }
 
 function isUnderCodexHome(skillPath: string, home: string): boolean {
@@ -13,7 +13,7 @@ function isUnderCodexHome(skillPath: string, home: string): boolean {
  * Codex discovers skills outside CODEX_HOME (`~/.agents/skills`, repo-level
  * `.codex/skills` and `.agents/skills`, `/etc/codex/skills`) and offers no
  * config switch to turn that discovery off. Goose must only use skills from
- * `~/.goose`, so anything else gets disabled via `skills/config/write`.
+ * `~/.icodex`, so anything else gets disabled via `skills/config/write`.
  * Returns the enabled skills that survive the policy.
  */
 export async function enforceSkillPolicy(cwd: string): Promise<SkillMetadata[]> {

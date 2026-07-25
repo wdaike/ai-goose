@@ -1,0 +1,9 @@
+# Appended to a freshly-generated ~/.icodex/config.toml on first launch.
+# Declares MCP servers that back the bundled seed skills. Skill enable-entries
+# ([[skills.config]]) are generated in code because their paths depend on the
+# resolved CODEX_HOME.
+
+[mcp_servers.playwright]
+command = "npx"
+args = ["-y", "@playwright/mcp@latest"]
+startup_timeout_sec = 120

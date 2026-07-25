@@ -156,7 +156,7 @@ function mapItem(
             text += part.text;
             break;
           case 'skill':
-            text += `/${part.name}`;
+            text += `/${part.name} `;
             break;
           case 'mention':
             text += `@${part.name}`;

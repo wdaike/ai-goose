@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import kebabCase from 'lodash/kebabCase';
-import { AlertCircle, Blocks, Plus, Search, Zap } from 'lucide-react';
+import { AlertCircle, Blocks, Download, Package, Plus, Search, Trash2, Zap } from 'lucide-react';
 import type { ExtensionConfig } from '../../../types/extensions';
 import { Button } from '../../ui/button';
 import { Switch } from '../../ui/switch';
@@ -11,6 +11,17 @@ import { errorMessage } from '../../../utils/conversionUtils';
 import { getInitialWorkingDir } from '../../../utils/workingDir';
 import { listManagedSkills, setSkillEnabled } from '../../../codex/engine/skillPolicy';
 import type { SkillMetadata } from '../../../codex/protocol/v2/SkillMetadata';
+import {
+  listPlugins,
+  setPluginEnabled,
+  installPlugin,
+  uninstallPlugin,
+  addMarketplace,
+} from '../../../codex/engine/pluginCatalog';
+import type { PluginSummary } from '../../../codex/protocol/v2/PluginSummary';
+import type { PluginMarketplaceEntry } from '../../../codex/protocol/v2/PluginMarketplaceEntry';
+import { BaseModal } from '../../ui/BaseModal';
+import { Input } from '../../ui/input';
 import ExtensionModal from '../extensions/modal/ExtensionModal';
 import {
   createExtensionConfig,
@@ -114,9 +125,57 @@ const i18n = defineMessages({
     id: 'pluginsSettings.toggleItem',
     defaultMessage: 'Toggle {name} on or off',
   },
+  tabPlugins: {
+    id: 'pluginsSettings.tabPlugins',
+    defaultMessage: 'Plugins',
+  },
+  searchPlugins: {
+    id: 'pluginsSettings.searchPlugins',
+    defaultMessage: 'Search plugins',
+  },
+  noPlugins: {
+    id: 'pluginsSettings.noPlugins',
+    defaultMessage: 'No plugins available',
+  },
+  noPluginsDescription: {
+    id: 'pluginsSettings.noPluginsDescription',
+    defaultMessage: 'Add a marketplace to install plugins.',
+  },
+  errorLoadingPlugins: {
+    id: 'pluginsSettings.errorLoadingPlugins',
+    defaultMessage: 'Error loading plugins',
+  },
+  install: {
+    id: 'pluginsSettings.install',
+    defaultMessage: 'Install',
+  },
+  uninstallPlugin: {
+    id: 'pluginsSettings.uninstallPlugin',
+    defaultMessage: 'Uninstall {name}',
+  },
+  disabledByAdmin: {
+    id: 'pluginsSettings.disabledByAdmin',
+    defaultMessage: 'Disabled by admin',
+  },
+  addMarketplace: {
+    id: 'pluginsSettings.addMarketplace',
+    defaultMessage: 'Add marketplace',
+  },
+  addMarketplaceTitle: {
+    id: 'pluginsSettings.addMarketplaceTitle',
+    defaultMessage: 'Add plugin marketplace',
+  },
+  marketplaceSourcePlaceholder: {
+    id: 'pluginsSettings.marketplaceSourcePlaceholder',
+    defaultMessage: 'git URL or local path',
+  },
+  cancel: {
+    id: 'pluginsSettings.cancel',
+    defaultMessage: 'Cancel',
+  },
 });
 
-type PluginsTab = 'mcps' | 'skills';
+type PluginsTab = 'mcps' | 'skills' | 'plugins';
 
 function scrollToExtension(extensionName: string) {
   setTimeout(() => {
@@ -301,6 +360,97 @@ function SkillRow({
   );
 }
 
+function PluginCatalogRow({
+  marketplaceName,
+  plugin,
+  onToggle,
+  onInstall,
+  onUninstall,
+}: {
+  marketplaceName: string;
+  plugin: PluginSummary;
+  onToggle: (plugin: PluginSummary, enabled: boolean) => Promise<void>;
+  onInstall: (plugin: PluginSummary) => Promise<void>;
+  onUninstall: (plugin: PluginSummary) => Promise<void>;
+}) {
+  const intl = useIntl();
+  const [visuallyEnabled, setVisuallyEnabled] = useState(plugin.enabled);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (!busy) setVisuallyEnabled(plugin.enabled);
+  }, [plugin.enabled, busy]);
+
+  const title = plugin.interface?.displayName || plugin.name;
+  const description = plugin.interface?.shortDescription ?? null;
+  const disabledByAdmin = plugin.availability === 'DISABLED_BY_ADMIN';
+
+  const runBusy = async (action: () => Promise<void>, revert?: () => void) => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      await action();
+    } catch {
+      revert?.();
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleToggle = () => {
+    const next = !visuallyEnabled;
+    setVisuallyEnabled(next);
+    return runBusy(
+      () => onToggle(plugin, next),
+      () => setVisuallyEnabled(!next)
+    );
+  };
+
+  return (
+    <PluginRow
+      icon={<Package className="h-5 w-5" />}
+      title={title}
+      description={description}
+      scope={marketplaceName}
+      actions={
+        disabledByAdmin ? (
+          <span className="text-sm text-text-tertiary">
+            {intl.formatMessage(i18n.disabledByAdmin)}
+          </span>
+        ) : plugin.installed ? (
+          <>
+            <button
+              className="text-text-secondary opacity-0 group-hover:opacity-100 hover:text-text-danger transition-opacity disabled:opacity-30"
+              aria-label={intl.formatMessage(i18n.uninstallPlugin, { name: title })}
+              onClick={() => runBusy(() => onUninstall(plugin))}
+              disabled={busy}
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+            <Switch
+              checked={visuallyEnabled}
+              onCheckedChange={handleToggle}
+              disabled={busy}
+              variant="mono"
+              aria-label={intl.formatMessage(i18n.toggleItem, { name: title })}
+            />
+          </>
+        ) : (
+          <Button
+            variant="secondary"
+            className="h-8 rounded-full flex items-center gap-1.5"
+            onClick={() => runBusy(() => onInstall(plugin))}
+            disabled={busy}
+          >
+            <Download className="h-4 w-4" />
+            {intl.formatMessage(i18n.install)}
+          </Button>
+        )
+      }
+    />
+  );
+}
+
 export interface PluginsSettingsSectionProps {
   deepLinkConfig?: ExtensionConfig;
   showEnvVars?: boolean;
@@ -328,6 +478,12 @@ export default function PluginsSettingsSection({
   const [skillsLoading, setSkillsLoading] = useState(true);
   const [skillsError, setSkillsError] = useState<string | null>(null);
 
+  const [pluginMarkets, setPluginMarkets] = useState<PluginMarketplaceEntry[]>([]);
+  const [pluginsLoading, setPluginsLoading] = useState(true);
+  const [pluginsError, setPluginsError] = useState<string | null>(null);
+  const [isAddMarketplaceOpen, setIsAddMarketplaceOpen] = useState(false);
+  const [marketplaceSource, setMarketplaceSource] = useState('');
+
   useEffect(() => {
     if (deepLinkConfig) {
       if (showEnvVars) {
@@ -353,6 +509,23 @@ export default function PluginsSettingsSection({
   useEffect(() => {
     loadSkills();
   }, [loadSkills]);
+
+  const loadPlugins = useCallback(async () => {
+    try {
+      setPluginsLoading(true);
+      setPluginsError(null);
+      const listing = await listPlugins(getInitialWorkingDir());
+      setPluginMarkets(listing.marketplaces);
+    } catch (err) {
+      setPluginsError(errorMessage(err, 'Failed to load plugins'));
+    } finally {
+      setPluginsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadPlugins();
+  }, [loadPlugins]);
 
   const extensions = useMemo(
     () => [...extensionsList].sort((a, b) => getFriendlyTitle(a).localeCompare(getFriendlyTitle(b))),
@@ -380,6 +553,34 @@ export default function PluginsSettingsSection({
     );
   }, [skills, query]);
 
+  const pluginRows = useMemo(
+    () => pluginMarkets.flatMap((market) => market.plugins.map((plugin) => ({ market, plugin }))),
+    [pluginMarkets]
+  );
+
+  const installedPluginCount = useMemo(
+    () => pluginRows.filter(({ plugin }) => plugin.installed).length,
+    [pluginRows]
+  );
+
+  const filteredPlugins = useMemo(() => {
+    const rows = !query
+      ? pluginRows
+      : pluginRows.filter(({ plugin }) => {
+          const title = plugin.interface?.displayName || plugin.name;
+          return [title, plugin.name, plugin.interface?.shortDescription].some((text) =>
+            text?.toLowerCase().includes(query)
+          );
+        });
+    return [...rows].sort(
+      (a, b) =>
+        Number(b.plugin.installed) - Number(a.plugin.installed) ||
+        (a.plugin.interface?.displayName || a.plugin.name).localeCompare(
+          b.plugin.interface?.displayName || b.plugin.name
+        )
+    );
+  }, [pluginRows, query]);
+
   const fetchExtensions = useCallback(async () => {
     await getExtensions(true);
   }, [getExtensions]);
@@ -397,6 +598,40 @@ export default function PluginsSettingsSection({
   const handleSkillToggle = async (skill: SkillMetadata, enabled: boolean) => {
     await setSkillEnabled(skill.path, enabled);
     setSkills((prev) => prev.map((s) => (s.path === skill.path ? { ...s, enabled } : s)));
+  };
+
+  const handlePluginToggle = async (plugin: PluginSummary, enabled: boolean) => {
+    await setPluginEnabled(plugin.id, enabled);
+    setPluginMarkets((prev) =>
+      prev.map((market) => ({
+        ...market,
+        plugins: market.plugins.map((p) => (p.id === plugin.id ? { ...p, enabled } : p)),
+      }))
+    );
+  };
+
+  const handlePluginInstall = async (market: PluginMarketplaceEntry, plugin: PluginSummary) => {
+    await installPlugin(market, plugin.name);
+    await loadPlugins();
+  };
+
+  const handlePluginUninstall = async (plugin: PluginSummary) => {
+    await uninstallPlugin(plugin.id);
+    await loadPlugins();
+  };
+
+  const handleAddMarketplace = async () => {
+    const source = marketplaceSource.trim();
+    if (!source) return;
+    setIsAddMarketplaceOpen(false);
+    setMarketplaceSource('');
+    try {
+      await addMarketplace(source);
+    } catch (error) {
+      setPluginsError(errorMessage(error, 'Failed to add marketplace'));
+    } finally {
+      await loadPlugins();
+    }
   };
 
   const handleModalClose = () => {
@@ -449,6 +684,7 @@ export default function PluginsSettingsSection({
   };
 
   const tabs: { tab: PluginsTab; label: string; count: number }[] = [
+    { tab: 'plugins', label: intl.formatMessage(i18n.tabPlugins), count: installedPluginCount },
     { tab: 'mcps', label: intl.formatMessage(i18n.tabMcps), count: extensions.length },
     { tab: 'skills', label: intl.formatMessage(i18n.tabSkills), count: skills.length },
   ];
@@ -522,6 +758,53 @@ export default function PluginsSettingsSection({
     );
   };
 
+  const renderPlugins = () => {
+    if (pluginsLoading) {
+      return (
+        <div>
+          <RowSkeleton />
+          <RowSkeleton />
+          <RowSkeleton />
+        </div>
+      );
+    }
+    if (pluginsError) {
+      return (
+        <div className="flex flex-col items-center justify-center py-12 text-text-secondary">
+          <AlertCircle className="h-10 w-10 text-text-danger mb-3" />
+          <p className="mb-1">{intl.formatMessage(i18n.errorLoadingPlugins)}</p>
+          <p className="text-sm mb-4">{pluginsError}</p>
+          <Button onClick={loadPlugins} variant="default">
+            {intl.formatMessage(i18n.tryAgain)}
+          </Button>
+        </div>
+      );
+    }
+    if (pluginRows.length === 0) {
+      return (
+        <div className="py-12 text-center text-text-secondary">
+          <p className="mb-1">{intl.formatMessage(i18n.noPlugins)}</p>
+          <p className="text-sm">{intl.formatMessage(i18n.noPluginsDescription)}</p>
+        </div>
+      );
+    }
+    if (filteredPlugins.length === 0) return renderNoMatches();
+    return (
+      <div>
+        {filteredPlugins.map(({ market, plugin }) => (
+          <PluginCatalogRow
+            key={plugin.id}
+            marketplaceName={market.interface?.displayName || market.name}
+            plugin={plugin}
+            onToggle={handlePluginToggle}
+            onInstall={(p) => handlePluginInstall(market, p)}
+            onUninstall={handlePluginUninstall}
+          />
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="pb-8">
       <p className="text-text-secondary -mt-6 mb-8">{intl.formatMessage(i18n.subtitle)}</p>
@@ -557,7 +840,11 @@ export default function PluginsSettingsSection({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={intl.formatMessage(
-                activeTab === 'mcps' ? i18n.searchMcps : i18n.searchSkills
+                activeTab === 'mcps'
+                  ? i18n.searchMcps
+                  : activeTab === 'skills'
+                    ? i18n.searchSkills
+                    : i18n.searchPlugins
               )}
               data-testid="plugins-search"
               className="w-[240px] h-9 pl-9 pr-3 rounded-full border border-border-primary bg-background-primary text-sm text-text-primary placeholder:text-text-tertiary focus:border-border-secondary focus-visible:outline-none transition-colors"
@@ -573,10 +860,24 @@ export default function PluginsSettingsSection({
               {intl.formatMessage(i18n.add)}
             </Button>
           )}
+          {activeTab === 'plugins' && (
+            <Button
+              variant="secondary"
+              className="h-9 rounded-full flex items-center gap-1.5"
+              onClick={() => setIsAddMarketplaceOpen(true)}
+            >
+              <Plus className="h-4 w-4" />
+              {intl.formatMessage(i18n.addMarketplace)}
+            </Button>
+          )}
         </div>
       </div>
 
-      {activeTab === 'mcps' ? renderMcps() : renderSkills()}
+      {activeTab === 'mcps'
+        ? renderMcps()
+        : activeTab === 'skills'
+          ? renderSkills()
+          : renderPlugins()}
 
       {selectedExtension && (
         <ExtensionModal
@@ -614,6 +915,37 @@ export default function PluginsSettingsSection({
           modalType={'add'}
         />
       )}
+
+      <BaseModal
+        isOpen={isAddMarketplaceOpen}
+        title={intl.formatMessage(i18n.addMarketplaceTitle)}
+        actions={
+          <div className="flex justify-end gap-2 px-8">
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setIsAddMarketplaceOpen(false);
+                setMarketplaceSource('');
+              }}
+            >
+              {intl.formatMessage(i18n.cancel)}
+            </Button>
+            <Button onClick={handleAddMarketplace} disabled={!marketplaceSource.trim()}>
+              {intl.formatMessage(i18n.addMarketplace)}
+            </Button>
+          </div>
+        }
+      >
+        <Input
+          autoFocus
+          value={marketplaceSource}
+          onChange={(e) => setMarketplaceSource(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleAddMarketplace();
+          }}
+          placeholder={intl.formatMessage(i18n.marketplaceSourcePlaceholder)}
+        />
+      </BaseModal>
     </div>
   );
 }

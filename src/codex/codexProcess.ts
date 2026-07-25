@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import * as yaml from 'yaml';
+import { documentRuntimeBinDir, ensureDocumentRuntime } from './documentRuntime';
 
 type JsonRpcId = number | string;
 
@@ -26,7 +27,7 @@ interface PendingRequest {
   method: string;
 }
 
-export const CODEX_HOME = path.join(os.homedir(), '.goose');
+export const CODEX_HOME = path.join(os.homedir(), '.icodex');
 const LEGACY_GOOSE_CONFIG = path.join(os.homedir(), '.config', 'goose', 'config.yaml');
 
 function tomlString(value: string): string {
@@ -67,7 +68,7 @@ const KNOWN_PROVIDERS: Record<string, { name: string; baseUrl: string; envKey: s
 };
 
 /**
- * Builds `~/.goose/config.toml` from the legacy goose config so a first
+ * Builds `~/.icodex/config.toml` from the legacy goose config so a first
  * launch works without manual setup. Runs only when the file is absent.
  */
 function migrateLegacyConfig(): string {
@@ -125,16 +126,112 @@ function migrateLegacyConfig(): string {
   return lines.join('\n') + '\n';
 }
 
+/**
+ * Locates the bundled `codex-seed` directory across run modes: packaged
+ * (`extraResource` copies it next to other resources), dev (`electron-forge
+ * start`, run from the repo root), and the web host (plain Node from the repo
+ * root). Returns the first candidate that exists, else the last one.
+ */
+function resolveSeedDir(): string {
+  const candidates = [
+    process.resourcesPath ? path.join(process.resourcesPath, 'codex-seed') : '',
+    path.join(process.cwd(), 'src', 'codex-seed'),
+    path.join(__dirname, 'codex-seed'),
+  ].filter(Boolean);
+  return candidates.find((dir) => fs.existsSync(dir)) ?? candidates[candidates.length - 1];
+}
+
+/**
+ * Copies each bundled skill folder into `~/.icodex/skills` when it is not
+ * already present (idempotent, so existing user skills are never overwritten).
+ * Returns the bundled skill names so first-run config generation can enable
+ * them.
+ */
+function seedBundledSkills(logger: Logger): string[] {
+  const seedSkillsDir = path.join(resolveSeedDir(), 'skills');
+  let entries: fs.Dirent[];
+  try {
+    entries = fs.readdirSync(seedSkillsDir, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+
+  const names: string[] = [];
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    names.push(entry.name);
+    const dest = path.join(CODEX_HOME, 'skills', entry.name);
+    if (fs.existsSync(dest)) continue;
+    fs.cpSync(path.join(seedSkillsDir, entry.name), dest, { recursive: true });
+    logger.info(`Seeded skill ${entry.name} -> ${dest}`);
+  }
+  return names;
+}
+
+/**
+ * Builds the first-run `config.toml`: the legacy-goose migration, plus the seed
+ * MCP declarations (`config-seed.toml`) and an enabled `[[skills.config]]` entry
+ * for each bundled skill.
+ */
+function buildInitialConfig(seededSkills: string[]): string {
+  let out = migrateLegacyConfig().trimEnd();
+
+  let seedConfig = '';
+  try {
+    seedConfig = fs.readFileSync(path.join(resolveSeedDir(), 'config-seed.toml'), 'utf8').trim();
+  } catch {
+    // No seed config fragment to append.
+  }
+  if (seedConfig) out += `\n\n${seedConfig}`;
+
+  for (const name of seededSkills) {
+    const skillPath = path.join(CODEX_HOME, 'skills', name, 'SKILL.md');
+    out += `\n\n[[skills.config]]\npath = ${tomlString(skillPath)}\nenabled = true`;
+  }
+
+  return out + '\n';
+}
+
 export function ensureCodexHome(logger: Logger = console): string {
   fs.mkdirSync(CODEX_HOME, { recursive: true });
 
+  const seededSkills = seedBundledSkills(logger);
+
   const configPath = path.join(CODEX_HOME, 'config.toml');
   if (!fs.existsSync(configPath)) {
-    fs.writeFileSync(configPath, migrateLegacyConfig());
+    fs.writeFileSync(configPath, buildInitialConfig(seededSkills));
     logger.info(`Created ${configPath} from legacy goose config`);
   }
 
   return CODEX_HOME;
+}
+
+/**
+ * Prepends the document runtime, which wins for names nothing else provides —
+ * `pdftoppm`. It cannot win `python3`: codex derives the tool environment from
+ * the user's login shell, whose profile (`path_helper`, brew shellenv) rebuilds
+ * PATH with the system directories in front, and no codex setting overrides
+ * that. The `document-runtime` seed skill names the interpreter instead.
+ *
+ * The directory may not exist yet when the process spawns — PATH lookup is
+ * per-exec and shells skip missing entries, so background provisioning goes
+ * live without a restart.
+ */
+function runtimePath(): string {
+  return [documentRuntimeBinDir(), process.env.PATH ?? ''].filter(Boolean).join(path.delimiter);
+}
+
+/**
+ * Mirrors the lookup `start-desktop.sh` performs, so launching the app from
+ * Finder resolves the same binary as launching it from a shell. Falls back to a
+ * bare `codex` for PATH lookup, which works once `adoptLoginEnv()` has run.
+ */
+function resolveCodexBin(): string {
+  const override = process.env.GOOSE_CODEX_BIN;
+  if (override) return override;
+
+  const bundled = path.join(os.homedir(), '.local', 'share', 'icodex', 'codex');
+  return fs.existsSync(bundled) ? bundled : 'codex';
 }
 
 export type ServerMessageSink = (msg: JsonRpcMessage) => void;
@@ -160,11 +257,12 @@ export class CodexProcess {
 
   start(): void {
     if (this.child) return;
-    const bin = process.env.GOOSE_CODEX_BIN ?? 'codex';
+    const bin = resolveCodexBin();
     const codexHome = ensureCodexHome(this.logger);
+    void ensureDocumentRuntime(this.logger);
     const child = spawn(bin, ['app-server'], {
       stdio: ['pipe', 'pipe', 'pipe'],
-      env: { ...process.env, CODEX_HOME: codexHome },
+      env: { ...process.env, CODEX_HOME: codexHome, PATH: runtimePath() },
     });
     this.child = child;
 

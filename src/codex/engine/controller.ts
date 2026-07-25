@@ -17,13 +17,20 @@ import { codex } from '../client';
 import type { AskForApproval } from '../protocol/v2/AskForApproval';
 import type { SandboxPolicy } from '../protocol/v2/SandboxPolicy';
 import type { Thread } from '../protocol/v2/Thread';
+import type { ThreadStartParams } from '../protocol/v2/ThreadStartParams';
 import type { ThreadItem } from '../protocol/v2/ThreadItem';
 import type { TurnError } from '../protocol/v2/TurnError';
 import type { TurnPlanUpdatedNotification } from '../protocol/v2/TurnPlanUpdatedNotification';
-import { messageToCodexInput } from './input';
+import type { DynamicToolSpec } from '../protocol/v2/DynamicToolSpec';
+import { explicitSkillName, messageToCodexInput } from './input';
 import { mapThreadToMessages, type MappingState } from './mapItems';
 import { restoreDynamicToolCalls } from './restoreToolCalls';
 import { enforceSkillPolicy } from './skillPolicy';
+import {
+  LOAD_WORKSPACE_DEPENDENCIES_TOOL,
+  workspaceDependenciesResponse,
+  workspaceDependencyTools,
+} from './workspaceDependencies';
 
 interface ThreadEntry extends MappingState {
   thread: Thread | null;
@@ -40,6 +47,9 @@ interface ServerMessage {
 const threads = new Map<string, ThreadEntry>();
 const modelOverrides = new Map<string, { model: string | null; effort: string | null }>();
 let subscribed = false;
+
+// Dynamic tools are experimental in 0.145 and omitted from the generated stable bindings.
+type ThreadStartWithDynamicTools = ThreadStartParams & { dynamicTools: DynamicToolSpec[] };
 
 export function getActiveTurnId(threadId: string): string | null {
   return threads.get(threadId)?.activeTurnId ?? null;
@@ -176,10 +186,29 @@ async function handleApprovalRequest(msg: ServerMessage): Promise<void> {
   publish(threadId);
 }
 
+function handleDynamicToolRequest(msg: ServerMessage): void {
+  const tool = msg.params?.tool;
+  if (tool !== LOAD_WORKSPACE_DEPENDENCIES_TOOL) {
+    window.codex.respond(msg.id!, {
+      contentItems: [{ type: 'inputText', text: `Unknown client tool: ${String(tool)}` }],
+      success: false,
+    });
+    return;
+  }
+
+  const homeDir = (window.appConfig?.get('GOOSE_HOME_DIR') as string | undefined) ?? '~';
+  window.codex.respond(
+    msg.id!,
+    workspaceDependenciesResponse(homeDir, window.electron.platform)
+  );
+}
+
 function handleEvent(msg: ServerMessage): void {
   if (msg.id !== undefined && msg.method) {
     if (APPROVAL_METHODS.has(msg.method) && msg.params?.threadId) {
       void handleApprovalRequest(msg);
+    } else if (msg.method === 'item/tool/call') {
+      handleDynamicToolRequest(msg);
     } else {
       window.codex.respond(msg.id, {});
     }
@@ -286,7 +315,8 @@ function applySkillPolicy(cwd: string): Promise<unknown> {
 
 async function createSession(cwd: string): Promise<Session> {
   ensureSubscribed();
-  const [{ thread }] = await Promise.all([codex.threadStart({ cwd }), applySkillPolicy(cwd)]);
+  const params: ThreadStartWithDynamicTools = { cwd, dynamicTools: workspaceDependencyTools };
+  const [{ thread }] = await Promise.all([codex.threadStart(params), applySkillPolicy(cwd)]);
   const session = threadToSession(thread);
   seedEntry(thread, []);
   acpChatSessionActions.finishSessionLoad(thread.id, session);
@@ -366,20 +396,33 @@ async function submitMessage(
   const snapshot = acpChatSessionStore.getSnapshot(sessionId);
   if (snapshot?.activePromptAttemptId) return;
 
-  const input = messageToCodexInput(userMessage);
-  if (input.length === 0) return;
-
   const promptAttemptId = uuidv7();
   acpChatSessionActions.startPromptAttempt(sessionId, promptAttemptId);
 
   const entry = entryFor(sessionId);
-  entry.finish = (error?: string) => {
-    if (acpChatSessionActions.finishPromptAttemptIfCurrent(sessionId, promptAttemptId)) {
-      void options.onFinish(error);
-    }
-  };
-
   try {
+    const skillName = explicitSkillName(userMessage);
+    const selectedSkill = skillName
+      ? (
+          await codex.skillsList({
+            cwds: entry.thread?.cwd ? [entry.thread.cwd] : [],
+          })
+        ).data
+          .flatMap((result) => result.skills)
+          .find((skill) => skill.enabled && skill.name === skillName) ?? null
+      : null;
+    const input = messageToCodexInput(userMessage, selectedSkill);
+    if (input.length === 0) {
+      acpChatSessionActions.finishPromptAttemptIfCurrent(sessionId, promptAttemptId);
+      return;
+    }
+
+    entry.finish = (error?: string) => {
+      if (acpChatSessionActions.finishPromptAttemptIfCurrent(sessionId, promptAttemptId)) {
+        void options.onFinish(error);
+      }
+    };
+
     const override = modelOverrides.get(sessionId);
     const policies = await permissionPolicies();
     const params = {
@@ -387,6 +430,7 @@ async function submitMessage(
       input,
       ...policies,
       ...(override?.model ? { model: override.model } : {}),
+      ...(override?.effort ? { effort: codexEffort(override.effort) } : {}),
     };
     try {
       await codex.turnStart(params);
@@ -402,6 +446,12 @@ async function submitMessage(
       void options.onFinish(submitError);
     }
   }
+}
+
+function codexEffort(effort: string): string {
+  if (effort === 'off') return 'minimal';
+  if (effort === 'max') return 'xhigh';
+  return effort;
 }
 
 function stop(sessionId: string): void {

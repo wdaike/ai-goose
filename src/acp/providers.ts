@@ -226,7 +226,15 @@ const EFFORT_KEY = 'goose-thinking-effort';
 
 export async function acpReadThinkingEffort(): Promise<ThinkingEffort | null> {
   const value = window.localStorage.getItem(EFFORT_KEY);
-  return value ? (value as ThinkingEffort) : null;
+  if (value) return value as ThinkingEffort;
+
+  const configured = (await codex.configRead()).config.model_reasoning_effort;
+  if (configured === 'minimal') return 'off';
+  if (configured === 'xhigh') return 'max';
+  if (configured === 'low' || configured === 'medium' || configured === 'high') {
+    return configured;
+  }
+  return null;
 }
 
 export async function acpSaveThinkingEffort(effort: ThinkingEffort): Promise<void> {

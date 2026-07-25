@@ -463,7 +463,7 @@ const MentionPopover = forwardRef<
         return '@' + item.name + ' ';
       }
       if (['Builtin', 'Recipe', 'Skill'].includes(item.itemType)) {
-        return '/' + item.name;
+        return '/' + item.name + ' ';
       }
       return item.extra;
     };

@@ -28,6 +28,18 @@ import type { ConfigReadResponse } from './protocol/v2/ConfigReadResponse';
 import type { ConfigBatchWriteParams } from './protocol/v2/ConfigBatchWriteParams';
 import type { ListMcpServerStatusParams } from './protocol/v2/ListMcpServerStatusParams';
 import type { ListMcpServerStatusResponse } from './protocol/v2/ListMcpServerStatusResponse';
+import type { PluginListParams } from './protocol/v2/PluginListParams';
+import type { PluginListResponse } from './protocol/v2/PluginListResponse';
+import type { PluginInstalledParams } from './protocol/v2/PluginInstalledParams';
+import type { PluginInstalledResponse } from './protocol/v2/PluginInstalledResponse';
+import type { PluginInstallParams } from './protocol/v2/PluginInstallParams';
+import type { PluginInstallResponse } from './protocol/v2/PluginInstallResponse';
+import type { PluginUninstallParams } from './protocol/v2/PluginUninstallParams';
+import type { PluginUninstallResponse } from './protocol/v2/PluginUninstallResponse';
+import type { MarketplaceAddParams } from './protocol/v2/MarketplaceAddParams';
+import type { MarketplaceAddResponse } from './protocol/v2/MarketplaceAddResponse';
+import type { MarketplaceRemoveParams } from './protocol/v2/MarketplaceRemoveParams';
+import type { MarketplaceRemoveResponse } from './protocol/v2/MarketplaceRemoveResponse';
 
 export interface ThreadResponse {
   thread: Thread;
@@ -84,5 +96,16 @@ export const codex = {
     request<Record<string, never>>('config/batchWrite', params),
   mcpServerStatusList: (params: ListMcpServerStatusParams = {}) =>
     request<ListMcpServerStatusResponse>('mcpServerStatus/list', params),
+  pluginList: (params: PluginListParams = {}) => request<PluginListResponse>('plugin/list', params),
+  pluginInstalled: (params: PluginInstalledParams = {}) =>
+    request<PluginInstalledResponse>('plugin/installed', params),
+  pluginInstall: (params: PluginInstallParams) =>
+    request<PluginInstallResponse>('plugin/install', params),
+  pluginUninstall: (params: PluginUninstallParams) =>
+    request<PluginUninstallResponse>('plugin/uninstall', params),
+  marketplaceAdd: (params: MarketplaceAddParams) =>
+    request<MarketplaceAddResponse>('marketplace/add', params),
+  marketplaceRemove: (params: MarketplaceRemoveParams) =>
+    request<MarketplaceRemoveResponse>('marketplace/remove', params),
   respond: (requestId: number | string, result: unknown) => window.codex.respond(requestId, result),
 };

@@ -30,6 +30,7 @@ import { registerTerminalManager } from './terminalManager';
 import { expandTilde } from './utils/pathUtils';
 import log from './utils/logger';
 import { ensureWinShims } from './utils/winShims';
+import { adoptLoginEnv } from './utils/loginEnv';
 import { addRecentDir, loadRecentDirs } from './utils/recentDirs';
 import { errorMessage, formatErrorForLogging } from './utils/conversionUtils';
 import type { Settings, SettingKey } from './utils/settings';
@@ -792,7 +793,7 @@ const resolveGoosePathRoot = (): string | undefined => {
 };
 
 let appConfig = {
-  GOOSE_CODEX_HOME: CODEX_HOME,
+  CODEX_HOME,
   GOOSE_DEFAULT_PROVIDER: defaultProvider,
   GOOSE_DEFAULT_MODEL: defaultModel,
   GOOSE_PREDEFINED_MODELS: predefinedModels,
@@ -1941,6 +1942,10 @@ async function appMain() {
   });
 
   await configureProxy();
+
+  // A Finder-launched app inherits launchd's bare environment, so this has to
+  // run before anything resolves a binary or reads a provider key.
+  await adoptLoginEnv();
 
   // Ensure Windows shims are available before any MCP processes are spawned
   await ensureWinShims();
