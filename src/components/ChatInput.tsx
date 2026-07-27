@@ -9,7 +9,7 @@ import React, {
 import { ArrowUp, Box, Plus } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/Tooltip';
 import { Button } from './ui/button';
-import type { View } from '../utils/navigationUtils';
+import type { View, ViewOptions } from '../utils/navigationUtils';
 import Stop from './ui/Stop';
 import { Microphone } from './icons';
 import { ChatState } from '../types/chatState';
@@ -132,7 +132,7 @@ interface ChatInputProps {
   initialValue?: string;
   droppedFiles?: DroppedFile[];
   onFilesProcessed?: () => void;
-  setView: (view: View) => void;
+  setView: (view: View, viewOptions?: ViewOptions) => void;
   totalTokens?: number;
   accumulatedInputTokens?: number;
   accumulatedOutputTokens?: number;
@@ -1343,7 +1343,7 @@ export default function ChatInput({
         </Tooltip>
 
         {/* Left: permission mode (ChatGPT-style "Full access" pill) */}
-        <PermissionModeChip onClick={() => setView('settings')} />
+        <PermissionModeChip onOpenSettings={() => setView('settings', { section: 'modes' })} />
 
         {/* Spacer */}
         <div className="flex-1" />

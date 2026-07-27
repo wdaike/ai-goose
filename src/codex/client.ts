@@ -23,6 +23,8 @@ import type { FsCreateDirectoryParams } from './protocol/v2/FsCreateDirectoryPar
 import type { FsCreateDirectoryResponse } from './protocol/v2/FsCreateDirectoryResponse';
 import type { FsGetMetadataParams } from './protocol/v2/FsGetMetadataParams';
 import type { FsGetMetadataResponse } from './protocol/v2/FsGetMetadataResponse';
+import type { FsRemoveParams } from './protocol/v2/FsRemoveParams';
+import type { FsRemoveResponse } from './protocol/v2/FsRemoveResponse';
 import type { ConfigReadParams } from './protocol/v2/ConfigReadParams';
 import type { ConfigReadResponse } from './protocol/v2/ConfigReadResponse';
 import type { ConfigBatchWriteParams } from './protocol/v2/ConfigBatchWriteParams';
@@ -32,6 +34,8 @@ import type { PluginListParams } from './protocol/v2/PluginListParams';
 import type { PluginListResponse } from './protocol/v2/PluginListResponse';
 import type { PluginInstalledParams } from './protocol/v2/PluginInstalledParams';
 import type { PluginInstalledResponse } from './protocol/v2/PluginInstalledResponse';
+import type { PluginReadParams } from './protocol/v2/PluginReadParams';
+import type { PluginReadResponse } from './protocol/v2/PluginReadResponse';
 import type { PluginInstallParams } from './protocol/v2/PluginInstallParams';
 import type { PluginInstallResponse } from './protocol/v2/PluginInstallResponse';
 import type { PluginUninstallParams } from './protocol/v2/PluginUninstallParams';
@@ -40,6 +44,8 @@ import type { MarketplaceAddParams } from './protocol/v2/MarketplaceAddParams';
 import type { MarketplaceAddResponse } from './protocol/v2/MarketplaceAddResponse';
 import type { MarketplaceRemoveParams } from './protocol/v2/MarketplaceRemoveParams';
 import type { MarketplaceRemoveResponse } from './protocol/v2/MarketplaceRemoveResponse';
+import type { AppsListParams } from './protocol/v2/AppsListParams';
+import type { AppsListResponse } from './protocol/v2/AppsListResponse';
 
 export interface ThreadResponse {
   thread: Thread;
@@ -91,6 +97,7 @@ export const codex = {
     request<FsCreateDirectoryResponse>('fs/createDirectory', params),
   fsGetMetadata: (params: FsGetMetadataParams) =>
     request<FsGetMetadataResponse>('fs/getMetadata', params),
+  fsRemove: (params: FsRemoveParams) => request<FsRemoveResponse>('fs/remove', params),
   configRead: (params: ConfigReadParams = {}) => request<ConfigReadResponse>('config/read', params),
   configBatchWrite: (params: ConfigBatchWriteParams) =>
     request<Record<string, never>>('config/batchWrite', params),
@@ -99,6 +106,7 @@ export const codex = {
   pluginList: (params: PluginListParams = {}) => request<PluginListResponse>('plugin/list', params),
   pluginInstalled: (params: PluginInstalledParams = {}) =>
     request<PluginInstalledResponse>('plugin/installed', params),
+  pluginRead: (params: PluginReadParams) => request<PluginReadResponse>('plugin/read', params),
   pluginInstall: (params: PluginInstallParams) =>
     request<PluginInstallResponse>('plugin/install', params),
   pluginUninstall: (params: PluginUninstallParams) =>
@@ -107,5 +115,6 @@ export const codex = {
     request<MarketplaceAddResponse>('marketplace/add', params),
   marketplaceRemove: (params: MarketplaceRemoveParams) =>
     request<MarketplaceRemoveResponse>('marketplace/remove', params),
+  appList: (params: AppsListParams = {}) => request<AppsListResponse>('app/list', params),
   respond: (requestId: number | string, result: unknown) => window.codex.respond(requestId, result),
 };

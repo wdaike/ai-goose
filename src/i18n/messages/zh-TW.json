@@ -1877,6 +1877,9 @@
   "navigation.itemHome": {
     "defaultMessage": "新交談"
   },
+  "navigation.itemPlugins": {
+    "defaultMessage": "外掛"
+  },
   "navigation.itemScheduler": {
     "defaultMessage": "排程器"
   },
@@ -1994,6 +1997,9 @@
   "permissionModeChip.fullAccess": {
     "defaultMessage": "完整存取"
   },
+  "permissionModeChip.permissionSettings": {
+    "defaultMessage": "權限設定"
+  },
   "permissionModeChip.smartApprove": {
     "defaultMessage": "智慧核准"
   },
@@ -2018,6 +2024,72 @@
   "planSteps.progress": {
     "defaultMessage": "第 {current} / {total} 步"
   },
+  "pluginDetails.apps": {
+    "defaultMessage": "應用程式"
+  },
+  "pluginDetails.capabilities": {
+    "defaultMessage": "能力"
+  },
+  "pluginDetails.category": {
+    "defaultMessage": "分類"
+  },
+  "pluginDetails.developer": {
+    "defaultMessage": "開發者"
+  },
+  "pluginDetails.disable": {
+    "defaultMessage": "停用"
+  },
+  "pluginDetails.enable": {
+    "defaultMessage": "啟用"
+  },
+  "pluginDetails.errorLoading": {
+    "defaultMessage": "無法載入外掛詳細資訊"
+  },
+  "pluginDetails.hooks": {
+    "defaultMessage": "掛鉤"
+  },
+  "pluginDetails.information": {
+    "defaultMessage": "資訊"
+  },
+  "pluginDetails.marketplace": {
+    "defaultMessage": "外掛市集"
+  },
+  "pluginDetails.mcpServers": {
+    "defaultMessage": "MCP"
+  },
+  "pluginDetails.moreActions": {
+    "defaultMessage": "{name} 的更多操作"
+  },
+  "pluginDetails.privacyPolicy": {
+    "defaultMessage": "隱私權政策"
+  },
+  "pluginDetails.skills": {
+    "defaultMessage": "技能"
+  },
+  "pluginDetails.termsOfService": {
+    "defaultMessage": "服務條款"
+  },
+  "pluginDetails.toggleItem": {
+    "defaultMessage": "開啟或關閉 {name}"
+  },
+  "pluginDetails.tryAgain": {
+    "defaultMessage": "重試"
+  },
+  "pluginDetails.tryNow": {
+    "defaultMessage": "試試看"
+  },
+  "pluginDetails.tryNowPrompt": {
+    "defaultMessage": "使用 {name} 外掛來"
+  },
+  "pluginDetails.uninstall": {
+    "defaultMessage": "解除安裝"
+  },
+  "pluginDetails.version": {
+    "defaultMessage": "版本"
+  },
+  "pluginDetails.website": {
+    "defaultMessage": "官方網站"
+  },
   "pluginsSettings.add": {
     "defaultMessage": "新增"
   },
@@ -2027,11 +2099,47 @@
   "pluginsSettings.addExtension": {
     "defaultMessage": "新增擴充功能"
   },
+  "pluginsSettings.addMarketplace": {
+    "defaultMessage": "新增外掛市集"
+  },
+  "pluginsSettings.addMarketplaceTitle": {
+    "defaultMessage": "新增外掛市集"
+  },
+  "pluginsSettings.appUnavailable": {
+    "defaultMessage": "無法使用"
+  },
+  "pluginsSettings.cancel": {
+    "defaultMessage": "取消"
+  },
   "pluginsSettings.configureExtension": {
     "defaultMessage": "設定 {name}"
   },
+  "pluginsSettings.details": {
+    "defaultMessage": "詳細資訊"
+  },
+  "pluginsSettings.disabledByAdmin": {
+    "defaultMessage": "已被管理員停用"
+  },
+  "pluginsSettings.errorLoadingApps": {
+    "defaultMessage": "載入應用程式失敗"
+  },
+  "pluginsSettings.errorLoadingPlugins": {
+    "defaultMessage": "載入外掛失敗"
+  },
   "pluginsSettings.errorLoadingSkills": {
     "defaultMessage": "載入技能時發生錯誤"
+  },
+  "pluginsSettings.marketplaceSourcePlaceholder": {
+    "defaultMessage": "git 網址或本機路徑"
+  },
+  "pluginsSettings.moreActions": {
+    "defaultMessage": "{name} 的更多操作"
+  },
+  "pluginsSettings.noApps": {
+    "defaultMessage": "沒有可用的應用程式"
+  },
+  "pluginsSettings.noAppsDescription": {
+    "defaultMessage": "應用程式是 Codex 發布的連接器，目前帳號沒有可用的應用程式。"
   },
   "pluginsSettings.noExtensions": {
     "defaultMessage": "未安裝任何擴充功能"
@@ -2039,11 +2147,20 @@
   "pluginsSettings.noMatches": {
     "defaultMessage": "沒有與「{query}」相符的結果"
   },
+  "pluginsSettings.noPlugins": {
+    "defaultMessage": "尚未安裝外掛"
+  },
+  "pluginsSettings.noPluginsDescription": {
+    "defaultMessage": "可在外掛頁面瀏覽並安裝外掛。"
+  },
   "pluginsSettings.noSkills": {
     "defaultMessage": "未安裝任何技能"
   },
   "pluginsSettings.noSkillsDescription": {
     "defaultMessage": "技能從 iCodex 技能目錄中的 SKILL.md 檔案載入。"
+  },
+  "pluginsSettings.open": {
+    "defaultMessage": "開啟"
   },
   "pluginsSettings.saveChanges": {
     "defaultMessage": "儲存變更"
@@ -2060,17 +2177,29 @@
   "pluginsSettings.scopeSystem": {
     "defaultMessage": "系統"
   },
+  "pluginsSettings.searchApps": {
+    "defaultMessage": "搜尋應用程式"
+  },
   "pluginsSettings.searchMcps": {
     "defaultMessage": "搜尋 MCP"
+  },
+  "pluginsSettings.searchPlugins": {
+    "defaultMessage": "搜尋外掛"
   },
   "pluginsSettings.searchSkills": {
     "defaultMessage": "搜尋技能"
   },
   "pluginsSettings.subtitle": {
-    "defaultMessage": "管理 MCP 擴充功能與技能"
+    "defaultMessage": "管理外掛、應用程式、MCP 與技能"
+  },
+  "pluginsSettings.tabApps": {
+    "defaultMessage": "應用程式"
   },
   "pluginsSettings.tabMcps": {
-    "defaultMessage": "MCPs"
+    "defaultMessage": "MCP"
+  },
+  "pluginsSettings.tabPlugins": {
+    "defaultMessage": "外掛"
   },
   "pluginsSettings.tabSkills": {
     "defaultMessage": "技能"
@@ -2081,8 +2210,116 @@
   "pluginsSettings.tryAgain": {
     "defaultMessage": "重試"
   },
+  "pluginsSettings.uninstallPlugin": {
+    "defaultMessage": "解除安裝 {name}"
+  },
   "pluginsSettings.updateExtension": {
     "defaultMessage": "更新擴充功能"
+  },
+  "pluginsView.addMarketplace": {
+    "defaultMessage": "新增外掛市集"
+  },
+  "pluginsView.allCategories": {
+    "defaultMessage": "全部分類"
+  },
+  "pluginsView.cancel": {
+    "defaultMessage": "取消"
+  },
+  "pluginsView.disable": {
+    "defaultMessage": "停用"
+  },
+  "pluginsView.disabled": {
+    "defaultMessage": "已停用"
+  },
+  "pluginsView.disabledByAdmin": {
+    "defaultMessage": "已被管理員停用"
+  },
+  "pluginsView.enable": {
+    "defaultMessage": "啟用"
+  },
+  "pluginsView.errorLoading": {
+    "defaultMessage": "發生錯誤"
+  },
+  "pluginsView.featured": {
+    "defaultMessage": "精選"
+  },
+  "pluginsView.filter": {
+    "defaultMessage": "依分類篩選"
+  },
+  "pluginsView.install": {
+    "defaultMessage": "安裝"
+  },
+  "pluginsView.installed": {
+    "defaultMessage": "已安裝"
+  },
+  "pluginsView.manage": {
+    "defaultMessage": "在設定中管理"
+  },
+  "pluginsView.marketplaceSourcePlaceholder": {
+    "defaultMessage": "git 網址或本機路徑"
+  },
+  "pluginsView.moreActions": {
+    "defaultMessage": "{name} 的更多操作"
+  },
+  "pluginsView.noMatches": {
+    "defaultMessage": "沒有符合「{query}」的結果"
+  },
+  "pluginsView.noPlugins": {
+    "defaultMessage": "沒有可用的外掛"
+  },
+  "pluginsView.noPluginsDescription": {
+    "defaultMessage": "新增外掛市集即可瀏覽並安裝外掛。"
+  },
+  "pluginsView.noSkills": {
+    "defaultMessage": "尚未安裝技能"
+  },
+  "pluginsView.noSkillsDescription": {
+    "defaultMessage": "技能來自 iCodex 技能目錄中的 SKILL.md 檔案。"
+  },
+  "pluginsView.pluginsSubtitle": {
+    "defaultMessage": "在你慣用的工具中使用 iCodex"
+  },
+  "pluginsView.refresh": {
+    "defaultMessage": "重新整理"
+  },
+  "pluginsView.scopePersonal": {
+    "defaultMessage": "個人"
+  },
+  "pluginsView.scopeProject": {
+    "defaultMessage": "專案"
+  },
+  "pluginsView.scopeSystem": {
+    "defaultMessage": "系統"
+  },
+  "pluginsView.searchPlugins": {
+    "defaultMessage": "搜尋外掛"
+  },
+  "pluginsView.searchSkills": {
+    "defaultMessage": "搜尋技能"
+  },
+  "pluginsView.seeLess": {
+    "defaultMessage": "收合外掛"
+  },
+  "pluginsView.seeMore": {
+    "defaultMessage": "檢視另外 {count} 個外掛"
+  },
+  "pluginsView.skillsSubtitle": {
+    "defaultMessage": "iCodex 會在任務需要時載入的可重複使用指令"
+  },
+  "pluginsView.tabPlugins": {
+    "defaultMessage": "外掛"
+  },
+  "pluginsView.tabSkills": {
+    "defaultMessage": "技能"
+  },
+  "pluginsView.toggleItem": {
+    "defaultMessage": "開啟或關閉 {name}"
+  },
+  "pluginsView.tryAgain": {
+    "defaultMessage": "重試"
+  },
+  "pluginsView.uninstall": {
+    "defaultMessage": "解除安裝"
   },
   "privacyInfoModal.collectErrors": {
     "defaultMessage": "錯誤類型（例如「rate_limit」、「auth」－不含詳細資料）"
@@ -2725,6 +2962,36 @@
   },
   "shortcutRecorder.save": {
     "defaultMessage": "儲存"
+  },
+  "skillDetails.cancel": {
+    "defaultMessage": "取消"
+  },
+  "skillDetails.errorLoadingContents": {
+    "defaultMessage": "無法讀取 SKILL.md"
+  },
+  "skillDetails.open": {
+    "defaultMessage": "開啟"
+  },
+  "skillDetails.skillLabel": {
+    "defaultMessage": "技能"
+  },
+  "skillDetails.toggleItem": {
+    "defaultMessage": "開啟或關閉 {name}"
+  },
+  "skillDetails.tryNow": {
+    "defaultMessage": "立即試用"
+  },
+  "skillDetails.tryNowPrompt": {
+    "defaultMessage": "使用 {name} 技能來 "
+  },
+  "skillDetails.uninstall": {
+    "defaultMessage": "解除安裝"
+  },
+  "skillDetails.uninstallMessage": {
+    "defaultMessage": "這會從磁碟刪除該技能資料夾，且無法復原。"
+  },
+  "skillDetails.uninstallTitle": {
+    "defaultMessage": "解除安裝 {name}？"
   },
   "spellcheckToggle.description": {
     "defaultMessage": "檢查聊天輸入中的拼字。需重新啟動才會生效。"

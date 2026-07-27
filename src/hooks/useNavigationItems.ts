@@ -1,4 +1,4 @@
-import { AppWindow, Settings, SquarePen } from 'lucide-react';
+import { AppWindow, AtSign, Settings, SquarePen } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { defineMessages, type IntlShape, type MessageDescriptor } from 'react-intl';
 
@@ -15,6 +15,7 @@ export interface NavItem {
 export const NAV_ITEMS: NavItem[] = [
   { id: 'home', path: '/', label: 'New chat', icon: SquarePen },
   { id: 'apps', path: '/apps', label: 'Apps', icon: AppWindow },
+  { id: 'plugins', path: '/plugins', label: 'Plugins', icon: AtSign },
 ];
 
 /** Settings is rendered separately, pinned to the bottom of the sidebar. */
@@ -35,6 +36,10 @@ const navItemMessages = defineMessages({
   apps: {
     id: 'navigation.itemApps',
     defaultMessage: 'Apps',
+  },
+  plugins: {
+    id: 'navigation.itemPlugins',
+    defaultMessage: 'Plugins',
   },
   scheduler: {
     id: 'navigation.itemScheduler',

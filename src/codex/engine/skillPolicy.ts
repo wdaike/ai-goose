@@ -61,3 +61,21 @@ export async function listManagedSkills(cwd: string): Promise<SkillMetadata[]> {
 export async function setSkillEnabled(path: string, enabled: boolean): Promise<void> {
   await codex.skillsConfigWrite({ path, enabled });
 }
+
+/** Directory holding a skill's SKILL.md, references and scripts. */
+export function skillDirectory(skillPath: string): string {
+  return parentPath(skillPath);
+}
+
+/**
+ * Standalone skills the user installed live directly under this root; codex's
+ * own `.system` skills and the ones a plugin ships are managed elsewhere and
+ * must not be deleted from disk.
+ */
+export async function personalSkillsRoot(): Promise<string> {
+  return `${await codexHome()}/skills`;
+}
+
+export async function uninstallSkill(skillPath: string): Promise<void> {
+  await codex.fsRemove({ path: skillDirectory(skillPath) });
+}

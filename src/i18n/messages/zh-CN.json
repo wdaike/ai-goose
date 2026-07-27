@@ -1877,6 +1877,9 @@
   "navigation.itemHome": {
     "defaultMessage": "新对话"
   },
+  "navigation.itemPlugins": {
+    "defaultMessage": "插件"
+  },
   "navigation.itemScheduler": {
     "defaultMessage": "调度"
   },
@@ -1994,6 +1997,9 @@
   "permissionModeChip.fullAccess": {
     "defaultMessage": "完全访问"
   },
+  "permissionModeChip.permissionSettings": {
+    "defaultMessage": "权限设置"
+  },
   "permissionModeChip.smartApprove": {
     "defaultMessage": "智能批准"
   },
@@ -2018,6 +2024,72 @@
   "planSteps.progress": {
     "defaultMessage": "第 {current} / {total} 步"
   },
+  "pluginDetails.apps": {
+    "defaultMessage": "应用"
+  },
+  "pluginDetails.capabilities": {
+    "defaultMessage": "能力"
+  },
+  "pluginDetails.category": {
+    "defaultMessage": "分类"
+  },
+  "pluginDetails.developer": {
+    "defaultMessage": "开发者"
+  },
+  "pluginDetails.disable": {
+    "defaultMessage": "停用"
+  },
+  "pluginDetails.enable": {
+    "defaultMessage": "启用"
+  },
+  "pluginDetails.errorLoading": {
+    "defaultMessage": "无法加载插件详情"
+  },
+  "pluginDetails.hooks": {
+    "defaultMessage": "钩子"
+  },
+  "pluginDetails.information": {
+    "defaultMessage": "信息"
+  },
+  "pluginDetails.marketplace": {
+    "defaultMessage": "插件市场"
+  },
+  "pluginDetails.mcpServers": {
+    "defaultMessage": "MCP"
+  },
+  "pluginDetails.moreActions": {
+    "defaultMessage": "{name} 的更多操作"
+  },
+  "pluginDetails.privacyPolicy": {
+    "defaultMessage": "隐私政策"
+  },
+  "pluginDetails.skills": {
+    "defaultMessage": "技能"
+  },
+  "pluginDetails.termsOfService": {
+    "defaultMessage": "服务条款"
+  },
+  "pluginDetails.toggleItem": {
+    "defaultMessage": "开启或关闭 {name}"
+  },
+  "pluginDetails.tryAgain": {
+    "defaultMessage": "重试"
+  },
+  "pluginDetails.tryNow": {
+    "defaultMessage": "试一试"
+  },
+  "pluginDetails.tryNowPrompt": {
+    "defaultMessage": "使用 {name} 插件来"
+  },
+  "pluginDetails.uninstall": {
+    "defaultMessage": "卸载"
+  },
+  "pluginDetails.version": {
+    "defaultMessage": "版本"
+  },
+  "pluginDetails.website": {
+    "defaultMessage": "官网"
+  },
   "pluginsSettings.add": {
     "defaultMessage": "添加"
   },
@@ -2027,11 +2099,47 @@
   "pluginsSettings.addExtension": {
     "defaultMessage": "添加扩展"
   },
+  "pluginsSettings.addMarketplace": {
+    "defaultMessage": "添加插件市场"
+  },
+  "pluginsSettings.addMarketplaceTitle": {
+    "defaultMessage": "添加插件市场"
+  },
+  "pluginsSettings.appUnavailable": {
+    "defaultMessage": "不可用"
+  },
+  "pluginsSettings.cancel": {
+    "defaultMessage": "取消"
+  },
   "pluginsSettings.configureExtension": {
     "defaultMessage": "配置 {name}"
   },
+  "pluginsSettings.details": {
+    "defaultMessage": "详情"
+  },
+  "pluginsSettings.disabledByAdmin": {
+    "defaultMessage": "已被管理员禁用"
+  },
+  "pluginsSettings.errorLoadingApps": {
+    "defaultMessage": "加载应用失败"
+  },
+  "pluginsSettings.errorLoadingPlugins": {
+    "defaultMessage": "加载插件失败"
+  },
   "pluginsSettings.errorLoadingSkills": {
     "defaultMessage": "加载技能出错"
+  },
+  "pluginsSettings.marketplaceSourcePlaceholder": {
+    "defaultMessage": "git 地址或本地路径"
+  },
+  "pluginsSettings.moreActions": {
+    "defaultMessage": "{name} 的更多操作"
+  },
+  "pluginsSettings.noApps": {
+    "defaultMessage": "暂无可用应用"
+  },
+  "pluginsSettings.noAppsDescription": {
+    "defaultMessage": "应用是 Codex 发布的连接器，当前账号没有可用的应用。"
   },
   "pluginsSettings.noExtensions": {
     "defaultMessage": "未安装任何扩展"
@@ -2039,11 +2147,20 @@
   "pluginsSettings.noMatches": {
     "defaultMessage": "没有与“{query}”匹配的结果"
   },
+  "pluginsSettings.noPlugins": {
+    "defaultMessage": "尚未安装插件"
+  },
+  "pluginsSettings.noPluginsDescription": {
+    "defaultMessage": "可在插件页面浏览并安装插件。"
+  },
   "pluginsSettings.noSkills": {
     "defaultMessage": "未安装任何技能"
   },
   "pluginsSettings.noSkillsDescription": {
     "defaultMessage": "技能从 iCodex 技能目录中的 SKILL.md 文件加载。"
+  },
+  "pluginsSettings.open": {
+    "defaultMessage": "打开"
   },
   "pluginsSettings.saveChanges": {
     "defaultMessage": "保存更改"
@@ -2060,17 +2177,29 @@
   "pluginsSettings.scopeSystem": {
     "defaultMessage": "系统"
   },
+  "pluginsSettings.searchApps": {
+    "defaultMessage": "搜索应用"
+  },
   "pluginsSettings.searchMcps": {
     "defaultMessage": "搜索 MCP"
+  },
+  "pluginsSettings.searchPlugins": {
+    "defaultMessage": "搜索插件"
   },
   "pluginsSettings.searchSkills": {
     "defaultMessage": "搜索技能"
   },
   "pluginsSettings.subtitle": {
-    "defaultMessage": "管理 MCP 扩展和技能"
+    "defaultMessage": "管理插件、应用、MCP 与技能"
+  },
+  "pluginsSettings.tabApps": {
+    "defaultMessage": "应用"
   },
   "pluginsSettings.tabMcps": {
-    "defaultMessage": "MCPs"
+    "defaultMessage": "MCP"
+  },
+  "pluginsSettings.tabPlugins": {
+    "defaultMessage": "插件"
   },
   "pluginsSettings.tabSkills": {
     "defaultMessage": "技能"
@@ -2081,8 +2210,116 @@
   "pluginsSettings.tryAgain": {
     "defaultMessage": "重试"
   },
+  "pluginsSettings.uninstallPlugin": {
+    "defaultMessage": "卸载 {name}"
+  },
   "pluginsSettings.updateExtension": {
     "defaultMessage": "更新扩展"
+  },
+  "pluginsView.addMarketplace": {
+    "defaultMessage": "添加插件市场"
+  },
+  "pluginsView.allCategories": {
+    "defaultMessage": "全部分类"
+  },
+  "pluginsView.cancel": {
+    "defaultMessage": "取消"
+  },
+  "pluginsView.disable": {
+    "defaultMessage": "停用"
+  },
+  "pluginsView.disabled": {
+    "defaultMessage": "已停用"
+  },
+  "pluginsView.disabledByAdmin": {
+    "defaultMessage": "已被管理员禁用"
+  },
+  "pluginsView.enable": {
+    "defaultMessage": "启用"
+  },
+  "pluginsView.errorLoading": {
+    "defaultMessage": "出错了"
+  },
+  "pluginsView.featured": {
+    "defaultMessage": "精选"
+  },
+  "pluginsView.filter": {
+    "defaultMessage": "按分类筛选"
+  },
+  "pluginsView.install": {
+    "defaultMessage": "安装"
+  },
+  "pluginsView.installed": {
+    "defaultMessage": "已安装"
+  },
+  "pluginsView.manage": {
+    "defaultMessage": "在设置中管理"
+  },
+  "pluginsView.marketplaceSourcePlaceholder": {
+    "defaultMessage": "git 地址或本地路径"
+  },
+  "pluginsView.moreActions": {
+    "defaultMessage": "{name} 的更多操作"
+  },
+  "pluginsView.noMatches": {
+    "defaultMessage": "没有与“{query}”匹配的结果"
+  },
+  "pluginsView.noPlugins": {
+    "defaultMessage": "暂无可用插件"
+  },
+  "pluginsView.noPluginsDescription": {
+    "defaultMessage": "添加插件市场即可浏览并安装插件。"
+  },
+  "pluginsView.noSkills": {
+    "defaultMessage": "尚未安装技能"
+  },
+  "pluginsView.noSkillsDescription": {
+    "defaultMessage": "技能来自 iCodex 技能目录中的 SKILL.md 文件。"
+  },
+  "pluginsView.pluginsSubtitle": {
+    "defaultMessage": "在你常用的工具中使用 iCodex"
+  },
+  "pluginsView.refresh": {
+    "defaultMessage": "刷新"
+  },
+  "pluginsView.scopePersonal": {
+    "defaultMessage": "个人"
+  },
+  "pluginsView.scopeProject": {
+    "defaultMessage": "项目"
+  },
+  "pluginsView.scopeSystem": {
+    "defaultMessage": "系统"
+  },
+  "pluginsView.searchPlugins": {
+    "defaultMessage": "搜索插件"
+  },
+  "pluginsView.searchSkills": {
+    "defaultMessage": "搜索技能"
+  },
+  "pluginsView.seeLess": {
+    "defaultMessage": "收起插件"
+  },
+  "pluginsView.seeMore": {
+    "defaultMessage": "查看另外 {count} 个插件"
+  },
+  "pluginsView.skillsSubtitle": {
+    "defaultMessage": "iCodex 会在任务需要时加载的可复用指令"
+  },
+  "pluginsView.tabPlugins": {
+    "defaultMessage": "插件"
+  },
+  "pluginsView.tabSkills": {
+    "defaultMessage": "技能"
+  },
+  "pluginsView.toggleItem": {
+    "defaultMessage": "开启或关闭 {name}"
+  },
+  "pluginsView.tryAgain": {
+    "defaultMessage": "重试"
+  },
+  "pluginsView.uninstall": {
+    "defaultMessage": "卸载"
   },
   "privacyInfoModal.collectErrors": {
     "defaultMessage": "错误类型（例如“rate_limit”“auth”——不含详情）"
@@ -2725,6 +2962,36 @@
   },
   "shortcutRecorder.save": {
     "defaultMessage": "保存"
+  },
+  "skillDetails.cancel": {
+    "defaultMessage": "取消"
+  },
+  "skillDetails.errorLoadingContents": {
+    "defaultMessage": "无法读取 SKILL.md"
+  },
+  "skillDetails.open": {
+    "defaultMessage": "打开"
+  },
+  "skillDetails.skillLabel": {
+    "defaultMessage": "技能"
+  },
+  "skillDetails.toggleItem": {
+    "defaultMessage": "开启或关闭 {name}"
+  },
+  "skillDetails.tryNow": {
+    "defaultMessage": "立即试用"
+  },
+  "skillDetails.tryNowPrompt": {
+    "defaultMessage": "使用 {name} 技能来 "
+  },
+  "skillDetails.uninstall": {
+    "defaultMessage": "卸载"
+  },
+  "skillDetails.uninstallMessage": {
+    "defaultMessage": "这将从磁盘删除该技能目录，且无法撤销。"
+  },
+  "skillDetails.uninstallTitle": {
+    "defaultMessage": "卸载 {name}？"
   },
   "spellcheckToggle.description": {
     "defaultMessage": "检查聊天输入框中的拼写。需要重启才能生效。"

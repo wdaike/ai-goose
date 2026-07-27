@@ -1,6 +1,15 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import kebabCase from 'lodash/kebabCase';
-import { AlertCircle, Blocks, Download, Package, Plus, Search, Trash2, Zap } from 'lucide-react';
+import {
+  AlertCircle,
+  Blocks,
+  MoreHorizontal,
+  Plus,
+  Search,
+  Trash2,
+  Waypoints,
+  Zap,
+} from 'lucide-react';
 import type { ExtensionConfig } from '../../../types/extensions';
 import { Button } from '../../ui/button';
 import { Switch } from '../../ui/switch';
@@ -9,18 +18,34 @@ import { Gear } from '../../icons';
 import { useConfig, FixedExtensionEntry } from '../../ConfigContext';
 import { errorMessage } from '../../../utils/conversionUtils';
 import { getInitialWorkingDir } from '../../../utils/workingDir';
-import { listManagedSkills, setSkillEnabled } from '../../../codex/engine/skillPolicy';
+import {
+  listManagedSkills,
+  personalSkillsRoot,
+  setSkillEnabled,
+  uninstallSkill,
+} from '../../../codex/engine/skillPolicy';
 import type { SkillMetadata } from '../../../codex/protocol/v2/SkillMetadata';
 import {
   listPlugins,
   setPluginEnabled,
-  installPlugin,
   uninstallPlugin,
   addMarketplace,
 } from '../../../codex/engine/pluginCatalog';
+import PluginDetails from '../../plugins/PluginDetails';
+import { PluginLogo } from '../../plugins/logos';
 import type { PluginSummary } from '../../../codex/protocol/v2/PluginSummary';
 import type { PluginMarketplaceEntry } from '../../../codex/protocol/v2/PluginMarketplaceEntry';
+import { listApps, setAppEnabled } from '../../../codex/engine/appCatalog';
+import type { AppInfo } from '../../../codex/protocol/v2/AppInfo';
+import { useTheme } from '../../../contexts/ThemeContext';
+import SkillDetailsModal, { openSkillFolder } from '../../plugins/SkillDetailsModal';
 import { BaseModal } from '../../ui/BaseModal';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../../ui/dropdown-menu';
 import { Input } from '../../ui/input';
 import ExtensionModal from '../extensions/modal/ExtensionModal';
 import {
@@ -39,7 +64,31 @@ import { cn } from '../../../utils';
 const i18n = defineMessages({
   subtitle: {
     id: 'pluginsSettings.subtitle',
-    defaultMessage: 'Manage MCP extensions and skills',
+    defaultMessage: 'Manage plugins, apps, MCPs, and skills',
+  },
+  tabApps: {
+    id: 'pluginsSettings.tabApps',
+    defaultMessage: 'Apps',
+  },
+  searchApps: {
+    id: 'pluginsSettings.searchApps',
+    defaultMessage: 'Search apps',
+  },
+  noApps: {
+    id: 'pluginsSettings.noApps',
+    defaultMessage: 'No apps available',
+  },
+  noAppsDescription: {
+    id: 'pluginsSettings.noAppsDescription',
+    defaultMessage: 'Apps are connectors published by Codex; none are available for this account.',
+  },
+  errorLoadingApps: {
+    id: 'pluginsSettings.errorLoadingApps',
+    defaultMessage: 'Error loading apps',
+  },
+  appUnavailable: {
+    id: 'pluginsSettings.appUnavailable',
+    defaultMessage: 'Unavailable',
   },
   tabMcps: {
     id: 'pluginsSettings.tabMcps',
@@ -125,6 +174,18 @@ const i18n = defineMessages({
     id: 'pluginsSettings.toggleItem',
     defaultMessage: 'Toggle {name} on or off',
   },
+  moreActions: {
+    id: 'pluginsSettings.moreActions',
+    defaultMessage: 'More actions for {name}',
+  },
+  open: {
+    id: 'pluginsSettings.open',
+    defaultMessage: 'Open',
+  },
+  details: {
+    id: 'pluginsSettings.details',
+    defaultMessage: 'Details',
+  },
   tabPlugins: {
     id: 'pluginsSettings.tabPlugins',
     defaultMessage: 'Plugins',
@@ -135,19 +196,15 @@ const i18n = defineMessages({
   },
   noPlugins: {
     id: 'pluginsSettings.noPlugins',
-    defaultMessage: 'No plugins available',
+    defaultMessage: 'No plugins installed',
   },
   noPluginsDescription: {
     id: 'pluginsSettings.noPluginsDescription',
-    defaultMessage: 'Add a marketplace to install plugins.',
+    defaultMessage: 'Browse and install plugins from the Plugins page.',
   },
   errorLoadingPlugins: {
     id: 'pluginsSettings.errorLoadingPlugins',
     defaultMessage: 'Error loading plugins',
-  },
-  install: {
-    id: 'pluginsSettings.install',
-    defaultMessage: 'Install',
   },
   uninstallPlugin: {
     id: 'pluginsSettings.uninstallPlugin',
@@ -175,7 +232,14 @@ const i18n = defineMessages({
   },
 });
 
-type PluginsTab = 'mcps' | 'skills' | 'plugins';
+type PluginsTab = 'plugins' | 'apps' | 'mcps' | 'skills';
+
+const SEARCH_PLACEHOLDER: Record<PluginsTab, typeof i18n.searchPlugins> = {
+  plugins: i18n.searchPlugins,
+  apps: i18n.searchApps,
+  mcps: i18n.searchMcps,
+  skills: i18n.searchSkills,
+};
 
 function scrollToExtension(extensionName: string) {
   setTimeout(() => {
@@ -196,6 +260,7 @@ function PluginRow({
   description,
   scope,
   actions,
+  onOpen,
 }: {
   id?: string;
   icon: ReactNode;
@@ -203,21 +268,35 @@ function PluginRow({
   description: string | null;
   scope: string;
   actions: ReactNode;
+  /** Set for rows that have a detail view; the row body becomes the link to it. */
+  onOpen?: () => void;
 }) {
-  return (
-    <div
-      id={id}
-      className="group flex items-center gap-4 py-4 px-3 -mx-3 rounded-xl transition-colors hover:bg-background-secondary"
-    >
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border-primary bg-background-secondary text-text-secondary">
+  const body = (
+    <>
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border-primary bg-background-secondary text-text-secondary">
         {icon}
       </div>
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 text-left">
         <div className="text-base text-text-primary truncate">{title}</div>
         {description && (
           <div className="text-sm text-text-secondary truncate mt-0.5">{description}</div>
         )}
       </div>
+    </>
+  );
+
+  return (
+    <div
+      id={id}
+      className="group flex items-center gap-4 py-4 px-3 -mx-3 rounded-xl transition-colors hover:bg-background-secondary"
+    >
+      {onOpen ? (
+        <button onClick={onOpen} className="flex min-w-0 flex-1 items-center gap-4">
+          {body}
+        </button>
+      ) : (
+        body
+      )}
       <div className="shrink-0 text-sm text-text-secondary">{scope}</div>
       <div className="flex shrink-0 items-center gap-3">{actions}</div>
     </div>
@@ -306,9 +385,11 @@ function ExtensionRow({
 function SkillRow({
   skill,
   onToggle,
+  onShowDetails,
 }: {
   skill: SkillMetadata;
   onToggle: (skill: SkillMetadata, enabled: boolean) => Promise<void>;
+  onShowDetails: (skill: SkillMetadata) => void;
 }) {
   const intl = useIntl();
   const [visuallyEnabled, setVisuallyEnabled] = useState(skill.enabled);
@@ -348,30 +429,107 @@ function SkillRow({
       description={skill.description}
       scope={intl.formatMessage(scope)}
       actions={
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                aria-label={intl.formatMessage(i18n.moreActions, { name: skill.name })}
+                className="rounded-lg p-1.5 text-text-secondary opacity-0 transition-opacity hover:bg-background-tertiary hover:text-text-primary group-hover:opacity-100 data-[state=open]:opacity-100"
+              >
+                <MoreHorizontal className="h-4 w-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-[9rem]">
+              <DropdownMenuItem onSelect={() => openSkillFolder(skill)}>
+                {intl.formatMessage(i18n.open)}
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => onShowDetails(skill)}>
+                {intl.formatMessage(i18n.details)}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Switch
+            checked={visuallyEnabled}
+            onCheckedChange={handleToggle}
+            disabled={isToggling}
+            variant="mono"
+            aria-label={intl.formatMessage(i18n.toggleItem, { name: skill.name })}
+          />
+        </>
+      }
+    />
+  );
+}
+
+function AppRow({
+  app,
+  onToggle,
+}: {
+  app: AppInfo;
+  onToggle: (app: AppInfo, enabled: boolean) => Promise<void>;
+}) {
+  const intl = useIntl();
+  const { resolvedTheme } = useTheme();
+  const [visuallyEnabled, setVisuallyEnabled] = useState(app.isEnabled);
+  const [isToggling, setIsToggling] = useState(false);
+
+  useEffect(() => {
+    if (!isToggling) setVisuallyEnabled(app.isEnabled);
+  }, [app.isEnabled, isToggling]);
+
+  const handleToggle = async () => {
+    if (isToggling) return;
+    setIsToggling(true);
+    const next = !visuallyEnabled;
+    setVisuallyEnabled(next);
+    try {
+      await onToggle(app, next);
+    } catch {
+      setVisuallyEnabled(!next);
+    } finally {
+      setIsToggling(false);
+    }
+  };
+
+  const logoUrl = (resolvedTheme === 'dark' ? app.logoUrlDark : null) ?? app.logoUrl;
+
+  return (
+    <PluginRow
+      icon={
+        logoUrl ? (
+          <img src={logoUrl} alt="" className="h-full w-full rounded-xl object-cover" />
+        ) : (
+          <Waypoints className="h-5 w-5" />
+        )
+      }
+      title={app.name}
+      description={app.description}
+      scope={app.isAccessible ? '' : intl.formatMessage(i18n.appUnavailable)}
+      actions={
         <Switch
           checked={visuallyEnabled}
           onCheckedChange={handleToggle}
-          disabled={isToggling}
+          disabled={isToggling || !app.isAccessible}
           variant="mono"
-          aria-label={intl.formatMessage(i18n.toggleItem, { name: skill.name })}
+          aria-label={intl.formatMessage(i18n.toggleItem, { name: app.name })}
         />
       }
     />
   );
 }
 
-function PluginCatalogRow({
+function InstalledPluginRow({
   marketplaceName,
   plugin,
   onToggle,
-  onInstall,
   onUninstall,
+  onOpen,
 }: {
   marketplaceName: string;
   plugin: PluginSummary;
   onToggle: (plugin: PluginSummary, enabled: boolean) => Promise<void>;
-  onInstall: (plugin: PluginSummary) => Promise<void>;
   onUninstall: (plugin: PluginSummary) => Promise<void>;
+  onOpen: () => void;
 }) {
   const intl = useIntl();
   const [visuallyEnabled, setVisuallyEnabled] = useState(plugin.enabled);
@@ -408,16 +566,17 @@ function PluginCatalogRow({
 
   return (
     <PluginRow
-      icon={<Package className="h-5 w-5" />}
+      icon={<PluginLogo plugin={plugin} className="h-full w-full" />}
       title={title}
       description={description}
       scope={marketplaceName}
+      onOpen={onOpen}
       actions={
         disabledByAdmin ? (
           <span className="text-sm text-text-tertiary">
             {intl.formatMessage(i18n.disabledByAdmin)}
           </span>
-        ) : plugin.installed ? (
+        ) : (
           <>
             <button
               className="text-text-secondary opacity-0 group-hover:opacity-100 hover:text-text-danger transition-opacity disabled:opacity-30"
@@ -435,16 +594,6 @@ function PluginCatalogRow({
               aria-label={intl.formatMessage(i18n.toggleItem, { name: title })}
             />
           </>
-        ) : (
-          <Button
-            variant="secondary"
-            className="h-8 rounded-full flex items-center gap-1.5"
-            onClick={() => runBusy(() => onInstall(plugin))}
-            disabled={busy}
-          >
-            <Download className="h-4 w-4" />
-            {intl.formatMessage(i18n.install)}
-          </Button>
         )
       }
     />
@@ -477,12 +626,22 @@ export default function PluginsSettingsSection({
   const [skills, setSkills] = useState<SkillMetadata[]>([]);
   const [skillsLoading, setSkillsLoading] = useState(true);
   const [skillsError, setSkillsError] = useState<string | null>(null);
+  const [detailsSkillPath, setDetailsSkillPath] = useState<string | null>(null);
+  const [skillsRoot, setSkillsRoot] = useState('');
 
   const [pluginMarkets, setPluginMarkets] = useState<PluginMarketplaceEntry[]>([]);
   const [pluginsLoading, setPluginsLoading] = useState(true);
   const [pluginsError, setPluginsError] = useState<string | null>(null);
   const [isAddMarketplaceOpen, setIsAddMarketplaceOpen] = useState(false);
   const [marketplaceSource, setMarketplaceSource] = useState('');
+  const [selectedPlugin, setSelectedPlugin] = useState<{
+    market: PluginMarketplaceEntry;
+    plugin: PluginSummary;
+  } | null>(null);
+
+  const [apps, setApps] = useState<AppInfo[]>([]);
+  const [appsLoading, setAppsLoading] = useState(true);
+  const [appsError, setAppsError] = useState<string | null>(null);
 
   useEffect(() => {
     if (deepLinkConfig) {
@@ -508,6 +667,7 @@ export default function PluginsSettingsSection({
 
   useEffect(() => {
     loadSkills();
+    personalSkillsRoot().then(setSkillsRoot).catch(console.error);
   }, [loadSkills]);
 
   const loadPlugins = useCallback(async () => {
@@ -527,8 +687,25 @@ export default function PluginsSettingsSection({
     loadPlugins();
   }, [loadPlugins]);
 
+  const loadApps = useCallback(async () => {
+    try {
+      setAppsLoading(true);
+      setAppsError(null);
+      setApps(await listApps());
+    } catch (err) {
+      setAppsError(errorMessage(err, 'Failed to load apps'));
+    } finally {
+      setAppsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadApps();
+  }, [loadApps]);
+
   const extensions = useMemo(
-    () => [...extensionsList].sort((a, b) => getFriendlyTitle(a).localeCompare(getFriendlyTitle(b))),
+    () =>
+      [...extensionsList].sort((a, b) => getFriendlyTitle(a).localeCompare(getFriendlyTitle(b))),
     [extensionsList]
   );
 
@@ -548,38 +725,41 @@ export default function PluginsSettingsSection({
     if (!query) return skills;
     return skills.filter(
       (skill) =>
-        skill.name.toLowerCase().includes(query) ||
-        skill.description.toLowerCase().includes(query)
+        skill.name.toLowerCase().includes(query) || skill.description.toLowerCase().includes(query)
     );
   }, [skills, query]);
 
+  // Settings manages what is already installed; browsing and installing lives on
+  // the Plugins page.
   const pluginRows = useMemo(
-    () => pluginMarkets.flatMap((market) => market.plugins.map((plugin) => ({ market, plugin }))),
+    () =>
+      pluginMarkets
+        .flatMap((market) => market.plugins.map((plugin) => ({ market, plugin })))
+        .filter(({ plugin }) => plugin.installed)
+        .sort((a, b) =>
+          (a.plugin.interface?.displayName || a.plugin.name).localeCompare(
+            b.plugin.interface?.displayName || b.plugin.name
+          )
+        ),
     [pluginMarkets]
   );
 
-  const installedPluginCount = useMemo(
-    () => pluginRows.filter(({ plugin }) => plugin.installed).length,
-    [pluginRows]
-  );
-
   const filteredPlugins = useMemo(() => {
-    const rows = !query
-      ? pluginRows
-      : pluginRows.filter(({ plugin }) => {
-          const title = plugin.interface?.displayName || plugin.name;
-          return [title, plugin.name, plugin.interface?.shortDescription].some((text) =>
-            text?.toLowerCase().includes(query)
-          );
-        });
-    return [...rows].sort(
-      (a, b) =>
-        Number(b.plugin.installed) - Number(a.plugin.installed) ||
-        (a.plugin.interface?.displayName || a.plugin.name).localeCompare(
-          b.plugin.interface?.displayName || b.plugin.name
-        )
-    );
+    if (!query) return pluginRows;
+    return pluginRows.filter(({ plugin }) => {
+      const title = plugin.interface?.displayName || plugin.name;
+      return [title, plugin.name, plugin.interface?.shortDescription].some((text) =>
+        text?.toLowerCase().includes(query)
+      );
+    });
   }, [pluginRows, query]);
+
+  const filteredApps = useMemo(() => {
+    if (!query) return apps;
+    return apps.filter((app) =>
+      [app.name, app.description].some((text) => text?.toLowerCase().includes(query))
+    );
+  }, [apps, query]);
 
   const fetchExtensions = useCallback(async () => {
     await getExtensions(true);
@@ -600,6 +780,19 @@ export default function PluginsSettingsSection({
     setSkills((prev) => prev.map((s) => (s.path === skill.path ? { ...s, enabled } : s)));
   };
 
+  const detailsSkill = skills.find((skill) => skill.path === detailsSkillPath) ?? null;
+
+  const isPersonalSkill = (skill: SkillMetadata) =>
+    skillsRoot !== '' &&
+    skill.path.startsWith(`${skillsRoot}/`) &&
+    !skill.path.startsWith(`${skillsRoot}/.system/`);
+
+  const handleSkillUninstall = async (skill: SkillMetadata) => {
+    await uninstallSkill(skill.path);
+    setDetailsSkillPath(null);
+    await loadSkills();
+  };
+
   const handlePluginToggle = async (plugin: PluginSummary, enabled: boolean) => {
     await setPluginEnabled(plugin.id, enabled);
     setPluginMarkets((prev) =>
@@ -610,9 +803,9 @@ export default function PluginsSettingsSection({
     );
   };
 
-  const handlePluginInstall = async (market: PluginMarketplaceEntry, plugin: PluginSummary) => {
-    await installPlugin(market, plugin.name);
-    await loadPlugins();
+  const handleAppToggle = async (app: AppInfo, enabled: boolean) => {
+    await setAppEnabled(app.id, enabled);
+    setApps((prev) => prev.map((a) => (a.id === app.id ? { ...a, isEnabled: enabled } : a)));
   };
 
   const handlePluginUninstall = async (plugin: PluginSummary) => {
@@ -684,7 +877,8 @@ export default function PluginsSettingsSection({
   };
 
   const tabs: { tab: PluginsTab; label: string; count: number }[] = [
-    { tab: 'plugins', label: intl.formatMessage(i18n.tabPlugins), count: installedPluginCount },
+    { tab: 'plugins', label: intl.formatMessage(i18n.tabPlugins), count: pluginRows.length },
+    { tab: 'apps', label: intl.formatMessage(i18n.tabApps), count: apps.length },
     { tab: 'mcps', label: intl.formatMessage(i18n.tabMcps), count: extensions.length },
     { tab: 'skills', label: intl.formatMessage(i18n.tabSkills), count: skills.length },
   ];
@@ -752,7 +946,12 @@ export default function PluginsSettingsSection({
     return (
       <div>
         {filteredSkills.map((skill) => (
-          <SkillRow key={skill.path} skill={skill} onToggle={handleSkillToggle} />
+          <SkillRow
+            key={skill.path}
+            skill={skill}
+            onToggle={handleSkillToggle}
+            onShowDetails={(target) => setDetailsSkillPath(target.path)}
+          />
         ))}
       </div>
     );
@@ -792,18 +991,72 @@ export default function PluginsSettingsSection({
     return (
       <div>
         {filteredPlugins.map(({ market, plugin }) => (
-          <PluginCatalogRow
+          <InstalledPluginRow
             key={plugin.id}
             marketplaceName={market.interface?.displayName || market.name}
             plugin={plugin}
             onToggle={handlePluginToggle}
-            onInstall={(p) => handlePluginInstall(market, p)}
             onUninstall={handlePluginUninstall}
+            onOpen={() => setSelectedPlugin({ market, plugin })}
           />
         ))}
       </div>
     );
   };
+
+  const renderApps = () => {
+    if (appsLoading) {
+      return (
+        <div>
+          <RowSkeleton />
+          <RowSkeleton />
+          <RowSkeleton />
+        </div>
+      );
+    }
+    if (appsError) {
+      return (
+        <div className="flex flex-col items-center justify-center py-12 text-text-secondary">
+          <AlertCircle className="h-10 w-10 text-text-danger mb-3" />
+          <p className="mb-1">{intl.formatMessage(i18n.errorLoadingApps)}</p>
+          <p className="text-sm mb-4">{appsError}</p>
+          <Button onClick={loadApps} variant="default">
+            {intl.formatMessage(i18n.tryAgain)}
+          </Button>
+        </div>
+      );
+    }
+    if (apps.length === 0) {
+      return (
+        <div className="py-12 text-center text-text-secondary">
+          <p className="mb-1">{intl.formatMessage(i18n.noApps)}</p>
+          <p className="text-sm">{intl.formatMessage(i18n.noAppsDescription)}</p>
+        </div>
+      );
+    }
+    if (filteredApps.length === 0) return renderNoMatches();
+    return (
+      <div>
+        {filteredApps.map((app) => (
+          <AppRow key={app.id} app={app} onToggle={handleAppToggle} />
+        ))}
+      </div>
+    );
+  };
+
+  if (selectedPlugin) {
+    return (
+      <div className="-mt-6">
+        <PluginDetails
+          market={selectedPlugin.market}
+          plugin={selectedPlugin.plugin}
+          breadcrumb={intl.formatMessage(i18n.tabPlugins)}
+          onBack={() => setSelectedPlugin(null)}
+          onChanged={loadPlugins}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="pb-8">
@@ -839,13 +1092,7 @@ export default function PluginsSettingsSection({
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={intl.formatMessage(
-                activeTab === 'mcps'
-                  ? i18n.searchMcps
-                  : activeTab === 'skills'
-                    ? i18n.searchSkills
-                    : i18n.searchPlugins
-              )}
+              placeholder={intl.formatMessage(SEARCH_PLACEHOLDER[activeTab])}
               data-testid="plugins-search"
               className="w-[240px] h-9 pl-9 pr-3 rounded-full border border-border-primary bg-background-primary text-sm text-text-primary placeholder:text-text-tertiary focus:border-border-secondary focus-visible:outline-none transition-colors"
             />
@@ -877,7 +1124,18 @@ export default function PluginsSettingsSection({
         ? renderMcps()
         : activeTab === 'skills'
           ? renderSkills()
-          : renderPlugins()}
+          : activeTab === 'apps'
+            ? renderApps()
+            : renderPlugins()}
+
+      <SkillDetailsModal
+        skill={detailsSkill}
+        onClose={() => setDetailsSkillPath(null)}
+        onToggle={handleSkillToggle}
+        onUninstall={
+          detailsSkill && isPersonalSkill(detailsSkill) ? handleSkillUninstall : undefined
+        }
+      />
 
       {selectedExtension && (
         <ExtensionModal

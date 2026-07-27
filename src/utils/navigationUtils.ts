@@ -25,6 +25,7 @@ export type ViewOptions = {
   initialMessage?: UserInput;
   resumeSessionId?: string;
   pendingScheduleDeepLink?: string;
+  section?: string;
 };
 
 export const createNavigationHandler = (navigate: NavigateFunction) => {

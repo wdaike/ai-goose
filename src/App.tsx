@@ -28,6 +28,7 @@ interface PairRouteState {
 import SettingsView, { SettingsViewOptions } from './components/settings/SettingsView';
 import ProviderSettings from './components/settings/providers/ProviderSettingsPage';
 import { AppLayout } from './components/Layout/AppLayout';
+import PluginsView from './components/plugins/PluginsView';
 import { ChatProvider, DEFAULT_CHAT_TITLE } from './contexts/ChatContext';
 import LauncherView from './components/LauncherView';
 
@@ -480,6 +481,7 @@ export function AppInner() {
                   />
                 }
               />
+              <Route path="plugins" element={<PluginsView />} />
               <Route path="settings" element={<SettingsRoute />} />
               <Route path="permission" element={<PermissionRoute />} />
             </Route>

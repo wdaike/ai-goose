@@ -203,36 +203,6 @@
   "baseChat.goHome": {
     "defaultMessage": "Go home"
   },
-  "baseChat.reconnecting": {
-    "defaultMessage": "Connection lost. Reconnecting…"
-  },
-  "bottomMenuExtensionSelection.extensionUpdated": {
-    "defaultMessage": "Extension Updated"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeDisabled": {
-    "defaultMessage": "{name} will be disabled in new chats"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeEnabled": {
-    "defaultMessage": "{name} will be enabled in new chats"
-  },
-  "bottomMenuExtensionSelection.extensionsForNewChats": {
-    "defaultMessage": "Extensions for new chats"
-  },
-  "bottomMenuExtensionSelection.extensionsForThisSession": {
-    "defaultMessage": "Extensions for this chat session"
-  },
-  "bottomMenuExtensionSelection.manageExtensions": {
-    "defaultMessage": "manage extensions"
-  },
-  "bottomMenuExtensionSelection.noExtensionsAvailable": {
-    "defaultMessage": "no extensions available"
-  },
-  "bottomMenuExtensionSelection.noExtensionsFound": {
-    "defaultMessage": "no extensions found"
-  },
-  "bottomMenuExtensionSelection.searchExtensions": {
-    "defaultMessage": "search extensions..."
-  },
   "cardButtons.configure": {
     "defaultMessage": "Configure"
   },
@@ -263,11 +233,8 @@
   "chatInput.recording": {
     "defaultMessage": "Recording..."
   },
-  "chatInput.removeFile": {
-    "defaultMessage": "Remove file"
-  },
-  "chatInput.removeImage": {
-    "defaultMessage": "Remove image"
+  "chatInput.removeSkill": {
+    "defaultMessage": "Remove skill"
   },
   "chatInput.restartingSession": {
     "defaultMessage": "Restarting session..."
@@ -280,9 +247,6 @@
   },
   "chatInput.typeMessage": {
     "defaultMessage": "Type a message to send"
-  },
-  "chatInput.unknownType": {
-    "defaultMessage": "Unknown type"
   },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "Waiting for cancellation to finish"
@@ -301,6 +265,15 @@
   },
   "chatSettings.responseStylesTitle": {
     "defaultMessage": "Response Styles"
+  },
+  "composerAttachments.file": {
+    "defaultMessage": "File"
+  },
+  "composerAttachments.removeFile": {
+    "defaultMessage": "Remove file"
+  },
+  "composerAttachments.removeImage": {
+    "defaultMessage": "Remove image"
   },
   "configSettings.configReset": {
     "defaultMessage": "Configuration Reset"
@@ -394,18 +367,6 @@
   },
   "conversationLimitsDropdown.maxTurnsDescription": {
     "defaultMessage": "Maximum agent turns before iCodex asks for user input"
-  },
-  "costTracker.costUnavailable": {
-    "defaultMessage": "Cost data not available for {model} ({inputTokens} input, {outputTokens} output tokens)"
-  },
-  "costTracker.inputOutputTooltip": {
-    "defaultMessage": "Input: {inputTokens} tokens ({inputCost}) | Output: {outputTokens} tokens ({outputCost})"
-  },
-  "costTracker.pricingUnavailable": {
-    "defaultMessage": "Pricing data unavailable for {model}"
-  },
-  "costTracker.totalSessionCost": {
-    "defaultMessage": "Total session cost: {cost}"
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "Add credits"
@@ -610,57 +571,6 @@
   },
   "defaultProviderSetupForm.showOptions": {
     "defaultMessage": "Show {count} options"
-  },
-  "diagnosticsModal.attachHint": {
-    "defaultMessage": "If you file a bug, consider attaching the diagnostics report to it."
-  },
-  "diagnosticsModal.cancel": {
-    "defaultMessage": "Cancel"
-  },
-  "diagnosticsModal.configSettings": {
-    "defaultMessage": "Configuration settings"
-  },
-  "diagnosticsModal.description": {
-    "defaultMessage": "You can download a diagnostics JSON report to share with the team, or file a bug directly on GitHub with your system details pre-filled. A diagnostics report contains the following:"
-  },
-  "diagnosticsModal.diagnosticsErrorMsg": {
-    "defaultMessage": "Failed to download diagnostics report"
-  },
-  "diagnosticsModal.diagnosticsErrorTitle": {
-    "defaultMessage": "Diagnostics Error"
-  },
-  "diagnosticsModal.download": {
-    "defaultMessage": "Download"
-  },
-  "diagnosticsModal.downloading": {
-    "defaultMessage": "Downloading..."
-  },
-  "diagnosticsModal.fileBug": {
-    "defaultMessage": "File Bug on GitHub"
-  },
-  "diagnosticsModal.logFiles": {
-    "defaultMessage": "Recent log files"
-  },
-  "diagnosticsModal.opening": {
-    "defaultMessage": "Opening..."
-  },
-  "diagnosticsModal.reportProblem": {
-    "defaultMessage": "Report a Problem"
-  },
-  "diagnosticsModal.sensitiveWarning": {
-    "defaultMessage": "If your session contains sensitive information, do not share the diagnostics file publicly."
-  },
-  "diagnosticsModal.sessionMessages": {
-    "defaultMessage": "Your current session messages"
-  },
-  "diagnosticsModal.systemInfo": {
-    "defaultMessage": "Basic system info"
-  },
-  "diagnosticsModal.systemInfoErrorMsg": {
-    "defaultMessage": "Failed to get system information"
-  },
-  "diagnosticsModal.systemInfoErrorTitle": {
-    "defaultMessage": "Error"
   },
   "dialog.close": {
     "defaultMessage": "Close"
@@ -1154,14 +1064,26 @@
   "imagePreview.altText": {
     "defaultMessage": "iCodex image"
   },
-  "imagePreview.clickToCollapse": {
-    "defaultMessage": "Click to collapse"
-  },
   "imagePreview.clickToExpand": {
     "defaultMessage": "Click to expand"
   },
+  "imagePreview.download": {
+    "defaultMessage": "Download image"
+  },
+  "imagePreview.previewTitle": {
+    "defaultMessage": "Image preview"
+  },
+  "imagePreview.resetZoom": {
+    "defaultMessage": "Reset zoom to 100%"
+  },
   "imagePreview.unableToLoad": {
     "defaultMessage": "Unable to load image"
+  },
+  "imagePreview.zoomIn": {
+    "defaultMessage": "Zoom in"
+  },
+  "imagePreview.zoomOut": {
+    "defaultMessage": "Zoom out"
   },
   "inlineEditText.clickToEdit": {
     "defaultMessage": "Click to edit"
@@ -1556,6 +1478,9 @@
   "mentionPopover.loadingCommands": {
     "defaultMessage": "Loading commands..."
   },
+  "mentionPopover.noCommandsAvailable": {
+    "defaultMessage": "No commands available"
+  },
   "mentionPopover.noCommandsFound": {
     "defaultMessage": "No commands found matching \"{query}\""
   },
@@ -1586,47 +1511,20 @@
   "messageQueue.cancel": {
     "defaultMessage": "Cancel"
   },
-  "messageQueue.cannotSendWhileEditing": {
-    "defaultMessage": "Cannot send while editing"
-  },
   "messageQueue.clearAll": {
     "defaultMessage": "Clear All"
   },
-  "messageQueue.clickToEdit": {
-    "defaultMessage": "{content} (Click to edit)"
+  "messageQueue.editInstruction": {
+    "defaultMessage": "Edit instruction"
   },
-  "messageQueue.collapseQueue": {
-    "defaultMessage": "Collapse queue"
-  },
-  "messageQueue.dragToReorder": {
-    "defaultMessage": "Drag messages to reorder priority"
-  },
-  "messageQueue.expandQueue": {
-    "defaultMessage": "Expand queue"
-  },
-  "messageQueue.messageCount": {
-    "defaultMessage": "{count,plural,one{# message {status}} other{# messages {status}}}"
-  },
-  "messageQueue.messageQueue": {
-    "defaultMessage": "Message Queue"
-  },
-  "messageQueue.next": {
-    "defaultMessage": "Next"
+  "messageQueue.moreOptions": {
+    "defaultMessage": "More options"
   },
   "messageQueue.paused": {
     "defaultMessage": "Paused"
   },
-  "messageQueue.queuePaused": {
-    "defaultMessage": "Queue Paused"
-  },
   "messageQueue.queuePausedCompact": {
-    "defaultMessage": "Queue paused - click \"Send\" or add new message to resume"
-  },
-  "messageQueue.queuePausedExpanded": {
-    "defaultMessage": "Queue paused by interruption. Use \"Send Now\" or add a new message to resume."
-  },
-  "messageQueue.queued": {
-    "defaultMessage": "queued"
+    "defaultMessage": "Queue paused - click \"Steer\" or add new message to resume"
   },
   "messageQueue.removeFromQueue": {
     "defaultMessage": "Remove this message from queue"
@@ -1634,14 +1532,11 @@
   "messageQueue.save": {
     "defaultMessage": "Save"
   },
-  "messageQueue.sendNow": {
-    "defaultMessage": "Send this message now"
+  "messageQueue.steer": {
+    "defaultMessage": "Steer"
   },
-  "messageQueue.stopAndSend": {
-    "defaultMessage": "Stop current processing and send this message now"
-  },
-  "messageQueue.waiting": {
-    "defaultMessage": "waiting"
+  "messageQueue.steerHint": {
+    "defaultMessage": "Steer the running turn with this message"
   },
   "messageUsageStats.cacheHitRate": {
     "defaultMessage": "({percent}% of input)"
@@ -1985,6 +1880,9 @@
   "navigation.itemHome": {
     "defaultMessage": "New chat"
   },
+  "navigation.itemPlugins": {
+    "defaultMessage": "Plugins"
+  },
   "navigation.itemScheduler": {
     "defaultMessage": "Scheduler"
   },
@@ -2102,6 +2000,9 @@
   "permissionModeChip.fullAccess": {
     "defaultMessage": "Full access"
   },
+  "permissionModeChip.permissionSettings": {
+    "defaultMessage": "Permission settings"
+  },
   "permissionModeChip.smartApprove": {
     "defaultMessage": "Smart approval"
   },
@@ -2126,6 +2027,72 @@
   "planSteps.progress": {
     "defaultMessage": "Step {current} / {total}"
   },
+  "pluginDetails.apps": {
+    "defaultMessage": "Apps"
+  },
+  "pluginDetails.capabilities": {
+    "defaultMessage": "Capabilities"
+  },
+  "pluginDetails.category": {
+    "defaultMessage": "Category"
+  },
+  "pluginDetails.developer": {
+    "defaultMessage": "Developer"
+  },
+  "pluginDetails.disable": {
+    "defaultMessage": "Disable"
+  },
+  "pluginDetails.enable": {
+    "defaultMessage": "Enable"
+  },
+  "pluginDetails.errorLoading": {
+    "defaultMessage": "Could not load plugin details"
+  },
+  "pluginDetails.hooks": {
+    "defaultMessage": "Hooks"
+  },
+  "pluginDetails.information": {
+    "defaultMessage": "Information"
+  },
+  "pluginDetails.marketplace": {
+    "defaultMessage": "Marketplace"
+  },
+  "pluginDetails.mcpServers": {
+    "defaultMessage": "MCPs"
+  },
+  "pluginDetails.moreActions": {
+    "defaultMessage": "More actions for {name}"
+  },
+  "pluginDetails.privacyPolicy": {
+    "defaultMessage": "Privacy policy"
+  },
+  "pluginDetails.skills": {
+    "defaultMessage": "Skills"
+  },
+  "pluginDetails.termsOfService": {
+    "defaultMessage": "Terms of service"
+  },
+  "pluginDetails.toggleItem": {
+    "defaultMessage": "Toggle {name} on or off"
+  },
+  "pluginDetails.tryAgain": {
+    "defaultMessage": "Try Again"
+  },
+  "pluginDetails.tryNow": {
+    "defaultMessage": "Try now"
+  },
+  "pluginDetails.tryNowPrompt": {
+    "defaultMessage": "Use the {name} plugin to"
+  },
+  "pluginDetails.uninstall": {
+    "defaultMessage": "Uninstall"
+  },
+  "pluginDetails.version": {
+    "defaultMessage": "Version"
+  },
+  "pluginDetails.website": {
+    "defaultMessage": "Website"
+  },
   "pluginsSettings.add": {
     "defaultMessage": "Add"
   },
@@ -2135,11 +2102,47 @@
   "pluginsSettings.addExtension": {
     "defaultMessage": "Add Extension"
   },
+  "pluginsSettings.addMarketplace": {
+    "defaultMessage": "Add marketplace"
+  },
+  "pluginsSettings.addMarketplaceTitle": {
+    "defaultMessage": "Add plugin marketplace"
+  },
+  "pluginsSettings.appUnavailable": {
+    "defaultMessage": "Unavailable"
+  },
+  "pluginsSettings.cancel": {
+    "defaultMessage": "Cancel"
+  },
   "pluginsSettings.configureExtension": {
     "defaultMessage": "Configure {name}"
   },
+  "pluginsSettings.details": {
+    "defaultMessage": "Details"
+  },
+  "pluginsSettings.disabledByAdmin": {
+    "defaultMessage": "Disabled by admin"
+  },
+  "pluginsSettings.errorLoadingApps": {
+    "defaultMessage": "Error loading apps"
+  },
+  "pluginsSettings.errorLoadingPlugins": {
+    "defaultMessage": "Error loading plugins"
+  },
   "pluginsSettings.errorLoadingSkills": {
     "defaultMessage": "Error loading skills"
+  },
+  "pluginsSettings.marketplaceSourcePlaceholder": {
+    "defaultMessage": "git URL or local path"
+  },
+  "pluginsSettings.moreActions": {
+    "defaultMessage": "More actions for {name}"
+  },
+  "pluginsSettings.noApps": {
+    "defaultMessage": "No apps available"
+  },
+  "pluginsSettings.noAppsDescription": {
+    "defaultMessage": "Apps are connectors published by Codex; none are available for this account."
   },
   "pluginsSettings.noExtensions": {
     "defaultMessage": "No extensions installed"
@@ -2147,11 +2150,20 @@
   "pluginsSettings.noMatches": {
     "defaultMessage": "No results for \"{query}\""
   },
+  "pluginsSettings.noPlugins": {
+    "defaultMessage": "No plugins installed"
+  },
+  "pluginsSettings.noPluginsDescription": {
+    "defaultMessage": "Browse and install plugins from the Plugins page."
+  },
   "pluginsSettings.noSkills": {
     "defaultMessage": "No skills installed"
   },
   "pluginsSettings.noSkillsDescription": {
     "defaultMessage": "Skills are loaded from SKILL.md files in the iCodex skills directory."
+  },
+  "pluginsSettings.open": {
+    "defaultMessage": "Open"
   },
   "pluginsSettings.saveChanges": {
     "defaultMessage": "Save Changes"
@@ -2168,17 +2180,29 @@
   "pluginsSettings.scopeSystem": {
     "defaultMessage": "System"
   },
+  "pluginsSettings.searchApps": {
+    "defaultMessage": "Search apps"
+  },
   "pluginsSettings.searchMcps": {
     "defaultMessage": "Search MCPs"
+  },
+  "pluginsSettings.searchPlugins": {
+    "defaultMessage": "Search plugins"
   },
   "pluginsSettings.searchSkills": {
     "defaultMessage": "Search skills"
   },
   "pluginsSettings.subtitle": {
-    "defaultMessage": "Manage MCP extensions and skills"
+    "defaultMessage": "Manage plugins, apps, MCPs, and skills"
+  },
+  "pluginsSettings.tabApps": {
+    "defaultMessage": "Apps"
   },
   "pluginsSettings.tabMcps": {
     "defaultMessage": "MCPs"
+  },
+  "pluginsSettings.tabPlugins": {
+    "defaultMessage": "Plugins"
   },
   "pluginsSettings.tabSkills": {
     "defaultMessage": "Skills"
@@ -2189,8 +2213,116 @@
   "pluginsSettings.tryAgain": {
     "defaultMessage": "Try Again"
   },
+  "pluginsSettings.uninstallPlugin": {
+    "defaultMessage": "Uninstall {name}"
+  },
   "pluginsSettings.updateExtension": {
     "defaultMessage": "Update Extension"
+  },
+  "pluginsView.addMarketplace": {
+    "defaultMessage": "Add marketplace"
+  },
+  "pluginsView.allCategories": {
+    "defaultMessage": "All categories"
+  },
+  "pluginsView.cancel": {
+    "defaultMessage": "Cancel"
+  },
+  "pluginsView.disable": {
+    "defaultMessage": "Disable"
+  },
+  "pluginsView.disabled": {
+    "defaultMessage": "Disabled"
+  },
+  "pluginsView.disabledByAdmin": {
+    "defaultMessage": "Disabled by admin"
+  },
+  "pluginsView.enable": {
+    "defaultMessage": "Enable"
+  },
+  "pluginsView.errorLoading": {
+    "defaultMessage": "Something went wrong"
+  },
+  "pluginsView.featured": {
+    "defaultMessage": "Featured"
+  },
+  "pluginsView.filter": {
+    "defaultMessage": "Filter by category"
+  },
+  "pluginsView.install": {
+    "defaultMessage": "Install"
+  },
+  "pluginsView.installed": {
+    "defaultMessage": "Installed"
+  },
+  "pluginsView.manage": {
+    "defaultMessage": "Manage in settings"
+  },
+  "pluginsView.marketplaceSourcePlaceholder": {
+    "defaultMessage": "git URL or local path"
+  },
+  "pluginsView.moreActions": {
+    "defaultMessage": "More actions for {name}"
+  },
+  "pluginsView.noMatches": {
+    "defaultMessage": "No results for \"{query}\""
+  },
+  "pluginsView.noPlugins": {
+    "defaultMessage": "No plugins available"
+  },
+  "pluginsView.noPluginsDescription": {
+    "defaultMessage": "Add a marketplace to browse and install plugins."
+  },
+  "pluginsView.noSkills": {
+    "defaultMessage": "No skills installed"
+  },
+  "pluginsView.noSkillsDescription": {
+    "defaultMessage": "Skills are loaded from SKILL.md files in the iCodex skills directory."
+  },
+  "pluginsView.pluginsSubtitle": {
+    "defaultMessage": "Work with iCodex across your favorite tools"
+  },
+  "pluginsView.refresh": {
+    "defaultMessage": "Refresh"
+  },
+  "pluginsView.scopePersonal": {
+    "defaultMessage": "Personal"
+  },
+  "pluginsView.scopeProject": {
+    "defaultMessage": "Project"
+  },
+  "pluginsView.scopeSystem": {
+    "defaultMessage": "System"
+  },
+  "pluginsView.searchPlugins": {
+    "defaultMessage": "Search plugins"
+  },
+  "pluginsView.searchSkills": {
+    "defaultMessage": "Search skills"
+  },
+  "pluginsView.seeLess": {
+    "defaultMessage": "Show fewer plugins"
+  },
+  "pluginsView.seeMore": {
+    "defaultMessage": "{count,plural,one{See # more plugin} other{See # more plugins}}"
+  },
+  "pluginsView.skillsSubtitle": {
+    "defaultMessage": "Reusable instructions iCodex loads when a task needs them"
+  },
+  "pluginsView.tabPlugins": {
+    "defaultMessage": "Plugins"
+  },
+  "pluginsView.tabSkills": {
+    "defaultMessage": "Skills"
+  },
+  "pluginsView.toggleItem": {
+    "defaultMessage": "Toggle {name} on or off"
+  },
+  "pluginsView.tryAgain": {
+    "defaultMessage": "Try Again"
+  },
+  "pluginsView.uninstall": {
+    "defaultMessage": "Uninstall"
   },
   "privacyInfoModal.collectErrors": {
     "defaultMessage": "Error types (e.g., \"rate_limit\", \"auth\" - no details)"
@@ -2819,9 +2951,6 @@
   "settingsView.title": {
     "defaultMessage": "Settings"
   },
-  "sheet.close": {
-    "defaultMessage": "Close"
-  },
   "shortcutRecorder.cancel": {
     "defaultMessage": "Cancel"
   },
@@ -2836,6 +2965,36 @@
   },
   "shortcutRecorder.save": {
     "defaultMessage": "Save"
+  },
+  "skillDetails.cancel": {
+    "defaultMessage": "Cancel"
+  },
+  "skillDetails.errorLoadingContents": {
+    "defaultMessage": "Could not read SKILL.md"
+  },
+  "skillDetails.open": {
+    "defaultMessage": "Open"
+  },
+  "skillDetails.skillLabel": {
+    "defaultMessage": "Skill"
+  },
+  "skillDetails.toggleItem": {
+    "defaultMessage": "Toggle {name} on or off"
+  },
+  "skillDetails.tryNow": {
+    "defaultMessage": "Try now"
+  },
+  "skillDetails.tryNowPrompt": {
+    "defaultMessage": "Use the {name} skill to"
+  },
+  "skillDetails.uninstall": {
+    "defaultMessage": "Uninstall"
+  },
+  "skillDetails.uninstallMessage": {
+    "defaultMessage": "This deletes the skill folder from disk. It cannot be undone."
+  },
+  "skillDetails.uninstallTitle": {
+    "defaultMessage": "Uninstall {name}?"
   },
   "spellcheckToggle.description": {
     "defaultMessage": "Check spelling in the chat input. Requires restart to take effect."
