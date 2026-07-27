@@ -45,10 +45,36 @@ export async function installPlugin(
 /** Everything a plugin bundles: skills, hooks, apps, MCP servers, scheduled tasks. */
 export async function readPlugin(
   marketplace: PluginMarketplaceEntry,
-  pluginName: string
+  pluginName: string,
+  cwd: string
 ): Promise<PluginDetail> {
   const response = await codex.pluginRead(pluginRef(marketplace, pluginName));
-  return response.plugin;
+  const detail = response.plugin;
+  if (!detail.summary.installed) return detail;
+
+  const skillsResponse = await codex.skillsList({
+    cwds: cwd ? [cwd] : [],
+    forceReload: true,
+  });
+  const installedSkills = new Map(
+    skillsResponse.data.flatMap((entry) => entry.skills).map((skill) => [skill.name, skill])
+  );
+
+  return {
+    ...detail,
+    skills: detail.skills.map((skill) => {
+      const installed = installedSkills.get(skill.name);
+      if (!installed) return skill;
+      return {
+        ...skill,
+        description: installed.description,
+        shortDescription: installed.shortDescription ?? null,
+        interface: installed.interface ?? null,
+        path: installed.path,
+        enabled: installed.enabled,
+      };
+    }),
+  };
 }
 
 export async function uninstallPlugin(pluginId: string): Promise<void> {

@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { PluginLogo, SkillLogo, pluginTitle } from './logos';
+import SkillDetailsModal from './SkillDetailsModal';
 import { setSkillEnabled } from '../../codex/engine/skillPolicy';
 import { readPlugin, setPluginEnabled, uninstallPlugin } from '../../codex/engine/pluginCatalog';
 import type { PluginDetail } from '../../codex/protocol/v2/PluginDetail';
@@ -19,6 +20,7 @@ import type { PluginMarketplaceEntry } from '../../codex/protocol/v2/PluginMarke
 import type { PluginSummary } from '../../codex/protocol/v2/PluginSummary';
 import type { SkillSummary } from '../../codex/protocol/v2/SkillSummary';
 import { errorMessage } from '../../utils/conversionUtils';
+import { getInitialWorkingDir } from '../../utils/workingDir';
 import { defineMessages, useIntl } from '../../i18n';
 import { cn } from '../../utils';
 
@@ -153,9 +155,11 @@ function InfoRow({ label, children }: { label: string; children: ReactNode }) {
 function SkillRow({
   skill,
   onToggle,
+  onOpen,
 }: {
   skill: SkillSummary;
   onToggle: (skill: SkillSummary, enabled: boolean) => Promise<void>;
+  onOpen: (skill: SkillSummary) => void;
 }) {
   const intl = useIntl();
   const [busy, setBusy] = useState(false);
@@ -173,13 +177,20 @@ function SkillRow({
 
   return (
     <div className="flex items-center gap-4 py-4">
-      <SkillLogo skill={skill} className="h-10 w-10 shrink-0 rounded-xl" />
-      <div className="min-w-0 flex-1">
-        <div className="truncate text-base text-text-primary">{title}</div>
-        <div className="truncate text-sm text-text-secondary">
-          {skill.interface?.shortDescription || skill.shortDescription || skill.description}
+      <button
+        type="button"
+        className="flex min-w-0 flex-1 items-center gap-4 text-left"
+        disabled={!skill.path}
+        onClick={() => onOpen(skill)}
+      >
+        <SkillLogo skill={skill} className="h-10 w-10 shrink-0 rounded-xl" />
+        <div className="min-w-0 flex-1">
+          <div className="truncate text-base text-text-primary">{title}</div>
+          <div className="truncate text-sm text-text-secondary">
+            {skill.interface?.shortDescription || skill.shortDescription || skill.description}
+          </div>
         </div>
-      </div>
+      </button>
       <Switch
         checked={skill.enabled}
         onCheckedChange={handleToggle}
@@ -211,13 +222,14 @@ export default function PluginDetails({
   const [detail, setDetail] = useState<PluginDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [selectedSkillName, setSelectedSkillName] = useState<string | null>(null);
 
   const pluginName = plugin.name;
 
   const load = useCallback(async () => {
     setError(null);
     try {
-      setDetail(await readPlugin(market, pluginName));
+      setDetail(await readPlugin(market, pluginName, getInitialWorkingDir()));
     } catch (err) {
       setError(errorMessage(err, 'Failed to read plugin'));
     }
@@ -279,6 +291,7 @@ export default function PluginDetails({
     { label: intl.formatMessage(i18n.privacyPolicy), url: iface?.privacyPolicyUrl },
     { label: intl.formatMessage(i18n.termsOfService), url: iface?.termsOfServiceUrl },
   ].filter((link) => link.url);
+  const selectedSkill = detail?.skills.find((skill) => skill.name === selectedSkillName) ?? null;
 
   return (
     <div className="pb-8">
@@ -380,7 +393,12 @@ export default function PluginDetails({
           {detail.skills.length > 0 && (
             <Section title={intl.formatMessage(i18n.skills)} count={detail.skills.length}>
               {detail.skills.map((skill) => (
-                <SkillRow key={skill.name} skill={skill} onToggle={handleSkillToggle} />
+                <SkillRow
+                  key={skill.name}
+                  skill={skill}
+                  onToggle={handleSkillToggle}
+                  onOpen={(selected) => setSelectedSkillName(selected.name)}
+                />
               ))}
             </Section>
           )}
@@ -454,6 +472,12 @@ export default function PluginDetails({
           </Section>
         </>
       )}
+
+      <SkillDetailsModal
+        skill={selectedSkill}
+        onClose={() => setSelectedSkillName(null)}
+        onToggle={handleSkillToggle}
+      />
     </div>
   );
 }

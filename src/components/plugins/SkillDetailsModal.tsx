@@ -12,6 +12,7 @@ import { codex } from '../../codex/client';
 import { skillDirectory } from '../../codex/engine/skillPolicy';
 import { errorMessage } from '../../utils/conversionUtils';
 import type { SkillMetadata } from '../../codex/protocol/v2/SkillMetadata';
+import type { SkillSummary } from '../../codex/protocol/v2/SkillSummary';
 import { defineMessages, useIntl } from '../../i18n';
 
 const i18n = defineMessages({
@@ -57,7 +58,10 @@ const i18n = defineMessages({
   },
 });
 
-export function openSkillFolder(skill: SkillMetadata): void {
+type DisplayableSkill = SkillMetadata | SkillSummary;
+
+export function openSkillFolder(skill: DisplayableSkill): void {
+  if (!skill.path) return;
   window.electron.openDirectoryInExplorer(skillDirectory(skill.path));
 }
 
@@ -75,7 +79,7 @@ function stripFrontmatter(markdown: string): string {
   return bodyStart === -1 ? '' : markdown.slice(bodyStart + 1).trimStart();
 }
 
-function SkillIcon({ skill }: { skill: SkillMetadata }) {
+function SkillIcon({ skill }: { skill: DisplayableSkill }) {
   const iface = skill.interface;
   const localUrl = useLocalImage(iface?.iconLarge ?? iface?.iconSmall ?? null);
 
@@ -93,17 +97,17 @@ function SkillIcon({ skill }: { skill: SkillMetadata }) {
   );
 }
 
-export default function SkillDetailsModal({
+export default function SkillDetailsModal<T extends DisplayableSkill>({
   skill,
   onClose,
   onToggle,
   onUninstall,
 }: {
-  skill: SkillMetadata | null;
+  skill: T | null;
   onClose: () => void;
-  onToggle: (skill: SkillMetadata, enabled: boolean) => Promise<void>;
+  onToggle: (skill: T, enabled: boolean) => Promise<void>;
   /** Omitted for skills goose does not own on disk (codex system and plugin skills). */
-  onUninstall?: (skill: SkillMetadata) => Promise<void>;
+  onUninstall?: (skill: T) => Promise<void>;
 }) {
   const intl = useIntl();
   const navigate = useNavigate();
@@ -182,7 +186,7 @@ export default function SkillDetailsModal({
           <Switch
             checked={skill.enabled}
             onCheckedChange={handleToggle}
-            disabled={busy}
+            disabled={busy || !skill.path}
             variant="mono"
             aria-label={intl.formatMessage(i18n.toggleItem, { name: title })}
           />
@@ -223,6 +227,7 @@ export default function SkillDetailsModal({
             <Button
               variant="secondary"
               className="h-9 gap-1.5 rounded-full"
+              disabled={!skill.path}
               onClick={() => openSkillFolder(skill)}
             >
               <FolderOpen className="h-4 w-4" />
@@ -240,7 +245,7 @@ export default function SkillDetailsModal({
         isOpen={isConfirmingUninstall}
         title={intl.formatMessage(i18n.uninstallTitle, { name: title })}
         message={intl.formatMessage(i18n.uninstallMessage)}
-        detail={skillDirectory(skill.path)}
+        detail={skill.path ? skillDirectory(skill.path) : ''}
         confirmLabel={intl.formatMessage(i18n.uninstall)}
         cancelLabel={intl.formatMessage(i18n.cancel)}
         confirmVariant="destructive"
