@@ -78,7 +78,7 @@ describe('skill policy', () => {
     expect(codex.skillsConfigWrite).not.toHaveBeenCalled();
   });
 
-  it('uses the resolved app-server home when listing managed skills', async () => {
+  it('only lists skills under the app-server skills directory', async () => {
     vi.mocked(codex.configRead).mockResolvedValue({
       config: {} as never,
       origins: {},
@@ -101,10 +101,20 @@ describe('skill policy', () => {
           ...managedSkill,
           path: 'C:\\Users\\test\\.icodex\\skills\\documents\\SKILL.md',
         },
+        {
+          ...managedSkill,
+          name: 'other-home-file',
+          path: 'C:\\Users\\test\\.icodex\\other\\SKILL.md',
+        },
         externalSkill,
       ])
     );
 
-    await expect(listManagedSkills('/workspace')).resolves.toHaveLength(1);
+    await expect(listManagedSkills('/workspace')).resolves.toEqual([
+      {
+        ...managedSkill,
+        path: 'C:\\Users\\test\\.icodex\\skills\\documents\\SKILL.md',
+      },
+    ]);
   });
 });

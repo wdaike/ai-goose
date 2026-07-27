@@ -142,38 +142,10 @@ function resolveSeedDir(): string {
 }
 
 /**
- * Copies each bundled skill folder into `~/.icodex/skills` when it is not
- * already present (idempotent, so existing user skills are never overwritten).
- * Returns the bundled skill names so first-run config generation can enable
- * them.
+ * Builds the first-run `config.toml` from the legacy-goose migration and the
+ * seed config fragment.
  */
-function seedBundledSkills(logger: Logger): string[] {
-  const seedSkillsDir = path.join(resolveSeedDir(), 'skills');
-  let entries: fs.Dirent[];
-  try {
-    entries = fs.readdirSync(seedSkillsDir, { withFileTypes: true });
-  } catch {
-    return [];
-  }
-
-  const names: string[] = [];
-  for (const entry of entries) {
-    if (!entry.isDirectory()) continue;
-    names.push(entry.name);
-    const dest = path.join(CODEX_HOME, 'skills', entry.name);
-    if (fs.existsSync(dest)) continue;
-    fs.cpSync(path.join(seedSkillsDir, entry.name), dest, { recursive: true });
-    logger.info(`Seeded skill ${entry.name} -> ${dest}`);
-  }
-  return names;
-}
-
-/**
- * Builds the first-run `config.toml`: the legacy-goose migration, plus the seed
- * MCP declarations (`config-seed.toml`) and an enabled `[[skills.config]]` entry
- * for each bundled skill.
- */
-function buildInitialConfig(seededSkills: string[]): string {
+function buildInitialConfig(): string {
   let out = migrateLegacyConfig().trimEnd();
 
   let seedConfig = '';
@@ -184,22 +156,15 @@ function buildInitialConfig(seededSkills: string[]): string {
   }
   if (seedConfig) out += `\n\n${seedConfig}`;
 
-  for (const name of seededSkills) {
-    const skillPath = path.join(CODEX_HOME, 'skills', name, 'SKILL.md');
-    out += `\n\n[[skills.config]]\npath = ${tomlString(skillPath)}\nenabled = true`;
-  }
-
   return out + '\n';
 }
 
 export function ensureCodexHome(logger: Logger = console): string {
   fs.mkdirSync(CODEX_HOME, { recursive: true });
 
-  const seededSkills = seedBundledSkills(logger);
-
   const configPath = path.join(CODEX_HOME, 'config.toml');
   if (!fs.existsSync(configPath)) {
-    fs.writeFileSync(configPath, buildInitialConfig(seededSkills));
+    fs.writeFileSync(configPath, buildInitialConfig());
     logger.info(`Created ${configPath} from legacy goose config`);
   }
 
@@ -211,7 +176,7 @@ export function ensureCodexHome(logger: Logger = console): string {
  * `pdftoppm`. It cannot win `python3`: codex derives the tool environment from
  * the user's login shell, whose profile (`path_helper`, brew shellenv) rebuilds
  * PATH with the system directories in front, and no codex setting overrides
- * that. The `document-runtime` seed skill names the interpreter instead.
+ * that. Document tooling must invoke the runtime interpreter by path.
  *
  * The directory may not exist yet when the process spawns — PATH lookup is
  * per-exec and shells skip missing entries, so background provisioning goes

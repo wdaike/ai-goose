@@ -17,8 +17,14 @@ async function codexHome(): Promise<string> {
   return userLayer?.name.type === 'user' ? parentPath(userLayer.name.file) : '';
 }
 
+function isUnderDirectory(filePath: string, directory: string): boolean {
+  const normalizedPath = filePath.replace(/\\/g, '/');
+  const normalizedDirectory = directory.replace(/\\/g, '/').replace(/\/+$/, '');
+  return normalizedDirectory !== '' && normalizedPath.startsWith(`${normalizedDirectory}/`);
+}
+
 function isUnderCodexHome(skillPath: string, home: string): boolean {
-  return home !== '' && (skillPath.startsWith(`${home}/`) || skillPath.startsWith(`${home}\\`));
+  return isUnderDirectory(skillPath, home);
 }
 
 /**
@@ -46,8 +52,7 @@ export async function enforceSkillPolicy(cwd: string): Promise<SkillMetadata[]> 
 }
 
 /**
- * Skills goose manages: everything under CODEX_HOME, enabled or not, so
- * settings can list and toggle them.
+ * Skills shown in settings are the ones under CODEX_HOME/skills.
  */
 export async function listManagedSkills(cwd: string): Promise<SkillMetadata[]> {
   const [home, response] = await Promise.all([
@@ -55,7 +60,7 @@ export async function listManagedSkills(cwd: string): Promise<SkillMetadata[]> {
     codex.skillsList({ cwds: cwd ? [cwd] : [], forceReload: true }),
   ]);
   const skills = response.data.flatMap((entry) => entry.skills);
-  return skills.filter((skill) => isUnderCodexHome(skill.path, home));
+  return skills.filter((skill) => isUnderDirectory(skill.path, `${home}/skills`));
 }
 
 export async function setSkillEnabled(path: string, enabled: boolean): Promise<void> {
