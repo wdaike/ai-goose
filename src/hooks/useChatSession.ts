@@ -122,11 +122,11 @@ export function useChatSession({
         });
       } else {
         try {
-          const [notificationsEnabled, anyWindowFocused] = await Promise.all([
-            window.electron.getSetting('enableNotifications'),
+          const [notifyWhen, anyWindowFocused] = await Promise.all([
+            window.electron.getSetting('turnNotifications'),
             window.electron.isAnyWindowFocused(),
           ]);
-          if (notificationsEnabled === true && !anyWindowFocused) {
+          if (notifyWhen === 'always' || (notifyWhen !== 'never' && !anyWindowFocused)) {
             window.electron.showNotification({
               title: intl.formatMessage(i18n.notificationTitle),
               body: intl.formatMessage(i18n.notificationBody),

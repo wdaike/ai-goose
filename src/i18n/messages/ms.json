@@ -23,66 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "Togol panel sisi"
   },
-  "authSettings.activeProviderWarning": {
-    "defaultMessage": "Ini ialah pembekal aktif. Permintaan baharu mungkin gagal sehingga anda mengkonfigurasi kelayakan lain."
-  },
-  "authSettings.cancel": {
-    "defaultMessage": "Batal"
-  },
-  "authSettings.delete": {
-    "defaultMessage": "Padam"
-  },
-  "authSettings.deleteCredential": {
-    "defaultMessage": "Padam kelayakan"
-  },
-  "authSettings.deleteMessage": {
-    "defaultMessage": "Padam kelayakan {name} untuk {provider}?"
-  },
-  "authSettings.deleteTitle": {
-    "defaultMessage": "Padam kelayakan"
-  },
-  "authSettings.deleted": {
-    "defaultMessage": "Kelayakan dipadam"
-  },
-  "authSettings.description": {
-    "defaultMessage": "Urus kelayakan pembekal yang disimpan secara setempat oleh iCodex."
-  },
-  "authSettings.empty": {
-    "defaultMessage": "Tiada kelayakan pembekal yang disimpan secara setempat ditemui."
-  },
-  "authSettings.expiresAt": {
-    "defaultMessage": "Tamat tempoh {date}"
-  },
-  "authSettings.failedToConfigure": {
-    "defaultMessage": "Gagal mengkonfigurasi kelayakan: {error}"
-  },
-  "authSettings.failedToDelete": {
-    "defaultMessage": "Gagal memadam kelayakan: {error}"
-  },
-  "authSettings.failedToLoad": {
-    "defaultMessage": "Gagal memuatkan kelayakan pembekal"
-  },
-  "authSettings.loading": {
-    "defaultMessage": "Memuatkan kelayakan..."
-  },
-  "authSettings.reauthorize": {
-    "defaultMessage": "Sahkan semula"
-  },
-  "authSettings.signIn": {
-    "defaultMessage": "Log masuk"
-  },
-  "authSettings.signedIn": {
-    "defaultMessage": "Kelayakan dikonfigurasi"
-  },
-  "authSettings.storageProviderCache": {
-    "defaultMessage": "Cache pembekal"
-  },
-  "authSettings.storageSecretStore": {
-    "defaultMessage": "Stor rahsia"
-  },
-  "authSettings.title": {
-    "defaultMessage": "Kelayakan Pembekal"
-  },
   "backButton.back": {
     "defaultMessage": "Kembali"
   },
@@ -91,36 +31,6 @@
   },
   "baseChat.goHome": {
     "defaultMessage": "Pergi ke laman utama"
-  },
-  "baseChat.reconnecting": {
-    "defaultMessage": "Sambungan terputus. Menyambung semula…"
-  },
-  "bottomMenuExtensionSelection.extensionUpdated": {
-    "defaultMessage": "Sambungan Dikemas Kini"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeDisabled": {
-    "defaultMessage": "{name} akan dilumpuhkan dalam sembang baharu"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeEnabled": {
-    "defaultMessage": "{name} akan didayakan dalam sembang baharu"
-  },
-  "bottomMenuExtensionSelection.extensionsForNewChats": {
-    "defaultMessage": "Sambungan untuk sembang baharu"
-  },
-  "bottomMenuExtensionSelection.extensionsForThisSession": {
-    "defaultMessage": "Sambungan untuk sesi sembang ini"
-  },
-  "bottomMenuExtensionSelection.manageExtensions": {
-    "defaultMessage": "urus sambungan"
-  },
-  "bottomMenuExtensionSelection.noExtensionsAvailable": {
-    "defaultMessage": "tiada sambungan tersedia"
-  },
-  "bottomMenuExtensionSelection.noExtensionsFound": {
-    "defaultMessage": "tiada sambungan ditemui"
-  },
-  "bottomMenuExtensionSelection.searchExtensions": {
-    "defaultMessage": "cari sambungan..."
   },
   "cardButtons.configure": {
     "defaultMessage": "Konfigurasi"
@@ -137,9 +47,6 @@
   "chat.requestFailed": {
     "defaultMessage": "Permintaan gagal"
   },
-  "chatInput.contextWindow": {
-    "defaultMessage": "Tetingkap konteks"
-  },
   "chatInput.dictationError": {
     "defaultMessage": "Ralat Imlak"
   },
@@ -155,12 +62,6 @@
   "chatInput.recording": {
     "defaultMessage": "Merakam..."
   },
-  "chatInput.removeFile": {
-    "defaultMessage": "Alih keluar fail"
-  },
-  "chatInput.removeImage": {
-    "defaultMessage": "Alih keluar imej"
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "Memulakan semula sesi..."
   },
@@ -173,101 +74,11 @@
   "chatInput.typeMessage": {
     "defaultMessage": "Taip mesej untuk dihantar"
   },
-  "chatInput.unknownType": {
-    "defaultMessage": "Jenis tidak diketahui"
-  },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "Menunggu pembatalan selesai"
   },
   "chatInput.waitingForImages": {
     "defaultMessage": "Menunggu imej disimpan..."
-  },
-  "chatSettings.modeDescription": {
-    "defaultMessage": "Pilih mod lalai yang iCodex gunakan untuk sesi baharu. Sesi sedia ada mengekalkan mod semasanya."
-  },
-  "chatSettings.modeTitle": {
-    "defaultMessage": "Mod Lalai"
-  },
-  "chatSettings.responseStylesDescription": {
-    "defaultMessage": "Pilih cara iCodex memformat dan menggaya respons"
-  },
-  "chatSettings.responseStylesTitle": {
-    "defaultMessage": "Gaya Respons"
-  },
-  "configSettings.configReset": {
-    "defaultMessage": "Konfigurasi Ditetapkan Semula"
-  },
-  "configSettings.configResetMsg": {
-    "defaultMessage": "Semua perubahan telah diundurkan"
-  },
-  "configSettings.configUpdated": {
-    "defaultMessage": "Konfigurasi Dikemas Kini"
-  },
-  "configSettings.configUpdatedMsg": {
-    "defaultMessage": "Berjaya menyimpan \"{name}\""
-  },
-  "configSettings.configurationEditor": {
-    "defaultMessage": "Editor Konfigurasi"
-  },
-  "configSettings.description": {
-    "defaultMessage": "Edit tetapan konfigurasi iCodex anda"
-  },
-  "configSettings.descriptionWithProvider": {
-    "defaultMessage": "Edit tetapan konfigurasi iCodex anda (tetapan semasa untuk {provider})"
-  },
-  "configSettings.done": {
-    "defaultMessage": "Selesai"
-  },
-  "configSettings.editConfiguration": {
-    "defaultMessage": "Edit Konfigurasi"
-  },
-  "configSettings.enterValue": {
-    "defaultMessage": "Masukkan {name}"
-  },
-  "configSettings.noSettings": {
-    "defaultMessage": "Tiada tetapan konfigurasi ditemui."
-  },
-  "configSettings.resetChanges": {
-    "defaultMessage": "Tetapkan Semula Perubahan"
-  },
-  "configSettings.saveFailed": {
-    "defaultMessage": "Gagal Menyimpan"
-  },
-  "configSettings.saveFailedMsg": {
-    "defaultMessage": "Gagal menyimpan \"{name}\""
-  },
-  "configSettings.saving": {
-    "defaultMessage": "Menyimpan..."
-  },
-  "configSettings.title": {
-    "defaultMessage": "Konfigurasi"
-  },
-  "configureApproveMode.cancel": {
-    "defaultMessage": "Batal"
-  },
-  "configureApproveMode.description": {
-    "defaultMessage": "Permintaan kelulusan boleh diberikan kepada semua permintaan alat atau menentukan tindakan mana yang mungkin memerlukan penyepaduan"
-  },
-  "configureApproveMode.manualApproval": {
-    "defaultMessage": "Kelulusan manual"
-  },
-  "configureApproveMode.manualApprovalDescription": {
-    "defaultMessage": "Semua alat, sambungan dan pengubahsuaian fail akan memerlukan kelulusan manusia"
-  },
-  "configureApproveMode.save": {
-    "defaultMessage": "Simpan"
-  },
-  "configureApproveMode.saving": {
-    "defaultMessage": "Menyimpan..."
-  },
-  "configureApproveMode.smartApproval": {
-    "defaultMessage": "Kelulusan pintar"
-  },
-  "configureApproveMode.smartApprovalDescription": {
-    "defaultMessage": "Tentukan secara pintar tindakan mana yang memerlukan kelulusan berdasarkan tahap risiko"
-  },
-  "configureApproveMode.title": {
-    "defaultMessage": "Konfigurasi mod kelulusan"
   },
   "confirmationModal.defaultCancel": {
     "defaultMessage": "Tidak"
@@ -277,27 +88,6 @@
   },
   "confirmationModal.processing": {
     "defaultMessage": "Memproses..."
-  },
-  "conversationLimitsDropdown.conversationLimits": {
-    "defaultMessage": "Had Perbualan"
-  },
-  "conversationLimitsDropdown.maxTurns": {
-    "defaultMessage": "Pusingan Maksimum"
-  },
-  "conversationLimitsDropdown.maxTurnsDescription": {
-    "defaultMessage": "Pusingan ejen maksimum sebelum iCodex meminta input pengguna"
-  },
-  "costTracker.costUnavailable": {
-    "defaultMessage": "Data kos tidak tersedia untuk {model} ({inputTokens} token input, {outputTokens} token output)"
-  },
-  "costTracker.inputOutputTooltip": {
-    "defaultMessage": "Input: {inputTokens} token ({inputCost}) | Output: {outputTokens} token ({outputCost})"
-  },
-  "costTracker.pricingUnavailable": {
-    "defaultMessage": "Data harga tidak tersedia untuk {model}"
-  },
-  "costTracker.totalSessionCost": {
-    "defaultMessage": "Jumlah kos sesi: {cost}"
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "Tambah kredit"
@@ -503,104 +293,8 @@
   "defaultProviderSetupForm.showOptions": {
     "defaultMessage": "Tunjukkan {count} pilihan"
   },
-  "diagnosticsModal.attachHint": {
-    "defaultMessage": "Jika anda melaporkan pepijat, pertimbangkan untuk melampirkan laporan diagnostik kepadanya."
-  },
-  "diagnosticsModal.cancel": {
-    "defaultMessage": "Batal"
-  },
-  "diagnosticsModal.configSettings": {
-    "defaultMessage": "Tetapan konfigurasi"
-  },
-  "diagnosticsModal.description": {
-    "defaultMessage": "Anda boleh memuat turun laporan JSON diagnostik untuk dikongsi dengan pasukan, atau melaporkan pepijat terus di GitHub dengan butiran sistem anda diisi terlebih dahulu. Laporan diagnostik mengandungi yang berikut:"
-  },
-  "diagnosticsModal.diagnosticsErrorMsg": {
-    "defaultMessage": "Gagal memuat turun laporan diagnostik"
-  },
-  "diagnosticsModal.diagnosticsErrorTitle": {
-    "defaultMessage": "Ralat Diagnostik"
-  },
-  "diagnosticsModal.download": {
-    "defaultMessage": "Muat Turun"
-  },
-  "diagnosticsModal.downloading": {
-    "defaultMessage": "Memuat turun..."
-  },
-  "diagnosticsModal.fileBug": {
-    "defaultMessage": "Laporkan Pepijat di GitHub"
-  },
-  "diagnosticsModal.logFiles": {
-    "defaultMessage": "Fail log terkini"
-  },
-  "diagnosticsModal.opening": {
-    "defaultMessage": "Membuka..."
-  },
-  "diagnosticsModal.reportProblem": {
-    "defaultMessage": "Laporkan Masalah"
-  },
-  "diagnosticsModal.sensitiveWarning": {
-    "defaultMessage": "Jika sesi anda mengandungi maklumat sensitif, jangan kongsi fail diagnostik secara awam."
-  },
-  "diagnosticsModal.sessionMessages": {
-    "defaultMessage": "Mesej sesi semasa anda"
-  },
-  "diagnosticsModal.systemInfo": {
-    "defaultMessage": "Maklumat asas sistem"
-  },
-  "diagnosticsModal.systemInfoErrorMsg": {
-    "defaultMessage": "Gagal mendapatkan maklumat sistem"
-  },
-  "diagnosticsModal.systemInfoErrorTitle": {
-    "defaultMessage": "Ralat"
-  },
   "dialog.close": {
     "defaultMessage": "Tutup"
-  },
-  "dictationSettings.addApiKey": {
-    "defaultMessage": "Tambah Kunci API"
-  },
-  "dictationSettings.apiKey": {
-    "defaultMessage": "Kunci API"
-  },
-  "dictationSettings.cancel": {
-    "defaultMessage": "Batal"
-  },
-  "dictationSettings.chooseVoiceConversion": {
-    "defaultMessage": "Pilih cara suara ditukar kepada teks"
-  },
-  "dictationSettings.configureApiKey": {
-    "defaultMessage": "Konfigurasikan kunci API dalam <b>{settingsPath}</b>"
-  },
-  "dictationSettings.configured": {
-    "defaultMessage": "(Dikonfigurasikan)"
-  },
-  "dictationSettings.configuredIn": {
-    "defaultMessage": "✓ Dikonfigurasikan dalam {settingsPath}"
-  },
-  "dictationSettings.disabled": {
-    "defaultMessage": "Dilumpuhkan"
-  },
-  "dictationSettings.enterApiKey": {
-    "defaultMessage": "Masukkan kunci API anda"
-  },
-  "dictationSettings.notConfigured": {
-    "defaultMessage": "(tidak dikonfigurasikan)"
-  },
-  "dictationSettings.removeApiKey": {
-    "defaultMessage": "Buang Kunci API"
-  },
-  "dictationSettings.requiredForTranscription": {
-    "defaultMessage": "Diperlukan untuk transkripsi"
-  },
-  "dictationSettings.save": {
-    "defaultMessage": "Simpan"
-  },
-  "dictationSettings.updateApiKey": {
-    "defaultMessage": "Kemas Kini Kunci API"
-  },
-  "dictationSettings.voiceDictationProvider": {
-    "defaultMessage": "Pembekal Imlak Suara"
   },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "Gagal mengemas kini direktori kerja"
@@ -851,66 +545,6 @@
   "filesPanel.title": {
     "defaultMessage": "Fail"
   },
-  "goosehintsModal.close": {
-    "defaultMessage": "Tutup"
-  },
-  "goosehintsModal.developer": {
-    "defaultMessage": "Pembangun"
-  },
-  "goosehintsModal.dialogDescription": {
-    "defaultMessage": "Berikan konteks tambahan tentang projek anda untuk meningkatkan komunikasi dengan iCodex"
-  },
-  "goosehintsModal.dialogTitle": {
-    "defaultMessage": "Konfigurasikan Petunjuk Projek (.goosehints)"
-  },
-  "goosehintsModal.errorReading": {
-    "defaultMessage": "Ralat membaca fail .goosehints: {error}"
-  },
-  "goosehintsModal.failedToAccess": {
-    "defaultMessage": "Gagal mengakses fail .goosehints"
-  },
-  "goosehintsModal.failedToSave": {
-    "defaultMessage": "Gagal menyimpan fail .goosehints"
-  },
-  "goosehintsModal.fileCreating": {
-    "defaultMessage": "Mencipta fail .goosehints baharu di: {filePath}"
-  },
-  "goosehintsModal.fileFound": {
-    "defaultMessage": "Fail .goosehints dijumpai di: {filePath}"
-  },
-  "goosehintsModal.helpText1": {
-    "defaultMessage": ".goosehints ialah fail teks yang digunakan untuk memberikan konteks tambahan tentang projek anda dan meningkatkan komunikasi dengan iCodex."
-  },
-  "goosehintsModal.helpText2": {
-    "defaultMessage": "Sila pastikan sambungan {bold} didayakan dalam halaman sambungan. Sambungan ini diperlukan untuk menggunakan .goosehints. Anda perlu memulakan semula sesi anda untuk kemas kini .goosehints berkuat kuasa."
-  },
-  "goosehintsModal.helpText3": {
-    "defaultMessage": "Lihat {link} untuk maklumat lanjut."
-  },
-  "goosehintsModal.helpTextLink": {
-    "defaultMessage": "menggunakan .goosehints"
-  },
-  "goosehintsModal.placeholder": {
-    "defaultMessage": "Masukkan petunjuk projek di sini..."
-  },
-  "goosehintsModal.save": {
-    "defaultMessage": "Simpan"
-  },
-  "goosehintsModal.savedSuccessfully": {
-    "defaultMessage": "Berjaya disimpan"
-  },
-  "goosehintsModal.saving": {
-    "defaultMessage": "Menyimpan..."
-  },
-  "goosehintsSection.configure": {
-    "defaultMessage": "Konfigurasikan"
-  },
-  "goosehintsSection.description": {
-    "defaultMessage": "Konfigurasikan fail .goosehints projek anda untuk memberikan konteks tambahan kepada iCodex"
-  },
-  "goosehintsSection.title": {
-    "defaultMessage": "Petunjuk Projek (.goosehints)"
-  },
   "groupedExtensionLoadingToast.askGoose": {
     "defaultMessage": "Tanya iCodex"
   },
@@ -992,42 +626,6 @@
   "hub.suggestionReview": {
     "defaultMessage": "Semak kod dan cadangkan perubahan"
   },
-  "huggingFaceModelSearch.download": {
-    "defaultMessage": "Muat Turun"
-  },
-  "huggingFaceModelSearch.downloaded": {
-    "defaultMessage": "Dimuat turun"
-  },
-  "huggingFaceModelSearch.downloading": {
-    "defaultMessage": "Memuat turun…"
-  },
-  "huggingFaceModelSearch.loadingVariants": {
-    "defaultMessage": "Memuatkan varian..."
-  },
-  "huggingFaceModelSearch.noGgufModels": {
-    "defaultMessage": "Tiada model tempatan serasi dijumpai untuk pertanyaan ini."
-  },
-  "huggingFaceModelSearch.recommended": {
-    "defaultMessage": "Disyorkan"
-  },
-  "huggingFaceModelSearch.searchError": {
-    "defaultMessage": "Ralat carian: {details}"
-  },
-  "huggingFaceModelSearch.searchFailed": {
-    "defaultMessage": "Carian gagal. Sila cuba lagi."
-  },
-  "huggingFaceModelSearch.searchHuggingFace": {
-    "defaultMessage": "Cari HuggingFace"
-  },
-  "huggingFaceModelSearch.searchNoData": {
-    "defaultMessage": "Carian tidak mengembalikan sebarang data."
-  },
-  "huggingFaceModelSearch.searchPlaceholder": {
-    "defaultMessage": "Cari model tempatan..."
-  },
-  "huggingFaceModelSearch.tooLarge": {
-    "defaultMessage": "Mungkin tidak muat dalam memori (model {size}, {available} tersedia)"
-  },
   "huggingFaceSignInPrompt.failedToConfigure": {
     "defaultMessage": "Gagal log masuk ke Hugging Face: {error}"
   },
@@ -1045,9 +643,6 @@
   },
   "imagePreview.altText": {
     "defaultMessage": "imej iCodex"
-  },
-  "imagePreview.clickToCollapse": {
-    "defaultMessage": "Klik untuk meruntuhkan"
   },
   "imagePreview.clickToExpand": {
     "defaultMessage": "Klik untuk mengembangkan"
@@ -1262,111 +857,6 @@
   "loadingGoose.waiting": {
     "defaultMessage": "menunggu"
   },
-  "localInferenceSettings.deleteConfirm": {
-    "defaultMessage": "Padam model ini? Anda boleh memuat turunnya semula kemudian."
-  },
-  "localInferenceSettings.description": {
-    "defaultMessage": "Muat turun dan urus model LLM tempatan untuk inferens tanpa kunci API. Cari HuggingFace untuk model GGUF atau MLX, atau gunakan pilihan utama di bawah."
-  },
-  "localInferenceSettings.dismiss": {
-    "defaultMessage": "Ketepikan"
-  },
-  "localInferenceSettings.download": {
-    "defaultMessage": "Muat turun"
-  },
-  "localInferenceSettings.downloadCancelled": {
-    "defaultMessage": "Muat turun dibatalkan"
-  },
-  "localInferenceSettings.downloadFailed": {
-    "defaultMessage": "Muat turun gagal"
-  },
-  "localInferenceSettings.downloadProgress": {
-    "defaultMessage": "{downloaded} / {total} ({percent}%)"
-  },
-  "localInferenceSettings.downloadedModels": {
-    "defaultMessage": "Model Dimuat Turun"
-  },
-  "localInferenceSettings.downloading": {
-    "defaultMessage": "Memuat turun"
-  },
-  "localInferenceSettings.evictFromMemory": {
-    "defaultMessage": "Evict from memory"
-  },
-  "localInferenceSettings.featuredModels": {
-    "defaultMessage": "Model Pilihan"
-  },
-  "localInferenceSettings.huggingFaceSignInNote": {
-    "defaultMessage": "Log masuk untuk meningkatkan had kadar semasa mencari dan memuat turun model, dan untuk mengakses repositori Hugging Face peribadi atau berpagar."
-  },
-  "localInferenceSettings.loadedInMemory": {
-    "defaultMessage": "Loaded in memory"
-  },
-  "localInferenceSettings.modelSettings": {
-    "defaultMessage": "Tetapan Model"
-  },
-  "localInferenceSettings.modelSettingsTitle": {
-    "defaultMessage": "Tetapan model"
-  },
-  "localInferenceSettings.noModels": {
-    "defaultMessage": "Tiada model tersedia"
-  },
-  "localInferenceSettings.recommended": {
-    "defaultMessage": "Disyorkan"
-  },
-  "localInferenceSettings.remaining": {
-    "defaultMessage": "{time} berbaki"
-  },
-  "localInferenceSettings.retry": {
-    "defaultMessage": "Cuba semula"
-  },
-  "localInferenceSettings.showAllFeatured": {
-    "defaultMessage": "Tunjukkan semua pilihan ({count} lagi)"
-  },
-  "localInferenceSettings.showRecommendedOnly": {
-    "defaultMessage": "Tunjukkan yang disyorkan sahaja"
-  },
-  "localInferenceSettings.title": {
-    "defaultMessage": "Model Inferens Tempatan"
-  },
-  "localInferenceSettings.vision": {
-    "defaultMessage": "Penglihatan"
-  },
-  "localInferenceSettings.visionEncoderDownloading": {
-    "defaultMessage": "Pengekod penglihatan sedang dimuat turun…"
-  },
-  "localInferenceSettings.visionEncoderNotDownloaded": {
-    "defaultMessage": "Pengekod penglihatan belum dimuat turun"
-  },
-  "localModelManager.active": {
-    "defaultMessage": "Aktif"
-  },
-  "localModelManager.deleteConfirm": {
-    "defaultMessage": "Padam model ini? Anda boleh memuat turunnya semula kemudian."
-  },
-  "localModelManager.download": {
-    "defaultMessage": "Muat turun"
-  },
-  "localModelManager.downloaded": {
-    "defaultMessage": "Dimuat turun"
-  },
-  "localModelManager.gpuAcceleration": {
-    "defaultMessage": "Menyokong pemecutan GPU (CUDA untuk NVIDIA, Metal untuk Apple Silicon). Ciri GPU mesti didayakan pada masa pembinaan untuk pemecutan perkakasan."
-  },
-  "localModelManager.noModels": {
-    "defaultMessage": "Tiada model tersedia"
-  },
-  "localModelManager.recommended": {
-    "defaultMessage": "Disyorkan"
-  },
-  "localModelManager.recommendedForHardware": {
-    "defaultMessage": "Disyorkan untuk perkakasan anda"
-  },
-  "localModelManager.showAllModels": {
-    "defaultMessage": "Tunjukkan semua model ({count} lagi)"
-  },
-  "localModelManager.showRecommendedOnly": {
-    "defaultMessage": "Tunjukkan yang disyorkan sahaja"
-  },
   "localModelPicker.bestForMachine": {
     "defaultMessage": "Terbaik untuk mesin anda"
   },
@@ -1478,62 +968,20 @@
   "messageQueue.cancel": {
     "defaultMessage": "Batal"
   },
-  "messageQueue.cannotSendWhileEditing": {
-    "defaultMessage": "Tidak boleh hantar semasa menyunting"
-  },
   "messageQueue.clearAll": {
     "defaultMessage": "Kosongkan Semua"
-  },
-  "messageQueue.clickToEdit": {
-    "defaultMessage": "{content} (Klik untuk menyunting)"
-  },
-  "messageQueue.collapseQueue": {
-    "defaultMessage": "Runtuhkan baris gilir"
-  },
-  "messageQueue.dragToReorder": {
-    "defaultMessage": "Seret mesej untuk menyusun semula keutamaan"
-  },
-  "messageQueue.expandQueue": {
-    "defaultMessage": "Kembangkan baris gilir"
-  },
-  "messageQueue.messageCount": {
-    "defaultMessage": "{count,plural,one{# mesej {status}} other{# mesej {status}}}"
-  },
-  "messageQueue.messageQueue": {
-    "defaultMessage": "Baris Gilir Mesej"
-  },
-  "messageQueue.next": {
-    "defaultMessage": "Seterusnya"
   },
   "messageQueue.paused": {
     "defaultMessage": "Dijeda"
   },
-  "messageQueue.queuePaused": {
-    "defaultMessage": "Baris Gilir Dijeda"
-  },
   "messageQueue.queuePausedCompact": {
     "defaultMessage": "Baris gilir dijeda - klik \"Hantar\" atau tambah mesej baharu untuk menyambung semula"
-  },
-  "messageQueue.queuePausedExpanded": {
-    "defaultMessage": "Baris gilir dijeda oleh gangguan. Gunakan \"Hantar Sekarang\" atau tambah mesej baharu untuk menyambung semula."
-  },
-  "messageQueue.queued": {
-    "defaultMessage": "dalam baris gilir"
   },
   "messageQueue.removeFromQueue": {
     "defaultMessage": "Buang mesej ini daripada baris gilir"
   },
   "messageQueue.save": {
     "defaultMessage": "Simpan"
-  },
-  "messageQueue.sendNow": {
-    "defaultMessage": "Hantar mesej ini sekarang"
-  },
-  "messageQueue.stopAndSend": {
-    "defaultMessage": "Hentikan pemprosesan semasa dan hantar mesej ini sekarang"
-  },
-  "messageQueue.waiting": {
-    "defaultMessage": "menunggu"
   },
   "messageUsageStats.cacheHitRate": {
     "defaultMessage": "({percent}% daripada input)"
@@ -1580,59 +1028,17 @@
   "messageUsageStats.totalTime": {
     "defaultMessage": "Jumlah masa"
   },
-  "microphoneSelector.chooseDescription": {
-    "defaultMessage": "Pilih mikrofon yang hendak digunakan untuk imlak"
-  },
-  "microphoneSelector.grantAccess": {
-    "defaultMessage": "Berikan Akses"
-  },
-  "microphoneSelector.grantAccessDescription": {
-    "defaultMessage": "Berikan akses untuk melihat mikrofon tersedia"
-  },
-  "microphoneSelector.microphone": {
-    "defaultMessage": "Mikrofon"
-  },
-  "microphoneSelector.microphoneLabel": {
-    "defaultMessage": "Mikrofon {index}"
-  },
-  "microphoneSelector.selectedMicrophone": {
-    "defaultMessage": "Mikrofon Dipilih"
-  },
-  "microphoneSelector.speakToTest": {
-    "defaultMessage": "Bercakap untuk menguji mikrofon anda ({seconds}s)"
-  },
-  "microphoneSelector.stop": {
-    "defaultMessage": "Berhenti"
-  },
-  "microphoneSelector.systemDefault": {
-    "defaultMessage": "Lalai Sistem"
-  },
-  "microphoneSelector.test": {
-    "defaultMessage": "Uji"
-  },
   "modeSelectionItem.autonomousDescription": {
     "defaultMessage": "Keupayaan pengubahsuaian fail penuh, sunting, cipta dan padam fail secara bebas."
-  },
-  "modeSelectionItem.autonomousLabel": {
-    "defaultMessage": "Autonomi"
   },
   "modeSelectionItem.chatOnlyDescription": {
     "defaultMessage": "Berinteraksi dengan penyedia yang dipilih tanpa menggunakan alat atau sambungan."
   },
-  "modeSelectionItem.chatOnlyLabel": {
-    "defaultMessage": "Sembang sahaja"
-  },
   "modeSelectionItem.manualDescription": {
     "defaultMessage": "Semua alat, sambungan dan pengubahsuaian fail akan memerlukan kelulusan manusia"
   },
-  "modeSelectionItem.manualLabel": {
-    "defaultMessage": "Manual"
-  },
   "modeSelectionItem.smartDescription": {
     "defaultMessage": "Tentukan secara bijak tindakan yang memerlukan kelulusan berdasarkan tahap risiko"
-  },
-  "modeSelectionItem.smartLabel": {
-    "defaultMessage": "Pintar"
   },
   "modelAndProviderContext.modelChangeFailed": {
     "defaultMessage": "{provider}/{model} gagal"
@@ -1952,39 +1358,6 @@
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "Kongsi data penggunaan tanpa nama"
   },
-  "permissionModal.alwaysAllow": {
-    "defaultMessage": "Sentiasa benarkan"
-  },
-  "permissionModal.askBefore": {
-    "defaultMessage": "Tanya dahulu"
-  },
-  "permissionModal.cancel": {
-    "defaultMessage": "Batal"
-  },
-  "permissionModal.close": {
-    "defaultMessage": "Tutup"
-  },
-  "permissionModal.failedToLoadTools": {
-    "defaultMessage": "Gagal memuatkan alat"
-  },
-  "permissionModal.failedToLoadToolsDescription": {
-    "defaultMessage": "Tidak dapat memuatkan alat untuk sambungan ini. Sambungan mungkin tidak dimuatkan dalam sesi semasa."
-  },
-  "permissionModal.neverAllow": {
-    "defaultMessage": "Jangan sekali-kali benarkan"
-  },
-  "permissionModal.noActiveSession": {
-    "defaultMessage": "Tiada sesi aktif"
-  },
-  "permissionModal.noActiveSessionDescription": {
-    "defaultMessage": "Mulakan sesi sembang dahulu untuk mengkonfigurasi kebenaran alat bagi sambungan ini. Kebenaran alat dimuatkan daripada sambungan sesi aktif."
-  },
-  "permissionModal.noToolsAvailable": {
-    "defaultMessage": "Tiada alat tersedia untuk sambungan ini."
-  },
-  "permissionModal.saveChanges": {
-    "defaultMessage": "Simpan Perubahan"
-  },
   "permissionModeChip.approve": {
     "defaultMessage": "Kelulusan manual"
   },
@@ -1996,24 +1369,6 @@
   },
   "permissionModeChip.smartApprove": {
     "defaultMessage": "Kelulusan pintar"
-  },
-  "permissionRulesModal.description": {
-    "defaultMessage": "Konfigurasikan kebenaran alat untuk sambungan bagi mengawal cara ia berinteraksi dengan sistem anda."
-  },
-  "permissionRulesModal.extensionRules": {
-    "defaultMessage": "Peraturan sambungan"
-  },
-  "permissionRulesModal.title": {
-    "defaultMessage": "Peraturan Kebenaran"
-  },
-  "permissionSetting.extensionRules": {
-    "defaultMessage": "Peraturan sambungan"
-  },
-  "permissionSetting.permissionRules": {
-    "defaultMessage": "Peraturan Kebenaran"
-  },
-  "permissionSetting.permissionRulesDescription": {
-    "defaultMessage": "Arahan tersembunyi yang akan dihantar kepada penyedia untuk membantu mengarah dan menambah konteks pada respons anda."
   },
   "planSteps.progress": {
     "defaultMessage": "Langkah {current} / {total}"
@@ -2351,14 +1706,8 @@
   "resetProviderSection.resetDescription": {
     "defaultMessage": "Ini akan mengosongkan tetapan model dan penyedia yang anda pilih. Jika tiada lalai tersedia, anda akan dibawa ke skrin alu-aluan untuk menetapkannya semula."
   },
-  "responseStyle.conciseDescription": {
-    "defaultMessage": "Panggilan alat secara lalai ditutup dan hanya menunjukkan alat yang digunakan"
-  },
   "responseStyle.conciseLabel": {
     "defaultMessage": "Ringkas"
-  },
-  "responseStyle.detailedDescription": {
-    "defaultMessage": "Panggilan alat secara lalai dipaparkan terbuka untuk mendedahkan butiran"
   },
   "responseStyle.detailedLabel": {
     "defaultMessage": "Terperinci"
@@ -2380,66 +1729,6 @@
   },
   "secureStorageNotice.defaultMessage": {
     "defaultMessage": "Kunci disimpan dengan selamat dalam rantai kunci"
-  },
-  "securityToggle.apiTokenDescription": {
-    "defaultMessage": "Token pengesahan untuk perkhidmatan pengelasan"
-  },
-  "securityToggle.apiTokenOptional": {
-    "defaultMessage": "Token API (Pilihan)"
-  },
-  "securityToggle.classificationEndpoint": {
-    "defaultMessage": "Titik Akhir Pengelasan"
-  },
-  "securityToggle.classificationEndpointDescription": {
-    "defaultMessage": "Masukkan URL penuh untuk perkhidmatan pengelasan anda"
-  },
-  "securityToggle.commandClassifierActive": {
-    "defaultMessage": "Pengelas arahan aktif (dikonfigurasi automatik daripada persekitaran)"
-  },
-  "securityToggle.commandEndpointDescription": {
-    "defaultMessage": "Masukkan URL penuh untuk perkhidmatan pengelasan suntikan arahan anda"
-  },
-  "securityToggle.commandInjectionDescription": {
-    "defaultMessage": "Gunakan model ML untuk mengesan arahan shell yang berniat jahat"
-  },
-  "securityToggle.detectionModel": {
-    "defaultMessage": "Model Pengesanan"
-  },
-  "securityToggle.detectionModelDescription": {
-    "defaultMessage": "Pilih model ML yang hendak digunakan untuk pengesanan suntikan gesaan"
-  },
-  "securityToggle.detectionThreshold": {
-    "defaultMessage": "Ambang Pengesanan"
-  },
-  "securityToggle.enableCommandInjection": {
-    "defaultMessage": "Dayakan Pengesanan ML Suntikan Arahan"
-  },
-  "securityToggle.enablePromptInjection": {
-    "defaultMessage": "Dayakan Pengesanan Suntikan Gesaan"
-  },
-  "securityToggle.enablePromptInjectionMl": {
-    "defaultMessage": "Dayakan Pengesanan ML Suntikan Gesaan"
-  },
-  "securityToggle.mlEndpointDescription": {
-    "defaultMessage": "Masukkan URL penuh untuk perkhidmatan pengelasan ML anda (termasuk pengecam model)"
-  },
-  "securityToggle.mlTokenDescription": {
-    "defaultMessage": "Token pengesahan untuk perkhidmatan ML (cth., token HuggingFace)"
-  },
-  "securityToggle.overrideNotice": {
-    "defaultMessage": "Tetapan ini diurus oleh organisasi anda dan tidak boleh diubah."
-  },
-  "securityToggle.promptInjectionDescription": {
-    "defaultMessage": "Kesan dan halang potensi serangan suntikan gesaan"
-  },
-  "securityToggle.promptInjectionMlDescription": {
-    "defaultMessage": "Gunakan model ML untuk mengesan potensi suntikan gesaan dalam sembang anda"
-  },
-  "securityToggle.thresholdDescription": {
-    "defaultMessage": "Nilai yang lebih tinggi adalah lebih ketat (0.01 = sangat longgar, 1.0 = paling ketat)"
-  },
-  "securityToggle.warpNotice": {
-    "defaultMessage": "Pengesanan suntikan arahan berfungsi paling baik apabila disambungkan ke WARP (diperlukan untuk mencapai perkhidmatan pengelasan)."
   },
   "sessionActionsHeader.actionsLabel": {
     "defaultMessage": "Tindakan sesi"
@@ -2486,26 +1775,29 @@
   "sessionIndicators.streaming": {
     "defaultMessage": "Penstriman"
   },
-  "settings.appearance.description": {
-    "defaultMessage": "Konfigurasikan cara iCodex muncul pada sistem anda"
+  "settings.about.title": {
+    "defaultMessage": "Perihal"
   },
-  "settings.appearance.title": {
-    "defaultMessage": "Penampilan"
+  "settings.bottomPanel.description": {
+    "defaultMessage": "Tunjukkan kawalan panel bawah pada pengepala aplikasi"
   },
-  "settings.close": {
-    "defaultMessage": "Tutup"
+  "settings.bottomPanel.title": {
+    "defaultMessage": "Panel bawah"
   },
-  "settings.costTracking.description": {
-    "defaultMessage": "Tunjukkan harga model dan kos penggunaan"
+  "settings.chat.title": {
+    "defaultMessage": "Sembang"
   },
-  "settings.costTracking.title": {
-    "defaultMessage": "Penjejakan Kos"
+  "settings.composer.title": {
+    "defaultMessage": "Ruang taip"
   },
   "settings.dockIcon.description": {
     "defaultMessage": "Tunjukkan iCodex dalam dok"
   },
   "settings.dockIcon.title": {
     "defaultMessage": "Ikon dok"
+  },
+  "settings.general.title": {
+    "defaultMessage": "Umum"
   },
   "settings.help.description": {
     "defaultMessage": "Bantu kami menambah baik iCodex dengan melaporkan isu atau meminta ciri baharu"
@@ -2577,73 +1869,82 @@
     "defaultMessage": "Bahasa Cina (Tradisional)"
   },
   "settings.menuBarIcon.description": {
-    "defaultMessage": "Tunjukkan iCodex dalam bar menu"
+    "defaultMessage": "Kekalkan iCodex pada bar menu apabila tetingkap utama ditutup"
   },
   "settings.menuBarIcon.title": {
-    "defaultMessage": "Ikon bar menu"
-  },
-  "settings.notifications.configGuide": {
-    "defaultMessage": "Panduan konfigurasi"
-  },
-  "settings.notifications.description": {
-    "defaultMessage": "Pemberitahuan diuruskan oleh OS anda - {link}"
-  },
-  "settings.notifications.modal.macInstructions": {
-    "defaultMessage": "Untuk mendayakan pemberitahuan pada macOS:"
-  },
-  "settings.notifications.modal.macStep1": {
-    "defaultMessage": "Buka System Preferences"
-  },
-  "settings.notifications.modal.macStep2": {
-    "defaultMessage": "Klik pada Notifications"
-  },
-  "settings.notifications.modal.macStep3": {
-    "defaultMessage": "Cari dan pilih iCodex dalam senarai aplikasi"
-  },
-  "settings.notifications.modal.macStep4": {
-    "defaultMessage": "Dayakan pemberitahuan dan laraskan tetapan mengikut kehendak"
-  },
-  "settings.notifications.modal.title": {
-    "defaultMessage": "Cara Mendayakan Pemberitahuan"
-  },
-  "settings.notifications.modal.winInstructions": {
-    "defaultMessage": "Untuk mendayakan pemberitahuan pada Windows:"
-  },
-  "settings.notifications.modal.winStep1": {
-    "defaultMessage": "Buka Settings"
-  },
-  "settings.notifications.modal.winStep2": {
-    "defaultMessage": "Pergi ke System > Notifications"
-  },
-  "settings.notifications.modal.winStep3": {
-    "defaultMessage": "Cari dan pilih iCodex dalam senarai aplikasi"
-  },
-  "settings.notifications.modal.winStep4": {
-    "defaultMessage": "Hidupkan pemberitahuan dan laraskan tetapan mengikut kehendak"
+    "defaultMessage": "Tunjukkan pada bar menu"
   },
   "settings.notifications.openSettings": {
     "defaultMessage": "Buka Tetapan"
   },
-  "settings.notifications.task.description": {
-    "defaultMessage": "Beritahu apabila iCodex menyelesaikan tugasan semasa tetingkap berada di latar belakang"
+  "settings.notifications.system.description": {
+    "defaultMessage": "Penghantaran pemberitahuan diuruskan oleh sistem pengendalian anda"
   },
-  "settings.notifications.task.title": {
-    "defaultMessage": "Pemberitahuan penyelesaian tugasan"
+  "settings.notifications.system.title": {
+    "defaultMessage": "Pemberitahuan sistem"
   },
   "settings.notifications.title": {
     "defaultMessage": "Pemberitahuan"
+  },
+  "settings.notifications.turn.always": {
+    "defaultMessage": "Sentiasa"
+  },
+  "settings.notifications.turn.description": {
+    "defaultMessage": "Tetapkan bila iCodex memberitahu anda bahawa ia telah selesai"
+  },
+  "settings.notifications.turn.never": {
+    "defaultMessage": "Tidak pernah"
+  },
+  "settings.notifications.turn.title": {
+    "defaultMessage": "Pemberitahuan selesai"
+  },
+  "settings.notifications.turn.unfocused": {
+    "defaultMessage": "Hanya apabila tidak difokus"
+  },
+  "settings.permissions.autoReview.description": {
+    "defaultMessage": "iCodex menentukan permintaan akses tambahan yang selamat dan hanya bertanya untuk yang berisiko. Semakan automatik boleh tersilap"
+  },
+  "settings.permissions.autoReview.title": {
+    "defaultMessage": "Semakan automatik"
+  },
+  "settings.permissions.default.description": {
+    "defaultMessage": "Secara lalai, iCodex boleh membaca dan mengedit fail dalam ruang kerjanya. Selain itu, ia akan meminta kelulusan"
+  },
+  "settings.permissions.default.title": {
+    "defaultMessage": "Kebenaran lalai"
+  },
+  "settings.permissions.fullAccess.description": {
+    "defaultMessage": "iCodex boleh mengedit sebarang fail pada komputer anda dan menjalankan arahan dengan akses rangkaian tanpa kelulusan anda. Ini meningkatkan risiko kehilangan data, kebocoran atau tingkah laku luar jangka"
+  },
+  "settings.permissions.fullAccess.title": {
+    "defaultMessage": "Akses penuh"
+  },
+  "settings.permissions.title": {
+    "defaultMessage": "Kebenaran"
   },
   "settings.preventSleep.description": {
     "defaultMessage": "Pastikan komputer anda kekal terjaga semasa iCodex sedang menjalankan tugasan (skrin masih boleh dikunci)"
   },
   "settings.preventSleep.title": {
-    "defaultMessage": "Cegah Tidur"
+    "defaultMessage": "Halang tidur semasa berjalan"
   },
-  "settings.theme.description": {
-    "defaultMessage": "Sesuaikan rupa dan rasa iCodex"
+  "settings.sendShortcut.description": {
+    "defaultMessage": "Pilih sama ada Enter menghantar mesej atau menambah baris baharu"
   },
-  "settings.theme.title": {
-    "defaultMessage": "Tema"
+  "settings.sendShortcut.enter": {
+    "defaultMessage": "Enter"
+  },
+  "settings.sendShortcut.modEnter": {
+    "defaultMessage": "{mod} + Enter"
+  },
+  "settings.sendShortcut.title": {
+    "defaultMessage": "Pintasan hantar"
+  },
+  "settings.toolDetails.description": {
+    "defaultMessage": "Sama ada panggilan alat dibuka atau ditutup secara lalai dalam sembang"
+  },
+  "settings.toolDetails.title": {
+    "defaultMessage": "Butiran panggilan alat"
   },
   "settings.updates.description": {
     "defaultMessage": "Semak dan pasang kemas kini untuk memastikan iCodex berjalan dengan terbaik"
@@ -2651,14 +1952,17 @@
   "settings.updates.title": {
     "defaultMessage": "Kemas Kini"
   },
+  "settings.usageStats.description": {
+    "defaultMessage": "Tunjukkan token, kelajuan dan kos di bawah setiap balasan"
+  },
+  "settings.usageStats.title": {
+    "defaultMessage": "Tunjukkan statistik penggunaan"
+  },
   "settings.version.title": {
     "defaultMessage": "Versi"
   },
   "settingsView.back": {
     "defaultMessage": "Kembali ke aplikasi"
-  },
-  "settingsView.groupAdvanced": {
-    "defaultMessage": "Lanjutan"
   },
   "settingsView.groupIntegrations": {
     "defaultMessage": "Integrasi"
@@ -2672,20 +1976,14 @@
   "settingsView.search": {
     "defaultMessage": "Cari tetapan..."
   },
-  "settingsView.tabApp": {
-    "defaultMessage": "Aplikasi"
+  "settingsView.tabAppearance": {
+    "defaultMessage": "Penampilan"
   },
-  "settingsView.tabAuth": {
-    "defaultMessage": "Pengesahan"
-  },
-  "settingsView.tabChat": {
-    "defaultMessage": "Sembang"
+  "settingsView.tabGeneral": {
+    "defaultMessage": "Umum"
   },
   "settingsView.tabKeyboard": {
     "defaultMessage": "Papan Kekunci"
-  },
-  "settingsView.tabLocalInference": {
-    "defaultMessage": "Inferens Tempatan"
   },
   "settingsView.tabModels": {
     "defaultMessage": "Model"
@@ -2693,14 +1991,8 @@
   "settingsView.tabPlugins": {
     "defaultMessage": "Plugin"
   },
-  "settingsView.tabPrompts": {
-    "defaultMessage": "Gesaan"
-  },
   "settingsView.title": {
     "defaultMessage": "Tetapan"
-  },
-  "sheet.close": {
-    "defaultMessage": "Tutup"
   },
   "shortcutRecorder.cancel": {
     "defaultMessage": "Batal"

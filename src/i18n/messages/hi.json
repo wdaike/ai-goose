@@ -23,66 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "साइड पैनल टॉगल करें"
   },
-  "authSettings.activeProviderWarning": {
-    "defaultMessage": "यह सक्रिय प्रदाता है. जब तक आप कोई अन्य क्रेडेंशियल कॉन्फ़िगर नहीं करते तब तक नए अनुरोध विफल हो सकते हैं।"
-  },
-  "authSettings.cancel": {
-    "defaultMessage": "रद्द करें"
-  },
-  "authSettings.delete": {
-    "defaultMessage": "हटाएँ"
-  },
-  "authSettings.deleteCredential": {
-    "defaultMessage": "क्रेडेंशियल हटाएँ"
-  },
-  "authSettings.deleteMessage": {
-    "defaultMessage": "{provider} के लिए {name} क्रेडेंशियल हटाएं?"
-  },
-  "authSettings.deleteTitle": {
-    "defaultMessage": "क्रेडेंशियल हटाएँ"
-  },
-  "authSettings.deleted": {
-    "defaultMessage": "क्रेडेंशियल हटा दिया गया"
-  },
-  "authSettings.description": {
-    "defaultMessage": "iCodex द्वारा स्थानीय रूप से संग्रहीत प्रदाता क्रेडेंशियल प्रबंधित करें।"
-  },
-  "authSettings.empty": {
-    "defaultMessage": "कोई स्थानीय रूप से संग्रहीत प्रदाता क्रेडेंशियल नहीं मिला।"
-  },
-  "authSettings.expiresAt": {
-    "defaultMessage": "समाप्त हो रहा है {date}"
-  },
-  "authSettings.failedToConfigure": {
-    "defaultMessage": "क्रेडेंशियल कॉन्फ़िगर करने में विफल: {error}"
-  },
-  "authSettings.failedToDelete": {
-    "defaultMessage": "क्रेडेंशियल हटाने में विफल: {error}"
-  },
-  "authSettings.failedToLoad": {
-    "defaultMessage": "प्रदाता क्रेडेंशियल लोड करने में विफल"
-  },
-  "authSettings.loading": {
-    "defaultMessage": "क्रेडेंशियल लोड हो रहा है..."
-  },
-  "authSettings.reauthorize": {
-    "defaultMessage": "पुन: प्राधिकृत करें"
-  },
-  "authSettings.signIn": {
-    "defaultMessage": "साइन इन करें"
-  },
-  "authSettings.signedIn": {
-    "defaultMessage": "क्रेडेंशियल कॉन्फ़िगर किया गया"
-  },
-  "authSettings.storageProviderCache": {
-    "defaultMessage": "प्रदाता कैश"
-  },
-  "authSettings.storageSecretStore": {
-    "defaultMessage": "गुप्त भंडार"
-  },
-  "authSettings.title": {
-    "defaultMessage": "प्रदाता क्रेडेंशियल"
-  },
   "backButton.back": {
     "defaultMessage": "वापस"
   },
@@ -91,36 +31,6 @@
   },
   "baseChat.goHome": {
     "defaultMessage": "घर जाओ"
-  },
-  "baseChat.reconnecting": {
-    "defaultMessage": "कनेक्शन टूट गया। फिर से कनेक्ट किया जा रहा है…"
-  },
-  "bottomMenuExtensionSelection.extensionUpdated": {
-    "defaultMessage": "एक्सटेंशन अपडेट किया गया"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeDisabled": {
-    "defaultMessage": "नई चैट में {name} अक्षम कर दिया जाएगा"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeEnabled": {
-    "defaultMessage": "नई चैट में {name} सक्षम किया जाएगा"
-  },
-  "bottomMenuExtensionSelection.extensionsForNewChats": {
-    "defaultMessage": "नई चैट के लिए एक्सटेंशन"
-  },
-  "bottomMenuExtensionSelection.extensionsForThisSession": {
-    "defaultMessage": "इस चैट सत्र के लिए एक्सटेंशन"
-  },
-  "bottomMenuExtensionSelection.manageExtensions": {
-    "defaultMessage": "एक्सटेंशन प्रबंधित करें"
-  },
-  "bottomMenuExtensionSelection.noExtensionsAvailable": {
-    "defaultMessage": "कोई एक्सटेंशन उपलब्ध नहीं है"
-  },
-  "bottomMenuExtensionSelection.noExtensionsFound": {
-    "defaultMessage": "कोई एक्सटेंशन नहीं मिला"
-  },
-  "bottomMenuExtensionSelection.searchExtensions": {
-    "defaultMessage": "एक्सटेंशन खोजें..."
   },
   "cardButtons.configure": {
     "defaultMessage": "कॉन्फ़िगर करें"
@@ -137,9 +47,6 @@
   "chat.requestFailed": {
     "defaultMessage": "अनुरोध विफल"
   },
-  "chatInput.contextWindow": {
-    "defaultMessage": "प्रसंग विंडो"
-  },
   "chatInput.dictationError": {
     "defaultMessage": "श्रुतलेख त्रुटि"
   },
@@ -155,12 +62,6 @@
   "chatInput.recording": {
     "defaultMessage": "रिकॉर्डिंग..."
   },
-  "chatInput.removeFile": {
-    "defaultMessage": "फ़ाइल हटाएँ"
-  },
-  "chatInput.removeImage": {
-    "defaultMessage": "छवि हटाएँ"
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "सत्र पुनः प्रारंभ हो रहा है..."
   },
@@ -173,101 +74,11 @@
   "chatInput.typeMessage": {
     "defaultMessage": "भेजने के लिए एक संदेश टाइप करें"
   },
-  "chatInput.unknownType": {
-    "defaultMessage": "अज्ञात प्रकार"
-  },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "रद्दीकरण समाप्त होने की प्रतीक्षा की जा रही है"
   },
   "chatInput.waitingForImages": {
     "defaultMessage": "छवियों को सहेजने की प्रतीक्षा की जा रही है..."
-  },
-  "chatSettings.modeDescription": {
-    "defaultMessage": "कॉन्फ़िगर करें कि iCodex टूल और एक्सटेंशन के साथ कैसे इंटरैक्ट करता है"
-  },
-  "chatSettings.modeTitle": {
-    "defaultMessage": "मोड"
-  },
-  "chatSettings.responseStylesDescription": {
-    "defaultMessage": "चुनें कि iCodex को अपनी प्रतिक्रियाओं को कैसे प्रारूपित और शैलीबद्ध करना चाहिए"
-  },
-  "chatSettings.responseStylesTitle": {
-    "defaultMessage": "प्रतिक्रिया शैलियाँ"
-  },
-  "configSettings.configReset": {
-    "defaultMessage": "कॉन्फ़िगरेशन रीसेट"
-  },
-  "configSettings.configResetMsg": {
-    "defaultMessage": "सभी परिवर्तन पूर्ववत कर दिए गए हैं"
-  },
-  "configSettings.configUpdated": {
-    "defaultMessage": "कॉन्फ़िगरेशन अद्यतन किया गया"
-  },
-  "configSettings.configUpdatedMsg": {
-    "defaultMessage": "\"{name}\" सफलतापूर्वक सहेजा गया"
-  },
-  "configSettings.configurationEditor": {
-    "defaultMessage": "कॉन्फ़िगरेशन संपादक"
-  },
-  "configSettings.description": {
-    "defaultMessage": "अपनी iCodex कॉन्फ़िगरेशन सेटिंग संपादित करें"
-  },
-  "configSettings.descriptionWithProvider": {
-    "defaultMessage": "अपनी iCodex कॉन्फ़िगरेशन सेटिंग्स संपादित करें ({provider} के लिए वर्तमान सेटिंग्स)"
-  },
-  "configSettings.done": {
-    "defaultMessage": "हो गया"
-  },
-  "configSettings.editConfiguration": {
-    "defaultMessage": "कॉन्फ़िगरेशन संपादित करें"
-  },
-  "configSettings.enterValue": {
-    "defaultMessage": "{name} दर्ज करें"
-  },
-  "configSettings.noSettings": {
-    "defaultMessage": "कोई कॉन्फ़िगरेशन सेटिंग नहीं मिली."
-  },
-  "configSettings.resetChanges": {
-    "defaultMessage": "परिवर्तन रीसेट करें"
-  },
-  "configSettings.saveFailed": {
-    "defaultMessage": "सहेजें विफल"
-  },
-  "configSettings.saveFailedMsg": {
-    "defaultMessage": "\"{name}\" को सहेजने में विफल"
-  },
-  "configSettings.saving": {
-    "defaultMessage": "सहेजा जा रहा है..."
-  },
-  "configSettings.title": {
-    "defaultMessage": "विन्यास"
-  },
-  "configureApproveMode.cancel": {
-    "defaultMessage": "रद्द करें"
-  },
-  "configureApproveMode.description": {
-    "defaultMessage": "स्वीकृत अनुरोध या तो सभी टूल अनुरोधों को दिए जा सकते हैं या यह निर्धारित कर सकते हैं कि किन कार्यों के लिए एकीकरण की आवश्यकता हो सकती है"
-  },
-  "configureApproveMode.manualApproval": {
-    "defaultMessage": "मैन्युअल अनुमोदन"
-  },
-  "configureApproveMode.manualApprovalDescription": {
-    "defaultMessage": "सभी टूल, एक्सटेंशन और फ़ाइल संशोधनों के लिए मानव अनुमोदन की आवश्यकता होगी"
-  },
-  "configureApproveMode.save": {
-    "defaultMessage": "सहेजें"
-  },
-  "configureApproveMode.saving": {
-    "defaultMessage": "सहेजा जा रहा है..."
-  },
-  "configureApproveMode.smartApproval": {
-    "defaultMessage": "स्मार्ट अनुमोदन"
-  },
-  "configureApproveMode.smartApprovalDescription": {
-    "defaultMessage": "जोखिम स्तर के आधार पर समझदारी से निर्धारित करें कि किन कार्यों को अनुमोदन की आवश्यकता है"
-  },
-  "configureApproveMode.title": {
-    "defaultMessage": "अनुमोदन मोड कॉन्फ़िगर करें"
   },
   "confirmationModal.defaultCancel": {
     "defaultMessage": "नहीं"
@@ -277,27 +88,6 @@
   },
   "confirmationModal.processing": {
     "defaultMessage": "प्रसंस्करण..."
-  },
-  "conversationLimitsDropdown.conversationLimits": {
-    "defaultMessage": "बातचीत की सीमाएँ"
-  },
-  "conversationLimitsDropdown.maxTurns": {
-    "defaultMessage": "अधिकतम मोड़"
-  },
-  "conversationLimitsDropdown.maxTurnsDescription": {
-    "defaultMessage": "iCodex द्वारा उपयोगकर्ता इनपुट मांगने से पहले अधिकतम एजेंट मुड़ता है"
-  },
-  "costTracker.costUnavailable": {
-    "defaultMessage": "{model} ({inputTokens} इनपुट, {outputTokens} आउटपुट टोकन) के लिए लागत डेटा उपलब्ध नहीं है"
-  },
-  "costTracker.inputOutputTooltip": {
-    "defaultMessage": "इनपुट: {inputTokens} टोकन ({inputCost}) | आउटपुट: {outputTokens} टोकन ({outputCost})"
-  },
-  "costTracker.pricingUnavailable": {
-    "defaultMessage": "{model} के लिए मूल्य निर्धारण डेटा उपलब्ध नहीं है"
-  },
-  "costTracker.totalSessionCost": {
-    "defaultMessage": "कुल सत्र लागत: {cost}"
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "क्रेडिट जोड़ें"
@@ -503,104 +293,8 @@
   "defaultProviderSetupForm.showOptions": {
     "defaultMessage": "{count} विकल्प दिखाएँ"
   },
-  "diagnosticsModal.attachHint": {
-    "defaultMessage": "यदि आप कोई बग दर्ज करते हैं, तो उसके साथ निदान रिपोर्ट संलग्न करने पर विचार करें।"
-  },
-  "diagnosticsModal.cancel": {
-    "defaultMessage": "रद्द करें"
-  },
-  "diagnosticsModal.configSettings": {
-    "defaultMessage": "कॉन्फ़िगरेशन सेटिंग्स"
-  },
-  "diagnosticsModal.description": {
-    "defaultMessage": "आप टीम के साथ साझा करने के लिए डायग्नोस्टिक्स ज़िप फ़ाइल डाउनलोड कर सकते हैं, या अपने सिस्टम विवरण पहले से भरे हुए सीधे GitHub पर बग दर्ज कर सकते हैं। डायग्नोस्टिक्स रिपोर्ट में निम्नलिखित शामिल हैं:"
-  },
-  "diagnosticsModal.diagnosticsErrorMsg": {
-    "defaultMessage": "निदान डाउनलोड करने में विफल"
-  },
-  "diagnosticsModal.diagnosticsErrorTitle": {
-    "defaultMessage": "निदान त्रुटि"
-  },
-  "diagnosticsModal.download": {
-    "defaultMessage": "डाउनलोड करें"
-  },
-  "diagnosticsModal.downloading": {
-    "defaultMessage": "डाउनलोड हो रहा है..."
-  },
-  "diagnosticsModal.fileBug": {
-    "defaultMessage": "GitHub पर बग फ़ाइल करें"
-  },
-  "diagnosticsModal.logFiles": {
-    "defaultMessage": "हाल की लॉग फ़ाइलें"
-  },
-  "diagnosticsModal.opening": {
-    "defaultMessage": "खुल रहा है..."
-  },
-  "diagnosticsModal.reportProblem": {
-    "defaultMessage": "किसी समस्या की रिपोर्ट करें"
-  },
-  "diagnosticsModal.sensitiveWarning": {
-    "defaultMessage": "यदि आपके सत्र में संवेदनशील जानकारी है, तो डायग्नोस्टिक्स फ़ाइल को सार्वजनिक रूप से साझा न करें।"
-  },
-  "diagnosticsModal.sessionMessages": {
-    "defaultMessage": "आपके वर्तमान सत्र संदेश"
-  },
-  "diagnosticsModal.systemInfo": {
-    "defaultMessage": "बुनियादी सिस्टम जानकारी"
-  },
-  "diagnosticsModal.systemInfoErrorMsg": {
-    "defaultMessage": "सिस्टम जानकारी प्राप्त करने में विफल"
-  },
-  "diagnosticsModal.systemInfoErrorTitle": {
-    "defaultMessage": "त्रुटि"
-  },
   "dialog.close": {
     "defaultMessage": "बंद करें"
-  },
-  "dictationSettings.addApiKey": {
-    "defaultMessage": "API कुंजी जोड़ें"
-  },
-  "dictationSettings.apiKey": {
-    "defaultMessage": "API कुंजी"
-  },
-  "dictationSettings.cancel": {
-    "defaultMessage": "रद्द करें"
-  },
-  "dictationSettings.chooseVoiceConversion": {
-    "defaultMessage": "चुनें कि आवाज़ को टेक्स्ट में कैसे परिवर्तित किया जाए"
-  },
-  "dictationSettings.configureApiKey": {
-    "defaultMessage": "<b>{settingsPath}</b> में API कुंजी कॉन्फ़िगर करें"
-  },
-  "dictationSettings.configured": {
-    "defaultMessage": "(कॉन्फ़िगर)"
-  },
-  "dictationSettings.configuredIn": {
-    "defaultMessage": "✓ {settingsPath} में कॉन्फ़िगर किया गया"
-  },
-  "dictationSettings.disabled": {
-    "defaultMessage": "विकलांग"
-  },
-  "dictationSettings.enterApiKey": {
-    "defaultMessage": "अपनी API कुंजी दर्ज करें"
-  },
-  "dictationSettings.notConfigured": {
-    "defaultMessage": "(कॉन्फ़िगर नहीं)"
-  },
-  "dictationSettings.removeApiKey": {
-    "defaultMessage": "API कुंजी हटाएँ"
-  },
-  "dictationSettings.requiredForTranscription": {
-    "defaultMessage": "प्रतिलेखन के लिए आवश्यक है"
-  },
-  "dictationSettings.save": {
-    "defaultMessage": "सहेजें"
-  },
-  "dictationSettings.updateApiKey": {
-    "defaultMessage": "अद्यतन करें API कुंजी"
-  },
-  "dictationSettings.voiceDictationProvider": {
-    "defaultMessage": "वॉयस डिक्टेशन प्रदाता"
   },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "कार्यशील निर्देशिका अद्यतन करने में विफल"
@@ -851,66 +545,6 @@
   "filesPanel.title": {
     "defaultMessage": "फ़ाइलें"
   },
-  "goosehintsModal.close": {
-    "defaultMessage": "बंद करें"
-  },
-  "goosehintsModal.developer": {
-    "defaultMessage": "डेवलपर"
-  },
-  "goosehintsModal.dialogDescription": {
-    "defaultMessage": "iCodex के साथ संचार को बेहतर बनाने के लिए अपने प्रोजेक्ट के बारे में अतिरिक्त संदर्भ प्रदान करें"
-  },
-  "goosehintsModal.dialogTitle": {
-    "defaultMessage": "प्रोजेक्ट संकेत कॉन्फ़िगर करें (.goosehints)"
-  },
-  "goosehintsModal.errorReading": {
-    "defaultMessage": ".goosehints फ़ाइल पढ़ने में त्रुटि: {error}"
-  },
-  "goosehintsModal.failedToAccess": {
-    "defaultMessage": ".goosehints फ़ाइल तक पहुँचने में विफल"
-  },
-  "goosehintsModal.failedToSave": {
-    "defaultMessage": ".goosehints फ़ाइल सहेजने में विफल"
-  },
-  "goosehintsModal.fileCreating": {
-    "defaultMessage": "नई .goosehints फ़ाइल यहां बनाई जा रही है: {filePath}"
-  },
-  "goosehintsModal.fileFound": {
-    "defaultMessage": ".goosehints फ़ाइल यहां मिली: {filePath}"
-  },
-  "goosehintsModal.helpText1": {
-    "defaultMessage": ".goosehints एक टेक्स्ट फ़ाइल है जिसका उपयोग आपके प्रोजेक्ट के बारे में अतिरिक्त संदर्भ प्रदान करने और iCodex के साथ संचार को बेहतर बनाने के लिए किया जाता है।"
-  },
-  "goosehintsModal.helpText2": {
-    "defaultMessage": "कृपया सुनिश्चित करें कि एक्सटेंशन पृष्ठ में {bold} एक्सटेंशन सक्षम है। .goosehints का उपयोग करने के लिए यह एक्सटेंशन आवश्यक है। .goosehints अपडेट को प्रभावी बनाने के लिए आपको अपना सत्र पुनः आरंभ करना होगा।"
-  },
-  "goosehintsModal.helpText3": {
-    "defaultMessage": "अधिक जानकारी के लिए {link} देखें।"
-  },
-  "goosehintsModal.helpTextLink": {
-    "defaultMessage": ".goosehints का उपयोग करना"
-  },
-  "goosehintsModal.placeholder": {
-    "defaultMessage": "प्रोजेक्ट संकेत यहां दर्ज करें..."
-  },
-  "goosehintsModal.save": {
-    "defaultMessage": "सहेजें"
-  },
-  "goosehintsModal.savedSuccessfully": {
-    "defaultMessage": "सफलतापूर्वक सहेजा गया"
-  },
-  "goosehintsModal.saving": {
-    "defaultMessage": "सहेजा जा रहा है..."
-  },
-  "goosehintsSection.configure": {
-    "defaultMessage": "कॉन्फ़िगर करें"
-  },
-  "goosehintsSection.description": {
-    "defaultMessage": "iCodex को अतिरिक्त संदर्भ प्रदान करने के लिए अपने प्रोजेक्ट की .goosehints फ़ाइल को कॉन्फ़िगर करें"
-  },
-  "goosehintsSection.title": {
-    "defaultMessage": "प्रोजेक्ट संकेत (.goosehints)"
-  },
   "groupedExtensionLoadingToast.askGoose": {
     "defaultMessage": "पूछें iCodex"
   },
@@ -992,42 +626,6 @@
   "hub.suggestionReview": {
     "defaultMessage": "कोड की समीक्षा करें और बदलाव सुझाएँ"
   },
-  "huggingFaceModelSearch.download": {
-    "defaultMessage": "डाउनलोड करें"
-  },
-  "huggingFaceModelSearch.downloaded": {
-    "defaultMessage": "डाउनलोड"
-  },
-  "huggingFaceModelSearch.downloading": {
-    "defaultMessage": "डाउनलोड हो रहा है..."
-  },
-  "huggingFaceModelSearch.loadingVariants": {
-    "defaultMessage": "वेरिएंट लोड हो रहा है..."
-  },
-  "huggingFaceModelSearch.noGgufModels": {
-    "defaultMessage": "इस क्वेरी के लिए कोई GGUF मॉडल नहीं मिला."
-  },
-  "huggingFaceModelSearch.recommended": {
-    "defaultMessage": "अनुशंसित"
-  },
-  "huggingFaceModelSearch.searchError": {
-    "defaultMessage": "खोज त्रुटि: {details}"
-  },
-  "huggingFaceModelSearch.searchFailed": {
-    "defaultMessage": "खोज विफल रही. कृपया पुन: प्रयास करें।"
-  },
-  "huggingFaceModelSearch.searchHuggingFace": {
-    "defaultMessage": "हगिंगफेस खोजें"
-  },
-  "huggingFaceModelSearch.searchNoData": {
-    "defaultMessage": "खोज से कोई डेटा नहीं मिला."
-  },
-  "huggingFaceModelSearch.searchPlaceholder": {
-    "defaultMessage": "जीजीयूएफ मॉडल खोजें..."
-  },
-  "huggingFaceModelSearch.tooLarge": {
-    "defaultMessage": "मेमोरी में फ़िट नहीं हो सकता ({size} मॉडल, {available} उपलब्ध)"
-  },
   "huggingFaceSignInPrompt.failedToConfigure": {
     "defaultMessage": "हगिंग फेस में साइन इन करने में विफल: {error}"
   },
@@ -1045,9 +643,6 @@
   },
   "imagePreview.altText": {
     "defaultMessage": "iCodex छवि"
-  },
-  "imagePreview.clickToCollapse": {
-    "defaultMessage": "संक्षिप्त करने के लिए क्लिक करें"
   },
   "imagePreview.clickToExpand": {
     "defaultMessage": "विस्तार करने के लिए क्लिक करें"
@@ -1262,111 +857,6 @@
   "loadingGoose.waiting": {
     "defaultMessage": "प्रतीक्षा में"
   },
-  "localInferenceSettings.deleteConfirm": {
-    "defaultMessage": "यह मॉडल हटाएं? आप इसे बाद में पुनः डाउनलोड कर सकते हैं."
-  },
-  "localInferenceSettings.description": {
-    "defaultMessage": "API कुंजियों के बिना अनुमान के लिए स्थानीय एलएलएम मॉडल डाउनलोड और प्रबंधित करें। किसी भी जीजीयूएफ मॉडल के लिए हगिंगफेस खोजें या नीचे दिए गए चुनिंदा विकल्पों का उपयोग करें।"
-  },
-  "localInferenceSettings.dismiss": {
-    "defaultMessage": "खारिज करें"
-  },
-  "localInferenceSettings.download": {
-    "defaultMessage": "डाउनलोड करें"
-  },
-  "localInferenceSettings.downloadCancelled": {
-    "defaultMessage": "डाउनलोड रद्द किया गया"
-  },
-  "localInferenceSettings.downloadFailed": {
-    "defaultMessage": "डाउनलोड विफल रहा"
-  },
-  "localInferenceSettings.downloadProgress": {
-    "defaultMessage": "{downloaded} / {total} ({percent}%)"
-  },
-  "localInferenceSettings.downloadedModels": {
-    "defaultMessage": "डाउनलोड किए गए मॉडल"
-  },
-  "localInferenceSettings.downloading": {
-    "defaultMessage": "डाउनलोड हो रहा है"
-  },
-  "localInferenceSettings.evictFromMemory": {
-    "defaultMessage": "Evict from memory"
-  },
-  "localInferenceSettings.featuredModels": {
-    "defaultMessage": "विशेष रुप से प्रदर्शित मॉडल"
-  },
-  "localInferenceSettings.huggingFaceSignInNote": {
-    "defaultMessage": "मॉडल खोजते और डाउनलोड करते समय दर सीमा बढ़ाने के लिए और निजी या गेटेड हगिंग फेस रिपॉजिटरी तक पहुंचने के लिए साइन इन करें।"
-  },
-  "localInferenceSettings.loadedInMemory": {
-    "defaultMessage": "Loaded in memory"
-  },
-  "localInferenceSettings.modelSettings": {
-    "defaultMessage": "मॉडल Settings"
-  },
-  "localInferenceSettings.modelSettingsTitle": {
-    "defaultMessage": "मॉडल सेटिंग्स"
-  },
-  "localInferenceSettings.noModels": {
-    "defaultMessage": "कोई मॉडल उपलब्ध नहीं"
-  },
-  "localInferenceSettings.recommended": {
-    "defaultMessage": "अनुशंसित"
-  },
-  "localInferenceSettings.remaining": {
-    "defaultMessage": "{time} शेष"
-  },
-  "localInferenceSettings.retry": {
-    "defaultMessage": "पुनः प्रयास करें"
-  },
-  "localInferenceSettings.showAllFeatured": {
-    "defaultMessage": "सभी विशेष रुप से प्रदर्शित दिखाएँ ({count} अधिक)"
-  },
-  "localInferenceSettings.showRecommendedOnly": {
-    "defaultMessage": "केवल अनुशंसित दिखाएं"
-  },
-  "localInferenceSettings.title": {
-    "defaultMessage": "स्थानीय अनुमान मॉडल"
-  },
-  "localInferenceSettings.vision": {
-    "defaultMessage": "दृष्टि"
-  },
-  "localInferenceSettings.visionEncoderDownloading": {
-    "defaultMessage": "विज़न एनकोडर डाउनलोड हो रहा है..."
-  },
-  "localInferenceSettings.visionEncoderNotDownloaded": {
-    "defaultMessage": "विज़न एनकोडर डाउनलोड नहीं हुआ"
-  },
-  "localModelManager.active": {
-    "defaultMessage": "सक्रिय"
-  },
-  "localModelManager.deleteConfirm": {
-    "defaultMessage": "यह मॉडल हटाएं? आप इसे बाद में पुनः डाउनलोड कर सकते हैं."
-  },
-  "localModelManager.download": {
-    "defaultMessage": "डाउनलोड करें"
-  },
-  "localModelManager.downloaded": {
-    "defaultMessage": "डाउनलोड"
-  },
-  "localModelManager.gpuAcceleration": {
-    "defaultMessage": "GPU त्वरण का समर्थन करता है (NVIDIA के लिए CUDA, Apple सिलिकॉन के लिए मेटल)। हार्डवेयर त्वरण के लिए निर्माण समय पर GPU सुविधाओं को सक्षम किया जाना चाहिए।"
-  },
-  "localModelManager.noModels": {
-    "defaultMessage": "कोई मॉडल उपलब्ध नहीं"
-  },
-  "localModelManager.recommended": {
-    "defaultMessage": "अनुशंसित"
-  },
-  "localModelManager.recommendedForHardware": {
-    "defaultMessage": "आपके हार्डवेयर के लिए अनुशंसित"
-  },
-  "localModelManager.showAllModels": {
-    "defaultMessage": "सभी मॉडल दिखाएं ({count} अधिक)"
-  },
-  "localModelManager.showRecommendedOnly": {
-    "defaultMessage": "केवल अनुशंसित दिखाएं"
-  },
   "localModelPicker.bestForMachine": {
     "defaultMessage": "आपकी मशीन के लिए सर्वोत्तम"
   },
@@ -1478,62 +968,20 @@
   "messageQueue.cancel": {
     "defaultMessage": "रद्द करें"
   },
-  "messageQueue.cannotSendWhileEditing": {
-    "defaultMessage": "संपादन करते समय नहीं भेजा जा सकता"
-  },
   "messageQueue.clearAll": {
     "defaultMessage": "सभी साफ़ करें"
-  },
-  "messageQueue.clickToEdit": {
-    "defaultMessage": "{content} (संपादित करने के लिए क्लिक करें)"
-  },
-  "messageQueue.collapseQueue": {
-    "defaultMessage": "कतार संक्षिप्त करें"
-  },
-  "messageQueue.dragToReorder": {
-    "defaultMessage": "प्राथमिकता को पुन: व्यवस्थित करने के लिए संदेशों को खींचें"
-  },
-  "messageQueue.expandQueue": {
-    "defaultMessage": "कतार का विस्तार करें"
-  },
-  "messageQueue.messageCount": {
-    "defaultMessage": "{count,plural,one{# संदेश {status}} other{# संदेश {status}}}"
-  },
-  "messageQueue.messageQueue": {
-    "defaultMessage": "संदेश कतार"
-  },
-  "messageQueue.next": {
-    "defaultMessage": "अगला"
   },
   "messageQueue.paused": {
     "defaultMessage": "रुका हुआ"
   },
-  "messageQueue.queuePaused": {
-    "defaultMessage": "कतार रोक दी गई"
-  },
   "messageQueue.queuePausedCompact": {
     "defaultMessage": "कतार रुकी हुई - \"भेजें\" पर क्लिक करें या फिर से शुरू करने के लिए नया संदेश जोड़ें"
-  },
-  "messageQueue.queuePausedExpanded": {
-    "defaultMessage": "रुकावट के कारण कतार रुकी. \"अभी भेजें\" का उपयोग करें या फिर से शुरू करने के लिए एक नया संदेश जोड़ें।"
-  },
-  "messageQueue.queued": {
-    "defaultMessage": "पंक्तिबद्ध"
   },
   "messageQueue.removeFromQueue": {
     "defaultMessage": "इस संदेश को कतार से हटाएँ"
   },
   "messageQueue.save": {
     "defaultMessage": "सहेजें"
-  },
-  "messageQueue.sendNow": {
-    "defaultMessage": "यह संदेश अभी भेजें"
-  },
-  "messageQueue.stopAndSend": {
-    "defaultMessage": "वर्तमान प्रोसेसिंग बंद करें और यह संदेश अभी भेजें"
-  },
-  "messageQueue.waiting": {
-    "defaultMessage": "इंतज़ार कर रहा हूँ"
   },
   "messageUsageStats.cacheHitRate": {
     "defaultMessage": "(इनपुट का {percent}%)"
@@ -1580,59 +1028,17 @@
   "messageUsageStats.totalTime": {
     "defaultMessage": "कुल समय"
   },
-  "microphoneSelector.chooseDescription": {
-    "defaultMessage": "श्रुतलेख के लिए कौन सा माइक्रोफ़ोन उपयोग करना है चुनें"
-  },
-  "microphoneSelector.grantAccess": {
-    "defaultMessage": "पहुंच प्रदान करें"
-  },
-  "microphoneSelector.grantAccessDescription": {
-    "defaultMessage": "उपलब्ध माइक्रोफ़ोन देखने की पहुंच प्रदान करें"
-  },
-  "microphoneSelector.microphone": {
-    "defaultMessage": "माइक्रोफ़ोन"
-  },
-  "microphoneSelector.microphoneLabel": {
-    "defaultMessage": "माइक्रोफ़ोन {index}"
-  },
-  "microphoneSelector.selectedMicrophone": {
-    "defaultMessage": "चयनित माइक्रोफ़ोन"
-  },
-  "microphoneSelector.speakToTest": {
-    "defaultMessage": "अपने माइक्रोफ़ोन का परीक्षण करने के लिए बोलें ({seconds}s)"
-  },
-  "microphoneSelector.stop": {
-    "defaultMessage": "रुकें"
-  },
-  "microphoneSelector.systemDefault": {
-    "defaultMessage": "सिस्टम डिफ़ॉल्ट"
-  },
-  "microphoneSelector.test": {
-    "defaultMessage": "परीक्षण"
-  },
   "modeSelectionItem.autonomousDescription": {
     "defaultMessage": "पूर्ण फ़ाइल संशोधन क्षमताएं, फ़ाइलों को स्वतंत्र रूप से संपादित करें, बनाएं और हटाएं।"
-  },
-  "modeSelectionItem.autonomousLabel": {
-    "defaultMessage": "स्वायत्त"
   },
   "modeSelectionItem.chatOnlyDescription": {
     "defaultMessage": "टूल या एक्सटेंशन का उपयोग किए बिना चयनित प्रदाता से बातचीत करें।"
   },
-  "modeSelectionItem.chatOnlyLabel": {
-    "defaultMessage": "केवल चैट करें"
-  },
   "modeSelectionItem.manualDescription": {
     "defaultMessage": "सभी टूल, एक्सटेंशन और फ़ाइल संशोधनों के लिए मानव अनुमोदन की आवश्यकता होगी"
   },
-  "modeSelectionItem.manualLabel": {
-    "defaultMessage": "मैनुअल"
-  },
   "modeSelectionItem.smartDescription": {
     "defaultMessage": "जोखिम स्तर के आधार पर समझदारी से निर्धारित करें कि किन कार्यों को अनुमोदन की आवश्यकता है"
-  },
-  "modeSelectionItem.smartLabel": {
-    "defaultMessage": "होशियार"
   },
   "modelAndProviderContext.modelChangeFailed": {
     "defaultMessage": "{provider}/{model} विफल"
@@ -1952,39 +1358,6 @@
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "अनाम उपयोग डेटा साझा करें"
   },
-  "permissionModal.alwaysAllow": {
-    "defaultMessage": "हमेशा अनुमति दें"
-  },
-  "permissionModal.askBefore": {
-    "defaultMessage": "पहले पूछो"
-  },
-  "permissionModal.cancel": {
-    "defaultMessage": "रद्द करें"
-  },
-  "permissionModal.close": {
-    "defaultMessage": "बंद करें"
-  },
-  "permissionModal.failedToLoadTools": {
-    "defaultMessage": "उपकरण लोड करने में विफल"
-  },
-  "permissionModal.failedToLoadToolsDescription": {
-    "defaultMessage": "इस एक्सटेंशन के लिए उपकरण लोड नहीं किए जा सके. मौजूदा सत्र में एक्सटेंशन लोड नहीं किया जा सकता है."
-  },
-  "permissionModal.neverAllow": {
-    "defaultMessage": "कभी अनुमति न दें"
-  },
-  "permissionModal.noActiveSession": {
-    "defaultMessage": "कोई सक्रिय सत्र नहीं"
-  },
-  "permissionModal.noActiveSessionDescription": {
-    "defaultMessage": "इस एक्सटेंशन के लिए टूल अनुमतियों को कॉन्फ़िगर करने के लिए पहले एक चैट सत्र प्रारंभ करें। टूल अनुमतियाँ सक्रिय सत्र के एक्सटेंशन से लोड की जाती हैं।"
-  },
-  "permissionModal.noToolsAvailable": {
-    "defaultMessage": "इस एक्सटेंशन के लिए कोई उपकरण उपलब्ध नहीं है."
-  },
-  "permissionModal.saveChanges": {
-    "defaultMessage": "परिवर्तन सहेजें"
-  },
   "permissionModeChip.approve": {
     "defaultMessage": "मैनुअल अनुमोदन"
   },
@@ -1996,24 +1369,6 @@
   },
   "permissionModeChip.smartApprove": {
     "defaultMessage": "स्मार्ट अनुमोदन"
-  },
-  "permissionRulesModal.description": {
-    "defaultMessage": "एक्सटेंशन के लिए टूल अनुमतियाँ कॉन्फ़िगर करें ताकि यह नियंत्रित किया जा सके कि वे आपके सिस्टम के साथ कैसे इंटरैक्ट करते हैं।"
-  },
-  "permissionRulesModal.extensionRules": {
-    "defaultMessage": "विस्तार नियम"
-  },
-  "permissionRulesModal.title": {
-    "defaultMessage": "अनुमति नियम"
-  },
-  "permissionSetting.extensionRules": {
-    "defaultMessage": "विस्तार नियम"
-  },
-  "permissionSetting.permissionRules": {
-    "defaultMessage": "अनुमति नियम"
-  },
-  "permissionSetting.permissionRulesDescription": {
-    "defaultMessage": "छिपे हुए निर्देश जो आपकी प्रतिक्रियाओं को निर्देशित करने और संदर्भ जोड़ने में सहायता के लिए प्रदाता को भेजे जाएंगे।"
   },
   "planSteps.progress": {
     "defaultMessage": "चरण {current} / {total}"
@@ -2351,14 +1706,8 @@
   "resetProviderSection.resetDescription": {
     "defaultMessage": "यह आपके चयनित मॉडल और प्रदाता सेटिंग्स को साफ़ कर देगा। यदि कोई डिफ़ॉल्ट उपलब्ध नहीं है, तो आपको उन्हें फिर से सेट करने के लिए स्वागत स्क्रीन पर ले जाया जाएगा।"
   },
-  "responseStyle.conciseDescription": {
-    "defaultMessage": "टूल कॉल डिफ़ॉल्ट रूप से बंद हैं और केवल उपयोग किए गए टूल को दिखाते हैं"
-  },
   "responseStyle.conciseLabel": {
     "defaultMessage": "संक्षिप्त"
-  },
-  "responseStyle.detailedDescription": {
-    "defaultMessage": "विवरण उजागर करने के लिए टूल कॉल डिफ़ॉल्ट रूप से खुले दिखाए जाते हैं"
   },
   "responseStyle.detailedLabel": {
     "defaultMessage": "विस्तृत"
@@ -2380,66 +1729,6 @@
   },
   "secureStorageNotice.defaultMessage": {
     "defaultMessage": "चाभियाँ किचेन में सुरक्षित रूप से संग्रहीत होती हैं"
-  },
-  "securityToggle.apiTokenDescription": {
-    "defaultMessage": "वर्गीकरण सेवा के लिए प्रमाणीकरण टोकन"
-  },
-  "securityToggle.apiTokenOptional": {
-    "defaultMessage": "API टोकन (वैकल्पिक)"
-  },
-  "securityToggle.classificationEndpoint": {
-    "defaultMessage": "वर्गीकरण समापन बिंदु"
-  },
-  "securityToggle.classificationEndpointDescription": {
-    "defaultMessage": "अपनी वर्गीकरण सेवा का पूरा URL दर्ज करें"
-  },
-  "securityToggle.commandClassifierActive": {
-    "defaultMessage": "कमांड क्लासिफायर सक्रिय (पर्यावरण से स्वतः कॉन्फ़िगर किया गया)"
-  },
-  "securityToggle.commandEndpointDescription": {
-    "defaultMessage": "अपनी कमांड इंजेक्शन वर्गीकरण सेवा का पूरा URL दर्ज करें"
-  },
-  "securityToggle.commandInjectionDescription": {
-    "defaultMessage": "दुर्भावनापूर्ण शेल कमांड का पता लगाने के लिए एमएल मॉडल का उपयोग करें"
-  },
-  "securityToggle.detectionModel": {
-    "defaultMessage": "डिटेक्शन मॉडल"
-  },
-  "securityToggle.detectionModelDescription": {
-    "defaultMessage": "शीघ्र इंजेक्शन का पता लगाने के लिए किस एमएल मॉडल का उपयोग करना है उसका चयन करें"
-  },
-  "securityToggle.detectionThreshold": {
-    "defaultMessage": "डिटेक्शन थ्रेशोल्ड"
-  },
-  "securityToggle.enableCommandInjection": {
-    "defaultMessage": "कमांड इंजेक्शन एमएल डिटेक्शन सक्षम करें"
-  },
-  "securityToggle.enablePromptInjection": {
-    "defaultMessage": "शीघ्र इंजेक्शन जांच सक्षम करें"
-  },
-  "securityToggle.enablePromptInjectionMl": {
-    "defaultMessage": "शीघ्र इंजेक्शन एमएल जांच सक्षम करें"
-  },
-  "securityToggle.mlEndpointDescription": {
-    "defaultMessage": "अपनी ML वर्गीकरण सेवा का पूरा URL दर्ज करें (मॉडल पहचानकर्ता सहित)"
-  },
-  "securityToggle.mlTokenDescription": {
-    "defaultMessage": "एमएल सेवा के लिए प्रमाणीकरण टोकन (उदाहरण के लिए, हगिंगफेस टोकन)"
-  },
-  "securityToggle.overrideNotice": {
-    "defaultMessage": "यह सेटिंग आपके संगठन द्वारा प्रबंधित की जाती है और इसे बदला नहीं जा सकता."
-  },
-  "securityToggle.promptInjectionDescription": {
-    "defaultMessage": "संभावित त्वरित इंजेक्शन हमलों का पता लगाएं और उन्हें रोकें"
-  },
-  "securityToggle.promptInjectionMlDescription": {
-    "defaultMessage": "अपनी चैट में संभावित शीघ्र इंजेक्शन का पता लगाने के लिए एमएल मॉडल का उपयोग करें"
-  },
-  "securityToggle.thresholdDescription": {
-    "defaultMessage": "उच्च मान अधिक सख्त होते हैं (0.01 = बहुत उदार, 1.0 = अधिकतम सख्त)"
-  },
-  "securityToggle.warpNotice": {
-    "defaultMessage": "WARP से कनेक्ट होने पर कमांड इंजेक्शन डिटेक्शन सबसे अच्छा काम करता है (वर्गीकरण सेवा तक पहुंचने के लिए आवश्यक)।"
   },
   "sessionActionsHeader.actionsLabel": {
     "defaultMessage": "Session actions"
@@ -2486,26 +1775,29 @@
   "sessionIndicators.streaming": {
     "defaultMessage": "स्ट्रीमिंग"
   },
-  "settings.appearance.description": {
-    "defaultMessage": "कॉन्फ़िगर करें कि iCodex आपके सिस्टम पर कैसे दिखाई देता है"
+  "settings.about.title": {
+    "defaultMessage": "परिचय"
   },
-  "settings.appearance.title": {
-    "defaultMessage": "दिखावट"
+  "settings.bottomPanel.description": {
+    "defaultMessage": "ऐप हेडर में निचले पैनल का नियंत्रण दिखाएँ"
   },
-  "settings.close": {
-    "defaultMessage": "बंद करें"
+  "settings.bottomPanel.title": {
+    "defaultMessage": "निचला पैनल"
   },
-  "settings.costTracking.description": {
-    "defaultMessage": "मॉडल मूल्य निर्धारण और उपयोग लागत दिखाएं"
+  "settings.chat.title": {
+    "defaultMessage": "चैट"
   },
-  "settings.costTracking.title": {
-    "defaultMessage": "लागत ट्रैकिंग"
+  "settings.composer.title": {
+    "defaultMessage": "इनपुट बॉक्स"
   },
   "settings.dockIcon.description": {
     "defaultMessage": "गोदी में iCodex दिखाएँ"
   },
   "settings.dockIcon.title": {
     "defaultMessage": "डॉक आइकन"
+  },
+  "settings.general.title": {
+    "defaultMessage": "सामान्य"
   },
   "settings.help.description": {
     "defaultMessage": "समस्याओं की रिपोर्ट करके या नई सुविधाओं का अनुरोध करके iCodex को बेहतर बनाने में हमारी सहायता करें"
@@ -2577,73 +1869,82 @@
     "defaultMessage": "चीनी (पारंपरिक)"
   },
   "settings.menuBarIcon.description": {
-    "defaultMessage": "मेनू बार में iCodex दिखाएँ"
+    "defaultMessage": "मुख्य विंडो बंद होने पर भी iCodex को मेन्यू बार में रखें"
   },
   "settings.menuBarIcon.title": {
-    "defaultMessage": "मेनू बार आइकन"
-  },
-  "settings.notifications.configGuide": {
-    "defaultMessage": "कॉन्फ़िगरेशन मार्गदर्शिका"
-  },
-  "settings.notifications.description": {
-    "defaultMessage": "सूचनाएं आपके OS द्वारा प्रबंधित की जाती हैं - {link}"
-  },
-  "settings.notifications.modal.macInstructions": {
-    "defaultMessage": "macOS पर सूचनाएं सक्षम करने के लिए:"
-  },
-  "settings.notifications.modal.macStep1": {
-    "defaultMessage": "सिस्टम प्राथमिकताएँ खोलें"
-  },
-  "settings.notifications.modal.macStep2": {
-    "defaultMessage": "नोटिफिकेशन पर क्लिक करें"
-  },
-  "settings.notifications.modal.macStep3": {
-    "defaultMessage": "एप्लिकेशन सूची में iCodex ढूंढें और चुनें"
-  },
-  "settings.notifications.modal.macStep4": {
-    "defaultMessage": "सूचनाएं सक्षम करें और सेटिंग्स को इच्छानुसार समायोजित करें"
-  },
-  "settings.notifications.modal.title": {
-    "defaultMessage": "सूचनाएं कैसे सक्षम करें"
-  },
-  "settings.notifications.modal.winInstructions": {
-    "defaultMessage": "Windows पर सूचनाएं सक्षम करने के लिए:"
-  },
-  "settings.notifications.modal.winStep1": {
-    "defaultMessage": "Settings खोलें"
-  },
-  "settings.notifications.modal.winStep2": {
-    "defaultMessage": "सिस्टम > सूचनाएँ पर जाएँ"
-  },
-  "settings.notifications.modal.winStep3": {
-    "defaultMessage": "एप्लिकेशन सूची में iCodex ढूंढें और चुनें"
-  },
-  "settings.notifications.modal.winStep4": {
-    "defaultMessage": "सूचनाओं को चालू करें और सेटिंग्स को इच्छानुसार समायोजित करें"
+    "defaultMessage": "मेन्यू बार में दिखाएँ"
   },
   "settings.notifications.openSettings": {
     "defaultMessage": "Settings खोलें"
   },
-  "settings.notifications.task.description": {
-    "defaultMessage": "जब विंडो पृष्ठभूमि में हो तो iCodex कोई कार्य पूरा कर ले तो सूचित करें"
+  "settings.notifications.system.description": {
+    "defaultMessage": "सूचनाओं का वितरण आपका ऑपरेटिंग सिस्टम प्रबंधित करता है"
   },
-  "settings.notifications.task.title": {
-    "defaultMessage": "कार्य पूर्ण होने की सूचनाएं"
+  "settings.notifications.system.title": {
+    "defaultMessage": "सिस्टम सूचनाएँ"
   },
   "settings.notifications.title": {
     "defaultMessage": "सूचनाएं"
+  },
+  "settings.notifications.turn.always": {
+    "defaultMessage": "हमेशा"
+  },
+  "settings.notifications.turn.description": {
+    "defaultMessage": "तय करें कि iCodex आपको काम पूरा होने की सूचना कब दे"
+  },
+  "settings.notifications.turn.never": {
+    "defaultMessage": "कभी नहीं"
+  },
+  "settings.notifications.turn.title": {
+    "defaultMessage": "कार्य पूरा होने की सूचनाएँ"
+  },
+  "settings.notifications.turn.unfocused": {
+    "defaultMessage": "केवल जब फ़ोकस में न हो"
+  },
+  "settings.permissions.autoReview.description": {
+    "defaultMessage": "iCodex तय करता है कि अतिरिक्त एक्सेस के कौन-से अनुरोध सुरक्षित हैं और केवल जोखिम भरे मामलों में पूछता है। स्वतः समीक्षा गलती कर सकती है"
+  },
+  "settings.permissions.autoReview.title": {
+    "defaultMessage": "स्वतः समीक्षा"
+  },
+  "settings.permissions.default.description": {
+    "defaultMessage": "डिफ़ॉल्ट रूप से iCodex अपने वर्कस्पेस की फ़ाइलें पढ़ और संपादित कर सकता है। बाकी सब के लिए वह मंज़ूरी माँगता है"
+  },
+  "settings.permissions.default.title": {
+    "defaultMessage": "डिफ़ॉल्ट अनुमतियाँ"
+  },
+  "settings.permissions.fullAccess.description": {
+    "defaultMessage": "iCodex आपकी मंज़ूरी के बिना आपके कंप्यूटर की कोई भी फ़ाइल संपादित कर सकता है और नेटवर्क वाले कमांड चला सकता है। इससे डेटा हानि, लीक या अप्रत्याशित व्यवहार का जोखिम काफ़ी बढ़ जाता है"
+  },
+  "settings.permissions.fullAccess.title": {
+    "defaultMessage": "पूर्ण एक्सेस"
+  },
+  "settings.permissions.title": {
+    "defaultMessage": "अनुमतियाँ"
   },
   "settings.preventSleep.description": {
     "defaultMessage": "जब iCodex कोई कार्य चला रहा हो तो अपने कंप्यूटर को चालू रखें (स्क्रीन अभी भी लॉक हो सकती है)"
   },
   "settings.preventSleep.title": {
-    "defaultMessage": "नींद रोकें"
+    "defaultMessage": "चलते समय स्लीप रोकें"
   },
-  "settings.theme.description": {
-    "defaultMessage": "iCodex के रूप और अनुभव को अनुकूलित करें"
+  "settings.sendShortcut.description": {
+    "defaultMessage": "चुनें कि Enter संदेश भेजे या नई लाइन जोड़े"
   },
-  "settings.theme.title": {
-    "defaultMessage": "थीम"
+  "settings.sendShortcut.enter": {
+    "defaultMessage": "Enter"
+  },
+  "settings.sendShortcut.modEnter": {
+    "defaultMessage": "{mod} + Enter"
+  },
+  "settings.sendShortcut.title": {
+    "defaultMessage": "भेजने का शॉर्टकट"
+  },
+  "settings.toolDetails.description": {
+    "defaultMessage": "चैट में टूल कॉल डिफ़ॉल्ट रूप से विस्तृत हों या संक्षिप्त"
+  },
+  "settings.toolDetails.title": {
+    "defaultMessage": "टूल कॉल विवरण"
   },
   "settings.updates.description": {
     "defaultMessage": "iCodex को सर्वोत्तम रूप से चालू रखने के लिए अपडेट की जाँच करें और इंस्टॉल करें"
@@ -2651,14 +1952,17 @@
   "settings.updates.title": {
     "defaultMessage": "अद्यतन"
   },
+  "settings.usageStats.description": {
+    "defaultMessage": "हर उत्तर के नीचे टोकन, गति और लागत दिखाएँ"
+  },
+  "settings.usageStats.title": {
+    "defaultMessage": "उपयोग आँकड़े दिखाएँ"
+  },
   "settings.version.title": {
     "defaultMessage": "संस्करण"
   },
   "settingsView.back": {
     "defaultMessage": "ऐप पर वापस जाएँ"
-  },
-  "settingsView.groupAdvanced": {
-    "defaultMessage": "उन्नत"
   },
   "settingsView.groupIntegrations": {
     "defaultMessage": "इंटीग्रेशन"
@@ -2672,20 +1976,14 @@
   "settingsView.search": {
     "defaultMessage": "सेटिंग्स खोजें..."
   },
-  "settingsView.tabApp": {
-    "defaultMessage": "ऐप"
+  "settingsView.tabAppearance": {
+    "defaultMessage": "दिखावट"
   },
-  "settingsView.tabAuth": {
-    "defaultMessage": "प्रामाणिक"
-  },
-  "settingsView.tabChat": {
-    "defaultMessage": "बातचीत"
+  "settingsView.tabGeneral": {
+    "defaultMessage": "सामान्य"
   },
   "settingsView.tabKeyboard": {
     "defaultMessage": "कीबोर्ड"
-  },
-  "settingsView.tabLocalInference": {
-    "defaultMessage": "स्थानीय अनुमान"
   },
   "settingsView.tabModels": {
     "defaultMessage": "मॉडल"
@@ -2693,14 +1991,8 @@
   "settingsView.tabPlugins": {
     "defaultMessage": "प्लगइन्स"
   },
-  "settingsView.tabPrompts": {
-    "defaultMessage": "संकेत"
-  },
   "settingsView.title": {
     "defaultMessage": "Settings"
-  },
-  "sheet.close": {
-    "defaultMessage": "बंद करें"
   },
   "shortcutRecorder.cancel": {
     "defaultMessage": "रद्द करें"

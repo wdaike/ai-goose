@@ -23,66 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "Alternar panel lateral"
   },
-  "authSettings.activeProviderWarning": {
-    "defaultMessage": "Este es el proveedor activo. Las nuevas solicitudes pueden fallar hasta que configures otra credencial."
-  },
-  "authSettings.cancel": {
-    "defaultMessage": "Cancelar"
-  },
-  "authSettings.delete": {
-    "defaultMessage": "Eliminar"
-  },
-  "authSettings.deleteCredential": {
-    "defaultMessage": "Eliminar credencial"
-  },
-  "authSettings.deleteMessage": {
-    "defaultMessage": "¿Eliminar la credencial {name} de {provider}?"
-  },
-  "authSettings.deleteTitle": {
-    "defaultMessage": "Eliminar credencial"
-  },
-  "authSettings.deleted": {
-    "defaultMessage": "Credencial eliminada"
-  },
-  "authSettings.description": {
-    "defaultMessage": "Gestiona las credenciales de proveedores que iCodex guarda localmente."
-  },
-  "authSettings.empty": {
-    "defaultMessage": "No se encontraron credenciales de proveedores guardadas localmente."
-  },
-  "authSettings.expiresAt": {
-    "defaultMessage": "Vence {date}"
-  },
-  "authSettings.failedToConfigure": {
-    "defaultMessage": "No se pudo configurar la credencial: {error}"
-  },
-  "authSettings.failedToDelete": {
-    "defaultMessage": "No se pudo eliminar la credencial: {error}"
-  },
-  "authSettings.failedToLoad": {
-    "defaultMessage": "No se pudieron cargar las credenciales de proveedores"
-  },
-  "authSettings.loading": {
-    "defaultMessage": "Cargando credenciales..."
-  },
-  "authSettings.reauthorize": {
-    "defaultMessage": "Volver a autorizar"
-  },
-  "authSettings.signIn": {
-    "defaultMessage": "Iniciar sesión"
-  },
-  "authSettings.signedIn": {
-    "defaultMessage": "Credencial configurada"
-  },
-  "authSettings.storageProviderCache": {
-    "defaultMessage": "Caché del proveedor"
-  },
-  "authSettings.storageSecretStore": {
-    "defaultMessage": "Almacén de secretos"
-  },
-  "authSettings.title": {
-    "defaultMessage": "Credenciales de proveedores"
-  },
   "backButton.back": {
     "defaultMessage": "Atrás"
   },
@@ -91,36 +31,6 @@
   },
   "baseChat.goHome": {
     "defaultMessage": "Ir al inicio"
-  },
-  "baseChat.reconnecting": {
-    "defaultMessage": "Conexión perdida. Reconectando…"
-  },
-  "bottomMenuExtensionSelection.extensionUpdated": {
-    "defaultMessage": "Extensión actualizada"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeDisabled": {
-    "defaultMessage": "{name} se desactivará en los chats nuevos"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeEnabled": {
-    "defaultMessage": "{name} se activará en los chats nuevos"
-  },
-  "bottomMenuExtensionSelection.extensionsForNewChats": {
-    "defaultMessage": "Extensiones para chats nuevos"
-  },
-  "bottomMenuExtensionSelection.extensionsForThisSession": {
-    "defaultMessage": "Extensiones para esta sesión de chat"
-  },
-  "bottomMenuExtensionSelection.manageExtensions": {
-    "defaultMessage": "administrar extensiones"
-  },
-  "bottomMenuExtensionSelection.noExtensionsAvailable": {
-    "defaultMessage": "no hay extensiones disponibles"
-  },
-  "bottomMenuExtensionSelection.noExtensionsFound": {
-    "defaultMessage": "no se encontraron extensiones"
-  },
-  "bottomMenuExtensionSelection.searchExtensions": {
-    "defaultMessage": "buscar extensiones..."
   },
   "cardButtons.configure": {
     "defaultMessage": "Configurar"
@@ -137,9 +47,6 @@
   "chat.requestFailed": {
     "defaultMessage": "Error en la solicitud"
   },
-  "chatInput.contextWindow": {
-    "defaultMessage": "Ventana de contexto"
-  },
   "chatInput.dictationError": {
     "defaultMessage": "Error de dictado"
   },
@@ -155,12 +62,6 @@
   "chatInput.recording": {
     "defaultMessage": "Grabando..."
   },
-  "chatInput.removeFile": {
-    "defaultMessage": "Quitar archivo"
-  },
-  "chatInput.removeImage": {
-    "defaultMessage": "Quitar imagen"
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "Reiniciando sesión..."
   },
@@ -173,101 +74,11 @@
   "chatInput.typeMessage": {
     "defaultMessage": "Escribe un mensaje para enviar"
   },
-  "chatInput.unknownType": {
-    "defaultMessage": "Tipo desconocido"
-  },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "Esperando a que finalice la cancelación"
   },
   "chatInput.waitingForImages": {
     "defaultMessage": "Esperando a que se guarden las imágenes..."
-  },
-  "chatSettings.modeDescription": {
-    "defaultMessage": "Configura cómo interactúa iCodex con las herramientas y las extensiones"
-  },
-  "chatSettings.modeTitle": {
-    "defaultMessage": "Modo"
-  },
-  "chatSettings.responseStylesDescription": {
-    "defaultMessage": "Elige cómo debe formatear y dar estilo iCodex a sus respuestas"
-  },
-  "chatSettings.responseStylesTitle": {
-    "defaultMessage": "Estilos de respuesta"
-  },
-  "configSettings.configReset": {
-    "defaultMessage": "Configuración restablecida"
-  },
-  "configSettings.configResetMsg": {
-    "defaultMessage": "Se revirtieron todos los cambios"
-  },
-  "configSettings.configUpdated": {
-    "defaultMessage": "Configuración actualizada"
-  },
-  "configSettings.configUpdatedMsg": {
-    "defaultMessage": "Se guardó \"{name}\" con éxito"
-  },
-  "configSettings.configurationEditor": {
-    "defaultMessage": "Editor de configuración"
-  },
-  "configSettings.description": {
-    "defaultMessage": "Edita los ajustes de configuración de iCodex"
-  },
-  "configSettings.descriptionWithProvider": {
-    "defaultMessage": "Edita los ajustes de configuración de iCodex (ajustes actuales de {provider})"
-  },
-  "configSettings.done": {
-    "defaultMessage": "Listo"
-  },
-  "configSettings.editConfiguration": {
-    "defaultMessage": "Editar configuración"
-  },
-  "configSettings.enterValue": {
-    "defaultMessage": "Ingresa {name}"
-  },
-  "configSettings.noSettings": {
-    "defaultMessage": "No se encontraron ajustes de configuración."
-  },
-  "configSettings.resetChanges": {
-    "defaultMessage": "Restablecer cambios"
-  },
-  "configSettings.saveFailed": {
-    "defaultMessage": "No se pudo guardar"
-  },
-  "configSettings.saveFailedMsg": {
-    "defaultMessage": "No se pudo guardar \"{name}\""
-  },
-  "configSettings.saving": {
-    "defaultMessage": "Guardando..."
-  },
-  "configSettings.title": {
-    "defaultMessage": "Configuración"
-  },
-  "configureApproveMode.cancel": {
-    "defaultMessage": "Cancelar"
-  },
-  "configureApproveMode.description": {
-    "defaultMessage": "La aprobación se puede aplicar a todas las solicitudes de herramientas o determinar qué acciones pueden requerir integración"
-  },
-  "configureApproveMode.manualApproval": {
-    "defaultMessage": "Aprobación manual"
-  },
-  "configureApproveMode.manualApprovalDescription": {
-    "defaultMessage": "Todas las herramientas, extensiones y modificaciones de archivos requerirán aprobación humana"
-  },
-  "configureApproveMode.save": {
-    "defaultMessage": "Guardar"
-  },
-  "configureApproveMode.saving": {
-    "defaultMessage": "Guardando..."
-  },
-  "configureApproveMode.smartApproval": {
-    "defaultMessage": "Aprobación inteligente"
-  },
-  "configureApproveMode.smartApprovalDescription": {
-    "defaultMessage": "Determina de forma inteligente qué acciones necesitan aprobación según el nivel de riesgo"
-  },
-  "configureApproveMode.title": {
-    "defaultMessage": "Configurar modo de aprobación"
   },
   "confirmationModal.defaultCancel": {
     "defaultMessage": "No"
@@ -277,27 +88,6 @@
   },
   "confirmationModal.processing": {
     "defaultMessage": "Procesando..."
-  },
-  "conversationLimitsDropdown.conversationLimits": {
-    "defaultMessage": "Límites de conversación"
-  },
-  "conversationLimitsDropdown.maxTurns": {
-    "defaultMessage": "Turnos máximos"
-  },
-  "conversationLimitsDropdown.maxTurnsDescription": {
-    "defaultMessage": "Turnos máximos del agente antes de que iCodex pida la intervención del usuario"
-  },
-  "costTracker.costUnavailable": {
-    "defaultMessage": "Datos de costo no disponibles para {model} ({inputTokens} de entrada, {outputTokens} tokens de salida)"
-  },
-  "costTracker.inputOutputTooltip": {
-    "defaultMessage": "Entrada: {inputTokens} tokens ({inputCost}) | Salida: {outputTokens} tokens ({outputCost})"
-  },
-  "costTracker.pricingUnavailable": {
-    "defaultMessage": "Datos de precios no disponibles para {model}"
-  },
-  "costTracker.totalSessionCost": {
-    "defaultMessage": "Costo total de la sesión: {cost}"
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "Agregar créditos"
@@ -503,104 +293,8 @@
   "defaultProviderSetupForm.showOptions": {
     "defaultMessage": "Mostrar {count} opciones"
   },
-  "diagnosticsModal.attachHint": {
-    "defaultMessage": "Si reportas un error, considera adjuntarle el informe de diagnóstico."
-  },
-  "diagnosticsModal.cancel": {
-    "defaultMessage": "Cancelar"
-  },
-  "diagnosticsModal.configSettings": {
-    "defaultMessage": "Ajustes de configuración"
-  },
-  "diagnosticsModal.description": {
-    "defaultMessage": "Puedes descargar un archivo zip de diagnóstico para compartir con el equipo, o reportar un error directamente en GitHub con los detalles de tu sistema ya rellenados. Un informe de diagnóstico contiene lo siguiente:"
-  },
-  "diagnosticsModal.diagnosticsErrorMsg": {
-    "defaultMessage": "No se pudo descargar el diagnóstico"
-  },
-  "diagnosticsModal.diagnosticsErrorTitle": {
-    "defaultMessage": "Error de diagnóstico"
-  },
-  "diagnosticsModal.download": {
-    "defaultMessage": "Descargar"
-  },
-  "diagnosticsModal.downloading": {
-    "defaultMessage": "Descargando..."
-  },
-  "diagnosticsModal.fileBug": {
-    "defaultMessage": "Reportar error en GitHub"
-  },
-  "diagnosticsModal.logFiles": {
-    "defaultMessage": "Archivos de registro recientes"
-  },
-  "diagnosticsModal.opening": {
-    "defaultMessage": "Abriendo..."
-  },
-  "diagnosticsModal.reportProblem": {
-    "defaultMessage": "Reportar un problema"
-  },
-  "diagnosticsModal.sensitiveWarning": {
-    "defaultMessage": "Si tu sesión contiene información sensible, no compartas el archivo de diagnóstico públicamente."
-  },
-  "diagnosticsModal.sessionMessages": {
-    "defaultMessage": "Los mensajes de tu sesión actual"
-  },
-  "diagnosticsModal.systemInfo": {
-    "defaultMessage": "Información básica del sistema"
-  },
-  "diagnosticsModal.systemInfoErrorMsg": {
-    "defaultMessage": "No se pudo obtener la información del sistema"
-  },
-  "diagnosticsModal.systemInfoErrorTitle": {
-    "defaultMessage": "Error"
-  },
   "dialog.close": {
     "defaultMessage": "Cerrar"
-  },
-  "dictationSettings.addApiKey": {
-    "defaultMessage": "Añadir API Key"
-  },
-  "dictationSettings.apiKey": {
-    "defaultMessage": "API Key"
-  },
-  "dictationSettings.cancel": {
-    "defaultMessage": "Cancelar"
-  },
-  "dictationSettings.chooseVoiceConversion": {
-    "defaultMessage": "Elige cómo se convierte la voz a texto"
-  },
-  "dictationSettings.configureApiKey": {
-    "defaultMessage": "Configura la API key en <b>{settingsPath}</b>"
-  },
-  "dictationSettings.configured": {
-    "defaultMessage": "(Configurado)"
-  },
-  "dictationSettings.configuredIn": {
-    "defaultMessage": "✓ Configurado en {settingsPath}"
-  },
-  "dictationSettings.disabled": {
-    "defaultMessage": "Deshabilitado"
-  },
-  "dictationSettings.enterApiKey": {
-    "defaultMessage": "Introduce tu API key"
-  },
-  "dictationSettings.notConfigured": {
-    "defaultMessage": "(no configurado)"
-  },
-  "dictationSettings.removeApiKey": {
-    "defaultMessage": "Quitar API Key"
-  },
-  "dictationSettings.requiredForTranscription": {
-    "defaultMessage": "Requerido para la transcripción"
-  },
-  "dictationSettings.save": {
-    "defaultMessage": "Guardar"
-  },
-  "dictationSettings.updateApiKey": {
-    "defaultMessage": "Actualizar API Key"
-  },
-  "dictationSettings.voiceDictationProvider": {
-    "defaultMessage": "Proveedor de dictado por voz"
   },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "No se pudo actualizar el directorio de trabajo"
@@ -851,66 +545,6 @@
   "filesPanel.title": {
     "defaultMessage": "Archivos"
   },
-  "goosehintsModal.close": {
-    "defaultMessage": "Cerrar"
-  },
-  "goosehintsModal.developer": {
-    "defaultMessage": "Developer"
-  },
-  "goosehintsModal.dialogDescription": {
-    "defaultMessage": "Proporciona contexto adicional sobre tu proyecto para mejorar la comunicación con iCodex"
-  },
-  "goosehintsModal.dialogTitle": {
-    "defaultMessage": "Configurar pistas del proyecto (.goosehints)"
-  },
-  "goosehintsModal.errorReading": {
-    "defaultMessage": "Error al leer el archivo .goosehints: {error}"
-  },
-  "goosehintsModal.failedToAccess": {
-    "defaultMessage": "No se pudo acceder al archivo .goosehints"
-  },
-  "goosehintsModal.failedToSave": {
-    "defaultMessage": "No se pudo guardar el archivo .goosehints"
-  },
-  "goosehintsModal.fileCreating": {
-    "defaultMessage": "Creando un nuevo archivo .goosehints en: {filePath}"
-  },
-  "goosehintsModal.fileFound": {
-    "defaultMessage": "Archivo .goosehints encontrado en: {filePath}"
-  },
-  "goosehintsModal.helpText1": {
-    "defaultMessage": ".goosehints es un archivo de texto usado para proporcionar contexto adicional sobre tu proyecto y mejorar la comunicación con iCodex."
-  },
-  "goosehintsModal.helpText2": {
-    "defaultMessage": "Asegúrate de que la extensión {bold} esté habilitada en la página de extensiones. Esta extensión es necesaria para usar .goosehints. Tendrás que reiniciar tu sesión para que las actualizaciones de .goosehints surtan efecto."
-  },
-  "goosehintsModal.helpText3": {
-    "defaultMessage": "Consulta {link} para más información."
-  },
-  "goosehintsModal.helpTextLink": {
-    "defaultMessage": "usar .goosehints"
-  },
-  "goosehintsModal.placeholder": {
-    "defaultMessage": "Introduce aquí las pistas del proyecto..."
-  },
-  "goosehintsModal.save": {
-    "defaultMessage": "Guardar"
-  },
-  "goosehintsModal.savedSuccessfully": {
-    "defaultMessage": "Guardado correctamente"
-  },
-  "goosehintsModal.saving": {
-    "defaultMessage": "Guardando..."
-  },
-  "goosehintsSection.configure": {
-    "defaultMessage": "Configurar"
-  },
-  "goosehintsSection.description": {
-    "defaultMessage": "Configura el archivo .goosehints de tu proyecto para proporcionar contexto adicional a iCodex"
-  },
-  "goosehintsSection.title": {
-    "defaultMessage": "Pistas del proyecto (.goosehints)"
-  },
   "groupedExtensionLoadingToast.askGoose": {
     "defaultMessage": "Pregunta a iCodex"
   },
@@ -992,42 +626,6 @@
   "hub.suggestionReview": {
     "defaultMessage": "Revisar el código y sugerir cambios"
   },
-  "huggingFaceModelSearch.download": {
-    "defaultMessage": "Descargar"
-  },
-  "huggingFaceModelSearch.downloaded": {
-    "defaultMessage": "Descargado"
-  },
-  "huggingFaceModelSearch.downloading": {
-    "defaultMessage": "Descargando…"
-  },
-  "huggingFaceModelSearch.loadingVariants": {
-    "defaultMessage": "Cargando variantes..."
-  },
-  "huggingFaceModelSearch.noGgufModels": {
-    "defaultMessage": "No se encontraron modelos GGUF para esta búsqueda."
-  },
-  "huggingFaceModelSearch.recommended": {
-    "defaultMessage": "Recomendado"
-  },
-  "huggingFaceModelSearch.searchError": {
-    "defaultMessage": "Error de búsqueda: {details}"
-  },
-  "huggingFaceModelSearch.searchFailed": {
-    "defaultMessage": "La búsqueda falló. Inténtalo de nuevo."
-  },
-  "huggingFaceModelSearch.searchHuggingFace": {
-    "defaultMessage": "Buscar en HuggingFace"
-  },
-  "huggingFaceModelSearch.searchNoData": {
-    "defaultMessage": "La búsqueda no devolvió datos."
-  },
-  "huggingFaceModelSearch.searchPlaceholder": {
-    "defaultMessage": "Buscar modelos GGUF..."
-  },
-  "huggingFaceModelSearch.tooLarge": {
-    "defaultMessage": "Puede que no quepa en memoria (modelo de {size}, {available} disponible)"
-  },
   "huggingFaceSignInPrompt.failedToConfigure": {
     "defaultMessage": "No se pudo iniciar sesión en Hugging Face: {error}"
   },
@@ -1045,9 +643,6 @@
   },
   "imagePreview.altText": {
     "defaultMessage": "imagen de iCodex"
-  },
-  "imagePreview.clickToCollapse": {
-    "defaultMessage": "Haz clic para contraer"
   },
   "imagePreview.clickToExpand": {
     "defaultMessage": "Haz clic para expandir"
@@ -1262,111 +857,6 @@
   "loadingGoose.waiting": {
     "defaultMessage": "esperando"
   },
-  "localInferenceSettings.deleteConfirm": {
-    "defaultMessage": "¿Eliminar este modelo? Podrás volver a descargarlo más tarde."
-  },
-  "localInferenceSettings.description": {
-    "defaultMessage": "Descarga y gestiona modelos LLM locales para inferencia sin claves API. Busca cualquier modelo GGUF en HuggingFace o usa las opciones destacadas de abajo."
-  },
-  "localInferenceSettings.dismiss": {
-    "defaultMessage": "Descartar"
-  },
-  "localInferenceSettings.download": {
-    "defaultMessage": "Descargar"
-  },
-  "localInferenceSettings.downloadCancelled": {
-    "defaultMessage": "Descarga cancelada"
-  },
-  "localInferenceSettings.downloadFailed": {
-    "defaultMessage": "La descarga falló"
-  },
-  "localInferenceSettings.downloadProgress": {
-    "defaultMessage": "{downloaded} / {total} ({percent}%)"
-  },
-  "localInferenceSettings.downloadedModels": {
-    "defaultMessage": "Modelos descargados"
-  },
-  "localInferenceSettings.downloading": {
-    "defaultMessage": "Descargando"
-  },
-  "localInferenceSettings.evictFromMemory": {
-    "defaultMessage": "Evict from memory"
-  },
-  "localInferenceSettings.featuredModels": {
-    "defaultMessage": "Modelos destacados"
-  },
-  "localInferenceSettings.huggingFaceSignInNote": {
-    "defaultMessage": "Inicia sesión para aumentar los límites de uso al buscar y descargar modelos, y para acceder a repositorios de Hugging Face privados o restringidos."
-  },
-  "localInferenceSettings.loadedInMemory": {
-    "defaultMessage": "Loaded in memory"
-  },
-  "localInferenceSettings.modelSettings": {
-    "defaultMessage": "Ajustes del modelo"
-  },
-  "localInferenceSettings.modelSettingsTitle": {
-    "defaultMessage": "Ajustes del modelo"
-  },
-  "localInferenceSettings.noModels": {
-    "defaultMessage": "No hay modelos disponibles"
-  },
-  "localInferenceSettings.recommended": {
-    "defaultMessage": "Recomendado"
-  },
-  "localInferenceSettings.remaining": {
-    "defaultMessage": "{time} restante"
-  },
-  "localInferenceSettings.retry": {
-    "defaultMessage": "Reintentar"
-  },
-  "localInferenceSettings.showAllFeatured": {
-    "defaultMessage": "Mostrar todos los destacados ({count} más)"
-  },
-  "localInferenceSettings.showRecommendedOnly": {
-    "defaultMessage": "Mostrar solo los recomendados"
-  },
-  "localInferenceSettings.title": {
-    "defaultMessage": "Modelos de inferencia local"
-  },
-  "localInferenceSettings.vision": {
-    "defaultMessage": "Visión"
-  },
-  "localInferenceSettings.visionEncoderDownloading": {
-    "defaultMessage": "Descargando codificador de visión…"
-  },
-  "localInferenceSettings.visionEncoderNotDownloaded": {
-    "defaultMessage": "Codificador de visión no descargado"
-  },
-  "localModelManager.active": {
-    "defaultMessage": "Activo"
-  },
-  "localModelManager.deleteConfirm": {
-    "defaultMessage": "¿Eliminar este modelo? Podrás volver a descargarlo más tarde."
-  },
-  "localModelManager.download": {
-    "defaultMessage": "Descargar"
-  },
-  "localModelManager.downloaded": {
-    "defaultMessage": "Descargado"
-  },
-  "localModelManager.gpuAcceleration": {
-    "defaultMessage": "Admite aceleración por GPU (CUDA para NVIDIA, Metal para Apple Silicon). Las funciones de GPU deben habilitarse al compilar para obtener aceleración por hardware."
-  },
-  "localModelManager.noModels": {
-    "defaultMessage": "No hay modelos disponibles"
-  },
-  "localModelManager.recommended": {
-    "defaultMessage": "Recomendado"
-  },
-  "localModelManager.recommendedForHardware": {
-    "defaultMessage": "Recomendado para tu hardware"
-  },
-  "localModelManager.showAllModels": {
-    "defaultMessage": "Mostrar todos los modelos ({count} más)"
-  },
-  "localModelManager.showRecommendedOnly": {
-    "defaultMessage": "Mostrar solo los recomendados"
-  },
   "localModelPicker.bestForMachine": {
     "defaultMessage": "El mejor para tu máquina"
   },
@@ -1478,62 +968,20 @@
   "messageQueue.cancel": {
     "defaultMessage": "Cancelar"
   },
-  "messageQueue.cannotSendWhileEditing": {
-    "defaultMessage": "No se puede enviar mientras editas"
-  },
   "messageQueue.clearAll": {
     "defaultMessage": "Borrar todo"
-  },
-  "messageQueue.clickToEdit": {
-    "defaultMessage": "{content} (Clic para editar)"
-  },
-  "messageQueue.collapseQueue": {
-    "defaultMessage": "Contraer la cola"
-  },
-  "messageQueue.dragToReorder": {
-    "defaultMessage": "Arrastra los mensajes para reordenar la prioridad"
-  },
-  "messageQueue.expandQueue": {
-    "defaultMessage": "Expandir la cola"
-  },
-  "messageQueue.messageCount": {
-    "defaultMessage": "{count,plural,one{# mensaje {status}} other{# mensajes {status}}}"
-  },
-  "messageQueue.messageQueue": {
-    "defaultMessage": "Cola de mensajes"
-  },
-  "messageQueue.next": {
-    "defaultMessage": "Siguiente"
   },
   "messageQueue.paused": {
     "defaultMessage": "Pausado"
   },
-  "messageQueue.queuePaused": {
-    "defaultMessage": "Cola pausada"
-  },
   "messageQueue.queuePausedCompact": {
     "defaultMessage": "Cola pausada: haz clic en \"Enviar\" o añade un nuevo mensaje para reanudar"
-  },
-  "messageQueue.queuePausedExpanded": {
-    "defaultMessage": "Cola pausada por interrupción. Usa \"Enviar ahora\" o añade un nuevo mensaje para reanudar."
-  },
-  "messageQueue.queued": {
-    "defaultMessage": "en cola"
   },
   "messageQueue.removeFromQueue": {
     "defaultMessage": "Quitar este mensaje de la cola"
   },
   "messageQueue.save": {
     "defaultMessage": "Guardar"
-  },
-  "messageQueue.sendNow": {
-    "defaultMessage": "Enviar este mensaje ahora"
-  },
-  "messageQueue.stopAndSend": {
-    "defaultMessage": "Detener el procesamiento actual y enviar este mensaje ahora"
-  },
-  "messageQueue.waiting": {
-    "defaultMessage": "esperando"
   },
   "messageUsageStats.cacheHitRate": {
     "defaultMessage": "({percent}% de la entrada)"
@@ -1580,59 +1028,17 @@
   "messageUsageStats.totalTime": {
     "defaultMessage": "Tiempo total"
   },
-  "microphoneSelector.chooseDescription": {
-    "defaultMessage": "Elige qué micrófono usar para el dictado"
-  },
-  "microphoneSelector.grantAccess": {
-    "defaultMessage": "Conceder acceso"
-  },
-  "microphoneSelector.grantAccessDescription": {
-    "defaultMessage": "Concede acceso para ver los micrófonos disponibles"
-  },
-  "microphoneSelector.microphone": {
-    "defaultMessage": "Micrófono"
-  },
-  "microphoneSelector.microphoneLabel": {
-    "defaultMessage": "Micrófono {index}"
-  },
-  "microphoneSelector.selectedMicrophone": {
-    "defaultMessage": "Micrófono seleccionado"
-  },
-  "microphoneSelector.speakToTest": {
-    "defaultMessage": "Habla para probar tu micrófono ({seconds}s)"
-  },
-  "microphoneSelector.stop": {
-    "defaultMessage": "Detener"
-  },
-  "microphoneSelector.systemDefault": {
-    "defaultMessage": "Predeterminado del sistema"
-  },
-  "microphoneSelector.test": {
-    "defaultMessage": "Probar"
-  },
   "modeSelectionItem.autonomousDescription": {
     "defaultMessage": "Capacidades completas de modificación de archivos: edita, crea y elimina archivos libremente."
-  },
-  "modeSelectionItem.autonomousLabel": {
-    "defaultMessage": "Autónomo"
   },
   "modeSelectionItem.chatOnlyDescription": {
     "defaultMessage": "Interactúa con el proveedor seleccionado sin usar herramientas ni extensiones."
   },
-  "modeSelectionItem.chatOnlyLabel": {
-    "defaultMessage": "Solo chat"
-  },
   "modeSelectionItem.manualDescription": {
     "defaultMessage": "Todas las herramientas, extensiones y modificaciones de archivos requerirán aprobación humana"
   },
-  "modeSelectionItem.manualLabel": {
-    "defaultMessage": "Manual"
-  },
   "modeSelectionItem.smartDescription": {
     "defaultMessage": "Determina de forma inteligente qué acciones necesitan aprobación según el nivel de riesgo"
-  },
-  "modeSelectionItem.smartLabel": {
-    "defaultMessage": "Inteligente"
   },
   "modelAndProviderContext.modelChangeFailed": {
     "defaultMessage": "{provider}/{model} falló"
@@ -1952,39 +1358,6 @@
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "Compartir datos de uso anónimos"
   },
-  "permissionModal.alwaysAllow": {
-    "defaultMessage": "Permitir siempre"
-  },
-  "permissionModal.askBefore": {
-    "defaultMessage": "Preguntar antes"
-  },
-  "permissionModal.cancel": {
-    "defaultMessage": "Cancelar"
-  },
-  "permissionModal.close": {
-    "defaultMessage": "Cerrar"
-  },
-  "permissionModal.failedToLoadTools": {
-    "defaultMessage": "No se pudieron cargar las herramientas"
-  },
-  "permissionModal.failedToLoadToolsDescription": {
-    "defaultMessage": "No se pudieron cargar las herramientas de esta extensión. Puede que la extensión no esté cargada en la sesión actual."
-  },
-  "permissionModal.neverAllow": {
-    "defaultMessage": "No permitir nunca"
-  },
-  "permissionModal.noActiveSession": {
-    "defaultMessage": "No hay sesión activa"
-  },
-  "permissionModal.noActiveSessionDescription": {
-    "defaultMessage": "Inicia primero una sesión de chat para configurar los permisos de herramientas de esta extensión. Los permisos de herramientas se cargan desde las extensiones de la sesión activa."
-  },
-  "permissionModal.noToolsAvailable": {
-    "defaultMessage": "No hay herramientas disponibles para esta extensión."
-  },
-  "permissionModal.saveChanges": {
-    "defaultMessage": "Guardar cambios"
-  },
   "permissionModeChip.approve": {
     "defaultMessage": "Aprobación manual"
   },
@@ -1996,24 +1369,6 @@
   },
   "permissionModeChip.smartApprove": {
     "defaultMessage": "Aprobación inteligente"
-  },
-  "permissionRulesModal.description": {
-    "defaultMessage": "Configura los permisos de herramientas de las extensiones para controlar cómo interactúan con tu sistema."
-  },
-  "permissionRulesModal.extensionRules": {
-    "defaultMessage": "Reglas de extensiones"
-  },
-  "permissionRulesModal.title": {
-    "defaultMessage": "Reglas de permisos"
-  },
-  "permissionSetting.extensionRules": {
-    "defaultMessage": "Reglas de extensiones"
-  },
-  "permissionSetting.permissionRules": {
-    "defaultMessage": "Reglas de permisos"
-  },
-  "permissionSetting.permissionRulesDescription": {
-    "defaultMessage": "Instrucciones ocultas que se pasarán al proveedor para ayudar a dirigir y añadir contexto a tus respuestas."
   },
   "planSteps.progress": {
     "defaultMessage": "Paso {current} / {total}"
@@ -2351,14 +1706,8 @@
   "resetProviderSection.resetDescription": {
     "defaultMessage": "Esto borrará los ajustes de modelo y proveedor que seleccionaste. Si no hay valores predeterminados disponibles, te llevaremos a la pantalla de bienvenida para configurarlos de nuevo."
   },
-  "responseStyle.conciseDescription": {
-    "defaultMessage": "Las llamadas a herramientas aparecen cerradas por defecto y solo muestran la herramienta usada"
-  },
   "responseStyle.conciseLabel": {
     "defaultMessage": "Conciso"
-  },
-  "responseStyle.detailedDescription": {
-    "defaultMessage": "Las llamadas a herramientas aparecen abiertas por defecto para mostrar los detalles"
   },
   "responseStyle.detailedLabel": {
     "defaultMessage": "Detallado"
@@ -2380,66 +1729,6 @@
   },
   "secureStorageNotice.defaultMessage": {
     "defaultMessage": "Las claves se almacenan de forma segura en el llavero"
-  },
-  "securityToggle.apiTokenDescription": {
-    "defaultMessage": "Token de autenticación para el servicio de clasificación"
-  },
-  "securityToggle.apiTokenOptional": {
-    "defaultMessage": "API Token (opcional)"
-  },
-  "securityToggle.classificationEndpoint": {
-    "defaultMessage": "Endpoint de clasificación"
-  },
-  "securityToggle.classificationEndpointDescription": {
-    "defaultMessage": "Ingresa la URL completa de tu servicio de clasificación"
-  },
-  "securityToggle.commandClassifierActive": {
-    "defaultMessage": "Clasificador de comandos activo (configurado automáticamente desde el entorno)"
-  },
-  "securityToggle.commandEndpointDescription": {
-    "defaultMessage": "Ingresa la URL completa de tu servicio de clasificación de inyección de comandos"
-  },
-  "securityToggle.commandInjectionDescription": {
-    "defaultMessage": "Usa modelos de ML para detectar comandos de shell maliciosos"
-  },
-  "securityToggle.detectionModel": {
-    "defaultMessage": "Modelo de detección"
-  },
-  "securityToggle.detectionModelDescription": {
-    "defaultMessage": "Selecciona qué modelo de ML usar para la detección de inyección de prompt"
-  },
-  "securityToggle.detectionThreshold": {
-    "defaultMessage": "Umbral de detección"
-  },
-  "securityToggle.enableCommandInjection": {
-    "defaultMessage": "Activar detección de inyección de comandos con ML"
-  },
-  "securityToggle.enablePromptInjection": {
-    "defaultMessage": "Activar detección de inyección de prompt"
-  },
-  "securityToggle.enablePromptInjectionMl": {
-    "defaultMessage": "Activar detección de inyección de prompt con ML"
-  },
-  "securityToggle.mlEndpointDescription": {
-    "defaultMessage": "Ingresa la URL completa de tu servicio de clasificación con ML (incluido el identificador del modelo)"
-  },
-  "securityToggle.mlTokenDescription": {
-    "defaultMessage": "Token de autenticación para el servicio de ML (p. ej., token de HuggingFace)"
-  },
-  "securityToggle.overrideNotice": {
-    "defaultMessage": "Este ajuste lo gestiona tu organización y no se puede cambiar."
-  },
-  "securityToggle.promptInjectionDescription": {
-    "defaultMessage": "Detecta y previene posibles ataques de inyección de prompt"
-  },
-  "securityToggle.promptInjectionMlDescription": {
-    "defaultMessage": "Usa modelos de ML para detectar posibles inyecciones de prompt en tu chat"
-  },
-  "securityToggle.thresholdDescription": {
-    "defaultMessage": "Los valores más altos son más estrictos (0.01 = muy permisivo, 1.0 = máximo estricto)"
-  },
-  "securityToggle.warpNotice": {
-    "defaultMessage": "La detección de inyección de comandos funciona mejor cuando estás conectado a WARP (necesario para llegar al servicio de clasificación)."
   },
   "sessionActionsHeader.actionsLabel": {
     "defaultMessage": "Acciones de la sesión"
@@ -2486,26 +1775,29 @@
   "sessionIndicators.streaming": {
     "defaultMessage": "Streaming"
   },
-  "settings.appearance.description": {
-    "defaultMessage": "Configura cómo se ve iCodex en tu sistema"
+  "settings.about.title": {
+    "defaultMessage": "Acerca de"
   },
-  "settings.appearance.title": {
-    "defaultMessage": "Apariencia"
+  "settings.bottomPanel.description": {
+    "defaultMessage": "Mostrar el control del panel inferior en la cabecera de la app"
   },
-  "settings.close": {
-    "defaultMessage": "Cerrar"
+  "settings.bottomPanel.title": {
+    "defaultMessage": "Panel inferior"
   },
-  "settings.costTracking.description": {
-    "defaultMessage": "Muestra los precios del modelo y los costos de uso"
+  "settings.chat.title": {
+    "defaultMessage": "Chat"
   },
-  "settings.costTracking.title": {
-    "defaultMessage": "Seguimiento de costos"
+  "settings.composer.title": {
+    "defaultMessage": "Redacción"
   },
   "settings.dockIcon.description": {
     "defaultMessage": "Muestra iCodex en el dock"
   },
   "settings.dockIcon.title": {
     "defaultMessage": "Icono del dock"
+  },
+  "settings.general.title": {
+    "defaultMessage": "General"
   },
   "settings.help.description": {
     "defaultMessage": "Ayúdanos a mejorar iCodex reportando problemas o solicitando nuevas funciones"
@@ -2577,73 +1869,82 @@
     "defaultMessage": "Chino (tradicional)"
   },
   "settings.menuBarIcon.description": {
-    "defaultMessage": "Muestra iCodex en la barra de menús"
+    "defaultMessage": "Mantener iCodex en la barra de menús al cerrar la ventana principal"
   },
   "settings.menuBarIcon.title": {
-    "defaultMessage": "Icono de la barra de menús"
-  },
-  "settings.notifications.configGuide": {
-    "defaultMessage": "Guía de configuración"
-  },
-  "settings.notifications.description": {
-    "defaultMessage": "Las notificaciones las gestiona tu sistema operativo - {link}"
-  },
-  "settings.notifications.modal.macInstructions": {
-    "defaultMessage": "Para activar las notificaciones en macOS:"
-  },
-  "settings.notifications.modal.macStep1": {
-    "defaultMessage": "Abre Preferencias del Sistema"
-  },
-  "settings.notifications.modal.macStep2": {
-    "defaultMessage": "Haz clic en Notificaciones"
-  },
-  "settings.notifications.modal.macStep3": {
-    "defaultMessage": "Encuentra y selecciona iCodex en la lista de aplicaciones"
-  },
-  "settings.notifications.modal.macStep4": {
-    "defaultMessage": "Activa las notificaciones y ajusta la configuración como prefieras"
-  },
-  "settings.notifications.modal.title": {
-    "defaultMessage": "Cómo activar las notificaciones"
-  },
-  "settings.notifications.modal.winInstructions": {
-    "defaultMessage": "Para activar las notificaciones en Windows:"
-  },
-  "settings.notifications.modal.winStep1": {
-    "defaultMessage": "Abre Configuración"
-  },
-  "settings.notifications.modal.winStep2": {
-    "defaultMessage": "Ve a Sistema > Notificaciones"
-  },
-  "settings.notifications.modal.winStep3": {
-    "defaultMessage": "Encuentra y selecciona iCodex en la lista de aplicaciones"
-  },
-  "settings.notifications.modal.winStep4": {
-    "defaultMessage": "Activa las notificaciones y ajusta la configuración como prefieras"
+    "defaultMessage": "Mostrar en la barra de menús"
   },
   "settings.notifications.openSettings": {
     "defaultMessage": "Abrir configuración"
   },
-  "settings.notifications.task.description": {
-    "defaultMessage": "Notifica cuando iCodex termina una tarea mientras la ventana está en segundo plano"
+  "settings.notifications.system.description": {
+    "defaultMessage": "La entrega de notificaciones la gestiona tu sistema operativo"
   },
-  "settings.notifications.task.title": {
-    "defaultMessage": "Notificaciones de tareas completadas"
+  "settings.notifications.system.title": {
+    "defaultMessage": "Notificaciones del sistema"
   },
   "settings.notifications.title": {
     "defaultMessage": "Notificaciones"
+  },
+  "settings.notifications.turn.always": {
+    "defaultMessage": "Siempre"
+  },
+  "settings.notifications.turn.description": {
+    "defaultMessage": "Define cuándo iCodex te avisa de que ha terminado"
+  },
+  "settings.notifications.turn.never": {
+    "defaultMessage": "Nunca"
+  },
+  "settings.notifications.turn.title": {
+    "defaultMessage": "Notificaciones al terminar"
+  },
+  "settings.notifications.turn.unfocused": {
+    "defaultMessage": "Solo cuando no está enfocada"
+  },
+  "settings.permissions.autoReview.description": {
+    "defaultMessage": "iCodex decide qué solicitudes de acceso adicional son seguras y solo pregunta por las arriesgadas. La revisión automática puede equivocarse"
+  },
+  "settings.permissions.autoReview.title": {
+    "defaultMessage": "Revisión automática"
+  },
+  "settings.permissions.default.description": {
+    "defaultMessage": "De forma predeterminada, iCodex puede leer y editar archivos de su espacio de trabajo. Para todo lo demás pide aprobación"
+  },
+  "settings.permissions.default.title": {
+    "defaultMessage": "Permisos predeterminados"
+  },
+  "settings.permissions.fullAccess.description": {
+    "defaultMessage": "iCodex puede editar cualquier archivo de tu equipo y ejecutar comandos con red sin tu aprobación. Esto aumenta mucho el riesgo de pérdida de datos, filtraciones o comportamientos inesperados"
+  },
+  "settings.permissions.fullAccess.title": {
+    "defaultMessage": "Acceso total"
+  },
+  "settings.permissions.title": {
+    "defaultMessage": "Permisos"
   },
   "settings.preventSleep.description": {
     "defaultMessage": "Mantén tu computadora despierta mientras iCodex ejecuta una tarea (la pantalla aún puede bloquearse)"
   },
   "settings.preventSleep.title": {
-    "defaultMessage": "Evitar suspensión"
+    "defaultMessage": "Evitar la suspensión mientras se ejecuta"
   },
-  "settings.theme.description": {
-    "defaultMessage": "Personaliza la apariencia de iCodex"
+  "settings.sendShortcut.description": {
+    "defaultMessage": "Elige cuándo Enter envía el mensaje o inserta un salto de línea"
   },
-  "settings.theme.title": {
-    "defaultMessage": "Tema"
+  "settings.sendShortcut.enter": {
+    "defaultMessage": "Enter"
+  },
+  "settings.sendShortcut.modEnter": {
+    "defaultMessage": "{mod} + Enter"
+  },
+  "settings.sendShortcut.title": {
+    "defaultMessage": "Atajo de envío"
+  },
+  "settings.toolDetails.description": {
+    "defaultMessage": "Si las llamadas a herramientas aparecen expandidas o contraídas en el chat"
+  },
+  "settings.toolDetails.title": {
+    "defaultMessage": "Detalles de llamadas a herramientas"
   },
   "settings.updates.description": {
     "defaultMessage": "Busca e instala actualizaciones para mantener iCodex funcionando al máximo"
@@ -2651,14 +1952,17 @@
   "settings.updates.title": {
     "defaultMessage": "Actualizaciones"
   },
+  "settings.usageStats.description": {
+    "defaultMessage": "Muestra tokens, velocidad y coste bajo cada respuesta"
+  },
+  "settings.usageStats.title": {
+    "defaultMessage": "Mostrar estadísticas de uso"
+  },
   "settings.version.title": {
     "defaultMessage": "Versión"
   },
   "settingsView.back": {
     "defaultMessage": "Volver a la aplicación"
-  },
-  "settingsView.groupAdvanced": {
-    "defaultMessage": "Avanzado"
   },
   "settingsView.groupIntegrations": {
     "defaultMessage": "Integraciones"
@@ -2672,20 +1976,14 @@
   "settingsView.search": {
     "defaultMessage": "Buscar ajustes..."
   },
-  "settingsView.tabApp": {
-    "defaultMessage": "App"
+  "settingsView.tabAppearance": {
+    "defaultMessage": "Apariencia"
   },
-  "settingsView.tabAuth": {
-    "defaultMessage": "Auth"
-  },
-  "settingsView.tabChat": {
-    "defaultMessage": "Chat"
+  "settingsView.tabGeneral": {
+    "defaultMessage": "General"
   },
   "settingsView.tabKeyboard": {
     "defaultMessage": "Teclado"
-  },
-  "settingsView.tabLocalInference": {
-    "defaultMessage": "Inferencia local"
   },
   "settingsView.tabModels": {
     "defaultMessage": "Modelos"
@@ -2693,14 +1991,8 @@
   "settingsView.tabPlugins": {
     "defaultMessage": "Plugins"
   },
-  "settingsView.tabPrompts": {
-    "defaultMessage": "Prompts"
-  },
   "settingsView.title": {
     "defaultMessage": "Ajustes"
-  },
-  "sheet.close": {
-    "defaultMessage": "Cerrar"
   },
   "shortcutRecorder.cancel": {
     "defaultMessage": "Cancelar"

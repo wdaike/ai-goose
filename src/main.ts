@@ -197,9 +197,13 @@ function getSettings(): Settings {
       console.error('Failed to read settings.json, using defaults:', err);
       return defaultSettings;
     }
+    const legacyNotifications = (stored as { enableNotifications?: boolean }).enableNotifications;
     return {
       ...defaultSettings,
       ...stored,
+      turnNotifications:
+        stored.turnNotifications ??
+        (legacyNotifications === false ? 'never' : defaultSettings.turnNotifications),
       keyboardShortcuts: {
         ...defaultSettings.keyboardShortcuts,
         ...(stored.keyboardShortcuts ?? {}),
@@ -879,10 +883,6 @@ const createChat = async (
           REQUEST_DIR: dir,
           GOOSE_VERSION: version,
           scheduledJobId: scheduledJobId,
-          SECURITY_ML_MODEL_MAPPING: process.env.SECURITY_ML_MODEL_MAPPING,
-          SECURITY_PROMPT_ENABLED_OVERRIDE: process.env.SECURITY_PROMPT_ENABLED_OVERRIDE,
-          SECURITY_COMMAND_CLASSIFIER_ENABLED_OVERRIDE:
-            process.env.SECURITY_COMMAND_CLASSIFIER_ENABLED_OVERRIDE,
         }),
       ],
       partition: 'persist:goose',
@@ -1465,7 +1465,7 @@ const validSettingKeys: Set<string> = new Set([
   'showMenuBarIcon',
   'showDockIcon',
   'enableWakelock',
-  'enableNotifications',
+  'turnNotifications',
   'spellcheckEnabled',
   'globalShortcut',
   'keyboardShortcuts',
@@ -1473,7 +1473,9 @@ const validSettingKeys: Set<string> = new Set([
   'useSystemTheme',
   'language',
   'responseStyle',
-  'showPricing',
+  'sendShortcut',
+  'showBottomPanelControl',
+  'showUsageStats',
   'seenAnnouncementIds',
   'disableAutoDownload',
 ]);

@@ -14,6 +14,7 @@ import { codex } from '../codex/client';
 import { setThreadModelOverride } from '../codex/engine/controller';
 import type { Model } from '../codex/protocol/v2/Model';
 import type { JsonValue } from '../codex/protocol/serde_json/JsonValue';
+import { acpReadConfig, acpUpsertConfig } from './config';
 
 export type { CanonicalModelInfoDto, ProviderSecretDto };
 
@@ -35,6 +36,23 @@ interface CodexModelProvider {
   env_key?: string;
   wire_api?: string;
   experimental_bearer_token?: string;
+  http_headers?: Record<string, string>;
+}
+
+const CUSTOM_MODELS_KEY = 'custom-provider-models';
+
+async function readCustomModels(): Promise<Record<string, string[]>> {
+  return ((await acpReadConfig(CUSTOM_MODELS_KEY)) as Record<string, string[]> | null) ?? {};
+}
+
+async function writeCustomModels(providerId: string, models: string[]): Promise<void> {
+  const all = await readCustomModels();
+  all[providerId] = models;
+  await acpUpsertConfig(CUSTOM_MODELS_KEY, all);
+}
+
+async function customModelsFor(providerId: string): Promise<string[]> {
+  return (await readCustomModels())[providerId] ?? [];
 }
 
 interface CodexConfigView {
@@ -82,11 +100,16 @@ export async function acpListProviderDetails(): Promise<ProviderDetails[]> {
       },
     },
   ];
+  const storedModels = await readCustomModels();
   for (const [providerId, provider] of Object.entries(config.modelProviders)) {
-    const knownModels =
-      config.modelProvider === providerId && config.model
-        ? [{ name: config.model, context_limit: 0, reasoning: undefined }]
-        : [];
+    const modelIds =
+      storedModels[providerId] ??
+      (config.modelProvider === providerId && config.model ? [config.model] : []);
+    const knownModels = modelIds.map((name) => ({
+      name,
+      context_limit: 0,
+      reasoning: undefined,
+    }));
     details.push({
       name: providerId,
       is_configured: true,
@@ -109,11 +132,15 @@ export async function acpListProviderDetails(): Promise<ProviderDetails[]> {
 
 export async function acpListProviderModels(providerId: string) {
   if (providerId !== CODEX_PROVIDER_ID) {
+    const stored = await customModelsFor(providerId);
     const config = await readCodexConfig();
     const model = config.modelProvider === providerId ? config.model : null;
-    return model
-      ? [{ id: model, contextLimit: null as number | null, reasoning: undefined as boolean | undefined }]
-      : [];
+    const modelIds = stored.length > 0 ? stored : model ? [model] : [];
+    return modelIds.map((id) => ({
+      id,
+      contextLimit: null as number | null,
+      reasoning: undefined as boolean | undefined,
+    }));
   }
   const models = await listCodexModels();
   return models.map((model) => ({
@@ -136,7 +163,76 @@ export async function acpGetProviderTemplate(providerId: string): Promise<Provid
 export async function acpGetCustomProvider(
   providerId: string
 ): Promise<CustomProviderReadResponse_unstable> {
-  throw new Error(`Custom providers are not available with codex: ${providerId}`);
+  const config = await readCodexConfig();
+  const provider = config.modelProviders[providerId];
+  if (!provider) {
+    throw new Error(`Unknown provider: ${providerId}`);
+  }
+  const stored = await customModelsFor(providerId);
+  const models =
+    stored.length > 0
+      ? stored
+      : config.modelProvider === providerId && config.model
+        ? [config.model]
+        : [];
+  const apiKey = provider.experimental_bearer_token;
+  return {
+    provider: {
+      providerId,
+      engine: provider.wire_api ?? 'responses',
+      displayName: provider.name ?? providerId,
+      apiUrl: provider.base_url ?? '',
+      models,
+      headers: provider.http_headers,
+      requiresAuth: Boolean(apiKey ?? provider.env_key),
+      catalogProviderId: null,
+      apiKeyEnv: provider.env_key ?? null,
+      apiKeySet: Boolean(apiKey),
+      apiKeyPreview: apiKey ? maskApiKey(apiKey) : null,
+    },
+    editable: true,
+    status: { providerId, isConfigured: true },
+  };
+}
+
+function maskApiKey(apiKey: string): string {
+  if (apiKey.length <= 10) return '••••••';
+  return `${apiKey.slice(0, 4)}••••••${apiKey.slice(-4)}`;
+}
+
+function buildCodexProvider(
+  request: UpdateCustomProviderRequest,
+  existing?: CodexModelProvider
+): CodexModelProvider {
+  const requiresAuth = request.requires_auth ?? true;
+  const apiKey = requiresAuth ? request.api_key || existing?.experimental_bearer_token : undefined;
+  const headers = request.headers;
+  return {
+    name: request.display_name,
+    base_url: request.api_url,
+    wire_api: request.engine === 'chat' ? 'chat' : 'responses',
+    ...(apiKey ? { experimental_bearer_token: apiKey } : {}),
+    ...(requiresAuth && existing?.env_key ? { env_key: existing.env_key } : {}),
+    ...(headers && Object.keys(headers).length > 0 ? { http_headers: headers } : {}),
+  };
+}
+
+async function writeCodexProvider(
+  providerId: string,
+  provider: CodexModelProvider,
+  models: string[]
+): Promise<void> {
+  await codex.configBatchWrite({
+    edits: [
+      {
+        keyPath: `model_providers.${providerId}`,
+        value: provider as JsonValue,
+        mergeStrategy: 'replace',
+      },
+    ],
+    reloadUserConfig: true,
+  });
+  await writeCustomModels(providerId, models);
 }
 
 export async function acpCreateCustomProviderFromRequest(
@@ -146,29 +242,30 @@ export async function acpCreateCustomProviderFromRequest(
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '_')
     .replace(/^_+|_+$/g, '');
-  const provider: CodexModelProvider = {
-    name: request.display_name,
-    base_url: request.api_url,
-    wire_api: 'responses',
-    ...(request.api_key ? { experimental_bearer_token: request.api_key } : {}),
-  };
-  await codex.configBatchWrite({
-    edits: [
-      { keyPath: `model_providers.${providerId}`, value: provider as JsonValue, mergeStrategy: 'replace' },
-    ],
-    reloadUserConfig: true,
-  });
+  await writeCodexProvider(providerId, buildCodexProvider(request), request.models);
   return { provider_name: providerId };
 }
 
 export async function acpUpdateCustomProviderFromRequest(
-  _providerId: string,
-  _request: UpdateCustomProviderRequest
+  providerId: string,
+  request: UpdateCustomProviderRequest
 ): Promise<void> {
-  throw new Error('Custom providers are not available with codex');
+  const config = await readCodexConfig();
+  const provider = buildCodexProvider(request, config.modelProviders[providerId]);
+  await writeCodexProvider(providerId, provider, request.models);
 }
 
-export async function acpDeleteCustomProvider(_providerId: string): Promise<void> {}
+export async function acpDeleteCustomProvider(providerId: string): Promise<void> {
+  await codex.configBatchWrite({
+    edits: [
+      { keyPath: `model_providers.${providerId}`, value: null, mergeStrategy: 'replace' },
+    ],
+    reloadUserConfig: true,
+  });
+  const all = await readCustomModels();
+  delete all[providerId];
+  await acpUpsertConfig(CUSTOM_MODELS_KEY, all);
+}
 
 export async function acpReadProviderConfig(_providerId: string) {
   return [] as { key: string; value: string; isSet?: boolean }[];

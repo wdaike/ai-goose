@@ -12,8 +12,7 @@ export type View =
   | 'ConfigureProviders'
   | 'settingsV2'
   | 'loading'
-  | 'skills'
-  | 'permission';
+  | 'skills';
 
 export type ViewOptions = {
   showEnvVars?: boolean;
@@ -52,9 +51,6 @@ export const createNavigationHandler = (navigate: NavigateFunction) => {
         break;
       case 'skills':
         navigate('/settings', { state: { ...options, section: 'skills' } });
-        break;
-      case 'permission':
-        navigate('/permission', { state: options });
         break;
       case 'ConfigureProviders':
         navigate('/configure-providers', { state: options });

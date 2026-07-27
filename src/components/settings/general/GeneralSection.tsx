@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { defineMessages, useIntl } from '../../../i18n';
 import { Switch } from '../../ui/switch';
 import { Button } from '../../ui/button';
-import { ChevronDown, Settings } from 'lucide-react';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../../ui/dialog';
+import { ChevronDown } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,58 +12,98 @@ import {
 } from '../../ui/dropdown-menu';
 import UpdateSection from './UpdateSection';
 
-import { COST_TRACKING_ENABLED, UPDATES_ENABLED } from '../../../updates';
+import { UPDATES_ENABLED } from '../../../updates';
 import { SettingsGroup, SettingsRow, SettingsSection } from '../SettingsGroup';
-import ThemeSelector from '../../GooseSidebar/ThemeSelector';
+import { PermissionsSection } from '../mode/PermissionsSection';
 import BlockLogoBlack from './icons/block-lockup_black.png';
 import BlockLogoWhite from './icons/block-lockup_white.png';
 import TelemetrySettings from './TelemetrySettings';
+import { AppEvents } from '../../../constants/events';
 import { trackSettingToggled } from '../../../utils/analytics';
-import type { LanguageSetting } from '../../../utils/settings';
+import type {
+  LanguageSetting,
+  SendShortcutSetting,
+  SettingKey,
+  Settings,
+  TurnNotificationSetting,
+} from '../../../utils/settings';
 
 const i18n = defineMessages({
-  appearanceTitle: { id: 'settings.appearance.title', defaultMessage: 'Appearance' },
-  appearanceDesc: {
-    id: 'settings.appearance.description',
-    defaultMessage: 'Configure how iCodex appears on your system',
-  },
+  permissionsTitle: { id: 'settings.permissions.title', defaultMessage: 'Permissions' },
+  generalTitle: { id: 'settings.general.title', defaultMessage: 'General' },
+  composerTitle: { id: 'settings.composer.title', defaultMessage: 'Composer' },
+  chatTitle: { id: 'settings.chat.title', defaultMessage: 'Chat' },
   notifications: { id: 'settings.notifications.title', defaultMessage: 'Notifications' },
-  notificationsDesc: {
-    id: 'settings.notifications.description',
-    defaultMessage: 'Notifications are managed by your OS - {link}',
+  systemNotifications: {
+    id: 'settings.notifications.system.title',
+    defaultMessage: 'System notifications',
   },
-  configGuide: { id: 'settings.notifications.configGuide', defaultMessage: 'Configuration guide' },
+  systemNotificationsDesc: {
+    id: 'settings.notifications.system.description',
+    defaultMessage: 'Notification delivery is managed by your operating system',
+  },
   openSettings: { id: 'settings.notifications.openSettings', defaultMessage: 'Open Settings' },
-  taskNotifications: {
-    id: 'settings.notifications.task.title',
-    defaultMessage: 'Task completion notifications',
+  turnNotifications: {
+    id: 'settings.notifications.turn.title',
+    defaultMessage: 'Turn completion notifications',
   },
-  taskNotificationsDesc: {
-    id: 'settings.notifications.task.description',
-    defaultMessage: 'Notify when iCodex finishes a task while the window is in the background',
+  turnNotificationsDesc: {
+    id: 'settings.notifications.turn.description',
+    defaultMessage: 'Set when iCodex alerts you that it has finished',
   },
-  menuBarIcon: { id: 'settings.menuBarIcon.title', defaultMessage: 'Menu bar icon' },
+  turnNotificationsAlways: { id: 'settings.notifications.turn.always', defaultMessage: 'Always' },
+  turnNotificationsUnfocused: {
+    id: 'settings.notifications.turn.unfocused',
+    defaultMessage: 'Only when unfocused',
+  },
+  turnNotificationsNever: { id: 'settings.notifications.turn.never', defaultMessage: 'Never' },
+  menuBarIcon: { id: 'settings.menuBarIcon.title', defaultMessage: 'Show in menu bar' },
   menuBarIconDesc: {
     id: 'settings.menuBarIcon.description',
-    defaultMessage: 'Show iCodex in the menu bar',
+    defaultMessage: 'Keep iCodex in the menu bar when the main window is closed',
   },
   dockIcon: { id: 'settings.dockIcon.title', defaultMessage: 'Dock icon' },
   dockIconDesc: { id: 'settings.dockIcon.description', defaultMessage: 'Show iCodex in the dock' },
-  preventSleep: { id: 'settings.preventSleep.title', defaultMessage: 'Prevent Sleep' },
+  bottomPanel: { id: 'settings.bottomPanel.title', defaultMessage: 'Bottom panel' },
+  bottomPanelDesc: {
+    id: 'settings.bottomPanel.description',
+    defaultMessage: 'Show the bottom panel control in the app header',
+  },
+  preventSleep: {
+    id: 'settings.preventSleep.title',
+    defaultMessage: 'Prevent sleep while running',
+  },
   preventSleepDesc: {
     id: 'settings.preventSleep.description',
     defaultMessage:
       'Keep your computer awake while iCodex is running a task (screen can still lock)',
   },
-  costTracking: { id: 'settings.costTracking.title', defaultMessage: 'Cost Tracking' },
-  costTrackingDesc: {
-    id: 'settings.costTracking.description',
-    defaultMessage: 'Show model pricing and usage costs',
+  sendShortcut: { id: 'settings.sendShortcut.title', defaultMessage: 'Send shortcut' },
+  sendShortcutDesc: {
+    id: 'settings.sendShortcut.description',
+    defaultMessage: 'Choose when Enter sends a prompt or inserts a new line',
   },
-  themeTitle: { id: 'settings.theme.title', defaultMessage: 'Theme' },
-  themeDesc: {
-    id: 'settings.theme.description',
-    defaultMessage: 'Customize the look and feel of iCodex',
+  sendShortcutEnter: { id: 'settings.sendShortcut.enter', defaultMessage: 'Enter' },
+  sendShortcutModEnter: {
+    id: 'settings.sendShortcut.modEnter',
+    defaultMessage: '{mod} + Enter',
+  },
+  spellcheck: { id: 'spellcheckToggle.title', defaultMessage: 'Enable Spellcheck' },
+  spellcheckDesc: {
+    id: 'spellcheckToggle.description',
+    defaultMessage: 'Check spelling in the chat input. Requires restart to take effect.',
+  },
+  toolDetails: { id: 'settings.toolDetails.title', defaultMessage: 'Tool call details' },
+  toolDetailsDesc: {
+    id: 'settings.toolDetails.description',
+    defaultMessage: 'Whether tool calls start expanded or collapsed in chat',
+  },
+  toolDetailsExpanded: { id: 'responseStyle.detailedLabel', defaultMessage: 'Detailed' },
+  toolDetailsCollapsed: { id: 'responseStyle.conciseLabel', defaultMessage: 'Concise' },
+  usageStats: { id: 'settings.usageStats.title', defaultMessage: 'Show usage stats' },
+  usageStatsDesc: {
+    id: 'settings.usageStats.description',
+    defaultMessage: 'Show tokens, speed, and cost under each response',
   },
   languageTitle: { id: 'settings.language.title', defaultMessage: 'Language' },
   languageDesc: {
@@ -94,6 +133,7 @@ const i18n = defineMessages({
     id: 'settings.language.zhTW',
     defaultMessage: 'Chinese (Traditional)',
   },
+  aboutTitle: { id: 'settings.about.title', defaultMessage: 'About' },
   helpTitle: { id: 'settings.help.title', defaultMessage: 'Help & feedback' },
   helpDesc: {
     id: 'settings.help.description',
@@ -107,51 +147,6 @@ const i18n = defineMessages({
     id: 'settings.updates.description',
     defaultMessage: 'Check for and install updates to keep iCodex running at its best',
   },
-  notificationsModalTitle: {
-    id: 'settings.notifications.modal.title',
-    defaultMessage: 'How to Enable Notifications',
-  },
-  notificationsMacInstructions: {
-    id: 'settings.notifications.modal.macInstructions',
-    defaultMessage: 'To enable notifications on macOS:',
-  },
-  notificationsMacStep1: {
-    id: 'settings.notifications.modal.macStep1',
-    defaultMessage: 'Open System Preferences',
-  },
-  notificationsMacStep2: {
-    id: 'settings.notifications.modal.macStep2',
-    defaultMessage: 'Click on Notifications',
-  },
-  notificationsMacStep3: {
-    id: 'settings.notifications.modal.macStep3',
-    defaultMessage: 'Find and select iCodex in the application list',
-  },
-  notificationsMacStep4: {
-    id: 'settings.notifications.modal.macStep4',
-    defaultMessage: 'Enable notifications and adjust settings as desired',
-  },
-  notificationsWinInstructions: {
-    id: 'settings.notifications.modal.winInstructions',
-    defaultMessage: 'To enable notifications on Windows:',
-  },
-  notificationsWinStep1: {
-    id: 'settings.notifications.modal.winStep1',
-    defaultMessage: 'Open Settings',
-  },
-  notificationsWinStep2: {
-    id: 'settings.notifications.modal.winStep2',
-    defaultMessage: 'Go to System > Notifications',
-  },
-  notificationsWinStep3: {
-    id: 'settings.notifications.modal.winStep3',
-    defaultMessage: 'Find and select iCodex in the application list',
-  },
-  notificationsWinStep4: {
-    id: 'settings.notifications.modal.winStep4',
-    defaultMessage: 'Toggle notifications on and adjust settings as desired',
-  },
-  close: { id: 'settings.close', defaultMessage: 'Close' },
 });
 
 const LANGUAGE_OPTIONS: Array<{ value: LanguageSetting; message: keyof typeof i18n }> = [
@@ -174,19 +169,72 @@ const LANGUAGE_OPTIONS: Array<{ value: LanguageSetting; message: keyof typeof i1
   { value: 'zh-TW', message: 'languageChineseTraditional' },
 ];
 
-interface AppSettingsSectionProps {
+const TOOL_DETAIL_OPTIONS: Array<{ value: string; message: keyof typeof i18n }> = [
+  { value: 'concise', message: 'toolDetailsCollapsed' },
+  { value: 'detailed', message: 'toolDetailsExpanded' },
+];
+
+const SEND_SHORTCUT_OPTIONS: Array<{ value: SendShortcutSetting; message: keyof typeof i18n }> = [
+  { value: 'enter', message: 'sendShortcutEnter' },
+  { value: 'mod+enter', message: 'sendShortcutModEnter' },
+];
+
+const TURN_NOTIFICATION_OPTIONS: Array<{
+  value: TurnNotificationSetting;
+  message: keyof typeof i18n;
+}> = [
+  { value: 'always', message: 'turnNotificationsAlways' },
+  { value: 'unfocused', message: 'turnNotificationsUnfocused' },
+  { value: 'never', message: 'turnNotificationsNever' },
+];
+
+function SettingsDropdown<T extends string>({
+  value,
+  options,
+  onChange,
+}: {
+  value: T;
+  options: Array<{ value: T; label: string }>;
+  onChange: (value: string) => void;
+}) {
+  const selected = options.find((option) => option.value === value) ?? options[0];
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="flex w-[220px] items-center justify-between gap-2 rounded-lg border border-border-primary bg-background-primary px-3 py-2 text-sm text-text-primary transition-colors hover:border-border-secondary">
+        <span className="truncate">{selected.label}</span>
+        <ChevronDown className="h-4 w-4 shrink-0" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-[260px]">
+        <DropdownMenuRadioGroup value={value} onValueChange={onChange}>
+          {options.map((option) => (
+            <DropdownMenuRadioItem key={option.value} value={option.value}>
+              {option.label}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+interface GeneralSectionProps {
   scrollToSection?: string;
 }
 
-export default function AppSettingsSection({ scrollToSection }: AppSettingsSectionProps) {
+export default function GeneralSection({ scrollToSection }: GeneralSectionProps) {
+  const intl = useIntl();
   const [menuBarIconEnabled, setMenuBarIconEnabled] = useState(true);
   const [dockIconEnabled, setDockIconEnabled] = useState(true);
   const [wakelockEnabled, setWakelockEnabled] = useState(true);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [spellcheckEnabled, setSpellcheckEnabled] = useState(true);
   const [isMacOS, setIsMacOS] = useState(false);
   const [isDockSwitchDisabled, setIsDockSwitchDisabled] = useState(false);
-  const [showNotificationModal, setShowNotificationModal] = useState(false);
-  const [showPricing, setShowPricing] = useState(true);
+  const [turnNotifications, setTurnNotifications] =
+    useState<TurnNotificationSetting>('unfocused');
+  const [sendShortcut, setSendShortcut] = useState<SendShortcutSetting>('enter');
+  const [showBottomPanelControl, setShowBottomPanelControl] = useState(true);
+  const [showUsageStats, setShowUsageStats] = useState(true);
+  const [toolDetails, setToolDetails] = useState('concise');
   const [language, setLanguage] = useState<LanguageSetting>('system');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const updateSectionRef = useRef<HTMLDivElement>(null);
@@ -213,8 +261,17 @@ export default function AppSettingsSection({ scrollToSection }: AppSettingsSecti
   }, []);
 
   useEffect(() => {
-    window.electron.getSetting('showPricing').then(setShowPricing);
     window.electron.getSetting('language').then((value) => setLanguage(value ?? 'system'));
+    window.electron.getSetting('responseStyle').then((value) => setToolDetails(value ?? 'concise'));
+    window.electron.getSetting('sendShortcut').then((value) => setSendShortcut(value ?? 'enter'));
+    window.electron
+      .getSetting('showBottomPanelControl')
+      .then((value) => setShowBottomPanelControl(value ?? true));
+    window.electron.getSetting('showUsageStats').then((value) => setShowUsageStats(value ?? true));
+    window.electron
+      .getSetting('turnNotifications')
+      .then((value) => setTurnNotifications(value ?? 'unfocused'));
+    window.electron.getSpellcheckState().then(setSpellcheckEnabled);
   }, []);
 
   useEffect(() => {
@@ -234,16 +291,17 @@ export default function AppSettingsSection({ scrollToSection }: AppSettingsSecti
       setWakelockEnabled(enabled);
     });
 
-    window.electron.getSetting('enableNotifications').then((enabled) => {
-      setNotificationsEnabled(enabled ?? true);
-    });
-
     if (isMacOS) {
       window.electron.getDockIconState().then((enabled) => {
         setDockIconEnabled(enabled);
       });
     }
   }, [isMacOS]);
+
+  const saveSetting = async <K extends SettingKey>(key: K, value: Settings[K]) => {
+    await window.electron.setSetting(key, value);
+    window.dispatchEvent(new CustomEvent(AppEvents.SETTINGS_CHANGED));
+  };
 
   const handleMenuBarIconToggle = async () => {
     const newState = !menuBarIconEnabled;
@@ -296,18 +354,38 @@ export default function AppSettingsSection({ scrollToSection }: AppSettingsSecti
     }
   };
 
-  const handleNotificationsToggle = async (checked: boolean) => {
-    setNotificationsEnabled(checked);
-    await window.electron.setSetting('enableNotifications', checked);
-    trackSettingToggled('task_notifications', checked);
+  const handleBottomPanelToggle = async (checked: boolean) => {
+    setShowBottomPanelControl(checked);
+    await saveSetting('showBottomPanelControl', checked);
+    trackSettingToggled('bottom_panel_control', checked);
   };
 
-  const handleShowPricingToggle = async (checked: boolean) => {
-    setShowPricing(checked);
-    await window.electron.setSetting('showPricing', checked);
-    trackSettingToggled('cost_tracking', checked);
-    // Trigger event for other components
-    window.dispatchEvent(new CustomEvent('showPricingChanged'));
+  const handleUsageStatsToggle = async (checked: boolean) => {
+    setShowUsageStats(checked);
+    await saveSetting('showUsageStats', checked);
+    trackSettingToggled('usage_stats', checked);
+  };
+
+  const handleTurnNotificationsChange = async (value: string) => {
+    const next = value as TurnNotificationSetting;
+    setTurnNotifications(next);
+    await saveSetting('turnNotifications', next);
+  };
+
+  const handleSendShortcutChange = async (value: string) => {
+    const next = value as SendShortcutSetting;
+    setSendShortcut(next);
+    await saveSetting('sendShortcut', next);
+  };
+
+  const handleSpellcheckToggle = async (checked: boolean) => {
+    setSpellcheckEnabled(checked);
+    await window.electron.setSpellcheck(checked);
+  };
+
+  const handleToolDetailsChange = async (value: string) => {
+    setToolDetails(value);
+    await saveSetting('responseStyle', value);
   };
 
   const handleLanguageChange = async (value: string) => {
@@ -326,42 +404,28 @@ export default function AppSettingsSection({ scrollToSection }: AppSettingsSecti
     }
   };
 
-  const intl = useIntl();
-  const selectedLanguage =
-    LANGUAGE_OPTIONS.find((option) => option.value === language) ?? LANGUAGE_OPTIONS[0];
-
   return (
     <div className="pb-8">
-      <SettingsSection title={intl.formatMessage(i18n.appearanceTitle)}>
+      <SettingsSection title={intl.formatMessage(i18n.permissionsTitle)}>
         <SettingsGroup>
-          <SettingsRow
-            title={intl.formatMessage(i18n.themeTitle)}
-            description={intl.formatMessage(i18n.themeDesc)}
-          >
-            <ThemeSelector className="w-auto" hideTitle horizontal />
-          </SettingsRow>
+          <PermissionsSection />
+        </SettingsGroup>
+      </SettingsSection>
 
+      <SettingsSection title={intl.formatMessage(i18n.generalTitle)}>
+        <SettingsGroup>
           <SettingsRow
             title={intl.formatMessage(i18n.languageTitle)}
             description={intl.formatMessage(i18n.languageDesc)}
           >
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex w-[220px] items-center justify-between gap-2 rounded-lg border border-border-primary bg-background-primary px-3 py-2 text-sm text-text-primary transition-colors hover:border-border-secondary">
-                <span className="truncate">
-                  {intl.formatMessage(i18n[selectedLanguage.message])}
-                </span>
-                <ChevronDown className="h-4 w-4 shrink-0" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[260px]">
-                <DropdownMenuRadioGroup value={language} onValueChange={handleLanguageChange}>
-                  {LANGUAGE_OPTIONS.map((option) => (
-                    <DropdownMenuRadioItem key={option.value} value={option.value}>
-                      {intl.formatMessage(i18n[option.message])}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <SettingsDropdown
+              value={language}
+              onChange={handleLanguageChange}
+              options={LANGUAGE_OPTIONS.map((option) => ({
+                value: option.value,
+                label: intl.formatMessage(i18n[option.message]),
+              }))}
+            />
           </SettingsRow>
 
           <SettingsRow
@@ -390,6 +454,17 @@ export default function AppSettingsSection({ scrollToSection }: AppSettingsSecti
           )}
 
           <SettingsRow
+            title={intl.formatMessage(i18n.bottomPanel)}
+            description={intl.formatMessage(i18n.bottomPanelDesc)}
+          >
+            <Switch
+              checked={showBottomPanelControl}
+              onCheckedChange={handleBottomPanelToggle}
+              variant="mono"
+            />
+          </SettingsRow>
+
+          <SettingsRow
             title={intl.formatMessage(i18n.preventSleep)}
             description={intl.formatMessage(i18n.preventSleepDesc)}
           >
@@ -399,39 +474,88 @@ export default function AppSettingsSection({ scrollToSection }: AppSettingsSecti
               variant="mono"
             />
           </SettingsRow>
+        </SettingsGroup>
+      </SettingsSection>
 
-          {COST_TRACKING_ENABLED && (
-            <SettingsRow
-              title={intl.formatMessage(i18n.costTracking)}
-              description={intl.formatMessage(i18n.costTrackingDesc)}
-            >
-              <Switch
-                checked={showPricing}
-                onCheckedChange={handleShowPricingToggle}
-                variant="mono"
-              />
-            </SettingsRow>
-          )}
+      <SettingsSection title={intl.formatMessage(i18n.composerTitle)}>
+        <SettingsGroup>
+          <SettingsRow
+            title={intl.formatMessage(i18n.sendShortcut)}
+            description={intl.formatMessage(i18n.sendShortcutDesc)}
+          >
+            <SettingsDropdown
+              value={sendShortcut}
+              onChange={handleSendShortcutChange}
+              options={SEND_SHORTCUT_OPTIONS.map((option) => ({
+                value: option.value,
+                label: intl.formatMessage(i18n[option.message], { mod: isMacOS ? '⌘' : 'Ctrl' }),
+              }))}
+            />
+          </SettingsRow>
+
+          <SettingsRow
+            title={intl.formatMessage(i18n.spellcheck)}
+            description={intl.formatMessage(i18n.spellcheckDesc)}
+          >
+            <Switch
+              checked={spellcheckEnabled}
+              onCheckedChange={handleSpellcheckToggle}
+              variant="mono"
+            />
+          </SettingsRow>
+        </SettingsGroup>
+      </SettingsSection>
+
+      <SettingsSection title={intl.formatMessage(i18n.chatTitle)}>
+        <SettingsGroup>
+          <SettingsRow
+            title={intl.formatMessage(i18n.toolDetails)}
+            description={intl.formatMessage(i18n.toolDetailsDesc)}
+          >
+            <SettingsDropdown
+              value={toolDetails}
+              onChange={handleToolDetailsChange}
+              options={TOOL_DETAIL_OPTIONS.map((option) => ({
+                value: option.value,
+                label: intl.formatMessage(i18n[option.message]),
+              }))}
+            />
+          </SettingsRow>
+
+          <SettingsRow
+            title={intl.formatMessage(i18n.usageStats)}
+            description={intl.formatMessage(i18n.usageStatsDesc)}
+          >
+            <Switch
+              checked={showUsageStats}
+              onCheckedChange={handleUsageStatsToggle}
+              variant="mono"
+            />
+          </SettingsRow>
         </SettingsGroup>
       </SettingsSection>
 
       <SettingsSection title={intl.formatMessage(i18n.notifications)}>
         <SettingsGroup>
           <SettingsRow
-            title={intl.formatMessage(i18n.notifications)}
-            description={intl.formatMessage(i18n.notificationsDesc, {
-              link: (
-                <span
-                  className="underline hover:cursor-pointer"
-                  onClick={() => setShowNotificationModal(true)}
-                >
-                  {intl.formatMessage(i18n.configGuide)}
-                </span>
-              ),
-            })}
+            title={intl.formatMessage(i18n.turnNotifications)}
+            description={intl.formatMessage(i18n.turnNotificationsDesc)}
+          >
+            <SettingsDropdown
+              value={turnNotifications}
+              onChange={handleTurnNotificationsChange}
+              options={TURN_NOTIFICATION_OPTIONS.map((option) => ({
+                value: option.value,
+                label: intl.formatMessage(i18n[option.message]),
+              }))}
+            />
+          </SettingsRow>
+
+          <SettingsRow
+            title={intl.formatMessage(i18n.systemNotifications)}
+            description={intl.formatMessage(i18n.systemNotificationsDesc)}
           >
             <Button
-              className="flex items-center gap-2 justify-center"
               variant="secondary"
               size="sm"
               onClick={async () => {
@@ -442,27 +566,15 @@ export default function AppSettingsSection({ scrollToSection }: AppSettingsSecti
                 }
               }}
             >
-              <Settings />
               {intl.formatMessage(i18n.openSettings)}
             </Button>
-          </SettingsRow>
-
-          <SettingsRow
-            title={intl.formatMessage(i18n.taskNotifications)}
-            description={intl.formatMessage(i18n.taskNotificationsDesc)}
-          >
-            <Switch
-              checked={notificationsEnabled}
-              onCheckedChange={handleNotificationsToggle}
-              variant="mono"
-            />
           </SettingsRow>
         </SettingsGroup>
       </SettingsSection>
 
       <TelemetrySettings />
 
-      <SettingsSection title={intl.formatMessage(i18n.helpTitle)}>
+      <SettingsSection title={intl.formatMessage(i18n.aboutTitle)}>
         <SettingsGroup>
           <SettingsRow
             title={intl.formatMessage(i18n.helpTitle)}
@@ -526,52 +638,6 @@ export default function AppSettingsSection({ scrollToSection }: AppSettingsSecti
           </div>
         </SettingsSection>
       )}
-
-      {/* Notification Instructions Modal */}
-      <Dialog
-        open={showNotificationModal}
-        onOpenChange={(open) => !open && setShowNotificationModal(false)}
-      >
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Settings className="text-iconStandard" size={24} />
-              {intl.formatMessage(i18n.notificationsModalTitle)}
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="py-4">
-            {/* OS-specific instructions */}
-            {isMacOS ? (
-              <div className="space-y-4">
-                <p>{intl.formatMessage(i18n.notificationsMacInstructions)}</p>
-                <ol className="list-decimal pl-5 space-y-2">
-                  <li>{intl.formatMessage(i18n.notificationsMacStep1)}</li>
-                  <li>{intl.formatMessage(i18n.notificationsMacStep2)}</li>
-                  <li>{intl.formatMessage(i18n.notificationsMacStep3)}</li>
-                  <li>{intl.formatMessage(i18n.notificationsMacStep4)}</li>
-                </ol>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <p>{intl.formatMessage(i18n.notificationsWinInstructions)}</p>
-                <ol className="list-decimal pl-5 space-y-2">
-                  <li>{intl.formatMessage(i18n.notificationsWinStep1)}</li>
-                  <li>{intl.formatMessage(i18n.notificationsWinStep2)}</li>
-                  <li>{intl.formatMessage(i18n.notificationsWinStep3)}</li>
-                  <li>{intl.formatMessage(i18n.notificationsWinStep4)}</li>
-                </ol>
-              </div>
-            )}
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowNotificationModal(false)}>
-              {intl.formatMessage(i18n.close)}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

@@ -23,66 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "サイドパネルを切り替え"
   },
-  "authSettings.activeProviderWarning": {
-    "defaultMessage": "これは現在使用中のプロバイダーです。別の認証情報を設定するまで、新しいリクエストが失敗する可能性があります。"
-  },
-  "authSettings.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "authSettings.delete": {
-    "defaultMessage": "削除"
-  },
-  "authSettings.deleteCredential": {
-    "defaultMessage": "認証情報を削除"
-  },
-  "authSettings.deleteMessage": {
-    "defaultMessage": "{provider} の {name} 認証情報を削除しますか？"
-  },
-  "authSettings.deleteTitle": {
-    "defaultMessage": "認証情報を削除"
-  },
-  "authSettings.deleted": {
-    "defaultMessage": "認証情報を削除しました"
-  },
-  "authSettings.description": {
-    "defaultMessage": "iCodexがローカルに保存したプロバイダー認証情報を管理します。"
-  },
-  "authSettings.empty": {
-    "defaultMessage": "ローカルに保存されたプロバイダー認証情報は見つかりませんでした。"
-  },
-  "authSettings.expiresAt": {
-    "defaultMessage": "有効期限: {date}"
-  },
-  "authSettings.failedToConfigure": {
-    "defaultMessage": "認証情報の設定に失敗しました: {error}"
-  },
-  "authSettings.failedToDelete": {
-    "defaultMessage": "認証情報の削除に失敗しました: {error}"
-  },
-  "authSettings.failedToLoad": {
-    "defaultMessage": "プロバイダー認証情報の読み込みに失敗しました"
-  },
-  "authSettings.loading": {
-    "defaultMessage": "認証情報を読み込み中..."
-  },
-  "authSettings.reauthorize": {
-    "defaultMessage": "再認証"
-  },
-  "authSettings.signIn": {
-    "defaultMessage": "サインイン"
-  },
-  "authSettings.signedIn": {
-    "defaultMessage": "認証情報を設定しました"
-  },
-  "authSettings.storageProviderCache": {
-    "defaultMessage": "プロバイダーキャッシュ"
-  },
-  "authSettings.storageSecretStore": {
-    "defaultMessage": "シークレットストア"
-  },
-  "authSettings.title": {
-    "defaultMessage": "プロバイダー認証情報"
-  },
   "backButton.back": {
     "defaultMessage": "戻る"
   },
@@ -91,36 +31,6 @@
   },
   "baseChat.goHome": {
     "defaultMessage": "ホームへ"
-  },
-  "baseChat.reconnecting": {
-    "defaultMessage": "接続が失われました。再接続しています…"
-  },
-  "bottomMenuExtensionSelection.extensionUpdated": {
-    "defaultMessage": "拡張機能を更新しました"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeDisabled": {
-    "defaultMessage": "{name} は新しいチャットで無効になります"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeEnabled": {
-    "defaultMessage": "{name} は新しいチャットで有効になります"
-  },
-  "bottomMenuExtensionSelection.extensionsForNewChats": {
-    "defaultMessage": "新しいチャットの拡張機能"
-  },
-  "bottomMenuExtensionSelection.extensionsForThisSession": {
-    "defaultMessage": "このチャットセッションの拡張機能"
-  },
-  "bottomMenuExtensionSelection.manageExtensions": {
-    "defaultMessage": "拡張機能を管理"
-  },
-  "bottomMenuExtensionSelection.noExtensionsAvailable": {
-    "defaultMessage": "利用可能な拡張機能はありません"
-  },
-  "bottomMenuExtensionSelection.noExtensionsFound": {
-    "defaultMessage": "拡張機能が見つかりません"
-  },
-  "bottomMenuExtensionSelection.searchExtensions": {
-    "defaultMessage": "拡張機能を検索..."
   },
   "cardButtons.configure": {
     "defaultMessage": "設定"
@@ -137,9 +47,6 @@
   "chat.requestFailed": {
     "defaultMessage": "リクエストに失敗しました"
   },
-  "chatInput.contextWindow": {
-    "defaultMessage": "コンテキストウィンドウ"
-  },
   "chatInput.dictationError": {
     "defaultMessage": "音声入力エラー"
   },
@@ -155,12 +62,6 @@
   "chatInput.recording": {
     "defaultMessage": "録音中..."
   },
-  "chatInput.removeFile": {
-    "defaultMessage": "ファイルを削除"
-  },
-  "chatInput.removeImage": {
-    "defaultMessage": "画像を削除"
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "セッションを再起動中..."
   },
@@ -173,101 +74,11 @@
   "chatInput.typeMessage": {
     "defaultMessage": "送信するメッセージを入力"
   },
-  "chatInput.unknownType": {
-    "defaultMessage": "不明なタイプ"
-  },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "キャンセルの完了を待機中"
   },
   "chatInput.waitingForImages": {
     "defaultMessage": "画像の保存を待機中..."
-  },
-  "chatSettings.modeDescription": {
-    "defaultMessage": "iCodexがツールや拡張機能とどのようにやり取りするかを設定します"
-  },
-  "chatSettings.modeTitle": {
-    "defaultMessage": "モード"
-  },
-  "chatSettings.responseStylesDescription": {
-    "defaultMessage": "iCodexの回答の形式とスタイルを選択します"
-  },
-  "chatSettings.responseStylesTitle": {
-    "defaultMessage": "回答スタイル"
-  },
-  "configSettings.configReset": {
-    "defaultMessage": "設定をリセットしました"
-  },
-  "configSettings.configResetMsg": {
-    "defaultMessage": "すべての変更を元に戻しました"
-  },
-  "configSettings.configUpdated": {
-    "defaultMessage": "設定を更新しました"
-  },
-  "configSettings.configUpdatedMsg": {
-    "defaultMessage": "\"{name}\" を保存しました"
-  },
-  "configSettings.configurationEditor": {
-    "defaultMessage": "設定エディター"
-  },
-  "configSettings.description": {
-    "defaultMessage": "iCodexの設定を編集します"
-  },
-  "configSettings.descriptionWithProvider": {
-    "defaultMessage": "iCodexの設定を編集します（{provider} の現在の設定）"
-  },
-  "configSettings.done": {
-    "defaultMessage": "完了"
-  },
-  "configSettings.editConfiguration": {
-    "defaultMessage": "設定を編集"
-  },
-  "configSettings.enterValue": {
-    "defaultMessage": "{name} を入力"
-  },
-  "configSettings.noSettings": {
-    "defaultMessage": "設定項目が見つかりません。"
-  },
-  "configSettings.resetChanges": {
-    "defaultMessage": "変更をリセット"
-  },
-  "configSettings.saveFailed": {
-    "defaultMessage": "保存に失敗しました"
-  },
-  "configSettings.saveFailedMsg": {
-    "defaultMessage": "\"{name}\" の保存に失敗しました"
-  },
-  "configSettings.saving": {
-    "defaultMessage": "保存中..."
-  },
-  "configSettings.title": {
-    "defaultMessage": "設定"
-  },
-  "configureApproveMode.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "configureApproveMode.description": {
-    "defaultMessage": "すべてのツールリクエストに承認を求めるか、承認が必要な操作を自動で判断するかを選択します"
-  },
-  "configureApproveMode.manualApproval": {
-    "defaultMessage": "手動承認"
-  },
-  "configureApproveMode.manualApprovalDescription": {
-    "defaultMessage": "すべてのツール、拡張機能、ファイル変更に人の承認が必要になります"
-  },
-  "configureApproveMode.save": {
-    "defaultMessage": "保存"
-  },
-  "configureApproveMode.saving": {
-    "defaultMessage": "保存中..."
-  },
-  "configureApproveMode.smartApproval": {
-    "defaultMessage": "スマート承認"
-  },
-  "configureApproveMode.smartApprovalDescription": {
-    "defaultMessage": "リスクレベルに基づき、承認が必要な操作をインテリジェントに判断します"
-  },
-  "configureApproveMode.title": {
-    "defaultMessage": "承認モードを設定"
   },
   "confirmationModal.defaultCancel": {
     "defaultMessage": "いいえ"
@@ -277,27 +88,6 @@
   },
   "confirmationModal.processing": {
     "defaultMessage": "処理中..."
-  },
-  "conversationLimitsDropdown.conversationLimits": {
-    "defaultMessage": "会話制限"
-  },
-  "conversationLimitsDropdown.maxTurns": {
-    "defaultMessage": "最大ターン数"
-  },
-  "conversationLimitsDropdown.maxTurnsDescription": {
-    "defaultMessage": "iCodexがユーザー入力を求めるまでのエージェントの最大ターン数"
-  },
-  "costTracker.costUnavailable": {
-    "defaultMessage": "{model} のコストデータは利用できません（入力 {inputTokens} トークン、出力 {outputTokens} トークン）"
-  },
-  "costTracker.inputOutputTooltip": {
-    "defaultMessage": "入力: {inputTokens} トークン（{inputCost}） | 出力: {outputTokens} トークン（{outputCost}）"
-  },
-  "costTracker.pricingUnavailable": {
-    "defaultMessage": "{model} の料金データは利用できません"
-  },
-  "costTracker.totalSessionCost": {
-    "defaultMessage": "セッション合計コスト: {cost}"
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "クレジットを追加"
@@ -503,104 +293,8 @@
   "defaultProviderSetupForm.showOptions": {
     "defaultMessage": "{count}件のオプションを表示"
   },
-  "diagnosticsModal.attachHint": {
-    "defaultMessage": "バグ報告時は、診断レポートの添付もご検討ください。"
-  },
-  "diagnosticsModal.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "diagnosticsModal.configSettings": {
-    "defaultMessage": "構成設定"
-  },
-  "diagnosticsModal.description": {
-    "defaultMessage": "診断用のzipファイルをダウンロードしてチームに共有するか、システム詳細を事前入力した状態でGitHubに直接バグを報告できます。診断レポートには以下が含まれます:"
-  },
-  "diagnosticsModal.diagnosticsErrorMsg": {
-    "defaultMessage": "診断情報のダウンロードに失敗しました"
-  },
-  "diagnosticsModal.diagnosticsErrorTitle": {
-    "defaultMessage": "診断エラー"
-  },
-  "diagnosticsModal.download": {
-    "defaultMessage": "ダウンロード"
-  },
-  "diagnosticsModal.downloading": {
-    "defaultMessage": "ダウンロード中..."
-  },
-  "diagnosticsModal.fileBug": {
-    "defaultMessage": "GitHubでバグを報告"
-  },
-  "diagnosticsModal.logFiles": {
-    "defaultMessage": "最近のログファイル"
-  },
-  "diagnosticsModal.opening": {
-    "defaultMessage": "開いています..."
-  },
-  "diagnosticsModal.reportProblem": {
-    "defaultMessage": "問題を報告"
-  },
-  "diagnosticsModal.sensitiveWarning": {
-    "defaultMessage": "セッションに機密情報が含まれる場合は、診断ファイルを公開しないでください。"
-  },
-  "diagnosticsModal.sessionMessages": {
-    "defaultMessage": "現在のセッションメッセージ"
-  },
-  "diagnosticsModal.systemInfo": {
-    "defaultMessage": "基本システム情報"
-  },
-  "diagnosticsModal.systemInfoErrorMsg": {
-    "defaultMessage": "システム情報の取得に失敗しました"
-  },
-  "diagnosticsModal.systemInfoErrorTitle": {
-    "defaultMessage": "エラー"
-  },
   "dialog.close": {
     "defaultMessage": "閉じる"
-  },
-  "dictationSettings.addApiKey": {
-    "defaultMessage": "APIキーを追加"
-  },
-  "dictationSettings.apiKey": {
-    "defaultMessage": "APIキー"
-  },
-  "dictationSettings.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "dictationSettings.chooseVoiceConversion": {
-    "defaultMessage": "音声をテキストに変換する方法を選択"
-  },
-  "dictationSettings.configureApiKey": {
-    "defaultMessage": "APIキーは <b>{settingsPath}</b> で設定してください"
-  },
-  "dictationSettings.configured": {
-    "defaultMessage": "（設定済み）"
-  },
-  "dictationSettings.configuredIn": {
-    "defaultMessage": "✓ {settingsPath} で設定済み"
-  },
-  "dictationSettings.disabled": {
-    "defaultMessage": "無効"
-  },
-  "dictationSettings.enterApiKey": {
-    "defaultMessage": "APIキーを入力"
-  },
-  "dictationSettings.notConfigured": {
-    "defaultMessage": "（未設定）"
-  },
-  "dictationSettings.removeApiKey": {
-    "defaultMessage": "APIキーを削除"
-  },
-  "dictationSettings.requiredForTranscription": {
-    "defaultMessage": "文字起こしに必要"
-  },
-  "dictationSettings.save": {
-    "defaultMessage": "保存"
-  },
-  "dictationSettings.updateApiKey": {
-    "defaultMessage": "APIキーを更新"
-  },
-  "dictationSettings.voiceDictationProvider": {
-    "defaultMessage": "音声入力プロバイダー"
   },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "作業ディレクトリの更新に失敗しました"
@@ -851,66 +545,6 @@
   "filesPanel.title": {
     "defaultMessage": "ファイル"
   },
-  "goosehintsModal.close": {
-    "defaultMessage": "閉じる"
-  },
-  "goosehintsModal.developer": {
-    "defaultMessage": "開発者"
-  },
-  "goosehintsModal.dialogDescription": {
-    "defaultMessage": "iCodex とのコミュニケーションを改善するために、プロジェクトに関する追加コンテキストを提供します"
-  },
-  "goosehintsModal.dialogTitle": {
-    "defaultMessage": "プロジェクトヒントを設定（.goosehints）"
-  },
-  "goosehintsModal.errorReading": {
-    "defaultMessage": ".goosehints ファイルの読み取りエラー: {error}"
-  },
-  "goosehintsModal.failedToAccess": {
-    "defaultMessage": ".goosehints ファイルにアクセスできませんでした"
-  },
-  "goosehintsModal.failedToSave": {
-    "defaultMessage": ".goosehints ファイルの保存に失敗しました"
-  },
-  "goosehintsModal.fileCreating": {
-    "defaultMessage": "新しい .goosehints ファイルを作成しています: {filePath}"
-  },
-  "goosehintsModal.fileFound": {
-    "defaultMessage": ".goosehints ファイルが見つかりました: {filePath}"
-  },
-  "goosehintsModal.helpText1": {
-    "defaultMessage": ".goosehints は、プロジェクトに関する追加コンテキストを提供し、iCodex とのコミュニケーションを改善するためのテキストファイルです。"
-  },
-  "goosehintsModal.helpText2": {
-    "defaultMessage": "拡張機能ページで {bold} 拡張機能が有効になっていることを確認してください。この拡張機能は .goosehints を使用するために必要です。.goosehints の更新を反映するにはセッションの再起動が必要です。"
-  },
-  "goosehintsModal.helpText3": {
-    "defaultMessage": "詳しくは {link} をご覧ください。"
-  },
-  "goosehintsModal.helpTextLink": {
-    "defaultMessage": ".goosehints の使い方"
-  },
-  "goosehintsModal.placeholder": {
-    "defaultMessage": "プロジェクトヒントをここに入力..."
-  },
-  "goosehintsModal.save": {
-    "defaultMessage": "保存"
-  },
-  "goosehintsModal.savedSuccessfully": {
-    "defaultMessage": "保存しました"
-  },
-  "goosehintsModal.saving": {
-    "defaultMessage": "保存中..."
-  },
-  "goosehintsSection.configure": {
-    "defaultMessage": "設定"
-  },
-  "goosehintsSection.description": {
-    "defaultMessage": "iCodex に追加コンテキストを提供するために、プロジェクトの .goosehints ファイルを設定します"
-  },
-  "goosehintsSection.title": {
-    "defaultMessage": "プロジェクトヒント（.goosehints）"
-  },
   "groupedExtensionLoadingToast.askGoose": {
     "defaultMessage": "iCodexに聞く"
   },
@@ -992,42 +626,6 @@
   "hub.suggestionReview": {
     "defaultMessage": "コードをレビューして変更を提案する"
   },
-  "huggingFaceModelSearch.download": {
-    "defaultMessage": "ダウンロード"
-  },
-  "huggingFaceModelSearch.downloaded": {
-    "defaultMessage": "ダウンロード済み"
-  },
-  "huggingFaceModelSearch.downloading": {
-    "defaultMessage": "ダウンロード中…"
-  },
-  "huggingFaceModelSearch.loadingVariants": {
-    "defaultMessage": "バリアントを読み込み中..."
-  },
-  "huggingFaceModelSearch.noGgufModels": {
-    "defaultMessage": "このクエリに一致する GGUF モデルは見つかりませんでした。"
-  },
-  "huggingFaceModelSearch.recommended": {
-    "defaultMessage": "おすすめ"
-  },
-  "huggingFaceModelSearch.searchError": {
-    "defaultMessage": "検索エラー: {details}"
-  },
-  "huggingFaceModelSearch.searchFailed": {
-    "defaultMessage": "検索に失敗しました。もう一度お試しください。"
-  },
-  "huggingFaceModelSearch.searchHuggingFace": {
-    "defaultMessage": "Hugging Faceを検索"
-  },
-  "huggingFaceModelSearch.searchNoData": {
-    "defaultMessage": "検索結果にデータがありません。"
-  },
-  "huggingFaceModelSearch.searchPlaceholder": {
-    "defaultMessage": "GGUFモデルを検索..."
-  },
-  "huggingFaceModelSearch.tooLarge": {
-    "defaultMessage": "メモリに収まらない可能性があります（{size}モデル、利用可能: {available}）"
-  },
   "huggingFaceSignInPrompt.failedToConfigure": {
     "defaultMessage": "Hugging Faceへのサインインに失敗しました: {error}"
   },
@@ -1045,9 +643,6 @@
   },
   "imagePreview.altText": {
     "defaultMessage": "iCodex画像"
-  },
-  "imagePreview.clickToCollapse": {
-    "defaultMessage": "クリックして折りたたむ"
   },
   "imagePreview.clickToExpand": {
     "defaultMessage": "クリックして展開"
@@ -1262,111 +857,6 @@
   "loadingGoose.waiting": {
     "defaultMessage": "待機中"
   },
-  "localInferenceSettings.deleteConfirm": {
-    "defaultMessage": "このモデルを削除しますか？後で再ダウンロードできます。"
-  },
-  "localInferenceSettings.description": {
-    "defaultMessage": "APIキーなしで推論できるローカルLLMモデルをダウンロード・管理します。Hugging Faceで任意のGGUFモデルを検索するか、以下の注目モデルを使用できます。"
-  },
-  "localInferenceSettings.dismiss": {
-    "defaultMessage": "閉じる"
-  },
-  "localInferenceSettings.download": {
-    "defaultMessage": "ダウンロード"
-  },
-  "localInferenceSettings.downloadCancelled": {
-    "defaultMessage": "ダウンロードがキャンセルされました"
-  },
-  "localInferenceSettings.downloadFailed": {
-    "defaultMessage": "ダウンロードに失敗しました"
-  },
-  "localInferenceSettings.downloadProgress": {
-    "defaultMessage": "{downloaded} / {total} ({percent}%)"
-  },
-  "localInferenceSettings.downloadedModels": {
-    "defaultMessage": "ダウンロード済みモデル"
-  },
-  "localInferenceSettings.downloading": {
-    "defaultMessage": "ダウンロード中"
-  },
-  "localInferenceSettings.evictFromMemory": {
-    "defaultMessage": "Evict from memory"
-  },
-  "localInferenceSettings.featuredModels": {
-    "defaultMessage": "注目モデル"
-  },
-  "localInferenceSettings.huggingFaceSignInNote": {
-    "defaultMessage": "モデルの検索・ダウンロード時のレート制限を緩和し、非公開またはゲート付きHugging Faceリポジトリにアクセスするにはサインインしてください。"
-  },
-  "localInferenceSettings.loadedInMemory": {
-    "defaultMessage": "Loaded in memory"
-  },
-  "localInferenceSettings.modelSettings": {
-    "defaultMessage": "モデル設定"
-  },
-  "localInferenceSettings.modelSettingsTitle": {
-    "defaultMessage": "モデル設定"
-  },
-  "localInferenceSettings.noModels": {
-    "defaultMessage": "利用可能なモデルはありません"
-  },
-  "localInferenceSettings.recommended": {
-    "defaultMessage": "おすすめ"
-  },
-  "localInferenceSettings.remaining": {
-    "defaultMessage": "残り{time}"
-  },
-  "localInferenceSettings.retry": {
-    "defaultMessage": "再試行"
-  },
-  "localInferenceSettings.showAllFeatured": {
-    "defaultMessage": "注目モデルをすべて表示（あと{count}件）"
-  },
-  "localInferenceSettings.showRecommendedOnly": {
-    "defaultMessage": "おすすめのみ表示"
-  },
-  "localInferenceSettings.title": {
-    "defaultMessage": "ローカル推論モデル"
-  },
-  "localInferenceSettings.vision": {
-    "defaultMessage": "ビジョン"
-  },
-  "localInferenceSettings.visionEncoderDownloading": {
-    "defaultMessage": "ビジョンエンコーダーをダウンロード中…"
-  },
-  "localInferenceSettings.visionEncoderNotDownloaded": {
-    "defaultMessage": "ビジョンエンコーダー未ダウンロード"
-  },
-  "localModelManager.active": {
-    "defaultMessage": "アクティブ"
-  },
-  "localModelManager.deleteConfirm": {
-    "defaultMessage": "このモデルを削除しますか？後で再ダウンロードできます。"
-  },
-  "localModelManager.download": {
-    "defaultMessage": "ダウンロード"
-  },
-  "localModelManager.downloaded": {
-    "defaultMessage": "ダウンロード済み"
-  },
-  "localModelManager.gpuAcceleration": {
-    "defaultMessage": "GPUアクセラレーションに対応（NVIDIAはCUDA、Apple SiliconはMetal）。ハードウェアアクセラレーションを利用するには、ビルド時にGPU機能を有効にする必要があります。"
-  },
-  "localModelManager.noModels": {
-    "defaultMessage": "利用可能なモデルはありません"
-  },
-  "localModelManager.recommended": {
-    "defaultMessage": "おすすめ"
-  },
-  "localModelManager.recommendedForHardware": {
-    "defaultMessage": "お使いのハードウェアにおすすめ"
-  },
-  "localModelManager.showAllModels": {
-    "defaultMessage": "すべてのモデルを表示（あと{count}件）"
-  },
-  "localModelManager.showRecommendedOnly": {
-    "defaultMessage": "おすすめのみ表示"
-  },
   "localModelPicker.bestForMachine": {
     "defaultMessage": "お使いのマシンに最適"
   },
@@ -1478,62 +968,20 @@
   "messageQueue.cancel": {
     "defaultMessage": "キャンセル"
   },
-  "messageQueue.cannotSendWhileEditing": {
-    "defaultMessage": "編集中は送信できません"
-  },
   "messageQueue.clearAll": {
     "defaultMessage": "すべてクリア"
-  },
-  "messageQueue.clickToEdit": {
-    "defaultMessage": "{content}（クリックして編集）"
-  },
-  "messageQueue.collapseQueue": {
-    "defaultMessage": "キューを折りたたむ"
-  },
-  "messageQueue.dragToReorder": {
-    "defaultMessage": "メッセージをドラッグして優先順位を並べ替え"
-  },
-  "messageQueue.expandQueue": {
-    "defaultMessage": "キューを展開"
-  },
-  "messageQueue.messageCount": {
-    "defaultMessage": "{count,plural,one{# 件のメッセージ（{status}）} other{# 件のメッセージ（{status}）}}"
-  },
-  "messageQueue.messageQueue": {
-    "defaultMessage": "メッセージキュー"
-  },
-  "messageQueue.next": {
-    "defaultMessage": "次"
   },
   "messageQueue.paused": {
     "defaultMessage": "一時停止中"
   },
-  "messageQueue.queuePaused": {
-    "defaultMessage": "キューを一時停止中"
-  },
   "messageQueue.queuePausedCompact": {
     "defaultMessage": "キューは一時停止中です。「送信」をクリックするか、新しいメッセージを追加すると再開します"
-  },
-  "messageQueue.queuePausedExpanded": {
-    "defaultMessage": "キューは割り込みにより一時停止されました。「今すぐ送信」を使用するか、新しいメッセージを追加すると再開します。"
-  },
-  "messageQueue.queued": {
-    "defaultMessage": "キュー内"
   },
   "messageQueue.removeFromQueue": {
     "defaultMessage": "このメッセージをキューから削除"
   },
   "messageQueue.save": {
     "defaultMessage": "保存"
-  },
-  "messageQueue.sendNow": {
-    "defaultMessage": "このメッセージを今すぐ送信"
-  },
-  "messageQueue.stopAndSend": {
-    "defaultMessage": "現在の処理を停止して、このメッセージを今すぐ送信"
-  },
-  "messageQueue.waiting": {
-    "defaultMessage": "待機中"
   },
   "messageUsageStats.cacheHitRate": {
     "defaultMessage": "（入力の{percent}%）"
@@ -1580,59 +1028,17 @@
   "messageUsageStats.totalTime": {
     "defaultMessage": "合計時間"
   },
-  "microphoneSelector.chooseDescription": {
-    "defaultMessage": "音声入力に使用するマイクを選択"
-  },
-  "microphoneSelector.grantAccess": {
-    "defaultMessage": "アクセスを許可"
-  },
-  "microphoneSelector.grantAccessDescription": {
-    "defaultMessage": "利用可能なマイクを表示するにはアクセスを許可してください"
-  },
-  "microphoneSelector.microphone": {
-    "defaultMessage": "マイク"
-  },
-  "microphoneSelector.microphoneLabel": {
-    "defaultMessage": "マイク{index}"
-  },
-  "microphoneSelector.selectedMicrophone": {
-    "defaultMessage": "選択中のマイク"
-  },
-  "microphoneSelector.speakToTest": {
-    "defaultMessage": "マイクをテストするために話してください（{seconds}秒）"
-  },
-  "microphoneSelector.stop": {
-    "defaultMessage": "停止"
-  },
-  "microphoneSelector.systemDefault": {
-    "defaultMessage": "システム既定"
-  },
-  "microphoneSelector.test": {
-    "defaultMessage": "テスト"
-  },
   "modeSelectionItem.autonomousDescription": {
     "defaultMessage": "ファイルを自由に編集、作成、削除できる完全なファイル変更権限。"
-  },
-  "modeSelectionItem.autonomousLabel": {
-    "defaultMessage": "自律"
   },
   "modeSelectionItem.chatOnlyDescription": {
     "defaultMessage": "ツールや拡張機能を使わず、選択したプロバイダーとやり取りします。"
   },
-  "modeSelectionItem.chatOnlyLabel": {
-    "defaultMessage": "チャットのみ"
-  },
   "modeSelectionItem.manualDescription": {
     "defaultMessage": "すべてのツール、拡張機能、ファイル変更には人による承認が必要です"
   },
-  "modeSelectionItem.manualLabel": {
-    "defaultMessage": "手動"
-  },
   "modeSelectionItem.smartDescription": {
     "defaultMessage": "リスクレベルに基づき、承認が必要な操作を自動判断します"
-  },
-  "modeSelectionItem.smartLabel": {
-    "defaultMessage": "スマート"
   },
   "modelAndProviderContext.modelChangeFailed": {
     "defaultMessage": "{provider}/{model}に失敗しました"
@@ -1952,39 +1358,6 @@
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "匿名の使用データを共有"
   },
-  "permissionModal.alwaysAllow": {
-    "defaultMessage": "常に許可"
-  },
-  "permissionModal.askBefore": {
-    "defaultMessage": "事前に確認"
-  },
-  "permissionModal.cancel": {
-    "defaultMessage": "キャンセル"
-  },
-  "permissionModal.close": {
-    "defaultMessage": "閉じる"
-  },
-  "permissionModal.failedToLoadTools": {
-    "defaultMessage": "ツールの読み込みに失敗しました"
-  },
-  "permissionModal.failedToLoadToolsDescription": {
-    "defaultMessage": "この拡張機能のツールを読み込めませんでした。現在のセッションで拡張機能が読み込まれていない可能性があります。"
-  },
-  "permissionModal.neverAllow": {
-    "defaultMessage": "許可しない"
-  },
-  "permissionModal.noActiveSession": {
-    "defaultMessage": "アクティブなセッションがありません"
-  },
-  "permissionModal.noActiveSessionDescription": {
-    "defaultMessage": "この拡張機能のツール権限を設定するには、まずチャットセッションを開始してください。ツール権限はアクティブなセッションの拡張機能から読み込まれます。"
-  },
-  "permissionModal.noToolsAvailable": {
-    "defaultMessage": "この拡張機能で利用可能なツールはありません。"
-  },
-  "permissionModal.saveChanges": {
-    "defaultMessage": "変更を保存"
-  },
   "permissionModeChip.approve": {
     "defaultMessage": "手動承認"
   },
@@ -1996,24 +1369,6 @@
   },
   "permissionModeChip.smartApprove": {
     "defaultMessage": "スマート承認"
-  },
-  "permissionRulesModal.description": {
-    "defaultMessage": "拡張機能のツール権限を設定して、システムとのやり取りを制御します。"
-  },
-  "permissionRulesModal.extensionRules": {
-    "defaultMessage": "拡張機能ルール"
-  },
-  "permissionRulesModal.title": {
-    "defaultMessage": "権限ルール"
-  },
-  "permissionSetting.extensionRules": {
-    "defaultMessage": "拡張機能ルール"
-  },
-  "permissionSetting.permissionRules": {
-    "defaultMessage": "権限ルール"
-  },
-  "permissionSetting.permissionRulesDescription": {
-    "defaultMessage": "レスポンスの方向づけやコンテキスト追加のためにプロバイダーへ渡される非表示の指示です。"
   },
   "planSteps.progress": {
     "defaultMessage": "ステップ {current} / {total}"
@@ -2351,14 +1706,8 @@
   "resetProviderSection.resetDescription": {
     "defaultMessage": "選択したモデルとプロバイダー設定がクリアされます。デフォルトがない場合は、再設定のためウェルカム画面に移動します。"
   },
-  "responseStyle.conciseDescription": {
-    "defaultMessage": "ツール呼び出しはデフォルトで閉じられ、使用されたツールのみ表示されます"
-  },
   "responseStyle.conciseLabel": {
     "defaultMessage": "簡潔"
-  },
-  "responseStyle.detailedDescription": {
-    "defaultMessage": "ツール呼び出しはデフォルトで開かれ、詳細が表示されます"
   },
   "responseStyle.detailedLabel": {
     "defaultMessage": "詳細"
@@ -2380,66 +1729,6 @@
   },
   "secureStorageNotice.defaultMessage": {
     "defaultMessage": "キーはキーチェーンに安全に保存されます"
-  },
-  "securityToggle.apiTokenDescription": {
-    "defaultMessage": "分類サービスの認証トークン"
-  },
-  "securityToggle.apiTokenOptional": {
-    "defaultMessage": "APIトークン（任意）"
-  },
-  "securityToggle.classificationEndpoint": {
-    "defaultMessage": "分類エンドポイント"
-  },
-  "securityToggle.classificationEndpointDescription": {
-    "defaultMessage": "分類サービスの完全なURLを入力してください"
-  },
-  "securityToggle.commandClassifierActive": {
-    "defaultMessage": "コマンド分類器が有効です（環境から自動設定）"
-  },
-  "securityToggle.commandEndpointDescription": {
-    "defaultMessage": "コマンドインジェクション分類サービスの完全なURLを入力してください"
-  },
-  "securityToggle.commandInjectionDescription": {
-    "defaultMessage": "MLモデルを使用して悪意のあるシェルコマンドを検出します"
-  },
-  "securityToggle.detectionModel": {
-    "defaultMessage": "検出モデル"
-  },
-  "securityToggle.detectionModelDescription": {
-    "defaultMessage": "プロンプトインジェクション検出に使用するMLモデルを選択します"
-  },
-  "securityToggle.detectionThreshold": {
-    "defaultMessage": "検出しきい値"
-  },
-  "securityToggle.enableCommandInjection": {
-    "defaultMessage": "コマンドインジェクションML検出を有効化"
-  },
-  "securityToggle.enablePromptInjection": {
-    "defaultMessage": "プロンプトインジェクション検出を有効化"
-  },
-  "securityToggle.enablePromptInjectionMl": {
-    "defaultMessage": "プロンプトインジェクションML検出を有効化"
-  },
-  "securityToggle.mlEndpointDescription": {
-    "defaultMessage": "ML分類サービスの完全なURL（モデル識別子を含む）を入力してください"
-  },
-  "securityToggle.mlTokenDescription": {
-    "defaultMessage": "MLサービスの認証トークン（例: Hugging Faceトークン）"
-  },
-  "securityToggle.overrideNotice": {
-    "defaultMessage": "この設定は組織によって管理されているため、変更できません。"
-  },
-  "securityToggle.promptInjectionDescription": {
-    "defaultMessage": "潜在的なプロンプトインジェクション攻撃を検出して防止します"
-  },
-  "securityToggle.promptInjectionMlDescription": {
-    "defaultMessage": "MLモデルを使用してチャット内の潜在的なプロンプトインジェクションを検出します"
-  },
-  "securityToggle.thresholdDescription": {
-    "defaultMessage": "値が高いほど厳格です（0.01 = 非常に緩い、1.0 = 最大限に厳格）"
-  },
-  "securityToggle.warpNotice": {
-    "defaultMessage": "コマンドインジェクション検出は、WARPに接続していると最も効果的です（分類サービスに到達するために必要です）。"
   },
   "sessionActionsHeader.actionsLabel": {
     "defaultMessage": "セッションの操作"
@@ -2486,26 +1775,29 @@
   "sessionIndicators.streaming": {
     "defaultMessage": "ストリーミング中"
   },
-  "settings.appearance.description": {
-    "defaultMessage": "システム上でのiCodexの表示を設定します"
+  "settings.about.title": {
+    "defaultMessage": "情報"
   },
-  "settings.appearance.title": {
-    "defaultMessage": "外観"
+  "settings.bottomPanel.description": {
+    "defaultMessage": "アプリのヘッダーに下部パネルの操作ボタンを表示します"
   },
-  "settings.close": {
-    "defaultMessage": "閉じる"
+  "settings.bottomPanel.title": {
+    "defaultMessage": "下部パネル"
   },
-  "settings.costTracking.description": {
-    "defaultMessage": "モデル料金と使用コストを表示します"
+  "settings.chat.title": {
+    "defaultMessage": "チャット"
   },
-  "settings.costTracking.title": {
-    "defaultMessage": "コスト管理"
+  "settings.composer.title": {
+    "defaultMessage": "入力欄"
   },
   "settings.dockIcon.description": {
     "defaultMessage": "DockにiCodexを表示します"
   },
   "settings.dockIcon.title": {
     "defaultMessage": "Dockアイコン"
+  },
+  "settings.general.title": {
+    "defaultMessage": "一般"
   },
   "settings.help.description": {
     "defaultMessage": "問題の報告や新機能のリクエストでiCodexの改善にご協力ください"
@@ -2577,73 +1869,82 @@
     "defaultMessage": "中国語（繁体字）"
   },
   "settings.menuBarIcon.description": {
-    "defaultMessage": "メニューバーにiCodexを表示します"
+    "defaultMessage": "メインウィンドウを閉じても iCodex をメニューバーに常駐させます"
   },
   "settings.menuBarIcon.title": {
-    "defaultMessage": "メニューバーアイコン"
-  },
-  "settings.notifications.configGuide": {
-    "defaultMessage": "設定ガイド"
-  },
-  "settings.notifications.description": {
-    "defaultMessage": "通知はOSで管理されます - {link}"
-  },
-  "settings.notifications.modal.macInstructions": {
-    "defaultMessage": "macOSで通知を有効にするには:"
-  },
-  "settings.notifications.modal.macStep1": {
-    "defaultMessage": "システム設定を開く"
-  },
-  "settings.notifications.modal.macStep2": {
-    "defaultMessage": "「通知」をクリック"
-  },
-  "settings.notifications.modal.macStep3": {
-    "defaultMessage": "アプリ一覧でiCodexを見つけて選択"
-  },
-  "settings.notifications.modal.macStep4": {
-    "defaultMessage": "通知を有効にし、必要に応じて設定を調整"
-  },
-  "settings.notifications.modal.title": {
-    "defaultMessage": "通知を有効にする方法"
-  },
-  "settings.notifications.modal.winInstructions": {
-    "defaultMessage": "Windowsで通知を有効にするには:"
-  },
-  "settings.notifications.modal.winStep1": {
-    "defaultMessage": "設定を開く"
-  },
-  "settings.notifications.modal.winStep2": {
-    "defaultMessage": "システム > 通知に移動"
-  },
-  "settings.notifications.modal.winStep3": {
-    "defaultMessage": "アプリ一覧でiCodexを見つけて選択"
-  },
-  "settings.notifications.modal.winStep4": {
-    "defaultMessage": "通知をオンにし、必要に応じて設定を調整"
+    "defaultMessage": "メニューバーに表示"
   },
   "settings.notifications.openSettings": {
     "defaultMessage": "設定を開く"
   },
-  "settings.notifications.task.description": {
-    "defaultMessage": "ウィンドウがバックグラウンドにある間にiCodexがタスクを完了したら通知します"
+  "settings.notifications.system.description": {
+    "defaultMessage": "通知の配信は OS によって管理されます"
   },
-  "settings.notifications.task.title": {
-    "defaultMessage": "タスク完了通知"
+  "settings.notifications.system.title": {
+    "defaultMessage": "システム通知"
   },
   "settings.notifications.title": {
     "defaultMessage": "通知"
+  },
+  "settings.notifications.turn.always": {
+    "defaultMessage": "常に"
+  },
+  "settings.notifications.turn.description": {
+    "defaultMessage": "iCodex が完了を知らせるタイミングを設定します"
+  },
+  "settings.notifications.turn.never": {
+    "defaultMessage": "しない"
+  },
+  "settings.notifications.turn.title": {
+    "defaultMessage": "ターン完了通知"
+  },
+  "settings.notifications.turn.unfocused": {
+    "defaultMessage": "未フォーカス時のみ"
+  },
+  "settings.permissions.autoReview.description": {
+    "defaultMessage": "追加アクセスの要求が安全かどうかを iCodex が判断し、リスクがある場合のみ確認します。自動レビューは誤ることがあります"
+  },
+  "settings.permissions.autoReview.title": {
+    "defaultMessage": "自動レビュー"
+  },
+  "settings.permissions.default.description": {
+    "defaultMessage": "デフォルトでは、iCodex はワークスペース内のファイルを読み書きできます。それ以外の操作は承認を求めます"
+  },
+  "settings.permissions.default.title": {
+    "defaultMessage": "デフォルトの権限"
+  },
+  "settings.permissions.fullAccess.description": {
+    "defaultMessage": "iCodex がコンピュータ上のあらゆるファイルを編集し、ネットワークを使うコマンドを承認なしで実行できます。データの消失や漏洩、予期しない動作のリスクが大幅に高まります"
+  },
+  "settings.permissions.fullAccess.title": {
+    "defaultMessage": "フルアクセス"
+  },
+  "settings.permissions.title": {
+    "defaultMessage": "権限"
   },
   "settings.preventSleep.description": {
     "defaultMessage": "iCodexがタスクを実行中はコンピューターがスリープしないようにします（画面はロックされる場合があります）"
   },
   "settings.preventSleep.title": {
-    "defaultMessage": "スリープを防止"
+    "defaultMessage": "実行中にスリープを防ぐ"
   },
-  "settings.theme.description": {
-    "defaultMessage": "iCodexの見た目と操作感をカスタマイズします"
+  "settings.sendShortcut.description": {
+    "defaultMessage": "Enter で送信するか改行するかを選びます"
   },
-  "settings.theme.title": {
-    "defaultMessage": "テーマ"
+  "settings.sendShortcut.enter": {
+    "defaultMessage": "Enter"
+  },
+  "settings.sendShortcut.modEnter": {
+    "defaultMessage": "{mod} + Enter"
+  },
+  "settings.sendShortcut.title": {
+    "defaultMessage": "送信ショートカット"
+  },
+  "settings.toolDetails.description": {
+    "defaultMessage": "チャットでツール呼び出しを既定で展開するか折りたたむか"
+  },
+  "settings.toolDetails.title": {
+    "defaultMessage": "ツール呼び出しの詳細"
   },
   "settings.updates.description": {
     "defaultMessage": "iCodexを最新の状態に保つため、アップデートを確認してインストールします"
@@ -2651,14 +1952,17 @@
   "settings.updates.title": {
     "defaultMessage": "アップデート"
   },
+  "settings.usageStats.description": {
+    "defaultMessage": "各応答の下にトークン数、速度、コストを表示します"
+  },
+  "settings.usageStats.title": {
+    "defaultMessage": "使用状況を表示"
+  },
   "settings.version.title": {
     "defaultMessage": "バージョン"
   },
   "settingsView.back": {
     "defaultMessage": "アプリに戻る"
-  },
-  "settingsView.groupAdvanced": {
-    "defaultMessage": "詳細"
   },
   "settingsView.groupIntegrations": {
     "defaultMessage": "連携"
@@ -2672,20 +1976,14 @@
   "settingsView.search": {
     "defaultMessage": "設定を検索..."
   },
-  "settingsView.tabApp": {
-    "defaultMessage": "アプリ"
+  "settingsView.tabAppearance": {
+    "defaultMessage": "外観"
   },
-  "settingsView.tabAuth": {
-    "defaultMessage": "認証"
-  },
-  "settingsView.tabChat": {
-    "defaultMessage": "チャット"
+  "settingsView.tabGeneral": {
+    "defaultMessage": "一般"
   },
   "settingsView.tabKeyboard": {
     "defaultMessage": "キーボード"
-  },
-  "settingsView.tabLocalInference": {
-    "defaultMessage": "ローカル推論"
   },
   "settingsView.tabModels": {
     "defaultMessage": "モデル"
@@ -2693,14 +1991,8 @@
   "settingsView.tabPlugins": {
     "defaultMessage": "プラグイン"
   },
-  "settingsView.tabPrompts": {
-    "defaultMessage": "プロンプト"
-  },
   "settingsView.title": {
     "defaultMessage": "設定"
-  },
-  "sheet.close": {
-    "defaultMessage": "閉じる"
   },
   "shortcutRecorder.cancel": {
     "defaultMessage": "キャンセル"

@@ -23,66 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "Bật/tắt bảng bên"
   },
-  "authSettings.activeProviderWarning": {
-    "defaultMessage": "Đây là nhà cung cấp đang hoạt động. Các yêu cầu mới có thể thất bại cho đến khi bạn cấu hình thông tin xác thực khác."
-  },
-  "authSettings.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "authSettings.delete": {
-    "defaultMessage": "Xóa"
-  },
-  "authSettings.deleteCredential": {
-    "defaultMessage": "Xóa thông tin xác thực"
-  },
-  "authSettings.deleteMessage": {
-    "defaultMessage": "Xóa thông tin xác thực {name} cho {provider}?"
-  },
-  "authSettings.deleteTitle": {
-    "defaultMessage": "Xóa thông tin xác thực"
-  },
-  "authSettings.deleted": {
-    "defaultMessage": "Đã xóa thông tin xác thực"
-  },
-  "authSettings.description": {
-    "defaultMessage": "Quản lý thông tin xác thực nhà cung cấp được iCodex lưu trữ cục bộ."
-  },
-  "authSettings.empty": {
-    "defaultMessage": "Không tìm thấy thông tin xác thực nhà cung cấp nào được lưu trữ cục bộ."
-  },
-  "authSettings.expiresAt": {
-    "defaultMessage": "Hết hạn {date}"
-  },
-  "authSettings.failedToConfigure": {
-    "defaultMessage": "Không thể cấu hình thông tin xác thực: {error}"
-  },
-  "authSettings.failedToDelete": {
-    "defaultMessage": "Không thể xóa thông tin xác thực: {error}"
-  },
-  "authSettings.failedToLoad": {
-    "defaultMessage": "Không thể tải thông tin xác thực nhà cung cấp"
-  },
-  "authSettings.loading": {
-    "defaultMessage": "Đang tải thông tin xác thực..."
-  },
-  "authSettings.reauthorize": {
-    "defaultMessage": "Cấp quyền lại"
-  },
-  "authSettings.signIn": {
-    "defaultMessage": "Đăng nhập"
-  },
-  "authSettings.signedIn": {
-    "defaultMessage": "Đã cấu hình thông tin xác thực"
-  },
-  "authSettings.storageProviderCache": {
-    "defaultMessage": "Bộ nhớ đệm nhà cung cấp"
-  },
-  "authSettings.storageSecretStore": {
-    "defaultMessage": "Kho lưu trữ bí mật"
-  },
-  "authSettings.title": {
-    "defaultMessage": "Thông tin xác thực nhà cung cấp"
-  },
   "backButton.back": {
     "defaultMessage": "Quay lại"
   },
@@ -91,36 +31,6 @@
   },
   "baseChat.goHome": {
     "defaultMessage": "Về trang chủ"
-  },
-  "baseChat.reconnecting": {
-    "defaultMessage": "Mất kết nối. Đang kết nối lại…"
-  },
-  "bottomMenuExtensionSelection.extensionUpdated": {
-    "defaultMessage": "Đã cập nhật tiện ích mở rộng"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeDisabled": {
-    "defaultMessage": "{name} sẽ bị vô hiệu hóa trong các cuộc trò chuyện mới"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeEnabled": {
-    "defaultMessage": "{name} sẽ được bật trong các cuộc trò chuyện mới"
-  },
-  "bottomMenuExtensionSelection.extensionsForNewChats": {
-    "defaultMessage": "Tiện ích mở rộng cho các cuộc trò chuyện mới"
-  },
-  "bottomMenuExtensionSelection.extensionsForThisSession": {
-    "defaultMessage": "Tiện ích mở rộng cho phiên trò chuyện này"
-  },
-  "bottomMenuExtensionSelection.manageExtensions": {
-    "defaultMessage": "quản lý tiện ích mở rộng"
-  },
-  "bottomMenuExtensionSelection.noExtensionsAvailable": {
-    "defaultMessage": "không có tiện ích mở rộng nào"
-  },
-  "bottomMenuExtensionSelection.noExtensionsFound": {
-    "defaultMessage": "không tìm thấy tiện ích mở rộng nào"
-  },
-  "bottomMenuExtensionSelection.searchExtensions": {
-    "defaultMessage": "tìm kiếm tiện ích mở rộng..."
   },
   "cardButtons.configure": {
     "defaultMessage": "Cấu hình"
@@ -137,9 +47,6 @@
   "chat.requestFailed": {
     "defaultMessage": "Yêu cầu không thành công"
   },
-  "chatInput.contextWindow": {
-    "defaultMessage": "Cửa sổ ngữ cảnh"
-  },
   "chatInput.dictationError": {
     "defaultMessage": "Lỗi đọc chính tả"
   },
@@ -155,12 +62,6 @@
   "chatInput.recording": {
     "defaultMessage": "Đang ghi âm..."
   },
-  "chatInput.removeFile": {
-    "defaultMessage": "Xóa tệp"
-  },
-  "chatInput.removeImage": {
-    "defaultMessage": "Xóa hình ảnh"
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "Đang khởi động lại phiên..."
   },
@@ -173,101 +74,11 @@
   "chatInput.typeMessage": {
     "defaultMessage": "Nhập tin nhắn để gửi"
   },
-  "chatInput.unknownType": {
-    "defaultMessage": "Loại không xác định"
-  },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "Đang chờ hủy hoàn tất"
   },
   "chatInput.waitingForImages": {
     "defaultMessage": "Đang chờ lưu hình ảnh..."
-  },
-  "chatSettings.modeDescription": {
-    "defaultMessage": "Chọn chế độ mặc định mà iCodex sử dụng cho các phiên mới. Các phiên hiện có vẫn giữ chế độ hiện tại của chúng."
-  },
-  "chatSettings.modeTitle": {
-    "defaultMessage": "Chế độ mặc định"
-  },
-  "chatSettings.responseStylesDescription": {
-    "defaultMessage": "Chọn cách iCodex định dạng và tạo phong cách cho các phản hồi của mình"
-  },
-  "chatSettings.responseStylesTitle": {
-    "defaultMessage": "Phong cách phản hồi"
-  },
-  "configSettings.configReset": {
-    "defaultMessage": "Đặt lại cấu hình"
-  },
-  "configSettings.configResetMsg": {
-    "defaultMessage": "Tất cả thay đổi đã được hoàn nguyên"
-  },
-  "configSettings.configUpdated": {
-    "defaultMessage": "Đã cập nhật cấu hình"
-  },
-  "configSettings.configUpdatedMsg": {
-    "defaultMessage": "Đã lưu thành công \"{name}\""
-  },
-  "configSettings.configurationEditor": {
-    "defaultMessage": "Trình chỉnh sửa cấu hình"
-  },
-  "configSettings.description": {
-    "defaultMessage": "Chỉnh sửa cài đặt cấu hình iCodex của bạn"
-  },
-  "configSettings.descriptionWithProvider": {
-    "defaultMessage": "Chỉnh sửa cài đặt cấu hình iCodex của bạn (cài đặt hiện tại cho {provider})"
-  },
-  "configSettings.done": {
-    "defaultMessage": "Xong"
-  },
-  "configSettings.editConfiguration": {
-    "defaultMessage": "Chỉnh sửa cấu hình"
-  },
-  "configSettings.enterValue": {
-    "defaultMessage": "Nhập {name}"
-  },
-  "configSettings.noSettings": {
-    "defaultMessage": "Không tìm thấy cài đặt cấu hình nào."
-  },
-  "configSettings.resetChanges": {
-    "defaultMessage": "Đặt lại thay đổi"
-  },
-  "configSettings.saveFailed": {
-    "defaultMessage": "Lưu thất bại"
-  },
-  "configSettings.saveFailedMsg": {
-    "defaultMessage": "Không thể lưu \"{name}\""
-  },
-  "configSettings.saving": {
-    "defaultMessage": "Đang lưu..."
-  },
-  "configSettings.title": {
-    "defaultMessage": "Cấu hình"
-  },
-  "configureApproveMode.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "configureApproveMode.description": {
-    "defaultMessage": "Yêu cầu phê duyệt có thể được áp dụng cho tất cả các yêu cầu công cụ hoặc xác định những hành động nào có thể cần tích hợp"
-  },
-  "configureApproveMode.manualApproval": {
-    "defaultMessage": "Phê duyệt thủ công"
-  },
-  "configureApproveMode.manualApprovalDescription": {
-    "defaultMessage": "Tất cả các công cụ, tiện ích mở rộng và thay đổi tệp sẽ yêu cầu phê duyệt của con người"
-  },
-  "configureApproveMode.save": {
-    "defaultMessage": "Lưu"
-  },
-  "configureApproveMode.saving": {
-    "defaultMessage": "Đang lưu..."
-  },
-  "configureApproveMode.smartApproval": {
-    "defaultMessage": "Phê duyệt thông minh"
-  },
-  "configureApproveMode.smartApprovalDescription": {
-    "defaultMessage": "Xác định một cách thông minh những hành động nào cần phê duyệt dựa trên mức độ rủi ro"
-  },
-  "configureApproveMode.title": {
-    "defaultMessage": "Cấu hình chế độ phê duyệt"
   },
   "confirmationModal.defaultCancel": {
     "defaultMessage": "Không"
@@ -277,27 +88,6 @@
   },
   "confirmationModal.processing": {
     "defaultMessage": "Đang xử lý..."
-  },
-  "conversationLimitsDropdown.conversationLimits": {
-    "defaultMessage": "Giới hạn cuộc trò chuyện"
-  },
-  "conversationLimitsDropdown.maxTurns": {
-    "defaultMessage": "Số lượt tối đa"
-  },
-  "conversationLimitsDropdown.maxTurnsDescription": {
-    "defaultMessage": "Số lượt tác nhân tối đa trước khi iCodex yêu cầu người dùng nhập liệu"
-  },
-  "costTracker.costUnavailable": {
-    "defaultMessage": "Không có dữ liệu chi phí cho {model} ({inputTokens} token đầu vào, {outputTokens} token đầu ra)"
-  },
-  "costTracker.inputOutputTooltip": {
-    "defaultMessage": "Đầu vào: {inputTokens} token ({inputCost}) | Đầu ra: {outputTokens} token ({outputCost})"
-  },
-  "costTracker.pricingUnavailable": {
-    "defaultMessage": "Không có dữ liệu giá cho {model}"
-  },
-  "costTracker.totalSessionCost": {
-    "defaultMessage": "Tổng chi phí phiên: {cost}"
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "Thêm tín dụng"
@@ -503,104 +293,8 @@
   "defaultProviderSetupForm.showOptions": {
     "defaultMessage": "Hiện {count} tùy chọn"
   },
-  "diagnosticsModal.attachHint": {
-    "defaultMessage": "Nếu bạn báo lỗi, hãy cân nhắc đính kèm báo cáo chẩn đoán vào đó."
-  },
-  "diagnosticsModal.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "diagnosticsModal.configSettings": {
-    "defaultMessage": "Thiết lập cấu hình"
-  },
-  "diagnosticsModal.description": {
-    "defaultMessage": "Bạn có thể tải xuống báo cáo chẩn đoán dạng JSON để chia sẻ với nhóm, hoặc báo lỗi trực tiếp trên GitHub với thông tin hệ thống được điền sẵn. Báo cáo chẩn đoán bao gồm những nội dung sau:"
-  },
-  "diagnosticsModal.diagnosticsErrorMsg": {
-    "defaultMessage": "Không thể tải xuống báo cáo chẩn đoán"
-  },
-  "diagnosticsModal.diagnosticsErrorTitle": {
-    "defaultMessage": "Lỗi chẩn đoán"
-  },
-  "diagnosticsModal.download": {
-    "defaultMessage": "Tải xuống"
-  },
-  "diagnosticsModal.downloading": {
-    "defaultMessage": "Đang tải xuống..."
-  },
-  "diagnosticsModal.fileBug": {
-    "defaultMessage": "Báo lỗi trên GitHub"
-  },
-  "diagnosticsModal.logFiles": {
-    "defaultMessage": "Tệp nhật ký gần đây"
-  },
-  "diagnosticsModal.opening": {
-    "defaultMessage": "Đang mở..."
-  },
-  "diagnosticsModal.reportProblem": {
-    "defaultMessage": "Báo cáo sự cố"
-  },
-  "diagnosticsModal.sensitiveWarning": {
-    "defaultMessage": "Nếu phiên của bạn chứa thông tin nhạy cảm, đừng chia sẻ tệp chẩn đoán công khai."
-  },
-  "diagnosticsModal.sessionMessages": {
-    "defaultMessage": "Tin nhắn phiên hiện tại của bạn"
-  },
-  "diagnosticsModal.systemInfo": {
-    "defaultMessage": "Thông tin hệ thống cơ bản"
-  },
-  "diagnosticsModal.systemInfoErrorMsg": {
-    "defaultMessage": "Không thể lấy thông tin hệ thống"
-  },
-  "diagnosticsModal.systemInfoErrorTitle": {
-    "defaultMessage": "Lỗi"
-  },
   "dialog.close": {
     "defaultMessage": "Đóng"
-  },
-  "dictationSettings.addApiKey": {
-    "defaultMessage": "Thêm khóa API"
-  },
-  "dictationSettings.apiKey": {
-    "defaultMessage": "Khóa API"
-  },
-  "dictationSettings.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "dictationSettings.chooseVoiceConversion": {
-    "defaultMessage": "Chọn cách chuyển giọng nói thành văn bản"
-  },
-  "dictationSettings.configureApiKey": {
-    "defaultMessage": "Cấu hình khóa API trong <b>{settingsPath}</b>"
-  },
-  "dictationSettings.configured": {
-    "defaultMessage": "(Đã cấu hình)"
-  },
-  "dictationSettings.configuredIn": {
-    "defaultMessage": "✓ Đã cấu hình trong {settingsPath}"
-  },
-  "dictationSettings.disabled": {
-    "defaultMessage": "Đã tắt"
-  },
-  "dictationSettings.enterApiKey": {
-    "defaultMessage": "Nhập khóa API của bạn"
-  },
-  "dictationSettings.notConfigured": {
-    "defaultMessage": "(chưa cấu hình)"
-  },
-  "dictationSettings.removeApiKey": {
-    "defaultMessage": "Xóa khóa API"
-  },
-  "dictationSettings.requiredForTranscription": {
-    "defaultMessage": "Bắt buộc để phiên âm"
-  },
-  "dictationSettings.save": {
-    "defaultMessage": "Lưu"
-  },
-  "dictationSettings.updateApiKey": {
-    "defaultMessage": "Cập nhật khóa API"
-  },
-  "dictationSettings.voiceDictationProvider": {
-    "defaultMessage": "Nhà cung cấp đọc chính tả bằng giọng nói"
   },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "Không thể cập nhật thư mục làm việc"
@@ -851,66 +545,6 @@
   "filesPanel.title": {
     "defaultMessage": "Tệp"
   },
-  "goosehintsModal.close": {
-    "defaultMessage": "Đóng"
-  },
-  "goosehintsModal.developer": {
-    "defaultMessage": "Nhà phát triển"
-  },
-  "goosehintsModal.dialogDescription": {
-    "defaultMessage": "Cung cấp thêm ngữ cảnh về dự án của bạn để cải thiện giao tiếp với iCodex"
-  },
-  "goosehintsModal.dialogTitle": {
-    "defaultMessage": "Cấu hình gợi ý dự án (.goosehints)"
-  },
-  "goosehintsModal.errorReading": {
-    "defaultMessage": "Lỗi khi đọc tệp .goosehints: {error}"
-  },
-  "goosehintsModal.failedToAccess": {
-    "defaultMessage": "Không thể truy cập tệp .goosehints"
-  },
-  "goosehintsModal.failedToSave": {
-    "defaultMessage": "Không thể lưu tệp .goosehints"
-  },
-  "goosehintsModal.fileCreating": {
-    "defaultMessage": "Đang tạo tệp .goosehints mới tại: {filePath}"
-  },
-  "goosehintsModal.fileFound": {
-    "defaultMessage": "Đã tìm thấy tệp .goosehints tại: {filePath}"
-  },
-  "goosehintsModal.helpText1": {
-    "defaultMessage": ".goosehints là một tệp văn bản dùng để cung cấp thêm ngữ cảnh về dự án của bạn và cải thiện giao tiếp với iCodex."
-  },
-  "goosehintsModal.helpText2": {
-    "defaultMessage": "Hãy đảm bảo tiện ích mở rộng {bold} được bật trong trang tiện ích mở rộng. Tiện ích mở rộng này là bắt buộc để sử dụng .goosehints. Bạn cần khởi động lại phiên để các cập nhật .goosehints có hiệu lực."
-  },
-  "goosehintsModal.helpText3": {
-    "defaultMessage": "Xem {link} để biết thêm thông tin."
-  },
-  "goosehintsModal.helpTextLink": {
-    "defaultMessage": "cách sử dụng .goosehints"
-  },
-  "goosehintsModal.placeholder": {
-    "defaultMessage": "Nhập gợi ý dự án ở đây..."
-  },
-  "goosehintsModal.save": {
-    "defaultMessage": "Lưu"
-  },
-  "goosehintsModal.savedSuccessfully": {
-    "defaultMessage": "Đã lưu thành công"
-  },
-  "goosehintsModal.saving": {
-    "defaultMessage": "Đang lưu..."
-  },
-  "goosehintsSection.configure": {
-    "defaultMessage": "Cấu hình"
-  },
-  "goosehintsSection.description": {
-    "defaultMessage": "Cấu hình tệp .goosehints của dự án để cung cấp thêm ngữ cảnh cho iCodex"
-  },
-  "goosehintsSection.title": {
-    "defaultMessage": "Gợi ý dự án (.goosehints)"
-  },
   "groupedExtensionLoadingToast.askGoose": {
     "defaultMessage": "Hỏi iCodex"
   },
@@ -992,42 +626,6 @@
   "hub.suggestionReview": {
     "defaultMessage": "Xem xét mã và đề xuất thay đổi"
   },
-  "huggingFaceModelSearch.download": {
-    "defaultMessage": "Tải xuống"
-  },
-  "huggingFaceModelSearch.downloaded": {
-    "defaultMessage": "Đã tải xuống"
-  },
-  "huggingFaceModelSearch.downloading": {
-    "defaultMessage": "Đang tải xuống…"
-  },
-  "huggingFaceModelSearch.loadingVariants": {
-    "defaultMessage": "Đang tải các biến thể..."
-  },
-  "huggingFaceModelSearch.noGgufModels": {
-    "defaultMessage": "Không tìm thấy mô hình cục bộ tương thích nào cho truy vấn này."
-  },
-  "huggingFaceModelSearch.recommended": {
-    "defaultMessage": "Được khuyến nghị"
-  },
-  "huggingFaceModelSearch.searchError": {
-    "defaultMessage": "Lỗi tìm kiếm: {details}"
-  },
-  "huggingFaceModelSearch.searchFailed": {
-    "defaultMessage": "Tìm kiếm thất bại. Vui lòng thử lại."
-  },
-  "huggingFaceModelSearch.searchHuggingFace": {
-    "defaultMessage": "Tìm kiếm HuggingFace"
-  },
-  "huggingFaceModelSearch.searchNoData": {
-    "defaultMessage": "Tìm kiếm không trả về dữ liệu nào."
-  },
-  "huggingFaceModelSearch.searchPlaceholder": {
-    "defaultMessage": "Tìm kiếm mô hình cục bộ..."
-  },
-  "huggingFaceModelSearch.tooLarge": {
-    "defaultMessage": "Có thể không vừa với bộ nhớ (mô hình {size}, khả dụng {available})"
-  },
   "huggingFaceSignInPrompt.failedToConfigure": {
     "defaultMessage": "Không thể đăng nhập vào Hugging Face: {error}"
   },
@@ -1045,9 +643,6 @@
   },
   "imagePreview.altText": {
     "defaultMessage": "hình ảnh iCodex"
-  },
-  "imagePreview.clickToCollapse": {
-    "defaultMessage": "Nhấp để thu gọn"
   },
   "imagePreview.clickToExpand": {
     "defaultMessage": "Nhấp để mở rộng"
@@ -1262,111 +857,6 @@
   "loadingGoose.waiting": {
     "defaultMessage": "đang chờ"
   },
-  "localInferenceSettings.deleteConfirm": {
-    "defaultMessage": "Xóa mô hình này? Bạn có thể tải lại sau."
-  },
-  "localInferenceSettings.description": {
-    "defaultMessage": "Tải xuống và quản lý các mô hình LLM cục bộ để suy luận mà không cần khóa API. Tìm kiếm các mô hình GGUF hoặc MLX trên HuggingFace, hoặc sử dụng các lựa chọn nổi bật bên dưới."
-  },
-  "localInferenceSettings.dismiss": {
-    "defaultMessage": "Bỏ qua"
-  },
-  "localInferenceSettings.download": {
-    "defaultMessage": "Tải xuống"
-  },
-  "localInferenceSettings.downloadCancelled": {
-    "defaultMessage": "Đã hủy tải xuống"
-  },
-  "localInferenceSettings.downloadFailed": {
-    "defaultMessage": "Tải xuống thất bại"
-  },
-  "localInferenceSettings.downloadProgress": {
-    "defaultMessage": "{downloaded} / {total} ({percent}%)"
-  },
-  "localInferenceSettings.downloadedModels": {
-    "defaultMessage": "Các mô hình đã tải xuống"
-  },
-  "localInferenceSettings.downloading": {
-    "defaultMessage": "Đang tải xuống"
-  },
-  "localInferenceSettings.evictFromMemory": {
-    "defaultMessage": "Evict from memory"
-  },
-  "localInferenceSettings.featuredModels": {
-    "defaultMessage": "Mô hình nổi bật"
-  },
-  "localInferenceSettings.huggingFaceSignInNote": {
-    "defaultMessage": "Đăng nhập để tăng giới hạn tốc độ khi tìm kiếm và tải xuống mô hình, và để truy cập các kho lưu trữ Hugging Face riêng tư hoặc bị giới hạn."
-  },
-  "localInferenceSettings.loadedInMemory": {
-    "defaultMessage": "Loaded in memory"
-  },
-  "localInferenceSettings.modelSettings": {
-    "defaultMessage": "Cài đặt mô hình"
-  },
-  "localInferenceSettings.modelSettingsTitle": {
-    "defaultMessage": "Cài đặt mô hình"
-  },
-  "localInferenceSettings.noModels": {
-    "defaultMessage": "Không có mô hình nào khả dụng"
-  },
-  "localInferenceSettings.recommended": {
-    "defaultMessage": "Được đề xuất"
-  },
-  "localInferenceSettings.remaining": {
-    "defaultMessage": "Còn lại {time}"
-  },
-  "localInferenceSettings.retry": {
-    "defaultMessage": "Thử lại"
-  },
-  "localInferenceSettings.showAllFeatured": {
-    "defaultMessage": "Hiển thị tất cả nổi bật (thêm {count})"
-  },
-  "localInferenceSettings.showRecommendedOnly": {
-    "defaultMessage": "Chỉ hiển thị được đề xuất"
-  },
-  "localInferenceSettings.title": {
-    "defaultMessage": "Mô hình suy luận cục bộ"
-  },
-  "localInferenceSettings.vision": {
-    "defaultMessage": "Thị giác"
-  },
-  "localInferenceSettings.visionEncoderDownloading": {
-    "defaultMessage": "Đang tải bộ mã hóa thị giác…"
-  },
-  "localInferenceSettings.visionEncoderNotDownloaded": {
-    "defaultMessage": "Bộ mã hóa thị giác chưa được tải xuống"
-  },
-  "localModelManager.active": {
-    "defaultMessage": "Đang hoạt động"
-  },
-  "localModelManager.deleteConfirm": {
-    "defaultMessage": "Xóa mô hình này? Bạn có thể tải lại sau."
-  },
-  "localModelManager.download": {
-    "defaultMessage": "Tải xuống"
-  },
-  "localModelManager.downloaded": {
-    "defaultMessage": "Đã tải xuống"
-  },
-  "localModelManager.gpuAcceleration": {
-    "defaultMessage": "Hỗ trợ tăng tốc GPU (CUDA cho NVIDIA, Metal cho Apple Silicon). Các tính năng GPU phải được bật khi biên dịch để có tăng tốc phần cứng."
-  },
-  "localModelManager.noModels": {
-    "defaultMessage": "Không có mô hình nào khả dụng"
-  },
-  "localModelManager.recommended": {
-    "defaultMessage": "Được đề xuất"
-  },
-  "localModelManager.recommendedForHardware": {
-    "defaultMessage": "Được đề xuất cho phần cứng của bạn"
-  },
-  "localModelManager.showAllModels": {
-    "defaultMessage": "Hiển thị tất cả mô hình (thêm {count})"
-  },
-  "localModelManager.showRecommendedOnly": {
-    "defaultMessage": "Chỉ hiển thị được đề xuất"
-  },
   "localModelPicker.bestForMachine": {
     "defaultMessage": "Tốt nhất cho máy của bạn"
   },
@@ -1478,62 +968,20 @@
   "messageQueue.cancel": {
     "defaultMessage": "Hủy"
   },
-  "messageQueue.cannotSendWhileEditing": {
-    "defaultMessage": "Không thể gửi khi đang chỉnh sửa"
-  },
   "messageQueue.clearAll": {
     "defaultMessage": "Xóa tất cả"
-  },
-  "messageQueue.clickToEdit": {
-    "defaultMessage": "{content} (Nhấp để chỉnh sửa)"
-  },
-  "messageQueue.collapseQueue": {
-    "defaultMessage": "Thu gọn hàng đợi"
-  },
-  "messageQueue.dragToReorder": {
-    "defaultMessage": "Kéo tin nhắn để sắp xếp lại mức ưu tiên"
-  },
-  "messageQueue.expandQueue": {
-    "defaultMessage": "Mở rộng hàng đợi"
-  },
-  "messageQueue.messageCount": {
-    "defaultMessage": "{count,plural,one{# tin nhắn {status}} other{# tin nhắn {status}}}"
-  },
-  "messageQueue.messageQueue": {
-    "defaultMessage": "Hàng đợi tin nhắn"
-  },
-  "messageQueue.next": {
-    "defaultMessage": "Tiếp theo"
   },
   "messageQueue.paused": {
     "defaultMessage": "Đã tạm dừng"
   },
-  "messageQueue.queuePaused": {
-    "defaultMessage": "Hàng đợi đã tạm dừng"
-  },
   "messageQueue.queuePausedCompact": {
     "defaultMessage": "Hàng đợi đã tạm dừng - nhấp \"Gửi\" hoặc thêm tin nhắn mới để tiếp tục"
-  },
-  "messageQueue.queuePausedExpanded": {
-    "defaultMessage": "Hàng đợi bị tạm dừng do gián đoạn. Sử dụng \"Gửi ngay\" hoặc thêm tin nhắn mới để tiếp tục."
-  },
-  "messageQueue.queued": {
-    "defaultMessage": "đã xếp hàng"
   },
   "messageQueue.removeFromQueue": {
     "defaultMessage": "Xóa tin nhắn này khỏi hàng đợi"
   },
   "messageQueue.save": {
     "defaultMessage": "Lưu"
-  },
-  "messageQueue.sendNow": {
-    "defaultMessage": "Gửi tin nhắn này ngay"
-  },
-  "messageQueue.stopAndSend": {
-    "defaultMessage": "Dừng xử lý hiện tại và gửi tin nhắn này ngay"
-  },
-  "messageQueue.waiting": {
-    "defaultMessage": "đang chờ"
   },
   "messageUsageStats.cacheHitRate": {
     "defaultMessage": "({percent}% đầu vào)"
@@ -1580,59 +1028,17 @@
   "messageUsageStats.totalTime": {
     "defaultMessage": "Tổng thời gian"
   },
-  "microphoneSelector.chooseDescription": {
-    "defaultMessage": "Chọn micrô nào để sử dụng cho việc đọc chính tả"
-  },
-  "microphoneSelector.grantAccess": {
-    "defaultMessage": "Cấp quyền truy cập"
-  },
-  "microphoneSelector.grantAccessDescription": {
-    "defaultMessage": "Cấp quyền truy cập để xem các micrô khả dụng"
-  },
-  "microphoneSelector.microphone": {
-    "defaultMessage": "Micrô"
-  },
-  "microphoneSelector.microphoneLabel": {
-    "defaultMessage": "Micrô {index}"
-  },
-  "microphoneSelector.selectedMicrophone": {
-    "defaultMessage": "Micrô đã chọn"
-  },
-  "microphoneSelector.speakToTest": {
-    "defaultMessage": "Hãy nói để kiểm tra micrô của bạn ({seconds}s)"
-  },
-  "microphoneSelector.stop": {
-    "defaultMessage": "Dừng"
-  },
-  "microphoneSelector.systemDefault": {
-    "defaultMessage": "Mặc định của hệ thống"
-  },
-  "microphoneSelector.test": {
-    "defaultMessage": "Kiểm tra"
-  },
   "modeSelectionItem.autonomousDescription": {
     "defaultMessage": "Khả năng chỉnh sửa tệp đầy đủ, chỉnh sửa, tạo và xóa tệp một cách tự do."
-  },
-  "modeSelectionItem.autonomousLabel": {
-    "defaultMessage": "Tự động"
   },
   "modeSelectionItem.chatOnlyDescription": {
     "defaultMessage": "Tương tác với nhà cung cấp đã chọn mà không sử dụng công cụ hoặc tiện ích mở rộng."
   },
-  "modeSelectionItem.chatOnlyLabel": {
-    "defaultMessage": "Chỉ trò chuyện"
-  },
   "modeSelectionItem.manualDescription": {
     "defaultMessage": "Tất cả công cụ, tiện ích mở rộng và chỉnh sửa tệp sẽ yêu cầu sự phê duyệt của con người"
   },
-  "modeSelectionItem.manualLabel": {
-    "defaultMessage": "Thủ công"
-  },
   "modeSelectionItem.smartDescription": {
     "defaultMessage": "Tự động xác định một cách thông minh những hành động nào cần phê duyệt dựa trên mức độ rủi ro"
-  },
-  "modeSelectionItem.smartLabel": {
-    "defaultMessage": "Thông minh"
   },
   "modelAndProviderContext.modelChangeFailed": {
     "defaultMessage": "{provider}/{model} thất bại"
@@ -1952,39 +1358,6 @@
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "Chia sẻ dữ liệu sử dụng ẩn danh"
   },
-  "permissionModal.alwaysAllow": {
-    "defaultMessage": "Luôn cho phép"
-  },
-  "permissionModal.askBefore": {
-    "defaultMessage": "Hỏi trước"
-  },
-  "permissionModal.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "permissionModal.close": {
-    "defaultMessage": "Đóng"
-  },
-  "permissionModal.failedToLoadTools": {
-    "defaultMessage": "Không tải được công cụ"
-  },
-  "permissionModal.failedToLoadToolsDescription": {
-    "defaultMessage": "Không thể tải công cụ cho phần mở rộng này. Phần mở rộng có thể chưa được tải trong phiên hiện tại."
-  },
-  "permissionModal.neverAllow": {
-    "defaultMessage": "Không bao giờ cho phép"
-  },
-  "permissionModal.noActiveSession": {
-    "defaultMessage": "Không có phiên đang hoạt động"
-  },
-  "permissionModal.noActiveSessionDescription": {
-    "defaultMessage": "Hãy bắt đầu một phiên trò chuyện trước để cấu hình quyền công cụ cho phần mở rộng này. Quyền công cụ được tải từ các phần mở rộng của phiên đang hoạt động."
-  },
-  "permissionModal.noToolsAvailable": {
-    "defaultMessage": "Không có công cụ nào khả dụng cho phần mở rộng này."
-  },
-  "permissionModal.saveChanges": {
-    "defaultMessage": "Lưu thay đổi"
-  },
   "permissionModeChip.approve": {
     "defaultMessage": "Phê duyệt thủ công"
   },
@@ -1996,24 +1369,6 @@
   },
   "permissionModeChip.smartApprove": {
     "defaultMessage": "Phê duyệt thông minh"
-  },
-  "permissionRulesModal.description": {
-    "defaultMessage": "Cấu hình quyền công cụ cho các phần mở rộng để kiểm soát cách chúng tương tác với hệ thống của bạn."
-  },
-  "permissionRulesModal.extensionRules": {
-    "defaultMessage": "Quy tắc phần mở rộng"
-  },
-  "permissionRulesModal.title": {
-    "defaultMessage": "Quy tắc quyền"
-  },
-  "permissionSetting.extensionRules": {
-    "defaultMessage": "Quy tắc phần mở rộng"
-  },
-  "permissionSetting.permissionRules": {
-    "defaultMessage": "Quy tắc quyền"
-  },
-  "permissionSetting.permissionRulesDescription": {
-    "defaultMessage": "Các hướng dẫn ẩn sẽ được chuyển đến nhà cung cấp để giúp định hướng và bổ sung ngữ cảnh cho các phản hồi của bạn."
   },
   "planSteps.progress": {
     "defaultMessage": "Bước {current} / {total}"
@@ -2351,14 +1706,8 @@
   "resetProviderSection.resetDescription": {
     "defaultMessage": "Thao tác này sẽ xóa cài đặt mô hình và nhà cung cấp đã chọn của bạn. Nếu không có giá trị mặc định nào khả dụng, bạn sẽ được đưa đến màn hình chào mừng để thiết lập lại."
   },
-  "responseStyle.conciseDescription": {
-    "defaultMessage": "Theo mặc định, các lệnh gọi công cụ được đóng lại và chỉ hiển thị công cụ đã dùng"
-  },
   "responseStyle.conciseLabel": {
     "defaultMessage": "Ngắn gọn"
-  },
-  "responseStyle.detailedDescription": {
-    "defaultMessage": "Theo mặc định, các lệnh gọi công cụ được hiển thị mở ra để lộ chi tiết"
   },
   "responseStyle.detailedLabel": {
     "defaultMessage": "Chi tiết"
@@ -2380,66 +1729,6 @@
   },
   "secureStorageNotice.defaultMessage": {
     "defaultMessage": "Khóa được lưu trữ an toàn trong keychain"
-  },
-  "securityToggle.apiTokenDescription": {
-    "defaultMessage": "Mã thông báo xác thực cho dịch vụ phân loại"
-  },
-  "securityToggle.apiTokenOptional": {
-    "defaultMessage": "Mã thông báo API (Tùy chọn)"
-  },
-  "securityToggle.classificationEndpoint": {
-    "defaultMessage": "Điểm cuối phân loại"
-  },
-  "securityToggle.classificationEndpointDescription": {
-    "defaultMessage": "Nhập URL đầy đủ cho dịch vụ phân loại của bạn"
-  },
-  "securityToggle.commandClassifierActive": {
-    "defaultMessage": "Bộ phân loại lệnh đang hoạt động (tự động cấu hình từ môi trường)"
-  },
-  "securityToggle.commandEndpointDescription": {
-    "defaultMessage": "Nhập URL đầy đủ cho dịch vụ phân loại tấn công chèn lệnh của bạn"
-  },
-  "securityToggle.commandInjectionDescription": {
-    "defaultMessage": "Sử dụng các mô hình ML để phát hiện các lệnh shell độc hại"
-  },
-  "securityToggle.detectionModel": {
-    "defaultMessage": "Mô hình phát hiện"
-  },
-  "securityToggle.detectionModelDescription": {
-    "defaultMessage": "Chọn mô hình ML để dùng cho việc phát hiện chèn lời nhắc"
-  },
-  "securityToggle.detectionThreshold": {
-    "defaultMessage": "Ngưỡng phát hiện"
-  },
-  "securityToggle.enableCommandInjection": {
-    "defaultMessage": "Bật phát hiện chèn lệnh bằng ML"
-  },
-  "securityToggle.enablePromptInjection": {
-    "defaultMessage": "Bật phát hiện chèn lời nhắc"
-  },
-  "securityToggle.enablePromptInjectionMl": {
-    "defaultMessage": "Bật phát hiện chèn lời nhắc bằng ML"
-  },
-  "securityToggle.mlEndpointDescription": {
-    "defaultMessage": "Nhập URL đầy đủ cho dịch vụ phân loại ML của bạn (bao gồm mã định danh mô hình)"
-  },
-  "securityToggle.mlTokenDescription": {
-    "defaultMessage": "Mã thông báo xác thực cho dịch vụ ML (ví dụ: mã thông báo HuggingFace)"
-  },
-  "securityToggle.overrideNotice": {
-    "defaultMessage": "Cài đặt này do tổ chức của bạn quản lý và không thể thay đổi."
-  },
-  "securityToggle.promptInjectionDescription": {
-    "defaultMessage": "Phát hiện và ngăn chặn các cuộc tấn công chèn lời nhắc tiềm ẩn"
-  },
-  "securityToggle.promptInjectionMlDescription": {
-    "defaultMessage": "Sử dụng các mô hình ML để phát hiện việc chèn lời nhắc tiềm ẩn trong cuộc trò chuyện của bạn"
-  },
-  "securityToggle.thresholdDescription": {
-    "defaultMessage": "Giá trị cao hơn thì nghiêm ngặt hơn (0.01 = rất khoan dung, 1.0 = nghiêm ngặt tối đa)"
-  },
-  "securityToggle.warpNotice": {
-    "defaultMessage": "Phát hiện chèn lệnh hoạt động tốt nhất khi được kết nối với WARP (bắt buộc để truy cập dịch vụ phân loại)."
   },
   "sessionActionsHeader.actionsLabel": {
     "defaultMessage": "Hành động phiên"
@@ -2486,26 +1775,29 @@
   "sessionIndicators.streaming": {
     "defaultMessage": "Đang truyền phát"
   },
-  "settings.appearance.description": {
-    "defaultMessage": "Định cấu hình cách iCodex hiển thị trên hệ thống của bạn"
+  "settings.about.title": {
+    "defaultMessage": "Giới thiệu"
   },
-  "settings.appearance.title": {
-    "defaultMessage": "Giao diện"
+  "settings.bottomPanel.description": {
+    "defaultMessage": "Hiện nút bảng dưới trên thanh tiêu đề ứng dụng"
   },
-  "settings.close": {
-    "defaultMessage": "Đóng"
+  "settings.bottomPanel.title": {
+    "defaultMessage": "Bảng dưới"
   },
-  "settings.costTracking.description": {
-    "defaultMessage": "Hiển thị giá mô hình và chi phí sử dụng"
+  "settings.chat.title": {
+    "defaultMessage": "Trò chuyện"
   },
-  "settings.costTracking.title": {
-    "defaultMessage": "Theo dõi chi phí"
+  "settings.composer.title": {
+    "defaultMessage": "Ô soạn thảo"
   },
   "settings.dockIcon.description": {
     "defaultMessage": "Hiển thị iCodex trên dock"
   },
   "settings.dockIcon.title": {
     "defaultMessage": "Biểu tượng dock"
+  },
+  "settings.general.title": {
+    "defaultMessage": "Chung"
   },
   "settings.help.description": {
     "defaultMessage": "Giúp chúng tôi cải thiện iCodex bằng cách báo cáo sự cố hoặc yêu cầu tính năng mới"
@@ -2577,73 +1869,82 @@
     "defaultMessage": "Tiếng Trung (Phồn thể)"
   },
   "settings.menuBarIcon.description": {
-    "defaultMessage": "Hiển thị iCodex trên thanh menu"
+    "defaultMessage": "Giữ iCodex trên thanh menu khi cửa sổ chính đã đóng"
   },
   "settings.menuBarIcon.title": {
-    "defaultMessage": "Biểu tượng thanh menu"
-  },
-  "settings.notifications.configGuide": {
-    "defaultMessage": "Hướng dẫn cấu hình"
-  },
-  "settings.notifications.description": {
-    "defaultMessage": "Thông báo được quản lý bởi hệ điều hành của bạn - {link}"
-  },
-  "settings.notifications.modal.macInstructions": {
-    "defaultMessage": "Để bật thông báo trên macOS:"
-  },
-  "settings.notifications.modal.macStep1": {
-    "defaultMessage": "Mở System Preferences"
-  },
-  "settings.notifications.modal.macStep2": {
-    "defaultMessage": "Nhấp vào Notifications"
-  },
-  "settings.notifications.modal.macStep3": {
-    "defaultMessage": "Tìm và chọn iCodex trong danh sách ứng dụng"
-  },
-  "settings.notifications.modal.macStep4": {
-    "defaultMessage": "Bật thông báo và điều chỉnh cài đặt theo ý muốn"
-  },
-  "settings.notifications.modal.title": {
-    "defaultMessage": "Cách bật thông báo"
-  },
-  "settings.notifications.modal.winInstructions": {
-    "defaultMessage": "Để bật thông báo trên Windows:"
-  },
-  "settings.notifications.modal.winStep1": {
-    "defaultMessage": "Mở Settings"
-  },
-  "settings.notifications.modal.winStep2": {
-    "defaultMessage": "Đi tới System > Notifications"
-  },
-  "settings.notifications.modal.winStep3": {
-    "defaultMessage": "Tìm và chọn iCodex trong danh sách ứng dụng"
-  },
-  "settings.notifications.modal.winStep4": {
-    "defaultMessage": "Bật thông báo và điều chỉnh cài đặt theo ý muốn"
+    "defaultMessage": "Hiện trên thanh menu"
   },
   "settings.notifications.openSettings": {
     "defaultMessage": "Mở Settings"
   },
-  "settings.notifications.task.description": {
-    "defaultMessage": "Thông báo khi iCodex hoàn thành một tác vụ trong khi cửa sổ đang ở chế độ nền"
+  "settings.notifications.system.description": {
+    "defaultMessage": "Việc gửi thông báo do hệ điều hành của bạn quản lý"
   },
-  "settings.notifications.task.title": {
-    "defaultMessage": "Thông báo hoàn thành tác vụ"
+  "settings.notifications.system.title": {
+    "defaultMessage": "Thông báo hệ thống"
   },
   "settings.notifications.title": {
     "defaultMessage": "Thông báo"
+  },
+  "settings.notifications.turn.always": {
+    "defaultMessage": "Luôn luôn"
+  },
+  "settings.notifications.turn.description": {
+    "defaultMessage": "Đặt thời điểm iCodex báo cho bạn biết đã xong"
+  },
+  "settings.notifications.turn.never": {
+    "defaultMessage": "Không bao giờ"
+  },
+  "settings.notifications.turn.title": {
+    "defaultMessage": "Thông báo khi hoàn thành"
+  },
+  "settings.notifications.turn.unfocused": {
+    "defaultMessage": "Chỉ khi không ở tiêu điểm"
+  },
+  "settings.permissions.autoReview.description": {
+    "defaultMessage": "iCodex tự xác định yêu cầu quyền bổ sung nào là an toàn và chỉ hỏi bạn với những yêu cầu rủi ro. Việc tự động xem xét có thể sai sót"
+  },
+  "settings.permissions.autoReview.title": {
+    "defaultMessage": "Tự động xem xét"
+  },
+  "settings.permissions.default.description": {
+    "defaultMessage": "Theo mặc định, iCodex có thể đọc và chỉnh sửa tệp trong không gian làm việc. Mọi việc khác đều cần bạn phê duyệt"
+  },
+  "settings.permissions.default.title": {
+    "defaultMessage": "Quyền mặc định"
+  },
+  "settings.permissions.fullAccess.description": {
+    "defaultMessage": "iCodex có thể chỉnh sửa mọi tệp trên máy tính của bạn và chạy lệnh có kết nối mạng mà không cần bạn phê duyệt. Điều này làm tăng đáng kể rủi ro mất dữ liệu, rò rỉ hoặc hành vi ngoài dự kiến"
+  },
+  "settings.permissions.fullAccess.title": {
+    "defaultMessage": "Toàn quyền"
+  },
+  "settings.permissions.title": {
+    "defaultMessage": "Quyền"
   },
   "settings.preventSleep.description": {
     "defaultMessage": "Giữ máy tính của bạn luôn hoạt động trong khi iCodex đang chạy một tác vụ (màn hình vẫn có thể khóa)"
   },
   "settings.preventSleep.title": {
-    "defaultMessage": "Ngăn chế độ ngủ"
+    "defaultMessage": "Ngăn máy ngủ khi đang chạy"
   },
-  "settings.theme.description": {
-    "defaultMessage": "Tùy chỉnh giao diện và cảm nhận của iCodex"
+  "settings.sendShortcut.description": {
+    "defaultMessage": "Chọn khi nào Enter gửi tin nhắn hoặc xuống dòng"
   },
-  "settings.theme.title": {
-    "defaultMessage": "Chủ đề"
+  "settings.sendShortcut.enter": {
+    "defaultMessage": "Enter"
+  },
+  "settings.sendShortcut.modEnter": {
+    "defaultMessage": "{mod} + Enter"
+  },
+  "settings.sendShortcut.title": {
+    "defaultMessage": "Phím gửi"
+  },
+  "settings.toolDetails.description": {
+    "defaultMessage": "Lệnh gọi công cụ mặc định mở rộng hay thu gọn trong cuộc trò chuyện"
+  },
+  "settings.toolDetails.title": {
+    "defaultMessage": "Chi tiết lệnh gọi công cụ"
   },
   "settings.updates.description": {
     "defaultMessage": "Kiểm tra và cài đặt bản cập nhật để iCodex luôn hoạt động tốt nhất"
@@ -2651,14 +1952,17 @@
   "settings.updates.title": {
     "defaultMessage": "Cập nhật"
   },
+  "settings.usageStats.description": {
+    "defaultMessage": "Hiện token, tốc độ và chi phí dưới mỗi phản hồi"
+  },
+  "settings.usageStats.title": {
+    "defaultMessage": "Hiện thống kê sử dụng"
+  },
   "settings.version.title": {
     "defaultMessage": "Phiên bản"
   },
   "settingsView.back": {
     "defaultMessage": "Quay lại ứng dụng"
-  },
-  "settingsView.groupAdvanced": {
-    "defaultMessage": "Nâng cao"
   },
   "settingsView.groupIntegrations": {
     "defaultMessage": "Tích hợp"
@@ -2672,20 +1976,14 @@
   "settingsView.search": {
     "defaultMessage": "Tìm kiếm cài đặt..."
   },
-  "settingsView.tabApp": {
-    "defaultMessage": "Ứng dụng"
+  "settingsView.tabAppearance": {
+    "defaultMessage": "Giao diện"
   },
-  "settingsView.tabAuth": {
-    "defaultMessage": "Xác thực"
-  },
-  "settingsView.tabChat": {
-    "defaultMessage": "Trò chuyện"
+  "settingsView.tabGeneral": {
+    "defaultMessage": "Chung"
   },
   "settingsView.tabKeyboard": {
     "defaultMessage": "Bàn phím"
-  },
-  "settingsView.tabLocalInference": {
-    "defaultMessage": "Suy luận cục bộ"
   },
   "settingsView.tabModels": {
     "defaultMessage": "Mô hình"
@@ -2693,14 +1991,8 @@
   "settingsView.tabPlugins": {
     "defaultMessage": "Plugin"
   },
-  "settingsView.tabPrompts": {
-    "defaultMessage": "Lời nhắc"
-  },
   "settingsView.title": {
     "defaultMessage": "Cài đặt"
-  },
-  "sheet.close": {
-    "defaultMessage": "Đóng"
   },
   "shortcutRecorder.cancel": {
     "defaultMessage": "Hủy"

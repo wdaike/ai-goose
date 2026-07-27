@@ -14,5 +14,5 @@ export enum AppEvents {
   MESSAGE_STREAM_FINISHED = 'message-stream-finished',
   SCROLL_CHAT_TO_BOTTOM = 'scroll-chat-to-bottom',
   HIDE_ALERT_POPOVER = 'hide-alert-popover',
-  RESPONSE_STYLE_CHANGED = 'responseStyleChanged',
+  SETTINGS_CHANGED = 'settingsChanged',
 }

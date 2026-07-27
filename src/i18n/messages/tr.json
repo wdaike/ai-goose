@@ -23,66 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "Yan paneli aç/kapat"
   },
-  "authSettings.activeProviderWarning": {
-    "defaultMessage": "Bu etkin sağlayıcıdır. Başka bir kimlik bilgisi yapılandırana kadar yeni istekler başarısız olabilir."
-  },
-  "authSettings.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "authSettings.delete": {
-    "defaultMessage": "Sil"
-  },
-  "authSettings.deleteCredential": {
-    "defaultMessage": "Kimlik bilgisini sil"
-  },
-  "authSettings.deleteMessage": {
-    "defaultMessage": "{provider} için {name} kimlik bilgisi silinsin mi?"
-  },
-  "authSettings.deleteTitle": {
-    "defaultMessage": "Kimlik bilgisini sil"
-  },
-  "authSettings.deleted": {
-    "defaultMessage": "Kimlik bilgisi silindi"
-  },
-  "authSettings.description": {
-    "defaultMessage": "iCodex tarafından yerel olarak saklanan sağlayıcı kimlik bilgilerini yönetin."
-  },
-  "authSettings.empty": {
-    "defaultMessage": "Yerel olarak saklanan sağlayıcı kimlik bilgisi bulunamadı."
-  },
-  "authSettings.expiresAt": {
-    "defaultMessage": "{date} tarihinde sona erer"
-  },
-  "authSettings.failedToConfigure": {
-    "defaultMessage": "Kimlik bilgisi yapılandırılamadı: {error}"
-  },
-  "authSettings.failedToDelete": {
-    "defaultMessage": "Kimlik bilgisi silinemedi: {error}"
-  },
-  "authSettings.failedToLoad": {
-    "defaultMessage": "Sağlayıcı kimlik bilgileri yüklenemedi"
-  },
-  "authSettings.loading": {
-    "defaultMessage": "Kimlik bilgileri yükleniyor..."
-  },
-  "authSettings.reauthorize": {
-    "defaultMessage": "Yeniden yetkilendir"
-  },
-  "authSettings.signIn": {
-    "defaultMessage": "Oturum aç"
-  },
-  "authSettings.signedIn": {
-    "defaultMessage": "Kimlik bilgisi yapılandırıldı"
-  },
-  "authSettings.storageProviderCache": {
-    "defaultMessage": "Sağlayıcı önbelleği"
-  },
-  "authSettings.storageSecretStore": {
-    "defaultMessage": "Gizli anahtar deposu"
-  },
-  "authSettings.title": {
-    "defaultMessage": "Sağlayıcı Kimlik Bilgileri"
-  },
   "backButton.back": {
     "defaultMessage": "Geri"
   },
@@ -91,36 +31,6 @@
   },
   "baseChat.goHome": {
     "defaultMessage": "Ana sayfaya git"
-  },
-  "baseChat.reconnecting": {
-    "defaultMessage": "Bağlantı kesildi. Yeniden bağlanılıyor…"
-  },
-  "bottomMenuExtensionSelection.extensionUpdated": {
-    "defaultMessage": "Uzantı Güncellendi"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeDisabled": {
-    "defaultMessage": "{name} yeni sohbetlerde devre dışı bırakılacak"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeEnabled": {
-    "defaultMessage": "{name} yeni sohbetlerde etkinleştirilecek"
-  },
-  "bottomMenuExtensionSelection.extensionsForNewChats": {
-    "defaultMessage": "Yeni sohbetler için uzantılar"
-  },
-  "bottomMenuExtensionSelection.extensionsForThisSession": {
-    "defaultMessage": "Bu sohbet oturumunun uzantıları"
-  },
-  "bottomMenuExtensionSelection.manageExtensions": {
-    "defaultMessage": "uzantıları yönet"
-  },
-  "bottomMenuExtensionSelection.noExtensionsAvailable": {
-    "defaultMessage": "Uzantı yok"
-  },
-  "bottomMenuExtensionSelection.noExtensionsFound": {
-    "defaultMessage": "uzantı bulunamadı"
-  },
-  "bottomMenuExtensionSelection.searchExtensions": {
-    "defaultMessage": "uzantıları ara..."
   },
   "cardButtons.configure": {
     "defaultMessage": "Yapılandır"
@@ -137,9 +47,6 @@
   "chat.requestFailed": {
     "defaultMessage": "İstek başarısız oldu"
   },
-  "chatInput.contextWindow": {
-    "defaultMessage": "Bağlam penceresi"
-  },
   "chatInput.dictationError": {
     "defaultMessage": "Dikte Hatası"
   },
@@ -155,12 +62,6 @@
   "chatInput.recording": {
     "defaultMessage": "Kaydediliyor..."
   },
-  "chatInput.removeFile": {
-    "defaultMessage": "Dosyayı kaldır"
-  },
-  "chatInput.removeImage": {
-    "defaultMessage": "Resmi kaldır"
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "Oturum yeniden başlatılıyor..."
   },
@@ -173,101 +74,11 @@
   "chatInput.typeMessage": {
     "defaultMessage": "Göndermek için bir mesaj yazın"
   },
-  "chatInput.unknownType": {
-    "defaultMessage": "Bilinmeyen tür"
-  },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "İptalin tamamlanması bekleniyor"
   },
   "chatInput.waitingForImages": {
     "defaultMessage": "Resimlerin kaydedilmesi bekleniyor..."
-  },
-  "chatSettings.modeDescription": {
-    "defaultMessage": "iCodex'nin araçlar ve uzantılarla nasıl etkileşimde bulunacağını yapılandırın"
-  },
-  "chatSettings.modeTitle": {
-    "defaultMessage": "Mod"
-  },
-  "chatSettings.responseStylesDescription": {
-    "defaultMessage": "iCodex'nin yanıtlarını nasıl biçimlendireceğini ve stillendireceğini seçin"
-  },
-  "chatSettings.responseStylesTitle": {
-    "defaultMessage": "Yanıt Stilleri"
-  },
-  "configSettings.configReset": {
-    "defaultMessage": "Yapılandırma Sıfırlama"
-  },
-  "configSettings.configResetMsg": {
-    "defaultMessage": "Tüm değişiklikler geri alındı"
-  },
-  "configSettings.configUpdated": {
-    "defaultMessage": "Yapılandırma Güncellendi"
-  },
-  "configSettings.configUpdatedMsg": {
-    "defaultMessage": "\"{name}\" başarıyla kaydedildi"
-  },
-  "configSettings.configurationEditor": {
-    "defaultMessage": "Yapılandırma Düzenleyici"
-  },
-  "configSettings.description": {
-    "defaultMessage": "iCodex yapılandırma ayarlarınızı düzenleyin"
-  },
-  "configSettings.descriptionWithProvider": {
-    "defaultMessage": "iCodex yapılandırma ayarlarınızı düzenleyin ({provider} için geçerli ayarlar)"
-  },
-  "configSettings.done": {
-    "defaultMessage": "Bitti"
-  },
-  "configSettings.editConfiguration": {
-    "defaultMessage": "Yapılandırmayı Düzenle"
-  },
-  "configSettings.enterValue": {
-    "defaultMessage": "{name}'yi girin"
-  },
-  "configSettings.noSettings": {
-    "defaultMessage": "Hiçbir yapılandırma ayarı bulunamadı."
-  },
-  "configSettings.resetChanges": {
-    "defaultMessage": "Değişiklikleri Sıfırla"
-  },
-  "configSettings.saveFailed": {
-    "defaultMessage": "Kaydetme Başarısız Oldu"
-  },
-  "configSettings.saveFailedMsg": {
-    "defaultMessage": "\"{name}\" kaydedilemedi"
-  },
-  "configSettings.saving": {
-    "defaultMessage": "Kaydediliyor..."
-  },
-  "configSettings.title": {
-    "defaultMessage": "Yapılandırma"
-  },
-  "configureApproveMode.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "configureApproveMode.description": {
-    "defaultMessage": "Onay istekleri tüm araç isteklerine verilebilir veya hangi eylemlerin entegrasyona ihtiyaç duyabileceği belirlenebilir"
-  },
-  "configureApproveMode.manualApproval": {
-    "defaultMessage": "Manuel onay"
-  },
-  "configureApproveMode.manualApprovalDescription": {
-    "defaultMessage": "Tüm araçlar, uzantılar ve dosya değişiklikleri insan onayı gerektirecektir"
-  },
-  "configureApproveMode.save": {
-    "defaultMessage": "Kaydet"
-  },
-  "configureApproveMode.saving": {
-    "defaultMessage": "Kaydediliyor..."
-  },
-  "configureApproveMode.smartApproval": {
-    "defaultMessage": "Akıllı onay"
-  },
-  "configureApproveMode.smartApprovalDescription": {
-    "defaultMessage": "Risk düzeyine göre hangi eylemlerin onaylanması gerektiğini akıllıca belirleyin"
-  },
-  "configureApproveMode.title": {
-    "defaultMessage": "Onay modunu yapılandırma"
   },
   "confirmationModal.defaultCancel": {
     "defaultMessage": "Hayır"
@@ -277,27 +88,6 @@
   },
   "confirmationModal.processing": {
     "defaultMessage": "İşleniyor..."
-  },
-  "conversationLimitsDropdown.conversationLimits": {
-    "defaultMessage": "Konuşma Sınırları"
-  },
-  "conversationLimitsDropdown.maxTurns": {
-    "defaultMessage": "Maksimum Dönüş"
-  },
-  "conversationLimitsDropdown.maxTurnsDescription": {
-    "defaultMessage": "iCodex kullanıcı girişi istemeden önce maksimum aracı dönüşü"
-  },
-  "costTracker.costUnavailable": {
-    "defaultMessage": "{model} için maliyet verileri mevcut değil ({inputTokens} girişi, {outputTokens} çıkış jetonları)"
-  },
-  "costTracker.inputOutputTooltip": {
-    "defaultMessage": "Girdi: {inputTokens} belirteçleri ({inputCost}) | Çıktı: {outputTokens} belirteçleri ({outputCost})"
-  },
-  "costTracker.pricingUnavailable": {
-    "defaultMessage": "{model} için fiyatlandırma verileri mevcut değil"
-  },
-  "costTracker.totalSessionCost": {
-    "defaultMessage": "Toplam oturum maliyeti: {cost}"
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "Kredi ekle"
@@ -503,104 +293,8 @@
   "defaultProviderSetupForm.showOptions": {
     "defaultMessage": "{count} seçeneklerini göster"
   },
-  "diagnosticsModal.attachHint": {
-    "defaultMessage": "Bir hata bildirirseniz, teşhis raporunu buna eklemeyi düşünün."
-  },
-  "diagnosticsModal.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "diagnosticsModal.configSettings": {
-    "defaultMessage": "Yapılandırma ayarları"
-  },
-  "diagnosticsModal.description": {
-    "defaultMessage": "Ekiple paylaşmak için bir tanılama zip dosyası indirebilir veya sistem ayrıntılarınızı önceden doldurarak doğrudan GitHub üzerinden bir hata dosyası oluşturabilirsiniz. Bir teşhis raporu aşağıdakileri içerir:"
-  },
-  "diagnosticsModal.diagnosticsErrorMsg": {
-    "defaultMessage": "Teşhis indirilemedi"
-  },
-  "diagnosticsModal.diagnosticsErrorTitle": {
-    "defaultMessage": "Teşhis Hatası"
-  },
-  "diagnosticsModal.download": {
-    "defaultMessage": "İndir"
-  },
-  "diagnosticsModal.downloading": {
-    "defaultMessage": "İndiriliyor..."
-  },
-  "diagnosticsModal.fileBug": {
-    "defaultMessage": "GitHub'de Dosya Hatası"
-  },
-  "diagnosticsModal.logFiles": {
-    "defaultMessage": "Son günlük dosyaları"
-  },
-  "diagnosticsModal.opening": {
-    "defaultMessage": "Açılıyor..."
-  },
-  "diagnosticsModal.reportProblem": {
-    "defaultMessage": "Sorun Bildir"
-  },
-  "diagnosticsModal.sensitiveWarning": {
-    "defaultMessage": "Oturumunuz hassas bilgiler içeriyorsa teşhis dosyasını herkese açık olarak paylaşmayın."
-  },
-  "diagnosticsModal.sessionMessages": {
-    "defaultMessage": "Mevcut oturum mesajlarınız"
-  },
-  "diagnosticsModal.systemInfo": {
-    "defaultMessage": "Temel sistem bilgisi"
-  },
-  "diagnosticsModal.systemInfoErrorMsg": {
-    "defaultMessage": "Sistem bilgisi alınamadı"
-  },
-  "diagnosticsModal.systemInfoErrorTitle": {
-    "defaultMessage": "Hata"
-  },
   "dialog.close": {
     "defaultMessage": "Kapat"
-  },
-  "dictationSettings.addApiKey": {
-    "defaultMessage": "API Anahtarını Ekle"
-  },
-  "dictationSettings.apiKey": {
-    "defaultMessage": "API Anahtarı"
-  },
-  "dictationSettings.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "dictationSettings.chooseVoiceConversion": {
-    "defaultMessage": "Sesin metne nasıl dönüştürüleceğini seçin"
-  },
-  "dictationSettings.configureApiKey": {
-    "defaultMessage": "<b>{settingsPath}</b>'de API anahtarını yapılandırın"
-  },
-  "dictationSettings.configured": {
-    "defaultMessage": "(Yapılandırılmış)"
-  },
-  "dictationSettings.configuredIn": {
-    "defaultMessage": "✓ {settingsPath}'de yapılandırılmıştır"
-  },
-  "dictationSettings.disabled": {
-    "defaultMessage": "Devre dışı"
-  },
-  "dictationSettings.enterApiKey": {
-    "defaultMessage": "API anahtarınızı girin"
-  },
-  "dictationSettings.notConfigured": {
-    "defaultMessage": "(yapılandırılmamış)"
-  },
-  "dictationSettings.removeApiKey": {
-    "defaultMessage": "API Anahtarını Kaldır"
-  },
-  "dictationSettings.requiredForTranscription": {
-    "defaultMessage": "Transkripsiyon için gerekli"
-  },
-  "dictationSettings.save": {
-    "defaultMessage": "Kaydet"
-  },
-  "dictationSettings.updateApiKey": {
-    "defaultMessage": "API Anahtarını Güncelle"
-  },
-  "dictationSettings.voiceDictationProvider": {
-    "defaultMessage": "Ses Dikte Sağlayıcısı"
   },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "Çalışma dizini güncellenemedi"
@@ -851,66 +545,6 @@
   "filesPanel.title": {
     "defaultMessage": "Dosyalar"
   },
-  "goosehintsModal.close": {
-    "defaultMessage": "Kapat"
-  },
-  "goosehintsModal.developer": {
-    "defaultMessage": "Geliştirici"
-  },
-  "goosehintsModal.dialogDescription": {
-    "defaultMessage": "iCodex ile iletişimi geliştirmek için projeniz hakkında ek bağlam sağlayın"
-  },
-  "goosehintsModal.dialogTitle": {
-    "defaultMessage": "Proje İpuçlarını Yapılandırma (.goosehints)"
-  },
-  "goosehintsModal.errorReading": {
-    "defaultMessage": ".goosehints dosyası okunurken hata oluştu: {error}"
-  },
-  "goosehintsModal.failedToAccess": {
-    "defaultMessage": ".goosehints dosyasına erişilemedi"
-  },
-  "goosehintsModal.failedToSave": {
-    "defaultMessage": ".goosehints dosyası kaydedilemedi"
-  },
-  "goosehintsModal.fileCreating": {
-    "defaultMessage": "Şu konumda yeni.goosehints dosyası oluşturuluyor: {filePath}"
-  },
-  "goosehintsModal.fileFound": {
-    "defaultMessage": ".goosehints dosyası şu konumda bulundu: {filePath}"
-  },
-  "goosehintsModal.helpText1": {
-    "defaultMessage": ".goosehints, projeniz hakkında ek bağlam sağlamak ve iCodex ile iletişimi geliştirmek için kullanılan bir metin dosyasıdır."
-  },
-  "goosehintsModal.helpText2": {
-    "defaultMessage": "Lütfen uzantılar sayfasında {bold} uzantısının etkinleştirildiğinden emin olun. Bu uzantı.goosehints'i kullanmak için gereklidir..goosehints güncellemelerinin etkili olması için oturumunuzu yeniden başlatmanız gerekir."
-  },
-  "goosehintsModal.helpText3": {
-    "defaultMessage": "Daha fazla bilgi için {link}'ye bakın."
-  },
-  "goosehintsModal.helpTextLink": {
-    "defaultMessage": ".goosehints'i kullanma"
-  },
-  "goosehintsModal.placeholder": {
-    "defaultMessage": "Proje ipuçlarını buraya girin..."
-  },
-  "goosehintsModal.save": {
-    "defaultMessage": "Kaydet"
-  },
-  "goosehintsModal.savedSuccessfully": {
-    "defaultMessage": "Başarıyla kaydedildi"
-  },
-  "goosehintsModal.saving": {
-    "defaultMessage": "Kaydediliyor..."
-  },
-  "goosehintsSection.configure": {
-    "defaultMessage": "Yapılandır"
-  },
-  "goosehintsSection.description": {
-    "defaultMessage": "iCodex'a ek bağlam sağlamak için projenizin.goosehints dosyasını yapılandırın"
-  },
-  "goosehintsSection.title": {
-    "defaultMessage": "Proje İpuçları (.goosehints)"
-  },
   "groupedExtensionLoadingToast.askGoose": {
     "defaultMessage": "iCodex'a sorun"
   },
@@ -992,42 +626,6 @@
   "hub.suggestionReview": {
     "defaultMessage": "Kodu incele ve değişiklik öner"
   },
-  "huggingFaceModelSearch.download": {
-    "defaultMessage": "İndir"
-  },
-  "huggingFaceModelSearch.downloaded": {
-    "defaultMessage": "İndirildi"
-  },
-  "huggingFaceModelSearch.downloading": {
-    "defaultMessage": "İndiriliyor…"
-  },
-  "huggingFaceModelSearch.loadingVariants": {
-    "defaultMessage": "Çeşitler yükleniyor..."
-  },
-  "huggingFaceModelSearch.noGgufModels": {
-    "defaultMessage": "Bu sorgu için GGUF modeli bulunamadı."
-  },
-  "huggingFaceModelSearch.recommended": {
-    "defaultMessage": "Önerilen"
-  },
-  "huggingFaceModelSearch.searchError": {
-    "defaultMessage": "Arama hatası: {details}"
-  },
-  "huggingFaceModelSearch.searchFailed": {
-    "defaultMessage": "Arama başarısız oldu. Lütfen tekrar deneyin."
-  },
-  "huggingFaceModelSearch.searchHuggingFace": {
-    "defaultMessage": "Arama HuggingFace"
-  },
-  "huggingFaceModelSearch.searchNoData": {
-    "defaultMessage": "Arama hiçbir veri döndürmedi."
-  },
-  "huggingFaceModelSearch.searchPlaceholder": {
-    "defaultMessage": "GGUF modellerini arayın..."
-  },
-  "huggingFaceModelSearch.tooLarge": {
-    "defaultMessage": "Belleğe sığmayabilir ({size} modeli, {available} mevcuttur)"
-  },
   "huggingFaceSignInPrompt.failedToConfigure": {
     "defaultMessage": "Hugging Face oturumu açılamadı: {error}"
   },
@@ -1045,9 +643,6 @@
   },
   "imagePreview.altText": {
     "defaultMessage": "iCodex resmi"
-  },
-  "imagePreview.clickToCollapse": {
-    "defaultMessage": "Daraltmak için tıklayın"
   },
   "imagePreview.clickToExpand": {
     "defaultMessage": "Genişletmek için tıklayın"
@@ -1262,111 +857,6 @@
   "loadingGoose.waiting": {
     "defaultMessage": "bekliyor"
   },
-  "localInferenceSettings.deleteConfirm": {
-    "defaultMessage": "Bu model silinsin mi? Daha sonra tekrar indirebilirsiniz."
-  },
-  "localInferenceSettings.description": {
-    "defaultMessage": "API anahtarları olmadan çıkarım yapmak için yerel LLM modellerini indirin ve yönetin. Herhangi bir GGUF modeli için HuggingFace'yi arayın veya aşağıdaki öne çıkan seçimleri kullanın."
-  },
-  "localInferenceSettings.dismiss": {
-    "defaultMessage": "Kapat"
-  },
-  "localInferenceSettings.download": {
-    "defaultMessage": "İndir"
-  },
-  "localInferenceSettings.downloadCancelled": {
-    "defaultMessage": "İndirme iptal edildi"
-  },
-  "localInferenceSettings.downloadFailed": {
-    "defaultMessage": "İndirme başarısız oldu"
-  },
-  "localInferenceSettings.downloadProgress": {
-    "defaultMessage": "{downloaded} / {total} (%{percent})"
-  },
-  "localInferenceSettings.downloadedModels": {
-    "defaultMessage": "İndirilen Modeller"
-  },
-  "localInferenceSettings.downloading": {
-    "defaultMessage": "İndiriliyor"
-  },
-  "localInferenceSettings.evictFromMemory": {
-    "defaultMessage": "Evict from memory"
-  },
-  "localInferenceSettings.featuredModels": {
-    "defaultMessage": "Öne Çıkan Modeller"
-  },
-  "localInferenceSettings.huggingFaceSignInNote": {
-    "defaultMessage": "Model ararken ve indirirken hız sınırlarını artırmak ve özel ya da erişimi kısıtlı Hugging Face depolarına erişmek için oturum açın."
-  },
-  "localInferenceSettings.loadedInMemory": {
-    "defaultMessage": "Loaded in memory"
-  },
-  "localInferenceSettings.modelSettings": {
-    "defaultMessage": "Modeli Ayarları"
-  },
-  "localInferenceSettings.modelSettingsTitle": {
-    "defaultMessage": "Modeli ayarları"
-  },
-  "localInferenceSettings.noModels": {
-    "defaultMessage": "Mevcut model yok"
-  },
-  "localInferenceSettings.recommended": {
-    "defaultMessage": "Önerilen"
-  },
-  "localInferenceSettings.remaining": {
-    "defaultMessage": "{time} kaldı"
-  },
-  "localInferenceSettings.retry": {
-    "defaultMessage": "Yeniden dene"
-  },
-  "localInferenceSettings.showAllFeatured": {
-    "defaultMessage": "Tüm öne çıkanları göster ({count} daha fazlası)"
-  },
-  "localInferenceSettings.showRecommendedOnly": {
-    "defaultMessage": "Yalnızca önerilenleri göster"
-  },
-  "localInferenceSettings.title": {
-    "defaultMessage": "Yerel Çıkarım Modelleri"
-  },
-  "localInferenceSettings.vision": {
-    "defaultMessage": "Vizyon"
-  },
-  "localInferenceSettings.visionEncoderDownloading": {
-    "defaultMessage": "Vision enkoder indiriliyor…"
-  },
-  "localInferenceSettings.visionEncoderNotDownloaded": {
-    "defaultMessage": "Görüntü kodlayıcı indirilmedi"
-  },
-  "localModelManager.active": {
-    "defaultMessage": "Aktif"
-  },
-  "localModelManager.deleteConfirm": {
-    "defaultMessage": "Bu model silinsin mi? Daha sonra tekrar indirebilirsiniz."
-  },
-  "localModelManager.download": {
-    "defaultMessage": "İndir"
-  },
-  "localModelManager.downloaded": {
-    "defaultMessage": "İndirildi"
-  },
-  "localModelManager.gpuAcceleration": {
-    "defaultMessage": "GPU hızlandırmayı destekler (NVIDIA için CUDA, Apple Silicon için Metal). Donanım hızlandırma için derleme sırasında GPU özelliklerinin etkinleştirilmesi gerekir."
-  },
-  "localModelManager.noModels": {
-    "defaultMessage": "Mevcut model yok"
-  },
-  "localModelManager.recommended": {
-    "defaultMessage": "Önerilen"
-  },
-  "localModelManager.recommendedForHardware": {
-    "defaultMessage": "Donanımınız için önerilir"
-  },
-  "localModelManager.showAllModels": {
-    "defaultMessage": "Tüm modelleri göster ({count} daha fazlası)"
-  },
-  "localModelManager.showRecommendedOnly": {
-    "defaultMessage": "Yalnızca önerilenleri göster"
-  },
   "localModelPicker.bestForMachine": {
     "defaultMessage": "Makineniz için en iyisi"
   },
@@ -1478,62 +968,20 @@
   "messageQueue.cancel": {
     "defaultMessage": "İptal"
   },
-  "messageQueue.cannotSendWhileEditing": {
-    "defaultMessage": "Düzenleme sırasında gönderilemiyor"
-  },
   "messageQueue.clearAll": {
     "defaultMessage": "Tümünü Temizle"
-  },
-  "messageQueue.clickToEdit": {
-    "defaultMessage": "{content} (Düzenlemek için tıklayın)"
-  },
-  "messageQueue.collapseQueue": {
-    "defaultMessage": "Sırayı daralt"
-  },
-  "messageQueue.dragToReorder": {
-    "defaultMessage": "Önceliği yeniden sıralamak için mesajları sürükleyin"
-  },
-  "messageQueue.expandQueue": {
-    "defaultMessage": "Sırayı genişlet"
-  },
-  "messageQueue.messageCount": {
-    "defaultMessage": "{count,plural,one{# mesaj {status}} other{# mesaj {status}}}"
-  },
-  "messageQueue.messageQueue": {
-    "defaultMessage": "Mesaj Sırası"
-  },
-  "messageQueue.next": {
-    "defaultMessage": "Sonraki"
   },
   "messageQueue.paused": {
     "defaultMessage": "Duraklatıldı"
   },
-  "messageQueue.queuePaused": {
-    "defaultMessage": "Sıra Duraklatıldı"
-  },
   "messageQueue.queuePausedCompact": {
     "defaultMessage": "Sıra duraklatıldı - devam etmek için \"Gönder\"i tıklayın veya yeni mesaj ekleyin"
-  },
-  "messageQueue.queuePausedExpanded": {
-    "defaultMessage": "Kuyruk kesinti nedeniyle duraklatıldı. Devam etmek için \"Şimdi Gönder\" seçeneğini kullanın veya yeni bir mesaj ekleyin."
-  },
-  "messageQueue.queued": {
-    "defaultMessage": "sıraya alınmış"
   },
   "messageQueue.removeFromQueue": {
     "defaultMessage": "Bu mesajı sıradan kaldır"
   },
   "messageQueue.save": {
     "defaultMessage": "Kaydet"
-  },
-  "messageQueue.sendNow": {
-    "defaultMessage": "Bu mesajı şimdi gönder"
-  },
-  "messageQueue.stopAndSend": {
-    "defaultMessage": "Mevcut işlemeyi durdurun ve bu mesajı hemen gönderin"
-  },
-  "messageQueue.waiting": {
-    "defaultMessage": "beklemek"
   },
   "messageUsageStats.cacheHitRate": {
     "defaultMessage": "(girdinin %{percent}'i)"
@@ -1580,59 +1028,17 @@
   "messageUsageStats.totalTime": {
     "defaultMessage": "Toplam süre"
   },
-  "microphoneSelector.chooseDescription": {
-    "defaultMessage": "Dikte için hangi mikrofonun kullanılacağını seçin"
-  },
-  "microphoneSelector.grantAccess": {
-    "defaultMessage": "Erişim Ver"
-  },
-  "microphoneSelector.grantAccessDescription": {
-    "defaultMessage": "Kullanılabilir mikrofonları görmek için erişim izni verin"
-  },
-  "microphoneSelector.microphone": {
-    "defaultMessage": "Mikrofon"
-  },
-  "microphoneSelector.microphoneLabel": {
-    "defaultMessage": "Mikrofon {index}"
-  },
-  "microphoneSelector.selectedMicrophone": {
-    "defaultMessage": "Seçilen Mikrofon"
-  },
-  "microphoneSelector.speakToTest": {
-    "defaultMessage": "Mikrofonunuzu test etmek için konuşun ({seconds}'ler)"
-  },
-  "microphoneSelector.stop": {
-    "defaultMessage": "Durdur"
-  },
-  "microphoneSelector.systemDefault": {
-    "defaultMessage": "Sistem Varsayılanı"
-  },
-  "microphoneSelector.test": {
-    "defaultMessage": "testi"
-  },
   "modeSelectionItem.autonomousDescription": {
     "defaultMessage": "Tam dosya değiştirme yetenekleri, dosyaları özgürce düzenleyin, oluşturun ve silin."
-  },
-  "modeSelectionItem.autonomousLabel": {
-    "defaultMessage": "Özerk"
   },
   "modeSelectionItem.chatOnlyDescription": {
     "defaultMessage": "Araç veya uzantı kullanmadan seçilen sağlayıcıyla etkileşime geçin."
   },
-  "modeSelectionItem.chatOnlyLabel": {
-    "defaultMessage": "Yalnızca sohbet"
-  },
   "modeSelectionItem.manualDescription": {
     "defaultMessage": "Tüm araçlar, uzantılar ve dosya değişiklikleri insan onayı gerektirecektir"
   },
-  "modeSelectionItem.manualLabel": {
-    "defaultMessage": "Manuel"
-  },
   "modeSelectionItem.smartDescription": {
     "defaultMessage": "Risk düzeyine göre hangi eylemlerin onaylanması gerektiğini akıllıca belirleyin"
-  },
-  "modeSelectionItem.smartLabel": {
-    "defaultMessage": "Akıllı"
   },
   "modelAndProviderContext.modelChangeFailed": {
     "defaultMessage": "{provider}/{model} başarısız oldu"
@@ -1952,39 +1358,6 @@
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "Anonim kullanım verilerini paylaşın"
   },
-  "permissionModal.alwaysAllow": {
-    "defaultMessage": "Her zaman izin ver"
-  },
-  "permissionModal.askBefore": {
-    "defaultMessage": "Daha önce sor"
-  },
-  "permissionModal.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "permissionModal.close": {
-    "defaultMessage": "Kapat"
-  },
-  "permissionModal.failedToLoadTools": {
-    "defaultMessage": "Araçlar yüklenemedi"
-  },
-  "permissionModal.failedToLoadToolsDescription": {
-    "defaultMessage": "Bu uzantı için araçlar yüklenemedi. Uzantı geçerli oturumda yüklenmemiş olabilir."
-  },
-  "permissionModal.neverAllow": {
-    "defaultMessage": "Asla izin verme"
-  },
-  "permissionModal.noActiveSession": {
-    "defaultMessage": "Aktif oturum yok"
-  },
-  "permissionModal.noActiveSessionDescription": {
-    "defaultMessage": "Bu uzantının araç izinlerini yapılandırmak için önce bir sohbet oturumu başlatın. Araç izinleri etkin oturumun uzantılarından yüklenir."
-  },
-  "permissionModal.noToolsAvailable": {
-    "defaultMessage": "Bu uzantı için kullanılabilir araç yok."
-  },
-  "permissionModal.saveChanges": {
-    "defaultMessage": "Değişiklikleri Kaydet"
-  },
   "permissionModeChip.approve": {
     "defaultMessage": "Manuel onay"
   },
@@ -1996,24 +1369,6 @@
   },
   "permissionModeChip.smartApprove": {
     "defaultMessage": "Akıllı onay"
-  },
-  "permissionRulesModal.description": {
-    "defaultMessage": "Uzantıların sisteminizle nasıl etkileşime gireceğini kontrol etmek için araç izinlerini yapılandırın."
-  },
-  "permissionRulesModal.extensionRules": {
-    "defaultMessage": "Uzantı kuralları"
-  },
-  "permissionRulesModal.title": {
-    "defaultMessage": "İzin Kuralları"
-  },
-  "permissionSetting.extensionRules": {
-    "defaultMessage": "Uzantı kuralları"
-  },
-  "permissionSetting.permissionRules": {
-    "defaultMessage": "İzin Kuralları"
-  },
-  "permissionSetting.permissionRulesDescription": {
-    "defaultMessage": "Yanıtlarınızı yönlendirmeye ve bağlam eklemeye yardımcı olmak için sağlayıcıya iletilecek gizli talimatlar."
   },
   "planSteps.progress": {
     "defaultMessage": "Adım {current} / {total}"
@@ -2351,14 +1706,8 @@
   "resetProviderSection.resetDescription": {
     "defaultMessage": "Bu, seçtiğiniz modeli ve sağlayıcı ayarlarını temizleyecektir. Hiçbir varsayılan ayar yoksa, bunları yeniden ayarlamak için karşılama ekranına yönlendirileceksiniz."
   },
-  "responseStyle.conciseDescription": {
-    "defaultMessage": "Araç çağrıları varsayılan olarak kapalıdır ve yalnızca kullanılan aracı gösterir"
-  },
   "responseStyle.conciseLabel": {
     "defaultMessage": "Kısa"
-  },
-  "responseStyle.detailedDescription": {
-    "defaultMessage": "Araç çağrıları varsayılan olarak ayrıntıları ortaya çıkarmak için açık olarak gösterilir"
   },
   "responseStyle.detailedLabel": {
     "defaultMessage": "Detaylı"
@@ -2380,66 +1729,6 @@
   },
   "secureStorageNotice.defaultMessage": {
     "defaultMessage": "Anahtarlar anahtarlıkta güvenli bir şekilde saklanır"
-  },
-  "securityToggle.apiTokenDescription": {
-    "defaultMessage": "Sınıflandırma hizmeti için kimlik doğrulama belirteci"
-  },
-  "securityToggle.apiTokenOptional": {
-    "defaultMessage": "API Jetonu (İsteğe bağlı)"
-  },
-  "securityToggle.classificationEndpoint": {
-    "defaultMessage": "Sınıflandırma Uç Noktası"
-  },
-  "securityToggle.classificationEndpointDescription": {
-    "defaultMessage": "Sınıflandırma hizmetinizin tam URL'sini girin"
-  },
-  "securityToggle.commandClassifierActive": {
-    "defaultMessage": "Komut sınıflandırıcı etkin (ortamdan otomatik olarak yapılandırılır)"
-  },
-  "securityToggle.commandEndpointDescription": {
-    "defaultMessage": "Komut ekleme sınıflandırma hizmetinizin tam URL'sini girin"
-  },
-  "securityToggle.commandInjectionDescription": {
-    "defaultMessage": "Kötü amaçlı kabuk komutlarını tespit etmek için ML modellerini kullanın"
-  },
-  "securityToggle.detectionModel": {
-    "defaultMessage": "Algılama Modeli"
-  },
-  "securityToggle.detectionModelDescription": {
-    "defaultMessage": "Hızlı enjeksiyon tespiti için hangi ML modelinin kullanılacağını seçin"
-  },
-  "securityToggle.detectionThreshold": {
-    "defaultMessage": "Tespit Eşiği"
-  },
-  "securityToggle.enableCommandInjection": {
-    "defaultMessage": "Command Injection ML Algılamayı Etkinleştir"
-  },
-  "securityToggle.enablePromptInjection": {
-    "defaultMessage": "İstem Ekleme Algılamayı Etkinleştir"
-  },
-  "securityToggle.enablePromptInjectionMl": {
-    "defaultMessage": "Prompt Injection ML Algılamayı Etkinleştir"
-  },
-  "securityToggle.mlEndpointDescription": {
-    "defaultMessage": "ML sınıflandırma hizmetinizin tam URL'sini girin (model tanımlayıcı dahil)"
-  },
-  "securityToggle.mlTokenDescription": {
-    "defaultMessage": "ML hizmeti için kimlik doğrulama belirteci (ör. HuggingFace belirteci)"
-  },
-  "securityToggle.overrideNotice": {
-    "defaultMessage": "Bu ayar kuruluşunuz tarafından yönetiliyor ve değiştirilemez."
-  },
-  "securityToggle.promptInjectionDescription": {
-    "defaultMessage": "Potansiyel anlık enjeksiyon saldırılarını tespit edin ve önleyin"
-  },
-  "securityToggle.promptInjectionMlDescription": {
-    "defaultMessage": "Sohbetinize olası istem eklemeyi tespit etmek için makine öğrenimi modellerini kullanın"
-  },
-  "securityToggle.thresholdDescription": {
-    "defaultMessage": "Daha yüksek değerler daha katıdır (0,01 = çok yumuşak, 1,0 = maksimum katı)"
-  },
-  "securityToggle.warpNotice": {
-    "defaultMessage": "Komut enjeksiyonu algılama, WARP bağlantısı olduğunda en iyi şekilde çalışır (sınıflandırma hizmetine erişmek için gereklidir)."
   },
   "sessionActionsHeader.actionsLabel": {
     "defaultMessage": "Session actions"
@@ -2486,26 +1775,29 @@
   "sessionIndicators.streaming": {
     "defaultMessage": "Akış"
   },
-  "settings.appearance.description": {
-    "defaultMessage": "iCodex'nin sisteminizde nasıl görüneceğini yapılandırın"
+  "settings.about.title": {
+    "defaultMessage": "Hakkında"
   },
-  "settings.appearance.title": {
-    "defaultMessage": "Görünüm"
+  "settings.bottomPanel.description": {
+    "defaultMessage": "Alt panel düğmesini uygulama başlığında göster"
   },
-  "settings.close": {
-    "defaultMessage": "Kapat"
+  "settings.bottomPanel.title": {
+    "defaultMessage": "Alt panel"
   },
-  "settings.costTracking.description": {
-    "defaultMessage": "Model fiyatlandırmasını ve kullanım maliyetlerini göster"
+  "settings.chat.title": {
+    "defaultMessage": "Sohbet"
   },
-  "settings.costTracking.title": {
-    "defaultMessage": "Maliyet Takibi"
+  "settings.composer.title": {
+    "defaultMessage": "Yazma alanı"
   },
   "settings.dockIcon.description": {
     "defaultMessage": "Dock'ta iCodex'yi göster"
   },
   "settings.dockIcon.title": {
     "defaultMessage": "Bağlantı noktası simgesi"
+  },
+  "settings.general.title": {
+    "defaultMessage": "Genel"
   },
   "settings.help.description": {
     "defaultMessage": "Sorunları bildirerek veya yeni özellikler talep ederek iCodex'yi geliştirmemize yardımcı olun"
@@ -2577,73 +1869,82 @@
     "defaultMessage": "Çince (Geleneksel)"
   },
   "settings.menuBarIcon.description": {
-    "defaultMessage": "Menü çubuğunda iCodex'yi göster"
+    "defaultMessage": "Ana pencere kapatıldığında iCodex’i menü çubuğunda tut"
   },
   "settings.menuBarIcon.title": {
-    "defaultMessage": "Menü çubuğu simgesi"
-  },
-  "settings.notifications.configGuide": {
-    "defaultMessage": "Yapılandırma kılavuzu"
-  },
-  "settings.notifications.description": {
-    "defaultMessage": "Bildirimler işletim sisteminiz tarafından yönetilir - {link}"
-  },
-  "settings.notifications.modal.macInstructions": {
-    "defaultMessage": "MacOS'ta bildirimleri etkinleştirmek için:"
-  },
-  "settings.notifications.modal.macStep1": {
-    "defaultMessage": "Sistem Tercihlerini Aç"
-  },
-  "settings.notifications.modal.macStep2": {
-    "defaultMessage": "Bildirimler'e tıklayın"
-  },
-  "settings.notifications.modal.macStep3": {
-    "defaultMessage": "Uygulama listesinde iCodex'yi bulun ve seçin"
-  },
-  "settings.notifications.modal.macStep4": {
-    "defaultMessage": "Bildirimleri etkinleştirin ve ayarları istediğiniz gibi yapın"
-  },
-  "settings.notifications.modal.title": {
-    "defaultMessage": "Bildirimler Nasıl Etkinleştirilir"
-  },
-  "settings.notifications.modal.winInstructions": {
-    "defaultMessage": "Windows'ta bildirimleri etkinleştirmek için:"
-  },
-  "settings.notifications.modal.winStep1": {
-    "defaultMessage": "Ayarları Aç"
-  },
-  "settings.notifications.modal.winStep2": {
-    "defaultMessage": "Sistem > Bildirimler'e gidin"
-  },
-  "settings.notifications.modal.winStep3": {
-    "defaultMessage": "Uygulama listesinde iCodex'yi bulun ve seçin"
-  },
-  "settings.notifications.modal.winStep4": {
-    "defaultMessage": "Bildirimleri açın ve ayarları istediğiniz gibi yapın"
+    "defaultMessage": "Menü çubuğunda göster"
   },
   "settings.notifications.openSettings": {
     "defaultMessage": "Ayarları Aç"
   },
-  "settings.notifications.task.description": {
-    "defaultMessage": "Pencere arka plandayken iCodex bir görevi tamamladığında bildirim al"
+  "settings.notifications.system.description": {
+    "defaultMessage": "Bildirimlerin iletimi işletim sisteminiz tarafından yönetilir"
   },
-  "settings.notifications.task.title": {
-    "defaultMessage": "Görev tamamlama bildirimleri"
+  "settings.notifications.system.title": {
+    "defaultMessage": "Sistem bildirimleri"
   },
   "settings.notifications.title": {
     "defaultMessage": "Bildirimler"
+  },
+  "settings.notifications.turn.always": {
+    "defaultMessage": "Her zaman"
+  },
+  "settings.notifications.turn.description": {
+    "defaultMessage": "iCodex'in işi bitirdiğini size ne zaman bildireceğini ayarlayın"
+  },
+  "settings.notifications.turn.never": {
+    "defaultMessage": "Asla"
+  },
+  "settings.notifications.turn.title": {
+    "defaultMessage": "Tamamlanma bildirimleri"
+  },
+  "settings.notifications.turn.unfocused": {
+    "defaultMessage": "Yalnızca odakta değilken"
+  },
+  "settings.permissions.autoReview.description": {
+    "defaultMessage": "iCodex ek erişim isteklerinden hangilerinin güvenli olduğuna karar verir ve yalnızca riskli olanları sorar. Otomatik inceleme hata yapabilir"
+  },
+  "settings.permissions.autoReview.title": {
+    "defaultMessage": "Otomatik inceleme"
+  },
+  "settings.permissions.default.description": {
+    "defaultMessage": "Varsayılan olarak iCodex kendi çalışma alanındaki dosyaları okuyup düzenleyebilir. Diğer her şey için onay ister"
+  },
+  "settings.permissions.default.title": {
+    "defaultMessage": "Varsayılan izinler"
+  },
+  "settings.permissions.fullAccess.description": {
+    "defaultMessage": "iCodex, onayınız olmadan bilgisayarınızdaki her dosyayı düzenleyebilir ve ağ erişimli komutlar çalıştırabilir. Bu; veri kaybı, sızıntı veya beklenmedik davranış riskini önemli ölçüde artırır"
+  },
+  "settings.permissions.fullAccess.title": {
+    "defaultMessage": "Tam erişim"
+  },
+  "settings.permissions.title": {
+    "defaultMessage": "İzinler"
   },
   "settings.preventSleep.description": {
     "defaultMessage": "iCodex bir görevi çalıştırırken bilgisayarınızı uyanık tutun (ekran hala kilitlenebilir)"
   },
   "settings.preventSleep.title": {
-    "defaultMessage": "Uykuyu Önleyin"
+    "defaultMessage": "Çalışırken uykuyu engelle"
   },
-  "settings.theme.description": {
-    "defaultMessage": "iCodex'nin görünümünü ve hissini özelleştirin"
+  "settings.sendShortcut.description": {
+    "defaultMessage": "Enter'ın mesajı mı göndereceğini yoksa satır mı ekleyeceğini seçin"
   },
-  "settings.theme.title": {
-    "defaultMessage": "Tema"
+  "settings.sendShortcut.enter": {
+    "defaultMessage": "Enter"
+  },
+  "settings.sendShortcut.modEnter": {
+    "defaultMessage": "{mod} + Enter"
+  },
+  "settings.sendShortcut.title": {
+    "defaultMessage": "Gönderme kısayolu"
+  },
+  "settings.toolDetails.description": {
+    "defaultMessage": "Sohbette araç çağrılarının varsayılan olarak açık mı kapalı mı görüneceği"
+  },
+  "settings.toolDetails.title": {
+    "defaultMessage": "Araç çağrısı ayrıntıları"
   },
   "settings.updates.description": {
     "defaultMessage": "iCodex'nin en iyi şekilde çalışmasını sağlamak için güncellemeleri kontrol edin ve yükleyin"
@@ -2651,14 +1952,17 @@
   "settings.updates.title": {
     "defaultMessage": "Güncellemeler"
   },
+  "settings.usageStats.description": {
+    "defaultMessage": "Her yanıtın altında token, hız ve maliyeti göster"
+  },
+  "settings.usageStats.title": {
+    "defaultMessage": "Kullanım istatistiklerini göster"
+  },
   "settings.version.title": {
     "defaultMessage": "Sürüm"
   },
   "settingsView.back": {
     "defaultMessage": "Uygulamaya dön"
-  },
-  "settingsView.groupAdvanced": {
-    "defaultMessage": "Gelişmiş"
   },
   "settingsView.groupIntegrations": {
     "defaultMessage": "Entegrasyonlar"
@@ -2672,20 +1976,14 @@
   "settingsView.search": {
     "defaultMessage": "Ayarlarda ara..."
   },
-  "settingsView.tabApp": {
-    "defaultMessage": "Uygulama"
+  "settingsView.tabAppearance": {
+    "defaultMessage": "Görünüm"
   },
-  "settingsView.tabAuth": {
-    "defaultMessage": "Kimlik Doğrulama"
-  },
-  "settingsView.tabChat": {
-    "defaultMessage": "Sohbet"
+  "settingsView.tabGeneral": {
+    "defaultMessage": "Genel"
   },
   "settingsView.tabKeyboard": {
     "defaultMessage": "Klavye"
-  },
-  "settingsView.tabLocalInference": {
-    "defaultMessage": "Yerel Çıkarım"
   },
   "settingsView.tabModels": {
     "defaultMessage": "Modeller"
@@ -2693,14 +1991,8 @@
   "settingsView.tabPlugins": {
     "defaultMessage": "Eklentiler"
   },
-  "settingsView.tabPrompts": {
-    "defaultMessage": "İstemler"
-  },
   "settingsView.title": {
     "defaultMessage": "Ayarlar"
-  },
-  "sheet.close": {
-    "defaultMessage": "Kapat"
   },
   "shortcutRecorder.cancel": {
     "defaultMessage": "İptal"

@@ -12,13 +12,6 @@ export const configLabels: Record<string, string> = {
   GOOSE_ALLOWLIST: 'Allow List',
   GOOSE_RECIPE_GITHUB_REPO: 'Recipe GitHub Repo',
 
-  // security settings
-  SECURITY_PROMPT_ENABLED: 'Prompt Injection Detection Enabled',
-  SECURITY_PROMPT_THRESHOLD: 'Prompt Injection Detection Threshold',
-  SECURITY_PROMPT_CLASSIFIER_ENABLED: 'ML-based Prompt Injection Detection Enabled',
-  SECURITY_PROMPT_CLASSIFIER_MODEL: 'ML-based Prompt Injection Detection Model',
-  SECURITY_PROMPT_CLASSIFIER_ENDPOINT: 'ML Classification Endpoint',
-  SECURITY_PROMPT_CLASSIFIER_TOKEN: 'ML Classification API Token',
 
   // openai
   OPENAI_API_KEY: 'OpenAI API Key',
@@ -71,29 +64,4 @@ export const configPlaceholders: Record<string, string> = {
   GITHUB_COPILOT_HOST: 'my-enterprise.ghe.com',
   GITHUB_COPILOT_CLIENT_ID: 'Iv1.xxxxxxxxxxxxxxxx',
   GITHUB_COPILOT_TOKEN_URL: 'https://my-enterprise.ghe.com/api/copilot_internal/v2/token',
-};
-
-export const providerPrefixes: Record<string, string[]> = {
-  openai: ['OPENAI_'],
-  anthropic: ['ANTHROPIC_'],
-  google: ['GOOGLE_'],
-  groq: ['GROQ_'],
-  databricks: ['DATABRICKS_'],
-  databricks_v2: ['DATABRICKS_'],
-  openrouter: ['OPENROUTER_'],
-  ollama: ['OLLAMA_'],
-  azure_openai: ['AZURE_'],
-  gcp_vertex_ai: ['GCP_'],
-  snowflake: ['SNOWFLAKE_'],
-  github_copilot: ['GITHUB_COPILOT_'],
-};
-
-export const getUiNames = (key: string): string => {
-  if (configLabels[key]) {
-    return configLabels[key];
-  }
-  return key
-    .split('_')
-    .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
-    .join(' ');
 };

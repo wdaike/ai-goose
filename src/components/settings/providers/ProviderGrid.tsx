@@ -290,10 +290,8 @@ function ProviderCards({
     engine: editingProvider.config.engine,
     display_name: editingProvider.config.displayName,
     api_url: editingProvider.config.apiUrl,
-    base_path: editingProvider.config.basePath ?? undefined,
     api_key: '',
     models: editingProvider.config.models ?? [],
-    supports_streaming: editingProvider.config.supportsStreaming ?? true,
     requires_auth: editingProvider.config.requiresAuth ?? true,
     headers: editingProvider.config.headers ?? undefined,
     catalog_provider_id: editingProvider.config.catalogProviderId ?? undefined,
@@ -333,6 +331,7 @@ function ProviderCards({
           </DialogHeader>
           <CustomProviderForm
             initialData={initialData}
+            apiKeyPreview={editingProvider?.config.apiKeyPreview}
             isEditable={editable}
             onSubmit={editingProvider ? handleUpdateCustomProvider : handleCreateCustomProvider}
             onCancel={handleCloseModal}

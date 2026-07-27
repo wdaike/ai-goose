@@ -19,6 +19,7 @@ import ModelPickerPill from './bottom_menu/ModelPickerPill';
 import { PermissionModeChip } from './bottom_menu/PermissionModeChip';
 import { cn } from '../utils';
 import { useModelAndProvider } from './ModelAndProviderContext';
+import { useAppSetting } from '../hooks/useAppSetting';
 import { useAudioRecorder } from '../hooks/useAudioRecorder';
 import { toastError } from '../toasts';
 import MentionPopover, { DisplayItem, DisplayItemWithMatch } from './MentionPopover';
@@ -397,6 +398,7 @@ export default function ChatInput({
     selectFile: (index: number) => void;
   }>(null);
 
+  const sendShortcut = useAppSetting('sendShortcut', 'enter');
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
   const [skillBadgeWidth, setSkillBadgeWidth] = useState(0);
   const skillBadgeRef = useRef<HTMLButtonElement>(null);
@@ -931,9 +933,14 @@ export default function ChatInput({
     handleHistoryNavigation(evt);
 
     if (evt.key === 'Enter') {
-      // should not trigger submit on Enter if it's composing (IME input in progress) or shift/alt(option) is pressed
-      if (evt.shiftKey || isComposing) {
-        // Allow line break for Shift+Enter, or during IME composition
+      if (isComposing) {
+        // Never submit mid IME composition
+        return;
+      }
+
+      // With the ⌘/Ctrl+Enter shortcut a bare Enter inserts a line break instead of sending.
+      const sendModifierHeld = evt.metaKey || evt.ctrlKey;
+      if (sendShortcut === 'mod+enter' ? !sendModifierHeld : evt.shiftKey) {
         return;
       }
 

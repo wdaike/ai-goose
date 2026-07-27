@@ -21,13 +21,17 @@ export type LanguageSetting =
   | 'system' | 'en' | 'es' | 'fr' | 'de' | 'it' | 'pt' | 'id' | 'ms' | 'vi'
   | 'hi' | 'ja' | 'ko' | 'ru' | 'tr' | 'zh-CN' | 'zh-TW';
 
+export type TurnNotificationSetting = 'always' | 'unfocused' | 'never';
+
+export type SendShortcutSetting = 'enter' | 'mod+enter';
+
 export interface Settings {
   // Desktop app settings
   showMenuBarIcon: boolean;
   disableAutoDownload: boolean;
   showDockIcon: boolean;
   enableWakelock: boolean;
-  enableNotifications: boolean;
+  turnNotifications: TurnNotificationSetting;
   spellcheckEnabled: boolean;
   globalShortcut?: string | null;
   keyboardShortcuts: KeyboardShortcuts;
@@ -37,7 +41,9 @@ export interface Settings {
   useSystemTheme: boolean;
   language: LanguageSetting;
   responseStyle: string;
-  showPricing: boolean;
+  sendShortcut: SendShortcutSetting;
+  showBottomPanelControl: boolean;
+  showUsageStats: boolean;
   seenAnnouncementIds: string[];
 }
 
@@ -63,7 +69,7 @@ export const defaultSettings: Settings = {
   disableAutoDownload: false,
   showDockIcon: true,
   enableWakelock: false,
-  enableNotifications: true,
+  turnNotifications: 'unfocused',
   spellcheckEnabled: true,
   keyboardShortcuts: defaultKeyboardShortcuts,
 
@@ -72,7 +78,9 @@ export const defaultSettings: Settings = {
   useSystemTheme: true,
   language: 'en',
   responseStyle: 'concise',
-  showPricing: true,
+  sendShortcut: 'enter',
+  showBottomPanelControl: true,
+  showUsageStats: true,
   seenAnnouncementIds: [],
 };
 

@@ -23,66 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "切換側邊面板"
   },
-  "authSettings.activeProviderWarning": {
-    "defaultMessage": "這是目前使用中的供應商。在您設定其他憑證之前，新的請求可能會失敗。"
-  },
-  "authSettings.cancel": {
-    "defaultMessage": "取消"
-  },
-  "authSettings.delete": {
-    "defaultMessage": "刪除"
-  },
-  "authSettings.deleteCredential": {
-    "defaultMessage": "刪除憑證"
-  },
-  "authSettings.deleteMessage": {
-    "defaultMessage": "要刪除 {provider} 的 {name} 憑證嗎？"
-  },
-  "authSettings.deleteTitle": {
-    "defaultMessage": "刪除憑證"
-  },
-  "authSettings.deleted": {
-    "defaultMessage": "憑證已刪除"
-  },
-  "authSettings.description": {
-    "defaultMessage": "管理 iCodex 在本機儲存的供應商憑證。"
-  },
-  "authSettings.empty": {
-    "defaultMessage": "找不到本機儲存的供應商憑證。"
-  },
-  "authSettings.expiresAt": {
-    "defaultMessage": "於 {date} 到期"
-  },
-  "authSettings.failedToConfigure": {
-    "defaultMessage": "無法設定憑證：{error}"
-  },
-  "authSettings.failedToDelete": {
-    "defaultMessage": "無法刪除憑證：{error}"
-  },
-  "authSettings.failedToLoad": {
-    "defaultMessage": "無法載入供應商憑證"
-  },
-  "authSettings.loading": {
-    "defaultMessage": "正在載入憑證…"
-  },
-  "authSettings.reauthorize": {
-    "defaultMessage": "重新授權"
-  },
-  "authSettings.signIn": {
-    "defaultMessage": "登入"
-  },
-  "authSettings.signedIn": {
-    "defaultMessage": "憑證已設定"
-  },
-  "authSettings.storageProviderCache": {
-    "defaultMessage": "供應商快取"
-  },
-  "authSettings.storageSecretStore": {
-    "defaultMessage": "密鑰儲存區"
-  },
-  "authSettings.title": {
-    "defaultMessage": "供應商憑證"
-  },
   "backButton.back": {
     "defaultMessage": "返回"
   },
@@ -91,36 +31,6 @@
   },
   "baseChat.goHome": {
     "defaultMessage": "回到首頁"
-  },
-  "baseChat.reconnecting": {
-    "defaultMessage": "連線已中斷。正在重新連線…"
-  },
-  "bottomMenuExtensionSelection.extensionUpdated": {
-    "defaultMessage": "擴充功能已更新"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeDisabled": {
-    "defaultMessage": "{name} 將在新的聊天中停用"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeEnabled": {
-    "defaultMessage": "{name} 將在新的聊天中啟用"
-  },
-  "bottomMenuExtensionSelection.extensionsForNewChats": {
-    "defaultMessage": "新聊天的擴充功能"
-  },
-  "bottomMenuExtensionSelection.extensionsForThisSession": {
-    "defaultMessage": "此聊天工作階段的擴充功能"
-  },
-  "bottomMenuExtensionSelection.manageExtensions": {
-    "defaultMessage": "管理擴充功能"
-  },
-  "bottomMenuExtensionSelection.noExtensionsAvailable": {
-    "defaultMessage": "沒有可用的擴充功能"
-  },
-  "bottomMenuExtensionSelection.noExtensionsFound": {
-    "defaultMessage": "找不到擴充功能"
-  },
-  "bottomMenuExtensionSelection.searchExtensions": {
-    "defaultMessage": "搜尋擴充功能…"
   },
   "cardButtons.configure": {
     "defaultMessage": "設定"
@@ -137,9 +47,6 @@
   "chat.requestFailed": {
     "defaultMessage": "請求失敗"
   },
-  "chatInput.contextWindow": {
-    "defaultMessage": "上下文視窗"
-  },
   "chatInput.dictationError": {
     "defaultMessage": "聽寫錯誤"
   },
@@ -155,12 +62,6 @@
   "chatInput.recording": {
     "defaultMessage": "錄音中…"
   },
-  "chatInput.removeFile": {
-    "defaultMessage": "移除檔案"
-  },
-  "chatInput.removeImage": {
-    "defaultMessage": "移除影像"
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "正在重新啟動工作階段…"
   },
@@ -173,101 +74,11 @@
   "chatInput.typeMessage": {
     "defaultMessage": "輸入要傳送的訊息"
   },
-  "chatInput.unknownType": {
-    "defaultMessage": "未知的類型"
-  },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "正在等待取消作業完成"
   },
   "chatInput.waitingForImages": {
     "defaultMessage": "正在等待影像儲存…"
-  },
-  "chatSettings.modeDescription": {
-    "defaultMessage": "選擇 iCodex 用於新工作階段的預設模式。現有的工作階段會維持目前的模式。"
-  },
-  "chatSettings.modeTitle": {
-    "defaultMessage": "預設模式"
-  },
-  "chatSettings.responseStylesDescription": {
-    "defaultMessage": "選擇 iCodex 設定回應格式與樣式的方式"
-  },
-  "chatSettings.responseStylesTitle": {
-    "defaultMessage": "回應樣式"
-  },
-  "configSettings.configReset": {
-    "defaultMessage": "設定已重設"
-  },
-  "configSettings.configResetMsg": {
-    "defaultMessage": "所有變更皆已還原"
-  },
-  "configSettings.configUpdated": {
-    "defaultMessage": "設定已更新"
-  },
-  "configSettings.configUpdatedMsg": {
-    "defaultMessage": "已成功儲存「{name}」"
-  },
-  "configSettings.configurationEditor": {
-    "defaultMessage": "設定編輯器"
-  },
-  "configSettings.description": {
-    "defaultMessage": "編輯您的 iCodex 設定"
-  },
-  "configSettings.descriptionWithProvider": {
-    "defaultMessage": "編輯您的 iCodex 設定（{provider} 的目前設定）"
-  },
-  "configSettings.done": {
-    "defaultMessage": "完成"
-  },
-  "configSettings.editConfiguration": {
-    "defaultMessage": "編輯設定"
-  },
-  "configSettings.enterValue": {
-    "defaultMessage": "輸入 {name}"
-  },
-  "configSettings.noSettings": {
-    "defaultMessage": "找不到任何設定。"
-  },
-  "configSettings.resetChanges": {
-    "defaultMessage": "重設變更"
-  },
-  "configSettings.saveFailed": {
-    "defaultMessage": "儲存失敗"
-  },
-  "configSettings.saveFailedMsg": {
-    "defaultMessage": "無法儲存「{name}」"
-  },
-  "configSettings.saving": {
-    "defaultMessage": "正在儲存…"
-  },
-  "configSettings.title": {
-    "defaultMessage": "設定"
-  },
-  "configureApproveMode.cancel": {
-    "defaultMessage": "取消"
-  },
-  "configureApproveMode.description": {
-    "defaultMessage": "核准請求可以套用至所有工具請求，或判斷哪些動作可能需要整合"
-  },
-  "configureApproveMode.manualApproval": {
-    "defaultMessage": "手動核准"
-  },
-  "configureApproveMode.manualApprovalDescription": {
-    "defaultMessage": "所有工具、擴充功能與檔案修改都將需要人工核准"
-  },
-  "configureApproveMode.save": {
-    "defaultMessage": "儲存"
-  },
-  "configureApproveMode.saving": {
-    "defaultMessage": "正在儲存…"
-  },
-  "configureApproveMode.smartApproval": {
-    "defaultMessage": "智慧核准"
-  },
-  "configureApproveMode.smartApprovalDescription": {
-    "defaultMessage": "根據風險等級智慧判斷哪些動作需要核准"
-  },
-  "configureApproveMode.title": {
-    "defaultMessage": "設定核准模式"
   },
   "confirmationModal.defaultCancel": {
     "defaultMessage": "否"
@@ -277,27 +88,6 @@
   },
   "confirmationModal.processing": {
     "defaultMessage": "正在處理…"
-  },
-  "conversationLimitsDropdown.conversationLimits": {
-    "defaultMessage": "對話限制"
-  },
-  "conversationLimitsDropdown.maxTurns": {
-    "defaultMessage": "最大回合數"
-  },
-  "conversationLimitsDropdown.maxTurnsDescription": {
-    "defaultMessage": "iCodex 要求使用者輸入前的最大代理回合數"
-  },
-  "costTracker.costUnavailable": {
-    "defaultMessage": "{model} 無可用的費用資料（輸入 {inputTokens} 個權杖，輸出 {outputTokens} 個權杖）"
-  },
-  "costTracker.inputOutputTooltip": {
-    "defaultMessage": "輸入：{inputTokens} 個權杖（{inputCost}）｜輸出：{outputTokens} 個權杖（{outputCost}）"
-  },
-  "costTracker.pricingUnavailable": {
-    "defaultMessage": "{model} 無可用的定價資料"
-  },
-  "costTracker.totalSessionCost": {
-    "defaultMessage": "工作階段總費用：{cost}"
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "新增點數"
@@ -503,104 +293,8 @@
   "defaultProviderSetupForm.showOptions": {
     "defaultMessage": "顯示 {count} 個選項"
   },
-  "diagnosticsModal.attachHint": {
-    "defaultMessage": "如果您要回報錯誤，建議將診斷報告一併附上。"
-  },
-  "diagnosticsModal.cancel": {
-    "defaultMessage": "取消"
-  },
-  "diagnosticsModal.configSettings": {
-    "defaultMessage": "設定項目"
-  },
-  "diagnosticsModal.description": {
-    "defaultMessage": "您可以下載診斷 JSON 報告與團隊分享，或直接在 GitHub 上回報錯誤並預先填入您的系統詳細資料。診斷報告包含下列內容："
-  },
-  "diagnosticsModal.diagnosticsErrorMsg": {
-    "defaultMessage": "無法下載診斷報告"
-  },
-  "diagnosticsModal.diagnosticsErrorTitle": {
-    "defaultMessage": "診斷錯誤"
-  },
-  "diagnosticsModal.download": {
-    "defaultMessage": "下載"
-  },
-  "diagnosticsModal.downloading": {
-    "defaultMessage": "正在下載…"
-  },
-  "diagnosticsModal.fileBug": {
-    "defaultMessage": "在 GitHub 上回報錯誤"
-  },
-  "diagnosticsModal.logFiles": {
-    "defaultMessage": "最近的記錄檔"
-  },
-  "diagnosticsModal.opening": {
-    "defaultMessage": "正在開啟…"
-  },
-  "diagnosticsModal.reportProblem": {
-    "defaultMessage": "回報問題"
-  },
-  "diagnosticsModal.sensitiveWarning": {
-    "defaultMessage": "如果您的工作階段包含敏感資訊，請勿公開分享診斷檔案。"
-  },
-  "diagnosticsModal.sessionMessages": {
-    "defaultMessage": "您目前工作階段的訊息"
-  },
-  "diagnosticsModal.systemInfo": {
-    "defaultMessage": "基本系統資訊"
-  },
-  "diagnosticsModal.systemInfoErrorMsg": {
-    "defaultMessage": "無法取得系統資訊"
-  },
-  "diagnosticsModal.systemInfoErrorTitle": {
-    "defaultMessage": "錯誤"
-  },
   "dialog.close": {
     "defaultMessage": "關閉"
-  },
-  "dictationSettings.addApiKey": {
-    "defaultMessage": "新增 API 金鑰"
-  },
-  "dictationSettings.apiKey": {
-    "defaultMessage": "API 金鑰"
-  },
-  "dictationSettings.cancel": {
-    "defaultMessage": "取消"
-  },
-  "dictationSettings.chooseVoiceConversion": {
-    "defaultMessage": "選擇語音轉換為文字的方式"
-  },
-  "dictationSettings.configureApiKey": {
-    "defaultMessage": "在 <b>{settingsPath}</b> 中設定 API 金鑰"
-  },
-  "dictationSettings.configured": {
-    "defaultMessage": "（已設定）"
-  },
-  "dictationSettings.configuredIn": {
-    "defaultMessage": "✓ 已在 {settingsPath} 中設定"
-  },
-  "dictationSettings.disabled": {
-    "defaultMessage": "已停用"
-  },
-  "dictationSettings.enterApiKey": {
-    "defaultMessage": "輸入您的 API 金鑰"
-  },
-  "dictationSettings.notConfigured": {
-    "defaultMessage": "（尚未設定）"
-  },
-  "dictationSettings.removeApiKey": {
-    "defaultMessage": "移除 API 金鑰"
-  },
-  "dictationSettings.requiredForTranscription": {
-    "defaultMessage": "轉錄所需"
-  },
-  "dictationSettings.save": {
-    "defaultMessage": "儲存"
-  },
-  "dictationSettings.updateApiKey": {
-    "defaultMessage": "更新 API 金鑰"
-  },
-  "dictationSettings.voiceDictationProvider": {
-    "defaultMessage": "語音聽寫供應商"
   },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "無法更新工作目錄"
@@ -851,66 +545,6 @@
   "filesPanel.title": {
     "defaultMessage": "檔案"
   },
-  "goosehintsModal.close": {
-    "defaultMessage": "關閉"
-  },
-  "goosehintsModal.developer": {
-    "defaultMessage": "開發者"
-  },
-  "goosehintsModal.dialogDescription": {
-    "defaultMessage": "提供有關您專案的額外內容，以改善與 iCodex 的溝通"
-  },
-  "goosehintsModal.dialogTitle": {
-    "defaultMessage": "設定專案提示 (.goosehints)"
-  },
-  "goosehintsModal.errorReading": {
-    "defaultMessage": "讀取 .goosehints 檔案時發生錯誤：{error}"
-  },
-  "goosehintsModal.failedToAccess": {
-    "defaultMessage": "無法存取 .goosehints 檔案"
-  },
-  "goosehintsModal.failedToSave": {
-    "defaultMessage": "無法儲存 .goosehints 檔案"
-  },
-  "goosehintsModal.fileCreating": {
-    "defaultMessage": "正在於此處建立新的 .goosehints 檔案：{filePath}"
-  },
-  "goosehintsModal.fileFound": {
-    "defaultMessage": "在此處找到 .goosehints 檔案：{filePath}"
-  },
-  "goosehintsModal.helpText1": {
-    "defaultMessage": ".goosehints 是一個文字檔，用於提供有關您專案的額外內容，並改善與 iCodex 的溝通。"
-  },
-  "goosehintsModal.helpText2": {
-    "defaultMessage": "請確認擴充功能頁面中已啟用 {bold} 擴充功能。使用 .goosehints 需要此擴充功能。您需要重新啟動工作階段，.goosehints 的更新才會生效。"
-  },
-  "goosehintsModal.helpText3": {
-    "defaultMessage": "如需更多資訊，請參閱 {link}。"
-  },
-  "goosehintsModal.helpTextLink": {
-    "defaultMessage": "使用 .goosehints"
-  },
-  "goosehintsModal.placeholder": {
-    "defaultMessage": "在此輸入專案提示…"
-  },
-  "goosehintsModal.save": {
-    "defaultMessage": "儲存"
-  },
-  "goosehintsModal.savedSuccessfully": {
-    "defaultMessage": "已成功儲存"
-  },
-  "goosehintsModal.saving": {
-    "defaultMessage": "正在儲存…"
-  },
-  "goosehintsSection.configure": {
-    "defaultMessage": "設定"
-  },
-  "goosehintsSection.description": {
-    "defaultMessage": "設定您專案的 .goosehints 檔案，為 iCodex 提供額外內容"
-  },
-  "goosehintsSection.title": {
-    "defaultMessage": "專案提示 (.goosehints)"
-  },
   "groupedExtensionLoadingToast.askGoose": {
     "defaultMessage": "詢問 iCodex"
   },
@@ -992,42 +626,6 @@
   "hub.suggestionReview": {
     "defaultMessage": "審查程式碼並提出修改建議"
   },
-  "huggingFaceModelSearch.download": {
-    "defaultMessage": "下載"
-  },
-  "huggingFaceModelSearch.downloaded": {
-    "defaultMessage": "已下載"
-  },
-  "huggingFaceModelSearch.downloading": {
-    "defaultMessage": "正在下載…"
-  },
-  "huggingFaceModelSearch.loadingVariants": {
-    "defaultMessage": "正在載入變體…"
-  },
-  "huggingFaceModelSearch.noGgufModels": {
-    "defaultMessage": "找不到符合此查詢的相容本機模型。"
-  },
-  "huggingFaceModelSearch.recommended": {
-    "defaultMessage": "推薦"
-  },
-  "huggingFaceModelSearch.searchError": {
-    "defaultMessage": "搜尋錯誤：{details}"
-  },
-  "huggingFaceModelSearch.searchFailed": {
-    "defaultMessage": "搜尋失敗。請再試一次。"
-  },
-  "huggingFaceModelSearch.searchHuggingFace": {
-    "defaultMessage": "搜尋 HuggingFace"
-  },
-  "huggingFaceModelSearch.searchNoData": {
-    "defaultMessage": "搜尋未傳回任何資料。"
-  },
-  "huggingFaceModelSearch.searchPlaceholder": {
-    "defaultMessage": "搜尋本機模型…"
-  },
-  "huggingFaceModelSearch.tooLarge": {
-    "defaultMessage": "可能無法載入記憶體（模型 {size}，可用 {available}）"
-  },
   "huggingFaceSignInPrompt.failedToConfigure": {
     "defaultMessage": "登入 Hugging Face 失敗：{error}"
   },
@@ -1045,9 +643,6 @@
   },
   "imagePreview.altText": {
     "defaultMessage": "iCodex 圖片"
-  },
-  "imagePreview.clickToCollapse": {
-    "defaultMessage": "按一下以收合"
   },
   "imagePreview.clickToExpand": {
     "defaultMessage": "按一下以展開"
@@ -1262,111 +857,6 @@
   "loadingGoose.waiting": {
     "defaultMessage": "等待中"
   },
-  "localInferenceSettings.deleteConfirm": {
-    "defaultMessage": "要刪除此模型嗎？您之後可以重新下載。"
-  },
-  "localInferenceSettings.description": {
-    "defaultMessage": "下載並管理本機 LLM 模型，無需 API 金鑰即可進行推論。在 HuggingFace 搜尋 GGUF 或 MLX 模型，或使用下方的精選推薦。"
-  },
-  "localInferenceSettings.dismiss": {
-    "defaultMessage": "關閉"
-  },
-  "localInferenceSettings.download": {
-    "defaultMessage": "下載"
-  },
-  "localInferenceSettings.downloadCancelled": {
-    "defaultMessage": "下載已取消"
-  },
-  "localInferenceSettings.downloadFailed": {
-    "defaultMessage": "下載失敗"
-  },
-  "localInferenceSettings.downloadProgress": {
-    "defaultMessage": "{downloaded} / {total}（{percent}%）"
-  },
-  "localInferenceSettings.downloadedModels": {
-    "defaultMessage": "已下載的模型"
-  },
-  "localInferenceSettings.downloading": {
-    "defaultMessage": "下載中"
-  },
-  "localInferenceSettings.evictFromMemory": {
-    "defaultMessage": "Evict from memory"
-  },
-  "localInferenceSettings.featuredModels": {
-    "defaultMessage": "精選模型"
-  },
-  "localInferenceSettings.huggingFaceSignInNote": {
-    "defaultMessage": "登入以在搜尋與下載模型時提高速率上限，並存取私人或受限的 Hugging Face 儲存庫。"
-  },
-  "localInferenceSettings.loadedInMemory": {
-    "defaultMessage": "Loaded in memory"
-  },
-  "localInferenceSettings.modelSettings": {
-    "defaultMessage": "模型設定"
-  },
-  "localInferenceSettings.modelSettingsTitle": {
-    "defaultMessage": "模型設定"
-  },
-  "localInferenceSettings.noModels": {
-    "defaultMessage": "沒有可用的模型"
-  },
-  "localInferenceSettings.recommended": {
-    "defaultMessage": "建議"
-  },
-  "localInferenceSettings.remaining": {
-    "defaultMessage": "剩餘 {time}"
-  },
-  "localInferenceSettings.retry": {
-    "defaultMessage": "重試"
-  },
-  "localInferenceSettings.showAllFeatured": {
-    "defaultMessage": "顯示全部精選（還有 {count} 個）"
-  },
-  "localInferenceSettings.showRecommendedOnly": {
-    "defaultMessage": "僅顯示建議項目"
-  },
-  "localInferenceSettings.title": {
-    "defaultMessage": "本機推論模型"
-  },
-  "localInferenceSettings.vision": {
-    "defaultMessage": "視覺"
-  },
-  "localInferenceSettings.visionEncoderDownloading": {
-    "defaultMessage": "正在下載視覺編碼器…"
-  },
-  "localInferenceSettings.visionEncoderNotDownloaded": {
-    "defaultMessage": "尚未下載視覺編碼器"
-  },
-  "localModelManager.active": {
-    "defaultMessage": "使用中"
-  },
-  "localModelManager.deleteConfirm": {
-    "defaultMessage": "要刪除此模型嗎？您之後可以重新下載。"
-  },
-  "localModelManager.download": {
-    "defaultMessage": "下載"
-  },
-  "localModelManager.downloaded": {
-    "defaultMessage": "已下載"
-  },
-  "localModelManager.gpuAcceleration": {
-    "defaultMessage": "支援 GPU 加速（NVIDIA 使用 CUDA，Apple Silicon 使用 Metal）。硬體加速的 GPU 功能必須在建置時啟用。"
-  },
-  "localModelManager.noModels": {
-    "defaultMessage": "沒有可用的模型"
-  },
-  "localModelManager.recommended": {
-    "defaultMessage": "建議"
-  },
-  "localModelManager.recommendedForHardware": {
-    "defaultMessage": "為您的硬體建議"
-  },
-  "localModelManager.showAllModels": {
-    "defaultMessage": "顯示所有模型（還有 {count} 個）"
-  },
-  "localModelManager.showRecommendedOnly": {
-    "defaultMessage": "僅顯示建議項目"
-  },
   "localModelPicker.bestForMachine": {
     "defaultMessage": "最適合您的電腦"
   },
@@ -1478,62 +968,20 @@
   "messageQueue.cancel": {
     "defaultMessage": "取消"
   },
-  "messageQueue.cannotSendWhileEditing": {
-    "defaultMessage": "編輯時無法傳送"
-  },
   "messageQueue.clearAll": {
     "defaultMessage": "全部清除"
-  },
-  "messageQueue.clickToEdit": {
-    "defaultMessage": "{content}（點擊以編輯）"
-  },
-  "messageQueue.collapseQueue": {
-    "defaultMessage": "收合佇列"
-  },
-  "messageQueue.dragToReorder": {
-    "defaultMessage": "拖曳訊息以重新排序優先順序"
-  },
-  "messageQueue.expandQueue": {
-    "defaultMessage": "展開佇列"
-  },
-  "messageQueue.messageCount": {
-    "defaultMessage": "{count,plural,one{# 則訊息 {status}} other{# 則訊息 {status}}}"
-  },
-  "messageQueue.messageQueue": {
-    "defaultMessage": "訊息佇列"
-  },
-  "messageQueue.next": {
-    "defaultMessage": "下一個"
   },
   "messageQueue.paused": {
     "defaultMessage": "已暫停"
   },
-  "messageQueue.queuePaused": {
-    "defaultMessage": "佇列已暫停"
-  },
   "messageQueue.queuePausedCompact": {
     "defaultMessage": "佇列已暫停 - 點擊「傳送」或新增訊息以繼續"
-  },
-  "messageQueue.queuePausedExpanded": {
-    "defaultMessage": "佇列因中斷而暫停。請使用「立即傳送」或新增訊息以繼續。"
-  },
-  "messageQueue.queued": {
-    "defaultMessage": "已排入佇列"
   },
   "messageQueue.removeFromQueue": {
     "defaultMessage": "從佇列中移除此訊息"
   },
   "messageQueue.save": {
     "defaultMessage": "儲存"
-  },
-  "messageQueue.sendNow": {
-    "defaultMessage": "立即傳送此訊息"
-  },
-  "messageQueue.stopAndSend": {
-    "defaultMessage": "停止目前的處理並立即傳送此訊息"
-  },
-  "messageQueue.waiting": {
-    "defaultMessage": "等待中"
   },
   "messageUsageStats.cacheHitRate": {
     "defaultMessage": "（佔輸入的 {percent}%）"
@@ -1580,59 +1028,17 @@
   "messageUsageStats.totalTime": {
     "defaultMessage": "總時間"
   },
-  "microphoneSelector.chooseDescription": {
-    "defaultMessage": "選擇要用於聽寫的麥克風"
-  },
-  "microphoneSelector.grantAccess": {
-    "defaultMessage": "授予存取權"
-  },
-  "microphoneSelector.grantAccessDescription": {
-    "defaultMessage": "授予存取權以查看可用的麥克風"
-  },
-  "microphoneSelector.microphone": {
-    "defaultMessage": "麥克風"
-  },
-  "microphoneSelector.microphoneLabel": {
-    "defaultMessage": "麥克風 {index}"
-  },
-  "microphoneSelector.selectedMicrophone": {
-    "defaultMessage": "已選擇的麥克風"
-  },
-  "microphoneSelector.speakToTest": {
-    "defaultMessage": "說話以測試您的麥克風（{seconds} 秒）"
-  },
-  "microphoneSelector.stop": {
-    "defaultMessage": "停止"
-  },
-  "microphoneSelector.systemDefault": {
-    "defaultMessage": "系統預設"
-  },
-  "microphoneSelector.test": {
-    "defaultMessage": "測試"
-  },
   "modeSelectionItem.autonomousDescription": {
     "defaultMessage": "完整的檔案修改能力，可自由編輯、建立與刪除檔案。"
-  },
-  "modeSelectionItem.autonomousLabel": {
-    "defaultMessage": "自主"
   },
   "modeSelectionItem.chatOnlyDescription": {
     "defaultMessage": "與選定的供應商互動，不使用工具或擴充功能。"
   },
-  "modeSelectionItem.chatOnlyLabel": {
-    "defaultMessage": "僅對話"
-  },
   "modeSelectionItem.manualDescription": {
     "defaultMessage": "所有工具、擴充功能與檔案修改都需要人工核准"
   },
-  "modeSelectionItem.manualLabel": {
-    "defaultMessage": "手動"
-  },
   "modeSelectionItem.smartDescription": {
     "defaultMessage": "根據風險程度智慧判斷哪些動作需要核准"
-  },
-  "modeSelectionItem.smartLabel": {
-    "defaultMessage": "智慧"
   },
   "modelAndProviderContext.modelChangeFailed": {
     "defaultMessage": "{provider}/{model} 失敗"
@@ -1955,39 +1361,6 @@
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "分享匿名使用資料"
   },
-  "permissionModal.alwaysAllow": {
-    "defaultMessage": "一律允許"
-  },
-  "permissionModal.askBefore": {
-    "defaultMessage": "事前詢問"
-  },
-  "permissionModal.cancel": {
-    "defaultMessage": "取消"
-  },
-  "permissionModal.close": {
-    "defaultMessage": "關閉"
-  },
-  "permissionModal.failedToLoadTools": {
-    "defaultMessage": "無法載入工具"
-  },
-  "permissionModal.failedToLoadToolsDescription": {
-    "defaultMessage": "無法為此擴充功能載入工具。該擴充功能可能未在目前的工作階段中載入。"
-  },
-  "permissionModal.neverAllow": {
-    "defaultMessage": "永不允許"
-  },
-  "permissionModal.noActiveSession": {
-    "defaultMessage": "沒有作用中的工作階段"
-  },
-  "permissionModal.noActiveSessionDescription": {
-    "defaultMessage": "請先開始交談工作階段，以便為此擴充功能設定工具權限。工具權限會從作用中工作階段的擴充功能載入。"
-  },
-  "permissionModal.noToolsAvailable": {
-    "defaultMessage": "此擴充功能沒有可用的工具。"
-  },
-  "permissionModal.saveChanges": {
-    "defaultMessage": "儲存變更"
-  },
   "permissionModeChip.approve": {
     "defaultMessage": "手動核准"
   },
@@ -2002,24 +1375,6 @@
   },
   "permissionModeChip.smartApprove": {
     "defaultMessage": "智慧核准"
-  },
-  "permissionRulesModal.description": {
-    "defaultMessage": "為擴充功能設定工具權限，以控制它們與您系統互動的方式。"
-  },
-  "permissionRulesModal.extensionRules": {
-    "defaultMessage": "擴充功能規則"
-  },
-  "permissionRulesModal.title": {
-    "defaultMessage": "權限規則"
-  },
-  "permissionSetting.extensionRules": {
-    "defaultMessage": "擴充功能規則"
-  },
-  "permissionSetting.permissionRules": {
-    "defaultMessage": "權限規則"
-  },
-  "permissionSetting.permissionRulesDescription": {
-    "defaultMessage": "將傳遞給提供者的隱藏指示，用於引導並為您的回應補充背景資訊。"
   },
   "planSteps.progress": {
     "defaultMessage": "第 {current} / {total} 步"
@@ -2588,14 +1943,8 @@
   "resetProviderSection.resetDescription": {
     "defaultMessage": "這會清除您所選的模型與供應商設定。若沒有可用的預設值，系統將帶您回到歡迎畫面重新進行設定。"
   },
-  "responseStyle.conciseDescription": {
-    "defaultMessage": "工具呼叫預設為收合，僅顯示所使用的工具"
-  },
   "responseStyle.conciseLabel": {
     "defaultMessage": "精簡"
-  },
-  "responseStyle.detailedDescription": {
-    "defaultMessage": "工具呼叫預設為展開，以顯示詳細內容"
   },
   "responseStyle.detailedLabel": {
     "defaultMessage": "詳細"
@@ -2617,66 +1966,6 @@
   },
   "secureStorageNotice.defaultMessage": {
     "defaultMessage": "金鑰會安全地儲存在金鑰鏈中"
-  },
-  "securityToggle.apiTokenDescription": {
-    "defaultMessage": "分類服務的驗證權杖"
-  },
-  "securityToggle.apiTokenOptional": {
-    "defaultMessage": "API 權杖（選填）"
-  },
-  "securityToggle.classificationEndpoint": {
-    "defaultMessage": "分類端點"
-  },
-  "securityToggle.classificationEndpointDescription": {
-    "defaultMessage": "輸入您分類服務的完整 URL"
-  },
-  "securityToggle.commandClassifierActive": {
-    "defaultMessage": "指令分類器已啟用（已從環境自動設定）"
-  },
-  "securityToggle.commandEndpointDescription": {
-    "defaultMessage": "輸入您指令注入分類服務的完整 URL"
-  },
-  "securityToggle.commandInjectionDescription": {
-    "defaultMessage": "使用 ML 模型偵測惡意的 shell 指令"
-  },
-  "securityToggle.detectionModel": {
-    "defaultMessage": "偵測模型"
-  },
-  "securityToggle.detectionModelDescription": {
-    "defaultMessage": "選擇要用於提示注入偵測的 ML 模型"
-  },
-  "securityToggle.detectionThreshold": {
-    "defaultMessage": "偵測門檻"
-  },
-  "securityToggle.enableCommandInjection": {
-    "defaultMessage": "啟用指令注入 ML 偵測"
-  },
-  "securityToggle.enablePromptInjection": {
-    "defaultMessage": "啟用提示注入偵測"
-  },
-  "securityToggle.enablePromptInjectionMl": {
-    "defaultMessage": "啟用提示注入 ML 偵測"
-  },
-  "securityToggle.mlEndpointDescription": {
-    "defaultMessage": "輸入您 ML 分類服務的完整 URL（包含模型識別碼）"
-  },
-  "securityToggle.mlTokenDescription": {
-    "defaultMessage": "ML 服務的驗證權杖（例如 HuggingFace 權杖）"
-  },
-  "securityToggle.overrideNotice": {
-    "defaultMessage": "此設定由您的組織管理，無法變更。"
-  },
-  "securityToggle.promptInjectionDescription": {
-    "defaultMessage": "偵測並防範潛在的提示注入攻擊"
-  },
-  "securityToggle.promptInjectionMlDescription": {
-    "defaultMessage": "使用 ML 模型偵測您聊天中潛在的提示注入"
-  },
-  "securityToggle.thresholdDescription": {
-    "defaultMessage": "數值越高越嚴格（0.01 = 非常寬鬆，1.0 = 最嚴格）"
-  },
-  "securityToggle.warpNotice": {
-    "defaultMessage": "連線至 WARP 時，指令注入偵測的效果最佳（為了連接分類服務所必需）。"
   },
   "sessionActionsHeader.actionsLabel": {
     "defaultMessage": "工作階段動作"
@@ -2732,26 +2021,29 @@
   "sessionIndicators.streaming": {
     "defaultMessage": "串流中"
   },
-  "settings.appearance.description": {
-    "defaultMessage": "設定 iCodex 在您系統上的顯示方式"
+  "settings.about.title": {
+    "defaultMessage": "關於"
   },
-  "settings.appearance.title": {
-    "defaultMessage": "外觀"
+  "settings.bottomPanel.description": {
+    "defaultMessage": "在應用程式標題列顯示底部面板控制項"
   },
-  "settings.close": {
-    "defaultMessage": "關閉"
+  "settings.bottomPanel.title": {
+    "defaultMessage": "底部面板"
   },
-  "settings.costTracking.description": {
-    "defaultMessage": "顯示模型定價與使用費用"
+  "settings.chat.title": {
+    "defaultMessage": "聊天"
   },
-  "settings.costTracking.title": {
-    "defaultMessage": "費用追蹤"
+  "settings.composer.title": {
+    "defaultMessage": "輸入框"
   },
   "settings.dockIcon.description": {
     "defaultMessage": "在 Dock 中顯示 iCodex"
   },
   "settings.dockIcon.title": {
     "defaultMessage": "Dock 圖示"
+  },
+  "settings.general.title": {
+    "defaultMessage": "一般"
   },
   "settings.help.description": {
     "defaultMessage": "回報問題或申請新功能，協助我們改善 iCodex"
@@ -2823,73 +2115,82 @@
     "defaultMessage": "中文（繁體）"
   },
   "settings.menuBarIcon.description": {
-    "defaultMessage": "在選單列中顯示 iCodex"
+    "defaultMessage": "主視窗關閉後仍將 iCodex 保留在選單列"
   },
   "settings.menuBarIcon.title": {
-    "defaultMessage": "選單列圖示"
-  },
-  "settings.notifications.configGuide": {
-    "defaultMessage": "設定指南"
-  },
-  "settings.notifications.description": {
-    "defaultMessage": "通知由您的作業系統管理 - {link}"
-  },
-  "settings.notifications.modal.macInstructions": {
-    "defaultMessage": "若要在 macOS 上啟用通知："
-  },
-  "settings.notifications.modal.macStep1": {
-    "defaultMessage": "開啟「系統偏好設定」"
-  },
-  "settings.notifications.modal.macStep2": {
-    "defaultMessage": "點選「通知」"
-  },
-  "settings.notifications.modal.macStep3": {
-    "defaultMessage": "在應用程式清單中找到並選取 iCodex"
-  },
-  "settings.notifications.modal.macStep4": {
-    "defaultMessage": "啟用通知並依需求調整設定"
-  },
-  "settings.notifications.modal.title": {
-    "defaultMessage": "如何啟用通知"
-  },
-  "settings.notifications.modal.winInstructions": {
-    "defaultMessage": "若要在 Windows 上啟用通知："
-  },
-  "settings.notifications.modal.winStep1": {
-    "defaultMessage": "開啟「設定」"
-  },
-  "settings.notifications.modal.winStep2": {
-    "defaultMessage": "前往「系統」>「通知」"
-  },
-  "settings.notifications.modal.winStep3": {
-    "defaultMessage": "在應用程式清單中找到並選取 iCodex"
-  },
-  "settings.notifications.modal.winStep4": {
-    "defaultMessage": "開啟通知並依需求調整設定"
+    "defaultMessage": "在選單列顯示"
   },
   "settings.notifications.openSettings": {
     "defaultMessage": "開啟設定"
   },
-  "settings.notifications.task.description": {
-    "defaultMessage": "當視窗在背景執行時，iCodex 完成工作後發出通知"
+  "settings.notifications.system.description": {
+    "defaultMessage": "通知的傳送由作業系統管理"
   },
-  "settings.notifications.task.title": {
-    "defaultMessage": "工作完成通知"
+  "settings.notifications.system.title": {
+    "defaultMessage": "系統通知"
   },
   "settings.notifications.title": {
     "defaultMessage": "通知"
+  },
+  "settings.notifications.turn.always": {
+    "defaultMessage": "一律"
+  },
+  "settings.notifications.turn.description": {
+    "defaultMessage": "設定 iCodex 何時提醒你任務已完成"
+  },
+  "settings.notifications.turn.never": {
+    "defaultMessage": "從不"
+  },
+  "settings.notifications.turn.title": {
+    "defaultMessage": "任務完成通知"
+  },
+  "settings.notifications.turn.unfocused": {
+    "defaultMessage": "僅在未聚焦時"
+  },
+  "settings.permissions.autoReview.description": {
+    "defaultMessage": "由 iCodex 判斷哪些額外權限請求是安全的，只在有風險時詢問你。自動審核可能會出錯"
+  },
+  "settings.permissions.autoReview.title": {
+    "defaultMessage": "自動審核"
+  },
+  "settings.permissions.default.description": {
+    "defaultMessage": "預設情況下，iCodex 可以讀取和編輯工作區內的檔案。其他操作都會先徵求你的同意"
+  },
+  "settings.permissions.default.title": {
+    "defaultMessage": "預設權限"
+  },
+  "settings.permissions.fullAccess.description": {
+    "defaultMessage": "iCodex 可以編輯你電腦上的任何檔案，並在未經你批准的情況下執行連網指令。這會顯著增加資料遺失、外洩或非預期行為的風險"
+  },
+  "settings.permissions.fullAccess.title": {
+    "defaultMessage": "完全存取"
+  },
+  "settings.permissions.title": {
+    "defaultMessage": "權限"
   },
   "settings.preventSleep.description": {
     "defaultMessage": "在 iCodex 執行工作時讓電腦保持喚醒狀態（螢幕仍可鎖定）"
   },
   "settings.preventSleep.title": {
-    "defaultMessage": "防止睡眠"
+    "defaultMessage": "執行任務時防止休眠"
   },
-  "settings.theme.description": {
-    "defaultMessage": "自訂 iCodex 的外觀與風格"
+  "settings.sendShortcut.description": {
+    "defaultMessage": "選擇 Enter 是傳送訊息還是換行"
   },
-  "settings.theme.title": {
-    "defaultMessage": "佈景主題"
+  "settings.sendShortcut.enter": {
+    "defaultMessage": "Enter"
+  },
+  "settings.sendShortcut.modEnter": {
+    "defaultMessage": "{mod} + Enter"
+  },
+  "settings.sendShortcut.title": {
+    "defaultMessage": "傳送快捷鍵"
+  },
+  "settings.toolDetails.description": {
+    "defaultMessage": "聊天中的工具呼叫預設展開或收合"
+  },
+  "settings.toolDetails.title": {
+    "defaultMessage": "工具呼叫詳情"
   },
   "settings.updates.description": {
     "defaultMessage": "檢查並安裝更新，讓 iCodex 保持最佳運作狀態"
@@ -2897,14 +2198,17 @@
   "settings.updates.title": {
     "defaultMessage": "更新"
   },
+  "settings.usageStats.description": {
+    "defaultMessage": "在每則回覆下方顯示 token、速度與費用"
+  },
+  "settings.usageStats.title": {
+    "defaultMessage": "顯示用量統計"
+  },
   "settings.version.title": {
     "defaultMessage": "版本"
   },
   "settingsView.back": {
     "defaultMessage": "返回應用程式"
-  },
-  "settingsView.groupAdvanced": {
-    "defaultMessage": "進階"
   },
   "settingsView.groupIntegrations": {
     "defaultMessage": "整合"
@@ -2918,20 +2222,14 @@
   "settingsView.search": {
     "defaultMessage": "搜尋設定..."
   },
-  "settingsView.tabApp": {
-    "defaultMessage": "應用程式"
+  "settingsView.tabAppearance": {
+    "defaultMessage": "外觀"
   },
-  "settingsView.tabAuth": {
-    "defaultMessage": "驗證"
-  },
-  "settingsView.tabChat": {
-    "defaultMessage": "聊天"
+  "settingsView.tabGeneral": {
+    "defaultMessage": "一般"
   },
   "settingsView.tabKeyboard": {
     "defaultMessage": "鍵盤"
-  },
-  "settingsView.tabLocalInference": {
-    "defaultMessage": "本機推論"
   },
   "settingsView.tabModels": {
     "defaultMessage": "模型"
@@ -2939,14 +2237,8 @@
   "settingsView.tabPlugins": {
     "defaultMessage": "外掛"
   },
-  "settingsView.tabPrompts": {
-    "defaultMessage": "提示"
-  },
   "settingsView.title": {
     "defaultMessage": "設定"
-  },
-  "sheet.close": {
-    "defaultMessage": "關閉"
   },
   "shortcutRecorder.cancel": {
     "defaultMessage": "取消"

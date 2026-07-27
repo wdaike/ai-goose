@@ -37,9 +37,8 @@ import { useConfig } from './components/ConfigContext';
 import { ModelAndProviderProvider } from './components/ModelAndProviderContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { FeaturesProvider } from './contexts/FeaturesContext';
-import PermissionSettingsView from './components/settings/permission/PermissionSetting';
 
-import { View, ViewOptions } from './utils/navigationUtils';
+import { View } from './utils/navigationUtils';
 
 import { useNavigation } from './hooks/useNavigation';
 import { errorMessage } from './utils/conversionUtils';
@@ -156,34 +155,6 @@ const SettingsRoute = () => {
   }
 
   return <SettingsView onClose={() => navigate('/')} setView={setView} viewOptions={viewOptions} />;
-};
-
-const PermissionRoute = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const parentView = location.state?.parentView as View;
-  const parentViewOptions = location.state?.parentViewOptions as ViewOptions;
-
-  return (
-    <PermissionSettingsView
-      onClose={() => {
-        // Navigate back to parent view with options
-        switch (parentView) {
-          case 'chat':
-            navigate('/');
-            break;
-          case 'pair':
-            navigate('/pair');
-            break;
-          case 'settings':
-            navigate('/settings', { state: parentViewOptions });
-            break;
-          default:
-            navigate('/');
-        }
-      }}
-    />
-  );
 };
 
 const ConfigureProvidersRoute = () => {
@@ -483,7 +454,6 @@ export function AppInner() {
               />
               <Route path="plugins" element={<PluginsView />} />
               <Route path="settings" element={<SettingsRoute />} />
-              <Route path="permission" element={<PermissionRoute />} />
             </Route>
           </Routes>
         </div>

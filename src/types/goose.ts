@@ -307,16 +307,14 @@ export type CustomProviderConfigDto = {
   displayName: string;
   apiUrl: string;
   models?: Array<string>;
-  supportsStreaming?: boolean | null;
   headers?: {
     [key: string]: string;
   };
   requiresAuth: boolean;
   catalogProviderId?: string | null;
-  basePath?: string | null;
   apiKeyEnv?: string | null;
   apiKeySet: boolean;
-  preservesThinking: boolean;
+  apiKeyPreview?: string | null;
 };
 export type ProviderSecretDto = {
   id: string;

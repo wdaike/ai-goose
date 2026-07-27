@@ -112,7 +112,10 @@ const mockSettings: Record<string, unknown> = {
   useSystemTheme: true,
   language: 'system',
   responseStyle: 'concise',
-  showPricing: true,
+  sendShortcut: 'enter',
+  showBottomPanelControl: true,
+  showUsageStats: true,
+  turnNotifications: 'unfocused',
   seenAnnouncementIds: [],
 };
 

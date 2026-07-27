@@ -1,5 +1,4 @@
-import { Check, ChevronDown, MessageCircle, ShieldAlert, ShieldCheck } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { Check, ChevronDown } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,43 +9,14 @@ import {
 import { useConfig } from '../ConfigContext';
 import { cn } from '../../utils';
 import { defineMessages, useIntl } from '../../i18n';
+import { PERMISSION_MODES, permissionMode } from '../settings/mode/modes';
 
 const i18n = defineMessages({
-  fullAccess: {
-    id: 'permissionModeChip.fullAccess',
-    defaultMessage: 'Full access',
-  },
-  approve: {
-    id: 'permissionModeChip.approve',
-    defaultMessage: 'Manual approval',
-  },
-  smartApprove: {
-    id: 'permissionModeChip.smartApprove',
-    defaultMessage: 'Smart approval',
-  },
-  chatOnly: {
-    id: 'permissionModeChip.chatOnly',
-    defaultMessage: 'Chat only',
-  },
   permissionSettings: {
     id: 'permissionModeChip.permissionSettings',
     defaultMessage: 'Permission settings',
   },
 });
-
-interface ModeDisplay {
-  key: string;
-  label: keyof typeof i18n;
-  icon: LucideIcon;
-  warn: boolean;
-}
-
-const MODES: ModeDisplay[] = [
-  { key: 'auto', label: 'fullAccess', icon: ShieldAlert, warn: true },
-  { key: 'smart_approve', label: 'smartApprove', icon: ShieldCheck, warn: false },
-  { key: 'approve', label: 'approve', icon: ShieldCheck, warn: false },
-  { key: 'chat', label: 'chatOnly', icon: MessageCircle, warn: false },
-];
 
 /**
  * Compact chip in the chat input's bottom bar showing the current permission
@@ -57,8 +27,7 @@ export const PermissionModeChip = ({ onOpenSettings }: { onOpenSettings: () => v
   const intl = useIntl();
   const { config, upsert } = useConfig();
 
-  const mode = (config.GOOSE_MODE as string | undefined) ?? 'auto';
-  const current = MODES.find((entry) => entry.key === mode) ?? MODES[0];
+  const current = permissionMode(config.GOOSE_MODE as string | undefined);
   const Icon = current.icon;
 
   const handleSelect = async (key: string) => {
@@ -81,12 +50,12 @@ export const PermissionModeChip = ({ onOpenSettings }: { onOpenSettings: () => v
         )}
       >
         <Icon size={14} />
-        {intl.formatMessage(i18n[current.label])}
+        {intl.formatMessage(current.label)}
         <ChevronDown size={12} className="flex-shrink-0" />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent side="top" align="start" className="w-56 rounded-2xl p-1.5">
-        {MODES.map((entry) => {
+        {PERMISSION_MODES.map((entry) => {
           const EntryIcon = entry.icon;
           return (
             <DropdownMenuItem
@@ -95,7 +64,7 @@ export const PermissionModeChip = ({ onOpenSettings }: { onOpenSettings: () => v
               onClick={() => void handleSelect(entry.key)}
             >
               <EntryIcon size={14} className={entry.warn ? 'text-text-warning' : undefined} />
-              <span>{intl.formatMessage(i18n[entry.label])}</span>
+              <span>{intl.formatMessage(entry.label)}</span>
               {entry.key === current.key && <Check className="ml-auto h-4 w-4 flex-shrink-0" />}
             </DropdownMenuItem>
           );

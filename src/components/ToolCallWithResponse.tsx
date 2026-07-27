@@ -1,4 +1,3 @@
-import { AppEvents } from '../constants/events';
 import { ToolIconWithStatus, ToolCallStatus } from './ToolCallStatusIndicator';
 import { getToolCallIcon } from '../utils/toolIconMapping';
 import React, { useEffect, useRef, useState } from 'react';
@@ -15,6 +14,7 @@ import { LoadingStatus } from './ui/Dot';
 import { ChevronRight, ExternalLink } from 'lucide-react';
 import { TooltipWrapper } from './settings/providers/subcomponents/buttons/TooltipWrapper';
 import type { ContentBlock } from '../types/message';
+import { useAppSetting } from '../hooks/useAppSetting';
 
 import FileChangeCard, { getStructuredFileChanges } from './FileChangeCard';
 import ToolApprovalButtons from './ToolApprovalButtons';
@@ -431,32 +431,8 @@ function ToolCallView({
   isStreamingMessage = false,
 }: ToolCallViewProps) {
   const intl = useIntl();
-  const [responseStyle, setResponseStyle] = useState<string>('concise');
-
-  useEffect(() => {
-    // Load initial value from settings
-    window.electron.getSetting('responseStyle').then(setResponseStyle);
-
-    const handleStyleChange = () => {
-      window.electron.getSetting('responseStyle').then(setResponseStyle);
-    };
-
-    window.addEventListener(AppEvents.RESPONSE_STYLE_CHANGED, handleStyleChange);
-
-    return () => {
-      window.removeEventListener(AppEvents.RESPONSE_STYLE_CHANGED, handleStyleChange);
-    };
-  }, []);
-
-  const isExpandToolDetails = (() => {
-    switch (responseStyle) {
-      case 'concise':
-        return false;
-      case 'detailed':
-      default:
-        return true;
-    }
-  })();
+  const responseStyle = useAppSetting('responseStyle', 'concise');
+  const isExpandToolDetails = responseStyle === 'detailed';
 
   const isToolDetails = toolCall?.arguments && Object.entries(toolCall.arguments).length > 0;
 
@@ -801,9 +777,7 @@ function ToolCallView({
           <ToolLogsView
             logs={logs}
             working={loadingStatus === 'loading'}
-            isStartExpanded={
-              loadingStatus === 'loading' || responseStyle === 'detailed' || responseStyle === null
-            }
+            isStartExpanded={loadingStatus === 'loading' || isExpandToolDetails}
           />
         </div>
       )}

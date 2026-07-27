@@ -21,6 +21,7 @@ import ToolCallConfirmation from './ToolCallConfirmation';
 import ElicitationRequest from './ElicitationRequest';
 import MessageActions from './MessageActions';
 import MessageUsageStats from './MessageUsageStats';
+import { useAppSetting } from '../hooks/useAppSetting';
 import { cn } from '../utils';
 import { identifyConsecutiveToolCalls, shouldHideTimestamp } from '../utils/toolCallChaining';
 
@@ -52,6 +53,7 @@ export default function GooseMessage({
   submitElicitationResponse,
 }: GooseMessageProps) {
   const contentRef = useRef<HTMLDivElement | null>(null);
+  const showUsageStats = useAppSetting('showUsageStats', true);
 
   const { textContent: displayText, imagePaths } = getTextAndImageContent(message);
   const thinkingContent = getThinkingContent(message);
@@ -168,7 +170,7 @@ export default function GooseMessage({
                     {timestamp}
                   </div>
                 )}
-                {message.metadata.usage && (
+                {showUsageStats && message.metadata.usage && (
                   <div className="transition-all duration-200 opacity-0 group-hover:opacity-100">
                     <MessageUsageStats usage={message.metadata.usage} />
                   </div>
@@ -209,13 +211,14 @@ export default function GooseMessage({
                 <div
                   className={cn(
                     'text-xs text-text-secondary pt-1',
-                    message.metadata.usage &&
+                    showUsageStats &&
+                      message.metadata.usage &&
                       'transition-all duration-200 group-hover:-translate-y-4 group-hover:opacity-0'
                   )}
                 >
                   {!isStreaming && !hideTimestamp && timestamp}
                 </div>
-                {!isStreaming && message.metadata.usage && (
+                {!isStreaming && showUsageStats && message.metadata.usage && (
                   <div className="pt-1 transition-all duration-200 opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0">
                     <MessageUsageStats usage={message.metadata.usage} />
                   </div>

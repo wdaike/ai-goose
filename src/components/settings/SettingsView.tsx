@@ -1,33 +1,24 @@
 import { ScrollArea } from '../ui/scroll-area';
 import { View, ViewOptions } from '../../utils/navigationUtils';
 import ModelsSection from './models/ModelsSection';
-import AppSettingsSection from './app/AppSettingsSection';
-import ConfigSettings from './config/ConfigSettings';
+import GeneralSection from './general/GeneralSection';
 import PluginsSettingsSection from './plugins/PluginsSettingsSection';
 import type { ExtensionConfig } from '../../types/extensions';
 import { Z_INDEX } from '../Layout/constants';
 import {
   ArrowLeft,
   Bot,
-  Monitor,
-  MessageSquare,
   Keyboard,
-  HardDrive,
-  KeyRound,
   Puzzle,
   Search,
+  Settings,
   SunMedium,
   type LucideIcon,
 } from 'lucide-react';
 import AppearanceSection from './appearance/AppearanceSection';
 import { useState, useEffect, useMemo, useRef } from 'react';
-import ChatSettingsSection from './chat/ChatSettingsSection';
 import KeyboardShortcutsSection from './keyboard/KeyboardShortcutsSection';
-import AuthSettingsSection from './auth/AuthSettingsSection';
-import LocalInferenceSection from './localInference/LocalInferenceSection';
-import { CONFIGURATION_ENABLED } from '../../updates';
 import { trackSettingsTabViewed } from '../../utils/analytics';
-import { useFeatures } from '../../contexts/FeaturesContext';
 import { defineMessages, useIntl } from '../../i18n';
 import { cn } from '../../utils';
 
@@ -56,41 +47,21 @@ const i18n = defineMessages({
     id: 'settingsView.groupIntegrations',
     defaultMessage: 'Integrations',
   },
-  groupAdvanced: {
-    id: 'settingsView.groupAdvanced',
-    defaultMessage: 'Advanced',
-  },
-  tabModels: {
-    id: 'settingsView.tabModels',
-    defaultMessage: 'Models',
-  },
-  tabLocalInference: {
-    id: 'settingsView.tabLocalInference',
-    defaultMessage: 'Local Inference',
-  },
-  tabChat: {
-    id: 'settingsView.tabChat',
-    defaultMessage: 'Chat',
+  tabGeneral: {
+    id: 'settingsView.tabGeneral',
+    defaultMessage: 'General',
   },
   tabAppearance: {
     id: 'settingsView.tabAppearance',
     defaultMessage: 'Appearance',
   },
-  tabPrompts: {
-    id: 'settingsView.tabPrompts',
-    defaultMessage: 'Prompts',
+  tabModels: {
+    id: 'settingsView.tabModels',
+    defaultMessage: 'Models',
   },
   tabKeyboard: {
     id: 'settingsView.tabKeyboard',
     defaultMessage: 'Keyboard',
-  },
-  tabAuth: {
-    id: 'settingsView.tabAuth',
-    defaultMessage: 'Auth',
-  },
-  tabApp: {
-    id: 'settingsView.tabApp',
-    defaultMessage: 'App',
   },
   tabPlugins: {
     id: 'settingsView.tabPlugins',
@@ -98,15 +69,7 @@ const i18n = defineMessages({
   },
 });
 
-type SettingsTab =
-  | 'models'
-  | 'local-inference'
-  | 'chat'
-  | 'appearance'
-  | 'app'
-  | 'plugins'
-  | 'keyboard'
-  | 'auth';
+type SettingsTab = 'general' | 'appearance' | 'models' | 'keyboard' | 'plugins';
 
 type NavItem = {
   tab: SettingsTab;
@@ -124,42 +87,37 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: 'groupPersonal',
     items: [
-      { tab: 'models', label: 'tabModels', icon: Bot, testId: 'settings-models-tab' },
-      {
-        tab: 'local-inference',
-        label: 'tabLocalInference',
-        icon: HardDrive,
-        testId: 'settings-local-inference-tab',
-      },
-      { tab: 'chat', label: 'tabChat', icon: MessageSquare, testId: 'settings-chat-tab' },
+      { tab: 'general', label: 'tabGeneral', icon: Settings, testId: 'settings-general-tab' },
       {
         tab: 'appearance',
         label: 'tabAppearance',
         icon: SunMedium,
         testId: 'settings-appearance-tab',
       },
-      { tab: 'app', label: 'tabApp', icon: Monitor, testId: 'settings-app-tab' },
+      { tab: 'models', label: 'tabModels', icon: Bot, testId: 'settings-models-tab' },
+      { tab: 'keyboard', label: 'tabKeyboard', icon: Keyboard, testId: 'settings-keyboard-tab' },
     ],
   },
   {
     label: 'groupIntegrations',
-    items: [
-      {
-        tab: 'plugins',
-        label: 'tabPlugins',
-        icon: Puzzle,
-        testId: 'settings-plugins-tab',
-      },
-    ],
-  },
-  {
-    label: 'groupAdvanced',
-    items: [
-      { tab: 'keyboard', label: 'tabKeyboard', icon: Keyboard, testId: 'settings-keyboard-tab' },
-      { tab: 'auth', label: 'tabAuth', icon: KeyRound, testId: 'settings-auth-tab' },
-    ],
+    items: [{ tab: 'plugins', label: 'tabPlugins', icon: Puzzle, testId: 'settings-plugins-tab' }],
   },
 ];
+
+const SECTION_TO_TAB: Record<string, SettingsTab> = {
+  update: 'general',
+  general: 'general',
+  app: 'general',
+  modes: 'general',
+  permissions: 'general',
+  chat: 'general',
+  appearance: 'appearance',
+  models: 'models',
+  keyboard: 'keyboard',
+  extensions: 'plugins',
+  skills: 'plugins',
+  plugins: 'plugins',
+};
 
 export type SettingsViewOptions = {
   deepLinkConfig?: ExtensionConfig;
@@ -176,10 +134,9 @@ export default function SettingsView({
   setView: (view: View, viewOptions?: ViewOptions) => void;
   viewOptions: SettingsViewOptions;
 }) {
-  const [activeTab, setActiveTab] = useState<SettingsTab>('models');
+  const [activeTab, setActiveTab] = useState<SettingsTab>('general');
   const [search, setSearch] = useState('');
   const hasTrackedInitialTab = useRef(false);
-  const { localInference } = useFeatures();
   const intl = useIntl();
 
   const handleTabChange = (tab: SettingsTab) => {
@@ -191,12 +148,11 @@ export default function SettingsView({
     const query = search.trim().toLowerCase();
     return NAV_GROUPS.map((group) => ({
       ...group,
-      items: group.items.filter((item) => {
-        if (item.tab === 'local-inference' && !localInference) return false;
-        return !query || intl.formatMessage(i18n[item.label]).toLowerCase().includes(query);
-      }),
+      items: group.items.filter(
+        (item) => !query || intl.formatMessage(i18n[item.label]).toLowerCase().includes(query)
+      ),
     })).filter((group) => group.items.length > 0);
-  }, [search, localInference, intl]);
+  }, [search, intl]);
 
   const activeItem = NAV_GROUPS.flatMap((group) => group.items).find(
     (item) => item.tab === activeTab
@@ -205,37 +161,12 @@ export default function SettingsView({
   // Determine initial tab based on section prop
   useEffect(() => {
     if (viewOptions.section) {
-      // Map section names to tab values
-      const sectionToTab: Record<string, SettingsTab> = {
-        update: 'app',
-        models: 'models',
-        modes: 'chat',
-        styles: 'chat',
-        tools: 'chat',
-        app: 'app',
-        chat: 'chat',
-        appearance: 'appearance',
-        extensions: 'plugins',
-        skills: 'plugins',
-        plugins: 'plugins',
-        keyboard: 'keyboard',
-        auth: 'auth',
-        'local-inference': 'local-inference',
-      };
-
-      const targetTab = sectionToTab[viewOptions.section];
-      if (targetTab && (targetTab !== 'local-inference' || localInference)) {
+      const targetTab = SECTION_TO_TAB[viewOptions.section];
+      if (targetTab) {
         setActiveTab(targetTab);
       }
     }
-  }, [viewOptions.section, localInference]);
-
-  // Reset active tab if local-inference becomes unavailable
-  useEffect(() => {
-    if (!localInference && activeTab === 'local-inference') {
-      setActiveTab('models');
-    }
-  }, [localInference, activeTab]);
+  }, [viewOptions.section]);
 
   useEffect(() => {
     if (!hasTrackedInitialTab.current) {
@@ -340,24 +271,16 @@ export default function SettingsView({
                   : intl.formatMessage(i18n.title)}
               </h1>
 
-              {activeTab === 'models' && <ModelsSection setView={setView} />}
-              {activeTab === 'local-inference' && localInference && <LocalInferenceSection />}
-              {activeTab === 'chat' && <ChatSettingsSection />}
+              {activeTab === 'general' && <GeneralSection scrollToSection={viewOptions.section} />}
               {activeTab === 'appearance' && <AppearanceSection />}
+              {activeTab === 'models' && <ModelsSection setView={setView} />}
+              {activeTab === 'keyboard' && <KeyboardShortcutsSection />}
               {activeTab === 'plugins' && (
                 <PluginsSettingsSection
                   deepLinkConfig={viewOptions.deepLinkConfig}
                   showEnvVars={viewOptions.showEnvVars}
                   initialTab={viewOptions.section === 'skills' ? 'skills' : 'mcps'}
                 />
-              )}
-              {activeTab === 'keyboard' && <KeyboardShortcutsSection />}
-              {activeTab === 'auth' && <AuthSettingsSection />}
-              {activeTab === 'app' && (
-                <div className="space-y-8">
-                  {CONFIGURATION_ENABLED && <ConfigSettings />}
-                  <AppSettingsSection scrollToSection={viewOptions.section} />
-                </div>
               )}
             </div>
           </ScrollArea>

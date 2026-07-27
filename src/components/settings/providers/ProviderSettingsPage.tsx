@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ScrollArea } from '../../ui/scroll-area';
 import BackButton from '../../ui/BackButton';
 import ProviderGrid from './ProviderGrid';
-import { acpListProviderDetails } from '../../../acp/providers';
+import { acpListProviderDetails, CODEX_PROVIDER_ID } from '../../../acp/providers';
 import type { ProviderDetails } from '../../../types/providers';
 import { createNavigationHandler } from '../../../utils/navigationUtils';
 import { defineMessages, useIntl } from '../../../i18n';
@@ -28,6 +28,12 @@ const i18n = defineMessages({
   },
 });
 
+// The built-in codex provider has nothing to configure here.
+async function listConfigurableProviders(): Promise<ProviderDetails[]> {
+  const providers = await acpListProviderDetails();
+  return providers.filter((provider) => provider.name !== CODEX_PROVIDER_ID);
+}
+
 interface ProviderSettingsProps {
   onClose: () => void;
   isOnboarding: boolean;
@@ -51,7 +57,7 @@ export default function ProviderSettings({
   const loadProviders = useCallback(async () => {
     setLoading(true);
     try {
-      const result = await acpListProviderDetails();
+      const result = await listConfigurableProviders();
       if (result) {
         setProviders(result);
         initialLoadDone.current = true;
@@ -72,7 +78,7 @@ export default function ProviderSettings({
   // This function will be passed to ProviderGrid for manual refreshes after config changes
   const refreshProviders = useCallback(async () => {
     if (initialLoadDone.current) {
-      const result = await acpListProviderDetails();
+      const result = await listConfigurableProviders();
       if (result) setProviders(result);
     }
   }, []);

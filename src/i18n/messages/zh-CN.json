@@ -23,66 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "切换侧边面板"
   },
-  "authSettings.activeProviderWarning": {
-    "defaultMessage": "这是当前正在使用的提供商。在配置其他凭据之前，新的请求可能会失败。"
-  },
-  "authSettings.cancel": {
-    "defaultMessage": "取消"
-  },
-  "authSettings.delete": {
-    "defaultMessage": "删除"
-  },
-  "authSettings.deleteCredential": {
-    "defaultMessage": "删除凭据"
-  },
-  "authSettings.deleteMessage": {
-    "defaultMessage": "要删除 {provider} 的 {name} 凭据吗？"
-  },
-  "authSettings.deleteTitle": {
-    "defaultMessage": "删除凭据"
-  },
-  "authSettings.deleted": {
-    "defaultMessage": "凭据已删除"
-  },
-  "authSettings.description": {
-    "defaultMessage": "管理 iCodex 在本地存储的提供商凭据。"
-  },
-  "authSettings.empty": {
-    "defaultMessage": "未找到本地存储的提供商凭据。"
-  },
-  "authSettings.expiresAt": {
-    "defaultMessage": "到期时间：{date}"
-  },
-  "authSettings.failedToConfigure": {
-    "defaultMessage": "配置凭据失败：{error}"
-  },
-  "authSettings.failedToDelete": {
-    "defaultMessage": "删除凭据失败：{error}"
-  },
-  "authSettings.failedToLoad": {
-    "defaultMessage": "加载提供商凭据失败"
-  },
-  "authSettings.loading": {
-    "defaultMessage": "正在加载凭据..."
-  },
-  "authSettings.reauthorize": {
-    "defaultMessage": "重新授权"
-  },
-  "authSettings.signIn": {
-    "defaultMessage": "登录"
-  },
-  "authSettings.signedIn": {
-    "defaultMessage": "凭据已配置"
-  },
-  "authSettings.storageProviderCache": {
-    "defaultMessage": "提供商缓存"
-  },
-  "authSettings.storageSecretStore": {
-    "defaultMessage": "密钥存储"
-  },
-  "authSettings.title": {
-    "defaultMessage": "提供商凭据"
-  },
   "backButton.back": {
     "defaultMessage": "返回"
   },
@@ -91,36 +31,6 @@
   },
   "baseChat.goHome": {
     "defaultMessage": "回到首页"
-  },
-  "baseChat.reconnecting": {
-    "defaultMessage": "连接已断开。正在重新连接…"
-  },
-  "bottomMenuExtensionSelection.extensionUpdated": {
-    "defaultMessage": "扩展已更新"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeDisabled": {
-    "defaultMessage": "{name} 将在新聊天中被禁用"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeEnabled": {
-    "defaultMessage": "{name} 将在新聊天中被启用"
-  },
-  "bottomMenuExtensionSelection.extensionsForNewChats": {
-    "defaultMessage": "新聊天使用的扩展"
-  },
-  "bottomMenuExtensionSelection.extensionsForThisSession": {
-    "defaultMessage": "当前聊天会话使用的扩展"
-  },
-  "bottomMenuExtensionSelection.manageExtensions": {
-    "defaultMessage": "管理扩展"
-  },
-  "bottomMenuExtensionSelection.noExtensionsAvailable": {
-    "defaultMessage": "暂无可用扩展"
-  },
-  "bottomMenuExtensionSelection.noExtensionsFound": {
-    "defaultMessage": "未找到扩展"
-  },
-  "bottomMenuExtensionSelection.searchExtensions": {
-    "defaultMessage": "搜索扩展…"
   },
   "cardButtons.configure": {
     "defaultMessage": "配置"
@@ -137,9 +47,6 @@
   "chat.requestFailed": {
     "defaultMessage": "请求失败"
   },
-  "chatInput.contextWindow": {
-    "defaultMessage": "上下文窗口"
-  },
   "chatInput.dictationError": {
     "defaultMessage": "语音输入错误"
   },
@@ -155,12 +62,6 @@
   "chatInput.recording": {
     "defaultMessage": "录音中…"
   },
-  "chatInput.removeFile": {
-    "defaultMessage": "移除文件"
-  },
-  "chatInput.removeImage": {
-    "defaultMessage": "移除图片"
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "正在重启会话…"
   },
@@ -173,101 +74,11 @@
   "chatInput.typeMessage": {
     "defaultMessage": "输入消息以发送"
   },
-  "chatInput.unknownType": {
-    "defaultMessage": "未知类型"
-  },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "正在等待取消完成"
   },
   "chatInput.waitingForImages": {
     "defaultMessage": "正在等待图片保存…"
-  },
-  "chatSettings.modeDescription": {
-    "defaultMessage": "配置 iCodex 与工具和扩展的交互方式"
-  },
-  "chatSettings.modeTitle": {
-    "defaultMessage": "模式"
-  },
-  "chatSettings.responseStylesDescription": {
-    "defaultMessage": "选择 iCodex 格式化和呈现回复的方式"
-  },
-  "chatSettings.responseStylesTitle": {
-    "defaultMessage": "回复风格"
-  },
-  "configSettings.configReset": {
-    "defaultMessage": "配置已重置"
-  },
-  "configSettings.configResetMsg": {
-    "defaultMessage": "所有更改已还原"
-  },
-  "configSettings.configUpdated": {
-    "defaultMessage": "配置已更新"
-  },
-  "configSettings.configUpdatedMsg": {
-    "defaultMessage": "已成功保存“{name}”"
-  },
-  "configSettings.configurationEditor": {
-    "defaultMessage": "配置编辑器"
-  },
-  "configSettings.description": {
-    "defaultMessage": "编辑你的 iCodex 配置项"
-  },
-  "configSettings.descriptionWithProvider": {
-    "defaultMessage": "编辑你的 iCodex 配置项（当前为 {provider} 的配置）"
-  },
-  "configSettings.done": {
-    "defaultMessage": "完成"
-  },
-  "configSettings.editConfiguration": {
-    "defaultMessage": "编辑配置"
-  },
-  "configSettings.enterValue": {
-    "defaultMessage": "请输入 {name}"
-  },
-  "configSettings.noSettings": {
-    "defaultMessage": "未找到任何配置项。"
-  },
-  "configSettings.resetChanges": {
-    "defaultMessage": "重置更改"
-  },
-  "configSettings.saveFailed": {
-    "defaultMessage": "保存失败"
-  },
-  "configSettings.saveFailedMsg": {
-    "defaultMessage": "保存“{name}”失败"
-  },
-  "configSettings.saving": {
-    "defaultMessage": "保存中…"
-  },
-  "configSettings.title": {
-    "defaultMessage": "配置"
-  },
-  "configureApproveMode.cancel": {
-    "defaultMessage": "取消"
-  },
-  "configureApproveMode.description": {
-    "defaultMessage": "批准可以应用于所有工具请求，或仅针对需要介入的特定操作"
-  },
-  "configureApproveMode.manualApproval": {
-    "defaultMessage": "手动批准"
-  },
-  "configureApproveMode.manualApprovalDescription": {
-    "defaultMessage": "所有工具、扩展和文件修改都将需要人工批准"
-  },
-  "configureApproveMode.save": {
-    "defaultMessage": "保存"
-  },
-  "configureApproveMode.saving": {
-    "defaultMessage": "保存中…"
-  },
-  "configureApproveMode.smartApproval": {
-    "defaultMessage": "智能批准"
-  },
-  "configureApproveMode.smartApprovalDescription": {
-    "defaultMessage": "根据风险级别智能判断哪些操作需要批准"
-  },
-  "configureApproveMode.title": {
-    "defaultMessage": "配置批准模式"
   },
   "confirmationModal.defaultCancel": {
     "defaultMessage": "否"
@@ -277,27 +88,6 @@
   },
   "confirmationModal.processing": {
     "defaultMessage": "处理中…"
-  },
-  "conversationLimitsDropdown.conversationLimits": {
-    "defaultMessage": "对话限制"
-  },
-  "conversationLimitsDropdown.maxTurns": {
-    "defaultMessage": "最大轮次"
-  },
-  "conversationLimitsDropdown.maxTurnsDescription": {
-    "defaultMessage": "iCodex 请求用户输入前的最大 agent 轮次"
-  },
-  "costTracker.costUnavailable": {
-    "defaultMessage": "无法获取 {model} 的费用数据（输入 {inputTokens}、输出 {outputTokens} 令牌）"
-  },
-  "costTracker.inputOutputTooltip": {
-    "defaultMessage": "输入：{inputTokens} 令牌（{inputCost}）| 输出：{outputTokens} 令牌（{outputCost}）"
-  },
-  "costTracker.pricingUnavailable": {
-    "defaultMessage": "无法获取 {model} 的定价数据"
-  },
-  "costTracker.totalSessionCost": {
-    "defaultMessage": "本次会话总费用：{cost}"
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "充值额度"
@@ -503,104 +293,8 @@
   "defaultProviderSetupForm.showOptions": {
     "defaultMessage": "显示 {count} 项选项"
   },
-  "diagnosticsModal.attachHint": {
-    "defaultMessage": "如果你要提交 bug，建议将诊断报告一并附上。"
-  },
-  "diagnosticsModal.cancel": {
-    "defaultMessage": "取消"
-  },
-  "diagnosticsModal.configSettings": {
-    "defaultMessage": "配置项"
-  },
-  "diagnosticsModal.description": {
-    "defaultMessage": "你可以下载诊断 zip 文件分享给团队，或直接在 GitHub 上提交一个预填了系统详情的 bug。诊断报告包含以下内容："
-  },
-  "diagnosticsModal.diagnosticsErrorMsg": {
-    "defaultMessage": "下载诊断信息失败"
-  },
-  "diagnosticsModal.diagnosticsErrorTitle": {
-    "defaultMessage": "诊断错误"
-  },
-  "diagnosticsModal.download": {
-    "defaultMessage": "下载"
-  },
-  "diagnosticsModal.downloading": {
-    "defaultMessage": "下载中…"
-  },
-  "diagnosticsModal.fileBug": {
-    "defaultMessage": "到 GitHub 提交 Bug"
-  },
-  "diagnosticsModal.logFiles": {
-    "defaultMessage": "最近的日志文件"
-  },
-  "diagnosticsModal.opening": {
-    "defaultMessage": "正在打开…"
-  },
-  "diagnosticsModal.reportProblem": {
-    "defaultMessage": "报告问题"
-  },
-  "diagnosticsModal.sensitiveWarning": {
-    "defaultMessage": "如果你的会话包含敏感信息，请不要公开分享诊断文件。"
-  },
-  "diagnosticsModal.sessionMessages": {
-    "defaultMessage": "你当前会话的消息"
-  },
-  "diagnosticsModal.systemInfo": {
-    "defaultMessage": "基础系统信息"
-  },
-  "diagnosticsModal.systemInfoErrorMsg": {
-    "defaultMessage": "获取系统信息失败"
-  },
-  "diagnosticsModal.systemInfoErrorTitle": {
-    "defaultMessage": "错误"
-  },
   "dialog.close": {
     "defaultMessage": "关闭"
-  },
-  "dictationSettings.addApiKey": {
-    "defaultMessage": "添加 API 密钥"
-  },
-  "dictationSettings.apiKey": {
-    "defaultMessage": "API 密钥"
-  },
-  "dictationSettings.cancel": {
-    "defaultMessage": "取消"
-  },
-  "dictationSettings.chooseVoiceConversion": {
-    "defaultMessage": "选择语音转文字的方式"
-  },
-  "dictationSettings.configureApiKey": {
-    "defaultMessage": "请在 <b>{settingsPath}</b> 中配置 API 密钥"
-  },
-  "dictationSettings.configured": {
-    "defaultMessage": "（已配置）"
-  },
-  "dictationSettings.configuredIn": {
-    "defaultMessage": "✓ 已在 {settingsPath} 中配置"
-  },
-  "dictationSettings.disabled": {
-    "defaultMessage": "已禁用"
-  },
-  "dictationSettings.enterApiKey": {
-    "defaultMessage": "输入你的 API 密钥"
-  },
-  "dictationSettings.notConfigured": {
-    "defaultMessage": "（未配置）"
-  },
-  "dictationSettings.removeApiKey": {
-    "defaultMessage": "移除 API 密钥"
-  },
-  "dictationSettings.requiredForTranscription": {
-    "defaultMessage": "转写功能所需"
-  },
-  "dictationSettings.save": {
-    "defaultMessage": "保存"
-  },
-  "dictationSettings.updateApiKey": {
-    "defaultMessage": "更新 API 密钥"
-  },
-  "dictationSettings.voiceDictationProvider": {
-    "defaultMessage": "语音输入提供商"
   },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "更新工作目录失败"
@@ -851,66 +545,6 @@
   "filesPanel.title": {
     "defaultMessage": "文件"
   },
-  "goosehintsModal.close": {
-    "defaultMessage": "关闭"
-  },
-  "goosehintsModal.developer": {
-    "defaultMessage": "Developer"
-  },
-  "goosehintsModal.dialogDescription": {
-    "defaultMessage": "为你的项目提供额外上下文，改善与 iCodex 的沟通"
-  },
-  "goosehintsModal.dialogTitle": {
-    "defaultMessage": "配置项目提示（.goosehints）"
-  },
-  "goosehintsModal.errorReading": {
-    "defaultMessage": "读取 .goosehints 文件出错：{error}"
-  },
-  "goosehintsModal.failedToAccess": {
-    "defaultMessage": "访问 .goosehints 文件失败"
-  },
-  "goosehintsModal.failedToSave": {
-    "defaultMessage": "保存 .goosehints 文件失败"
-  },
-  "goosehintsModal.fileCreating": {
-    "defaultMessage": "正在创建新的 .goosehints 文件：{filePath}"
-  },
-  "goosehintsModal.fileFound": {
-    "defaultMessage": "已找到 .goosehints 文件：{filePath}"
-  },
-  "goosehintsModal.helpText1": {
-    "defaultMessage": ".goosehints 是一个文本文件，用于为你的项目提供额外上下文，改善与 iCodex 的沟通。"
-  },
-  "goosehintsModal.helpText2": {
-    "defaultMessage": "请确认已在扩展页面启用 {bold} 扩展。此扩展是使用 .goosehints 所必需的。你需要重启会话，.goosehints 的更新才会生效。"
-  },
-  "goosehintsModal.helpText3": {
-    "defaultMessage": "更多信息请参见 {link}。"
-  },
-  "goosehintsModal.helpTextLink": {
-    "defaultMessage": "使用 .goosehints"
-  },
-  "goosehintsModal.placeholder": {
-    "defaultMessage": "在此输入项目提示…"
-  },
-  "goosehintsModal.save": {
-    "defaultMessage": "保存"
-  },
-  "goosehintsModal.savedSuccessfully": {
-    "defaultMessage": "保存成功"
-  },
-  "goosehintsModal.saving": {
-    "defaultMessage": "保存中…"
-  },
-  "goosehintsSection.configure": {
-    "defaultMessage": "配置"
-  },
-  "goosehintsSection.description": {
-    "defaultMessage": "配置项目的 .goosehints 文件，为 iCodex 提供额外上下文"
-  },
-  "goosehintsSection.title": {
-    "defaultMessage": "项目提示（.goosehints）"
-  },
   "groupedExtensionLoadingToast.askGoose": {
     "defaultMessage": "问问 iCodex"
   },
@@ -992,42 +626,6 @@
   "hub.suggestionReview": {
     "defaultMessage": "审查代码并提出修改建议"
   },
-  "huggingFaceModelSearch.download": {
-    "defaultMessage": "下载"
-  },
-  "huggingFaceModelSearch.downloaded": {
-    "defaultMessage": "已下载"
-  },
-  "huggingFaceModelSearch.downloading": {
-    "defaultMessage": "下载中…"
-  },
-  "huggingFaceModelSearch.loadingVariants": {
-    "defaultMessage": "正在加载变体…"
-  },
-  "huggingFaceModelSearch.noGgufModels": {
-    "defaultMessage": "未找到此查询的 GGUF 模型。"
-  },
-  "huggingFaceModelSearch.recommended": {
-    "defaultMessage": "推荐"
-  },
-  "huggingFaceModelSearch.searchError": {
-    "defaultMessage": "搜索错误：{details}"
-  },
-  "huggingFaceModelSearch.searchFailed": {
-    "defaultMessage": "搜索失败，请重试。"
-  },
-  "huggingFaceModelSearch.searchHuggingFace": {
-    "defaultMessage": "搜索 HuggingFace"
-  },
-  "huggingFaceModelSearch.searchNoData": {
-    "defaultMessage": "搜索未返回数据。"
-  },
-  "huggingFaceModelSearch.searchPlaceholder": {
-    "defaultMessage": "搜索 GGUF 模型…"
-  },
-  "huggingFaceModelSearch.tooLarge": {
-    "defaultMessage": "可能超出内存（模型 {size}，可用 {available}）"
-  },
   "huggingFaceSignInPrompt.failedToConfigure": {
     "defaultMessage": "登录 Hugging Face 失败：{error}"
   },
@@ -1045,9 +643,6 @@
   },
   "imagePreview.altText": {
     "defaultMessage": "iCodex 图片"
-  },
-  "imagePreview.clickToCollapse": {
-    "defaultMessage": "点击收起"
   },
   "imagePreview.clickToExpand": {
     "defaultMessage": "点击展开"
@@ -1262,111 +857,6 @@
   "loadingGoose.waiting": {
     "defaultMessage": "等待中"
   },
-  "localInferenceSettings.deleteConfirm": {
-    "defaultMessage": "删除此模型？之后可以重新下载。"
-  },
-  "localInferenceSettings.description": {
-    "defaultMessage": "下载和管理用于本地推理的大模型，无需 API 密钥。在 HuggingFace 搜索任意 GGUF 模型，或使用下方推荐。"
-  },
-  "localInferenceSettings.dismiss": {
-    "defaultMessage": "关闭"
-  },
-  "localInferenceSettings.download": {
-    "defaultMessage": "下载"
-  },
-  "localInferenceSettings.downloadCancelled": {
-    "defaultMessage": "下载已取消"
-  },
-  "localInferenceSettings.downloadFailed": {
-    "defaultMessage": "下载失败"
-  },
-  "localInferenceSettings.downloadProgress": {
-    "defaultMessage": "{downloaded} / {total}（{percent}%）"
-  },
-  "localInferenceSettings.downloadedModels": {
-    "defaultMessage": "已下载的模型"
-  },
-  "localInferenceSettings.downloading": {
-    "defaultMessage": "下载中"
-  },
-  "localInferenceSettings.evictFromMemory": {
-    "defaultMessage": "Evict from memory"
-  },
-  "localInferenceSettings.featuredModels": {
-    "defaultMessage": "推荐模型"
-  },
-  "localInferenceSettings.huggingFaceSignInNote": {
-    "defaultMessage": "登录后可在搜索和下载模型时提高速率限制，并访问私有或受限的 Hugging Face 仓库。"
-  },
-  "localInferenceSettings.loadedInMemory": {
-    "defaultMessage": "Loaded in memory"
-  },
-  "localInferenceSettings.modelSettings": {
-    "defaultMessage": "模型设置"
-  },
-  "localInferenceSettings.modelSettingsTitle": {
-    "defaultMessage": "模型设置"
-  },
-  "localInferenceSettings.noModels": {
-    "defaultMessage": "暂无可用模型"
-  },
-  "localInferenceSettings.recommended": {
-    "defaultMessage": "推荐"
-  },
-  "localInferenceSettings.remaining": {
-    "defaultMessage": "剩余 {time}"
-  },
-  "localInferenceSettings.retry": {
-    "defaultMessage": "重试"
-  },
-  "localInferenceSettings.showAllFeatured": {
-    "defaultMessage": "显示全部推荐（还有 {count} 个）"
-  },
-  "localInferenceSettings.showRecommendedOnly": {
-    "defaultMessage": "仅显示推荐"
-  },
-  "localInferenceSettings.title": {
-    "defaultMessage": "本地推理模型"
-  },
-  "localInferenceSettings.vision": {
-    "defaultMessage": "视觉"
-  },
-  "localInferenceSettings.visionEncoderDownloading": {
-    "defaultMessage": "视觉编码器下载中…"
-  },
-  "localInferenceSettings.visionEncoderNotDownloaded": {
-    "defaultMessage": "视觉编码器尚未下载"
-  },
-  "localModelManager.active": {
-    "defaultMessage": "启用中"
-  },
-  "localModelManager.deleteConfirm": {
-    "defaultMessage": "删除此模型？之后可以重新下载。"
-  },
-  "localModelManager.download": {
-    "defaultMessage": "下载"
-  },
-  "localModelManager.downloaded": {
-    "defaultMessage": "已下载"
-  },
-  "localModelManager.gpuAcceleration": {
-    "defaultMessage": "支持 GPU 加速（NVIDIA 走 CUDA，Apple Silicon 走 Metal）。硬件加速需要在构建时启用 GPU 特性。"
-  },
-  "localModelManager.noModels": {
-    "defaultMessage": "暂无可用模型"
-  },
-  "localModelManager.recommended": {
-    "defaultMessage": "推荐"
-  },
-  "localModelManager.recommendedForHardware": {
-    "defaultMessage": "为你的硬件推荐"
-  },
-  "localModelManager.showAllModels": {
-    "defaultMessage": "显示全部模型（还有 {count} 个）"
-  },
-  "localModelManager.showRecommendedOnly": {
-    "defaultMessage": "仅显示推荐"
-  },
   "localModelPicker.bestForMachine": {
     "defaultMessage": "最适合你的机器"
   },
@@ -1478,62 +968,20 @@
   "messageQueue.cancel": {
     "defaultMessage": "取消"
   },
-  "messageQueue.cannotSendWhileEditing": {
-    "defaultMessage": "编辑时无法发送"
-  },
   "messageQueue.clearAll": {
     "defaultMessage": "清空"
-  },
-  "messageQueue.clickToEdit": {
-    "defaultMessage": "{content}（点击编辑）"
-  },
-  "messageQueue.collapseQueue": {
-    "defaultMessage": "收起队列"
-  },
-  "messageQueue.dragToReorder": {
-    "defaultMessage": "拖动消息以调整优先级"
-  },
-  "messageQueue.expandQueue": {
-    "defaultMessage": "展开队列"
-  },
-  "messageQueue.messageCount": {
-    "defaultMessage": "{count,plural,one{# 条消息 {status}} other{# 条消息 {status}}}"
-  },
-  "messageQueue.messageQueue": {
-    "defaultMessage": "消息队列"
-  },
-  "messageQueue.next": {
-    "defaultMessage": "下一条"
   },
   "messageQueue.paused": {
     "defaultMessage": "已暂停"
   },
-  "messageQueue.queuePaused": {
-    "defaultMessage": "队列已暂停"
-  },
   "messageQueue.queuePausedCompact": {
     "defaultMessage": "队列已暂停 - 点击“发送”或添加新消息以恢复"
-  },
-  "messageQueue.queuePausedExpanded": {
-    "defaultMessage": "队列因中断而暂停。使用“立即发送”或添加新消息以恢复。"
-  },
-  "messageQueue.queued": {
-    "defaultMessage": "已排队"
   },
   "messageQueue.removeFromQueue": {
     "defaultMessage": "将此消息从队列中移除"
   },
   "messageQueue.save": {
     "defaultMessage": "保存"
-  },
-  "messageQueue.sendNow": {
-    "defaultMessage": "立即发送此消息"
-  },
-  "messageQueue.stopAndSend": {
-    "defaultMessage": "停止当前处理并立即发送此消息"
-  },
-  "messageQueue.waiting": {
-    "defaultMessage": "等待中"
   },
   "messageUsageStats.cacheHitRate": {
     "defaultMessage": "（占输入的 {percent}%）"
@@ -1580,59 +1028,17 @@
   "messageUsageStats.totalTime": {
     "defaultMessage": "总耗时"
   },
-  "microphoneSelector.chooseDescription": {
-    "defaultMessage": "选择用于语音输入的麦克风"
-  },
-  "microphoneSelector.grantAccess": {
-    "defaultMessage": "授予权限"
-  },
-  "microphoneSelector.grantAccessDescription": {
-    "defaultMessage": "授予权限以查看可用麦克风"
-  },
-  "microphoneSelector.microphone": {
-    "defaultMessage": "麦克风"
-  },
-  "microphoneSelector.microphoneLabel": {
-    "defaultMessage": "麦克风 {index}"
-  },
-  "microphoneSelector.selectedMicrophone": {
-    "defaultMessage": "已选麦克风"
-  },
-  "microphoneSelector.speakToTest": {
-    "defaultMessage": "说话以测试麦克风（{seconds} 秒）"
-  },
-  "microphoneSelector.stop": {
-    "defaultMessage": "停止"
-  },
-  "microphoneSelector.systemDefault": {
-    "defaultMessage": "系统默认"
-  },
-  "microphoneSelector.test": {
-    "defaultMessage": "测试"
-  },
   "modeSelectionItem.autonomousDescription": {
     "defaultMessage": "完整文件修改能力，可自由编辑、创建和删除文件。"
-  },
-  "modeSelectionItem.autonomousLabel": {
-    "defaultMessage": "自主"
   },
   "modeSelectionItem.chatOnlyDescription": {
     "defaultMessage": "仅与所选提供商交互，不使用工具或扩展。"
   },
-  "modeSelectionItem.chatOnlyLabel": {
-    "defaultMessage": "仅聊天"
-  },
   "modeSelectionItem.manualDescription": {
     "defaultMessage": "所有工具、扩展和文件修改都需要人工批准"
   },
-  "modeSelectionItem.manualLabel": {
-    "defaultMessage": "手动"
-  },
   "modeSelectionItem.smartDescription": {
     "defaultMessage": "根据风险级别智能判断哪些操作需要批准"
-  },
-  "modeSelectionItem.smartLabel": {
-    "defaultMessage": "智能"
   },
   "modelAndProviderContext.modelChangeFailed": {
     "defaultMessage": "{provider}/{model} 失败"
@@ -1955,39 +1361,6 @@
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "分享匿名使用数据"
   },
-  "permissionModal.alwaysAllow": {
-    "defaultMessage": "始终允许"
-  },
-  "permissionModal.askBefore": {
-    "defaultMessage": "事先询问"
-  },
-  "permissionModal.cancel": {
-    "defaultMessage": "取消"
-  },
-  "permissionModal.close": {
-    "defaultMessage": "关闭"
-  },
-  "permissionModal.failedToLoadTools": {
-    "defaultMessage": "加载工具失败"
-  },
-  "permissionModal.failedToLoadToolsDescription": {
-    "defaultMessage": "无法为此扩展加载工具。该扩展可能未在当前会话中加载。"
-  },
-  "permissionModal.neverAllow": {
-    "defaultMessage": "从不允许"
-  },
-  "permissionModal.noActiveSession": {
-    "defaultMessage": "无活动会话"
-  },
-  "permissionModal.noActiveSessionDescription": {
-    "defaultMessage": "请先开始一个聊天会话，以便为此扩展配置工具权限。工具权限从活动会话的扩展中加载。"
-  },
-  "permissionModal.noToolsAvailable": {
-    "defaultMessage": "此扩展没有可用工具。"
-  },
-  "permissionModal.saveChanges": {
-    "defaultMessage": "保存更改"
-  },
   "permissionModeChip.approve": {
     "defaultMessage": "手动批准"
   },
@@ -2002,24 +1375,6 @@
   },
   "permissionModeChip.smartApprove": {
     "defaultMessage": "智能批准"
-  },
-  "permissionRulesModal.description": {
-    "defaultMessage": "为扩展配置工具权限，控制它们与你的系统的交互方式。"
-  },
-  "permissionRulesModal.extensionRules": {
-    "defaultMessage": "扩展规则"
-  },
-  "permissionRulesModal.title": {
-    "defaultMessage": "权限规则"
-  },
-  "permissionSetting.extensionRules": {
-    "defaultMessage": "扩展规则"
-  },
-  "permissionSetting.permissionRules": {
-    "defaultMessage": "权限规则"
-  },
-  "permissionSetting.permissionRulesDescription": {
-    "defaultMessage": "传给提供商的隐藏指令，用于引导并为回复补充上下文。"
   },
   "planSteps.progress": {
     "defaultMessage": "第 {current} / {total} 步"
@@ -2588,14 +1943,8 @@
   "resetProviderSection.resetDescription": {
     "defaultMessage": "这将清空已选的模型和提供商设置。如果没有可用的默认值，你会被带到欢迎页重新设置。"
   },
-  "responseStyle.conciseDescription": {
-    "defaultMessage": "工具调用默认折叠，只显示所用工具"
-  },
   "responseStyle.conciseLabel": {
     "defaultMessage": "精简"
-  },
-  "responseStyle.detailedDescription": {
-    "defaultMessage": "工具调用默认展开，显示详细信息"
   },
   "responseStyle.detailedLabel": {
     "defaultMessage": "详细"
@@ -2617,66 +1966,6 @@
   },
   "secureStorageNotice.defaultMessage": {
     "defaultMessage": "密钥已安全地存储在系统密钥库中"
-  },
-  "securityToggle.apiTokenDescription": {
-    "defaultMessage": "分类服务的认证令牌"
-  },
-  "securityToggle.apiTokenOptional": {
-    "defaultMessage": "API 令牌（可选）"
-  },
-  "securityToggle.classificationEndpoint": {
-    "defaultMessage": "分类端点"
-  },
-  "securityToggle.classificationEndpointDescription": {
-    "defaultMessage": "输入你的分类服务的完整 URL"
-  },
-  "securityToggle.commandClassifierActive": {
-    "defaultMessage": "命令分类器已启用（根据环境自动配置）"
-  },
-  "securityToggle.commandEndpointDescription": {
-    "defaultMessage": "输入你的命令注入分类服务的完整 URL"
-  },
-  "securityToggle.commandInjectionDescription": {
-    "defaultMessage": "使用机器学习模型检测恶意 shell 命令"
-  },
-  "securityToggle.detectionModel": {
-    "defaultMessage": "检测模型"
-  },
-  "securityToggle.detectionModelDescription": {
-    "defaultMessage": "选择用于提示注入检测的机器学习模型"
-  },
-  "securityToggle.detectionThreshold": {
-    "defaultMessage": "检测阈值"
-  },
-  "securityToggle.enableCommandInjection": {
-    "defaultMessage": "启用命令注入机器学习检测"
-  },
-  "securityToggle.enablePromptInjection": {
-    "defaultMessage": "启用提示注入检测"
-  },
-  "securityToggle.enablePromptInjectionMl": {
-    "defaultMessage": "启用提示注入机器学习检测"
-  },
-  "securityToggle.mlEndpointDescription": {
-    "defaultMessage": "输入你的机器学习分类服务的完整 URL（含模型标识符）"
-  },
-  "securityToggle.mlTokenDescription": {
-    "defaultMessage": "机器学习服务的认证令牌（例如 HuggingFace token）"
-  },
-  "securityToggle.overrideNotice": {
-    "defaultMessage": "此设置由你的组织管理，无法更改。"
-  },
-  "securityToggle.promptInjectionDescription": {
-    "defaultMessage": "检测并防范潜在的提示注入攻击"
-  },
-  "securityToggle.promptInjectionMlDescription": {
-    "defaultMessage": "使用机器学习模型检测聊天中潜在的提示注入"
-  },
-  "securityToggle.thresholdDescription": {
-    "defaultMessage": "值越高越严格（0.01 = 非常宽松，1.0 = 最严格）"
-  },
-  "securityToggle.warpNotice": {
-    "defaultMessage": "连接到 WARP 时，命令注入检测效果最佳（访问分类服务需要 WARP）。"
   },
   "sessionActionsHeader.actionsLabel": {
     "defaultMessage": "Session actions"
@@ -2732,26 +2021,29 @@
   "sessionIndicators.streaming": {
     "defaultMessage": "流式传输中"
   },
-  "settings.appearance.description": {
-    "defaultMessage": "配置 iCodex 在你系统中的外观"
+  "settings.about.title": {
+    "defaultMessage": "关于"
   },
-  "settings.appearance.title": {
-    "defaultMessage": "外观"
+  "settings.bottomPanel.description": {
+    "defaultMessage": "在应用标题栏显示底部面板控件"
   },
-  "settings.close": {
-    "defaultMessage": "关闭"
+  "settings.bottomPanel.title": {
+    "defaultMessage": "底部面板"
   },
-  "settings.costTracking.description": {
-    "defaultMessage": "显示模型定价和使用费用"
+  "settings.chat.title": {
+    "defaultMessage": "聊天"
   },
-  "settings.costTracking.title": {
-    "defaultMessage": "费用跟踪"
+  "settings.composer.title": {
+    "defaultMessage": "输入框"
   },
   "settings.dockIcon.description": {
     "defaultMessage": "在 Dock 中显示 iCodex"
   },
   "settings.dockIcon.title": {
     "defaultMessage": "Dock 图标"
+  },
+  "settings.general.title": {
+    "defaultMessage": "通用"
   },
   "settings.help.description": {
     "defaultMessage": "通过报告问题或请求新功能帮助我们改进 iCodex"
@@ -2823,73 +2115,82 @@
     "defaultMessage": "中文（繁体）"
   },
   "settings.menuBarIcon.description": {
-    "defaultMessage": "在菜单栏显示 iCodex"
+    "defaultMessage": "主窗口关闭后仍将 iCodex 保留在菜单栏"
   },
   "settings.menuBarIcon.title": {
-    "defaultMessage": "菜单栏图标"
-  },
-  "settings.notifications.configGuide": {
-    "defaultMessage": "配置指南"
-  },
-  "settings.notifications.description": {
-    "defaultMessage": "通知由你的操作系统管理 - {link}"
-  },
-  "settings.notifications.modal.macInstructions": {
-    "defaultMessage": "在 macOS 上启用通知："
-  },
-  "settings.notifications.modal.macStep1": {
-    "defaultMessage": "打开系统偏好设置"
-  },
-  "settings.notifications.modal.macStep2": {
-    "defaultMessage": "点击“通知”"
-  },
-  "settings.notifications.modal.macStep3": {
-    "defaultMessage": "在应用列表中找到并选择 iCodex"
-  },
-  "settings.notifications.modal.macStep4": {
-    "defaultMessage": "启用通知并按需调整设置"
-  },
-  "settings.notifications.modal.title": {
-    "defaultMessage": "如何启用通知"
-  },
-  "settings.notifications.modal.winInstructions": {
-    "defaultMessage": "在 Windows 上启用通知："
-  },
-  "settings.notifications.modal.winStep1": {
-    "defaultMessage": "打开设置"
-  },
-  "settings.notifications.modal.winStep2": {
-    "defaultMessage": "前往 系统 > 通知"
-  },
-  "settings.notifications.modal.winStep3": {
-    "defaultMessage": "在应用列表中找到并选择 iCodex"
-  },
-  "settings.notifications.modal.winStep4": {
-    "defaultMessage": "开启通知并按需调整设置"
+    "defaultMessage": "在菜单栏显示"
   },
   "settings.notifications.openSettings": {
     "defaultMessage": "打开设置"
   },
-  "settings.notifications.task.description": {
-    "defaultMessage": "窗口在后台时，iCodex 完成任务后通知你"
+  "settings.notifications.system.description": {
+    "defaultMessage": "通知的发送由操作系统管理"
   },
-  "settings.notifications.task.title": {
-    "defaultMessage": "任务完成通知"
+  "settings.notifications.system.title": {
+    "defaultMessage": "系统通知"
   },
   "settings.notifications.title": {
     "defaultMessage": "通知"
+  },
+  "settings.notifications.turn.always": {
+    "defaultMessage": "始终"
+  },
+  "settings.notifications.turn.description": {
+    "defaultMessage": "设置 iCodex 何时提醒你任务已完成"
+  },
+  "settings.notifications.turn.never": {
+    "defaultMessage": "从不"
+  },
+  "settings.notifications.turn.title": {
+    "defaultMessage": "任务完成通知"
+  },
+  "settings.notifications.turn.unfocused": {
+    "defaultMessage": "仅在未聚焦时"
+  },
+  "settings.permissions.autoReview.description": {
+    "defaultMessage": "由 iCodex 判断哪些额外权限请求是安全的，只在有风险时询问你。自动审核可能会出错"
+  },
+  "settings.permissions.autoReview.title": {
+    "defaultMessage": "自动审核"
+  },
+  "settings.permissions.default.description": {
+    "defaultMessage": "默认情况下，iCodex 可以读取和编辑工作区内的文件。其他操作都会先征求你的同意"
+  },
+  "settings.permissions.default.title": {
+    "defaultMessage": "默认权限"
+  },
+  "settings.permissions.fullAccess.description": {
+    "defaultMessage": "iCodex 可以编辑你电脑上的任何文件，并在无需你批准的情况下运行联网命令。这会显著增加数据丢失、泄露或意外行为的风险"
+  },
+  "settings.permissions.fullAccess.title": {
+    "defaultMessage": "完全访问"
+  },
+  "settings.permissions.title": {
+    "defaultMessage": "权限"
   },
   "settings.preventSleep.description": {
     "defaultMessage": "iCodex 运行任务期间保持电脑不休眠（屏幕仍可锁定）"
   },
   "settings.preventSleep.title": {
-    "defaultMessage": "阻止休眠"
+    "defaultMessage": "运行任务时阻止休眠"
   },
-  "settings.theme.description": {
-    "defaultMessage": "自定义 iCodex 的外观和风格"
+  "settings.sendShortcut.description": {
+    "defaultMessage": "选择 Enter 是发送消息还是换行"
   },
-  "settings.theme.title": {
-    "defaultMessage": "主题"
+  "settings.sendShortcut.enter": {
+    "defaultMessage": "Enter"
+  },
+  "settings.sendShortcut.modEnter": {
+    "defaultMessage": "{mod} + Enter"
+  },
+  "settings.sendShortcut.title": {
+    "defaultMessage": "发送快捷键"
+  },
+  "settings.toolDetails.description": {
+    "defaultMessage": "聊天中的工具调用默认展开还是折叠"
+  },
+  "settings.toolDetails.title": {
+    "defaultMessage": "工具调用详情"
   },
   "settings.updates.description": {
     "defaultMessage": "检查并安装更新，让 iCodex 保持最佳状态"
@@ -2897,14 +2198,17 @@
   "settings.updates.title": {
     "defaultMessage": "更新"
   },
+  "settings.usageStats.description": {
+    "defaultMessage": "在每条回复下方显示 token、速度和费用"
+  },
+  "settings.usageStats.title": {
+    "defaultMessage": "显示用量统计"
+  },
   "settings.version.title": {
     "defaultMessage": "版本"
   },
   "settingsView.back": {
     "defaultMessage": "返回应用"
-  },
-  "settingsView.groupAdvanced": {
-    "defaultMessage": "高级"
   },
   "settingsView.groupIntegrations": {
     "defaultMessage": "集成"
@@ -2918,20 +2222,14 @@
   "settingsView.search": {
     "defaultMessage": "搜索设置..."
   },
-  "settingsView.tabApp": {
-    "defaultMessage": "应用"
+  "settingsView.tabAppearance": {
+    "defaultMessage": "外观"
   },
-  "settingsView.tabAuth": {
-    "defaultMessage": "身份验证"
-  },
-  "settingsView.tabChat": {
-    "defaultMessage": "聊天"
+  "settingsView.tabGeneral": {
+    "defaultMessage": "通用"
   },
   "settingsView.tabKeyboard": {
     "defaultMessage": "键盘"
-  },
-  "settingsView.tabLocalInference": {
-    "defaultMessage": "本地推理"
   },
   "settingsView.tabModels": {
     "defaultMessage": "模型"
@@ -2939,14 +2237,8 @@
   "settingsView.tabPlugins": {
     "defaultMessage": "插件"
   },
-  "settingsView.tabPrompts": {
-    "defaultMessage": "提示词"
-  },
   "settingsView.title": {
     "defaultMessage": "设置"
-  },
-  "sheet.close": {
-    "defaultMessage": "关闭"
   },
   "shortcutRecorder.cancel": {
     "defaultMessage": "取消"

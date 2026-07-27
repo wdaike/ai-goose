@@ -23,66 +23,6 @@
   "appLayout.toggleSidePanel": {
     "defaultMessage": "Переключить боковую панель"
   },
-  "authSettings.activeProviderWarning": {
-    "defaultMessage": "Это активный провайдер. Новые запросы могут завершаться ошибкой, пока вы не настроите другие учетные данные."
-  },
-  "authSettings.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "authSettings.delete": {
-    "defaultMessage": "Удалить"
-  },
-  "authSettings.deleteCredential": {
-    "defaultMessage": "Удалить учетные данные"
-  },
-  "authSettings.deleteMessage": {
-    "defaultMessage": "Удалить учетные данные {name} для {provider}?"
-  },
-  "authSettings.deleteTitle": {
-    "defaultMessage": "Удалить учетные данные"
-  },
-  "authSettings.deleted": {
-    "defaultMessage": "Учетные данные удалены"
-  },
-  "authSettings.description": {
-    "defaultMessage": "Управляйте учетными данными провайдеров, сохраненными локально в iCodex."
-  },
-  "authSettings.empty": {
-    "defaultMessage": "Локально сохраненные учетные данные провайдеров не найдены."
-  },
-  "authSettings.expiresAt": {
-    "defaultMessage": "Истекает {date}"
-  },
-  "authSettings.failedToConfigure": {
-    "defaultMessage": "Не удалось настроить учетные данные: {error}"
-  },
-  "authSettings.failedToDelete": {
-    "defaultMessage": "Не удалось удалить учетные данные: {error}"
-  },
-  "authSettings.failedToLoad": {
-    "defaultMessage": "Не удалось загрузить учетные данные провайдера"
-  },
-  "authSettings.loading": {
-    "defaultMessage": "Загрузка учетных данных..."
-  },
-  "authSettings.reauthorize": {
-    "defaultMessage": "Авторизоваться снова"
-  },
-  "authSettings.signIn": {
-    "defaultMessage": "Войти"
-  },
-  "authSettings.signedIn": {
-    "defaultMessage": "Учетные данные настроены"
-  },
-  "authSettings.storageProviderCache": {
-    "defaultMessage": "Кэш провайдера"
-  },
-  "authSettings.storageSecretStore": {
-    "defaultMessage": "Хранилище секретов"
-  },
-  "authSettings.title": {
-    "defaultMessage": "Учетные данные провайдера"
-  },
   "backButton.back": {
     "defaultMessage": "Назад"
   },
@@ -91,36 +31,6 @@
   },
   "baseChat.goHome": {
     "defaultMessage": "На главную"
-  },
-  "baseChat.reconnecting": {
-    "defaultMessage": "Соединение потеряно. Повторное подключение…"
-  },
-  "bottomMenuExtensionSelection.extensionUpdated": {
-    "defaultMessage": "Расширение обновлено"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeDisabled": {
-    "defaultMessage": "{name} будет отключено в новых чатах"
-  },
-  "bottomMenuExtensionSelection.extensionWillBeEnabled": {
-    "defaultMessage": "{name} будет включено в новых чатах"
-  },
-  "bottomMenuExtensionSelection.extensionsForNewChats": {
-    "defaultMessage": "Расширения для новых чатов"
-  },
-  "bottomMenuExtensionSelection.extensionsForThisSession": {
-    "defaultMessage": "Расширения для этого чата"
-  },
-  "bottomMenuExtensionSelection.manageExtensions": {
-    "defaultMessage": "управлять расширениями"
-  },
-  "bottomMenuExtensionSelection.noExtensionsAvailable": {
-    "defaultMessage": "нет доступных расширений"
-  },
-  "bottomMenuExtensionSelection.noExtensionsFound": {
-    "defaultMessage": "расширения не найдены"
-  },
-  "bottomMenuExtensionSelection.searchExtensions": {
-    "defaultMessage": "поиск расширений..."
   },
   "cardButtons.configure": {
     "defaultMessage": "Настроить"
@@ -137,9 +47,6 @@
   "chat.requestFailed": {
     "defaultMessage": "Не удалось выполнить запрос"
   },
-  "chatInput.contextWindow": {
-    "defaultMessage": "Контекстное окно"
-  },
   "chatInput.dictationError": {
     "defaultMessage": "Ошибка диктовки"
   },
@@ -155,12 +62,6 @@
   "chatInput.recording": {
     "defaultMessage": "Запись..."
   },
-  "chatInput.removeFile": {
-    "defaultMessage": "Удалить файл"
-  },
-  "chatInput.removeImage": {
-    "defaultMessage": "Удалить изображение"
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "Перезапуск сеанса..."
   },
@@ -173,101 +74,11 @@
   "chatInput.typeMessage": {
     "defaultMessage": "Введите сообщение для отправки"
   },
-  "chatInput.unknownType": {
-    "defaultMessage": "Неизвестный тип"
-  },
   "chatInput.waitingForCancellation": {
     "defaultMessage": "Ожидание завершения отмены"
   },
   "chatInput.waitingForImages": {
     "defaultMessage": "Ожидание сохранения изображений..."
-  },
-  "chatSettings.modeDescription": {
-    "defaultMessage": "Настройте как iCodex взаимодействует с инструментами и расширениями"
-  },
-  "chatSettings.modeTitle": {
-    "defaultMessage": "Режим"
-  },
-  "chatSettings.responseStylesDescription": {
-    "defaultMessage": "Выберите как iCodex должен форматировать и оформлять ответы"
-  },
-  "chatSettings.responseStylesTitle": {
-    "defaultMessage": "Стили ответов"
-  },
-  "configSettings.configReset": {
-    "defaultMessage": "Конфигурация сброшена"
-  },
-  "configSettings.configResetMsg": {
-    "defaultMessage": "Все изменения отменены"
-  },
-  "configSettings.configUpdated": {
-    "defaultMessage": "Конфигурация обновлена"
-  },
-  "configSettings.configUpdatedMsg": {
-    "defaultMessage": "«{name}» успешно сохранено"
-  },
-  "configSettings.configurationEditor": {
-    "defaultMessage": "Редактор конфигурации"
-  },
-  "configSettings.description": {
-    "defaultMessage": "Измените настройки конфигурации iCodex"
-  },
-  "configSettings.descriptionWithProvider": {
-    "defaultMessage": "Измените настройки конфигурации iCodex (текущие настройки для {provider})"
-  },
-  "configSettings.done": {
-    "defaultMessage": "Готово"
-  },
-  "configSettings.editConfiguration": {
-    "defaultMessage": "Изменить конфигурацию"
-  },
-  "configSettings.enterValue": {
-    "defaultMessage": "Введите {name}"
-  },
-  "configSettings.noSettings": {
-    "defaultMessage": "Настройки конфигурации не найдены."
-  },
-  "configSettings.resetChanges": {
-    "defaultMessage": "Сбросить изменения"
-  },
-  "configSettings.saveFailed": {
-    "defaultMessage": "Не удалось сохранить"
-  },
-  "configSettings.saveFailedMsg": {
-    "defaultMessage": "Не удалось сохранить «{name}»"
-  },
-  "configSettings.saving": {
-    "defaultMessage": "Сохранение..."
-  },
-  "configSettings.title": {
-    "defaultMessage": "Конфигурация"
-  },
-  "configureApproveMode.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "configureApproveMode.description": {
-    "defaultMessage": "Запросы на подтверждение могут быть даны на все запросы, либо определяться в зависимости от действий, которые могут требовать человеческого вмешательства"
-  },
-  "configureApproveMode.manualApproval": {
-    "defaultMessage": "Ручное подтверждение"
-  },
-  "configureApproveMode.manualApprovalDescription": {
-    "defaultMessage": "Все инструменты, расширения и изменения файлов будут требовать подтверждения человеком"
-  },
-  "configureApproveMode.save": {
-    "defaultMessage": "Сохранить"
-  },
-  "configureApproveMode.saving": {
-    "defaultMessage": "Сохранение..."
-  },
-  "configureApproveMode.smartApproval": {
-    "defaultMessage": "Умное подтверждение"
-  },
-  "configureApproveMode.smartApprovalDescription": {
-    "defaultMessage": "Интеллектуально определять, какие действия требуют подтверждения, исходя из уровня риска"
-  },
-  "configureApproveMode.title": {
-    "defaultMessage": "Настроить режим подтверждения"
   },
   "confirmationModal.defaultCancel": {
     "defaultMessage": "Нет"
@@ -277,27 +88,6 @@
   },
   "confirmationModal.processing": {
     "defaultMessage": "Обработка..."
-  },
-  "conversationLimitsDropdown.conversationLimits": {
-    "defaultMessage": "Ограничения разговора"
-  },
-  "conversationLimitsDropdown.maxTurns": {
-    "defaultMessage": "Максимум ходов"
-  },
-  "conversationLimitsDropdown.maxTurnsDescription": {
-    "defaultMessage": "Максимальное число ходов агента до запроса ввода от пользователя"
-  },
-  "costTracker.costUnavailable": {
-    "defaultMessage": "Данные о стоимости недоступны для {model} ({inputTokens} входных, {outputTokens} выходных токенов)"
-  },
-  "costTracker.inputOutputTooltip": {
-    "defaultMessage": "Ввод: {inputTokens} токенов ({inputCost}) | Вывод: {outputTokens} токенов ({outputCost})"
-  },
-  "costTracker.pricingUnavailable": {
-    "defaultMessage": "Данные о ценах недоступны для {model}"
-  },
-  "costTracker.totalSessionCost": {
-    "defaultMessage": "Итоговая стоимость сеанса: {cost}"
   },
   "creditsExhaustedNotification.addCredits": {
     "defaultMessage": "Добавить кредиты"
@@ -503,104 +293,8 @@
   "defaultProviderSetupForm.showOptions": {
     "defaultMessage": "Показать {count} параметров"
   },
-  "diagnosticsModal.attachHint": {
-    "defaultMessage": "Если вы создаете отчет об ошибке, приложите к нему диагностический отчет."
-  },
-  "diagnosticsModal.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "diagnosticsModal.configSettings": {
-    "defaultMessage": "Настройки конфигурации"
-  },
-  "diagnosticsModal.description": {
-    "defaultMessage": "Вы можете скачать ZIP-файл диагностики, чтобы поделиться им с командой, или сразу создать ошибку на GitHub с предзаполненными сведениями о системе. Диагностический отчет содержит:"
-  },
-  "diagnosticsModal.diagnosticsErrorMsg": {
-    "defaultMessage": "Не удалось скачать диагностику"
-  },
-  "diagnosticsModal.diagnosticsErrorTitle": {
-    "defaultMessage": "Ошибка диагностики"
-  },
-  "diagnosticsModal.download": {
-    "defaultMessage": "Скачать"
-  },
-  "diagnosticsModal.downloading": {
-    "defaultMessage": "Загрузка..."
-  },
-  "diagnosticsModal.fileBug": {
-    "defaultMessage": "Сообщить об ошибке на GitHub"
-  },
-  "diagnosticsModal.logFiles": {
-    "defaultMessage": "Недавние файлы журналов"
-  },
-  "diagnosticsModal.opening": {
-    "defaultMessage": "Открытие..."
-  },
-  "diagnosticsModal.reportProblem": {
-    "defaultMessage": "Сообщить о проблеме"
-  },
-  "diagnosticsModal.sensitiveWarning": {
-    "defaultMessage": "Если ваш сеанс содержит конфиденциальную информацию, не публикуйте файл диагностики."
-  },
-  "diagnosticsModal.sessionMessages": {
-    "defaultMessage": "Сообщения текущего сеанса"
-  },
-  "diagnosticsModal.systemInfo": {
-    "defaultMessage": "Основная информация о системе"
-  },
-  "diagnosticsModal.systemInfoErrorMsg": {
-    "defaultMessage": "Не удалось получить информацию о системе"
-  },
-  "diagnosticsModal.systemInfoErrorTitle": {
-    "defaultMessage": "Ошибка"
-  },
   "dialog.close": {
     "defaultMessage": "Закрыть"
-  },
-  "dictationSettings.addApiKey": {
-    "defaultMessage": "Добавить API-ключ"
-  },
-  "dictationSettings.apiKey": {
-    "defaultMessage": "API-ключ"
-  },
-  "dictationSettings.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "dictationSettings.chooseVoiceConversion": {
-    "defaultMessage": "Выберите, как голос преобразуется в текст"
-  },
-  "dictationSettings.configureApiKey": {
-    "defaultMessage": "Настройте API-ключ в <b>{settingsPath}</b>"
-  },
-  "dictationSettings.configured": {
-    "defaultMessage": "(Настроено)"
-  },
-  "dictationSettings.configuredIn": {
-    "defaultMessage": "✓ Настроено в {settingsPath}"
-  },
-  "dictationSettings.disabled": {
-    "defaultMessage": "Отключено"
-  },
-  "dictationSettings.enterApiKey": {
-    "defaultMessage": "Введите API-ключ"
-  },
-  "dictationSettings.notConfigured": {
-    "defaultMessage": "(не настроено)"
-  },
-  "dictationSettings.removeApiKey": {
-    "defaultMessage": "Удалить API-ключ"
-  },
-  "dictationSettings.requiredForTranscription": {
-    "defaultMessage": "Требуется для транскрипции"
-  },
-  "dictationSettings.save": {
-    "defaultMessage": "Сохранить"
-  },
-  "dictationSettings.updateApiKey": {
-    "defaultMessage": "Обновить API-ключ"
-  },
-  "dictationSettings.voiceDictationProvider": {
-    "defaultMessage": "Провайдер голосовой диктовки"
   },
   "dirSwitcher.failedToUpdateWorkingDir": {
     "defaultMessage": "Не удалось обновить рабочий каталог"
@@ -851,66 +545,6 @@
   "filesPanel.title": {
     "defaultMessage": "Файлы"
   },
-  "goosehintsModal.close": {
-    "defaultMessage": "Закрыть"
-  },
-  "goosehintsModal.developer": {
-    "defaultMessage": "Разработчик"
-  },
-  "goosehintsModal.dialogDescription": {
-    "defaultMessage": "Предоставьте дополнительный контекст о проекте, чтобы улучшить взаимодействие с iCodex"
-  },
-  "goosehintsModal.dialogTitle": {
-    "defaultMessage": "Настроить подсказки проекта (.goosehints)"
-  },
-  "goosehintsModal.errorReading": {
-    "defaultMessage": "Ошибка чтения файла .goosehints: {error}"
-  },
-  "goosehintsModal.failedToAccess": {
-    "defaultMessage": "Не удалось получить доступ к файлу .goosehints"
-  },
-  "goosehintsModal.failedToSave": {
-    "defaultMessage": "Не удалось сохранить файл .goosehints"
-  },
-  "goosehintsModal.fileCreating": {
-    "defaultMessage": "Создание нового файла .goosehints по пути: {filePath}"
-  },
-  "goosehintsModal.fileFound": {
-    "defaultMessage": "Файл .goosehints найден по пути: {filePath}"
-  },
-  "goosehintsModal.helpText1": {
-    "defaultMessage": ".goosehints — это текстовый файл для дополнительного контекста о проекте и улучшения взаимодействия с iCodex."
-  },
-  "goosehintsModal.helpText2": {
-    "defaultMessage": "Убедитесь, что расширение {bold} включено на странице расширений. Оно необходимо для использования .goosehints. Чтобы обновления .goosehints вступили в силу, перезапустите сеанс."
-  },
-  "goosehintsModal.helpText3": {
-    "defaultMessage": "Подробнее см. {link}."
-  },
-  "goosehintsModal.helpTextLink": {
-    "defaultMessage": "использование .goosehints"
-  },
-  "goosehintsModal.placeholder": {
-    "defaultMessage": "Введите подсказки проекта здесь..."
-  },
-  "goosehintsModal.save": {
-    "defaultMessage": "Сохранить"
-  },
-  "goosehintsModal.savedSuccessfully": {
-    "defaultMessage": "Успешно сохранено"
-  },
-  "goosehintsModal.saving": {
-    "defaultMessage": "Сохранение..."
-  },
-  "goosehintsSection.configure": {
-    "defaultMessage": "Настроить"
-  },
-  "goosehintsSection.description": {
-    "defaultMessage": "Настройте файл .goosehints вашего проекта, чтобы предоставить iCodex дополнительный контекст"
-  },
-  "goosehintsSection.title": {
-    "defaultMessage": "Подсказки проекта (.goosehints)"
-  },
   "groupedExtensionLoadingToast.askGoose": {
     "defaultMessage": "Спросить iCodex"
   },
@@ -992,42 +626,6 @@
   "hub.suggestionReview": {
     "defaultMessage": "Проверить код и предложить изменения"
   },
-  "huggingFaceModelSearch.download": {
-    "defaultMessage": "Скачать"
-  },
-  "huggingFaceModelSearch.downloaded": {
-    "defaultMessage": "Скачано"
-  },
-  "huggingFaceModelSearch.downloading": {
-    "defaultMessage": "Скачивание…"
-  },
-  "huggingFaceModelSearch.loadingVariants": {
-    "defaultMessage": "Загрузка вариантов..."
-  },
-  "huggingFaceModelSearch.noGgufModels": {
-    "defaultMessage": "По этому запросу модели GGUF не найдены."
-  },
-  "huggingFaceModelSearch.recommended": {
-    "defaultMessage": "Рекомендуется"
-  },
-  "huggingFaceModelSearch.searchError": {
-    "defaultMessage": "Ошибка поиска: {details}"
-  },
-  "huggingFaceModelSearch.searchFailed": {
-    "defaultMessage": "Поиск не удался. Повторите попытку."
-  },
-  "huggingFaceModelSearch.searchHuggingFace": {
-    "defaultMessage": "Поиск в HuggingFace"
-  },
-  "huggingFaceModelSearch.searchNoData": {
-    "defaultMessage": "Поиск не вернул данных."
-  },
-  "huggingFaceModelSearch.searchPlaceholder": {
-    "defaultMessage": "Поиск моделей GGUF..."
-  },
-  "huggingFaceModelSearch.tooLarge": {
-    "defaultMessage": "Может не поместиться в память (модель {size}, доступно {available})"
-  },
   "huggingFaceSignInPrompt.failedToConfigure": {
     "defaultMessage": "Не удалось войти в Hugging Face: {error}"
   },
@@ -1045,9 +643,6 @@
   },
   "imagePreview.altText": {
     "defaultMessage": "изображение iCodex"
-  },
-  "imagePreview.clickToCollapse": {
-    "defaultMessage": "Нажмите, чтобы свернуть"
   },
   "imagePreview.clickToExpand": {
     "defaultMessage": "Нажмите, чтобы развернуть"
@@ -1262,111 +857,6 @@
   "loadingGoose.waiting": {
     "defaultMessage": "ожидание"
   },
-  "localInferenceSettings.deleteConfirm": {
-    "defaultMessage": "Удалить эту модель? Позже ее можно скачать снова."
-  },
-  "localInferenceSettings.description": {
-    "defaultMessage": "Скачивайте и управляйте локальными LLM-моделями для инференса без API-ключей. Ищите любые GGUF-модели на HuggingFace или используйте подборку ниже."
-  },
-  "localInferenceSettings.dismiss": {
-    "defaultMessage": "Скрыть"
-  },
-  "localInferenceSettings.download": {
-    "defaultMessage": "Скачать"
-  },
-  "localInferenceSettings.downloadCancelled": {
-    "defaultMessage": "Скачивание отменено"
-  },
-  "localInferenceSettings.downloadFailed": {
-    "defaultMessage": "Скачивание не удалось"
-  },
-  "localInferenceSettings.downloadProgress": {
-    "defaultMessage": "{downloaded} / {total} ({percent}%)"
-  },
-  "localInferenceSettings.downloadedModels": {
-    "defaultMessage": "Скачанные модели"
-  },
-  "localInferenceSettings.downloading": {
-    "defaultMessage": "Скачивание"
-  },
-  "localInferenceSettings.evictFromMemory": {
-    "defaultMessage": "Evict from memory"
-  },
-  "localInferenceSettings.featuredModels": {
-    "defaultMessage": "Рекомендуемые модели"
-  },
-  "localInferenceSettings.huggingFaceSignInNote": {
-    "defaultMessage": "Войдите, чтобы увеличить лимиты запросов при поиске и загрузке моделей, а также получить доступ к приватным или ограниченным репозиториям Hugging Face."
-  },
-  "localInferenceSettings.loadedInMemory": {
-    "defaultMessage": "Loaded in memory"
-  },
-  "localInferenceSettings.modelSettings": {
-    "defaultMessage": "Настройки модели"
-  },
-  "localInferenceSettings.modelSettingsTitle": {
-    "defaultMessage": "Настройки модели"
-  },
-  "localInferenceSettings.noModels": {
-    "defaultMessage": "Нет доступных моделей"
-  },
-  "localInferenceSettings.recommended": {
-    "defaultMessage": "Рекомендуется"
-  },
-  "localInferenceSettings.remaining": {
-    "defaultMessage": "осталось {time}"
-  },
-  "localInferenceSettings.retry": {
-    "defaultMessage": "Повторить"
-  },
-  "localInferenceSettings.showAllFeatured": {
-    "defaultMessage": "Показать все рекомендуемые (ещё {count})"
-  },
-  "localInferenceSettings.showRecommendedOnly": {
-    "defaultMessage": "Показывать только рекомендуемые"
-  },
-  "localInferenceSettings.title": {
-    "defaultMessage": "Локальные модели инференса"
-  },
-  "localInferenceSettings.vision": {
-    "defaultMessage": "Зрение"
-  },
-  "localInferenceSettings.visionEncoderDownloading": {
-    "defaultMessage": "Скачивание визуального кодировщика…"
-  },
-  "localInferenceSettings.visionEncoderNotDownloaded": {
-    "defaultMessage": "Визуальный кодировщик не скачан"
-  },
-  "localModelManager.active": {
-    "defaultMessage": "Активно"
-  },
-  "localModelManager.deleteConfirm": {
-    "defaultMessage": "Удалить эту модель? Позже её можно скачать снова."
-  },
-  "localModelManager.download": {
-    "defaultMessage": "Скачать"
-  },
-  "localModelManager.downloaded": {
-    "defaultMessage": "Скачано"
-  },
-  "localModelManager.gpuAcceleration": {
-    "defaultMessage": "Поддерживает ускорение GPU (CUDA для NVIDIA, Metal для Apple Silicon). Для аппаратного ускорения функции GPU должны быть включены при сборке."
-  },
-  "localModelManager.noModels": {
-    "defaultMessage": "Нет доступных моделей"
-  },
-  "localModelManager.recommended": {
-    "defaultMessage": "Рекомендуется"
-  },
-  "localModelManager.recommendedForHardware": {
-    "defaultMessage": "Рекомендуется для вашего оборудования"
-  },
-  "localModelManager.showAllModels": {
-    "defaultMessage": "Показать все модели (ещё {count})"
-  },
-  "localModelManager.showRecommendedOnly": {
-    "defaultMessage": "Показывать только рекомендуемые"
-  },
   "localModelPicker.bestForMachine": {
     "defaultMessage": "Лучше всего для вашего компьютера"
   },
@@ -1478,62 +968,20 @@
   "messageQueue.cancel": {
     "defaultMessage": "Отмена"
   },
-  "messageQueue.cannotSendWhileEditing": {
-    "defaultMessage": "Нельзя отправить во время редактирования"
-  },
   "messageQueue.clearAll": {
     "defaultMessage": "Очистить всё"
-  },
-  "messageQueue.clickToEdit": {
-    "defaultMessage": "{content} (нажмите, чтобы изменить)"
-  },
-  "messageQueue.collapseQueue": {
-    "defaultMessage": "Свернуть очередь"
-  },
-  "messageQueue.dragToReorder": {
-    "defaultMessage": "Перетащите сообщения, чтобы изменить приоритет"
-  },
-  "messageQueue.expandQueue": {
-    "defaultMessage": "Развернуть очередь"
-  },
-  "messageQueue.messageCount": {
-    "defaultMessage": "{count, plural, one {# сообщение {status}} few {# сообщения {status}} many {# сообщений {status}} other {# сообщения {status}}}"
-  },
-  "messageQueue.messageQueue": {
-    "defaultMessage": "Очередь сообщений"
-  },
-  "messageQueue.next": {
-    "defaultMessage": "Далее"
   },
   "messageQueue.paused": {
     "defaultMessage": "На паузе"
   },
-  "messageQueue.queuePaused": {
-    "defaultMessage": "Очередь приостановлена"
-  },
   "messageQueue.queuePausedCompact": {
     "defaultMessage": "Очередь приостановлена - нажмите «Отправить» или добавьте новое сообщение, чтобы продолжить"
-  },
-  "messageQueue.queuePausedExpanded": {
-    "defaultMessage": "Очередь приостановлена из-за прерывания. Используйте «Отправить сейчас» или добавьте новое сообщение, чтобы продолжить."
-  },
-  "messageQueue.queued": {
-    "defaultMessage": "в очереди"
   },
   "messageQueue.removeFromQueue": {
     "defaultMessage": "Удалить это сообщение из очереди"
   },
   "messageQueue.save": {
     "defaultMessage": "Сохранить"
-  },
-  "messageQueue.sendNow": {
-    "defaultMessage": "Отправить это сообщение сейчас"
-  },
-  "messageQueue.stopAndSend": {
-    "defaultMessage": "Остановить текущую обработку и отправить это сообщение сейчас"
-  },
-  "messageQueue.waiting": {
-    "defaultMessage": "ожидание"
   },
   "messageUsageStats.cacheHitRate": {
     "defaultMessage": "({percent}% от ввода)"
@@ -1580,59 +1028,17 @@
   "messageUsageStats.totalTime": {
     "defaultMessage": "Общее время"
   },
-  "microphoneSelector.chooseDescription": {
-    "defaultMessage": "Выберите микрофон для диктовки"
-  },
-  "microphoneSelector.grantAccess": {
-    "defaultMessage": "Предоставить доступ"
-  },
-  "microphoneSelector.grantAccessDescription": {
-    "defaultMessage": "Предоставьте доступ, чтобы увидеть доступные микрофоны"
-  },
-  "microphoneSelector.microphone": {
-    "defaultMessage": "Микрофон"
-  },
-  "microphoneSelector.microphoneLabel": {
-    "defaultMessage": "Микрофон {index}"
-  },
-  "microphoneSelector.selectedMicrophone": {
-    "defaultMessage": "Выбранный микрофон"
-  },
-  "microphoneSelector.speakToTest": {
-    "defaultMessage": "Говорите, чтобы проверить микрофон ({seconds}с)"
-  },
-  "microphoneSelector.stop": {
-    "defaultMessage": "Остановить"
-  },
-  "microphoneSelector.systemDefault": {
-    "defaultMessage": "Системный по умолчанию"
-  },
-  "microphoneSelector.test": {
-    "defaultMessage": "Проверить"
-  },
   "modeSelectionItem.autonomousDescription": {
     "defaultMessage": "Полные возможности изменения файлов: свободное редактирование, создание и удаление файлов."
-  },
-  "modeSelectionItem.autonomousLabel": {
-    "defaultMessage": "Автономный"
   },
   "modeSelectionItem.chatOnlyDescription": {
     "defaultMessage": "Работать с выбранным провайдером без использования инструментов или расширений."
   },
-  "modeSelectionItem.chatOnlyLabel": {
-    "defaultMessage": "Только чат"
-  },
   "modeSelectionItem.manualDescription": {
     "defaultMessage": "Все инструменты, расширения и изменения файлов будут требовать подтверждения человеком"
   },
-  "modeSelectionItem.manualLabel": {
-    "defaultMessage": "Вручную"
-  },
   "modeSelectionItem.smartDescription": {
     "defaultMessage": "Интеллектуально определять, какие действия требуют подтверждения, исходя из уровня риска"
-  },
-  "modeSelectionItem.smartLabel": {
-    "defaultMessage": "Умный"
   },
   "modelAndProviderContext.modelChangeFailed": {
     "defaultMessage": "{provider}/{model} не удалось"
@@ -1952,39 +1358,6 @@
   "onboardingSuccess.shareUsageData": {
     "defaultMessage": "Поделиться анонимными данными об использовании"
   },
-  "permissionModal.alwaysAllow": {
-    "defaultMessage": "Всегда разрешать"
-  },
-  "permissionModal.askBefore": {
-    "defaultMessage": "Спрашивать заранее"
-  },
-  "permissionModal.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "permissionModal.close": {
-    "defaultMessage": "Закрыть"
-  },
-  "permissionModal.failedToLoadTools": {
-    "defaultMessage": "Не удалось загрузить инструменты"
-  },
-  "permissionModal.failedToLoadToolsDescription": {
-    "defaultMessage": "Не удалось загрузить инструменты для этого расширения. Возможно, расширение не загружено в текущем сеансе."
-  },
-  "permissionModal.neverAllow": {
-    "defaultMessage": "Никогда не разрешать"
-  },
-  "permissionModal.noActiveSession": {
-    "defaultMessage": "Нет активного сеанса"
-  },
-  "permissionModal.noActiveSessionDescription": {
-    "defaultMessage": "Сначала начните чат, чтобы настроить разрешения на инструменты для этого расширения. Разрешения на инструменты загружаются из расширений активного сеанса."
-  },
-  "permissionModal.noToolsAvailable": {
-    "defaultMessage": "Для этого расширения нет доступных инструментов."
-  },
-  "permissionModal.saveChanges": {
-    "defaultMessage": "Сохранить изменения"
-  },
   "permissionModeChip.approve": {
     "defaultMessage": "Ручное одобрение"
   },
@@ -1996,24 +1369,6 @@
   },
   "permissionModeChip.smartApprove": {
     "defaultMessage": "Умное одобрение"
-  },
-  "permissionRulesModal.description": {
-    "defaultMessage": "Настройте разрешения на инструменты для расширений, чтобы управлять их взаимодействием с системой."
-  },
-  "permissionRulesModal.extensionRules": {
-    "defaultMessage": "Правила расширений"
-  },
-  "permissionRulesModal.title": {
-    "defaultMessage": "Правила разрешений"
-  },
-  "permissionSetting.extensionRules": {
-    "defaultMessage": "Правила расширений"
-  },
-  "permissionSetting.permissionRules": {
-    "defaultMessage": "Правила разрешений"
-  },
-  "permissionSetting.permissionRulesDescription": {
-    "defaultMessage": "Скрытые инструкции, которые будут переданы провайдеру, чтобы направлять ответы и добавлять к ним контекст."
   },
   "planSteps.progress": {
     "defaultMessage": "Шаг {current} / {total}"
@@ -2351,14 +1706,8 @@
   "resetProviderSection.resetDescription": {
     "defaultMessage": "Это очистит выбранную модель и настройки провайдера. Если значения по умолчанию недоступны, вы перейдете на экран приветствия для повторной настройки."
   },
-  "responseStyle.conciseDescription": {
-    "defaultMessage": "Вызовы инструментов по умолчанию закрыты и показывают только использованный инструмент"
-  },
   "responseStyle.conciseLabel": {
     "defaultMessage": "Краткий"
-  },
-  "responseStyle.detailedDescription": {
-    "defaultMessage": "Вызовы инструментов по умолчанию раскрыты, чтобы показать детали"
   },
   "responseStyle.detailedLabel": {
     "defaultMessage": "Подробный"
@@ -2380,66 +1729,6 @@
   },
   "secureStorageNotice.defaultMessage": {
     "defaultMessage": "Ключи надежно хранятся в связке ключей"
-  },
-  "securityToggle.apiTokenDescription": {
-    "defaultMessage": "Токен аутентификации для сервиса классификации"
-  },
-  "securityToggle.apiTokenOptional": {
-    "defaultMessage": "API-токен (необязательно)"
-  },
-  "securityToggle.classificationEndpoint": {
-    "defaultMessage": "Эндпоинт классификации"
-  },
-  "securityToggle.classificationEndpointDescription": {
-    "defaultMessage": "Введите полный URL сервиса классификации"
-  },
-  "securityToggle.commandClassifierActive": {
-    "defaultMessage": "Классификатор команд активен (автоматически настроен из окружения)"
-  },
-  "securityToggle.commandEndpointDescription": {
-    "defaultMessage": "Введите полный URL сервиса классификации command injection"
-  },
-  "securityToggle.commandInjectionDescription": {
-    "defaultMessage": "Использовать ML-модели для обнаружения вредоносных shell-команд"
-  },
-  "securityToggle.detectionModel": {
-    "defaultMessage": "Модель обнаружения"
-  },
-  "securityToggle.detectionModelDescription": {
-    "defaultMessage": "Выберите ML-модель для обнаружения prompt injection"
-  },
-  "securityToggle.detectionThreshold": {
-    "defaultMessage": "Порог обнаружения"
-  },
-  "securityToggle.enableCommandInjection": {
-    "defaultMessage": "Включить ML-обнаружение command injection"
-  },
-  "securityToggle.enablePromptInjection": {
-    "defaultMessage": "Включить обнаружение prompt injection"
-  },
-  "securityToggle.enablePromptInjectionMl": {
-    "defaultMessage": "Включить ML-обнаружение prompt injection"
-  },
-  "securityToggle.mlEndpointDescription": {
-    "defaultMessage": "Введите полный URL ML-сервиса классификации (включая идентификатор модели)"
-  },
-  "securityToggle.mlTokenDescription": {
-    "defaultMessage": "Токен аутентификации для ML-сервиса (например, токен HuggingFace)"
-  },
-  "securityToggle.overrideNotice": {
-    "defaultMessage": "Этот параметр управляется вашей организацией и не может быть изменен."
-  },
-  "securityToggle.promptInjectionDescription": {
-    "defaultMessage": "Обнаруживать и предотвращать потенциальные атаки prompt injection"
-  },
-  "securityToggle.promptInjectionMlDescription": {
-    "defaultMessage": "Использовать ML-модели для обнаружения потенциального prompt injection в чате"
-  },
-  "securityToggle.thresholdDescription": {
-    "defaultMessage": "Чем выше значение, тем строже проверка (0.01 = очень мягко, 1.0 = максимально строго)"
-  },
-  "securityToggle.warpNotice": {
-    "defaultMessage": "Обнаружение внедрения команд работает лучше всего при подключении к WARP (требуется для доступа к сервису классификации)."
   },
   "sessionActionsHeader.actionsLabel": {
     "defaultMessage": "Session actions"
@@ -2486,26 +1775,29 @@
   "sessionIndicators.streaming": {
     "defaultMessage": "Потоковая передача"
   },
-  "settings.appearance.description": {
-    "defaultMessage": "Настройте, как iCodex отображается в вашей системе"
+  "settings.about.title": {
+    "defaultMessage": "О программе"
   },
-  "settings.appearance.title": {
-    "defaultMessage": "Внешний вид"
+  "settings.bottomPanel.description": {
+    "defaultMessage": "Показывать кнопку нижней панели в заголовке приложения"
   },
-  "settings.close": {
-    "defaultMessage": "Закрыть"
+  "settings.bottomPanel.title": {
+    "defaultMessage": "Нижняя панель"
   },
-  "settings.costTracking.description": {
-    "defaultMessage": "Показывать цены моделей и стоимость использования"
+  "settings.chat.title": {
+    "defaultMessage": "Чат"
   },
-  "settings.costTracking.title": {
-    "defaultMessage": "Отслеживание стоимости"
+  "settings.composer.title": {
+    "defaultMessage": "Поле ввода"
   },
   "settings.dockIcon.description": {
     "defaultMessage": "Показывать iCodex в Dock"
   },
   "settings.dockIcon.title": {
     "defaultMessage": "Значок Dock"
+  },
+  "settings.general.title": {
+    "defaultMessage": "Общие"
   },
   "settings.help.description": {
     "defaultMessage": "Помогите улучшить iCodex: сообщайте о проблемах или запрашивайте новые функции"
@@ -2577,73 +1869,82 @@
     "defaultMessage": "Китайский (традиционный)"
   },
   "settings.menuBarIcon.description": {
-    "defaultMessage": "Показывать iCodex в строке меню"
+    "defaultMessage": "Оставлять iCodex в строке меню после закрытия главного окна"
   },
   "settings.menuBarIcon.title": {
-    "defaultMessage": "Значок строки меню"
-  },
-  "settings.notifications.configGuide": {
-    "defaultMessage": "Руководство по настройке"
-  },
-  "settings.notifications.description": {
-    "defaultMessage": "Уведомления управляются вашей ОС - {link}"
-  },
-  "settings.notifications.modal.macInstructions": {
-    "defaultMessage": "Чтобы включить уведомления в macOS:"
-  },
-  "settings.notifications.modal.macStep1": {
-    "defaultMessage": "Откройте «Системные настройки»"
-  },
-  "settings.notifications.modal.macStep2": {
-    "defaultMessage": "Нажмите «Уведомления»"
-  },
-  "settings.notifications.modal.macStep3": {
-    "defaultMessage": "Найдите и выберите iCodex в списке приложений"
-  },
-  "settings.notifications.modal.macStep4": {
-    "defaultMessage": "Включите уведомления и настройте параметры по желанию"
-  },
-  "settings.notifications.modal.title": {
-    "defaultMessage": "Как включить уведомления"
-  },
-  "settings.notifications.modal.winInstructions": {
-    "defaultMessage": "Чтобы включить уведомления в Windows:"
-  },
-  "settings.notifications.modal.winStep1": {
-    "defaultMessage": "Откройте «Параметры»"
-  },
-  "settings.notifications.modal.winStep2": {
-    "defaultMessage": "Перейдите в Система > Уведомления"
-  },
-  "settings.notifications.modal.winStep3": {
-    "defaultMessage": "Найдите и выберите iCodex в списке приложений"
-  },
-  "settings.notifications.modal.winStep4": {
-    "defaultMessage": "Включите уведомления и настройте параметры по желанию"
+    "defaultMessage": "Показывать в строке меню"
   },
   "settings.notifications.openSettings": {
     "defaultMessage": "Откройте «Параметры»"
   },
-  "settings.notifications.task.description": {
-    "defaultMessage": "Уведомлять, когда iCodex завершает задачу, пока окно в фоне"
+  "settings.notifications.system.description": {
+    "defaultMessage": "Доставкой уведомлений управляет ваша операционная система"
   },
-  "settings.notifications.task.title": {
-    "defaultMessage": "Уведомления о завершении задач"
+  "settings.notifications.system.title": {
+    "defaultMessage": "Системные уведомления"
   },
   "settings.notifications.title": {
     "defaultMessage": "Уведомления"
+  },
+  "settings.notifications.turn.always": {
+    "defaultMessage": "Всегда"
+  },
+  "settings.notifications.turn.description": {
+    "defaultMessage": "Выберите, когда iCodex сообщает о завершении"
+  },
+  "settings.notifications.turn.never": {
+    "defaultMessage": "Никогда"
+  },
+  "settings.notifications.turn.title": {
+    "defaultMessage": "Уведомления о завершении"
+  },
+  "settings.notifications.turn.unfocused": {
+    "defaultMessage": "Только без фокуса"
+  },
+  "settings.permissions.autoReview.description": {
+    "defaultMessage": "iCodex сам определяет, какие запросы на дополнительный доступ безопасны, и спрашивает только о рискованных. Автопроверка может ошибаться"
+  },
+  "settings.permissions.autoReview.title": {
+    "defaultMessage": "Автопроверка"
+  },
+  "settings.permissions.default.description": {
+    "defaultMessage": "По умолчанию iCodex может читать и изменять файлы в своей рабочей области. Для остального он спрашивает разрешение"
+  },
+  "settings.permissions.default.title": {
+    "defaultMessage": "Разрешения по умолчанию"
+  },
+  "settings.permissions.fullAccess.description": {
+    "defaultMessage": "iCodex может изменять любые файлы на компьютере и выполнять команды с доступом к сети без вашего подтверждения. Это значительно повышает риск потери данных, утечек и непредвиденного поведения"
+  },
+  "settings.permissions.fullAccess.title": {
+    "defaultMessage": "Полный доступ"
+  },
+  "settings.permissions.title": {
+    "defaultMessage": "Разрешения"
   },
   "settings.preventSleep.description": {
     "defaultMessage": "Не давать компьютеру засыпать, пока iCodex выполняет задачу (экран все равно может блокироваться)"
   },
   "settings.preventSleep.title": {
-    "defaultMessage": "Запретить сон"
+    "defaultMessage": "Не давать компьютеру уснуть во время работы"
   },
-  "settings.theme.description": {
-    "defaultMessage": "Настройте внешний вид и ощущения iCodex"
+  "settings.sendShortcut.description": {
+    "defaultMessage": "Выберите, отправляет ли Enter сообщение или переносит строку"
   },
-  "settings.theme.title": {
-    "defaultMessage": "Тема"
+  "settings.sendShortcut.enter": {
+    "defaultMessage": "Enter"
+  },
+  "settings.sendShortcut.modEnter": {
+    "defaultMessage": "{mod} + Enter"
+  },
+  "settings.sendShortcut.title": {
+    "defaultMessage": "Сочетание для отправки"
+  },
+  "settings.toolDetails.description": {
+    "defaultMessage": "Показывать вызовы инструментов в чате развёрнутыми или свёрнутыми"
+  },
+  "settings.toolDetails.title": {
+    "defaultMessage": "Детали вызовов инструментов"
   },
   "settings.updates.description": {
     "defaultMessage": "Проверяйте и устанавливайте обновления, чтобы iCodex работал оптимально"
@@ -2651,14 +1952,17 @@
   "settings.updates.title": {
     "defaultMessage": "Обновления"
   },
+  "settings.usageStats.description": {
+    "defaultMessage": "Показывать токены, скорость и стоимость под каждым ответом"
+  },
+  "settings.usageStats.title": {
+    "defaultMessage": "Показывать статистику использования"
+  },
   "settings.version.title": {
     "defaultMessage": "Версия"
   },
   "settingsView.back": {
     "defaultMessage": "Назад в приложение"
-  },
-  "settingsView.groupAdvanced": {
-    "defaultMessage": "Дополнительно"
   },
   "settingsView.groupIntegrations": {
     "defaultMessage": "Интеграции"
@@ -2672,20 +1976,14 @@
   "settingsView.search": {
     "defaultMessage": "Поиск настроек..."
   },
-  "settingsView.tabApp": {
-    "defaultMessage": "Приложение"
+  "settingsView.tabAppearance": {
+    "defaultMessage": "Внешний вид"
   },
-  "settingsView.tabAuth": {
-    "defaultMessage": "Авторизация"
-  },
-  "settingsView.tabChat": {
-    "defaultMessage": "Чат"
+  "settingsView.tabGeneral": {
+    "defaultMessage": "Общие"
   },
   "settingsView.tabKeyboard": {
     "defaultMessage": "Клавиатура"
-  },
-  "settingsView.tabLocalInference": {
-    "defaultMessage": "Локальный инференс"
   },
   "settingsView.tabModels": {
     "defaultMessage": "Модели"
@@ -2693,14 +1991,8 @@
   "settingsView.tabPlugins": {
     "defaultMessage": "Плагины"
   },
-  "settingsView.tabPrompts": {
-    "defaultMessage": "Промпты"
-  },
   "settingsView.title": {
     "defaultMessage": "Настройки"
-  },
-  "sheet.close": {
-    "defaultMessage": "Закрыть"
   },
   "shortcutRecorder.cancel": {
     "defaultMessage": "Отмена"

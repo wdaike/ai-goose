@@ -53,19 +53,15 @@ const i18n = defineMessages({
   },
   providerType: {
     id: 'customProviderForm.providerType',
-    defaultMessage: 'Provider Type',
+    defaultMessage: 'API Type',
   },
-  openaiCompatible: {
-    id: 'customProviderForm.openaiCompatible',
-    defaultMessage: 'OpenAI Compatible',
+  responsesApi: {
+    id: 'customProviderForm.responsesApi',
+    defaultMessage: 'OpenAI Responses API (/responses)',
   },
-  anthropicCompatible: {
-    id: 'customProviderForm.anthropicCompatible',
-    defaultMessage: 'Anthropic Compatible',
-  },
-  ollamaCompatible: {
-    id: 'customProviderForm.ollamaCompatible',
-    defaultMessage: 'Ollama Compatible',
+  chatApi: {
+    id: 'customProviderForm.chatApi',
+    defaultMessage: 'OpenAI Chat Completions (/chat/completions)',
   },
   displayName: {
     id: 'customProviderForm.displayName',
@@ -82,19 +78,6 @@ const i18n = defineMessages({
   apiUrlPlaceholder: {
     id: 'customProviderForm.apiUrlPlaceholder',
     defaultMessage: 'https://api.example.com',
-  },
-  apiBasePath: {
-    id: 'customProviderForm.apiBasePath',
-    defaultMessage: 'API Base Path (optional)',
-  },
-  apiBasePathPlaceholder: {
-    id: 'customProviderForm.apiBasePathPlaceholder',
-    defaultMessage: 'e.g., v1/chat/completions or project_id/v1',
-  },
-  apiBasePathHint: {
-    id: 'customProviderForm.apiBasePathHint',
-    defaultMessage:
-      "Override the default API path. Leave blank to use the provider's default path.",
   },
   authentication: {
     id: 'customProviderForm.authentication',
@@ -115,6 +98,14 @@ const i18n = defineMessages({
   apiKeyPlaceholderExisting: {
     id: 'customProviderForm.apiKeyPlaceholderExisting',
     defaultMessage: 'Leave blank to keep existing key',
+  },
+  apiKeySaved: {
+    id: 'customProviderForm.apiKeySaved',
+    defaultMessage: 'Saved key: {preview} — leave blank to keep it',
+  },
+  apiKeyMissing: {
+    id: 'customProviderForm.apiKeyMissing',
+    defaultMessage: 'No key is saved for this provider yet',
   },
   apiKeyPlaceholderNew: {
     id: 'customProviderForm.apiKeyPlaceholderNew',
@@ -139,10 +130,6 @@ const i18n = defineMessages({
   attachments: {
     id: 'customProviderForm.attachments',
     defaultMessage: 'Attachments',
-  },
-  supportsStreaming: {
-    id: 'customProviderForm.supportsStreaming',
-    defaultMessage: 'Provider supports streaming responses',
   },
   customHeaders: {
     id: 'customProviderForm.customHeaders',
@@ -233,6 +220,7 @@ interface CustomProviderFormProps {
   onDelete?: () => Promise<void>;
   isActiveProvider?: boolean;
   initialData: UpdateCustomProviderRequest | null;
+  apiKeyPreview?: string | null;
   isEditable?: boolean;
 }
 
@@ -242,17 +230,16 @@ export default function CustomProviderForm({
   onDelete,
   isActiveProvider = false,
   initialData,
+  apiKeyPreview,
   isEditable,
 }: CustomProviderFormProps) {
   const intl = useIntl();
-  const [engine, setEngine] = useState('openai_compatible');
+  const [engine, setEngine] = useState('responses');
   const [displayName, setDisplayName] = useState('');
   const [apiUrl, setApiUrl] = useState('');
-  const [basePath, setBasePath] = useState('');
   const [apiKey, setApiKey] = useState('');
   const [models, setModels] = useState('');
   const [requiresAuth, setRequiresAuth] = useState(false);
-  const [supportsStreaming, setSupportsStreaming] = useState(true);
   const [headers, setHeaders] = useState<{ key: string; value: string }[]>([]);
   const [newHeaderKey, setNewHeaderKey] = useState('');
   const [newHeaderValue, setNewHeaderValue] = useState('');
@@ -271,17 +258,10 @@ export default function CustomProviderForm({
 
   useEffect(() => {
     if (initialData) {
-      const engineMap: Record<string, string> = {
-        openai: 'openai_compatible',
-        anthropic: 'anthropic_compatible',
-        ollama: 'ollama_compatible',
-      };
-      setEngine(engineMap[initialData.engine] || 'openai_compatible');
+      setEngine(initialData.engine === 'chat' ? 'chat' : 'responses');
       setDisplayName(initialData.display_name);
       setApiUrl(initialData.api_url);
-      setBasePath(initialData.base_path ?? '');
       setModels(initialData.models.join(', '));
-      setSupportsStreaming(initialData.supports_streaming ?? true);
       setRequiresAuth(initialData.requires_auth ?? true);
 
       if (initialData.headers) {
@@ -302,16 +282,8 @@ export default function CustomProviderForm({
     // Prefill fields from template
     setDisplayName(template.name);
     setApiUrl(template.apiUrl);
-    setBasePath('');
-    setSupportsStreaming(template.supportsStreaming);
     setRequiresAuth(true);
-
-    const formatToEngine: Record<string, string> = {
-      openai: 'openai_compatible',
-      anthropic: 'anthropic_compatible',
-      ollama: 'ollama_compatible',
-    };
-    setEngine(formatToEngine[template.format] || 'openai_compatible');
+    setEngine('responses');
 
     const templateModels = template.models.filter((m) => !m.deprecated).map((m) => m.id);
     setModels(templateModels.join(', '));
@@ -323,10 +295,8 @@ export default function CustomProviderForm({
     setSelectedTemplate(null);
     setDisplayName('');
     setApiUrl('');
-    setBasePath('');
     setModels('');
-    setEngine('openai_compatible');
-    setSupportsStreaming(true);
+    setEngine('responses');
     setRequiresAuth(false);
     setStep('choice');
   };
@@ -456,12 +426,10 @@ export default function CustomProviderForm({
         api_url: apiUrl,
         api_key: apiKey,
         models: modelList,
-        supports_streaming: supportsStreaming,
         requires_auth: requiresAuth,
         headers: headersObject,
         catalog_provider_id:
           selectedTemplate?.providerId ?? initialData?.catalog_provider_id ?? undefined,
-        base_path: basePath || undefined,
       });
     } catch (error) {
       console.error('Failed to save custom provider:', error);
@@ -607,21 +575,15 @@ export default function CustomProviderForm({
             aria-invalid={!!validationErrors.providerType}
             aria-describedby={validationErrors.providerType ? 'provider-select-error' : undefined}
             options={[
-              { value: 'openai_compatible', label: intl.formatMessage(i18n.openaiCompatible) },
-              {
-                value: 'anthropic_compatible',
-                label: intl.formatMessage(i18n.anthropicCompatible),
-              },
-              { value: 'ollama_compatible', label: intl.formatMessage(i18n.ollamaCompatible) },
+              { value: 'responses', label: intl.formatMessage(i18n.responsesApi) },
+              { value: 'chat', label: intl.formatMessage(i18n.chatApi) },
             ]}
             value={{
               value: engine,
               label:
-                engine === 'openai_compatible'
-                  ? intl.formatMessage(i18n.openaiCompatible)
-                  : engine === 'anthropic_compatible'
-                    ? intl.formatMessage(i18n.anthropicCompatible)
-                    : intl.formatMessage(i18n.ollamaCompatible),
+                engine === 'chat'
+                  ? intl.formatMessage(i18n.chatApi)
+                  : intl.formatMessage(i18n.responsesApi),
             }}
             onChange={(option: unknown) => {
               const selectedOption = option as { value: string; label: string } | null;
@@ -691,25 +653,6 @@ export default function CustomProviderForm({
         </div>
       )}
 
-      {/* Base Path */}
-      {isEditable && (
-        <div>
-          <label
-            htmlFor="base-path"
-            className="flex items-center text-sm font-medium text-text-primary mb-2"
-          >
-            {intl.formatMessage(i18n.apiBasePath)}
-          </label>
-          <Input
-            id="base-path"
-            value={basePath}
-            onChange={(e) => setBasePath(e.target.value)}
-            placeholder={intl.formatMessage(i18n.apiBasePathPlaceholder)}
-          />
-          <p className="text-xs text-textSubtle mt-1">{intl.formatMessage(i18n.apiBasePathHint)}</p>
-        </div>
-      )}
-
       {/* Authentication */}
       <div>
         <label className="block text-sm font-medium text-text-primary mb-2">
@@ -757,6 +700,13 @@ export default function CustomProviderForm({
               aria-describedby={validationErrors.apiKey ? 'api-key-error' : undefined}
               className={validationErrors.apiKey ? 'border-red-500' : ''}
             />
+            {initialData && (
+              <p className="text-xs text-textSubtle mt-1">
+                {apiKeyPreview
+                  ? intl.formatMessage(i18n.apiKeySaved, { preview: apiKeyPreview })
+                  : intl.formatMessage(i18n.apiKeyMissing)}
+              </p>
+            )}
             {validationErrors.apiKey && (
               <p id="api-key-error" className="text-red-500 text-sm mt-1">
                 {validationErrors.apiKey}
@@ -810,22 +760,6 @@ export default function CustomProviderForm({
               )}
             </div>
           )}
-        </div>
-      )}
-
-      {/* Streaming */}
-      {isEditable && (
-        <div className="flex items-center space-x-2 mb-10">
-          <input
-            type="checkbox"
-            id="supports-streaming"
-            checked={supportsStreaming}
-            onChange={(e) => setSupportsStreaming(e.target.checked)}
-            className="rounded border-border-primary"
-          />
-          <label htmlFor="supports-streaming" className="text-sm text-text-secondary">
-            {intl.formatMessage(i18n.supportsStreaming)}
-          </label>
         </div>
       )}
 

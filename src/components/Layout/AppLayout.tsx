@@ -20,6 +20,7 @@ import { ResizeHandle, useResizableWidth } from './ResizeHandle';
 import { NAV_DIMENSIONS, Z_INDEX } from './constants';
 import { cn } from '../../utils';
 import { UserInput } from '../../types/message';
+import { useAppSetting } from '../../hooks/useAppSetting';
 
 const i18n = defineMessages({
   openNavigation: {
@@ -111,6 +112,7 @@ const AppLayoutContent: React.FC<AppLayoutContentProps> = ({ activeSessions }) =
   });
   const { isBottomPanelOpen, isSidePanelOpen, toggleBottomPanel, toggleSidePanel } =
     useWorkspacePanels();
+  const showBottomPanelControl = useAppSetting('showBottomPanelControl', true);
   const modKey = safeIsMacOS ? '⌘' : 'Ctrl+';
 
   if (!chatContext) {
@@ -149,14 +151,16 @@ const AppLayoutContent: React.FC<AppLayoutContentProps> = ({ activeSessions }) =
         style={{ zIndex: Z_INDEX.HEADER }}
         className={cn('absolute right-3 flex items-center gap-1', headerTop)}
       >
-        <PanelToggleButton
-          label={intl.formatMessage(i18n.toggleBottomPanel)}
-          shortcut={`${modKey}J`}
-          active={isBottomPanelOpen}
-          onClick={toggleBottomPanel}
-        >
-          <PanelBottom className="w-4 h-4" />
-        </PanelToggleButton>
+        {showBottomPanelControl && (
+          <PanelToggleButton
+            label={intl.formatMessage(i18n.toggleBottomPanel)}
+            shortcut={`${modKey}J`}
+            active={isBottomPanelOpen}
+            onClick={toggleBottomPanel}
+          >
+            <PanelBottom className="w-4 h-4" />
+          </PanelToggleButton>
+        )}
         <PanelToggleButton
           label={intl.formatMessage(i18n.toggleSidePanel)}
           shortcut={`${modKey}P`}
