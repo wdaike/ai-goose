@@ -8,9 +8,6 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "無法儲存閾值：{error}"
   },
-  "announcementModal.gotIt": {
-    "defaultMessage": "知道了！"
-  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "收合導覽列"
   },
@@ -47,9 +44,6 @@
   "chat.requestFailed": {
     "defaultMessage": "請求失敗"
   },
-  "chatInput.dictationError": {
-    "defaultMessage": "聽寫錯誤"
-  },
   "chatInput.failedToReadImage": {
     "defaultMessage": "無法讀取影像檔案"
   },
@@ -59,17 +53,11 @@
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "正在處理拖放的檔案…"
   },
-  "chatInput.recording": {
-    "defaultMessage": "錄音中…"
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "正在重新啟動工作階段…"
   },
   "chatInput.send": {
     "defaultMessage": "傳送"
-  },
-  "chatInput.transcribing": {
-    "defaultMessage": "正在轉錄…"
   },
   "chatInput.typeMessage": {
     "defaultMessage": "輸入要傳送的訊息"
@@ -97,18 +85,6 @@
   },
   "customProviderForm.add": {
     "defaultMessage": "新增"
-  },
-  "customProviderForm.anthropicCompatible": {
-    "defaultMessage": "Anthropic 相容"
-  },
-  "customProviderForm.apiBasePath": {
-    "defaultMessage": "API 基底路徑（選用）"
-  },
-  "customProviderForm.apiBasePathHint": {
-    "defaultMessage": "覆寫預設的 API 路徑。留空則使用供應商的預設路徑。"
-  },
-  "customProviderForm.apiBasePathPlaceholder": {
-    "defaultMessage": "例如：v1/chat/completions 或 project_id/v1"
   },
   "customProviderForm.apiKey": {
     "defaultMessage": "API 金鑰"
@@ -212,12 +188,6 @@
   "customProviderForm.modelsRequired": {
     "defaultMessage": "至少需要一個模型"
   },
-  "customProviderForm.ollamaCompatible": {
-    "defaultMessage": "Ollama 相容"
-  },
-  "customProviderForm.openaiCompatible": {
-    "defaultMessage": "OpenAI 相容"
-  },
   "customProviderForm.providerType": {
     "defaultMessage": "供應商類型"
   },
@@ -235,9 +205,6 @@
   },
   "customProviderForm.submitError": {
     "defaultMessage": "無法儲存供應商。請檢查您的設定後再試一次。"
-  },
-  "customProviderForm.supportsStreaming": {
-    "defaultMessage": "供應商支援串流回應"
   },
   "customProviderForm.toolCalling": {
     "defaultMessage": "工具呼叫"
@@ -2192,12 +2159,6 @@
   "settings.toolDetails.title": {
     "defaultMessage": "工具呼叫詳情"
   },
-  "settings.updates.description": {
-    "defaultMessage": "檢查並安裝更新，讓 iCodex 保持最佳運作狀態"
-  },
-  "settings.updates.title": {
-    "defaultMessage": "更新"
-  },
   "settings.usageStats.description": {
     "defaultMessage": "在每則回覆下方顯示 token、速度與費用"
   },
@@ -2539,81 +2500,6 @@
   },
   "toolConfirmation.gooseWouldLikeToCallWithName": {
     "defaultMessage": "iCodex 想要呼叫 {toolName}。要允許嗎？"
-  },
-  "updateSection.autoDownload": {
-    "defaultMessage": "iCodex 會在背景下載更新，並於您下次結束或重新啟動時安裝。"
-  },
-  "updateSection.autoDownloadDisabledByEnv": {
-    "defaultMessage": "已透過 GOOSE_DISABLE_AUTO_DOWNLOAD 環境變數停用自動下載。"
-  },
-  "updateSection.autoDownloadDisabledNote": {
-    "defaultMessage": "已停用自動下載。請點選「立即下載」以手動下載。"
-  },
-  "updateSection.autoInstallNote": {
-    "defaultMessage": "無需手動安裝。"
-  },
-  "updateSection.checkForUpdates": {
-    "defaultMessage": "檢查更新"
-  },
-  "updateSection.checking": {
-    "defaultMessage": "正在檢查更新..."
-  },
-  "updateSection.currentVersion": {
-    "defaultMessage": "目前版本"
-  },
-  "updateSection.disableAutoDownload": {
-    "defaultMessage": "停用自動下載更新"
-  },
-  "updateSection.disableAutoDownloadDesc": {
-    "defaultMessage": "啟用後，iCodex 會通知您有新版本，但不會自動下載。"
-  },
-  "updateSection.downloadNow": {
-    "defaultMessage": "立即下載"
-  },
-  "updateSection.downloadReady": {
-    "defaultMessage": "更新已下載完成並可供安裝！"
-  },
-  "updateSection.downloadingProgress": {
-    "defaultMessage": "正在下載更新... {percent}%"
-  },
-  "updateSection.downloadingUpdate": {
-    "defaultMessage": "正在下載更新..."
-  },
-  "updateSection.installAndRestart": {
-    "defaultMessage": "安裝並重新啟動"
-  },
-  "updateSection.installNowHint": {
-    "defaultMessage": "請點選「安裝並重新啟動」以立即更新。"
-  },
-  "updateSection.latestVersion": {
-    "defaultMessage": "您執行的是最新版本！"
-  },
-  "updateSection.loading": {
-    "defaultMessage": "載入中..."
-  },
-  "updateSection.manualInstallNote": {
-    "defaultMessage": "下載後，您需要手動安裝更新。"
-  },
-  "updateSection.manualInstallRequired": {
-    "defaultMessage": "此更新方式需要手動安裝。"
-  },
-  "updateSection.readyInstallAuto": {
-    "defaultMessage": "✓ 更新已就緒。重新啟動 iCodex 即可完成安裝，或在您完成後結束。"
-  },
-  "updateSection.readyInstallManual": {
-    "defaultMessage": "✓ 更新已就緒！請點選「安裝並重新啟動」以取得安裝指示。"
-  },
-  "updateSection.upToDate": {
-    "defaultMessage": "（為最新版本）"
-  },
-  "updateSection.updateAvailable": {
-    "defaultMessage": "有可用的更新！"
-  },
-  "updateSection.versionAvailable": {
-    "defaultMessage": "→ 有可用的 {version}"
-  },
-  "updateSection.versionIsAvailable": {
-    "defaultMessage": "{version} 版本已可使用"
   },
   "userMessage.cancel": {
     "defaultMessage": "取消"

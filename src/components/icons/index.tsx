@@ -46,7 +46,6 @@ import { ArrowRight } from './ArrowRight';
 import { Key } from './Key';
 import OpenAI from './OpenAI';
 import Tetrate from './Tetrate';
-import { Microphone } from './Microphone';
 import { Watch0 } from './Watch0';
 import { Watch1 } from './Watch1';
 import { Watch2 } from './Watch2';
@@ -88,7 +87,6 @@ export {
   Grape,
   Idea,
   LinkedIn,
-  Microphone,
   More,
   OpenRouter,
   Ollama,

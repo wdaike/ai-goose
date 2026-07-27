@@ -8,9 +8,6 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Không thể lưu ngưỡng: {error}"
   },
-  "announcementModal.gotIt": {
-    "defaultMessage": "Đã hiểu!"
-  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Thu gọn điều hướng"
   },
@@ -47,9 +44,6 @@
   "chat.requestFailed": {
     "defaultMessage": "Yêu cầu không thành công"
   },
-  "chatInput.dictationError": {
-    "defaultMessage": "Lỗi đọc chính tả"
-  },
   "chatInput.failedToReadImage": {
     "defaultMessage": "Không thể đọc tệp hình ảnh"
   },
@@ -59,17 +53,11 @@
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "Đang xử lý các tệp đã thả..."
   },
-  "chatInput.recording": {
-    "defaultMessage": "Đang ghi âm..."
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "Đang khởi động lại phiên..."
   },
   "chatInput.send": {
     "defaultMessage": "Gửi"
-  },
-  "chatInput.transcribing": {
-    "defaultMessage": "Đang chuyển lời nói thành văn bản..."
   },
   "chatInput.typeMessage": {
     "defaultMessage": "Nhập tin nhắn để gửi"
@@ -97,18 +85,6 @@
   },
   "customProviderForm.add": {
     "defaultMessage": "Thêm"
-  },
-  "customProviderForm.anthropicCompatible": {
-    "defaultMessage": "Tương thích Anthropic"
-  },
-  "customProviderForm.apiBasePath": {
-    "defaultMessage": "Đường dẫn API cơ sở (tùy chọn)"
-  },
-  "customProviderForm.apiBasePathHint": {
-    "defaultMessage": "Ghi đè đường dẫn API mặc định. Để trống để sử dụng đường dẫn mặc định của nhà cung cấp."
-  },
-  "customProviderForm.apiBasePathPlaceholder": {
-    "defaultMessage": "ví dụ: v1/chat/completions hoặc project_id/v1"
   },
   "customProviderForm.apiKey": {
     "defaultMessage": "Khóa API"
@@ -212,12 +188,6 @@
   "customProviderForm.modelsRequired": {
     "defaultMessage": "Cần có ít nhất một mô hình"
   },
-  "customProviderForm.ollamaCompatible": {
-    "defaultMessage": "Tương thích Ollama"
-  },
-  "customProviderForm.openaiCompatible": {
-    "defaultMessage": "Tương thích OpenAI"
-  },
   "customProviderForm.providerType": {
     "defaultMessage": "Loại nhà cung cấp"
   },
@@ -235,9 +205,6 @@
   },
   "customProviderForm.submitError": {
     "defaultMessage": "Không thể lưu nhà cung cấp. Vui lòng kiểm tra cấu hình của bạn và thử lại."
-  },
-  "customProviderForm.supportsStreaming": {
-    "defaultMessage": "Nhà cung cấp hỗ trợ phản hồi theo luồng (streaming)"
   },
   "customProviderForm.toolCalling": {
     "defaultMessage": "Gọi công cụ"
@@ -1946,12 +1913,6 @@
   "settings.toolDetails.title": {
     "defaultMessage": "Chi tiết lệnh gọi công cụ"
   },
-  "settings.updates.description": {
-    "defaultMessage": "Kiểm tra và cài đặt bản cập nhật để iCodex luôn hoạt động tốt nhất"
-  },
-  "settings.updates.title": {
-    "defaultMessage": "Cập nhật"
-  },
   "settings.usageStats.description": {
     "defaultMessage": "Hiện token, tốc độ và chi phí dưới mỗi phản hồi"
   },
@@ -2263,81 +2224,6 @@
   },
   "toolConfirmation.gooseWouldLikeToCallWithName": {
     "defaultMessage": "iCodex muốn gọi {toolName}. Cho phép?"
-  },
-  "updateSection.autoDownload": {
-    "defaultMessage": "iCodex sẽ tải bản cập nhật ở chế độ nền và cài đặt vào lần tiếp theo khi bạn thoát hoặc khởi động lại."
-  },
-  "updateSection.autoDownloadDisabledByEnv": {
-    "defaultMessage": "Tải xuống tự động đã bị tắt thông qua biến môi trường GOOSE_DISABLE_AUTO_DOWNLOAD."
-  },
-  "updateSection.autoDownloadDisabledNote": {
-    "defaultMessage": "Tải xuống tự động đã bị tắt. Nhấp vào \"Tải ngay\" để tải xuống theo cách thủ công."
-  },
-  "updateSection.autoInstallNote": {
-    "defaultMessage": "Không cần cài đặt thủ công."
-  },
-  "updateSection.checkForUpdates": {
-    "defaultMessage": "Kiểm tra bản cập nhật"
-  },
-  "updateSection.checking": {
-    "defaultMessage": "Đang kiểm tra bản cập nhật..."
-  },
-  "updateSection.currentVersion": {
-    "defaultMessage": "Phiên bản hiện tại"
-  },
-  "updateSection.disableAutoDownload": {
-    "defaultMessage": "Tắt tải xuống cập nhật tự động"
-  },
-  "updateSection.disableAutoDownloadDesc": {
-    "defaultMessage": "Khi được bật, iCodex sẽ thông báo cho bạn về các phiên bản mới nhưng sẽ không tự động tải xuống."
-  },
-  "updateSection.downloadNow": {
-    "defaultMessage": "Tải ngay"
-  },
-  "updateSection.downloadReady": {
-    "defaultMessage": "Bản cập nhật đã được tải về và sẵn sàng cài đặt!"
-  },
-  "updateSection.downloadingProgress": {
-    "defaultMessage": "Đang tải bản cập nhật... {percent}%"
-  },
-  "updateSection.downloadingUpdate": {
-    "defaultMessage": "Đang tải bản cập nhật..."
-  },
-  "updateSection.installAndRestart": {
-    "defaultMessage": "Cài đặt & khởi động lại"
-  },
-  "updateSection.installNowHint": {
-    "defaultMessage": "Nhấp vào \"Cài đặt & khởi động lại\" để cập nhật ngay."
-  },
-  "updateSection.latestVersion": {
-    "defaultMessage": "Bạn đang chạy phiên bản mới nhất!"
-  },
-  "updateSection.loading": {
-    "defaultMessage": "Đang tải..."
-  },
-  "updateSection.manualInstallNote": {
-    "defaultMessage": "Sau khi tải xuống, bạn sẽ cần cài đặt bản cập nhật theo cách thủ công."
-  },
-  "updateSection.manualInstallRequired": {
-    "defaultMessage": "Cần cài đặt thủ công cho phương thức cập nhật này."
-  },
-  "updateSection.readyInstallAuto": {
-    "defaultMessage": "✓ Bản cập nhật đã sẵn sàng. Khởi động lại iCodex để hoàn tất cài đặt, hoặc thoát khi bạn đã xong."
-  },
-  "updateSection.readyInstallManual": {
-    "defaultMessage": "✓ Bản cập nhật đã sẵn sàng! Nhấp vào \"Cài đặt & khởi động lại\" để xem hướng dẫn cài đặt."
-  },
-  "updateSection.upToDate": {
-    "defaultMessage": "(đã cập nhật)"
-  },
-  "updateSection.updateAvailable": {
-    "defaultMessage": "Có bản cập nhật!"
-  },
-  "updateSection.versionAvailable": {
-    "defaultMessage": "→ {version} có sẵn"
-  },
-  "updateSection.versionIsAvailable": {
-    "defaultMessage": "Đã có phiên bản {version}"
   },
   "userMessage.cancel": {
     "defaultMessage": "Hủy"

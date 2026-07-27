@@ -1,13 +1,3 @@
-# Goosey
-
-Put `goosey` in your $PATH if you want to launch via:
-
-```
-goosey .
-```
-
-This will open goose GUI from any path you specify
-
 # Unregister Deeplink Protocols (macos only)
 
 `unregister-deeplink-protocols.js` is a script to unregister the deeplink protocol used by iCodex like `icodex://`.
@@ -21,4 +11,3 @@ Then launch Goose again and your deeplinks should work from the latest launched 
 ```bash
 node scripts/unregister-deeplink-protocols.js
 ```
-

@@ -29,7 +29,6 @@ import { CODEX_HOME, registerCodexBridge } from './codex/bridge';
 import { registerTerminalManager } from './terminalManager';
 import { expandTilde } from './utils/pathUtils';
 import log from './utils/logger';
-import { ensureWinShims } from './utils/winShims';
 import { adoptLoginEnv } from './utils/loginEnv';
 import { addRecentDir, loadRecentDirs } from './utils/recentDirs';
 import { errorMessage, formatErrorForLogging } from './utils/conversionUtils';
@@ -37,23 +36,9 @@ import type { Settings, SettingKey } from './utils/settings';
 import { defaultSettings, getKeyboardShortcuts } from './utils/settings';
 import * as yaml from 'yaml';
 import windowStateKeeper from 'electron-window-state';
-import {
-  getUpdateAvailable,
-  registerUpdateIpcHandlers,
-  setAutoDownloadDisabled,
-  setTrayRef,
-  setupAutoUpdater,
-  updateTrayMenu,
-} from './utils/autoUpdater';
-import { UPDATES_ENABLED } from './updates';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { BLOCKED_PROTOCOLS, WEB_PROTOCOLS } from './utils/urlSecurity';
 import { buildCSP } from './utils/csp';
-
-function shouldSetupUpdater(): boolean {
-  // Setup updater if either the flag is enabled OR dev updates are enabled
-  return UPDATES_ENABLED || process.env.ENABLE_DEV_UPDATES === 'true';
-}
 
 // =======================================================================
 // Native menu localization
@@ -1219,8 +1204,19 @@ const createTray = () => {
 
   try {
     tray = new Tray(iconPath);
-    setTrayRef(tray);
-    updateTrayMenu(getUpdateAvailable());
+    tray.setToolTip('iCodex');
+    tray.setContextMenu(
+      Menu.buildFromTemplate([
+        {
+          label: 'Show Window',
+          click: () => {
+            void showWindow();
+          },
+        },
+        { type: 'separator' },
+        { label: 'Quit', click: () => app.quit() },
+      ])
+    );
 
     if (process.platform === 'win32') {
       tray.on('click', showWindow);
@@ -1476,8 +1472,6 @@ const validSettingKeys: Set<string> = new Set([
   'sendShortcut',
   'showBottomPanelControl',
   'showUsageStats',
-  'seenAnnouncementIds',
-  'disableAutoDownload',
 ]);
 
 ipcMain.handle('set-setting', (_event, key: SettingKey, value: unknown) => {
@@ -1504,10 +1498,6 @@ ipcMain.handle('set-setting', (_event, key: SettingKey, value: unknown) => {
   // Re-register shortcuts if keyboard shortcuts changed
   if (key === 'keyboardShortcuts') {
     registerGlobalShortcuts();
-  }
-
-  if (key === 'disableAutoDownload') {
-    setAutoDownloadDisabled(value as boolean);
   }
 });
 
@@ -1949,23 +1939,6 @@ async function appMain() {
   // run before anything resolves a binary or reads a provider key.
   await adoptLoginEnv();
 
-  // Ensure Windows shims are available before any MCP processes are spawned
-  await ensureWinShims();
-
-  registerUpdateIpcHandlers();
-
-  // Handle microphone permission requests
-  session.defaultSession.setPermissionRequestHandler((_webContents, permission, callback) => {
-    console.log('Permission requested:', permission);
-    // Allow microphone and media access
-    if (permission === 'media') {
-      callback(true);
-    } else {
-      // Default behavior for other permissions
-      callback(true);
-    }
-  });
-
   // Add CSP headers to all sessions, recomputed on every response so external
   // backend settings take effect without restarting the app.
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
@@ -2009,22 +1982,6 @@ async function appMain() {
   } else {
     log.info('[Main] Skipping window creation in appMain - open-url already handled launch');
   }
-
-  // Setup auto-updater AFTER window is created and displayed (with delay to avoid blocking)
-  setTimeout(() => {
-    if (shouldSetupUpdater()) {
-      log.info('Setting up auto-updater after window creation...');
-      try {
-        const settings = getSettings();
-        if (settings.disableAutoDownload) {
-          setAutoDownloadDisabled(true);
-        }
-        setupAutoUpdater();
-      } catch (error) {
-        log.error('Error setting up auto-updater:', error);
-      }
-    }
-  }, 2000);
 
   if (process.platform === 'darwin') {
     const dockMenu = Menu.buildFromTemplate([
@@ -2471,12 +2428,6 @@ async function appMain() {
     } catch (error) {
       console.error('Error opening URL in browser:', error);
     }
-  });
-
-  // Handle app restart
-  ipcMain.on('restart-app', () => {
-    app.relaunch();
-    app.exit(0);
   });
 
   // Handler for getting app version

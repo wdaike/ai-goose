@@ -116,7 +116,6 @@ const mockSettings: Record<string, unknown> = {
   showBottomPanelControl: true,
   showUsageStats: true,
   turnNotifications: 'unfocused',
-  seenAnnouncementIds: [],
 };
 
 // Mock window.electron for renderer process

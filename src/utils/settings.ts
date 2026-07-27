@@ -28,7 +28,6 @@ export type SendShortcutSetting = 'enter' | 'mod+enter';
 export interface Settings {
   // Desktop app settings
   showMenuBarIcon: boolean;
-  disableAutoDownload: boolean;
   showDockIcon: boolean;
   enableWakelock: boolean;
   turnNotifications: TurnNotificationSetting;
@@ -44,7 +43,6 @@ export interface Settings {
   sendShortcut: SendShortcutSetting;
   showBottomPanelControl: boolean;
   showUsageStats: boolean;
-  seenAnnouncementIds: string[];
 }
 
 export type SettingKey = keyof Settings;
@@ -66,7 +64,6 @@ export const defaultKeyboardShortcuts: DefaultKeyboardShortcuts = {
 export const defaultSettings: Settings = {
   // Desktop app settings
   showMenuBarIcon: true,
-  disableAutoDownload: false,
   showDockIcon: true,
   enableWakelock: false,
   turnNotifications: 'unfocused',
@@ -81,7 +78,6 @@ export const defaultSettings: Settings = {
   sendShortcut: 'enter',
   showBottomPanelControl: true,
   showUsageStats: true,
-  seenAnnouncementIds: [],
 };
 
 export function getKeyboardShortcuts(settings: Settings): KeyboardShortcuts {

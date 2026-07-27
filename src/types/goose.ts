@@ -510,45 +510,6 @@ export type UnstructuredCommandInput = {
     [key: string]: unknown;
   } | null;
 };
-/**
- * Per-provider configuration status.
- */
-export type DictationProviderStatusEntry = {
-  configured: boolean;
-  host?: string | null;
-  description: string;
-  usesProviderConfig: boolean;
-  settingsPath?: string | null;
-  configKey?: string | null;
-  modelConfigKey?: string | null;
-  defaultModel?: string | null;
-  selectedModel?: string | null;
-  availableModels?: Array<DictationModelOption>;
-};
-export type DictationModelOption = {
-  id: string;
-  label: string;
-  description: string;
-};
-export type DictationLocalModelStatus = {
-  id: string;
-  label: string;
-  description: string;
-  sizeMb: number;
-  downloaded: boolean;
-  downloadInProgress: boolean;
-  recommended: boolean;
-};
-export type DictationDownloadProgress = {
-  bytesDownloaded: number;
-  totalBytes: number;
-  progressPercent: number;
-  /**
-   * serde lowercase of DownloadStatus: "downloading" | "completed" | "failed" | "cancelled"
-   */
-  status: string;
-  error?: string | null;
-};
 export type LocalInferenceModelDto = {
   id: string;
   repoId: string;

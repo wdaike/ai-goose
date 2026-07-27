@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { defineMessages, useIntl } from '../../../i18n';
 import { Switch } from '../../ui/switch';
 import { Button } from '../../ui/button';
@@ -10,9 +10,6 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '../../ui/dropdown-menu';
-import UpdateSection from './UpdateSection';
-
-import { UPDATES_ENABLED } from '../../../updates';
 import { SettingsGroup, SettingsRow, SettingsSection } from '../SettingsGroup';
 import { PermissionsSection } from '../mode/PermissionsSection';
 import BlockLogoBlack from './icons/block-lockup_black.png';
@@ -142,11 +139,6 @@ const i18n = defineMessages({
   reportBug: { id: 'settings.help.reportBug', defaultMessage: 'Report a Bug' },
   requestFeature: { id: 'settings.help.requestFeature', defaultMessage: 'Request a Feature' },
   versionTitle: { id: 'settings.version.title', defaultMessage: 'Version' },
-  updatesTitle: { id: 'settings.updates.title', defaultMessage: 'Updates' },
-  updatesDesc: {
-    id: 'settings.updates.description',
-    defaultMessage: 'Check for and install updates to keep iCodex running at its best',
-  },
 });
 
 const LANGUAGE_OPTIONS: Array<{ value: LanguageSetting; message: keyof typeof i18n }> = [
@@ -217,11 +209,7 @@ function SettingsDropdown<T extends string>({
   );
 }
 
-interface GeneralSectionProps {
-  scrollToSection?: string;
-}
-
-export default function GeneralSection({ scrollToSection }: GeneralSectionProps) {
+export default function GeneralSection() {
   const intl = useIntl();
   const [menuBarIconEnabled, setMenuBarIconEnabled] = useState(true);
   const [dockIconEnabled, setDockIconEnabled] = useState(true);
@@ -229,16 +217,13 @@ export default function GeneralSection({ scrollToSection }: GeneralSectionProps)
   const [spellcheckEnabled, setSpellcheckEnabled] = useState(true);
   const [isMacOS, setIsMacOS] = useState(false);
   const [isDockSwitchDisabled, setIsDockSwitchDisabled] = useState(false);
-  const [turnNotifications, setTurnNotifications] =
-    useState<TurnNotificationSetting>('unfocused');
+  const [turnNotifications, setTurnNotifications] = useState<TurnNotificationSetting>('unfocused');
   const [sendShortcut, setSendShortcut] = useState<SendShortcutSetting>('enter');
   const [showBottomPanelControl, setShowBottomPanelControl] = useState(true);
   const [showUsageStats, setShowUsageStats] = useState(true);
   const [toolDetails, setToolDetails] = useState('concise');
   const [language, setLanguage] = useState<LanguageSetting>('system');
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const updateSectionRef = useRef<HTMLDivElement>(null);
-  const shouldShowUpdates = !window.appConfig.get('GOOSE_VERSION');
 
   useEffect(() => {
     setIsMacOS(window.electron.platform === 'darwin');
@@ -273,14 +258,6 @@ export default function GeneralSection({ scrollToSection }: GeneralSectionProps)
       .then((value) => setTurnNotifications(value ?? 'unfocused'));
     window.electron.getSpellcheckState().then(setSpellcheckEnabled);
   }, []);
-
-  useEffect(() => {
-    if (scrollToSection === 'update' && updateSectionRef.current) {
-      setTimeout(() => {
-        updateSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 100);
-    }
-  }, [scrollToSection]);
 
   useEffect(() => {
     window.electron.getMenuBarIconState().then((enabled) => {
@@ -608,36 +585,24 @@ export default function GeneralSection({ scrollToSection }: GeneralSectionProps)
             </div>
           </SettingsRow>
 
-          {!shouldShowUpdates && (
-            <SettingsRow title={intl.formatMessage(i18n.versionTitle)}>
-              <div className="flex items-center gap-3">
-                <img
-                  src={isDarkMode ? BlockLogoWhite : BlockLogoBlack}
-                  alt="Block Logo" // TODO: replace with AAIF logo asset
-                  className="h-6 w-auto"
-                />
-                <span className="text-lg font-mono text-text-primary">
-                  {String(window.appConfig.get('GOOSE_VERSION') || 'Development')}
-                </span>
-              </div>
-            </SettingsRow>
-          )}
+          <SettingsRow title={intl.formatMessage(i18n.versionTitle)}>
+            <div className="flex items-center gap-3">
+              <img
+                src={isDarkMode ? BlockLogoWhite : BlockLogoBlack}
+                alt="Block Logo" // TODO: replace with AAIF logo asset
+                className="h-6 w-auto"
+              />
+              <span className="text-lg font-mono text-text-primary">
+                {String(
+                  window.appConfig.get('GOOSE_VERSION') ||
+                    window.electron.getVersion() ||
+                    'Development'
+                )}
+              </span>
+            </div>
+          </SettingsRow>
         </SettingsGroup>
       </SettingsSection>
-
-      {/* Update Section - only show if GOOSE_VERSION is NOT set */}
-      {UPDATES_ENABLED && shouldShowUpdates && (
-        <SettingsSection title={intl.formatMessage(i18n.updatesTitle)}>
-          <div ref={updateSectionRef}>
-            <SettingsGroup className="divide-y-0 px-5 py-4">
-              <p className="text-sm text-text-secondary mb-3">
-                {intl.formatMessage(i18n.updatesDesc)}
-              </p>
-              <UpdateSection />
-            </SettingsGroup>
-          </div>
-        </SettingsSection>
-      )}
     </div>
   );
 }

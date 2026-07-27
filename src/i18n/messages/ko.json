@@ -8,9 +8,6 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "임계값 저장 실패: {error}"
   },
-  "announcementModal.gotIt": {
-    "defaultMessage": "알았어요!"
-  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "탐색 접기"
   },
@@ -47,9 +44,6 @@
   "chat.requestFailed": {
     "defaultMessage": "요청 실패"
   },
-  "chatInput.dictationError": {
-    "defaultMessage": "받아쓰기 오류"
-  },
   "chatInput.failedToReadImage": {
     "defaultMessage": "이미지 파일을 읽지 못했습니다."
   },
@@ -59,17 +53,11 @@
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "끌어다 놓은 파일을 처리하는 중..."
   },
-  "chatInput.recording": {
-    "defaultMessage": "녹음..."
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "세션을 다시 시작하는 중..."
   },
   "chatInput.send": {
     "defaultMessage": "보내기"
-  },
-  "chatInput.transcribing": {
-    "defaultMessage": "음성을 텍스트로 변환 중..."
   },
   "chatInput.typeMessage": {
     "defaultMessage": "보낼 메시지를 입력하세요"
@@ -97,18 +85,6 @@
   },
   "customProviderForm.add": {
     "defaultMessage": "추가"
-  },
-  "customProviderForm.anthropicCompatible": {
-    "defaultMessage": "Anthropic 호환 가능"
-  },
-  "customProviderForm.apiBasePath": {
-    "defaultMessage": "API 기본 경로(선택)"
-  },
-  "customProviderForm.apiBasePathHint": {
-    "defaultMessage": "기본 API 경로를 재정의합니다. 제공업체의 기본 경로를 사용하려면 비워 두세요."
-  },
-  "customProviderForm.apiBasePathPlaceholder": {
-    "defaultMessage": "예: v1/chat/completions 또는 project_id/v1"
   },
   "customProviderForm.apiKey": {
     "defaultMessage": "API 키"
@@ -212,12 +188,6 @@
   "customProviderForm.modelsRequired": {
     "defaultMessage": "모델이 1개 이상 필요합니다."
   },
-  "customProviderForm.ollamaCompatible": {
-    "defaultMessage": "Ollama 호환 가능"
-  },
-  "customProviderForm.openaiCompatible": {
-    "defaultMessage": "OpenAI 호환 가능"
-  },
   "customProviderForm.providerType": {
     "defaultMessage": "제공업체 유형"
   },
@@ -235,9 +205,6 @@
   },
   "customProviderForm.submitError": {
     "defaultMessage": "제공업체를 저장하지 못했습니다. 설정을 확인하고 다시 시도하세요."
-  },
-  "customProviderForm.supportsStreaming": {
-    "defaultMessage": "제공업체는 스트리밍 응답을 지원합니다."
   },
   "customProviderForm.toolCalling": {
     "defaultMessage": "도구 호출"
@@ -1946,12 +1913,6 @@
   "settings.toolDetails.title": {
     "defaultMessage": "도구 호출 세부 정보"
   },
-  "settings.updates.description": {
-    "defaultMessage": "iCodex가 최상의 상태로 실행되도록 업데이트를 확인하고 설치합니다."
-  },
-  "settings.updates.title": {
-    "defaultMessage": "업데이트"
-  },
   "settings.usageStats.description": {
     "defaultMessage": "각 응답 아래에 토큰, 속도, 비용 표시"
   },
@@ -2263,81 +2224,6 @@
   },
   "toolConfirmation.gooseWouldLikeToCallWithName": {
     "defaultMessage": "iCodex가 {toolName}을 호출하려고 합니다. 허용하시겠습니까?"
-  },
-  "updateSection.autoDownload": {
-    "defaultMessage": "업데이트는 백그라운드에서 자동으로 다운로드됩니다."
-  },
-  "updateSection.autoDownloadDisabledByEnv": {
-    "defaultMessage": "자동 다운로드는 GOOSE_DISABLE_AUTO_DOWNLOAD 환경 변수를 통해 비활성화되어 있습니다."
-  },
-  "updateSection.autoDownloadDisabledNote": {
-    "defaultMessage": "자동 다운로드가 비활성화되어 있습니다. 수동으로 다운로드하려면 \"지금 다운로드\"를 클릭하세요."
-  },
-  "updateSection.autoInstallNote": {
-    "defaultMessage": "앱을 종료하면 업데이트가 자동으로 설치됩니다."
-  },
-  "updateSection.checkForUpdates": {
-    "defaultMessage": "업데이트 확인"
-  },
-  "updateSection.checking": {
-    "defaultMessage": "업데이트 확인 중..."
-  },
-  "updateSection.currentVersion": {
-    "defaultMessage": "현재 버전"
-  },
-  "updateSection.disableAutoDownload": {
-    "defaultMessage": "자동 업데이트 다운로드 비활성화"
-  },
-  "updateSection.disableAutoDownloadDesc": {
-    "defaultMessage": "활성화하면 iCodex가 새 버전을 알려주지만 자동으로 다운로드하지는 않습니다."
-  },
-  "updateSection.downloadNow": {
-    "defaultMessage": "지금 다운로드"
-  },
-  "updateSection.downloadReady": {
-    "defaultMessage": "업데이트가 다운로드되었으며 설치 준비가 완료되었습니다!"
-  },
-  "updateSection.downloadingProgress": {
-    "defaultMessage": "업데이트 다운로드 중... {percent}%"
-  },
-  "updateSection.downloadingUpdate": {
-    "defaultMessage": "업데이트 다운로드 중..."
-  },
-  "updateSection.installAndRestart": {
-    "defaultMessage": "설치 및 다시 시작"
-  },
-  "updateSection.installNowHint": {
-    "defaultMessage": "또는 지금 업데이트하려면 \"설치 및 다시 시작\"을 클릭하세요."
-  },
-  "updateSection.latestVersion": {
-    "defaultMessage": "최신 버전을 사용 중입니다!"
-  },
-  "updateSection.loading": {
-    "defaultMessage": "로드 중..."
-  },
-  "updateSection.manualInstallNote": {
-    "defaultMessage": "다운로드한 후에는 업데이트를 수동으로 설치해야 합니다."
-  },
-  "updateSection.manualInstallRequired": {
-    "defaultMessage": "이 업데이트 방법에는 수동 설치가 필요합니다."
-  },
-  "updateSection.readyInstallAuto": {
-    "defaultMessage": "✓ 업데이트가 준비되었습니다! iCodex 종료 시 설치됩니다."
-  },
-  "updateSection.readyInstallManual": {
-    "defaultMessage": "✓ 업데이트가 준비되었습니다! 설치 지침을 보려면 \"설치 및 다시 시작\"을 클릭하세요."
-  },
-  "updateSection.upToDate": {
-    "defaultMessage": "최신 상태"
-  },
-  "updateSection.updateAvailable": {
-    "defaultMessage": "업데이트가 있습니다!"
-  },
-  "updateSection.versionAvailable": {
-    "defaultMessage": "→ {version} 사용 가능"
-  },
-  "updateSection.versionIsAvailable": {
-    "defaultMessage": "버전 {version}을 사용할 수 있습니다."
   },
   "userMessage.cancel": {
     "defaultMessage": "취소"

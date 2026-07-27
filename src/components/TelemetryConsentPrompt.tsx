@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
-import { TELEMETRY_UI_ENABLED } from '../updates';
+import { TELEMETRY_UI_ENABLED } from '../featureFlags';
 import { useConfig } from './ConfigContext';
 import {
   trackTelemetryPreference,

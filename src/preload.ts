@@ -7,7 +7,6 @@ const localStorageKeyMap: Partial<Record<SettingKey, string>> = {
   theme: 'theme',
   useSystemTheme: 'use_system_theme',
   responseStyle: 'response_style',
-  seenAnnouncementIds: 'seenAnnouncementIds',
 };
 
 // Parse localStorage value based on the setting key
@@ -23,8 +22,6 @@ function parseLocalStorageValue<K extends SettingKey>(
         return (rawValue === 'true') as unknown as Settings[K];
       case 'responseStyle':
         return rawValue as Settings[K];
-      case 'seenAnnouncementIds':
-        return JSON.parse(rawValue) as Settings[K];
       default:
         return null;
     }
@@ -76,11 +73,6 @@ export interface FileResponse {
 
 const config = JSON.parse(process.argv.find((arg) => arg.startsWith('{')) || '{}');
 
-export interface UpdaterEvent {
-  event: string;
-  data?: unknown;
-}
-
 export interface CreateChatWindowOptions {
   query?: string;
   dir?: string;
@@ -106,7 +98,6 @@ export type ElectronAPI = {
   reloadApp: () => void;
   checkForOllama: () => Promise<boolean>;
   selectFileOrDirectory: (defaultPath?: string) => Promise<string | null>;
-  getBinaryPath: (binaryName: string) => Promise<string>;
   readFile: (directory: string) => Promise<FileResponse>;
   writeFile: (directory: string, content: string) => Promise<boolean>;
   ensureDirectory: (dirPath: string) => Promise<boolean>;
@@ -146,16 +137,7 @@ export type ElectronAPI = {
     tokensUpdated?: boolean;
   }) => void;
   openExternal: (url: string) => Promise<void>;
-  // Update-related functions
   getVersion: () => string;
-  checkForUpdates: () => Promise<{ updateInfo: unknown; error: string | null }>;
-  downloadUpdate: () => Promise<{ success: boolean; error: string | null }>;
-  installUpdate: () => void;
-  restartApp: () => void;
-  onUpdaterEvent: (callback: (event: UpdaterEvent) => void) => void;
-  getUpdateState: () => Promise<{ updateAvailable: boolean; latestVersion?: string } | null>;
-  isUsingGitHubFallback: () => Promise<boolean>;
-  getAutoDownloadDisabled: () => Promise<boolean>;
   closeWindow: () => void;
   openDirectoryInExplorer: (directoryPath: string) => Promise<boolean>;
   addRecentDir: (dir: string) => Promise<boolean>;
@@ -210,7 +192,6 @@ const electronAPI: ElectronAPI = {
 
   selectFileOrDirectory: (defaultPath?: string) =>
     ipcRenderer.invoke('select-file-or-directory', defaultPath),
-  getBinaryPath: (binaryName: string) => ipcRenderer.invoke('get-binary-path', binaryName),
   readFile: (filePath: string) => ipcRenderer.invoke('read-file', filePath),
   writeFile: (filePath: string, content: string) =>
     ipcRenderer.invoke('write-file', filePath, content),
@@ -315,30 +296,6 @@ const electronAPI: ElectronAPI = {
   },
   getVersion: (): string => {
     return config.GOOSE_VERSION || ipcRenderer.sendSync('get-app-version') || '';
-  },
-  checkForUpdates: (): Promise<{ updateInfo: unknown; error: string | null }> => {
-    return ipcRenderer.invoke('check-for-updates');
-  },
-  downloadUpdate: (): Promise<{ success: boolean; error: string | null }> => {
-    return ipcRenderer.invoke('download-update');
-  },
-  installUpdate: (): void => {
-    ipcRenderer.invoke('install-update');
-  },
-  restartApp: (): void => {
-    ipcRenderer.send('restart-app');
-  },
-  onUpdaterEvent: (callback: (event: UpdaterEvent) => void): void => {
-    ipcRenderer.on('updater-event', (_event, data) => callback(data));
-  },
-  getUpdateState: (): Promise<{ updateAvailable: boolean; latestVersion?: string } | null> => {
-    return ipcRenderer.invoke('get-update-state');
-  },
-  isUsingGitHubFallback: (): Promise<boolean> => {
-    return ipcRenderer.invoke('is-using-github-fallback');
-  },
-  getAutoDownloadDisabled: (): Promise<boolean> => {
-    return ipcRenderer.invoke('get-auto-download-disabled');
   },
   closeWindow: () => ipcRenderer.send('close-window'),
   openDirectoryInExplorer: (directoryPath: string) =>

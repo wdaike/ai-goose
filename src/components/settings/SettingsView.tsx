@@ -271,7 +271,7 @@ export default function SettingsView({
                   : intl.formatMessage(i18n.title)}
               </h1>
 
-              {activeTab === 'general' && <GeneralSection scrollToSection={viewOptions.section} />}
+              {activeTab === 'general' && <GeneralSection />}
               {activeTab === 'appearance' && <AppearanceSection />}
               {activeTab === 'models' && <ModelsSection setView={setView} />}
               {activeTab === 'keyboard' && <KeyboardShortcutsSection />}

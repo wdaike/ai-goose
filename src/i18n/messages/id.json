@@ -8,9 +8,6 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Gagal menyimpan ambang batas: {error}"
   },
-  "announcementModal.gotIt": {
-    "defaultMessage": "Mengerti!"
-  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Ciutkan navigasi"
   },
@@ -47,9 +44,6 @@
   "chat.requestFailed": {
     "defaultMessage": "Permintaan gagal"
   },
-  "chatInput.dictationError": {
-    "defaultMessage": "Kesalahan Dikte"
-  },
   "chatInput.failedToReadImage": {
     "defaultMessage": "Gagal membaca berkas gambar"
   },
@@ -59,17 +53,11 @@
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "Memproses berkas yang dijatuhkan..."
   },
-  "chatInput.recording": {
-    "defaultMessage": "Merekam..."
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "Memulai ulang sesi..."
   },
   "chatInput.send": {
     "defaultMessage": "Kirim"
-  },
-  "chatInput.transcribing": {
-    "defaultMessage": "Mentranskripsikan..."
   },
   "chatInput.typeMessage": {
     "defaultMessage": "Ketik pesan untuk dikirim"
@@ -97,18 +85,6 @@
   },
   "customProviderForm.add": {
     "defaultMessage": "Tambah"
-  },
-  "customProviderForm.anthropicCompatible": {
-    "defaultMessage": "Kompatibel dengan Anthropic"
-  },
-  "customProviderForm.apiBasePath": {
-    "defaultMessage": "Jalur Dasar API (opsional)"
-  },
-  "customProviderForm.apiBasePathHint": {
-    "defaultMessage": "Timpa jalur API default. Biarkan kosong untuk menggunakan jalur default penyedia."
-  },
-  "customProviderForm.apiBasePathPlaceholder": {
-    "defaultMessage": "mis., v1/chat/completions atau project_id/v1"
   },
   "customProviderForm.apiKey": {
     "defaultMessage": "Kunci API"
@@ -212,12 +188,6 @@
   "customProviderForm.modelsRequired": {
     "defaultMessage": "Setidaknya satu model wajib diisi"
   },
-  "customProviderForm.ollamaCompatible": {
-    "defaultMessage": "Kompatibel dengan Ollama"
-  },
-  "customProviderForm.openaiCompatible": {
-    "defaultMessage": "Kompatibel dengan OpenAI"
-  },
   "customProviderForm.providerType": {
     "defaultMessage": "Tipe Penyedia"
   },
@@ -235,9 +205,6 @@
   },
   "customProviderForm.submitError": {
     "defaultMessage": "Gagal menyimpan penyedia. Harap periksa konfigurasi Anda dan coba lagi."
-  },
-  "customProviderForm.supportsStreaming": {
-    "defaultMessage": "Penyedia mendukung respons streaming"
   },
   "customProviderForm.toolCalling": {
     "defaultMessage": "Pemanggilan alat"
@@ -1946,12 +1913,6 @@
   "settings.toolDetails.title": {
     "defaultMessage": "Detail panggilan alat"
   },
-  "settings.updates.description": {
-    "defaultMessage": "Periksa dan instal pembaruan agar iCodex berjalan optimal"
-  },
-  "settings.updates.title": {
-    "defaultMessage": "Pembaruan"
-  },
   "settings.usageStats.description": {
     "defaultMessage": "Tampilkan token, kecepatan, dan biaya di bawah setiap balasan"
   },
@@ -2263,81 +2224,6 @@
   },
   "toolConfirmation.gooseWouldLikeToCallWithName": {
     "defaultMessage": "iCodex ingin memanggil {toolName}. Izinkan?"
-  },
-  "updateSection.autoDownload": {
-    "defaultMessage": "iCodex akan mengunduh pembaruan di latar belakang dan menginstalnya saat Anda keluar atau memulai ulang berikutnya."
-  },
-  "updateSection.autoDownloadDisabledByEnv": {
-    "defaultMessage": "Pengunduhan otomatis dinonaktifkan melalui variabel lingkungan GOOSE_DISABLE_AUTO_DOWNLOAD."
-  },
-  "updateSection.autoDownloadDisabledNote": {
-    "defaultMessage": "Pengunduhan otomatis dinonaktifkan. Klik \"Download Now\" untuk mengunduh secara manual."
-  },
-  "updateSection.autoInstallNote": {
-    "defaultMessage": "Tidak diperlukan instalasi manual."
-  },
-  "updateSection.checkForUpdates": {
-    "defaultMessage": "Periksa Pembaruan"
-  },
-  "updateSection.checking": {
-    "defaultMessage": "Memeriksa pembaruan..."
-  },
-  "updateSection.currentVersion": {
-    "defaultMessage": "Versi saat ini"
-  },
-  "updateSection.disableAutoDownload": {
-    "defaultMessage": "Nonaktifkan pengunduhan pembaruan otomatis"
-  },
-  "updateSection.disableAutoDownloadDesc": {
-    "defaultMessage": "Saat diaktifkan, iCodex akan memberi tahu Anda tentang versi baru tetapi tidak akan mengunduhnya secara otomatis."
-  },
-  "updateSection.downloadNow": {
-    "defaultMessage": "Unduh Sekarang"
-  },
-  "updateSection.downloadReady": {
-    "defaultMessage": "Pembaruan telah diunduh dan siap dipasang!"
-  },
-  "updateSection.downloadingProgress": {
-    "defaultMessage": "Mengunduh pembaruan... {percent}%"
-  },
-  "updateSection.downloadingUpdate": {
-    "defaultMessage": "Mengunduh pembaruan..."
-  },
-  "updateSection.installAndRestart": {
-    "defaultMessage": "Instal & Mulai Ulang"
-  },
-  "updateSection.installNowHint": {
-    "defaultMessage": "Klik \"Install & Restart\" untuk memperbarui sekarang."
-  },
-  "updateSection.latestVersion": {
-    "defaultMessage": "Anda menjalankan versi terbaru!"
-  },
-  "updateSection.loading": {
-    "defaultMessage": "Memuat..."
-  },
-  "updateSection.manualInstallNote": {
-    "defaultMessage": "Setelah pengunduhan, Anda perlu menginstal pembaruan secara manual."
-  },
-  "updateSection.manualInstallRequired": {
-    "defaultMessage": "Instalasi manual diperlukan untuk metode pembaruan ini."
-  },
-  "updateSection.readyInstallAuto": {
-    "defaultMessage": "✓ Pembaruan sudah siap. Mulai ulang iCodex untuk menyelesaikan pemasangan, atau keluar saat Anda selesai."
-  },
-  "updateSection.readyInstallManual": {
-    "defaultMessage": "✓ Pembaruan sudah siap! Klik \"Install & Restart\" untuk petunjuk pemasangan."
-  },
-  "updateSection.upToDate": {
-    "defaultMessage": "(terbaru)"
-  },
-  "updateSection.updateAvailable": {
-    "defaultMessage": "Pembaruan tersedia!"
-  },
-  "updateSection.versionAvailable": {
-    "defaultMessage": "→ {version} tersedia"
-  },
-  "updateSection.versionIsAvailable": {
-    "defaultMessage": "Versi {version} tersedia"
   },
   "userMessage.cancel": {
     "defaultMessage": "Batal"

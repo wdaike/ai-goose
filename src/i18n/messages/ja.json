@@ -8,9 +8,6 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "しきい値の保存に失敗しました: {error}"
   },
-  "announcementModal.gotIt": {
-    "defaultMessage": "了解しました"
-  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "ナビを折りたたむ"
   },
@@ -47,9 +44,6 @@
   "chat.requestFailed": {
     "defaultMessage": "リクエストに失敗しました"
   },
-  "chatInput.dictationError": {
-    "defaultMessage": "音声入力エラー"
-  },
   "chatInput.failedToReadImage": {
     "defaultMessage": "画像ファイルの読み込みに失敗しました"
   },
@@ -59,17 +53,11 @@
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "ドロップしたファイルを処理中..."
   },
-  "chatInput.recording": {
-    "defaultMessage": "録音中..."
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "セッションを再起動中..."
   },
   "chatInput.send": {
     "defaultMessage": "送信"
-  },
-  "chatInput.transcribing": {
-    "defaultMessage": "文字起こし中..."
   },
   "chatInput.typeMessage": {
     "defaultMessage": "送信するメッセージを入力"
@@ -97,18 +85,6 @@
   },
   "customProviderForm.add": {
     "defaultMessage": "追加"
-  },
-  "customProviderForm.anthropicCompatible": {
-    "defaultMessage": "Anthropic互換"
-  },
-  "customProviderForm.apiBasePath": {
-    "defaultMessage": "APIベースパス（任意）"
-  },
-  "customProviderForm.apiBasePathHint": {
-    "defaultMessage": "デフォルトのAPIパスを上書きします。プロバイダーのデフォルトパスを使う場合は空欄にしてください。"
-  },
-  "customProviderForm.apiBasePathPlaceholder": {
-    "defaultMessage": "例: v1/chat/completions または project_id/v1"
   },
   "customProviderForm.apiKey": {
     "defaultMessage": "APIキー"
@@ -212,12 +188,6 @@
   "customProviderForm.modelsRequired": {
     "defaultMessage": "少なくとも1つのモデルが必要です"
   },
-  "customProviderForm.ollamaCompatible": {
-    "defaultMessage": "Ollama互換"
-  },
-  "customProviderForm.openaiCompatible": {
-    "defaultMessage": "OpenAI互換"
-  },
   "customProviderForm.providerType": {
     "defaultMessage": "プロバイダー種別"
   },
@@ -235,9 +205,6 @@
   },
   "customProviderForm.submitError": {
     "defaultMessage": "プロバイダーの保存に失敗しました。設定を確認してもう一度お試しください。"
-  },
-  "customProviderForm.supportsStreaming": {
-    "defaultMessage": "プロバイダーはストリーミング応答に対応しています"
   },
   "customProviderForm.toolCalling": {
     "defaultMessage": "ツール呼び出し"
@@ -1946,12 +1913,6 @@
   "settings.toolDetails.title": {
     "defaultMessage": "ツール呼び出しの詳細"
   },
-  "settings.updates.description": {
-    "defaultMessage": "iCodexを最新の状態に保つため、アップデートを確認してインストールします"
-  },
-  "settings.updates.title": {
-    "defaultMessage": "アップデート"
-  },
   "settings.usageStats.description": {
     "defaultMessage": "各応答の下にトークン数、速度、コストを表示します"
   },
@@ -2263,81 +2224,6 @@
   },
   "toolConfirmation.gooseWouldLikeToCallWithName": {
     "defaultMessage": "iCodexが{toolName}を実行しようとしています。許可しますか？"
-  },
-  "updateSection.autoDownload": {
-    "defaultMessage": "アップデートはバックグラウンドで自動的にダウンロードされます。"
-  },
-  "updateSection.autoDownloadDisabledByEnv": {
-    "defaultMessage": "自動ダウンロードは GOOSE_DISABLE_AUTO_DOWNLOAD 環境変数によって無効になっています。"
-  },
-  "updateSection.autoDownloadDisabledNote": {
-    "defaultMessage": "自動ダウンロードは無効です。手動でダウンロードするには「今すぐダウンロード」をクリックしてください。"
-  },
-  "updateSection.autoInstallNote": {
-    "defaultMessage": "アプリを終了すると、アップデートが自動的にインストールされます。"
-  },
-  "updateSection.checkForUpdates": {
-    "defaultMessage": "アップデートを確認"
-  },
-  "updateSection.checking": {
-    "defaultMessage": "アップデートを確認中..."
-  },
-  "updateSection.currentVersion": {
-    "defaultMessage": "現在のバージョン"
-  },
-  "updateSection.disableAutoDownload": {
-    "defaultMessage": "アップデートの自動ダウンロードを無効にする"
-  },
-  "updateSection.disableAutoDownloadDesc": {
-    "defaultMessage": "有効にすると、iCodex は新しいバージョンを通知しますが、自動的にはダウンロードしません。"
-  },
-  "updateSection.downloadNow": {
-    "defaultMessage": "今すぐダウンロード"
-  },
-  "updateSection.downloadReady": {
-    "defaultMessage": "アップデートのダウンロードが完了し、インストールの準備ができました！"
-  },
-  "updateSection.downloadingProgress": {
-    "defaultMessage": "アップデートをダウンロード中... {percent}%"
-  },
-  "updateSection.downloadingUpdate": {
-    "defaultMessage": "アップデートをダウンロード中..."
-  },
-  "updateSection.installAndRestart": {
-    "defaultMessage": "インストールして再起動"
-  },
-  "updateSection.installNowHint": {
-    "defaultMessage": "今すぐアップデートするには「インストールして再起動」をクリックしてください。"
-  },
-  "updateSection.latestVersion": {
-    "defaultMessage": "最新バージョンを使用しています！"
-  },
-  "updateSection.loading": {
-    "defaultMessage": "読み込み中..."
-  },
-  "updateSection.manualInstallNote": {
-    "defaultMessage": "ダウンロード後、アップデートを手動でインストールする必要があります。"
-  },
-  "updateSection.manualInstallRequired": {
-    "defaultMessage": "このアップデート方法では、手動インストールが必要です。"
-  },
-  "updateSection.readyInstallAuto": {
-    "defaultMessage": "✓ アップデートの準備ができました！iCodexを終了するとインストールされます。"
-  },
-  "updateSection.readyInstallManual": {
-    "defaultMessage": "✓ アップデートの準備ができました！インストール手順を表示するには「インストールして再起動」をクリックしてください。"
-  },
-  "updateSection.upToDate": {
-    "defaultMessage": "(最新)"
-  },
-  "updateSection.updateAvailable": {
-    "defaultMessage": "アップデートがあります！"
-  },
-  "updateSection.versionAvailable": {
-    "defaultMessage": "→ {version} が利用可能"
-  },
-  "updateSection.versionIsAvailable": {
-    "defaultMessage": "バージョン {version} が利用可能です"
   },
   "userMessage.cancel": {
     "defaultMessage": "キャンセル"

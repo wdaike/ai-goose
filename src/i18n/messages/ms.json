@@ -8,9 +8,6 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Gagal menyimpan ambang: {error}"
   },
-  "announcementModal.gotIt": {
-    "defaultMessage": "Faham!"
-  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Runtuhkan navigasi"
   },
@@ -47,9 +44,6 @@
   "chat.requestFailed": {
     "defaultMessage": "Permintaan gagal"
   },
-  "chatInput.dictationError": {
-    "defaultMessage": "Ralat Imlak"
-  },
   "chatInput.failedToReadImage": {
     "defaultMessage": "Gagal membaca fail imej"
   },
@@ -59,17 +53,11 @@
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "Memproses fail yang dilepaskan..."
   },
-  "chatInput.recording": {
-    "defaultMessage": "Merakam..."
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "Memulakan semula sesi..."
   },
   "chatInput.send": {
     "defaultMessage": "Hantar"
-  },
-  "chatInput.transcribing": {
-    "defaultMessage": "Mentranskripsi..."
   },
   "chatInput.typeMessage": {
     "defaultMessage": "Taip mesej untuk dihantar"
@@ -97,18 +85,6 @@
   },
   "customProviderForm.add": {
     "defaultMessage": "Tambah"
-  },
-  "customProviderForm.anthropicCompatible": {
-    "defaultMessage": "Serasi Anthropic"
-  },
-  "customProviderForm.apiBasePath": {
-    "defaultMessage": "Laluan Asas API (pilihan)"
-  },
-  "customProviderForm.apiBasePathHint": {
-    "defaultMessage": "Ganti laluan API lalai. Biarkan kosong untuk menggunakan laluan lalai pembekal."
-  },
-  "customProviderForm.apiBasePathPlaceholder": {
-    "defaultMessage": "cth., v1/chat/completions atau project_id/v1"
   },
   "customProviderForm.apiKey": {
     "defaultMessage": "Kunci API"
@@ -212,12 +188,6 @@
   "customProviderForm.modelsRequired": {
     "defaultMessage": "Sekurang-kurangnya satu model diperlukan"
   },
-  "customProviderForm.ollamaCompatible": {
-    "defaultMessage": "Serasi Ollama"
-  },
-  "customProviderForm.openaiCompatible": {
-    "defaultMessage": "Serasi OpenAI"
-  },
   "customProviderForm.providerType": {
     "defaultMessage": "Jenis Pembekal"
   },
@@ -235,9 +205,6 @@
   },
   "customProviderForm.submitError": {
     "defaultMessage": "Gagal menyimpan pembekal. Sila semak konfigurasi anda dan cuba lagi."
-  },
-  "customProviderForm.supportsStreaming": {
-    "defaultMessage": "Pembekal menyokong respons penstriman"
   },
   "customProviderForm.toolCalling": {
     "defaultMessage": "Pemanggilan alat"
@@ -1946,12 +1913,6 @@
   "settings.toolDetails.title": {
     "defaultMessage": "Butiran panggilan alat"
   },
-  "settings.updates.description": {
-    "defaultMessage": "Semak dan pasang kemas kini untuk memastikan iCodex berjalan dengan terbaik"
-  },
-  "settings.updates.title": {
-    "defaultMessage": "Kemas Kini"
-  },
   "settings.usageStats.description": {
     "defaultMessage": "Tunjukkan token, kelajuan dan kos di bawah setiap balasan"
   },
@@ -2263,81 +2224,6 @@
   },
   "toolConfirmation.gooseWouldLikeToCallWithName": {
     "defaultMessage": "iCodex ingin memanggil {toolName}. Benarkan?"
-  },
-  "updateSection.autoDownload": {
-    "defaultMessage": "iCodex akan memuat turun kemas kini di latar belakang dan memasangnya pada kali seterusnya anda keluar atau mula semula."
-  },
-  "updateSection.autoDownloadDisabledByEnv": {
-    "defaultMessage": "Muat turun automatik dilumpuhkan melalui pemboleh ubah persekitaran GOOSE_DISABLE_AUTO_DOWNLOAD."
-  },
-  "updateSection.autoDownloadDisabledNote": {
-    "defaultMessage": "Muat turun automatik dilumpuhkan. Klik \"Muat Turun Sekarang\" untuk memuat turun secara manual."
-  },
-  "updateSection.autoInstallNote": {
-    "defaultMessage": "Tiada pemasangan manual diperlukan."
-  },
-  "updateSection.checkForUpdates": {
-    "defaultMessage": "Semak Kemas Kini"
-  },
-  "updateSection.checking": {
-    "defaultMessage": "Menyemak kemas kini..."
-  },
-  "updateSection.currentVersion": {
-    "defaultMessage": "Versi semasa"
-  },
-  "updateSection.disableAutoDownload": {
-    "defaultMessage": "Lumpuhkan muat turun kemas kini automatik"
-  },
-  "updateSection.disableAutoDownloadDesc": {
-    "defaultMessage": "Apabila didayakan, iCodex akan memberitahu anda tentang versi baharu tetapi tidak akan memuat turunnya secara automatik."
-  },
-  "updateSection.downloadNow": {
-    "defaultMessage": "Muat Turun Sekarang"
-  },
-  "updateSection.downloadReady": {
-    "defaultMessage": "Kemas kini dimuat turun dan sedia untuk dipasang!"
-  },
-  "updateSection.downloadingProgress": {
-    "defaultMessage": "Memuat turun kemas kini... {percent}%"
-  },
-  "updateSection.downloadingUpdate": {
-    "defaultMessage": "Memuat turun kemas kini..."
-  },
-  "updateSection.installAndRestart": {
-    "defaultMessage": "Pasang & Mula Semula"
-  },
-  "updateSection.installNowHint": {
-    "defaultMessage": "Klik \"Pasang & Mula Semula\" untuk mengemas kini sekarang."
-  },
-  "updateSection.latestVersion": {
-    "defaultMessage": "Anda sedang menjalankan versi terkini!"
-  },
-  "updateSection.loading": {
-    "defaultMessage": "Memuatkan..."
-  },
-  "updateSection.manualInstallNote": {
-    "defaultMessage": "Selepas muat turun, anda perlu memasang kemas kini secara manual."
-  },
-  "updateSection.manualInstallRequired": {
-    "defaultMessage": "Pemasangan manual diperlukan untuk kaedah kemas kini ini."
-  },
-  "updateSection.readyInstallAuto": {
-    "defaultMessage": "✓ Kemas kini sudah sedia. Mula semula iCodex untuk menyelesaikan pemasangannya, atau keluar apabila anda selesai."
-  },
-  "updateSection.readyInstallManual": {
-    "defaultMessage": "✓ Kemas kini sudah sedia! Klik \"Pasang & Mula Semula\" untuk arahan pemasangan."
-  },
-  "updateSection.upToDate": {
-    "defaultMessage": "(terkini)"
-  },
-  "updateSection.updateAvailable": {
-    "defaultMessage": "Kemas kini tersedia!"
-  },
-  "updateSection.versionAvailable": {
-    "defaultMessage": "→ {version} tersedia"
-  },
-  "updateSection.versionIsAvailable": {
-    "defaultMessage": "Versi {version} tersedia"
   },
   "userMessage.cancel": {
     "defaultMessage": "Batal"

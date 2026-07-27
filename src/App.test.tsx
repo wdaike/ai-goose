@@ -119,10 +119,6 @@ vi.mock('./components/GoosehintsModal', () => ({
   GoosehintsModal: () => null,
 }));
 
-vi.mock('./components/AnnouncementModal', () => ({
-  default: () => null,
-}));
-
 // Create mocks that we can track and configure per test
 const mockNavigate = vi.fn();
 const mockSearchParams = new URLSearchParams();

@@ -8,9 +8,6 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "सीमा सहेजने में विफल: {error}"
   },
-  "announcementModal.gotIt": {
-    "defaultMessage": "समझ गया!"
-  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Collapse navigation"
   },
@@ -47,9 +44,6 @@
   "chat.requestFailed": {
     "defaultMessage": "अनुरोध विफल"
   },
-  "chatInput.dictationError": {
-    "defaultMessage": "श्रुतलेख त्रुटि"
-  },
   "chatInput.failedToReadImage": {
     "defaultMessage": "छवि फ़ाइल पढ़ने में विफल"
   },
@@ -59,17 +53,11 @@
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "छोड़ी गई फ़ाइलें संसाधित हो रही हैं..."
   },
-  "chatInput.recording": {
-    "defaultMessage": "रिकॉर्डिंग..."
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "सत्र पुनः प्रारंभ हो रहा है..."
   },
   "chatInput.send": {
     "defaultMessage": "भेजें"
-  },
-  "chatInput.transcribing": {
-    "defaultMessage": "प्रतिलेखन..."
   },
   "chatInput.typeMessage": {
     "defaultMessage": "भेजने के लिए एक संदेश टाइप करें"
@@ -97,18 +85,6 @@
   },
   "customProviderForm.add": {
     "defaultMessage": "जोड़ें"
-  },
-  "customProviderForm.anthropicCompatible": {
-    "defaultMessage": "Anthropic संगत"
-  },
-  "customProviderForm.apiBasePath": {
-    "defaultMessage": "API बेस पथ (वैकल्पिक)"
-  },
-  "customProviderForm.apiBasePathHint": {
-    "defaultMessage": "डिफ़ॉल्ट API पथ को ओवरराइड करें। प्रदाता के डिफ़ॉल्ट पथ का उपयोग करने के लिए खाली छोड़ दें।"
-  },
-  "customProviderForm.apiBasePathPlaceholder": {
-    "defaultMessage": "उदाहरण के लिए, v1/चैट/समापन या project_id/v1"
   },
   "customProviderForm.apiKey": {
     "defaultMessage": "API कुंजी"
@@ -212,12 +188,6 @@
   "customProviderForm.modelsRequired": {
     "defaultMessage": "कम से कम एक मॉडल आवश्यक है"
   },
-  "customProviderForm.ollamaCompatible": {
-    "defaultMessage": "Ollama संगत"
-  },
-  "customProviderForm.openaiCompatible": {
-    "defaultMessage": "OpenAI संगत"
-  },
   "customProviderForm.providerType": {
     "defaultMessage": "प्रदाता प्रकार"
   },
@@ -235,9 +205,6 @@
   },
   "customProviderForm.submitError": {
     "defaultMessage": "प्रदाता को सहेजने में विफल. कृपया अपना कॉन्फ़िगरेशन जांचें और पुनः प्रयास करें।"
-  },
-  "customProviderForm.supportsStreaming": {
-    "defaultMessage": "प्रदाता स्ट्रीमिंग प्रतिक्रियाओं का समर्थन करता है"
   },
   "customProviderForm.toolCalling": {
     "defaultMessage": "टूल कॉलिंग"
@@ -1946,12 +1913,6 @@
   "settings.toolDetails.title": {
     "defaultMessage": "टूल कॉल विवरण"
   },
-  "settings.updates.description": {
-    "defaultMessage": "iCodex को सर्वोत्तम रूप से चालू रखने के लिए अपडेट की जाँच करें और इंस्टॉल करें"
-  },
-  "settings.updates.title": {
-    "defaultMessage": "अद्यतन"
-  },
   "settings.usageStats.description": {
     "defaultMessage": "हर उत्तर के नीचे टोकन, गति और लागत दिखाएँ"
   },
@@ -2263,81 +2224,6 @@
   },
   "toolConfirmation.gooseWouldLikeToCallWithName": {
     "defaultMessage": "iCodex {toolName} को कॉल करना चाहेंगे। अनुमति दें?"
-  },
-  "updateSection.autoDownload": {
-    "defaultMessage": "अपडेट बैकग्राउंड में अपने आप डाउनलोड हो जाएगा."
-  },
-  "updateSection.autoDownloadDisabledByEnv": {
-    "defaultMessage": "स्वचालित डाउनलोड GOOSE_DISABLE_AUTO_DOWNLOAD पर्यावरण चर के माध्यम से अक्षम हैं।"
-  },
-  "updateSection.autoDownloadDisabledNote": {
-    "defaultMessage": "स्वचालित डाउनलोड अक्षम है। मैन्युअल रूप से डाउनलोड करने के लिए \"अभी डाउनलोड करें\" पर क्लिक करें।"
-  },
-  "updateSection.autoInstallNote": {
-    "defaultMessage": "जब आप ऐप छोड़ देंगे तो अपडेट अपने आप इंस्टॉल हो जाएगा।"
-  },
-  "updateSection.checkForUpdates": {
-    "defaultMessage": "अद्यतनों के लिए जाँच करें"
-  },
-  "updateSection.checking": {
-    "defaultMessage": "अपडेट की जांच की जा रही है..."
-  },
-  "updateSection.currentVersion": {
-    "defaultMessage": "वर्तमान संस्करण"
-  },
-  "updateSection.disableAutoDownload": {
-    "defaultMessage": "स्वचालित अपडेट डाउनलोड अक्षम करें"
-  },
-  "updateSection.disableAutoDownloadDesc": {
-    "defaultMessage": "सक्षम होने पर, iCodex आपको नई संस्करणों की सूचना देगा लेकिन उन्हें स्वचालित रूप से डाउनलोड नहीं करेगा।"
-  },
-  "updateSection.downloadNow": {
-    "defaultMessage": "अभी डाउनलोड करें"
-  },
-  "updateSection.downloadReady": {
-    "defaultMessage": "अपडेट डाउनलोड हो गया है और इंस्टॉल करने के लिए तैयार है!"
-  },
-  "updateSection.downloadingProgress": {
-    "defaultMessage": "अपडेट डाउनलोड हो रहा है... {percent}%"
-  },
-  "updateSection.downloadingUpdate": {
-    "defaultMessage": "अपडेट डाउनलोड हो रहा है..."
-  },
-  "updateSection.installAndRestart": {
-    "defaultMessage": "स्थापित करें और पुनः प्रारंभ करें"
-  },
-  "updateSection.installNowHint": {
-    "defaultMessage": "या अभी अपडेट करने के लिए \"इंस्टॉल करें और पुनरारंभ करें\" पर क्लिक करें।"
-  },
-  "updateSection.latestVersion": {
-    "defaultMessage": "आप नवीनतम संस्करण चला रहे हैं!"
-  },
-  "updateSection.loading": {
-    "defaultMessage": "लोड हो रहा है..."
-  },
-  "updateSection.manualInstallNote": {
-    "defaultMessage": "डाउनलोड करने के बाद, आपको अपडेट को मैन्युअल रूप से इंस्टॉल करना होगा।"
-  },
-  "updateSection.manualInstallRequired": {
-    "defaultMessage": "इस अद्यतन विधि के लिए मैन्युअल स्थापना आवश्यक है."
-  },
-  "updateSection.readyInstallAuto": {
-    "defaultMessage": "✓ अपडेट तैयार है! जब आप iCodex छोड़ देंगे तो यह इंस्टॉल हो जाएगा।"
-  },
-  "updateSection.readyInstallManual": {
-    "defaultMessage": "✓ अपडेट तैयार है! इंस्टॉलेशन निर्देशों के लिए \"इंस्टॉल करें और पुनरारंभ करें\" पर क्लिक करें।"
-  },
-  "updateSection.upToDate": {
-    "defaultMessage": "(अप टू डेट)"
-  },
-  "updateSection.updateAvailable": {
-    "defaultMessage": "उपलब्ध अद्यतन!"
-  },
-  "updateSection.versionAvailable": {
-    "defaultMessage": "→ {version} उपलब्ध"
-  },
-  "updateSection.versionIsAvailable": {
-    "defaultMessage": "संस्करण {version} उपलब्ध है"
   },
   "userMessage.cancel": {
     "defaultMessage": "रद्द करें"

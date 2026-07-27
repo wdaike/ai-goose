@@ -1,17 +1,9 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useCallback,
-} from 'react';
+import React, { useRef, useState, useEffect, useLayoutEffect, useMemo, useCallback } from 'react';
 import { ArrowUp, Box, Plus } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/Tooltip';
 import { Button } from './ui/button';
 import type { View, ViewOptions } from '../utils/navigationUtils';
 import Stop from './ui/Stop';
-import { Microphone } from './icons';
 import { ChatState } from '../types/chatState';
 import debounce from 'lodash/debounce';
 import { LocalMessageStorage } from '../utils/localMessageStorage';
@@ -20,8 +12,6 @@ import { PermissionModeChip } from './bottom_menu/PermissionModeChip';
 import { cn } from '../utils';
 import { useModelAndProvider } from './ModelAndProviderContext';
 import { useAppSetting } from '../hooks/useAppSetting';
-import { useAudioRecorder } from '../hooks/useAudioRecorder';
-import { toastError } from '../toasts';
 import MentionPopover, { DisplayItem, DisplayItemWithMatch } from './MentionPopover';
 import { ComposerAttachments } from './ComposerAttachments';
 import { DroppedFile, useFileDrop } from '../hooks/useFileDrop';
@@ -29,7 +19,7 @@ import { MessageQueue, QueuedMessage } from './MessageQueue';
 import { detectInterruption } from '../utils/interruptionDetector';
 import type { Message } from '../types/message';
 import { getInitialWorkingDir } from '../utils/workingDir';
-import { trackFileAttached, trackVoiceDictation } from '../utils/analytics';
+import { trackFileAttached } from '../utils/analytics';
 import { UserInput, ImageData, FileAttachment } from '../types/message';
 import { usePastedImages, MAX_IMAGES_PER_MESSAGE } from '../hooks/usePastedImages';
 import { defineMessages, useIntl } from '../i18n';
@@ -75,10 +65,6 @@ const i18n = defineMessages({
     id: 'chatInput.placeholder',
     defaultMessage: 'Do anything',
   },
-  dictationError: {
-    id: 'chatInput.dictationError',
-    defaultMessage: 'Dictation Error',
-  },
   removeSkill: {
     id: 'chatInput.removeSkill',
     defaultMessage: 'Remove skill',
@@ -90,14 +76,6 @@ const i18n = defineMessages({
   processingDroppedFiles: {
     id: 'chatInput.processingDroppedFiles',
     defaultMessage: 'Processing dropped files...',
-  },
-  recording: {
-    id: 'chatInput.recording',
-    defaultMessage: 'Recording...',
-  },
-  transcribing: {
-    id: 'chatInput.transcribing',
-    defaultMessage: 'Transcribing...',
   },
   restartingSession: {
     id: 'chatInput.restartingSession',
@@ -407,56 +385,6 @@ export default function ChatInput({
     setSkillBadgeWidth(skillBadgeRef.current?.offsetWidth ?? 0);
   }, [selectedSkill]);
 
-  // Audio recorder hook for voice dictation
-  const {
-    isEnabled,
-    dictationProvider,
-    isRecording,
-    isTranscribing,
-    startRecording,
-    stopRecording,
-  } = useAudioRecorder({
-    onTranscription: (text) => {
-      trackVoiceDictation('transcribed');
-
-      let filteredText = text.replace(/\([^)]*\)/g, '').trim();
-
-      if (!filteredText) {
-        return;
-      }
-
-      const shouldAutoSubmit = /\bsubmit[.,!?;'"\s]*$/i.test(filteredText);
-
-      const cleanedText = shouldAutoSubmit
-        ? filteredText.replace(/\bsubmit[.,!?;'"\s]*$/i, '').trim()
-        : filteredText;
-
-      const newValue =
-        displayValue.trim() && cleanedText
-          ? `${displayValue.trim()} ${cleanedText}`
-          : displayValue.trim() || cleanedText;
-
-      setDisplayValue(newValue);
-      setValue(newValue);
-
-      if (shouldAutoSubmit && newValue.trim()) {
-        trackVoiceDictation('auto_submit');
-        setTimeout(() => {
-          performSubmit(newValue);
-        }, 100);
-      } else {
-        textAreaRef.current?.focus();
-      }
-    },
-    onError: (message) => {
-      const errorType = 'DictationError';
-      trackVoiceDictation('error', undefined, errorType);
-      toastError({
-        title: intl.formatMessage(i18n.dictationError),
-        msg: message,
-      });
-    },
-  });
   const internalTextAreaRef = useRef<HTMLTextAreaElement>(null);
   const textAreaRef = inputRef || internalTextAreaRef;
 
@@ -649,11 +577,15 @@ export default function ChatInput({
     if (localDroppedFiles.length > 0) {
       setLocalDroppedFiles([]);
     }
-  }, [droppedFiles.length, localDroppedFiles.length, onFilesProcessed, setLocalDroppedFiles, clearImages]);
+  }, [
+    droppedFiles.length,
+    localDroppedFiles.length,
+    onFilesProcessed,
+    setLocalDroppedFiles,
+    clearImages,
+  ]);
 
   const handlePaste = async (evt: React.ClipboardEvent<HTMLTextAreaElement>) => {
-    if (isRecording) return;
-
     const files = Array.from(evt.clipboardData.files || []);
     const imageFiles = files.filter((file) => file.type.startsWith('image/'));
 
@@ -1062,8 +994,6 @@ export default function ChatInput({
     !hasSubmittableContent ||
     isAnyImageLoading ||
     isAnyDroppedFileLoading ||
-    isRecording ||
-    isTranscribing ||
     queueProcessingBlocked ||
     chatState === ChatState.RestartingAgent;
 
@@ -1071,8 +1001,6 @@ export default function ChatInput({
     if (queueProcessingBlocked) return intl.formatMessage(i18n.waitingForCancellation);
     if (isAnyImageLoading) return intl.formatMessage(i18n.waitingForImages);
     if (isAnyDroppedFileLoading) return intl.formatMessage(i18n.processingDroppedFiles);
-    if (isRecording) return intl.formatMessage(i18n.recording);
-    if (isTranscribing) return intl.formatMessage(i18n.transcribing);
     if (chatState === ChatState.RestartingAgent) return intl.formatMessage(i18n.restartingSession);
     if (!hasSubmittableContent) return intl.formatMessage(i18n.typeMessage);
     return intl.formatMessage(i18n.send);
@@ -1281,7 +1209,7 @@ export default function ChatInput({
             data-testid="chat-input"
             autoFocus
             id="dynamic-textarea"
-            placeholder={isRecording ? '' : intl.formatMessage(i18n.placeholder)}
+            placeholder={intl.formatMessage(i18n.placeholder)}
             value={displayValue}
             onChange={handleChange}
             onCompositionStart={handleCompositionStart}
@@ -1292,7 +1220,6 @@ export default function ChatInput({
             onBlur={() => setIsFocused(false)}
             ref={textAreaRef}
             rows={1}
-            readOnly={isRecording}
             style={{
               minHeight: `${minTextareaHeight}px`,
               maxHeight: `${maxHeight}px`,
@@ -1301,32 +1228,11 @@ export default function ChatInput({
             }}
             className="w-full outline-none border-none focus:ring-0 bg-transparent px-3 pt-2.5 pb-1.5 text-base leading-6 resize-none text-text-primary placeholder:text-text-tertiary"
           />
-
-          {/* Recording/transcribing status indicator (floats above the bottom bar) */}
-          {(isRecording || isTranscribing) && (
-            <div className="absolute right-2 -bottom-2 bg-background-primary px-2 py-1 rounded text-xs whitespace-nowrap shadow-md border border-border-primary">
-              <span className="flex items-center gap-2">
-                {isRecording && (
-                  <span className="flex items-center gap-1 text-text-secondary">
-                    <span className="inline-block w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                    Listening
-                  </span>
-                )}
-                {isRecording && isTranscribing && <span className="text-text-secondary">•</span>}
-                {isTranscribing && (
-                  <span className="flex items-center gap-1 text-blue-500">
-                    <span className="inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                    Transcribing
-                  </span>
-                )}
-              </span>
-            </div>
-          )}
         </div>
       </form>
 
       {/* Bottom action bar — 1:1 ChatGPT composer layout. Left: attach +
-          permission mode. Right: model picker, mic, send. */}
+          permission mode. Right: model picker and send. */}
       <div className="flex flex-row items-center gap-1 px-2 pb-2 pt-1 relative">
         {/* Left: attach — plain icon, no ring */}
         <Tooltip>
@@ -1362,52 +1268,6 @@ export default function ChatInput({
           sessionLoaded={sessionLoaded}
           onModelChanged={setModelOverride}
         />
-
-        {/* Right: mic — ghost icon, no background when idle */}
-        {dictationProvider && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                type="button"
-                variant="ghost"
-                size="default"
-                shape="round"
-                onClick={() => {
-                  if (!isEnabled) return;
-                  if (isRecording) {
-                    trackVoiceDictation('stop');
-                    stopRecording();
-                  } else {
-                    trackVoiceDictation('start');
-                    startRecording();
-                  }
-                }}
-                // Keep the button hoverable when only !isEnabled so the
-                // "Dictation not configured" tooltip stays reachable.
-                // We still natively disable while transcribing.
-                disabled={isTranscribing}
-                aria-disabled={!isEnabled}
-                className={cn(
-                  'transition-colors',
-                  isRecording
-                    ? 'text-red-500 hover:text-red-600'
-                    : 'text-text-primary/70 hover:text-text-primary',
-                  isTranscribing && 'animate-pulse',
-                  !isEnabled && 'opacity-50 cursor-not-allowed'
-                )}
-              >
-                <Microphone size={18} />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              {!isEnabled ? (
-                <p>Dictation not configured (Settings)</p>
-              ) : (
-                <p>Voice dictation{isRecording ? '' : ' • Say "submit" to send'}</p>
-              )}
-            </TooltipContent>
-          </Tooltip>
-        )}
 
         {/* Right: send / stop — soft gray circle with up-arrow */}
         {isLoading && !hasSubmittableContent ? (

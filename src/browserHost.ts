@@ -4,7 +4,6 @@ import type {
   ElectronAPI,
   FileResponse,
   MessageBoxOptions,
-  UpdaterEvent,
 } from './preload';
 import { codex } from './codex/client';
 import { installBrowserCodex } from './codex/browserCodex';
@@ -148,7 +147,6 @@ const browserElectron: ElectronAPI = {
   reloadApp: () => window.location.reload(),
   checkForOllama: async () => false,
   selectFileOrDirectory: async () => null,
-  getBinaryPath: async () => '',
   readFile: (filePath) => codexReadFile(filePath),
   writeFile: async (filePath, content) => {
     try {
@@ -234,14 +232,6 @@ const browserElectron: ElectronAPI = {
   broadcastThemeChange: (themeData) => emit('theme-changed', themeData),
   openExternal: async (url) => openExternal(url),
   getVersion: () => String(appConfig.GOOSE_VERSION),
-  checkForUpdates: async () => ({ updateInfo: null, error: 'Updates are managed by the host' }),
-  downloadUpdate: async () => ({ success: false, error: 'Updates are managed by the host' }),
-  installUpdate: () => undefined,
-  restartApp: () => window.location.reload(),
-  onUpdaterEvent: (_callback: (event: UpdaterEvent) => void) => undefined,
-  getUpdateState: async () => null,
-  isUsingGitHubFallback: async () => false,
-  getAutoDownloadDisabled: async () => true,
   closeWindow: () => window.close(),
   openDirectoryInExplorer: async () => false,
   addRecentDir: async (directory) => {

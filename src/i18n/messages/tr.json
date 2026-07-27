@@ -8,9 +8,6 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Eşik kaydedilemedi: {error}"
   },
-  "announcementModal.gotIt": {
-    "defaultMessage": "Anladım!"
-  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Collapse navigation"
   },
@@ -47,9 +44,6 @@
   "chat.requestFailed": {
     "defaultMessage": "İstek başarısız oldu"
   },
-  "chatInput.dictationError": {
-    "defaultMessage": "Dikte Hatası"
-  },
   "chatInput.failedToReadImage": {
     "defaultMessage": "Resim dosyası okunamadı"
   },
@@ -59,17 +53,11 @@
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "Bırakılan dosyalar işleniyor..."
   },
-  "chatInput.recording": {
-    "defaultMessage": "Kaydediliyor..."
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "Oturum yeniden başlatılıyor..."
   },
   "chatInput.send": {
     "defaultMessage": "Gönder"
-  },
-  "chatInput.transcribing": {
-    "defaultMessage": "Metne dönüştürülüyor..."
   },
   "chatInput.typeMessage": {
     "defaultMessage": "Göndermek için bir mesaj yazın"
@@ -97,18 +85,6 @@
   },
   "customProviderForm.add": {
     "defaultMessage": "Ekle"
-  },
-  "customProviderForm.anthropicCompatible": {
-    "defaultMessage": "Anthropic Uyumlu"
-  },
-  "customProviderForm.apiBasePath": {
-    "defaultMessage": "API Temel Yol (isteğe bağlı)"
-  },
-  "customProviderForm.apiBasePathHint": {
-    "defaultMessage": "Varsayılan API yolunu geçersiz kılın. Sağlayıcının varsayılan yolunu kullanmak için boş bırakın."
-  },
-  "customProviderForm.apiBasePathPlaceholder": {
-    "defaultMessage": "ör. v1/sohbet/tamamlamalar veya proje_id/v1"
   },
   "customProviderForm.apiKey": {
     "defaultMessage": "API Anahtarı"
@@ -212,12 +188,6 @@
   "customProviderForm.modelsRequired": {
     "defaultMessage": "En az bir model gerekli"
   },
-  "customProviderForm.ollamaCompatible": {
-    "defaultMessage": "Ollama Uyumlu"
-  },
-  "customProviderForm.openaiCompatible": {
-    "defaultMessage": "OpenAI Uyumlu"
-  },
   "customProviderForm.providerType": {
     "defaultMessage": "Sağlayıcı Türü"
   },
@@ -235,9 +205,6 @@
   },
   "customProviderForm.submitError": {
     "defaultMessage": "Sağlayıcı kaydedilemedi. Lütfen yapılandırmanızı kontrol edip tekrar deneyin."
-  },
-  "customProviderForm.supportsStreaming": {
-    "defaultMessage": "Sağlayıcı akış yanıtlarını destekler"
   },
   "customProviderForm.toolCalling": {
     "defaultMessage": "Takım çağırma"
@@ -1946,12 +1913,6 @@
   "settings.toolDetails.title": {
     "defaultMessage": "Araç çağrısı ayrıntıları"
   },
-  "settings.updates.description": {
-    "defaultMessage": "iCodex'nin en iyi şekilde çalışmasını sağlamak için güncellemeleri kontrol edin ve yükleyin"
-  },
-  "settings.updates.title": {
-    "defaultMessage": "Güncellemeler"
-  },
   "settings.usageStats.description": {
     "defaultMessage": "Her yanıtın altında token, hız ve maliyeti göster"
   },
@@ -2263,81 +2224,6 @@
   },
   "toolConfirmation.gooseWouldLikeToCallWithName": {
     "defaultMessage": "iCodex, {toolName}'yi aramak istiyor. İzin vermek?"
-  },
-  "updateSection.autoDownload": {
-    "defaultMessage": "Güncelleme arka planda otomatik olarak indirilecektir."
-  },
-  "updateSection.autoDownloadDisabledByEnv": {
-    "defaultMessage": "Otomatik indirmeler GOOSE_DISABLE_AUTO_DOWNLOAD ortam değişkeni aracılığıyla devre dışı bırakılmıştır."
-  },
-  "updateSection.autoDownloadDisabledNote": {
-    "defaultMessage": "Otomatik indirme devre dışı. Manuel olarak indirmek için \"Şimdi İndir\"e tıklayın."
-  },
-  "updateSection.autoInstallNote": {
-    "defaultMessage": "Uygulamadan çıktığınızda güncelleme otomatik olarak yüklenecektir."
-  },
-  "updateSection.checkForUpdates": {
-    "defaultMessage": "Güncellemeleri Kontrol Et"
-  },
-  "updateSection.checking": {
-    "defaultMessage": "Güncellemeler kontrol ediliyor..."
-  },
-  "updateSection.currentVersion": {
-    "defaultMessage": "Güncel sürüm"
-  },
-  "updateSection.disableAutoDownload": {
-    "defaultMessage": "Otomatik güncelleme indirmelerini devre dışı bırak"
-  },
-  "updateSection.disableAutoDownloadDesc": {
-    "defaultMessage": "Etkinleştirildiğinde, iCodex yeni sürümleri bildirir ancak bunları otomatik olarak indirmez."
-  },
-  "updateSection.downloadNow": {
-    "defaultMessage": "Şimdi İndir"
-  },
-  "updateSection.downloadReady": {
-    "defaultMessage": "Güncelleme indirildi ve kuruluma hazır!"
-  },
-  "updateSection.downloadingProgress": {
-    "defaultMessage": "Güncelleme indiriliyor... {percent}%"
-  },
-  "updateSection.downloadingUpdate": {
-    "defaultMessage": "Güncelleme indiriliyor..."
-  },
-  "updateSection.installAndRestart": {
-    "defaultMessage": "Yükle ve Yeniden Başlat"
-  },
-  "updateSection.installNowHint": {
-    "defaultMessage": "Veya şimdi güncellemek için \"Yükle ve Yeniden Başlat\"ı tıklayın."
-  },
-  "updateSection.latestVersion": {
-    "defaultMessage": "En son sürümü çalıştırıyorsunuz!"
-  },
-  "updateSection.loading": {
-    "defaultMessage": "Yükleniyor..."
-  },
-  "updateSection.manualInstallNote": {
-    "defaultMessage": "İndirdikten sonra güncellemeyi manuel olarak yüklemeniz gerekecektir."
-  },
-  "updateSection.manualInstallRequired": {
-    "defaultMessage": "Bu güncelleme yöntemi için manuel kurulum gereklidir."
-  },
-  "updateSection.readyInstallAuto": {
-    "defaultMessage": "✓ Güncelleme hazır! iCodex'den çıktığınızda yüklenecektir."
-  },
-  "updateSection.readyInstallManual": {
-    "defaultMessage": "✓ Güncelleme hazır! Kurulum talimatları için \"Yükle ve Yeniden Başlat\"a tıklayın."
-  },
-  "updateSection.upToDate": {
-    "defaultMessage": "(güncel)"
-  },
-  "updateSection.updateAvailable": {
-    "defaultMessage": "Güncelleme mevcut!"
-  },
-  "updateSection.versionAvailable": {
-    "defaultMessage": "→ {version} mevcut"
-  },
-  "updateSection.versionIsAvailable": {
-    "defaultMessage": "Sürüm {version} mevcut"
   },
   "userMessage.cancel": {
     "defaultMessage": "İptal"

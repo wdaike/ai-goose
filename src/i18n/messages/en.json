@@ -8,9 +8,6 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Failed to save threshold: {error}"
   },
-  "announcementModal.gotIt": {
-    "defaultMessage": "Got it!"
-  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Collapse navigation"
   },
@@ -158,9 +155,6 @@
   "chat.requestFailed": {
     "defaultMessage": "Request failed"
   },
-  "chatInput.dictationError": {
-    "defaultMessage": "Dictation Error"
-  },
   "chatInput.failedToReadImage": {
     "defaultMessage": "Failed to read image file"
   },
@@ -170,9 +164,6 @@
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "Processing dropped files..."
   },
-  "chatInput.recording": {
-    "defaultMessage": "Recording..."
-  },
   "chatInput.removeSkill": {
     "defaultMessage": "Remove skill"
   },
@@ -181,9 +172,6 @@
   },
   "chatInput.send": {
     "defaultMessage": "Send"
-  },
-  "chatInput.transcribing": {
-    "defaultMessage": "Transcribing..."
   },
   "chatInput.typeMessage": {
     "defaultMessage": "Type a message to send"
@@ -2336,12 +2324,6 @@
   "settings.toolDetails.title": {
     "defaultMessage": "Tool call details"
   },
-  "settings.updates.description": {
-    "defaultMessage": "Check for and install updates to keep iCodex running at its best"
-  },
-  "settings.updates.title": {
-    "defaultMessage": "Updates"
-  },
   "settings.usageStats.description": {
     "defaultMessage": "Show tokens, speed, and cost under each response"
   },
@@ -2683,81 +2665,6 @@
   },
   "toolConfirmation.gooseWouldLikeToCallWithName": {
     "defaultMessage": "iCodex would like to call {toolName}. Allow?"
-  },
-  "updateSection.autoDownload": {
-    "defaultMessage": "iCodex will download the update in the background and install it the next time you quit or restart."
-  },
-  "updateSection.autoDownloadDisabledByEnv": {
-    "defaultMessage": "Automatic downloads are disabled via the GOOSE_DISABLE_AUTO_DOWNLOAD environment variable."
-  },
-  "updateSection.autoDownloadDisabledNote": {
-    "defaultMessage": "Automatic download is disabled. Click \"Download Now\" to download manually."
-  },
-  "updateSection.autoInstallNote": {
-    "defaultMessage": "No manual install is needed."
-  },
-  "updateSection.checkForUpdates": {
-    "defaultMessage": "Check for Updates"
-  },
-  "updateSection.checking": {
-    "defaultMessage": "Checking for updates..."
-  },
-  "updateSection.currentVersion": {
-    "defaultMessage": "Current version"
-  },
-  "updateSection.disableAutoDownload": {
-    "defaultMessage": "Disable automatic update downloads"
-  },
-  "updateSection.disableAutoDownloadDesc": {
-    "defaultMessage": "When enabled, iCodex will notify you of new versions but will not download them automatically."
-  },
-  "updateSection.downloadNow": {
-    "defaultMessage": "Download Now"
-  },
-  "updateSection.downloadReady": {
-    "defaultMessage": "Update downloaded and ready to install!"
-  },
-  "updateSection.downloadingProgress": {
-    "defaultMessage": "Downloading update... {percent}%"
-  },
-  "updateSection.downloadingUpdate": {
-    "defaultMessage": "Downloading update..."
-  },
-  "updateSection.installAndRestart": {
-    "defaultMessage": "Install & Restart"
-  },
-  "updateSection.installNowHint": {
-    "defaultMessage": "Click \"Install & Restart\" to update now."
-  },
-  "updateSection.latestVersion": {
-    "defaultMessage": "You are running the latest version!"
-  },
-  "updateSection.loading": {
-    "defaultMessage": "Loading..."
-  },
-  "updateSection.manualInstallNote": {
-    "defaultMessage": "After download, you'll need to manually install the update."
-  },
-  "updateSection.manualInstallRequired": {
-    "defaultMessage": "Manual installation required for this update method."
-  },
-  "updateSection.readyInstallAuto": {
-    "defaultMessage": "✓ Update is ready. Restart iCodex to finish installing it, or quit when you're done."
-  },
-  "updateSection.readyInstallManual": {
-    "defaultMessage": "✓ Update is ready! Click \"Install & Restart\" for installation instructions."
-  },
-  "updateSection.upToDate": {
-    "defaultMessage": "(up to date)"
-  },
-  "updateSection.updateAvailable": {
-    "defaultMessage": "Update available!"
-  },
-  "updateSection.versionAvailable": {
-    "defaultMessage": "→ {version} available"
-  },
-  "updateSection.versionIsAvailable": {
-    "defaultMessage": "Version {version} is available"
   },
   "userMessage.cancel": {
     "defaultMessage": "Cancel"

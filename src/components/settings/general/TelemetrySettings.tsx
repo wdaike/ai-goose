@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Switch } from '../../ui/switch';
 import { SettingsGroup, SettingsRow, SettingsSection } from '../SettingsGroup';
 import { useConfig } from '../../ConfigContext';
-import { TELEMETRY_UI_ENABLED } from '../../../updates';
+import { TELEMETRY_UI_ENABLED } from '../../../featureFlags';
 import PrivacyInfoModal from '../../onboarding/PrivacyInfoModal';
 import { toastService } from '../../../toasts';
 import {

@@ -8,9 +8,6 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Не удалось сохранить пороговое значение: {error}"
   },
-  "announcementModal.gotIt": {
-    "defaultMessage": "Понятно!"
-  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Collapse navigation"
   },
@@ -47,9 +44,6 @@
   "chat.requestFailed": {
     "defaultMessage": "Не удалось выполнить запрос"
   },
-  "chatInput.dictationError": {
-    "defaultMessage": "Ошибка диктовки"
-  },
   "chatInput.failedToReadImage": {
     "defaultMessage": "Не удалось прочитать файл изображения"
   },
@@ -59,17 +53,11 @@
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "Обработка перетащенных файлов..."
   },
-  "chatInput.recording": {
-    "defaultMessage": "Запись..."
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "Перезапуск сеанса..."
   },
   "chatInput.send": {
     "defaultMessage": "Отправить"
-  },
-  "chatInput.transcribing": {
-    "defaultMessage": "Расшифровка..."
   },
   "chatInput.typeMessage": {
     "defaultMessage": "Введите сообщение для отправки"
@@ -97,18 +85,6 @@
   },
   "customProviderForm.add": {
     "defaultMessage": "Добавить"
-  },
-  "customProviderForm.anthropicCompatible": {
-    "defaultMessage": "Совместимо с Anthropic"
-  },
-  "customProviderForm.apiBasePath": {
-    "defaultMessage": "Базовый путь API (необязательно)"
-  },
-  "customProviderForm.apiBasePathHint": {
-    "defaultMessage": "Переопределите путь API по умолчанию. Оставьте пустым, чтобы использовать путь провайдера по умолчанию."
-  },
-  "customProviderForm.apiBasePathPlaceholder": {
-    "defaultMessage": "например, v1/chat/completions или project_id/v1"
   },
   "customProviderForm.apiKey": {
     "defaultMessage": "API-ключ"
@@ -212,12 +188,6 @@
   "customProviderForm.modelsRequired": {
     "defaultMessage": "Требуется хотя бы одна модель"
   },
-  "customProviderForm.ollamaCompatible": {
-    "defaultMessage": "Совместимо с Ollama"
-  },
-  "customProviderForm.openaiCompatible": {
-    "defaultMessage": "Совместимо с OpenAI"
-  },
   "customProviderForm.providerType": {
     "defaultMessage": "Тип провайдера"
   },
@@ -235,9 +205,6 @@
   },
   "customProviderForm.submitError": {
     "defaultMessage": "Не удалось сохранить провайдера. Проверьте конфигурацию и повторите попытку."
-  },
-  "customProviderForm.supportsStreaming": {
-    "defaultMessage": "Провайдер поддерживает потоковые ответы"
   },
   "customProviderForm.toolCalling": {
     "defaultMessage": "Вызов инструментов"
@@ -1946,12 +1913,6 @@
   "settings.toolDetails.title": {
     "defaultMessage": "Детали вызовов инструментов"
   },
-  "settings.updates.description": {
-    "defaultMessage": "Проверяйте и устанавливайте обновления, чтобы iCodex работал оптимально"
-  },
-  "settings.updates.title": {
-    "defaultMessage": "Обновления"
-  },
   "settings.usageStats.description": {
     "defaultMessage": "Показывать токены, скорость и стоимость под каждым ответом"
   },
@@ -2263,81 +2224,6 @@
   },
   "toolConfirmation.gooseWouldLikeToCallWithName": {
     "defaultMessage": "iCodex хочет вызвать {toolName}. Разрешить?"
-  },
-  "updateSection.autoDownload": {
-    "defaultMessage": "Обновление будет автоматически скачано в фоновом режиме."
-  },
-  "updateSection.autoDownloadDisabledByEnv": {
-    "defaultMessage": "Автоматическая загрузка отключена через переменную окружения GOOSE_DISABLE_AUTO_DOWNLOAD."
-  },
-  "updateSection.autoDownloadDisabledNote": {
-    "defaultMessage": "Автоматическая загрузка отключена. Нажмите «Скачать сейчас», чтобы загрузить вручную."
-  },
-  "updateSection.autoInstallNote": {
-    "defaultMessage": "Обновление будет установлено автоматически при выходе из приложения."
-  },
-  "updateSection.checkForUpdates": {
-    "defaultMessage": "Проверить обновления"
-  },
-  "updateSection.checking": {
-    "defaultMessage": "Проверка обновлений..."
-  },
-  "updateSection.currentVersion": {
-    "defaultMessage": "Текущая версия"
-  },
-  "updateSection.disableAutoDownload": {
-    "defaultMessage": "Отключить автоматическую загрузку обновлений"
-  },
-  "updateSection.disableAutoDownloadDesc": {
-    "defaultMessage": "Когда включено, iCodex будет уведомлять о новых версиях, но не будет загружать их автоматически."
-  },
-  "updateSection.downloadNow": {
-    "defaultMessage": "Скачать сейчас"
-  },
-  "updateSection.downloadReady": {
-    "defaultMessage": "Обновление скачано и готово к установке!"
-  },
-  "updateSection.downloadingProgress": {
-    "defaultMessage": "Скачивание обновления... {percent}%"
-  },
-  "updateSection.downloadingUpdate": {
-    "defaultMessage": "Скачивание обновления..."
-  },
-  "updateSection.installAndRestart": {
-    "defaultMessage": "Установить и перезапустить"
-  },
-  "updateSection.installNowHint": {
-    "defaultMessage": "Или нажмите «Установить и перезапустить», чтобы обновиться сейчас."
-  },
-  "updateSection.latestVersion": {
-    "defaultMessage": "У вас установлена последняя версия!"
-  },
-  "updateSection.loading": {
-    "defaultMessage": "Загрузка..."
-  },
-  "updateSection.manualInstallNote": {
-    "defaultMessage": "После скачивания нужно будет установить обновление вручную."
-  },
-  "updateSection.manualInstallRequired": {
-    "defaultMessage": "Для этого способа обновления требуется ручная установка."
-  },
-  "updateSection.readyInstallAuto": {
-    "defaultMessage": "✓ Обновление готово! Оно будет установлено при выходе из iCodex."
-  },
-  "updateSection.readyInstallManual": {
-    "defaultMessage": "✓ Обновление готово! Нажмите «Установить и перезапустить», чтобы получить инструкции по установке."
-  },
-  "updateSection.upToDate": {
-    "defaultMessage": "(актуально)"
-  },
-  "updateSection.updateAvailable": {
-    "defaultMessage": "Доступно обновление!"
-  },
-  "updateSection.versionAvailable": {
-    "defaultMessage": "→ доступна {version}"
-  },
-  "updateSection.versionIsAvailable": {
-    "defaultMessage": "Доступна версия {version}"
   },
   "userMessage.cancel": {
     "defaultMessage": "Отмена"

@@ -8,9 +8,6 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Impossibile salvare la soglia: {error}"
   },
-  "announcementModal.gotIt": {
-    "defaultMessage": "Capito!"
-  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Comprimi navigazione"
   },
@@ -47,9 +44,6 @@
   "chat.requestFailed": {
     "defaultMessage": "Richiesta non riuscita"
   },
-  "chatInput.dictationError": {
-    "defaultMessage": "Errore di dettatura"
-  },
   "chatInput.failedToReadImage": {
     "defaultMessage": "Impossibile leggere il file immagine"
   },
@@ -59,17 +53,11 @@
   "chatInput.processingDroppedFiles": {
     "defaultMessage": "Elaborazione dei file rilasciati..."
   },
-  "chatInput.recording": {
-    "defaultMessage": "Registrazione in corso..."
-  },
   "chatInput.restartingSession": {
     "defaultMessage": "Riavvio della sessione..."
   },
   "chatInput.send": {
     "defaultMessage": "Invia"
-  },
-  "chatInput.transcribing": {
-    "defaultMessage": "Trascrizione in corso..."
   },
   "chatInput.typeMessage": {
     "defaultMessage": "Scrivi un messaggio da inviare"
@@ -97,18 +85,6 @@
   },
   "customProviderForm.add": {
     "defaultMessage": "Aggiungi"
-  },
-  "customProviderForm.anthropicCompatible": {
-    "defaultMessage": "Compatibile con Anthropic"
-  },
-  "customProviderForm.apiBasePath": {
-    "defaultMessage": "Percorso base API (facoltativo)"
-  },
-  "customProviderForm.apiBasePathHint": {
-    "defaultMessage": "Sostituisci il percorso API predefinito. Lascia vuoto per usare il percorso predefinito del provider."
-  },
-  "customProviderForm.apiBasePathPlaceholder": {
-    "defaultMessage": "ad es., v1/chat/completions o project_id/v1"
   },
   "customProviderForm.apiKey": {
     "defaultMessage": "Chiave API"
@@ -212,12 +188,6 @@
   "customProviderForm.modelsRequired": {
     "defaultMessage": "È richiesto almeno un modello"
   },
-  "customProviderForm.ollamaCompatible": {
-    "defaultMessage": "Compatibile con Ollama"
-  },
-  "customProviderForm.openaiCompatible": {
-    "defaultMessage": "Compatibile con OpenAI"
-  },
   "customProviderForm.providerType": {
     "defaultMessage": "Tipo di provider"
   },
@@ -235,9 +205,6 @@
   },
   "customProviderForm.submitError": {
     "defaultMessage": "Impossibile salvare il provider. Controlla la configurazione e riprova."
-  },
-  "customProviderForm.supportsStreaming": {
-    "defaultMessage": "Il provider supporta le risposte in streaming"
   },
   "customProviderForm.toolCalling": {
     "defaultMessage": "Chiamata di strumenti"
@@ -1946,12 +1913,6 @@
   "settings.toolDetails.title": {
     "defaultMessage": "Dettagli delle chiamate agli strumenti"
   },
-  "settings.updates.description": {
-    "defaultMessage": "Controlla e installa gli aggiornamenti per mantenere iCodex sempre al meglio"
-  },
-  "settings.updates.title": {
-    "defaultMessage": "Aggiornamenti"
-  },
   "settings.usageStats.description": {
     "defaultMessage": "Mostra token, velocità e costo sotto ogni risposta"
   },
@@ -2263,81 +2224,6 @@
   },
   "toolConfirmation.gooseWouldLikeToCallWithName": {
     "defaultMessage": "iCodex desidera richiamare {toolName}. Consentire?"
-  },
-  "updateSection.autoDownload": {
-    "defaultMessage": "iCodex scaricherà l'aggiornamento in background e lo installerà al prossimo arresto o riavvio."
-  },
-  "updateSection.autoDownloadDisabledByEnv": {
-    "defaultMessage": "I download automatici sono disabilitati tramite la variabile d'ambiente GOOSE_DISABLE_AUTO_DOWNLOAD."
-  },
-  "updateSection.autoDownloadDisabledNote": {
-    "defaultMessage": "Il download automatico è disabilitato. Fai clic su \"Scarica ora\" per scaricare manualmente."
-  },
-  "updateSection.autoInstallNote": {
-    "defaultMessage": "Non è necessaria alcuna installazione manuale."
-  },
-  "updateSection.checkForUpdates": {
-    "defaultMessage": "Controlla aggiornamenti"
-  },
-  "updateSection.checking": {
-    "defaultMessage": "Controllo degli aggiornamenti..."
-  },
-  "updateSection.currentVersion": {
-    "defaultMessage": "Versione attuale"
-  },
-  "updateSection.disableAutoDownload": {
-    "defaultMessage": "Disabilita i download automatici degli aggiornamenti"
-  },
-  "updateSection.disableAutoDownloadDesc": {
-    "defaultMessage": "Se abilitato, iCodex ti avviserà delle nuove versioni ma non le scaricherà automaticamente."
-  },
-  "updateSection.downloadNow": {
-    "defaultMessage": "Scarica ora"
-  },
-  "updateSection.downloadReady": {
-    "defaultMessage": "Aggiornamento scaricato e pronto per l'installazione!"
-  },
-  "updateSection.downloadingProgress": {
-    "defaultMessage": "Download dell'aggiornamento... {percent}%"
-  },
-  "updateSection.downloadingUpdate": {
-    "defaultMessage": "Download dell'aggiornamento..."
-  },
-  "updateSection.installAndRestart": {
-    "defaultMessage": "Installa e riavvia"
-  },
-  "updateSection.installNowHint": {
-    "defaultMessage": "Fai clic su \"Installa e riavvia\" per aggiornare ora."
-  },
-  "updateSection.latestVersion": {
-    "defaultMessage": "Stai usando la versione più recente!"
-  },
-  "updateSection.loading": {
-    "defaultMessage": "Caricamento..."
-  },
-  "updateSection.manualInstallNote": {
-    "defaultMessage": "Dopo il download, dovrai installare manualmente l'aggiornamento."
-  },
-  "updateSection.manualInstallRequired": {
-    "defaultMessage": "Installazione manuale richiesta per questo metodo di aggiornamento."
-  },
-  "updateSection.readyInstallAuto": {
-    "defaultMessage": "✓ L'aggiornamento è pronto. Riavvia iCodex per completarne l'installazione, oppure chiudilo quando hai finito."
-  },
-  "updateSection.readyInstallManual": {
-    "defaultMessage": "✓ L'aggiornamento è pronto! Fai clic su \"Installa e riavvia\" per le istruzioni di installazione."
-  },
-  "updateSection.upToDate": {
-    "defaultMessage": "(aggiornato)"
-  },
-  "updateSection.updateAvailable": {
-    "defaultMessage": "Aggiornamento disponibile!"
-  },
-  "updateSection.versionAvailable": {
-    "defaultMessage": "→ {version} disponibile"
-  },
-  "updateSection.versionIsAvailable": {
-    "defaultMessage": "La versione {version} è disponibile"
   },
   "userMessage.cancel": {
     "defaultMessage": "Annulla"
