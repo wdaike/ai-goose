@@ -35,6 +35,8 @@ const noWindowLocationHref = {
 };
 
 module.exports = [
+  // Vendored third-party plugin payload, not our source.
+  { ignores: ['src/codex-seed/**'] },
   js.configs.recommended,
   {
     ignores: ['src/api/**'],

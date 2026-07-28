@@ -1,0 +1,9 @@
+# Tab Claiming
+- A prompt link shaped like `plugin://chrome@openai-bundled?mention=tab-v1&browserId=...&tabId=...&title=...&url=...`, `plugin://chrome-internal@openai-bundled?...`, or `plugin://chrome-dev@openai-bundled?...` is an explicit user mention of an open Chrome tab. Decode its query parameters before choosing a browser or tab.
+- Resolve each tab mention from `agent.browsers`; never assume a `chrome`, `browser`, or other binding from an earlier turn still exists. If `agent.browsers` is unavailable, first run the idempotent Bootstrap block from this skill.
+- Call `agent.browsers.list()`, select the `extension` browser whose `metadata.extensionInstanceId` exactly equals `browserId`, and store `await agent.browsers.get(match.id)` as a local `mentionedBrowser` handle.
+- Call `mentionedBrowser.user.openTabs()` and find the exact returned object whose `providerTabId`, `title`, and `url` equal the decoded `tabId`, `title`, and `url`. Pass that exact object to `mentionedBrowser.user.claimTab(tab)`.
+- The title and URL are an accepted snapshot used to fail closed if a numeric Chrome tab id was reused after a restart. If the browser or exact tab no longer exists or has changed, report that it is unavailable; do not silently claim or open a different tab.
+- To take over an already-open Chrome tab, call `browser.user.openTabs()`, choose the matching returned tab by its visible title, URL, recency, and tab group, then pass that exact object to `browser.user.claimTab(tab)`.
+- Claiming gives the current browser session control of the chosen Chrome tab without moving it into an agent tab group, and returns a normal controllable `Tab`. Reuse that returned tab for navigation, Playwright, screenshots, CUA, and content reads.
+- Do not guess tab ids. Only claim ids that came from the current `openTabs()` result.

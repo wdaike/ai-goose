@@ -41,5 +41,7 @@
     "noImplicitReturns": true,
   },
   "include": ["src", "tests/integration"],
+  /* Vendored third-party plugin payload, not our source. */
+  "exclude": ["src/codex-seed"],
   "references": [{ "path": "./tsconfig.node.json" }],
 }

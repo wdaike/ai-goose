@@ -11,6 +11,8 @@ tmp/
 
 # Node
 node_modules
+# The vendored bundled plugins ship their own runtime deps.
+!src/codex-seed/marketplaces/**/node_modules
 .vite/
 dist-web/
 out

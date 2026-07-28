@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import * as yaml from 'yaml';
+import { ensureBundledPlugins } from './bundledPlugins';
 import { documentRuntimeBinDir, ensureDocumentRuntime } from './documentRuntime';
 
 type JsonRpcId = number | string;
@@ -259,6 +260,17 @@ export class CodexProcess {
       this.notify('initialized', undefined);
       return result;
     });
+
+    // Chained off `initialized` rather than awaited inside it — `request()`
+    // waits on that same promise, which would deadlock from within its handler.
+    void this.initialized.then(() =>
+      ensureBundledPlugins(
+        (method, params) => this.request(method, params),
+        codexHome,
+        resolveSeedDir(),
+        this.logger
+      )
+    );
   }
 
   stop(): void {
