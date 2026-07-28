@@ -17,7 +17,6 @@ import {
 import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Switch } from '../ui/switch';
 import { Skeleton } from '../ui/skeleton';
 import { BaseModal } from '../ui/BaseModal';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/Tooltip';
@@ -30,11 +29,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { PluginLogo, SkillLogo, pluginTitle } from './logos';
+import { PluginLogo, pluginTitle } from './logos';
 import PluginDetails from './PluginDetails';
 import { errorMessage } from '../../utils/conversionUtils';
 import { getInitialWorkingDir } from '../../utils/workingDir';
-import { listManagedSkills, setSkillEnabled } from '../../codex/engine/skillPolicy';
 import {
   addMarketplace,
   installPlugin,
@@ -42,7 +40,6 @@ import {
   setPluginEnabled,
   uninstallPlugin,
 } from '../../codex/engine/pluginCatalog';
-import type { SkillMetadata } from '../../codex/protocol/v2/SkillMetadata';
 import type { PluginSummary } from '../../codex/protocol/v2/PluginSummary';
 import type { PluginMarketplaceEntry } from '../../codex/protocol/v2/PluginMarketplaceEntry';
 import { defineMessages, useIntl } from '../../i18n';
@@ -53,25 +50,13 @@ const i18n = defineMessages({
     id: 'pluginsView.tabPlugins',
     defaultMessage: 'Plugins',
   },
-  tabSkills: {
-    id: 'pluginsView.tabSkills',
-    defaultMessage: 'Skills',
-  },
   pluginsSubtitle: {
     id: 'pluginsView.pluginsSubtitle',
     defaultMessage: 'Work with iCodex across your favorite tools',
   },
-  skillsSubtitle: {
-    id: 'pluginsView.skillsSubtitle',
-    defaultMessage: 'Reusable instructions iCodex loads when a task needs them',
-  },
   searchPlugins: {
     id: 'pluginsView.searchPlugins',
     defaultMessage: 'Search plugins',
-  },
-  searchSkills: {
-    id: 'pluginsView.searchSkills',
-    defaultMessage: 'Search skills',
   },
   installed: {
     id: 'pluginsView.installed',
@@ -169,14 +154,6 @@ const i18n = defineMessages({
     id: 'pluginsView.noPluginsDescription',
     defaultMessage: 'Add a marketplace to browse and install plugins.',
   },
-  noSkills: {
-    id: 'pluginsView.noSkills',
-    defaultMessage: 'No skills installed',
-  },
-  noSkillsDescription: {
-    id: 'pluginsView.noSkillsDescription',
-    defaultMessage: 'Skills are loaded from SKILL.md files in the iCodex skills directory.',
-  },
   noMatches: {
     id: 'pluginsView.noMatches',
     defaultMessage: 'No results for "{query}"',
@@ -188,18 +165,6 @@ const i18n = defineMessages({
   tryAgain: {
     id: 'pluginsView.tryAgain',
     defaultMessage: 'Try Again',
-  },
-  scopeProject: {
-    id: 'pluginsView.scopeProject',
-    defaultMessage: 'Project',
-  },
-  scopeSystem: {
-    id: 'pluginsView.scopeSystem',
-    defaultMessage: 'System',
-  },
-  scopePersonal: {
-    id: 'pluginsView.scopePersonal',
-    defaultMessage: 'Personal',
   },
 });
 
@@ -223,8 +188,6 @@ const FEATURED_PICKS = [
   'stripe',
   'vercel',
 ];
-
-type PluginsViewTab = 'plugins' | 'skills';
 
 interface PluginRow {
   market: PluginMarketplaceEntry;
@@ -350,54 +313,6 @@ function PluginCard({
   );
 }
 
-function SkillCard({
-  skill,
-  onToggle,
-}: {
-  skill: SkillMetadata;
-  onToggle: (skill: SkillMetadata, enabled: boolean) => Promise<void>;
-}) {
-  const intl = useIntl();
-  const [busy, setBusy] = useState(false);
-  const title = skill.interface?.displayName || skill.name;
-  const scope =
-    skill.scope === 'repo'
-      ? i18n.scopeProject
-      : skill.scope === 'system' || skill.scope === 'admin'
-        ? i18n.scopeSystem
-        : i18n.scopePersonal;
-
-  const handleToggle = async () => {
-    if (busy) return;
-    setBusy(true);
-    try {
-      await onToggle(skill, !skill.enabled);
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  return (
-    <div className="group flex items-center gap-3 rounded-2xl px-3 py-3 transition-colors hover:bg-background-secondary">
-      <SkillLogo skill={skill} className="h-10 w-10 shrink-0 rounded-xl" />
-      <div className="min-w-0 flex-1">
-        <div className="truncate text-[15px] text-text-primary">{title}</div>
-        <div className="truncate text-sm text-text-secondary">
-          {skill.interface?.shortDescription || skill.description}
-        </div>
-      </div>
-      <span className="shrink-0 text-sm text-text-tertiary">{intl.formatMessage(scope)}</span>
-      <Switch
-        checked={skill.enabled}
-        onCheckedChange={handleToggle}
-        disabled={busy}
-        variant="mono"
-        aria-label={intl.formatMessage(i18n.toggleItem, { name: title })}
-      />
-    </div>
-  );
-}
-
 function CardSkeleton() {
   return (
     <div className="flex items-center gap-3 px-3 py-3">
@@ -414,12 +329,10 @@ export default function PluginsView() {
   const intl = useIntl();
   const navigate = useNavigate();
 
-  const [tab, setTab] = useState<PluginsViewTab>('plugins');
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
 
   const [markets, setMarkets] = useState<PluginMarketplaceEntry[]>([]);
-  const [skills, setSkills] = useState<SkillMetadata[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -430,14 +343,9 @@ export default function PluginsView() {
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
-    const cwd = getInitialWorkingDir();
     try {
-      const [listing, managedSkills] = await Promise.all([
-        listPlugins(cwd),
-        listManagedSkills(cwd),
-      ]);
+      const listing = await listPlugins(getInitialWorkingDir());
       setMarkets(listing.marketplaces);
-      setSkills(managedSkills);
     } catch (err) {
       setError(errorMessage(err, 'Failed to load plugins'));
     } finally {
@@ -542,15 +450,6 @@ export default function PluginsView() {
     return featured.rows.length > 0 ? [featured, ...byCategory] : byCategory;
   }, [categories, category, featuredPlugins, intl, visiblePlugins]);
 
-  const visibleSkills = useMemo(() => {
-    if (!query) return skills;
-    return skills.filter((skill) =>
-      [skill.interface?.displayName, skill.name, skill.description].some((text) =>
-        text?.toLowerCase().includes(query)
-      )
-    );
-  }, [skills, query]);
-
   const handlePluginToggle = async (plugin: PluginSummary, enabled: boolean) => {
     await setPluginEnabled(plugin.id, enabled);
     setMarkets((prev) =>
@@ -569,11 +468,6 @@ export default function PluginsView() {
   const handleUninstall = async (plugin: PluginSummary) => {
     await uninstallPlugin(plugin.id);
     await load();
-  };
-
-  const handleSkillToggle = async (skill: SkillMetadata, enabled: boolean) => {
-    await setSkillEnabled(skill.path, enabled);
-    setSkills((prev) => prev.map((s) => (s.path === skill.path ? { ...s, enabled } : s)));
   };
 
   const handleAddMarketplace = async () => {
@@ -598,18 +492,13 @@ export default function PluginsView() {
   const createPlugin = () => startCreator('/plugin-creator Create a new plugin');
   const recordSkill = () => startCreator('/skill-creator Help me create a new skill');
 
-  const renderEmpty = (title: string, description: string) => (
-    <div className="py-16 text-center text-text-secondary">
-      <p className="mb-1">{title}</p>
-      <p className="text-sm">{description}</p>
-    </div>
-  );
-
   const renderPlugins = () => {
     if (rows.length === 0) {
-      return renderEmpty(
-        intl.formatMessage(i18n.noPlugins),
-        intl.formatMessage(i18n.noPluginsDescription)
+      return (
+        <div className="py-16 text-center text-text-secondary">
+          <p className="mb-1">{intl.formatMessage(i18n.noPlugins)}</p>
+          <p className="text-sm">{intl.formatMessage(i18n.noPluginsDescription)}</p>
+        </div>
       );
     }
 
@@ -725,29 +614,6 @@ export default function PluginsView() {
     );
   };
 
-  const renderSkills = () => {
-    if (skills.length === 0) {
-      return renderEmpty(
-        intl.formatMessage(i18n.noSkills),
-        intl.formatMessage(i18n.noSkillsDescription)
-      );
-    }
-    if (visibleSkills.length === 0) {
-      return (
-        <div className="py-12 text-center text-sm text-text-secondary">
-          {intl.formatMessage(i18n.noMatches, { query: search.trim() })}
-        </div>
-      );
-    }
-    return (
-      <div className="grid grid-cols-1 gap-x-6 border-t border-border-primary pt-4 sm:grid-cols-2">
-        {visibleSkills.map((skill) => (
-          <SkillCard key={skill.path} skill={skill} onToggle={handleSkillToggle} />
-        ))}
-      </div>
-    );
-  };
-
   const renderBody = () => {
     if (loading) {
       return (
@@ -768,7 +634,7 @@ export default function PluginsView() {
         </div>
       );
     }
-    return tab === 'plugins' ? renderPlugins() : renderSkills();
+    return renderPlugins();
   };
 
   return (
@@ -777,26 +643,6 @@ export default function PluginsView() {
       <div className="h-[52px] shrink-0" />
 
       <div className="flex shrink-0 items-center gap-1 px-6 pb-3">
-        {(['plugins', 'skills'] as PluginsViewTab[]).map((value) => (
-          <button
-            key={value}
-            onClick={() => {
-              setTab(value);
-              setSelected(null);
-            }}
-            data-testid={`plugins-view-tab-${value}`}
-            aria-current={tab === value ? 'page' : undefined}
-            className={cn(
-              'no-drag h-9 rounded-full px-4 text-sm transition-colors',
-              tab === value
-                ? 'bg-background-tertiary text-text-primary'
-                : 'text-text-secondary hover:text-text-primary'
-            )}
-          >
-            {intl.formatMessage(value === 'plugins' ? i18n.tabPlugins : i18n.tabSkills)}
-          </button>
-        ))}
-
         <div className="flex-1" />
 
         <button
@@ -860,10 +706,10 @@ export default function PluginsView() {
           ) : (
             <>
               <h1 className="mb-2 text-[40px] font-medium leading-tight text-text-primary">
-                {intl.formatMessage(tab === 'plugins' ? i18n.tabPlugins : i18n.tabSkills)}
+                {intl.formatMessage(i18n.tabPlugins)}
               </h1>
               <p className="mb-8 text-lg text-text-secondary">
-                {intl.formatMessage(tab === 'plugins' ? i18n.pluginsSubtitle : i18n.skillsSubtitle)}
+                {intl.formatMessage(i18n.pluginsSubtitle)}
               </p>
 
               <div className="relative mb-10">
@@ -872,9 +718,7 @@ export default function PluginsView() {
                   type="text"
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
-                  placeholder={intl.formatMessage(
-                    tab === 'plugins' ? i18n.searchPlugins : i18n.searchSkills
-                  )}
+                  placeholder={intl.formatMessage(i18n.searchPlugins)}
                   data-testid="plugins-view-search"
                   className="h-12 w-full rounded-full border border-border-primary bg-background-primary pl-11 pr-4 text-[15px] text-text-primary transition-colors placeholder:text-text-tertiary focus:border-border-secondary focus-visible:outline-none"
                 />

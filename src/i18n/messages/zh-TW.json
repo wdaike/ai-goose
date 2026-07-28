@@ -1592,44 +1592,20 @@
   "pluginsView.noPluginsDescription": {
     "defaultMessage": "新增外掛市集即可瀏覽並安裝外掛。"
   },
-  "pluginsView.noSkills": {
-    "defaultMessage": "尚未安裝技能"
-  },
-  "pluginsView.noSkillsDescription": {
-    "defaultMessage": "技能來自 iCodex 技能目錄中的 SKILL.md 檔案。"
-  },
   "pluginsView.pluginsSubtitle": {
     "defaultMessage": "在你慣用的工具中使用 iCodex"
   },
   "pluginsView.refresh": {
     "defaultMessage": "重新整理"
   },
-  "pluginsView.scopePersonal": {
-    "defaultMessage": "個人"
-  },
-  "pluginsView.scopeProject": {
-    "defaultMessage": "專案"
-  },
-  "pluginsView.scopeSystem": {
-    "defaultMessage": "系統"
-  },
   "pluginsView.searchPlugins": {
     "defaultMessage": "搜尋外掛"
-  },
-  "pluginsView.searchSkills": {
-    "defaultMessage": "搜尋技能"
   },
   "pluginsView.seeMore": {
     "defaultMessage": "檢視另外 {count} 個外掛"
   },
-  "pluginsView.skillsSubtitle": {
-    "defaultMessage": "iCodex 會在任務需要時載入的可重複使用指令"
-  },
   "pluginsView.tabPlugins": {
     "defaultMessage": "外掛"
-  },
-  "pluginsView.tabSkills": {
-    "defaultMessage": "技能"
   },
   "pluginsView.toggleItem": {
     "defaultMessage": "開啟或關閉 {name}"

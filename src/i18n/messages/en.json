@@ -1754,12 +1754,6 @@
   "pluginsView.noPluginsDescription": {
     "defaultMessage": "Add a marketplace to browse and install plugins."
   },
-  "pluginsView.noSkills": {
-    "defaultMessage": "No skills installed"
-  },
-  "pluginsView.noSkillsDescription": {
-    "defaultMessage": "Skills are loaded from SKILL.md files in the iCodex skills directory."
-  },
   "pluginsView.pluginsSubtitle": {
     "defaultMessage": "Work with iCodex across your favorite tools"
   },
@@ -1769,32 +1763,14 @@
   "pluginsView.refresh": {
     "defaultMessage": "Refresh"
   },
-  "pluginsView.scopePersonal": {
-    "defaultMessage": "Personal"
-  },
-  "pluginsView.scopeProject": {
-    "defaultMessage": "Project"
-  },
-  "pluginsView.scopeSystem": {
-    "defaultMessage": "System"
-  },
   "pluginsView.searchPlugins": {
     "defaultMessage": "Search plugins"
-  },
-  "pluginsView.searchSkills": {
-    "defaultMessage": "Search skills"
   },
   "pluginsView.seeMore": {
     "defaultMessage": "{count,plural,one{See # more plugin} other{See # more plugins}}"
   },
-  "pluginsView.skillsSubtitle": {
-    "defaultMessage": "Reusable instructions iCodex loads when a task needs them"
-  },
   "pluginsView.tabPlugins": {
     "defaultMessage": "Plugins"
-  },
-  "pluginsView.tabSkills": {
-    "defaultMessage": "Skills"
   },
   "pluginsView.toggleItem": {
     "defaultMessage": "Toggle {name} on or off"
