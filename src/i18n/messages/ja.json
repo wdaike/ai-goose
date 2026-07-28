@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "しきい値の保存に失敗しました: {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "戻る"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "ナビを折りたたむ"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "進む"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "ナビゲーションを開く"

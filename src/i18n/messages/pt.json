@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Falha ao guardar o limite: {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "Voltar"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Recolher navegação"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "Avançar"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "Abrir navegação"

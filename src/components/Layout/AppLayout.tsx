@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { IpcRendererEvent } from 'electron';
 import { Outlet, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, PanelBottom, PanelLeft, PanelRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Menu, PanelBottom, PanelLeft, PanelRight } from 'lucide-react';
 import { defineMessages, useIntl } from '../../i18n';
 import { Button } from '../ui/button';
 import ChatSessionsContainer from '../ChatSessionsContainer';
@@ -18,6 +18,7 @@ import { NavigationProvider, useNavigationContext } from './NavigationContext';
 import { Navigation } from './NavigationPanel';
 import { ResizeHandle, useResizableWidth } from './ResizeHandle';
 import { NAV_DIMENSIONS, Z_INDEX } from './constants';
+import { useHistoryNavigation } from './useHistoryNavigation';
 import { cn } from '../../utils';
 import { UserInput } from '../../types/message';
 import { useAppSetting } from '../../hooks/useAppSetting';
@@ -39,7 +40,43 @@ const i18n = defineMessages({
     id: 'appLayout.toggleSidePanel',
     defaultMessage: 'Toggle side panel',
   },
+  back: {
+    id: 'appLayout.back',
+    defaultMessage: 'Back',
+  },
+  forward: {
+    id: 'appLayout.forward',
+    defaultMessage: 'Forward',
+  },
 });
+
+const HeaderNavButton: React.FC<{
+  label: string;
+  shortcut: string;
+  disabled: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}> = ({ label, shortcut, disabled, onClick, children }) => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <Button
+        onClick={onClick}
+        disabled={disabled}
+        className="no-drag text-text-secondary hover:!bg-background-tertiary hover:text-text-primary"
+        variant="ghost"
+        size="sm"
+        shape="round"
+        aria-label={label}
+      >
+        {children}
+      </Button>
+    </TooltipTrigger>
+    <TooltipContent side="bottom" className="flex items-center gap-2">
+      {label}
+      <span className="text-text-secondary">{shortcut}</span>
+    </TooltipContent>
+  </Tooltip>
+);
 
 const PanelToggleButton: React.FC<{
   label: string;
@@ -114,6 +151,22 @@ const AppLayoutContent: React.FC<AppLayoutContentProps> = ({ activeSessions }) =
     useWorkspacePanels();
   const showBottomPanelControl = useAppSetting('showBottomPanelControl', true);
   const modKey = safeIsMacOS ? '⌘' : 'Ctrl+';
+  const { canGoBack, canGoForward, goBack, goForward } = useHistoryNavigation();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!(safeIsMacOS ? event.metaKey : event.ctrlKey) || event.altKey) return;
+      if (event.key === '[') {
+        event.preventDefault();
+        goBack();
+      } else if (event.key === ']') {
+        event.preventDefault();
+        goForward();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [safeIsMacOS, goBack, goForward]);
 
   if (!chatContext) {
     throw new Error('AppLayoutContent must be used within ChatProvider');
@@ -145,6 +198,22 @@ const AppLayoutContent: React.FC<AppLayoutContentProps> = ({ activeSessions }) =
         >
           {isNavExpanded ? <PanelLeft className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
         </Button>
+        <HeaderNavButton
+          label={intl.formatMessage(i18n.back)}
+          shortcut={`${modKey}[`}
+          disabled={!canGoBack}
+          onClick={goBack}
+        >
+          <ArrowLeft className="w-4 h-4" />
+        </HeaderNavButton>
+        <HeaderNavButton
+          label={intl.formatMessage(i18n.forward)}
+          shortcut={`${modKey}]`}
+          disabled={!canGoForward}
+          onClick={goForward}
+        >
+          <ArrowRight className="w-4 h-4" />
+        </HeaderNavButton>
       </div>
 
       <div

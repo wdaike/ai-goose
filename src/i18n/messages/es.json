@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "No se pudo guardar el umbral: {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "Atrás"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Contraer navegación"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "Adelante"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "Abrir navegación"

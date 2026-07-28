@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "सीमा सहेजने में विफल: {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "पीछे"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Collapse navigation"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "आगे"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "नेविगेशन खोलें"

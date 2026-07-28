@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "임계값 저장 실패: {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "뒤로"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "탐색 접기"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "앞으로"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "탐색 열기"

@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "保存阈值失败：{error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "返回"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Collapse navigation"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "前进"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "展开导航"

@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Eşik kaydedilemedi: {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "Geri"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Collapse navigation"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "İleri"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "Gezinmeyi aç"

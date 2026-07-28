@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Gagal menyimpan ambang batas: {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "Kembali"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Ciutkan navigasi"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "Maju"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "Buka navigasi"

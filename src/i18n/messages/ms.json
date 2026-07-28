@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Gagal menyimpan ambang: {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "Kembali"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Runtuhkan navigasi"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "Ke hadapan"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "Buka navigasi"

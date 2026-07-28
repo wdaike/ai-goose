@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Không thể lưu ngưỡng: {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "Quay lại"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Thu gọn điều hướng"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "Tiến tới"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "Mở điều hướng"

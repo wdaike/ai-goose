@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Не удалось сохранить пороговое значение: {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "Назад"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Collapse navigation"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "Вперёд"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "Открыть навигацию"

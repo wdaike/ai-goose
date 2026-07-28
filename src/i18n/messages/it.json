@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Impossibile salvare la soglia: {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "Indietro"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Comprimi navigazione"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "Avanti"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "Apri navigazione"

@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "無法儲存閾值：{error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "返回"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "收合導覽列"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "前進"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "開啟導覽列"

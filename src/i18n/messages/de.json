@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Schwellenwert konnte nicht gespeichert werden: {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "Zurück"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Navigation einklappen"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "Vor"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "Navigation öffnen"

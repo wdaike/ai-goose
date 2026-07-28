@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Échec de l'enregistrement du seuil : {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "Retour"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Réduire la navigation"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "Suivant"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "Ouvrir la navigation"

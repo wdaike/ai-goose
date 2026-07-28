@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   AlertCircle,
   Blocks,
@@ -338,7 +338,10 @@ export default function PluginsView() {
 
   const [isAddMarketplaceOpen, setIsAddMarketplaceOpen] = useState(false);
   const [marketplaceSource, setMarketplaceSource] = useState('');
-  const [selected, setSelected] = useState<PluginRow | null>(null);
+
+  /** The opened plugin lives in the URL so back/forward walk in and out of it. */
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedId = searchParams.get('plugin');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -363,6 +366,11 @@ export default function PluginsView() {
   );
 
   const installed = useMemo(() => rows.filter(({ plugin }) => plugin.installed), [rows]);
+
+  const selected = useMemo(
+    () => rows.find(({ plugin }) => plugin.id === selectedId) ?? null,
+    [rows, selectedId]
+  );
 
   const query = search.trim().toLowerCase();
 
@@ -583,7 +591,7 @@ export default function PluginsView() {
                       onToggle={handlePluginToggle}
                       onInstall={handleInstall}
                       onUninstall={handleUninstall}
-                      onOpen={setSelected}
+                      onOpen={(row) => setSearchParams({ plugin: row.plugin.id })}
                     />
                   ))}
                 </div>
@@ -700,7 +708,7 @@ export default function PluginsView() {
               market={selected.market}
               plugin={selected.plugin}
               breadcrumb={intl.formatMessage(i18n.tabPlugins)}
-              onBack={() => setSelected(null)}
+              onBack={() => setSearchParams({})}
               onChanged={load}
             />
           ) : (

@@ -8,8 +8,14 @@
   "alertBox.failedToSaveThreshold": {
     "defaultMessage": "Failed to save threshold: {error}"
   },
+  "appLayout.back": {
+    "defaultMessage": "Back"
+  },
   "appLayout.collapseNavigation": {
     "defaultMessage": "Collapse navigation"
+  },
+  "appLayout.forward": {
+    "defaultMessage": "Forward"
   },
   "appLayout.openNavigation": {
     "defaultMessage": "Open navigation"
