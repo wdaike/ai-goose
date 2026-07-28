@@ -7,6 +7,13 @@
       "runtimeArgs": ["run", "start-web"],
       "port": 5173,
       "url": "http://127.0.0.1:5173"
+    },
+    {
+      "name": "web-preview",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "GOOSE_WEB_PORT=5199 GOOSE_WEB_HOST=127.0.0.1 pnpm run start-web"],
+      "port": 5199,
+      "url": "http://127.0.0.1:5199"
     }
   ]
 }

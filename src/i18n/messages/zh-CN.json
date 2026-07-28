@@ -1619,9 +1619,6 @@
   "pluginsView.searchSkills": {
     "defaultMessage": "搜索技能"
   },
-  "pluginsView.seeLess": {
-    "defaultMessage": "收起插件"
-  },
   "pluginsView.seeMore": {
     "defaultMessage": "查看另外 {count} 个插件"
   },

@@ -2,6 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   AlertCircle,
+  Blocks,
+  ChevronDown,
+  CircleDot,
   Download,
   ListFilter,
   MoreHorizontal,
@@ -94,9 +97,25 @@ const i18n = defineMessages({
     id: 'pluginsView.manage',
     defaultMessage: 'Manage in settings',
   },
+  create: {
+    id: 'pluginsView.create',
+    defaultMessage: 'Create',
+  },
+  createMenu: {
+    id: 'pluginsView.createMenu',
+    defaultMessage: 'Create menu',
+  },
+  createPlugin: {
+    id: 'pluginsView.createPlugin',
+    defaultMessage: 'Create plugin',
+  },
   addMarketplace: {
     id: 'pluginsView.addMarketplace',
     defaultMessage: 'Add marketplace',
+  },
+  recordSkill: {
+    id: 'pluginsView.recordSkill',
+    defaultMessage: 'Record a skill',
   },
   marketplaceSourcePlaceholder: {
     id: 'pluginsView.marketplaceSourcePlaceholder',
@@ -142,10 +161,6 @@ const i18n = defineMessages({
     id: 'pluginsView.seeMore',
     defaultMessage: 'See {count, plural, one {# more plugin} other {# more plugins}}',
   },
-  seeLess: {
-    id: 'pluginsView.seeLess',
-    defaultMessage: 'Show fewer plugins',
-  },
   noPlugins: {
     id: 'pluginsView.noPlugins',
     defaultMessage: 'No plugins available',
@@ -189,6 +204,25 @@ const i18n = defineMessages({
 });
 
 const FEATURED_LIMIT = 8;
+const OTHER_CATEGORY = 'Other';
+/** Filter value for the featured shelf, kept apart from real category names. */
+const FEATURED_FILTER = '__featured__';
+const FEATURED_COUNT = 12;
+/** The catalog carries no featured flag, so these are the picks we lead the shelf with. */
+const FEATURED_PICKS = [
+  'github',
+  'gmail',
+  'slack',
+  'google-drive',
+  'notion',
+  'outlook-email',
+  'linear',
+  'figma',
+  'google-calendar',
+  'canva',
+  'stripe',
+  'vercel',
+];
 
 type PluginsViewTab = 'plugins' | 'skills';
 
@@ -197,8 +231,7 @@ interface PluginRow {
   plugin: PluginSummary;
 }
 
-const marketTitle = (market: PluginMarketplaceEntry) =>
-  market.interface?.displayName || market.name;
+const rowCategory = (plugin: PluginSummary) => plugin.interface?.category || OTHER_CATEGORY;
 
 function InstalledTile({
   plugin,
@@ -383,9 +416,7 @@ export default function PluginsView() {
 
   const [tab, setTab] = useState<PluginsViewTab>('plugins');
   const [search, setSearch] = useState('');
-  const [selectedMarket, setSelectedMarket] = useState('');
   const [category, setCategory] = useState('');
-  const [expanded, setExpanded] = useState(false);
 
   const [markets, setMarkets] = useState<PluginMarketplaceEntry[]>([]);
   const [skills, setSkills] = useState<SkillMetadata[]>([]);
@@ -425,40 +456,91 @@ export default function PluginsView() {
 
   const installed = useMemo(() => rows.filter(({ plugin }) => plugin.installed), [rows]);
 
-  const activeMarket = markets.some((market) => market.name === selectedMarket)
-    ? selectedMarket
-    : (markets[0]?.name ?? '');
-
-  const categories = useMemo(() => {
-    const found = new Set<string>();
-    for (const { market, plugin } of rows) {
-      if (market.name === activeMarket && plugin.interface?.category) {
-        found.add(plugin.interface.category);
-      }
-    }
-    return [...found].sort();
-  }, [rows, activeMarket]);
-
   const query = search.trim().toLowerCase();
 
-  const visiblePlugins = useMemo(() => {
-    const matches = rows.filter(({ market, plugin }) => {
-      if (market.name !== activeMarket) return false;
-      if (category && (plugin.interface?.category ?? '') !== category) return false;
-      if (!query) return true;
-      return [pluginTitle(plugin), plugin.name, plugin.interface?.shortDescription].some((text) =>
+  const matched = useMemo(() => {
+    if (!query) return rows;
+    return rows.filter(({ plugin }) =>
+      [pluginTitle(plugin), plugin.name, plugin.interface?.shortDescription].some((text) =>
         text?.toLowerCase().includes(query)
-      );
-    });
-    return matches.sort(
+      )
+    );
+  }, [rows, query]);
+
+  const visiblePlugins = useMemo(() => {
+    const inCategory =
+      category && category !== FEATURED_FILTER
+        ? matched.filter(({ plugin }) => rowCategory(plugin) === category)
+        : matched;
+    return [...inCategory].sort(
       (a, b) =>
         Number(b.plugin.installed) - Number(a.plugin.installed) ||
         pluginTitle(a.plugin).localeCompare(pluginTitle(b.plugin))
     );
-  }, [rows, activeMarket, category, query]);
+  }, [matched, category]);
 
-  const shownPlugins = expanded ? visiblePlugins : visiblePlugins.slice(0, FEATURED_LIMIT);
-  const hiddenPlugins = visiblePlugins.slice(shownPlugins.length);
+  /** Installed apps lead, then the picks below, then whatever the catalog lists first. */
+  const featuredPlugins = useMemo(() => {
+    const rank = ({ plugin }: PluginRow) => {
+      if (plugin.installed) return -1;
+      const pick = FEATURED_PICKS.indexOf(plugin.name);
+      return pick === -1 ? FEATURED_PICKS.length : pick;
+    };
+    return matched
+      .map((row, index) => ({ row, index }))
+      .sort((a, b) => rank(a.row) - rank(b.row) || a.index - b.index)
+      .slice(0, FEATURED_COUNT)
+      .map(({ row }) => row);
+  }, [matched]);
+
+  const categoryLabel = (value: string) => {
+    if (value === FEATURED_FILTER) return intl.formatMessage(i18n.featured);
+    return value || intl.formatMessage(i18n.allCategories);
+  };
+
+  /** Categories ordered by how much they hold, so the richest shelves come first. */
+  const categories = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const { plugin } of rows) {
+      const name = rowCategory(plugin);
+      counts.set(name, (counts.get(name) ?? 0) + 1);
+    }
+    const rank = (name: string) => (name === OTHER_CATEGORY ? 1 : 0);
+    return [...counts.entries()]
+      .sort(
+        ([aName, aCount], [bName, bCount]) =>
+          rank(aName) - rank(bName) || bCount - aCount || aName.localeCompare(bName)
+      )
+      .map(([name]) => name);
+  }, [rows]);
+
+  /** `All` browses shelf by shelf; picking a filter drills into just that shelf. */
+  const shelves = useMemo(() => {
+    const featured = {
+      name: intl.formatMessage(i18n.featured),
+      rows: featuredPlugins,
+      hidden: 0,
+      preview: [] as PluginRow[],
+    };
+    if (category === FEATURED_FILTER) return featured.rows.length > 0 ? [featured] : [];
+    if (category)
+      return visiblePlugins.length > 0
+        ? [{ name: category, rows: visiblePlugins, hidden: 0, preview: [] as PluginRow[] }]
+        : [];
+
+    const byCategory = categories
+      .map((name) => {
+        const matches = visiblePlugins.filter(({ plugin }) => rowCategory(plugin) === name);
+        return {
+          name,
+          rows: matches.slice(0, FEATURED_LIMIT),
+          hidden: Math.max(matches.length - FEATURED_LIMIT, 0),
+          preview: matches.slice(FEATURED_LIMIT, FEATURED_LIMIT + 3),
+        };
+      })
+      .filter((shelf) => shelf.rows.length > 0);
+    return featured.rows.length > 0 ? [featured, ...byCategory] : byCategory;
+  }, [categories, category, featuredPlugins, intl, visiblePlugins]);
 
   const visibleSkills = useMemo(() => {
     if (!query) return skills;
@@ -508,6 +590,14 @@ export default function PluginsView() {
     }
   };
 
+  const startCreator = (prompt: string) =>
+    navigate('/pair', {
+      state: { initialMessage: { msg: prompt, images: [] }, noAutoSubmit: true },
+    });
+
+  const createPlugin = () => startCreator('/plugin-creator Create a new plugin');
+  const recordSkill = () => startCreator('/skill-creator Help me create a new skill');
+
   const renderEmpty = (title: string, description: string) => (
     <div className="py-16 text-center text-text-secondary">
       <p className="mb-1">{title}</p>
@@ -546,102 +636,91 @@ export default function PluginsView() {
           </section>
         )}
 
-        <div className="mb-6 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-1">
-            {markets.map((market) => (
-              <button
-                key={market.name}
-                onClick={() => {
-                  setSelectedMarket(market.name);
-                  setCategory('');
-                  setExpanded(false);
-                }}
-                aria-current={market.name === activeMarket ? 'true' : undefined}
-                className={cn(
-                  'h-9 rounded-full px-4 text-sm transition-colors',
-                  market.name === activeMarket
-                    ? 'bg-background-tertiary text-text-primary'
-                    : 'text-text-secondary hover:text-text-primary'
-                )}
-              >
-                {marketTitle(market)}
-              </button>
-            ))}
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                aria-label={intl.formatMessage(i18n.filter)}
-                title={intl.formatMessage(i18n.filter)}
-                className={cn(
-                  'rounded-lg p-1.5 transition-colors hover:bg-background-tertiary hover:text-text-primary',
-                  category ? 'text-text-primary' : 'text-text-secondary'
-                )}
-              >
-                <ListFilter className="h-4 w-4" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="min-w-[12rem]">
-              <DropdownMenuRadioGroup value={category} onValueChange={setCategory}>
-                <DropdownMenuRadioItem value="">
-                  {intl.formatMessage(i18n.allCategories)}
-                </DropdownMenuRadioItem>
-                {categories.map((name) => (
-                  <DropdownMenuRadioItem key={name} value={name}>
-                    {name}
+        <>
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <button
+              onClick={() => setCategory('')}
+              aria-current="true"
+              className="h-9 rounded-full bg-background-tertiary px-4 text-sm text-text-primary"
+            >
+              {categoryLabel(category)}
+            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  aria-label={intl.formatMessage(i18n.filter)}
+                  title={intl.formatMessage(i18n.filter)}
+                  className={cn(
+                    'rounded-lg p-1.5 transition-colors hover:bg-background-tertiary hover:text-text-primary',
+                    category ? 'text-text-primary' : 'text-text-secondary'
+                  )}
+                >
+                  <ListFilter className="h-4 w-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-[12rem]">
+                <DropdownMenuRadioGroup value={category} onValueChange={setCategory}>
+                  <DropdownMenuRadioItem value="">{categoryLabel('')}</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value={FEATURED_FILTER}>
+                    {categoryLabel(FEATURED_FILTER)}
                   </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-
-        <h2 className="border-t border-border-primary pb-2 pt-6 text-lg text-text-primary">
-          {intl.formatMessage(i18n.featured)}
-        </h2>
-
-        {visiblePlugins.length === 0 ? (
-          <div className="py-12 text-center text-sm text-text-secondary">
-            {query
-              ? intl.formatMessage(i18n.noMatches, { query: search.trim() })
-              : intl.formatMessage(i18n.noPlugins)}
+                  {categories.map((name) => (
+                    <DropdownMenuRadioItem key={name} value={name}>
+                      {name}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
-            {shownPlugins.map((row) => (
-              <PluginCard
-                key={row.plugin.id}
-                row={row}
-                onToggle={handlePluginToggle}
-                onInstall={handleInstall}
-                onUninstall={handleUninstall}
-                onOpen={setSelected}
-              />
-            ))}
-          </div>
-        )}
 
-        {(hiddenPlugins.length > 0 || expanded) && (
-          <button
-            onClick={() => setExpanded((value) => !value)}
-            className="mt-4 flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-colors hover:bg-background-secondary"
-          >
-            <span className="flex shrink-0 -space-x-2">
-              {(expanded ? shownPlugins.slice(-3) : hiddenPlugins.slice(0, 3)).map(({ plugin }) => (
-                <PluginLogo
-                  key={plugin.id}
-                  plugin={plugin}
-                  className="h-7 w-7 rounded-lg ring-2 ring-background-primary"
-                />
-              ))}
-            </span>
-            <span className="truncate text-[15px] text-text-secondary">
-              {expanded
-                ? intl.formatMessage(i18n.seeLess)
-                : intl.formatMessage(i18n.seeMore, { count: hiddenPlugins.length })}
-            </span>
-          </button>
-        )}
+          {shelves.length === 0 ? (
+            <div className="py-12 text-center text-sm text-text-secondary">
+              {query
+                ? intl.formatMessage(i18n.noMatches, { query: search.trim() })
+                : intl.formatMessage(i18n.noPlugins)}
+            </div>
+          ) : (
+            shelves.map((shelf) => (
+              <section key={shelf.name} className="mb-2">
+                <h2 className="border-t border-border-primary pb-2 pt-6 text-lg text-text-primary">
+                  {shelf.name}
+                </h2>
+                <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+                  {shelf.rows.map((row) => (
+                    <PluginCard
+                      key={row.plugin.id}
+                      row={row}
+                      onToggle={handlePluginToggle}
+                      onInstall={handleInstall}
+                      onUninstall={handleUninstall}
+                      onOpen={setSelected}
+                    />
+                  ))}
+                </div>
+                {shelf.hidden > 0 && (
+                  <button
+                    onClick={() => setCategory(shelf.name)}
+                    className="mt-4 flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-colors hover:bg-background-secondary"
+                  >
+                    <span className="flex shrink-0 -space-x-2">
+                      {shelf.preview.map(({ plugin }) => (
+                        <PluginLogo
+                          key={plugin.id}
+                          plugin={plugin}
+                          className="h-7 w-7 rounded-lg ring-2 ring-background-primary"
+                        />
+                      ))}
+                    </span>
+                    <span className="truncate text-[15px] text-text-secondary">
+                      {intl.formatMessage(i18n.seeMore, { count: shelf.hidden })}
+                    </span>
+                  </button>
+                )}
+              </section>
+            ))
+          )}
+        </>
       </>
     );
   };
@@ -737,15 +816,35 @@ export default function PluginsView() {
         >
           <Settings className="h-4 w-4" />
         </button>
-        {tab === 'plugins' && (
-          <Button
-            className="no-drag ml-1 h-9 gap-1.5 rounded-full"
-            onClick={() => setIsAddMarketplaceOpen(true)}
-          >
-            <Plus className="h-4 w-4" />
-            {intl.formatMessage(i18n.addMarketplace)}
+        <div className="no-drag ml-1 flex">
+          <Button className="h-9 rounded-r-none pr-3" onClick={createPlugin}>
+            {intl.formatMessage(i18n.create)}
           </Button>
-        )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                aria-label={intl.formatMessage(i18n.createMenu)}
+                className="flex h-9 items-center rounded-r-full border-l border-white/20 bg-background-inverse px-2 text-text-inverse transition-colors hover:bg-background-inverse/90"
+              >
+                <ChevronDown className="h-4 w-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-[13rem]">
+              <DropdownMenuItem onSelect={createPlugin}>
+                <Blocks className="h-4 w-4" />
+                {intl.formatMessage(i18n.createPlugin)}
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setIsAddMarketplaceOpen(true)}>
+                <Plus className="h-4 w-4" />
+                {intl.formatMessage(i18n.addMarketplace)}
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={recordSkill}>
+                <CircleDot className="h-4 w-4" />
+                {intl.formatMessage(i18n.recordSkill)}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       <ScrollArea className="flex-1">

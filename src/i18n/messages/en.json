@@ -1586,17 +1586,8 @@
   "pluginsSettings.addExtension": {
     "defaultMessage": "Add Extension"
   },
-  "pluginsSettings.addMarketplace": {
-    "defaultMessage": "Add marketplace"
-  },
-  "pluginsSettings.addMarketplaceTitle": {
-    "defaultMessage": "Add plugin marketplace"
-  },
   "pluginsSettings.appUnavailable": {
     "defaultMessage": "Unavailable"
-  },
-  "pluginsSettings.cancel": {
-    "defaultMessage": "Cancel"
   },
   "pluginsSettings.configureExtension": {
     "defaultMessage": "Configure {name}"
@@ -1615,9 +1606,6 @@
   },
   "pluginsSettings.errorLoadingSkills": {
     "defaultMessage": "Error loading skills"
-  },
-  "pluginsSettings.marketplaceSourcePlaceholder": {
-    "defaultMessage": "git URL or local path"
   },
   "pluginsSettings.moreActions": {
     "defaultMessage": "More actions for {name}"
@@ -1712,6 +1700,15 @@
   "pluginsView.cancel": {
     "defaultMessage": "Cancel"
   },
+  "pluginsView.create": {
+    "defaultMessage": "Create"
+  },
+  "pluginsView.createMenu": {
+    "defaultMessage": "Create menu"
+  },
+  "pluginsView.createPlugin": {
+    "defaultMessage": "Create plugin"
+  },
   "pluginsView.disable": {
     "defaultMessage": "Disable"
   },
@@ -1766,6 +1763,9 @@
   "pluginsView.pluginsSubtitle": {
     "defaultMessage": "Work with iCodex across your favorite tools"
   },
+  "pluginsView.recordSkill": {
+    "defaultMessage": "Record a skill"
+  },
   "pluginsView.refresh": {
     "defaultMessage": "Refresh"
   },
@@ -1783,9 +1783,6 @@
   },
   "pluginsView.searchSkills": {
     "defaultMessage": "Search skills"
-  },
-  "pluginsView.seeLess": {
-    "defaultMessage": "Show fewer plugins"
   },
   "pluginsView.seeMore": {
     "defaultMessage": "{count,plural,one{See # more plugin} other{See # more plugins}}"

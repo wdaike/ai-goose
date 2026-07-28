@@ -29,7 +29,6 @@ import {
   listPlugins,
   setPluginEnabled,
   uninstallPlugin,
-  addMarketplace,
 } from '../../../codex/engine/pluginCatalog';
 import PluginDetails from '../../plugins/PluginDetails';
 import { PluginLogo } from '../../plugins/logos';
@@ -39,14 +38,12 @@ import { listApps, setAppEnabled } from '../../../codex/engine/appCatalog';
 import type { AppInfo } from '../../../codex/protocol/v2/AppInfo';
 import { useTheme } from '../../../contexts/ThemeContext';
 import SkillDetailsModal, { openSkillFolder } from '../../plugins/SkillDetailsModal';
-import { BaseModal } from '../../ui/BaseModal';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../../ui/dropdown-menu';
-import { Input } from '../../ui/input';
 import ExtensionModal from '../extensions/modal/ExtensionModal';
 import {
   createExtensionConfig,
@@ -213,22 +210,6 @@ const i18n = defineMessages({
   disabledByAdmin: {
     id: 'pluginsSettings.disabledByAdmin',
     defaultMessage: 'Disabled by admin',
-  },
-  addMarketplace: {
-    id: 'pluginsSettings.addMarketplace',
-    defaultMessage: 'Add marketplace',
-  },
-  addMarketplaceTitle: {
-    id: 'pluginsSettings.addMarketplaceTitle',
-    defaultMessage: 'Add plugin marketplace',
-  },
-  marketplaceSourcePlaceholder: {
-    id: 'pluginsSettings.marketplaceSourcePlaceholder',
-    defaultMessage: 'git URL or local path',
-  },
-  cancel: {
-    id: 'pluginsSettings.cancel',
-    defaultMessage: 'Cancel',
   },
 });
 
@@ -632,8 +613,6 @@ export default function PluginsSettingsSection({
   const [pluginMarkets, setPluginMarkets] = useState<PluginMarketplaceEntry[]>([]);
   const [pluginsLoading, setPluginsLoading] = useState(true);
   const [pluginsError, setPluginsError] = useState<string | null>(null);
-  const [isAddMarketplaceOpen, setIsAddMarketplaceOpen] = useState(false);
-  const [marketplaceSource, setMarketplaceSource] = useState('');
   const [selectedPlugin, setSelectedPlugin] = useState<{
     market: PluginMarketplaceEntry;
     plugin: PluginSummary;
@@ -811,20 +790,6 @@ export default function PluginsSettingsSection({
   const handlePluginUninstall = async (plugin: PluginSummary) => {
     await uninstallPlugin(plugin.id);
     await loadPlugins();
-  };
-
-  const handleAddMarketplace = async () => {
-    const source = marketplaceSource.trim();
-    if (!source) return;
-    setIsAddMarketplaceOpen(false);
-    setMarketplaceSource('');
-    try {
-      await addMarketplace(source);
-    } catch (error) {
-      setPluginsError(errorMessage(error, 'Failed to add marketplace'));
-    } finally {
-      await loadPlugins();
-    }
   };
 
   const handleModalClose = () => {
@@ -1107,16 +1072,6 @@ export default function PluginsSettingsSection({
               {intl.formatMessage(i18n.add)}
             </Button>
           )}
-          {activeTab === 'plugins' && (
-            <Button
-              variant="secondary"
-              className="h-9 rounded-full flex items-center gap-1.5"
-              onClick={() => setIsAddMarketplaceOpen(true)}
-            >
-              <Plus className="h-4 w-4" />
-              {intl.formatMessage(i18n.addMarketplace)}
-            </Button>
-          )}
         </div>
       </div>
 
@@ -1173,37 +1128,6 @@ export default function PluginsSettingsSection({
           modalType={'add'}
         />
       )}
-
-      <BaseModal
-        isOpen={isAddMarketplaceOpen}
-        title={intl.formatMessage(i18n.addMarketplaceTitle)}
-        actions={
-          <div className="flex justify-end gap-2 px-8">
-            <Button
-              variant="ghost"
-              onClick={() => {
-                setIsAddMarketplaceOpen(false);
-                setMarketplaceSource('');
-              }}
-            >
-              {intl.formatMessage(i18n.cancel)}
-            </Button>
-            <Button onClick={handleAddMarketplace} disabled={!marketplaceSource.trim()}>
-              {intl.formatMessage(i18n.addMarketplace)}
-            </Button>
-          </div>
-        }
-      >
-        <Input
-          autoFocus
-          value={marketplaceSource}
-          onChange={(e) => setMarketplaceSource(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') handleAddMarketplace();
-          }}
-          placeholder={intl.formatMessage(i18n.marketplaceSourcePlaceholder)}
-        />
-      </BaseModal>
     </div>
   );
 }

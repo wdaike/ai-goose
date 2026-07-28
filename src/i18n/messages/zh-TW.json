@@ -1619,9 +1619,6 @@
   "pluginsView.searchSkills": {
     "defaultMessage": "搜尋技能"
   },
-  "pluginsView.seeLess": {
-    "defaultMessage": "收合外掛"
-  },
   "pluginsView.seeMore": {
     "defaultMessage": "檢視另外 {count} 個外掛"
   },
