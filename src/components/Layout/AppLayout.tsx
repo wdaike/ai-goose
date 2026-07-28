@@ -106,8 +106,8 @@ const AppLayoutContent: React.FC<AppLayoutContentProps> = ({ activeSessions }) =
   const nav = useResizableWidth({
     storageKey: 'nav_width',
     defaultWidth: NAV_DIMENSIONS.NAV_WIDTH,
-    min: 200,
-    max: 480,
+    min: 240,
+    max: 520,
     side: 'left',
   });
   const { isBottomPanelOpen, isSidePanelOpen, toggleBottomPanel, toggleSidePanel } =

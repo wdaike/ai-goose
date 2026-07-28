@@ -1,6 +1,6 @@
 export const NAV_DIMENSIONS = {
-  /** Width of the navigation sidebar */
-  NAV_WIDTH: 288,
+  /** Width of the navigation sidebar (matches the Codex desktop sidebar) */
+  NAV_WIDTH: 275,
 } as const;
 
 export const Z_INDEX = {

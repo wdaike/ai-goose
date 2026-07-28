@@ -83,14 +83,21 @@ const i18n = defineMessages({
 
 const SESSIONS_PER_PROJECT = 5;
 
-const rowClass = (active: boolean) =>
+// Row geometry mirrors the Codex desktop sidebar: 30px tall, 10px radius, 8px
+// inset, 16px icon well. Indented rows drop the icon and align their label with
+// the icon-bearing rows above them.
+const rowClass = (active: boolean, indented: boolean) =>
   cn(
-    'no-drag flex w-full flex-row items-center gap-2.5 rounded-full px-3 py-2 outline-none',
-    'text-sm transition-colors',
-    active
-      ? 'bg-background-tertiary text-text-primary'
-      : 'text-text-primary hover:bg-background-tertiary/60'
+    'no-drag relative flex h-[30px] w-full shrink-0 cursor-pointer items-center gap-2',
+    'overflow-hidden rounded-[10px] text-left text-[14px] text-text-primary outline-none',
+    'transition-colors',
+    indented ? 'pl-8 pr-2' : 'px-2',
+    active ? 'bg-background-tertiary' : 'hover:bg-background-tertiary'
   );
+
+const RowIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <span className="flex w-4 shrink-0 items-center justify-center">{children}</span>
+);
 
 interface NavRowProps {
   item: NavItem;
@@ -102,10 +109,14 @@ const NavRow: React.FC<NavRowProps> = ({ item, active, onClick }) => {
   const intl = useIntl();
   const Icon = item.icon;
   return (
-    <button onClick={onClick} className={rowClass(active)}>
-      <Icon className="size-[18px] flex-shrink-0" />
-      <span className="flex-1 truncate text-left">{getNavItemLabel(item, intl)}</span>
-      {item.getTag && <span className="font-mono text-xs text-text-tertiary">{item.getTag()}</span>}
+    <button onClick={onClick} className={rowClass(active, false)}>
+      <RowIcon>
+        <Icon className="size-4" />
+      </RowIcon>
+      <span className="text-fade-truncate flex-1">{getNavItemLabel(item, intl)}</span>
+      {item.getTag && (
+        <span className="font-mono text-[11px] text-text-tertiary">{item.getTag()}</span>
+      )}
     </button>
   );
 };
@@ -126,16 +137,7 @@ const SessionRow: React.FC<SessionRowProps> = ({ session, active, status, onClic
   const hasUnread = status?.hasUnreadActivity ?? false;
 
   return (
-    <div
-      onClick={() => !isEditing && onClick()}
-      className={cn(
-        'no-drag flex cursor-pointer items-center gap-2 rounded-full py-2 pl-10 pr-3 text-sm',
-        'transition-colors',
-        active
-          ? 'bg-background-tertiary text-text-primary'
-          : 'text-text-secondary hover:bg-background-tertiary/60 hover:text-text-primary'
-      )}
-    >
+    <div onClick={() => !isEditing && onClick()} className={rowClass(active, true)}>
       <InlineEditText
         value={session.name}
         onSave={async (newName) => {
@@ -150,8 +152,8 @@ const SessionRow: React.FC<SessionRowProps> = ({ session, active, status, onClic
         placeholder={intl.formatMessage(i18n.untitledSession)}
         disabled={isStreaming}
         singleClickEdit={false}
-        className="flex-1 truncate !px-0 !py-0 text-inherit hover:bg-transparent"
-        editClassName="!text-sm"
+        className="text-fade-truncate flex-1 !px-0 !py-0 text-inherit hover:bg-transparent"
+        editClassName="!text-[14px]"
         onEditStart={() => setIsEditing(true)}
         onEditEnd={() => setIsEditing(false)}
       />
@@ -411,7 +413,7 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
       {/* Drag region clearing the window controls. */}
       <div className="h-[52px]" />
 
-      <div className="flex items-center gap-1 pl-5 pr-3 pb-2">
+      <div className="flex items-center gap-1 pl-4 pr-2 pb-2">
         <span className="flex items-center gap-1.5 text-[15px] font-semibold text-text-primary">
           iCodex
         </span>
@@ -419,7 +421,7 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
         <div className="flex-1" />
         <button
           onClick={openSearch}
-          className="no-drag rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-background-tertiary hover:text-text-primary"
+          className="no-drag rounded-[10px] p-1.5 text-text-secondary transition-colors hover:bg-background-tertiary hover:text-text-primary"
           aria-label={intl.formatMessage(i18n.search)}
           title={intl.formatMessage(i18n.search)}
         >
@@ -428,7 +430,7 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
       </div>
 
       {isSearchOpen && (
-        <div className="px-3 pb-2">
+        <div className="px-2 pb-2">
           <input
             ref={searchInputRef}
             value={query}
@@ -440,7 +442,7 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
               }
             }}
             placeholder={intl.formatMessage(i18n.search)}
-            className="no-drag w-full rounded-lg bg-background-tertiary px-2.5 py-1.5 text-[13px] text-text-primary outline-none placeholder:text-text-tertiary"
+            className="no-drag h-[30px] w-full rounded-[10px] bg-background-tertiary px-2 text-[14px] text-text-primary outline-none placeholder:text-text-tertiary"
           />
         </div>
       )}
@@ -457,16 +459,16 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
       </div>
 
       <div className="mt-4 flex min-h-0 flex-1 flex-col">
-        <div className="px-5 pb-1.5 text-sm text-text-tertiary">
+        <div className="pl-4 pr-2 text-[14px] font-medium text-text-tertiary opacity-75">
           {intl.formatMessage(i18n.projects)}
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
+        <div className="flex min-h-0 flex-1 flex-col gap-px overflow-y-auto px-2 pt-1 pb-2">
           {isSearching && groups.length === 0 ? (
-            <div className="px-3 py-2 text-sm text-text-tertiary">
+            <div className="px-2 py-1 text-[14px] text-text-tertiary">
               {intl.formatMessage(i18n.searching)}
             </div>
           ) : groups.length === 0 ? (
-            <div className="px-3 py-2 text-sm text-text-tertiary">
+            <div className="px-2 py-1 text-[14px] text-text-tertiary">
               {intl.formatMessage(keyword ? i18n.noResults : i18n.noChats)}
             </div>
           ) : (
@@ -481,13 +483,18 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
                 <React.Fragment key={group.path}>
                   <Tooltip delayDuration={400}>
                     <TooltipTrigger asChild>
-                      <button onClick={() => toggleProject(group.path)} className={rowClass(false)}>
-                        {isCollapsed ? (
-                          <FolderClosed className="size-[18px] flex-shrink-0" />
-                        ) : (
-                          <FolderOpened className="size-[18px] flex-shrink-0" />
-                        )}
-                        <span className="flex-1 truncate text-left">{group.label}</span>
+                      <button
+                        onClick={() => toggleProject(group.path)}
+                        className={rowClass(false, false)}
+                      >
+                        <RowIcon>
+                          {isCollapsed ? (
+                            <FolderClosed className="size-4" />
+                          ) : (
+                            <FolderOpened className="size-4" />
+                          )}
+                        </RowIcon>
+                        <span className="text-fade-truncate flex-1">{group.label}</span>
                       </button>
                     </TooltipTrigger>
                     <TooltipContent
@@ -517,7 +524,7 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
                   {!isCollapsed && hasMore && (
                     <button
                       onClick={() => setFullyShownProjects((prev) => new Set(prev).add(group.path))}
-                      className="no-drag flex w-full rounded-full py-2 pl-10 pr-3 text-sm text-text-tertiary transition-colors hover:bg-background-tertiary/60 hover:text-text-primary"
+                      className={cn(rowClass(false, true), 'text-text-tertiary')}
                     >
                       {intl.formatMessage(i18n.showMore)}
                     </button>
@@ -529,11 +536,11 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 border-t border-border-primary px-3 py-2.5">
+      <div className="flex items-center gap-1 px-2 py-2">
         <button
           onClick={() => handleNavClick(SETTINGS_NAV_ITEM.path)}
           title={getNavItemLabel(SETTINGS_NAV_ITEM, intl)}
-          className="no-drag flex min-w-0 flex-1 items-center gap-2 rounded-lg px-1 py-1 text-[13px] text-text-primary transition-colors hover:bg-background-tertiary/60"
+          className="no-drag flex h-8 min-w-0 flex-1 items-center gap-2 rounded-[10px] px-2 text-[14px] text-text-primary transition-colors hover:bg-background-tertiary"
         >
           {accountName ? (
             <span className="flex size-6 flex-shrink-0 items-center justify-center rounded-full bg-block-teal text-[10px] font-semibold uppercase text-white">
@@ -544,7 +551,7 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
               <Settings className="size-3.5 text-text-secondary" />
             </span>
           )}
-          <span className="truncate">
+          <span className="text-fade-truncate">
             {accountName ?? getNavItemLabel(SETTINGS_NAV_ITEM, intl)}
           </span>
         </button>
@@ -552,7 +559,7 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
           href={DOCS_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="no-drag rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-background-tertiary hover:text-text-primary"
+          className="no-drag rounded-[10px] p-1.5 text-text-secondary transition-colors hover:bg-background-tertiary hover:text-text-primary"
           aria-label={intl.formatMessage(i18n.help)}
           title={intl.formatMessage(i18n.help)}
         >

@@ -24,6 +24,12 @@ export default defineConfig(({ command }) => ({
     },
   ],
 
+  server: {
+    watch: {
+      ignored: ['**/src/codex-seed/**'],
+    },
+  },
+
   build: {
     target: 'esnext',
   },

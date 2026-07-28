@@ -8,6 +8,7 @@
 
 @source '../../index.html';
 @source '../**/*.{js,ts,jsx,tsx}';
+@source not '../codex-seed';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -565,6 +566,17 @@ pre:has(> code.bg-inline-code) {
 
 .assistant:has(+ .user):not(.in-chain) .goose-message {
   padding-bottom: 24px;
+}
+
+/* Codex-style overflow: long labels fade out instead of showing an ellipsis. */
+.text-fade-truncate {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+  mask-image: linear-gradient(to right, #000 calc(100% - 1rem), transparent);
 }
 
 /* Sidebar scrollbar styles */
