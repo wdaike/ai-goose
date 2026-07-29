@@ -16,7 +16,7 @@ import OnboardingGuard from './components/onboarding/OnboardingGuard';
 import { createSession } from './sessions';
 
 import { ChatType } from './types/chat';
-import Hub from './components/Hub';
+import Hub from './components/session/Hub';
 import { UserInput } from './types/message';
 
 interface PairRouteState {
@@ -29,7 +29,7 @@ import ProviderSettings from './components/settings/providers/ProviderSettingsPa
 import { AppLayout } from './components/Layout/AppLayout';
 import PluginsView from './components/plugins/PluginsView';
 import { ChatProvider, DEFAULT_CHAT_TITLE } from './contexts/ChatContext';
-import LauncherView from './components/LauncherView';
+import LauncherView from './components/session/LauncherView';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { useConfig } from './components/ConfigContext';

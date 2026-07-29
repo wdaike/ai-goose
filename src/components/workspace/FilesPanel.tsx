@@ -16,7 +16,7 @@ import { ScrollArea } from '../ui/scroll-area';
 import { cn } from '../../utils';
 import type { DirectoryEntry } from '../../preload';
 import { codex } from '../../codex/client';
-import CodeViewer, { languageFromFilePath } from '../CodeViewer';
+import CodeViewer, { languageFromFilePath } from '../conversation/CodeViewer';
 import { ResizeHandle, useResizableWidth } from '../Layout/ResizeHandle';
 
 const MAX_TEXT_PREVIEW_BYTES = 1024 * 1024;

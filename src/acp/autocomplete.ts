@@ -1,5 +1,5 @@
 import type { AgentMention, AvailableCommand } from '../types/goose';
-import type { DisplayItem } from '../components/MentionPopover';
+import type { DisplayItem } from '../components/composer/MentionPopover';
 import { enforceSkillPolicy } from '../codex/engine/skillPolicy';
 
 type SlashCommandItemType = Extract<DisplayItem['itemType'], 'Builtin' | 'Recipe' | 'Skill'>;

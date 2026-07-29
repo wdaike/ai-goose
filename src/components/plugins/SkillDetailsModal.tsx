@@ -6,7 +6,7 @@ import { Button } from '../ui/button';
 import { Switch } from '../ui/switch';
 import { Skeleton } from '../ui/skeleton';
 import { ConfirmationModal } from '../ui/ConfirmationModal';
-import MarkdownContent from '../MarkdownContent';
+import MarkdownContent from '../conversation/MarkdownContent';
 import { useLocalImage } from './localImage';
 import { codex } from '../../codex/client';
 import { skillDirectory } from '../../codex/engine/skillPolicy';

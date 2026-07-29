@@ -14,9 +14,9 @@ import {
   type NavItem,
 } from '../../hooks/useNavigationItems';
 import { AppEvents } from '../../constants/events';
-import { InlineEditText } from '../common/InlineEditText';
-import { SessionIndicators } from '../SessionIndicators';
-import EnvironmentBadge from '../GooseSidebar/EnvironmentBadge';
+import { InlineEditText } from '../ui/InlineEditText';
+import { SessionIndicators } from '../session/SessionIndicators';
+import EnvironmentBadge from './EnvironmentBadge';
 import {
   acpCountSessionsForDir,
   acpListSessions,

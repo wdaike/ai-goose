@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Menu, PanelBottom, PanelLeft, PanelRight } from 'lucide-react';
 import { defineMessages, useIntl } from '../../i18n';
 import { Button } from '../ui/button';
-import ChatSessionsContainer from '../ChatSessionsContainer';
+import ChatSessionsContainer from '../session/ChatSessionsContainer';
 import { useChatContext } from '../../contexts/ChatContext';
 import {
   WorkspacePanelsProvider,
