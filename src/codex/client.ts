@@ -3,6 +3,7 @@ import type { ThreadStartParams } from './protocol/v2/ThreadStartParams';
 import type { ThreadResumeParams } from './protocol/v2/ThreadResumeParams';
 import type { ThreadListParams } from './protocol/v2/ThreadListParams';
 import type { ThreadReadParams } from './protocol/v2/ThreadReadParams';
+import type { ThreadMetadataUpdateParams } from './protocol/v2/ThreadMetadataUpdateParams';
 import type { Turn } from './protocol/v2/Turn';
 import type { TurnStartParams } from './protocol/v2/TurnStartParams';
 import type { TurnInterruptParams } from './protocol/v2/TurnInterruptParams';
@@ -73,6 +74,8 @@ export const codex = {
   threadResume: (params: ThreadResumeParams) => request<ThreadResponse>('thread/resume', params),
   threadRead: (params: ThreadReadParams) => request<ThreadResponse>('thread/read', params),
   threadList: (params: ThreadListParams) => request<ThreadListResponse>('thread/list', params),
+  threadMetadataUpdate: (params: ThreadMetadataUpdateParams) =>
+    request<Record<string, never>>('thread/metadata/update', params),
   threadSetName: (threadId: string, name: string) =>
     request<Record<string, never>>('thread/name/set', { threadId, name }),
   threadArchive: (threadId: string) =>

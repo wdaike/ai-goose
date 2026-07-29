@@ -1271,6 +1271,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "Nessuna chat corrispondente"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "Fissa la chat"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "Fissate"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,one{# thread} other{# thread}}"
   },
@@ -1288,6 +1294,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "Mostra altro"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "Rimuovi la chat fissata"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Sessione senza titolo"

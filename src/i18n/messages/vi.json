@@ -1271,6 +1271,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "Không có cuộc trò chuyện phù hợp"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "Ghim cuộc trò chuyện"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "Đã ghim"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,other{# luồng}}"
   },
@@ -1288,6 +1294,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "Hiển thị thêm"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "Bỏ ghim cuộc trò chuyện"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Phiên chưa đặt tên"

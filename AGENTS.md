@@ -9,8 +9,9 @@ is no Rust code and no backend of our own.
 The renderer speaks the app-server v2 protocol directly through a four-verb
 `window.codex` façade (`request`/`notify`/`respond`/`onEvent`). Everything below
 that façade is transport, and all of it lives in one place —
-`src/codex/codexProcess.ts` — which spawns `codex app-server` (the
-official binary, from `PATH` or `GOOSE_CODEX_BIN`) and handles the stdio JSONL
+`src/codex/codexProcess.ts` — which spawns `codex app-server` (the official
+binary, resolved as `GOOSE_CODEX_BIN`, then the bundled
+`~/.local/share/icodex/codex`, then `PATH`) and handles the stdio JSONL
 JSON-RPC, request correlation, and forwarding of server-initiated messages via
 an injected `onServerMessage` sink. Two thin adapters back `window.codex` with
 that core:
@@ -62,11 +63,19 @@ npx eslint src --ext .ts,.tsx
 on loopback; set `GOOSE_WEB_TOKEN` to require one. `pnpm run build:web` +
 `pnpm run serve-web` runs the production static form of the web app.
 
-To regenerate protocol types after upgrading codex:
+To upgrade codex, run `codex update`, refresh the bundled binary the app
+actually spawns, and regenerate the protocol types from it:
+
+```bash
+ditto ~/.codex/packages/standalone/current/bin/codex ~/.local/share/icodex/codex
+```
 
 ```bash
 codex app-server generate-ts --out src/codex/protocol
 ```
+
+Copy the binary with `ditto`, not `cp` — `cp` drops metadata the kernel needs
+and the copy is SIGKILLed on launch.
 
 ## Structure
 

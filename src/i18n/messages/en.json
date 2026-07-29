@@ -1439,6 +1439,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "No matching chats"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "Pin chat"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "Pinned"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,one{# thread} other{# threads}}"
   },
@@ -1456,6 +1462,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "Show more"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "Unpin chat"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Untitled session"

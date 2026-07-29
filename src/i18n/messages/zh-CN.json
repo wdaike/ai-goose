@@ -1274,6 +1274,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "没有匹配的对话"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "置顶对话"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "置顶"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,other{# 个对话}}"
   },
@@ -1291,6 +1297,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "显示更多"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "取消置顶"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "未命名会话"

@@ -1271,6 +1271,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "Tidak ada obrolan yang cocok"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "Sematkan obrolan"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "Disematkan"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,other{# utas}}"
   },
@@ -1288,6 +1294,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "Tampilkan lebih banyak"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "Lepas sematan obrolan"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Sesi tanpa judul"

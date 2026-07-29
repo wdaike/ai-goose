@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { CircleHelp, FolderGit2, MessageCircle, Search, Settings } from 'lucide-react';
+import { CircleHelp, FolderGit2, MessageCircle, Pin, PinOff, Search, Settings } from 'lucide-react';
 import { FolderClosed, FolderOpened } from '../icons/Folder';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/Tooltip';
 import { motion } from 'framer-motion';
@@ -42,6 +42,18 @@ const i18n = defineMessages({
   projects: {
     id: 'navigationPanel.projects',
     defaultMessage: 'Projects',
+  },
+  pinned: {
+    id: 'navigationPanel.pinned',
+    defaultMessage: 'Pinned',
+  },
+  pin: {
+    id: 'navigationPanel.pin',
+    defaultMessage: 'Pin chat',
+  },
+  unpin: {
+    id: 'navigationPanel.unpin',
+    defaultMessage: 'Unpin chat',
   },
   noChats: {
     id: 'navigationPanel.noChats',
@@ -124,20 +136,36 @@ const NavRow: React.FC<NavRowProps> = ({ item, active, onClick }) => {
 interface SessionRowProps {
   session: SessionListItem;
   active: boolean;
+  pinned: boolean;
   status: SessionStatus | undefined;
   onClick: () => void;
   onRenamed: () => void;
+  onTogglePin: () => void;
 }
 
-const SessionRow: React.FC<SessionRowProps> = ({ session, active, status, onClick, onRenamed }) => {
+const SessionRow: React.FC<SessionRowProps> = ({
+  session,
+  active,
+  pinned,
+  status,
+  onClick,
+  onRenamed,
+  onTogglePin,
+}) => {
   const intl = useIntl();
   const [isEditing, setIsEditing] = useState(false);
   const isStreaming = status?.streamState === 'streaming';
   const hasError = status?.streamState === 'error';
   const hasUnread = status?.hasUnreadActivity ?? false;
+  const pinLabel = intl.formatMessage(pinned ? i18n.unpin : i18n.pin);
 
   return (
-    <div onClick={() => !isEditing && onClick()} className={rowClass(active, true)}>
+    <div onClick={() => !isEditing && onClick()} className={cn(rowClass(active, !pinned), 'group')}>
+      {pinned && (
+        <RowIcon>
+          <Pin className="size-4" />
+        </RowIcon>
+      )}
       <InlineEditText
         value={session.name}
         onSave={async (newName) => {
@@ -157,6 +185,17 @@ const SessionRow: React.FC<SessionRowProps> = ({ session, active, status, onClic
         onEditStart={() => setIsEditing(true)}
         onEditEnd={() => setIsEditing(false)}
       />
+      <button
+        onClick={(event) => {
+          event.stopPropagation();
+          onTogglePin();
+        }}
+        aria-label={pinLabel}
+        title={pinLabel}
+        className="no-drag hidden shrink-0 rounded text-text-tertiary transition-colors hover:text-text-primary group-hover:block"
+      >
+        {pinned ? <PinOff className="size-3.5" /> : <Pin className="size-3.5" />}
+      </button>
       <SessionIndicators isStreaming={isStreaming} hasUnread={hasUnread} hasError={hasError} />
     </div>
   );
@@ -273,8 +312,10 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
 
   const {
     recentSessionsByProject,
+    pinnedSessions,
     activeSessionId,
     fetchSessions,
+    setSessionPinned,
     handleNavClick,
     handleSessionClick,
   } = useNavigationSessions();
@@ -458,6 +499,31 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
         ))}
       </div>
 
+      {pinnedSessions.length > 0 && !keyword && (
+        <div className="mt-4 flex shrink-0 flex-col">
+          <div className="pl-4 pr-2 text-[14px] font-medium text-text-tertiary opacity-75">
+            {intl.formatMessage(i18n.pinned)}
+          </div>
+          <div className="flex max-h-[30vh] flex-col gap-px overflow-y-auto px-2 pt-1">
+            {pinnedSessions.map((session) => (
+              <SessionRow
+                key={session.id}
+                session={session}
+                active={session.id === activeSessionId}
+                pinned
+                status={sessionStatuses.get(session.id)}
+                onClick={() => {
+                  clearUnread(session.id);
+                  handleSessionClick(session.id);
+                }}
+                onRenamed={fetchSessions}
+                onTogglePin={() => setSessionPinned(session.id, false)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="mt-4 flex min-h-0 flex-1 flex-col">
         <div className="pl-4 pr-2 text-[14px] font-medium text-text-tertiary opacity-75">
           {intl.formatMessage(i18n.projects)}
@@ -513,12 +579,14 @@ export const Navigation: React.FC<{ className?: string }> = ({ className }) => {
                         key={session.id}
                         session={session}
                         active={session.id === activeSessionId}
+                        pinned={false}
                         status={sessionStatuses.get(session.id)}
                         onClick={() => {
                           clearUnread(session.id);
                           handleSessionClick(session.id);
                         }}
                         onRenamed={fetchSessions}
+                        onTogglePin={() => setSessionPinned(session.id, true)}
                       />
                     ))}
                   {!isCollapsed && hasMore && (

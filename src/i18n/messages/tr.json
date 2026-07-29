@@ -1271,6 +1271,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "Eşleşen sohbet yok"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "Sohbeti sabitle"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "Sabitlenenler"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,one{# konu} other{# konu}}"
   },
@@ -1288,6 +1294,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "Daha fazla göster"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "Sohbeti sabitlemeyi kaldır"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Başlıksız oturum"

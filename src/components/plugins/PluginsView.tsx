@@ -343,11 +343,11 @@ export default function PluginsView() {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedId = searchParams.get('plugin');
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (forceRefetch = false) => {
     setLoading(true);
     setError(null);
     try {
-      const listing = await listPlugins(getInitialWorkingDir());
+      const listing = await listPlugins(getInitialWorkingDir(), forceRefetch);
       setMarkets(listing.marketplaces);
     } catch (err) {
       setError(errorMessage(err, 'Failed to load plugins'));
@@ -638,7 +638,7 @@ export default function PluginsView() {
           <AlertCircle className="mb-3 h-10 w-10 text-text-danger" />
           <p className="mb-1">{intl.formatMessage(i18n.errorLoading)}</p>
           <p className="mb-4 text-sm">{error}</p>
-          <Button onClick={load}>{intl.formatMessage(i18n.tryAgain)}</Button>
+          <Button onClick={() => load(true)}>{intl.formatMessage(i18n.tryAgain)}</Button>
         </div>
       );
     }
@@ -654,7 +654,7 @@ export default function PluginsView() {
         <div className="flex-1" />
 
         <button
-          onClick={load}
+          onClick={() => load(true)}
           disabled={loading}
           aria-label={intl.formatMessage(i18n.refresh)}
           title={intl.formatMessage(i18n.refresh)}

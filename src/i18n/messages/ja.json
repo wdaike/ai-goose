@@ -1271,6 +1271,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "一致するチャットはありません"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "チャットをピン留め"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "ピン留め済み"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,other{# 件のスレッド}}"
   },
@@ -1288,6 +1294,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "もっと見る"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "ピン留めを解除"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "無題のセッション"

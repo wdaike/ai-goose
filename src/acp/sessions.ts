@@ -36,6 +36,7 @@ function threadToListItem(thread: Thread): SessionListItem {
     messageCount: 0,
     createdAt: iso(thread.createdAt),
     userSetName: Boolean(thread.name),
+    isPinned: thread.isPinned,
   };
 }
 
@@ -52,6 +53,7 @@ export interface SessionListItem {
   providerId?: string;
   modelId?: string;
   userSetName?: boolean;
+  isPinned?: boolean;
 }
 
 export interface SessionListPage {
@@ -133,6 +135,20 @@ export async function acpArchiveSession(sessionId: string): Promise<void> {
 
 export async function acpRenameSession(sessionId: string, title: string): Promise<void> {
   await codex.threadSetName(sessionId, title);
+}
+
+export async function acpSetSessionPinned(sessionId: string, isPinned: boolean): Promise<void> {
+  await codex.threadMetadataUpdate({ threadId: sessionId, isPinned });
+}
+
+export async function acpListPinnedSessions(maxSessions: number): Promise<SessionListItem[]> {
+  const response = await codex.threadList({
+    limit: maxSessions,
+    sortKey: 'updated_at',
+    isPinned: true,
+  });
+  const hidden = readHiddenThreadIds();
+  return response.data.filter((t) => !hidden.has(t.id)).map(threadToListItem);
 }
 
 export async function acpForkSession(

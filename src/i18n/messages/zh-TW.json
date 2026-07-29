@@ -1274,6 +1274,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "沒有相符的對話"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "置頂對話"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "置頂"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,other{# 個對話}}"
   },
@@ -1291,6 +1297,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "顯示更多"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "取消置頂"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "未命名工作階段"

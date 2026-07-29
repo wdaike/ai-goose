@@ -1271,6 +1271,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "No hay chats coincidentes"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "Fijar chat"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "Fijados"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,one{# hilo} other{# hilos}}"
   },
@@ -1288,6 +1294,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "Mostrar más"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "Dejar de fijar el chat"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Sesión sin título"

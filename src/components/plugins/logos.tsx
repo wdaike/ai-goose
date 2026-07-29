@@ -75,12 +75,15 @@ export function SkillLogo({
   className: string;
 }) {
   const iface = skill.interface;
-  const localUrl = useLocalImage(iface?.iconLarge ?? iface?.iconSmall ?? null);
+  const remoteUrl = iface?.iconLargeUrl ?? iface?.iconSmallUrl ?? null;
+  const localUrl = useLocalImage(
+    remoteUrl ? null : (iface?.iconLarge ?? iface?.iconSmall ?? null)
+  );
 
   return (
     <Logo
       name={iface?.displayName || skill.name}
-      url={localUrl}
+      url={remoteUrl ?? localUrl}
       brandColor={iface?.brandColor ?? null}
       className={className}
       fallback={<Zap className="h-5 w-5" />}

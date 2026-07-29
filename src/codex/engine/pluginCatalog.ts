@@ -8,8 +8,9 @@ export interface PluginListing {
   loadErrors: MarketplaceLoadErrorInfo[];
 }
 
-export async function listPlugins(cwd: string): Promise<PluginListing> {
-  const response = await codex.pluginList({ cwds: cwd ? [cwd] : [] });
+/** `forceRefetch` bypasses the cached remote catalog, for an explicit refresh. */
+export async function listPlugins(cwd: string, forceRefetch = false): Promise<PluginListing> {
+  const response = await codex.pluginList({ cwds: cwd ? [cwd] : [], forceRefetch });
   return { marketplaces: response.marketplaces, loadErrors: response.marketplaceLoadErrors };
 }
 

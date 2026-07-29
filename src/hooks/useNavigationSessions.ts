@@ -6,12 +6,15 @@ import { AppEvents } from '../constants/events';
 import type { Session } from '../types/session';
 import {
   acpGetSessionListItem,
+  acpListPinnedSessions,
   acpListRecentSessions,
+  acpSetSessionPinned,
   type SessionListItem,
 } from '../acp/sessions';
 import { groupSessionsByProject } from '../utils/projectSessions';
 
 const MAX_RECENT_SESSIONS = 25;
+const MAX_PINNED_SESSIONS = 25;
 
 export function prependUnique(
   prev: SessionListItem[],
@@ -55,8 +58,11 @@ export function useNavigationSessions() {
   const chatContext = useChatContext();
 
   const [recentSessions, setRecentSessions] = useState<SessionListItem[]>([]);
+  const [pinnedSessions, setPinnedSessions] = useState<SessionListItem[]>([]);
+  // Pinned threads get their own sidebar section, so they drop out of the
+  // project groups rather than showing up twice.
   const recentSessionsByProject = useMemo(
-    () => groupSessionsByProject(recentSessions),
+    () => groupSessionsByProject(recentSessions.filter((session) => !session.isPinned)),
     [recentSessions]
   );
   const lastSessionIdRef = useRef<string | null>(null);
@@ -73,12 +79,32 @@ export function useNavigationSessions() {
 
   const fetchSessions = useCallback(async () => {
     try {
-      const sessions = await acpListRecentSessions(MAX_RECENT_SESSIONS);
+      const [sessions, pinned] = await Promise.all([
+        acpListRecentSessions(MAX_RECENT_SESSIONS),
+        acpListPinnedSessions(MAX_PINNED_SESSIONS),
+      ]);
       setRecentSessions(sessions);
+      setPinnedSessions(pinned);
     } catch (error) {
       console.error('Failed to fetch sessions:', error);
     }
   }, []);
+
+  const setSessionPinned = useCallback(
+    async (sessionId: string, isPinned: boolean) => {
+      try {
+        await acpSetSessionPinned(sessionId, isPinned);
+      } catch (error) {
+        console.error('Failed to update pinned state:', error);
+        return;
+      }
+      setRecentSessions((prev) =>
+        prev.map((session) => (session.id === sessionId ? { ...session, isPinned } : session))
+      );
+      await fetchSessions();
+    },
+    [fetchSessions]
+  );
 
   useEffect(() => {
     if (!activeSessionId) return;
@@ -145,6 +171,7 @@ export function useNavigationSessions() {
       const { sessionId } = (event as CustomEvent<{ sessionId: string }>).detail;
 
       setRecentSessions((prev) => prev.filter((session) => session.id !== sessionId));
+      setPinnedSessions((prev) => prev.filter((session) => session.id !== sessionId));
 
       if (lastSessionIdRef.current === sessionId) {
         lastSessionIdRef.current = null;
@@ -163,13 +190,14 @@ export function useNavigationSessions() {
         event as CustomEvent<{ sessionId: string; newName: string; userInitiated?: boolean }>
       ).detail;
 
-      setRecentSessions((prev) =>
+      const applyRename = (prev: SessionListItem[]) =>
         prev.map((session) =>
           session.id === sessionId
             ? { ...session, name: newName, ...(userInitiated && { user_set_name: true }) }
             : session
-        )
-      );
+        );
+      setRecentSessions(applyRename);
+      setPinnedSessions(applyRename);
     };
 
     window.addEventListener(AppEvents.SESSION_DELETED, handleSessionDeleted);
@@ -208,8 +236,10 @@ export function useNavigationSessions() {
   return {
     recentSessions,
     recentSessionsByProject,
+    pinnedSessions,
     activeSessionId,
     fetchSessions,
+    setSessionPinned,
     handleNavClick,
     handleSessionClick,
   };

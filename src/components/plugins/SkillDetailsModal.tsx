@@ -81,15 +81,19 @@ function stripFrontmatter(markdown: string): string {
 
 function SkillIcon({ skill }: { skill: DisplayableSkill }) {
   const iface = skill.interface;
-  const localUrl = useLocalImage(iface?.iconLarge ?? iface?.iconSmall ?? null);
+  const remoteUrl = iface?.iconLargeUrl ?? iface?.iconSmallUrl ?? null;
+  const localUrl = useLocalImage(
+    remoteUrl ? null : (iface?.iconLarge ?? iface?.iconSmall ?? null)
+  );
+  const iconUrl = remoteUrl ?? localUrl;
 
   return (
     <div
       style={iface?.brandColor ? { backgroundColor: iface.brandColor, color: '#fff' } : undefined}
       className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border-primary bg-background-secondary text-text-secondary"
     >
-      {localUrl ? (
-        <img src={localUrl} alt="" className="h-full w-full object-cover" />
+      {iconUrl ? (
+        <img src={iconUrl} alt="" className="h-full w-full object-cover" />
       ) : (
         <Zap className="h-5 w-5" />
       )}

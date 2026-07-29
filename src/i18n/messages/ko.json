@@ -1271,6 +1271,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "일치하는 채팅이 없습니다"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "채팅 고정"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "고정됨"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,other{스레드 #개}}"
   },
@@ -1288,6 +1294,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "더 보기"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "채팅 고정 해제"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "제목 없는 세션"

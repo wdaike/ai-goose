@@ -1271,6 +1271,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "Keine passenden Chats"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "Chat anheften"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "Angeheftet"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,one{# Thread} other{# Threads}}"
   },
@@ -1288,6 +1294,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "Mehr anzeigen"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "Chat lösen"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Unbenannte Sitzung"

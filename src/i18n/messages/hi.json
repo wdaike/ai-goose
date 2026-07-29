@@ -1271,6 +1271,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "कोई मेल खाती चैट नहीं"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "चैट पिन करें"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "पिन किए गए"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,one{# थ्रेड} other{# थ्रेड}}"
   },
@@ -1288,6 +1294,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "और दिखाएँ"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "चैट अनपिन करें"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "शीर्षकहीन सत्र"

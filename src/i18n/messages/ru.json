@@ -1271,6 +1271,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "Подходящих чатов нет"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "Закрепить чат"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "Закреплённые"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,one{# тред} few{# треда} other{# тредов}}"
   },
@@ -1288,6 +1294,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "Показать ещё"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "Открепить чат"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Безымянный сеанс"

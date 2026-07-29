@@ -1271,6 +1271,12 @@
   "navigationPanel.noResults": {
     "defaultMessage": "Tiada sembang yang sepadan"
   },
+  "navigationPanel.pin": {
+    "defaultMessage": "Semat sembang"
+  },
+  "navigationPanel.pinned": {
+    "defaultMessage": "Disemat"
+  },
   "navigationPanel.projectThreads": {
     "defaultMessage": "{count,plural,other{# bebenang}}"
   },
@@ -1288,6 +1294,9 @@
   },
   "navigationPanel.showMore": {
     "defaultMessage": "Tunjukkan lagi"
+  },
+  "navigationPanel.unpin": {
+    "defaultMessage": "Nyahsemat sembang"
   },
   "navigationPanel.untitledSession": {
     "defaultMessage": "Sesi tanpa tajuk"
