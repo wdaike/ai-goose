@@ -1,13 +1,4 @@
 {
-  "alertBox.autoCompactAt": {
-    "defaultMessage": "Compactação automática em"
-  },
-  "alertBox.compactNow": {
-    "defaultMessage": "Compactar agora"
-  },
-  "alertBox.failedToSaveThreshold": {
-    "defaultMessage": "Falha ao guardar o limite: {error}"
-  },
   "appLayout.back": {
     "defaultMessage": "Voltar"
   },
@@ -113,9 +104,6 @@
   "customProviderForm.apiUrlRequired": {
     "defaultMessage": "O URL da API é obrigatório"
   },
-  "customProviderForm.attachments": {
-    "defaultMessage": "Anexos"
-  },
   "customProviderForm.authHint": {
     "defaultMessage": "LLMs locais como o Ollama normalmente não requerem uma chave de API."
   },
@@ -125,26 +113,11 @@
   "customProviderForm.availableModels": {
     "defaultMessage": "Modelos disponíveis (separados por vírgulas)"
   },
-  "customProviderForm.back": {
-    "defaultMessage": "← Voltar"
-  },
   "customProviderForm.cancel": {
     "defaultMessage": "Cancelar"
   },
   "customProviderForm.cannotDeleteActive": {
     "defaultMessage": "Não pode eliminar este fornecedor enquanto estiver a ser utilizado. Mude primeiro para um modelo diferente."
-  },
-  "customProviderForm.chooseSetup": {
-    "defaultMessage": "Escolha como pretende configurar o seu fornecedor."
-  },
-  "customProviderForm.clear": {
-    "defaultMessage": "Limpar"
-  },
-  "customProviderForm.configureManually": {
-    "defaultMessage": "Configurar manualmente"
-  },
-  "customProviderForm.configureManuallyDesc": {
-    "defaultMessage": "Introduza você mesmo todos os detalhes do fornecedor"
   },
   "customProviderForm.confirmDelete": {
     "defaultMessage": "Confirmar eliminação"
@@ -173,9 +146,6 @@
   "customProviderForm.displayNameRequired": {
     "defaultMessage": "O nome a apresentar é obrigatório"
   },
-  "customProviderForm.docs": {
-    "defaultMessage": "Documentação"
-  },
   "customProviderForm.headerBothRequired": {
     "defaultMessage": "É necessário introduzir o nome e o valor do cabeçalho"
   },
@@ -197,29 +167,14 @@
   "customProviderForm.providerType": {
     "defaultMessage": "Tipo de fornecedor"
   },
-  "customProviderForm.reasoning": {
-    "defaultMessage": "Raciocínio"
-  },
   "customProviderForm.requiresApiKey": {
     "defaultMessage": "Este fornecedor requer uma chave de API"
-  },
-  "customProviderForm.startFromTemplate": {
-    "defaultMessage": "Começar a partir de um modelo de fornecedor"
-  },
-  "customProviderForm.startFromTemplateDesc": {
-    "defaultMessage": "Escolha um fornecedor conhecido e preencheremos automaticamente a configuração"
   },
   "customProviderForm.submitError": {
     "defaultMessage": "Falha ao guardar o fornecedor. Verifique a sua configuração e tente novamente."
   },
-  "customProviderForm.toolCalling": {
-    "defaultMessage": "Chamada de ferramentas"
-  },
   "customProviderForm.updateProvider": {
     "defaultMessage": "Atualizar provedor"
-  },
-  "customProviderForm.usingTemplate": {
-    "defaultMessage": "Usando modelo: {name}"
   },
   "customProviderForm.valuePlaceholder": {
     "defaultMessage": "Valor"
@@ -227,44 +182,11 @@
   "defaultCardButtons.configureSettings": {
     "defaultMessage": "Configurar definições de {name}"
   },
-  "defaultCardButtons.deleteSettings": {
-    "defaultMessage": "Excluir definições de {name}"
-  },
   "defaultCardButtons.editSettings": {
     "defaultMessage": "Editar definições de {name}"
   },
   "defaultCardButtons.getStarted": {
     "defaultMessage": "Comece a usar o iCodex!"
-  },
-  "defaultProviderSetupForm.apiHostLabel": {
-    "defaultMessage": "Host da API"
-  },
-  "defaultProviderSetupForm.apiHostPlaceholder": {
-    "defaultMessage": "https://api.example.com"
-  },
-  "defaultProviderSetupForm.apiKeyLabel": {
-    "defaultMessage": "Chave de API"
-  },
-  "defaultProviderSetupForm.apiKeyPlaceholder": {
-    "defaultMessage": "Sua chave de API"
-  },
-  "defaultProviderSetupForm.hideOptions": {
-    "defaultMessage": "Ocultar {count} opções"
-  },
-  "defaultProviderSetupForm.loadingConfig": {
-    "defaultMessage": "Carregando valores de configuração..."
-  },
-  "defaultProviderSetupForm.modelsLabel": {
-    "defaultMessage": "Modelos"
-  },
-  "defaultProviderSetupForm.modelsPlaceholder": {
-    "defaultMessage": "modelo-a, modelo-b"
-  },
-  "defaultProviderSetupForm.noConfigParameters": {
-    "defaultMessage": "Nenhum parâmetro de configuração para este provedor."
-  },
-  "defaultProviderSetupForm.showOptions": {
-    "defaultMessage": "Mostrar {count} opções"
   },
   "dialog.close": {
     "defaultMessage": "Fechar"
@@ -598,21 +520,6 @@
   },
   "hub.suggestionReview": {
     "defaultMessage": "Revisar o código e sugerir mudanças"
-  },
-  "huggingFaceSignInPrompt.failedToConfigure": {
-    "defaultMessage": "Falha ao entrar no Hugging Face: {error}"
-  },
-  "huggingFaceSignInPrompt.signIn": {
-    "defaultMessage": "Entrar"
-  },
-  "huggingFaceSignInPrompt.signedIn": {
-    "defaultMessage": "Conectado ao Hugging Face"
-  },
-  "huggingFaceSignInPrompt.signingIn": {
-    "defaultMessage": "Entrando..."
-  },
-  "huggingFaceSignInPrompt.title": {
-    "defaultMessage": "Hugging Face"
   },
   "imagePreview.altText": {
     "defaultMessage": "imagem do iCodex"
@@ -1070,180 +977,6 @@
   "modelSettingsButtons.switchModels": {
     "defaultMessage": "Trocar modelos"
   },
-  "modelSettingsPanel.batchSize": {
-    "defaultMessage": "Tamanho do lote"
-  },
-  "modelSettingsPanel.batchSizeDescription": {
-    "defaultMessage": "Lote de processamento de prompts"
-  },
-  "modelSettingsPanel.builtinChatTemplate": {
-    "defaultMessage": "Modelo integrado"
-  },
-  "modelSettingsPanel.builtinChatTemplateDescription": {
-    "defaultMessage": "Selecione o nome de um modelo integrado do llama.cpp"
-  },
-  "modelSettingsPanel.chatTemplate": {
-    "defaultMessage": "Modelo de conversa"
-  },
-  "modelSettingsPanel.chatTemplateBuiltin": {
-    "defaultMessage": "Integrado"
-  },
-  "modelSettingsPanel.chatTemplateCustomInline": {
-    "defaultMessage": "Personalizado em linha"
-  },
-  "modelSettingsPanel.chatTemplateDescription": {
-    "defaultMessage": "Use os metadados GGUF incorporados, um modelo integrado do llama.cpp ou Jinja em linha"
-  },
-  "modelSettingsPanel.chatTemplateEmbedded": {
-    "defaultMessage": "Incorporado"
-  },
-  "modelSettingsPanel.contextAndGeneration": {
-    "defaultMessage": "Contexto e Geração"
-  },
-  "modelSettingsPanel.contextSize": {
-    "defaultMessage": "Tamanho do contexto"
-  },
-  "modelSettingsPanel.contextSizeDescription": {
-    "defaultMessage": "Janela de contexto máxima (0 = padrão do modelo)"
-  },
-  "modelSettingsPanel.customChatTemplate": {
-    "defaultMessage": "Modelo de conversa personalizado"
-  },
-  "modelSettingsPanel.customChatTemplateDescription": {
-    "defaultMessage": "Cole o código-fonte completo do modelo de conversa Jinja"
-  },
-  "modelSettingsPanel.etaLearningRate": {
-    "defaultMessage": "Eta (taxa de aprendizado)"
-  },
-  "modelSettingsPanel.flashAttention": {
-    "defaultMessage": "Flash attention"
-  },
-  "modelSettingsPanel.flashAttentionDescription": {
-    "defaultMessage": "Ativar a otimização de flash attention"
-  },
-  "modelSettingsPanel.frequencyPenalty": {
-    "defaultMessage": "Penalidade de frequência"
-  },
-  "modelSettingsPanel.frequencyPenaltyDescription": {
-    "defaultMessage": "0.0 = desativado"
-  },
-  "modelSettingsPanel.gpuLayers": {
-    "defaultMessage": "Camadas de GPU"
-  },
-  "modelSettingsPanel.gpuLayersDescription": {
-    "defaultMessage": "Camadas a descarregar na GPU"
-  },
-  "modelSettingsPanel.loadingSettings": {
-    "defaultMessage": "Carregando configurações..."
-  },
-  "modelSettingsPanel.lockModelInRam": {
-    "defaultMessage": "Bloquear modelo na RAM (mlock)"
-  },
-  "modelSettingsPanel.lockModelInRamDescription": {
-    "defaultMessage": "Impedir que o modelo seja transferido para o disco"
-  },
-  "modelSettingsPanel.maxOutputTokens": {
-    "defaultMessage": "Máximo de tokens de saída"
-  },
-  "modelSettingsPanel.maxOutputTokensDescription": {
-    "defaultMessage": "Limite de tokens gerados"
-  },
-  "modelSettingsPanel.minP": {
-    "defaultMessage": "Min P"
-  },
-  "modelSettingsPanel.performance": {
-    "defaultMessage": "Desempenho"
-  },
-  "modelSettingsPanel.presencePenalty": {
-    "defaultMessage": "Penalidade de presença"
-  },
-  "modelSettingsPanel.presencePenaltyDescription": {
-    "defaultMessage": "0.0 = desativado"
-  },
-  "modelSettingsPanel.repeatPenalty": {
-    "defaultMessage": "Penalidade de repetição"
-  },
-  "modelSettingsPanel.repeatPenaltyDescription": {
-    "defaultMessage": "1.0 = desativado"
-  },
-  "modelSettingsPanel.repeatWindow": {
-    "defaultMessage": "Janela de repetição"
-  },
-  "modelSettingsPanel.repeatWindowDescription": {
-    "defaultMessage": "Tokens a considerar retroativamente"
-  },
-  "modelSettingsPanel.repetitionPenalty": {
-    "defaultMessage": "Penalidade de Repetição"
-  },
-  "modelSettingsPanel.reset": {
-    "defaultMessage": "Redefinir"
-  },
-  "modelSettingsPanel.resetToDefaults": {
-    "defaultMessage": "Redefinir para os padrões"
-  },
-  "modelSettingsPanel.samplingStrategy": {
-    "defaultMessage": "Estratégia de Amostragem"
-  },
-  "modelSettingsPanel.saving": {
-    "defaultMessage": "Salvando..."
-  },
-  "modelSettingsPanel.seed": {
-    "defaultMessage": "Seed"
-  },
-  "modelSettingsPanel.tauTargetEntropy": {
-    "defaultMessage": "Tau (entropia alvo)"
-  },
-  "modelSettingsPanel.temperature": {
-    "defaultMessage": "Temperatura"
-  },
-  "modelSettingsPanel.threads": {
-    "defaultMessage": "Threads"
-  },
-  "modelSettingsPanel.threadsDescription": {
-    "defaultMessage": "Threads de CPU para geração"
-  },
-  "modelSettingsPanel.toolCalling": {
-    "defaultMessage": "Chamada de ferramentas"
-  },
-  "modelSettingsPanel.toolCallingAuto": {
-    "defaultMessage": "Automático"
-  },
-  "modelSettingsPanel.toolCallingDescription": {
-    "defaultMessage": "Escolha como os modelos locais selecionam a chamada de ferramentas nativa ou emulada"
-  },
-  "modelSettingsPanel.toolCallingForceEmulated": {
-    "defaultMessage": "Forçar emulada"
-  },
-  "modelSettingsPanel.toolCallingForceNative": {
-    "defaultMessage": "Forçar nativa"
-  },
-  "modelSettingsPanel.topK": {
-    "defaultMessage": "Top K"
-  },
-  "modelSettingsPanel.topP": {
-    "defaultMessage": "Top P"
-  },
-  "modelsBottomBar.changeModel": {
-    "defaultMessage": "Alterar Modelo"
-  },
-  "modelsBottomBar.currentModel": {
-    "defaultMessage": "Modelo atual"
-  },
-  "modelsBottomBar.loadingModel": {
-    "defaultMessage": "Carregando modelo..."
-  },
-  "modelsBottomBar.localModelSettings": {
-    "defaultMessage": "Configurações do Modelo Local"
-  },
-  "modelsBottomBar.localModelSettingsTitle": {
-    "defaultMessage": "Configurações do Modelo Local — {modelName}"
-  },
-  "modelsBottomBar.resolvedModel": {
-    "defaultMessage": "Modelo resolvido"
-  },
-  "modelsBottomBar.selectModel": {
-    "defaultMessage": "Selecionar Modelo"
-  },
   "modelsSection.resetDescription": {
     "defaultMessage": "Limpe suas configurações de modelo e provedor selecionados para começar do zero"
   },
@@ -1472,132 +1205,6 @@
   "providerCard.unknownProvider": {
     "defaultMessage": "Fornecedor desconhecido"
   },
-  "providerCatalogPicker.anthropicCompatible": {
-    "defaultMessage": "Compatível com Anthropic"
-  },
-  "providerCatalogPicker.apiFormat": {
-    "defaultMessage": "Formato da API"
-  },
-  "providerCatalogPicker.cancel": {
-    "defaultMessage": "Cancelar"
-  },
-  "providerCatalogPicker.chooseProvider": {
-    "defaultMessage": "Escolher fornecedor"
-  },
-  "providerCatalogPicker.errorPrefix": {
-    "defaultMessage": "Erro: {error}"
-  },
-  "providerCatalogPicker.loadingProviders": {
-    "defaultMessage": "A carregar fornecedores..."
-  },
-  "providerCatalogPicker.modelsAvailable": {
-    "defaultMessage": "{count} modelos disponíveis"
-  },
-  "providerCatalogPicker.noProvidersAvailable": {
-    "defaultMessage": "Não há fornecedores disponíveis"
-  },
-  "providerCatalogPicker.noProvidersFound": {
-    "defaultMessage": "Não foram encontrados fornecedores para \"{query}\""
-  },
-  "providerCatalogPicker.openaiCompatible": {
-    "defaultMessage": "Compatível com OpenAI"
-  },
-  "providerCatalogPicker.requiresEnvVar": {
-    "defaultMessage": "• Requer {envVar}"
-  },
-  "providerCatalogPicker.searchProviders": {
-    "defaultMessage": "Pesquisar fornecedores..."
-  },
-  "providerCatalogPicker.selectFormatDescription": {
-    "defaultMessage": "Selecione um formato de API e um fornecedor. Preencheremos a configuração automaticamente por si."
-  },
-  "providerConfigForm.browserWindowOpen": {
-    "defaultMessage": "Será aberta uma janela do navegador para concluir o início de sessão."
-  },
-  "providerConfigForm.configuring": {
-    "defaultMessage": "A configurar..."
-  },
-  "providerConfigForm.continue": {
-    "defaultMessage": "Continuar"
-  },
-  "providerConfigForm.deviceCodeFlowHint": {
-    "defaultMessage": "Será aberta uma janela do navegador e o código de verificação será copiado para a área de transferência. Cole-o no navegador para concluir o início de sessão."
-  },
-  "providerConfigForm.noApiKey": {
-    "defaultMessage": "Não tem uma chave de API?"
-  },
-  "providerConfigForm.signInWith": {
-    "defaultMessage": "Iniciar sessão com {providerName}"
-  },
-  "providerConfigForm.signingIn": {
-    "defaultMessage": "A iniciar sessão..."
-  },
-  "providerConfigurationModal.addApiKeyDescription": {
-    "defaultMessage": "Adicione a(s) sua(s) chave(s) de API deste fornecedor para integrar no iCodex"
-  },
-  "providerConfigurationModal.browserWindowHint": {
-    "defaultMessage": "Será aberta uma janela do navegador para concluir o início de sessão."
-  },
-  "providerConfigurationModal.cancel": {
-    "defaultMessage": "Cancelar"
-  },
-  "providerConfigurationModal.cannotDeleteActive": {
-    "defaultMessage": "Não pode eliminar este fornecedor enquanto estiver em utilização. Mude primeiro para um modelo diferente."
-  },
-  "providerConfigurationModal.checkConfigAgain": {
-    "defaultMessage": "Verifique novamente a sua configuração para utilizar este fornecedor."
-  },
-  "providerConfigurationModal.close": {
-    "defaultMessage": "Fechar"
-  },
-  "providerConfigurationModal.configureHeader": {
-    "defaultMessage": "Configurar {providerName}"
-  },
-  "providerConfigurationModal.deleteConfigHeader": {
-    "defaultMessage": "Eliminar configuração de {providerName}"
-  },
-  "providerConfigurationModal.deleteConfirmation": {
-    "defaultMessage": "Isto irá eliminar permanentemente a configuração atual do fornecedor."
-  },
-  "providerConfigurationModal.deviceCodeFlowHint": {
-    "defaultMessage": "Será aberta uma janela do navegador e o código de verificação será copiado para a área de transferência. Cole-o no navegador para concluir o início de sessão."
-  },
-  "providerConfigurationModal.errorCheckingConfig": {
-    "defaultMessage": "Ocorreu um erro ao verificar a configuração deste fornecedor."
-  },
-  "providerConfigurationModal.errorTitle": {
-    "defaultMessage": "Erro"
-  },
-  "providerConfigurationModal.externalSetupIntro": {
-    "defaultMessage": "Este fornecedor é configurado fora do iCodex. Siga estes passos:"
-  },
-  "providerConfigurationModal.goBack": {
-    "defaultMessage": "Voltar"
-  },
-  "providerConfigurationModal.huggingFaceOAuthDescription": {
-    "defaultMessage": "Inicie sessão para usar os Inference Providers da Hugging Face sem introduzir manualmente um token de API."
-  },
-  "providerConfigurationModal.oauthLoginFailed": {
-    "defaultMessage": "Falha no início de sessão OAuth: {error}"
-  },
-  "providerConfigurationModal.oauthSignInDescription": {
-    "defaultMessage": "Inicie sessão com a sua conta {providerName} para usar este fornecedor"
-  },
-  "providerConfigurationModal.parameterRequired": {
-    "defaultMessage": "{paramName} é obrigatório"
-  },
-  "providerConfigurationModal.removeConfiguration": {
-    "defaultMessage": "Remover configuração"
-  },
-  "providerConfigurationModal.seeDocumentation": {
-    "defaultMessage": "Consulte a <link>documentação</link> para mais detalhes."
-  },
-  "providerConfigurationModal.signInWith": {
-    "defaultMessage": "Iniciar sessão com {providerName}"
-  },
-  "providerConfigurationModal.signingIn": {
-    "defaultMessage": "A iniciar sessão..."
-  },
   "providerGrid.addProvider": {
     "defaultMessage": "Adicionar fornecedor"
   },
@@ -1612,9 +1219,6 @@
   },
   "providerGrid.editProvider": {
     "defaultMessage": "Editar fornecedor"
-  },
-  "providerGrid.fromTemplateOrManual": {
-    "defaultMessage": "A partir de um modelo ou configuração manual"
   },
   "providerGrid.noMatch": {
     "defaultMessage": "Nenhum fornecedor corresponde a \"{query}\""
@@ -1657,30 +1261,6 @@
   },
   "providerSettings.otherProviders": {
     "defaultMessage": "Outros fornecedores"
-  },
-  "providerSetupActions.cancel": {
-    "defaultMessage": "Cancelar"
-  },
-  "providerSetupActions.cannotDeleteActive": {
-    "defaultMessage": "Não pode eliminar {providerName} enquanto estiver em utilização. Mude para um modelo diferente antes de eliminar este fornecedor."
-  },
-  "providerSetupActions.confirmDelete": {
-    "defaultMessage": "Confirmar eliminação"
-  },
-  "providerSetupActions.confirmDeleteMessage": {
-    "defaultMessage": "Tem a certeza de que pretende eliminar os parâmetros de configuração de {providerName}? Esta ação não pode ser anulada."
-  },
-  "providerSetupActions.deleteProvider": {
-    "defaultMessage": "Eliminar fornecedor"
-  },
-  "providerSetupActions.enableProvider": {
-    "defaultMessage": "Ativar fornecedor"
-  },
-  "providerSetupActions.ok": {
-    "defaultMessage": "Ok"
-  },
-  "providerSetupActions.submit": {
-    "defaultMessage": "Submeter"
   },
   "resetProviderSection.resetButton": {
     "defaultMessage": "Repor fornecedor e modelo"
@@ -2171,18 +1751,6 @@
   "terminalPanel.newTerminal": {
     "defaultMessage": "Novo terminal"
   },
-  "themeSelector.dark": {
-    "defaultMessage": "Escuro"
-  },
-  "themeSelector.light": {
-    "defaultMessage": "Claro"
-  },
-  "themeSelector.system": {
-    "defaultMessage": "Sistema"
-  },
-  "themeSelector.theme": {
-    "defaultMessage": "Tema"
-  },
   "toolApprovalButtons.allowOnce": {
     "defaultMessage": "Permitir Uma Vez"
   },
@@ -2305,5 +1873,11 @@
   },
   "workToolActivity.usedTools": {
     "defaultMessage": "{count,plural,one{Usou uma ferramenta} other{Usou # ferramentas}}"
+  },
+  "providerGrid.connectOpenAiCompatible": {
+    "defaultMessage": "Conecte um endpoint compatível com OpenAI"
+  },
+  "providerSelector.continueWith": {
+    "defaultMessage": "Continuar com {providerName}"
   }
 }

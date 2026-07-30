@@ -1,7 +1,6 @@
 import React, { memo, useMemo, useCallback, useState } from 'react';
 import { ProviderCard } from './subcomponents/ProviderCard';
 import CardContainer from './subcomponents/CardContainer';
-import ProviderConfigurationModal from './modal/ProviderConfigurationModal';
 import type { CustomProviderConfigDto } from '../../../types/goose';
 import type { ProviderDetails, UpdateCustomProviderRequest } from '../../../types/providers';
 import {
@@ -24,9 +23,9 @@ const i18n = defineMessages({
     id: 'providerGrid.addProvider',
     defaultMessage: 'Add Provider',
   },
-  fromTemplateOrManual: {
-    id: 'providerGrid.fromTemplateOrManual',
-    defaultMessage: 'From template or manual setup',
+  connectOpenAiCompatible: {
+    id: 'providerGrid.connectOpenAiCompatible',
+    defaultMessage: 'Connect an OpenAI-compatible endpoint',
   },
   editProvider: {
     id: 'providerGrid.editProvider',
@@ -81,7 +80,7 @@ const CustomProviderCard = memo(function CustomProviderCard({ onClick }: { onCli
           <div className="text-sm text-gray-600 dark:text-gray-400 text-center">
             <div className="font-medium">{intl.formatMessage(i18n.addProvider)}</div>
             <div className="text-xs text-gray-500 mt-1">
-              {intl.formatMessage(i18n.fromTemplateOrManual)}
+              {intl.formatMessage(i18n.connectOpenAiCompatible)}
             </div>
           </div>
         </div>
@@ -107,7 +106,6 @@ function ProviderCards({
 }) {
   const intl = useIntl();
   const [searchQuery, setSearchQuery] = useState('');
-  const [configuringProvider, setConfiguringProvider] = useState<ProviderDetails | null>(null);
   const [showCustomProviderModal, setShowCustomProviderModal] = useState(false);
   const [showSwitchModelModal, setShowSwitchModelModal] = useState(false);
   const [switchModelProvider, setSwitchModelProvider] = useState<string | null>(null);
@@ -124,11 +122,6 @@ function ProviderCards({
     setSwitchModelProvider(provider.name);
     setShowSwitchModelModal(true);
   }, []);
-
-  const openModal = useCallback(
-    (provider: ProviderDetails) => setConfiguringProvider(provider),
-    []
-  );
 
   const configureProviderViaModal = useCallback(
     async (provider: ProviderDetails) => {
@@ -153,11 +146,9 @@ function ProviderCards({
 
           setShowCustomProviderModal(true);
         }
-      } else {
-        openModal(provider);
       }
     },
-    [openModal, getCurrentModelAndProvider]
+    [getCurrentModelAndProvider]
   );
 
   const handleUpdateCustomProvider = useCallback(
@@ -194,25 +185,6 @@ function ProviderCards({
     setEditingProvider(null);
     setIsActiveProvider(false);
   }, []);
-
-  const onCloseProviderConfig = useCallback(() => {
-    setConfiguringProvider(null);
-    if (refreshProviders) {
-      refreshProviders();
-    }
-  }, [refreshProviders]);
-
-  const onProviderConfigured = useCallback(
-    async (provider: ProviderDetails) => {
-      setConfiguringProvider(null);
-      if (refreshProviders) {
-        await refreshProviders();
-      }
-      setSwitchModelProvider(provider.name);
-      setShowSwitchModelModal(true);
-    },
-    [refreshProviders]
-  );
 
   const onCloseSwitchModelModal = useCallback(() => {
     setShowSwitchModelModal(false);
@@ -342,13 +314,6 @@ function ProviderCards({
           />
         </DialogContent>
       </Dialog>
-      {configuringProvider && (
-        <ProviderConfigurationModal
-          provider={configuringProvider}
-          onClose={onCloseProviderConfig}
-          onConfigured={onProviderConfigured}
-        />
-      )}
       {showSwitchModelModal && (
         <SwitchModelModal
           sessionId={null}

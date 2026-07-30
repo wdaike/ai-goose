@@ -1,13 +1,4 @@
 {
-  "alertBox.autoCompactAt": {
-    "defaultMessage": "Padatkan automatik pada"
-  },
-  "alertBox.compactNow": {
-    "defaultMessage": "Padatkan sekarang"
-  },
-  "alertBox.failedToSaveThreshold": {
-    "defaultMessage": "Gagal menyimpan ambang: {error}"
-  },
   "appLayout.back": {
     "defaultMessage": "Kembali"
   },
@@ -113,9 +104,6 @@
   "customProviderForm.apiUrlRequired": {
     "defaultMessage": "URL API diperlukan"
   },
-  "customProviderForm.attachments": {
-    "defaultMessage": "Lampiran"
-  },
   "customProviderForm.authHint": {
     "defaultMessage": "LLM setempat seperti Ollama biasanya tidak memerlukan kunci API."
   },
@@ -125,26 +113,11 @@
   "customProviderForm.availableModels": {
     "defaultMessage": "Model Tersedia (dipisahkan dengan koma)"
   },
-  "customProviderForm.back": {
-    "defaultMessage": "← Kembali"
-  },
   "customProviderForm.cancel": {
     "defaultMessage": "Batal"
   },
   "customProviderForm.cannotDeleteActive": {
     "defaultMessage": "Anda tidak boleh memadam pembekal ini semasa ia sedang digunakan. Sila tukar kepada model lain dahulu."
-  },
-  "customProviderForm.chooseSetup": {
-    "defaultMessage": "Pilih cara anda mahu menyediakan pembekal anda."
-  },
-  "customProviderForm.clear": {
-    "defaultMessage": "Kosongkan"
-  },
-  "customProviderForm.configureManually": {
-    "defaultMessage": "Konfigurasi secara manual"
-  },
-  "customProviderForm.configureManuallyDesc": {
-    "defaultMessage": "Masukkan semua butiran pembekal sendiri"
   },
   "customProviderForm.confirmDelete": {
     "defaultMessage": "Sahkan Pemadaman"
@@ -173,9 +146,6 @@
   "customProviderForm.displayNameRequired": {
     "defaultMessage": "Nama paparan diperlukan"
   },
-  "customProviderForm.docs": {
-    "defaultMessage": "Dokumentasi"
-  },
   "customProviderForm.headerBothRequired": {
     "defaultMessage": "Kedua-dua nama dan nilai pengepala mesti dimasukkan"
   },
@@ -197,29 +167,14 @@
   "customProviderForm.providerType": {
     "defaultMessage": "Jenis Pembekal"
   },
-  "customProviderForm.reasoning": {
-    "defaultMessage": "Penaakulan"
-  },
   "customProviderForm.requiresApiKey": {
     "defaultMessage": "Pembekal ini memerlukan kunci API"
-  },
-  "customProviderForm.startFromTemplate": {
-    "defaultMessage": "Mula daripada templat pembekal"
-  },
-  "customProviderForm.startFromTemplateDesc": {
-    "defaultMessage": "Pilih pembekal yang dikenali dan kami akan mengisi konfigurasi secara automatik"
   },
   "customProviderForm.submitError": {
     "defaultMessage": "Gagal menyimpan pembekal. Sila semak konfigurasi anda dan cuba lagi."
   },
-  "customProviderForm.toolCalling": {
-    "defaultMessage": "Pemanggilan alat"
-  },
   "customProviderForm.updateProvider": {
     "defaultMessage": "Kemas Kini Pembekal"
-  },
-  "customProviderForm.usingTemplate": {
-    "defaultMessage": "Menggunakan templat: {name}"
   },
   "customProviderForm.valuePlaceholder": {
     "defaultMessage": "Nilai"
@@ -227,44 +182,11 @@
   "defaultCardButtons.configureSettings": {
     "defaultMessage": "Konfigurasikan tetapan {name}"
   },
-  "defaultCardButtons.deleteSettings": {
-    "defaultMessage": "Padam tetapan {name}"
-  },
   "defaultCardButtons.editSettings": {
     "defaultMessage": "Edit tetapan {name}"
   },
   "defaultCardButtons.getStarted": {
     "defaultMessage": "Mulakan dengan iCodex!"
-  },
-  "defaultProviderSetupForm.apiHostLabel": {
-    "defaultMessage": "Hos API"
-  },
-  "defaultProviderSetupForm.apiHostPlaceholder": {
-    "defaultMessage": "https://api.example.com"
-  },
-  "defaultProviderSetupForm.apiKeyLabel": {
-    "defaultMessage": "Kunci API"
-  },
-  "defaultProviderSetupForm.apiKeyPlaceholder": {
-    "defaultMessage": "Kunci API anda"
-  },
-  "defaultProviderSetupForm.hideOptions": {
-    "defaultMessage": "Sembunyikan {count} pilihan"
-  },
-  "defaultProviderSetupForm.loadingConfig": {
-    "defaultMessage": "Memuatkan nilai konfigurasi..."
-  },
-  "defaultProviderSetupForm.modelsLabel": {
-    "defaultMessage": "Model"
-  },
-  "defaultProviderSetupForm.modelsPlaceholder": {
-    "defaultMessage": "model-a, model-b"
-  },
-  "defaultProviderSetupForm.noConfigParameters": {
-    "defaultMessage": "Tiada parameter konfigurasi untuk pembekal ini."
-  },
-  "defaultProviderSetupForm.showOptions": {
-    "defaultMessage": "Tunjukkan {count} pilihan"
   },
   "dialog.close": {
     "defaultMessage": "Tutup"
@@ -598,21 +520,6 @@
   },
   "hub.suggestionReview": {
     "defaultMessage": "Semak kod dan cadangkan perubahan"
-  },
-  "huggingFaceSignInPrompt.failedToConfigure": {
-    "defaultMessage": "Gagal log masuk ke Hugging Face: {error}"
-  },
-  "huggingFaceSignInPrompt.signIn": {
-    "defaultMessage": "Log masuk"
-  },
-  "huggingFaceSignInPrompt.signedIn": {
-    "defaultMessage": "Hugging Face telah log masuk"
-  },
-  "huggingFaceSignInPrompt.signingIn": {
-    "defaultMessage": "Sedang log masuk..."
-  },
-  "huggingFaceSignInPrompt.title": {
-    "defaultMessage": "Hugging Face"
   },
   "imagePreview.altText": {
     "defaultMessage": "imej iCodex"
@@ -1070,180 +977,6 @@
   "modelSettingsButtons.switchModels": {
     "defaultMessage": "Tukar model"
   },
-  "modelSettingsPanel.batchSize": {
-    "defaultMessage": "Saiz kelompok"
-  },
-  "modelSettingsPanel.batchSizeDescription": {
-    "defaultMessage": "Kelompok pemprosesan gesaan"
-  },
-  "modelSettingsPanel.builtinChatTemplate": {
-    "defaultMessage": "Templat terbina dalam"
-  },
-  "modelSettingsPanel.builtinChatTemplateDescription": {
-    "defaultMessage": "Pilih nama templat terbina dalam llama.cpp"
-  },
-  "modelSettingsPanel.chatTemplate": {
-    "defaultMessage": "Templat sembang"
-  },
-  "modelSettingsPanel.chatTemplateBuiltin": {
-    "defaultMessage": "Terbina dalam"
-  },
-  "modelSettingsPanel.chatTemplateCustomInline": {
-    "defaultMessage": "Sebaris tersuai"
-  },
-  "modelSettingsPanel.chatTemplateDescription": {
-    "defaultMessage": "Gunakan metadata GGUF terbenam, templat terbina dalam llama.cpp, atau Jinja sebaris"
-  },
-  "modelSettingsPanel.chatTemplateEmbedded": {
-    "defaultMessage": "Terbenam"
-  },
-  "modelSettingsPanel.contextAndGeneration": {
-    "defaultMessage": "Konteks & Penjanaan"
-  },
-  "modelSettingsPanel.contextSize": {
-    "defaultMessage": "Saiz konteks"
-  },
-  "modelSettingsPanel.contextSizeDescription": {
-    "defaultMessage": "Tetingkap konteks maksimum (0 = lalai model)"
-  },
-  "modelSettingsPanel.customChatTemplate": {
-    "defaultMessage": "Templat sembang tersuai"
-  },
-  "modelSettingsPanel.customChatTemplateDescription": {
-    "defaultMessage": "Tampal sumber templat sembang Jinja penuh"
-  },
-  "modelSettingsPanel.etaLearningRate": {
-    "defaultMessage": "Eta (kadar pembelajaran)"
-  },
-  "modelSettingsPanel.flashAttention": {
-    "defaultMessage": "Flash attention"
-  },
-  "modelSettingsPanel.flashAttentionDescription": {
-    "defaultMessage": "Dayakan pengoptimuman flash attention"
-  },
-  "modelSettingsPanel.frequencyPenalty": {
-    "defaultMessage": "Penalti frekuensi"
-  },
-  "modelSettingsPanel.frequencyPenaltyDescription": {
-    "defaultMessage": "0.0 = mati"
-  },
-  "modelSettingsPanel.gpuLayers": {
-    "defaultMessage": "Lapisan GPU"
-  },
-  "modelSettingsPanel.gpuLayersDescription": {
-    "defaultMessage": "Lapisan untuk dipunggah ke GPU"
-  },
-  "modelSettingsPanel.loadingSettings": {
-    "defaultMessage": "Memuatkan tetapan..."
-  },
-  "modelSettingsPanel.lockModelInRam": {
-    "defaultMessage": "Kunci model dalam RAM (mlock)"
-  },
-  "modelSettingsPanel.lockModelInRamDescription": {
-    "defaultMessage": "Halang model daripada ditukar ke cakera"
-  },
-  "modelSettingsPanel.maxOutputTokens": {
-    "defaultMessage": "Token output maksimum"
-  },
-  "modelSettingsPanel.maxOutputTokensDescription": {
-    "defaultMessage": "Had pada token yang dijana"
-  },
-  "modelSettingsPanel.minP": {
-    "defaultMessage": "Min P"
-  },
-  "modelSettingsPanel.performance": {
-    "defaultMessage": "Prestasi"
-  },
-  "modelSettingsPanel.presencePenalty": {
-    "defaultMessage": "Penalti kehadiran"
-  },
-  "modelSettingsPanel.presencePenaltyDescription": {
-    "defaultMessage": "0.0 = mati"
-  },
-  "modelSettingsPanel.repeatPenalty": {
-    "defaultMessage": "Penalti ulangan"
-  },
-  "modelSettingsPanel.repeatPenaltyDescription": {
-    "defaultMessage": "1.0 = mati"
-  },
-  "modelSettingsPanel.repeatWindow": {
-    "defaultMessage": "Tetingkap ulangan"
-  },
-  "modelSettingsPanel.repeatWindowDescription": {
-    "defaultMessage": "Token untuk dilihat semula"
-  },
-  "modelSettingsPanel.repetitionPenalty": {
-    "defaultMessage": "Penalti Pengulangan"
-  },
-  "modelSettingsPanel.reset": {
-    "defaultMessage": "Set semula"
-  },
-  "modelSettingsPanel.resetToDefaults": {
-    "defaultMessage": "Set semula kepada lalai"
-  },
-  "modelSettingsPanel.samplingStrategy": {
-    "defaultMessage": "Strategi Pensampelan"
-  },
-  "modelSettingsPanel.saving": {
-    "defaultMessage": "Menyimpan..."
-  },
-  "modelSettingsPanel.seed": {
-    "defaultMessage": "Benih"
-  },
-  "modelSettingsPanel.tauTargetEntropy": {
-    "defaultMessage": "Tau (entropi sasaran)"
-  },
-  "modelSettingsPanel.temperature": {
-    "defaultMessage": "Suhu"
-  },
-  "modelSettingsPanel.threads": {
-    "defaultMessage": "Bebenang"
-  },
-  "modelSettingsPanel.threadsDescription": {
-    "defaultMessage": "Bebenang CPU untuk penjanaan"
-  },
-  "modelSettingsPanel.toolCalling": {
-    "defaultMessage": "Pemanggilan alat"
-  },
-  "modelSettingsPanel.toolCallingAuto": {
-    "defaultMessage": "Auto"
-  },
-  "modelSettingsPanel.toolCallingDescription": {
-    "defaultMessage": "Pilih cara model tempatan memilih pemanggilan alat asli atau ditiru"
-  },
-  "modelSettingsPanel.toolCallingForceEmulated": {
-    "defaultMessage": "Paksa ditiru"
-  },
-  "modelSettingsPanel.toolCallingForceNative": {
-    "defaultMessage": "Paksa asli"
-  },
-  "modelSettingsPanel.topK": {
-    "defaultMessage": "Top K"
-  },
-  "modelSettingsPanel.topP": {
-    "defaultMessage": "Top P"
-  },
-  "modelsBottomBar.changeModel": {
-    "defaultMessage": "Tukar Model"
-  },
-  "modelsBottomBar.currentModel": {
-    "defaultMessage": "Model semasa"
-  },
-  "modelsBottomBar.loadingModel": {
-    "defaultMessage": "Memuatkan model..."
-  },
-  "modelsBottomBar.localModelSettings": {
-    "defaultMessage": "Tetapan Model Tempatan"
-  },
-  "modelsBottomBar.localModelSettingsTitle": {
-    "defaultMessage": "Tetapan Model Tempatan — {modelName}"
-  },
-  "modelsBottomBar.resolvedModel": {
-    "defaultMessage": "Model diselesaikan"
-  },
-  "modelsBottomBar.selectModel": {
-    "defaultMessage": "Pilih Model"
-  },
   "modelsSection.resetDescription": {
     "defaultMessage": "Kosongkan tetapan model dan penyedia yang anda pilih untuk bermula semula"
   },
@@ -1472,132 +1205,6 @@
   "providerCard.unknownProvider": {
     "defaultMessage": "Penyedia Tidak Diketahui"
   },
-  "providerCatalogPicker.anthropicCompatible": {
-    "defaultMessage": "Serasi Anthropic"
-  },
-  "providerCatalogPicker.apiFormat": {
-    "defaultMessage": "Format API"
-  },
-  "providerCatalogPicker.cancel": {
-    "defaultMessage": "Batal"
-  },
-  "providerCatalogPicker.chooseProvider": {
-    "defaultMessage": "Pilih Penyedia"
-  },
-  "providerCatalogPicker.errorPrefix": {
-    "defaultMessage": "Ralat: {error}"
-  },
-  "providerCatalogPicker.loadingProviders": {
-    "defaultMessage": "Memuatkan penyedia..."
-  },
-  "providerCatalogPicker.modelsAvailable": {
-    "defaultMessage": "{count} model tersedia"
-  },
-  "providerCatalogPicker.noProvidersAvailable": {
-    "defaultMessage": "Tiada penyedia tersedia"
-  },
-  "providerCatalogPicker.noProvidersFound": {
-    "defaultMessage": "Tiada penyedia ditemui untuk \"{query}\""
-  },
-  "providerCatalogPicker.openaiCompatible": {
-    "defaultMessage": "Serasi OpenAI"
-  },
-  "providerCatalogPicker.requiresEnvVar": {
-    "defaultMessage": "• Memerlukan {envVar}"
-  },
-  "providerCatalogPicker.searchProviders": {
-    "defaultMessage": "Cari penyedia..."
-  },
-  "providerCatalogPicker.selectFormatDescription": {
-    "defaultMessage": "Pilih format API dan penyedia. Kami akan mengisi konfigurasi secara automatik untuk anda."
-  },
-  "providerConfigForm.browserWindowOpen": {
-    "defaultMessage": "Tetingkap pelayar akan dibuka untuk anda melengkapkan log masuk."
-  },
-  "providerConfigForm.configuring": {
-    "defaultMessage": "Mengkonfigurasi..."
-  },
-  "providerConfigForm.continue": {
-    "defaultMessage": "Teruskan"
-  },
-  "providerConfigForm.deviceCodeFlowHint": {
-    "defaultMessage": "Tetingkap pelayar akan dibuka dan kod pengesahan akan disalin ke papan keratan anda. Tampalkannya dalam pelayar untuk melengkapkan log masuk."
-  },
-  "providerConfigForm.noApiKey": {
-    "defaultMessage": "Tidak mempunyai kunci API?"
-  },
-  "providerConfigForm.signInWith": {
-    "defaultMessage": "Log masuk dengan {providerName}"
-  },
-  "providerConfigForm.signingIn": {
-    "defaultMessage": "Sedang log masuk..."
-  },
-  "providerConfigurationModal.addApiKeyDescription": {
-    "defaultMessage": "Tambah kunci API anda untuk penyedia ini bagi disepadukan ke dalam iCodex"
-  },
-  "providerConfigurationModal.browserWindowHint": {
-    "defaultMessage": "Tetingkap pelayar akan dibuka untuk anda melengkapkan log masuk."
-  },
-  "providerConfigurationModal.cancel": {
-    "defaultMessage": "Batal"
-  },
-  "providerConfigurationModal.cannotDeleteActive": {
-    "defaultMessage": "Anda tidak boleh memadamkan penyedia ini semasa ia sedang digunakan. Sila tukar ke model lain terlebih dahulu."
-  },
-  "providerConfigurationModal.checkConfigAgain": {
-    "defaultMessage": "Semak semula konfigurasi anda untuk menggunakan penyedia ini."
-  },
-  "providerConfigurationModal.close": {
-    "defaultMessage": "Tutup"
-  },
-  "providerConfigurationModal.configureHeader": {
-    "defaultMessage": "Konfigurasikan {providerName}"
-  },
-  "providerConfigurationModal.deleteConfigHeader": {
-    "defaultMessage": "Padam konfigurasi untuk {providerName}"
-  },
-  "providerConfigurationModal.deleteConfirmation": {
-    "defaultMessage": "Ini akan memadamkan konfigurasi penyedia semasa secara kekal."
-  },
-  "providerConfigurationModal.deviceCodeFlowHint": {
-    "defaultMessage": "Tetingkap pelayar akan dibuka dan kod pengesahan akan disalin ke papan keratan anda. Tampalkannya dalam pelayar untuk melengkapkan log masuk."
-  },
-  "providerConfigurationModal.errorCheckingConfig": {
-    "defaultMessage": "Terdapat ralat semasa menyemak konfigurasi penyedia ini."
-  },
-  "providerConfigurationModal.errorTitle": {
-    "defaultMessage": "Ralat"
-  },
-  "providerConfigurationModal.externalSetupIntro": {
-    "defaultMessage": "Penyedia ini dikonfigurasikan di luar iCodex. Ikuti langkah-langkah ini:"
-  },
-  "providerConfigurationModal.goBack": {
-    "defaultMessage": "Kembali"
-  },
-  "providerConfigurationModal.huggingFaceOAuthDescription": {
-    "defaultMessage": "Log masuk untuk menggunakan Hugging Face Inference Providers tanpa memasukkan token API secara manual."
-  },
-  "providerConfigurationModal.oauthLoginFailed": {
-    "defaultMessage": "Log masuk OAuth gagal: {error}"
-  },
-  "providerConfigurationModal.oauthSignInDescription": {
-    "defaultMessage": "Log masuk dengan akaun {providerName} anda untuk menggunakan penyedia ini"
-  },
-  "providerConfigurationModal.parameterRequired": {
-    "defaultMessage": "{paramName} diperlukan"
-  },
-  "providerConfigurationModal.removeConfiguration": {
-    "defaultMessage": "Alih Keluar Konfigurasi"
-  },
-  "providerConfigurationModal.seeDocumentation": {
-    "defaultMessage": "Lihat <link>dokumentasi</link> untuk maklumat lanjut."
-  },
-  "providerConfigurationModal.signInWith": {
-    "defaultMessage": "Log masuk dengan {providerName}"
-  },
-  "providerConfigurationModal.signingIn": {
-    "defaultMessage": "Sedang log masuk..."
-  },
   "providerGrid.addProvider": {
     "defaultMessage": "Tambah Penyedia"
   },
@@ -1612,9 +1219,6 @@
   },
   "providerGrid.editProvider": {
     "defaultMessage": "Edit Penyedia"
-  },
-  "providerGrid.fromTemplateOrManual": {
-    "defaultMessage": "Daripada templat atau persediaan manual"
   },
   "providerGrid.noMatch": {
     "defaultMessage": "Tiada penyedia yang sepadan dengan \"{query}\""
@@ -1657,30 +1261,6 @@
   },
   "providerSettings.otherProviders": {
     "defaultMessage": "Penyedia lain"
-  },
-  "providerSetupActions.cancel": {
-    "defaultMessage": "Batal"
-  },
-  "providerSetupActions.cannotDeleteActive": {
-    "defaultMessage": "Anda tidak boleh memadamkan {providerName} semasa ia sedang digunakan. Sila tukar ke model lain sebelum memadamkan penyedia ini."
-  },
-  "providerSetupActions.confirmDelete": {
-    "defaultMessage": "Sahkan Padam"
-  },
-  "providerSetupActions.confirmDeleteMessage": {
-    "defaultMessage": "Adakah anda pasti mahu memadamkan parameter konfigurasi untuk {providerName}? Tindakan ini tidak boleh dibuat asal."
-  },
-  "providerSetupActions.deleteProvider": {
-    "defaultMessage": "Padam Penyedia"
-  },
-  "providerSetupActions.enableProvider": {
-    "defaultMessage": "Dayakan Penyedia"
-  },
-  "providerSetupActions.ok": {
-    "defaultMessage": "Ok"
-  },
-  "providerSetupActions.submit": {
-    "defaultMessage": "Hantar"
   },
   "resetProviderSection.resetButton": {
     "defaultMessage": "Tetapkan Semula Penyedia dan Model"
@@ -2171,18 +1751,6 @@
   "terminalPanel.newTerminal": {
     "defaultMessage": "Terminal baharu"
   },
-  "themeSelector.dark": {
-    "defaultMessage": "Gelap"
-  },
-  "themeSelector.light": {
-    "defaultMessage": "Cerah"
-  },
-  "themeSelector.system": {
-    "defaultMessage": "Sistem"
-  },
-  "themeSelector.theme": {
-    "defaultMessage": "Tema"
-  },
   "toolApprovalButtons.allowOnce": {
     "defaultMessage": "Benarkan Sekali"
   },
@@ -2305,5 +1873,11 @@
   },
   "workToolActivity.usedTools": {
     "defaultMessage": "{count,plural,other{Menggunakan # alat}}"
+  },
+  "providerGrid.connectOpenAiCompatible": {
+    "defaultMessage": "Sambungkan endpoint serasi OpenAI"
+  },
+  "providerSelector.continueWith": {
+    "defaultMessage": "Teruskan dengan {providerName}"
   }
 }

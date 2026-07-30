@@ -1,10 +1,4 @@
-import type {
-  CanonicalModelInfoDto,
-  CustomProviderReadResponse_unstable,
-  ProviderSecretDto,
-  ProviderTemplateCatalogEntryDto,
-  ProviderTemplateDto,
-} from '../types/goose';
+import type { CustomProviderReadResponse_unstable } from '../types/goose';
 import type {
   ProviderDetails,
   ThinkingEffort,
@@ -15,8 +9,6 @@ import { setThreadModelOverride } from '../codex/engine/controller';
 import type { Model } from '../codex/protocol/v2/Model';
 import type { JsonValue } from '../codex/protocol/serde_json/JsonValue';
 import { acpReadConfig, acpUpsertConfig } from './config';
-
-export type { CanonicalModelInfoDto, ProviderSecretDto };
 
 export const CODEX_PROVIDER_ID = 'codex';
 
@@ -150,16 +142,6 @@ export async function acpListProviderModels(providerId: string) {
   }));
 }
 
-export async function acpListProviderCatalogEntries(
-  _format?: string
-): Promise<ProviderTemplateCatalogEntryDto[]> {
-  return [];
-}
-
-export async function acpGetProviderTemplate(providerId: string): Promise<ProviderTemplateDto> {
-  throw new Error(`Provider templates are not available with codex: ${providerId}`);
-}
-
 export async function acpGetCustomProvider(
   providerId: string
 ): Promise<CustomProviderReadResponse_unstable> {
@@ -265,32 +247,6 @@ export async function acpDeleteCustomProvider(providerId: string): Promise<void>
   const all = await readCustomModels();
   delete all[providerId];
   await acpUpsertConfig(CUSTOM_MODELS_KEY, all);
-}
-
-export async function acpReadProviderConfig(_providerId: string) {
-  return [] as { key: string; value: string; isSet?: boolean }[];
-}
-
-export async function acpDeleteProviderConfig(_providerId: string): Promise<void> {}
-
-export async function acpSaveProviderConfig(
-  _providerId: string,
-  _fields: { key: string; value: string }[]
-): Promise<void> {}
-
-export async function acpAuthenticateProvider(_providerId: string): Promise<void> {}
-
-export async function acpListProviderSecrets(): Promise<ProviderSecretDto[]> {
-  return [];
-}
-
-export async function acpDeleteProviderSecret(_id: string): Promise<void> {}
-
-export async function acpGetCanonicalModelInfo(
-  _provider: string,
-  _model: string
-): Promise<CanonicalModelInfoDto | null> {
-  return null;
 }
 
 export async function acpReadDefaults(): Promise<{

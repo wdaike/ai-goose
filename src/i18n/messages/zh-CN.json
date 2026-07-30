@@ -1,13 +1,4 @@
 {
-  "alertBox.autoCompactAt": {
-    "defaultMessage": "自动压缩阈值"
-  },
-  "alertBox.compactNow": {
-    "defaultMessage": "立即压缩"
-  },
-  "alertBox.failedToSaveThreshold": {
-    "defaultMessage": "保存阈值失败：{error}"
-  },
   "appLayout.back": {
     "defaultMessage": "返回"
   },
@@ -113,9 +104,6 @@
   "customProviderForm.apiUrlRequired": {
     "defaultMessage": "API 地址为必填项"
   },
-  "customProviderForm.attachments": {
-    "defaultMessage": "附件"
-  },
   "customProviderForm.authHint": {
     "defaultMessage": "像 Ollama 这样的本地大模型通常不需要 API 密钥。"
   },
@@ -125,26 +113,11 @@
   "customProviderForm.availableModels": {
     "defaultMessage": "可用模型（用逗号分隔）"
   },
-  "customProviderForm.back": {
-    "defaultMessage": "← 返回"
-  },
   "customProviderForm.cancel": {
     "defaultMessage": "取消"
   },
   "customProviderForm.cannotDeleteActive": {
     "defaultMessage": "此提供商正在使用中，无法删除。请先切换到其他模型。"
-  },
-  "customProviderForm.chooseSetup": {
-    "defaultMessage": "选择你想如何设置提供商。"
-  },
-  "customProviderForm.clear": {
-    "defaultMessage": "清空"
-  },
-  "customProviderForm.configureManually": {
-    "defaultMessage": "手动配置"
-  },
-  "customProviderForm.configureManuallyDesc": {
-    "defaultMessage": "自己输入所有提供商详情"
   },
   "customProviderForm.confirmDelete": {
     "defaultMessage": "确认删除"
@@ -173,9 +146,6 @@
   "customProviderForm.displayNameRequired": {
     "defaultMessage": "显示名称为必填项"
   },
-  "customProviderForm.docs": {
-    "defaultMessage": "文档"
-  },
   "customProviderForm.headerBothRequired": {
     "defaultMessage": "请求头的名称和值都必须填写"
   },
@@ -197,29 +167,14 @@
   "customProviderForm.providerType": {
     "defaultMessage": "提供商类型"
   },
-  "customProviderForm.reasoning": {
-    "defaultMessage": "推理"
-  },
   "customProviderForm.requiresApiKey": {
     "defaultMessage": "此提供商需要 API 密钥"
-  },
-  "customProviderForm.startFromTemplate": {
-    "defaultMessage": "从提供商模板开始"
-  },
-  "customProviderForm.startFromTemplateDesc": {
-    "defaultMessage": "选择一个已知的提供商，我们会为你自动填充配置"
   },
   "customProviderForm.submitError": {
     "defaultMessage": "保存提供商失败。请检查配置后重试。"
   },
-  "customProviderForm.toolCalling": {
-    "defaultMessage": "工具调用"
-  },
   "customProviderForm.updateProvider": {
     "defaultMessage": "更新提供商"
-  },
-  "customProviderForm.usingTemplate": {
-    "defaultMessage": "正在使用模板：{name}"
   },
   "customProviderForm.valuePlaceholder": {
     "defaultMessage": "值"
@@ -227,44 +182,11 @@
   "defaultCardButtons.configureSettings": {
     "defaultMessage": "配置 {name} 设置"
   },
-  "defaultCardButtons.deleteSettings": {
-    "defaultMessage": "删除 {name} 设置"
-  },
   "defaultCardButtons.editSettings": {
     "defaultMessage": "编辑 {name} 设置"
   },
   "defaultCardButtons.getStarted": {
     "defaultMessage": "开始使用 iCodex！"
-  },
-  "defaultProviderSetupForm.apiHostLabel": {
-    "defaultMessage": "API 主机"
-  },
-  "defaultProviderSetupForm.apiHostPlaceholder": {
-    "defaultMessage": "https://api.example.com"
-  },
-  "defaultProviderSetupForm.apiKeyLabel": {
-    "defaultMessage": "API 密钥"
-  },
-  "defaultProviderSetupForm.apiKeyPlaceholder": {
-    "defaultMessage": "你的 API 密钥"
-  },
-  "defaultProviderSetupForm.hideOptions": {
-    "defaultMessage": "隐藏 {count} 项选项"
-  },
-  "defaultProviderSetupForm.loadingConfig": {
-    "defaultMessage": "正在加载配置值…"
-  },
-  "defaultProviderSetupForm.modelsLabel": {
-    "defaultMessage": "模型"
-  },
-  "defaultProviderSetupForm.modelsPlaceholder": {
-    "defaultMessage": "model-a, model-b"
-  },
-  "defaultProviderSetupForm.noConfigParameters": {
-    "defaultMessage": "此提供商没有可配置的参数。"
-  },
-  "defaultProviderSetupForm.showOptions": {
-    "defaultMessage": "显示 {count} 项选项"
   },
   "dialog.close": {
     "defaultMessage": "关闭"
@@ -598,21 +520,6 @@
   },
   "hub.suggestionReview": {
     "defaultMessage": "审查代码并提出修改建议"
-  },
-  "huggingFaceSignInPrompt.failedToConfigure": {
-    "defaultMessage": "登录 Hugging Face 失败：{error}"
-  },
-  "huggingFaceSignInPrompt.signIn": {
-    "defaultMessage": "登录"
-  },
-  "huggingFaceSignInPrompt.signedIn": {
-    "defaultMessage": "已登录 Hugging Face"
-  },
-  "huggingFaceSignInPrompt.signingIn": {
-    "defaultMessage": "正在登录..."
-  },
-  "huggingFaceSignInPrompt.title": {
-    "defaultMessage": "Hugging Face"
   },
   "imagePreview.altText": {
     "defaultMessage": "iCodex 图片"
@@ -1070,180 +977,6 @@
   "modelSettingsButtons.switchModels": {
     "defaultMessage": "切换模型"
   },
-  "modelSettingsPanel.batchSize": {
-    "defaultMessage": "批处理大小"
-  },
-  "modelSettingsPanel.batchSizeDescription": {
-    "defaultMessage": "提示词处理批大小"
-  },
-  "modelSettingsPanel.builtinChatTemplate": {
-    "defaultMessage": "内置模板"
-  },
-  "modelSettingsPanel.builtinChatTemplateDescription": {
-    "defaultMessage": "选择 llama.cpp 内置模板名称"
-  },
-  "modelSettingsPanel.chatTemplate": {
-    "defaultMessage": "聊天模板"
-  },
-  "modelSettingsPanel.chatTemplateBuiltin": {
-    "defaultMessage": "内置"
-  },
-  "modelSettingsPanel.chatTemplateCustomInline": {
-    "defaultMessage": "自定义内联"
-  },
-  "modelSettingsPanel.chatTemplateDescription": {
-    "defaultMessage": "使用嵌入式 GGUF 元数据、llama.cpp 内置模板或内联 Jinja 模板"
-  },
-  "modelSettingsPanel.chatTemplateEmbedded": {
-    "defaultMessage": "嵌入式"
-  },
-  "modelSettingsPanel.contextAndGeneration": {
-    "defaultMessage": "上下文与生成"
-  },
-  "modelSettingsPanel.contextSize": {
-    "defaultMessage": "上下文大小"
-  },
-  "modelSettingsPanel.contextSizeDescription": {
-    "defaultMessage": "最大上下文窗口（0 = 模型默认）"
-  },
-  "modelSettingsPanel.customChatTemplate": {
-    "defaultMessage": "自定义聊天模板"
-  },
-  "modelSettingsPanel.customChatTemplateDescription": {
-    "defaultMessage": "粘贴完整的 Jinja 聊天模板源码"
-  },
-  "modelSettingsPanel.etaLearningRate": {
-    "defaultMessage": "Eta（学习率）"
-  },
-  "modelSettingsPanel.flashAttention": {
-    "defaultMessage": "Flash Attention"
-  },
-  "modelSettingsPanel.flashAttentionDescription": {
-    "defaultMessage": "启用 Flash Attention 优化"
-  },
-  "modelSettingsPanel.frequencyPenalty": {
-    "defaultMessage": "频率惩罚"
-  },
-  "modelSettingsPanel.frequencyPenaltyDescription": {
-    "defaultMessage": "0.0 = 关闭"
-  },
-  "modelSettingsPanel.gpuLayers": {
-    "defaultMessage": "GPU 层数"
-  },
-  "modelSettingsPanel.gpuLayersDescription": {
-    "defaultMessage": "卸载到 GPU 的层数"
-  },
-  "modelSettingsPanel.loadingSettings": {
-    "defaultMessage": "正在加载设置…"
-  },
-  "modelSettingsPanel.lockModelInRam": {
-    "defaultMessage": "将模型锁定在内存（mlock）"
-  },
-  "modelSettingsPanel.lockModelInRamDescription": {
-    "defaultMessage": "防止模型被交换到磁盘"
-  },
-  "modelSettingsPanel.maxOutputTokens": {
-    "defaultMessage": "最大输出令牌"
-  },
-  "modelSettingsPanel.maxOutputTokensDescription": {
-    "defaultMessage": "生成令牌上限"
-  },
-  "modelSettingsPanel.minP": {
-    "defaultMessage": "Min P"
-  },
-  "modelSettingsPanel.performance": {
-    "defaultMessage": "性能"
-  },
-  "modelSettingsPanel.presencePenalty": {
-    "defaultMessage": "出现惩罚"
-  },
-  "modelSettingsPanel.presencePenaltyDescription": {
-    "defaultMessage": "0.0 = 关闭"
-  },
-  "modelSettingsPanel.repeatPenalty": {
-    "defaultMessage": "重复惩罚"
-  },
-  "modelSettingsPanel.repeatPenaltyDescription": {
-    "defaultMessage": "1.0 = 关闭"
-  },
-  "modelSettingsPanel.repeatWindow": {
-    "defaultMessage": "重复窗口"
-  },
-  "modelSettingsPanel.repeatWindowDescription": {
-    "defaultMessage": "回看的令牌数"
-  },
-  "modelSettingsPanel.repetitionPenalty": {
-    "defaultMessage": "重复惩罚"
-  },
-  "modelSettingsPanel.reset": {
-    "defaultMessage": "重置"
-  },
-  "modelSettingsPanel.resetToDefaults": {
-    "defaultMessage": "重置为默认"
-  },
-  "modelSettingsPanel.samplingStrategy": {
-    "defaultMessage": "采样策略"
-  },
-  "modelSettingsPanel.saving": {
-    "defaultMessage": "保存中…"
-  },
-  "modelSettingsPanel.seed": {
-    "defaultMessage": "随机种子"
-  },
-  "modelSettingsPanel.tauTargetEntropy": {
-    "defaultMessage": "Tau（目标熵）"
-  },
-  "modelSettingsPanel.temperature": {
-    "defaultMessage": "温度"
-  },
-  "modelSettingsPanel.threads": {
-    "defaultMessage": "线程数"
-  },
-  "modelSettingsPanel.threadsDescription": {
-    "defaultMessage": "用于生成的 CPU 线程数"
-  },
-  "modelSettingsPanel.toolCalling": {
-    "defaultMessage": "工具调用"
-  },
-  "modelSettingsPanel.toolCallingAuto": {
-    "defaultMessage": "自动"
-  },
-  "modelSettingsPanel.toolCallingDescription": {
-    "defaultMessage": "选择本地模型如何使用原生或模拟工具调用"
-  },
-  "modelSettingsPanel.toolCallingForceEmulated": {
-    "defaultMessage": "强制模拟"
-  },
-  "modelSettingsPanel.toolCallingForceNative": {
-    "defaultMessage": "强制原生"
-  },
-  "modelSettingsPanel.topK": {
-    "defaultMessage": "Top K"
-  },
-  "modelSettingsPanel.topP": {
-    "defaultMessage": "Top P"
-  },
-  "modelsBottomBar.changeModel": {
-    "defaultMessage": "切换模型"
-  },
-  "modelsBottomBar.currentModel": {
-    "defaultMessage": "当前模型"
-  },
-  "modelsBottomBar.loadingModel": {
-    "defaultMessage": "正在加载模型…"
-  },
-  "modelsBottomBar.localModelSettings": {
-    "defaultMessage": "本地模型设置"
-  },
-  "modelsBottomBar.localModelSettingsTitle": {
-    "defaultMessage": "本地模型设置 — {modelName}"
-  },
-  "modelsBottomBar.resolvedModel": {
-    "defaultMessage": "解析后的模型"
-  },
-  "modelsBottomBar.selectModel": {
-    "defaultMessage": "选择模型"
-  },
   "modelsSection.resetDescription": {
     "defaultMessage": "清空已选的模型和提供商设置，重新开始"
   },
@@ -1436,17 +1169,8 @@
   "pluginsSettings.addExtension": {
     "defaultMessage": "添加扩展"
   },
-  "pluginsSettings.addMarketplace": {
-    "defaultMessage": "添加插件市场"
-  },
-  "pluginsSettings.addMarketplaceTitle": {
-    "defaultMessage": "添加插件市场"
-  },
   "pluginsSettings.appUnavailable": {
     "defaultMessage": "不可用"
-  },
-  "pluginsSettings.cancel": {
-    "defaultMessage": "取消"
   },
   "pluginsSettings.configureExtension": {
     "defaultMessage": "配置 {name}"
@@ -1465,9 +1189,6 @@
   },
   "pluginsSettings.errorLoadingSkills": {
     "defaultMessage": "加载技能出错"
-  },
-  "pluginsSettings.marketplaceSourcePlaceholder": {
-    "defaultMessage": "git 地址或本地路径"
   },
   "pluginsSettings.moreActions": {
     "defaultMessage": "{name} 的更多操作"
@@ -1682,132 +1403,6 @@
   "providerCard.unknownProvider": {
     "defaultMessage": "未知提供商"
   },
-  "providerCatalogPicker.anthropicCompatible": {
-    "defaultMessage": "Anthropic 兼容"
-  },
-  "providerCatalogPicker.apiFormat": {
-    "defaultMessage": "API 格式"
-  },
-  "providerCatalogPicker.cancel": {
-    "defaultMessage": "取消"
-  },
-  "providerCatalogPicker.chooseProvider": {
-    "defaultMessage": "选择提供商"
-  },
-  "providerCatalogPicker.errorPrefix": {
-    "defaultMessage": "错误：{error}"
-  },
-  "providerCatalogPicker.loadingProviders": {
-    "defaultMessage": "正在加载提供商…"
-  },
-  "providerCatalogPicker.modelsAvailable": {
-    "defaultMessage": "{count} 个可用模型"
-  },
-  "providerCatalogPicker.noProvidersAvailable": {
-    "defaultMessage": "暂无可用提供商"
-  },
-  "providerCatalogPicker.noProvidersFound": {
-    "defaultMessage": "未找到匹配“{query}”的提供商"
-  },
-  "providerCatalogPicker.openaiCompatible": {
-    "defaultMessage": "OpenAI 兼容"
-  },
-  "providerCatalogPicker.requiresEnvVar": {
-    "defaultMessage": "• 需要 {envVar}"
-  },
-  "providerCatalogPicker.searchProviders": {
-    "defaultMessage": "搜索提供商…"
-  },
-  "providerCatalogPicker.selectFormatDescription": {
-    "defaultMessage": "选择 API 格式和提供商，我们会为你自动填充配置。"
-  },
-  "providerConfigForm.browserWindowOpen": {
-    "defaultMessage": "将打开浏览器窗口，请完成登录。"
-  },
-  "providerConfigForm.configuring": {
-    "defaultMessage": "配置中…"
-  },
-  "providerConfigForm.continue": {
-    "defaultMessage": "继续"
-  },
-  "providerConfigForm.deviceCodeFlowHint": {
-    "defaultMessage": "将打开浏览器窗口，验证码将复制到剪贴板。把它粘贴到浏览器即可完成登录。"
-  },
-  "providerConfigForm.noApiKey": {
-    "defaultMessage": "没有 API 密钥？"
-  },
-  "providerConfigForm.signInWith": {
-    "defaultMessage": "使用 {providerName} 登录"
-  },
-  "providerConfigForm.signingIn": {
-    "defaultMessage": "登录中…"
-  },
-  "providerConfigurationModal.addApiKeyDescription": {
-    "defaultMessage": "添加此提供商的 API 密钥以接入 iCodex"
-  },
-  "providerConfigurationModal.browserWindowHint": {
-    "defaultMessage": "将打开浏览器窗口，请完成登录。"
-  },
-  "providerConfigurationModal.cancel": {
-    "defaultMessage": "取消"
-  },
-  "providerConfigurationModal.cannotDeleteActive": {
-    "defaultMessage": "此提供商正在使用中，无法删除。请先切换到其他模型。"
-  },
-  "providerConfigurationModal.checkConfigAgain": {
-    "defaultMessage": "再次检查你的配置以使用此提供商。"
-  },
-  "providerConfigurationModal.close": {
-    "defaultMessage": "关闭"
-  },
-  "providerConfigurationModal.configureHeader": {
-    "defaultMessage": "配置 {providerName}"
-  },
-  "providerConfigurationModal.deleteConfigHeader": {
-    "defaultMessage": "删除 {providerName} 的配置"
-  },
-  "providerConfigurationModal.deleteConfirmation": {
-    "defaultMessage": "这将永久删除当前的提供商配置。"
-  },
-  "providerConfigurationModal.deviceCodeFlowHint": {
-    "defaultMessage": "将打开浏览器窗口，验证码将复制到剪贴板。把它粘贴到浏览器即可完成登录。"
-  },
-  "providerConfigurationModal.errorCheckingConfig": {
-    "defaultMessage": "检查此提供商配置时出错。"
-  },
-  "providerConfigurationModal.errorTitle": {
-    "defaultMessage": "错误"
-  },
-  "providerConfigurationModal.externalSetupIntro": {
-    "defaultMessage": "此提供商在 iCodex 之外配置。请按照以下步骤："
-  },
-  "providerConfigurationModal.goBack": {
-    "defaultMessage": "返回"
-  },
-  "providerConfigurationModal.huggingFaceOAuthDescription": {
-    "defaultMessage": "登录后即可使用 Hugging Face Inference Providers，而无需手动输入 API 令牌。"
-  },
-  "providerConfigurationModal.oauthLoginFailed": {
-    "defaultMessage": "OAuth 登录失败：{error}"
-  },
-  "providerConfigurationModal.oauthSignInDescription": {
-    "defaultMessage": "使用你的 {providerName} 账号登录以使用此提供商"
-  },
-  "providerConfigurationModal.parameterRequired": {
-    "defaultMessage": "{paramName} 为必填项"
-  },
-  "providerConfigurationModal.removeConfiguration": {
-    "defaultMessage": "移除配置"
-  },
-  "providerConfigurationModal.seeDocumentation": {
-    "defaultMessage": "详见 <link>文档</link>。"
-  },
-  "providerConfigurationModal.signInWith": {
-    "defaultMessage": "使用 {providerName} 登录"
-  },
-  "providerConfigurationModal.signingIn": {
-    "defaultMessage": "登录中…"
-  },
   "providerGrid.addProvider": {
     "defaultMessage": "添加提供商"
   },
@@ -1822,9 +1417,6 @@
   },
   "providerGrid.editProvider": {
     "defaultMessage": "编辑提供商"
-  },
-  "providerGrid.fromTemplateOrManual": {
-    "defaultMessage": "使用模板或手动设置"
   },
   "providerGrid.noMatch": {
     "defaultMessage": "没有匹配 \"{query}\" 的提供商"
@@ -1867,30 +1459,6 @@
   },
   "providerSettings.otherProviders": {
     "defaultMessage": "其他提供商"
-  },
-  "providerSetupActions.cancel": {
-    "defaultMessage": "取消"
-  },
-  "providerSetupActions.cannotDeleteActive": {
-    "defaultMessage": "{providerName} 正在使用中，无法删除。请先切换到其他模型。"
-  },
-  "providerSetupActions.confirmDelete": {
-    "defaultMessage": "确认删除"
-  },
-  "providerSetupActions.confirmDeleteMessage": {
-    "defaultMessage": "确定要删除 {providerName} 的配置参数吗？此操作无法撤销。"
-  },
-  "providerSetupActions.deleteProvider": {
-    "defaultMessage": "删除提供商"
-  },
-  "providerSetupActions.enableProvider": {
-    "defaultMessage": "启用提供商"
-  },
-  "providerSetupActions.ok": {
-    "defaultMessage": "确定"
-  },
-  "providerSetupActions.submit": {
-    "defaultMessage": "提交"
   },
   "resetProviderSection.resetButton": {
     "defaultMessage": "重置提供商和模型"
@@ -2420,18 +1988,6 @@
   "terminalPanel.newTerminal": {
     "defaultMessage": "新建终端"
   },
-  "themeSelector.dark": {
-    "defaultMessage": "深色"
-  },
-  "themeSelector.light": {
-    "defaultMessage": "浅色"
-  },
-  "themeSelector.system": {
-    "defaultMessage": "跟随系统"
-  },
-  "themeSelector.theme": {
-    "defaultMessage": "主题"
-  },
   "toolApprovalButtons.allowOnce": {
     "defaultMessage": "仅此次允许"
   },
@@ -2554,5 +2110,11 @@
   },
   "workToolActivity.usedTools": {
     "defaultMessage": "{count,plural,other{使用了 # 个工具}}"
+  },
+  "providerGrid.connectOpenAiCompatible": {
+    "defaultMessage": "连接一个 OpenAI 兼容端点"
+  },
+  "providerSelector.continueWith": {
+    "defaultMessage": "使用 {providerName} 继续"
   }
 }

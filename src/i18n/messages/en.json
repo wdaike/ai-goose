@@ -1,13 +1,4 @@
 {
-  "alertBox.autoCompactAt": {
-    "defaultMessage": "Auto compact at"
-  },
-  "alertBox.compactNow": {
-    "defaultMessage": "Compact now"
-  },
-  "alertBox.failedToSaveThreshold": {
-    "defaultMessage": "Failed to save threshold: {error}"
-  },
   "appLayout.back": {
     "defaultMessage": "Back"
   },
@@ -242,9 +233,6 @@
   "customProviderForm.apiUrlRequired": {
     "defaultMessage": "API URL is required"
   },
-  "customProviderForm.attachments": {
-    "defaultMessage": "Attachments"
-  },
   "customProviderForm.authHint": {
     "defaultMessage": "Local LLMs like Ollama typically don't require an API key."
   },
@@ -254,9 +242,6 @@
   "customProviderForm.availableModels": {
     "defaultMessage": "Available Models (comma-separated)"
   },
-  "customProviderForm.back": {
-    "defaultMessage": "← Back"
-  },
   "customProviderForm.cancel": {
     "defaultMessage": "Cancel"
   },
@@ -265,18 +250,6 @@
   },
   "customProviderForm.chatApi": {
     "defaultMessage": "OpenAI Chat Completions (/chat/completions)"
-  },
-  "customProviderForm.chooseSetup": {
-    "defaultMessage": "Choose how you'd like to set up your provider."
-  },
-  "customProviderForm.clear": {
-    "defaultMessage": "Clear"
-  },
-  "customProviderForm.configureManually": {
-    "defaultMessage": "Configure manually"
-  },
-  "customProviderForm.configureManuallyDesc": {
-    "defaultMessage": "Enter all provider details yourself"
   },
   "customProviderForm.confirmDelete": {
     "defaultMessage": "Confirm Delete"
@@ -305,9 +278,6 @@
   "customProviderForm.displayNameRequired": {
     "defaultMessage": "Display name is required"
   },
-  "customProviderForm.docs": {
-    "defaultMessage": "Docs"
-  },
   "customProviderForm.headerBothRequired": {
     "defaultMessage": "Both header name and value must be entered"
   },
@@ -329,32 +299,17 @@
   "customProviderForm.providerType": {
     "defaultMessage": "API Type"
   },
-  "customProviderForm.reasoning": {
-    "defaultMessage": "Reasoning"
-  },
   "customProviderForm.requiresApiKey": {
     "defaultMessage": "This provider requires an API key"
   },
   "customProviderForm.responsesApi": {
     "defaultMessage": "OpenAI Responses API (/responses)"
   },
-  "customProviderForm.startFromTemplate": {
-    "defaultMessage": "Start from a provider template"
-  },
-  "customProviderForm.startFromTemplateDesc": {
-    "defaultMessage": "Pick a known provider and we'll auto-fill the configuration"
-  },
   "customProviderForm.submitError": {
     "defaultMessage": "Failed to save provider. Please check your configuration and try again."
   },
-  "customProviderForm.toolCalling": {
-    "defaultMessage": "Tool calling"
-  },
   "customProviderForm.updateProvider": {
     "defaultMessage": "Update Provider"
-  },
-  "customProviderForm.usingTemplate": {
-    "defaultMessage": "Using template: {name}"
   },
   "customProviderForm.valuePlaceholder": {
     "defaultMessage": "Value"
@@ -362,44 +317,11 @@
   "defaultCardButtons.configureSettings": {
     "defaultMessage": "Configure {name} settings"
   },
-  "defaultCardButtons.deleteSettings": {
-    "defaultMessage": "Delete {name} settings"
-  },
   "defaultCardButtons.editSettings": {
     "defaultMessage": "Edit {name} settings"
   },
   "defaultCardButtons.getStarted": {
     "defaultMessage": "Get started with iCodex!"
-  },
-  "defaultProviderSetupForm.apiHostLabel": {
-    "defaultMessage": "API Host"
-  },
-  "defaultProviderSetupForm.apiHostPlaceholder": {
-    "defaultMessage": "https://api.example.com"
-  },
-  "defaultProviderSetupForm.apiKeyLabel": {
-    "defaultMessage": "API Key"
-  },
-  "defaultProviderSetupForm.apiKeyPlaceholder": {
-    "defaultMessage": "Your API key"
-  },
-  "defaultProviderSetupForm.hideOptions": {
-    "defaultMessage": "Hide {count} options"
-  },
-  "defaultProviderSetupForm.loadingConfig": {
-    "defaultMessage": "Loading configuration values..."
-  },
-  "defaultProviderSetupForm.modelsLabel": {
-    "defaultMessage": "Models"
-  },
-  "defaultProviderSetupForm.modelsPlaceholder": {
-    "defaultMessage": "model-a, model-b"
-  },
-  "defaultProviderSetupForm.noConfigParameters": {
-    "defaultMessage": "No configuration parameters for this provider."
-  },
-  "defaultProviderSetupForm.showOptions": {
-    "defaultMessage": "Show {count} options"
   },
   "dialog.close": {
     "defaultMessage": "Close"
@@ -733,21 +655,6 @@
   },
   "hub.suggestionReview": {
     "defaultMessage": "Review code and suggest changes"
-  },
-  "huggingFaceSignInPrompt.failedToConfigure": {
-    "defaultMessage": "Failed to sign in to Hugging Face: {error}"
-  },
-  "huggingFaceSignInPrompt.signIn": {
-    "defaultMessage": "Sign in"
-  },
-  "huggingFaceSignInPrompt.signedIn": {
-    "defaultMessage": "Hugging Face signed in"
-  },
-  "huggingFaceSignInPrompt.signingIn": {
-    "defaultMessage": "Signing in..."
-  },
-  "huggingFaceSignInPrompt.title": {
-    "defaultMessage": "Hugging Face"
   },
   "imagePreview.altText": {
     "defaultMessage": "iCodex image"
@@ -1235,180 +1142,6 @@
   "modelSettingsButtons.switchModels": {
     "defaultMessage": "Switch models"
   },
-  "modelSettingsPanel.batchSize": {
-    "defaultMessage": "Batch size"
-  },
-  "modelSettingsPanel.batchSizeDescription": {
-    "defaultMessage": "Prompt processing batch"
-  },
-  "modelSettingsPanel.builtinChatTemplate": {
-    "defaultMessage": "Built-in template"
-  },
-  "modelSettingsPanel.builtinChatTemplateDescription": {
-    "defaultMessage": "Select a llama.cpp built-in template name"
-  },
-  "modelSettingsPanel.chatTemplate": {
-    "defaultMessage": "Chat template"
-  },
-  "modelSettingsPanel.chatTemplateBuiltin": {
-    "defaultMessage": "Built-in"
-  },
-  "modelSettingsPanel.chatTemplateCustomInline": {
-    "defaultMessage": "Custom inline"
-  },
-  "modelSettingsPanel.chatTemplateDescription": {
-    "defaultMessage": "Use embedded GGUF metadata, a llama.cpp built-in template, or inline Jinja"
-  },
-  "modelSettingsPanel.chatTemplateEmbedded": {
-    "defaultMessage": "Embedded"
-  },
-  "modelSettingsPanel.contextAndGeneration": {
-    "defaultMessage": "Context & Generation"
-  },
-  "modelSettingsPanel.contextSize": {
-    "defaultMessage": "Context size"
-  },
-  "modelSettingsPanel.contextSizeDescription": {
-    "defaultMessage": "Max context window (0 = model default)"
-  },
-  "modelSettingsPanel.customChatTemplate": {
-    "defaultMessage": "Custom chat template"
-  },
-  "modelSettingsPanel.customChatTemplateDescription": {
-    "defaultMessage": "Paste the full Jinja chat template source"
-  },
-  "modelSettingsPanel.etaLearningRate": {
-    "defaultMessage": "Eta (learning rate)"
-  },
-  "modelSettingsPanel.flashAttention": {
-    "defaultMessage": "Flash attention"
-  },
-  "modelSettingsPanel.flashAttentionDescription": {
-    "defaultMessage": "Enable flash attention optimization"
-  },
-  "modelSettingsPanel.frequencyPenalty": {
-    "defaultMessage": "Frequency penalty"
-  },
-  "modelSettingsPanel.frequencyPenaltyDescription": {
-    "defaultMessage": "0.0 = off"
-  },
-  "modelSettingsPanel.gpuLayers": {
-    "defaultMessage": "GPU layers"
-  },
-  "modelSettingsPanel.gpuLayersDescription": {
-    "defaultMessage": "Layers to offload to GPU"
-  },
-  "modelSettingsPanel.loadingSettings": {
-    "defaultMessage": "Loading settings..."
-  },
-  "modelSettingsPanel.lockModelInRam": {
-    "defaultMessage": "Lock model in RAM (mlock)"
-  },
-  "modelSettingsPanel.lockModelInRamDescription": {
-    "defaultMessage": "Prevent model from being swapped to disk"
-  },
-  "modelSettingsPanel.maxOutputTokens": {
-    "defaultMessage": "Max output tokens"
-  },
-  "modelSettingsPanel.maxOutputTokensDescription": {
-    "defaultMessage": "Cap on generated tokens"
-  },
-  "modelSettingsPanel.minP": {
-    "defaultMessage": "Min P"
-  },
-  "modelSettingsPanel.performance": {
-    "defaultMessage": "Performance"
-  },
-  "modelSettingsPanel.presencePenalty": {
-    "defaultMessage": "Presence penalty"
-  },
-  "modelSettingsPanel.presencePenaltyDescription": {
-    "defaultMessage": "0.0 = off"
-  },
-  "modelSettingsPanel.repeatPenalty": {
-    "defaultMessage": "Repeat penalty"
-  },
-  "modelSettingsPanel.repeatPenaltyDescription": {
-    "defaultMessage": "1.0 = off"
-  },
-  "modelSettingsPanel.repeatWindow": {
-    "defaultMessage": "Repeat window"
-  },
-  "modelSettingsPanel.repeatWindowDescription": {
-    "defaultMessage": "Tokens to look back"
-  },
-  "modelSettingsPanel.repetitionPenalty": {
-    "defaultMessage": "Repetition Penalty"
-  },
-  "modelSettingsPanel.reset": {
-    "defaultMessage": "Reset"
-  },
-  "modelSettingsPanel.resetToDefaults": {
-    "defaultMessage": "Reset to defaults"
-  },
-  "modelSettingsPanel.samplingStrategy": {
-    "defaultMessage": "Sampling Strategy"
-  },
-  "modelSettingsPanel.saving": {
-    "defaultMessage": "Saving..."
-  },
-  "modelSettingsPanel.seed": {
-    "defaultMessage": "Seed"
-  },
-  "modelSettingsPanel.tauTargetEntropy": {
-    "defaultMessage": "Tau (target entropy)"
-  },
-  "modelSettingsPanel.temperature": {
-    "defaultMessage": "Temperature"
-  },
-  "modelSettingsPanel.threads": {
-    "defaultMessage": "Threads"
-  },
-  "modelSettingsPanel.threadsDescription": {
-    "defaultMessage": "CPU threads for generation"
-  },
-  "modelSettingsPanel.toolCalling": {
-    "defaultMessage": "Tool calling"
-  },
-  "modelSettingsPanel.toolCallingAuto": {
-    "defaultMessage": "Auto"
-  },
-  "modelSettingsPanel.toolCallingDescription": {
-    "defaultMessage": "Choose how local models select native or emulated tool calling"
-  },
-  "modelSettingsPanel.toolCallingForceEmulated": {
-    "defaultMessage": "Force emulated"
-  },
-  "modelSettingsPanel.toolCallingForceNative": {
-    "defaultMessage": "Force native"
-  },
-  "modelSettingsPanel.topK": {
-    "defaultMessage": "Top K"
-  },
-  "modelSettingsPanel.topP": {
-    "defaultMessage": "Top P"
-  },
-  "modelsBottomBar.changeModel": {
-    "defaultMessage": "Change Model"
-  },
-  "modelsBottomBar.currentModel": {
-    "defaultMessage": "Current model"
-  },
-  "modelsBottomBar.loadingModel": {
-    "defaultMessage": "Loading model..."
-  },
-  "modelsBottomBar.localModelSettings": {
-    "defaultMessage": "Local Model Settings"
-  },
-  "modelsBottomBar.localModelSettingsTitle": {
-    "defaultMessage": "Local Model Settings — {modelName}"
-  },
-  "modelsBottomBar.resolvedModel": {
-    "defaultMessage": "Resolved model"
-  },
-  "modelsBottomBar.selectModel": {
-    "defaultMessage": "Select Model"
-  },
   "modelsSection.resetDescription": {
     "defaultMessage": "Clear your selected model and provider settings to start fresh"
   },
@@ -1847,132 +1580,6 @@
   "providerCard.unknownProvider": {
     "defaultMessage": "Unknown Provider"
   },
-  "providerCatalogPicker.anthropicCompatible": {
-    "defaultMessage": "Anthropic Compatible"
-  },
-  "providerCatalogPicker.apiFormat": {
-    "defaultMessage": "API Format"
-  },
-  "providerCatalogPicker.cancel": {
-    "defaultMessage": "Cancel"
-  },
-  "providerCatalogPicker.chooseProvider": {
-    "defaultMessage": "Choose Provider"
-  },
-  "providerCatalogPicker.errorPrefix": {
-    "defaultMessage": "Error: {error}"
-  },
-  "providerCatalogPicker.loadingProviders": {
-    "defaultMessage": "Loading providers..."
-  },
-  "providerCatalogPicker.modelsAvailable": {
-    "defaultMessage": "{count} models available"
-  },
-  "providerCatalogPicker.noProvidersAvailable": {
-    "defaultMessage": "No providers available"
-  },
-  "providerCatalogPicker.noProvidersFound": {
-    "defaultMessage": "No providers found for \"{query}\""
-  },
-  "providerCatalogPicker.openaiCompatible": {
-    "defaultMessage": "OpenAI Compatible"
-  },
-  "providerCatalogPicker.requiresEnvVar": {
-    "defaultMessage": "• Requires {envVar}"
-  },
-  "providerCatalogPicker.searchProviders": {
-    "defaultMessage": "Search providers..."
-  },
-  "providerCatalogPicker.selectFormatDescription": {
-    "defaultMessage": "Select an API format and provider. We'll auto-fill the configuration for you."
-  },
-  "providerConfigForm.browserWindowOpen": {
-    "defaultMessage": "A browser window will open for you to complete the login."
-  },
-  "providerConfigForm.configuring": {
-    "defaultMessage": "Configuring..."
-  },
-  "providerConfigForm.continue": {
-    "defaultMessage": "Continue"
-  },
-  "providerConfigForm.deviceCodeFlowHint": {
-    "defaultMessage": "A browser window will open and the verification code will be copied to your clipboard. Paste it in the browser to complete sign-in."
-  },
-  "providerConfigForm.noApiKey": {
-    "defaultMessage": "Don't have an API key?"
-  },
-  "providerConfigForm.signInWith": {
-    "defaultMessage": "Sign in with {providerName}"
-  },
-  "providerConfigForm.signingIn": {
-    "defaultMessage": "Signing in..."
-  },
-  "providerConfigurationModal.addApiKeyDescription": {
-    "defaultMessage": "Add your API key(s) for this provider to integrate into iCodex"
-  },
-  "providerConfigurationModal.browserWindowHint": {
-    "defaultMessage": "A browser window will open for you to complete the login."
-  },
-  "providerConfigurationModal.cancel": {
-    "defaultMessage": "Cancel"
-  },
-  "providerConfigurationModal.cannotDeleteActive": {
-    "defaultMessage": "You cannot delete this provider while it's currently in use. Please switch to a different model first."
-  },
-  "providerConfigurationModal.checkConfigAgain": {
-    "defaultMessage": "Check your configuration again to use this provider."
-  },
-  "providerConfigurationModal.close": {
-    "defaultMessage": "Close"
-  },
-  "providerConfigurationModal.configureHeader": {
-    "defaultMessage": "Configure {providerName}"
-  },
-  "providerConfigurationModal.deleteConfigHeader": {
-    "defaultMessage": "Delete configuration for {providerName}"
-  },
-  "providerConfigurationModal.deleteConfirmation": {
-    "defaultMessage": "This will permanently delete the current provider configuration."
-  },
-  "providerConfigurationModal.deviceCodeFlowHint": {
-    "defaultMessage": "A browser window will open and the verification code will be copied to your clipboard. Paste it in the browser to complete sign-in."
-  },
-  "providerConfigurationModal.errorCheckingConfig": {
-    "defaultMessage": "There was an error checking this provider configuration."
-  },
-  "providerConfigurationModal.errorTitle": {
-    "defaultMessage": "Error"
-  },
-  "providerConfigurationModal.externalSetupIntro": {
-    "defaultMessage": "This provider is configured outside of iCodex. Follow these steps:"
-  },
-  "providerConfigurationModal.goBack": {
-    "defaultMessage": "Go Back"
-  },
-  "providerConfigurationModal.huggingFaceOAuthDescription": {
-    "defaultMessage": "Sign in to use Hugging Face Inference Providers without manually entering an API token."
-  },
-  "providerConfigurationModal.oauthLoginFailed": {
-    "defaultMessage": "OAuth login failed: {error}"
-  },
-  "providerConfigurationModal.oauthSignInDescription": {
-    "defaultMessage": "Sign in with your {providerName} account to use this provider"
-  },
-  "providerConfigurationModal.parameterRequired": {
-    "defaultMessage": "{paramName} is required"
-  },
-  "providerConfigurationModal.removeConfiguration": {
-    "defaultMessage": "Remove Configuration"
-  },
-  "providerConfigurationModal.seeDocumentation": {
-    "defaultMessage": "See the <link>documentation</link> for more details."
-  },
-  "providerConfigurationModal.signInWith": {
-    "defaultMessage": "Sign in with {providerName}"
-  },
-  "providerConfigurationModal.signingIn": {
-    "defaultMessage": "Signing in..."
-  },
   "providerGrid.addProvider": {
     "defaultMessage": "Add Provider"
   },
@@ -1985,11 +1592,11 @@
   "providerGrid.configureProvider": {
     "defaultMessage": "Configure Provider"
   },
+  "providerGrid.connectOpenAiCompatible": {
+    "defaultMessage": "Connect an OpenAI-compatible endpoint"
+  },
   "providerGrid.editProvider": {
     "defaultMessage": "Edit Provider"
-  },
-  "providerGrid.fromTemplateOrManual": {
-    "defaultMessage": "From template or manual setup"
   },
   "providerGrid.noMatch": {
     "defaultMessage": "No providers match \"{query}\""
@@ -2012,6 +1619,9 @@
   "providerSelector.connectProviderDescription": {
     "defaultMessage": "Connect OpenAI, Anthropic, Google, etc"
   },
+  "providerSelector.continueWith": {
+    "defaultMessage": "Continue with {providerName}"
+  },
   "providerSelector.localModelDescription": {
     "defaultMessage": "Download a model and run it on this device. No API key or account needed."
   },
@@ -2032,30 +1642,6 @@
   },
   "providerSettings.otherProviders": {
     "defaultMessage": "Other providers"
-  },
-  "providerSetupActions.cancel": {
-    "defaultMessage": "Cancel"
-  },
-  "providerSetupActions.cannotDeleteActive": {
-    "defaultMessage": "You cannot delete {providerName} while it's currently in use. Please switch to a different model before deleting this provider."
-  },
-  "providerSetupActions.confirmDelete": {
-    "defaultMessage": "Confirm Delete"
-  },
-  "providerSetupActions.confirmDeleteMessage": {
-    "defaultMessage": "Are you sure you want to delete the configuration parameters for {providerName}? This action cannot be undone."
-  },
-  "providerSetupActions.deleteProvider": {
-    "defaultMessage": "Delete Provider"
-  },
-  "providerSetupActions.enableProvider": {
-    "defaultMessage": "Enable Provider"
-  },
-  "providerSetupActions.ok": {
-    "defaultMessage": "Ok"
-  },
-  "providerSetupActions.submit": {
-    "defaultMessage": "Submit"
   },
   "resetProviderSection.resetButton": {
     "defaultMessage": "Reset Provider and Model"
@@ -2584,18 +2170,6 @@
   },
   "terminalPanel.newTerminal": {
     "defaultMessage": "New terminal"
-  },
-  "themeSelector.dark": {
-    "defaultMessage": "Dark"
-  },
-  "themeSelector.light": {
-    "defaultMessage": "Light"
-  },
-  "themeSelector.system": {
-    "defaultMessage": "System"
-  },
-  "themeSelector.theme": {
-    "defaultMessage": "Theme"
   },
   "toolApprovalButtons.allowOnce": {
     "defaultMessage": "Allow Once"

@@ -1,13 +1,4 @@
 {
-  "alertBox.autoCompactAt": {
-    "defaultMessage": "ऑटो कॉम्पैक्ट पर"
-  },
-  "alertBox.compactNow": {
-    "defaultMessage": "अब संक्षिप्त करें"
-  },
-  "alertBox.failedToSaveThreshold": {
-    "defaultMessage": "सीमा सहेजने में विफल: {error}"
-  },
   "appLayout.back": {
     "defaultMessage": "पीछे"
   },
@@ -113,9 +104,6 @@
   "customProviderForm.apiUrlRequired": {
     "defaultMessage": "API URL आवश्यक है"
   },
-  "customProviderForm.attachments": {
-    "defaultMessage": "अनुलग्नक"
-  },
   "customProviderForm.authHint": {
     "defaultMessage": "Ollama जैसे स्थानीय एलएलएम को आमतौर पर API कुंजी की आवश्यकता नहीं होती है।"
   },
@@ -125,26 +113,11 @@
   "customProviderForm.availableModels": {
     "defaultMessage": "उपलब्ध मॉडल (अल्पविराम से अलग)"
   },
-  "customProviderForm.back": {
-    "defaultMessage": "← वापस"
-  },
   "customProviderForm.cancel": {
     "defaultMessage": "रद्द करें"
   },
   "customProviderForm.cannotDeleteActive": {
     "defaultMessage": "आप इस प्रदाता को तब तक नहीं हटा सकते जब तक यह वर्तमान में उपयोग में है। कृपया पहले किसी भिन्न मॉडल पर स्विच करें."
-  },
-  "customProviderForm.chooseSetup": {
-    "defaultMessage": "चुनें कि आप अपने प्रदाता को कैसे स्थापित करना चाहेंगे।"
-  },
-  "customProviderForm.clear": {
-    "defaultMessage": "स्पष्ट"
-  },
-  "customProviderForm.configureManually": {
-    "defaultMessage": "मैन्युअल रूप से कॉन्फ़िगर करें"
-  },
-  "customProviderForm.configureManuallyDesc": {
-    "defaultMessage": "सभी प्रदाता विवरण स्वयं दर्ज करें"
   },
   "customProviderForm.confirmDelete": {
     "defaultMessage": "हटाने की पुष्टि करें"
@@ -173,9 +146,6 @@
   "customProviderForm.displayNameRequired": {
     "defaultMessage": "प्रदर्शन नाम आवश्यक है"
   },
-  "customProviderForm.docs": {
-    "defaultMessage": "दस्तावेज़"
-  },
   "customProviderForm.headerBothRequired": {
     "defaultMessage": "हेडर नाम और मान दोनों दर्ज किए जाने चाहिए"
   },
@@ -197,29 +167,14 @@
   "customProviderForm.providerType": {
     "defaultMessage": "प्रदाता प्रकार"
   },
-  "customProviderForm.reasoning": {
-    "defaultMessage": "तर्क"
-  },
   "customProviderForm.requiresApiKey": {
     "defaultMessage": "इस प्रदाता को API कुंजी की आवश्यकता है"
-  },
-  "customProviderForm.startFromTemplate": {
-    "defaultMessage": "प्रदाता टेम्पलेट से प्रारंभ करें"
-  },
-  "customProviderForm.startFromTemplateDesc": {
-    "defaultMessage": "एक ज्ञात प्रदाता चुनें और हम कॉन्फ़िगरेशन को स्वतः भर देंगे"
   },
   "customProviderForm.submitError": {
     "defaultMessage": "प्रदाता को सहेजने में विफल. कृपया अपना कॉन्फ़िगरेशन जांचें और पुनः प्रयास करें।"
   },
-  "customProviderForm.toolCalling": {
-    "defaultMessage": "टूल कॉलिंग"
-  },
   "customProviderForm.updateProvider": {
     "defaultMessage": "अद्यतन प्रदाता"
-  },
-  "customProviderForm.usingTemplate": {
-    "defaultMessage": "टेम्पलेट का उपयोग करना: {name}"
   },
   "customProviderForm.valuePlaceholder": {
     "defaultMessage": "मूल्य"
@@ -227,44 +182,11 @@
   "defaultCardButtons.configureSettings": {
     "defaultMessage": "{name} सेटिंग्स कॉन्फ़िगर करें"
   },
-  "defaultCardButtons.deleteSettings": {
-    "defaultMessage": "{name} सेटिंग्स हटाएँ"
-  },
   "defaultCardButtons.editSettings": {
     "defaultMessage": "{name} सेटिंग्स संपादित करें"
   },
   "defaultCardButtons.getStarted": {
     "defaultMessage": "iCodex से आरंभ करें!"
-  },
-  "defaultProviderSetupForm.apiHostLabel": {
-    "defaultMessage": "API होस्ट"
-  },
-  "defaultProviderSetupForm.apiHostPlaceholder": {
-    "defaultMessage": "https://api.example.com"
-  },
-  "defaultProviderSetupForm.apiKeyLabel": {
-    "defaultMessage": "API कुंजी"
-  },
-  "defaultProviderSetupForm.apiKeyPlaceholder": {
-    "defaultMessage": "आपकी API कुंजी"
-  },
-  "defaultProviderSetupForm.hideOptions": {
-    "defaultMessage": "{count} विकल्प छिपाएँ"
-  },
-  "defaultProviderSetupForm.loadingConfig": {
-    "defaultMessage": "कॉन्फ़िगरेशन मान लोड हो रहा है..."
-  },
-  "defaultProviderSetupForm.modelsLabel": {
-    "defaultMessage": "मॉडल"
-  },
-  "defaultProviderSetupForm.modelsPlaceholder": {
-    "defaultMessage": "मॉडल-ए, मॉडल-बी"
-  },
-  "defaultProviderSetupForm.noConfigParameters": {
-    "defaultMessage": "इस प्रदाता के लिए कोई कॉन्फ़िगरेशन पैरामीटर नहीं."
-  },
-  "defaultProviderSetupForm.showOptions": {
-    "defaultMessage": "{count} विकल्प दिखाएँ"
   },
   "dialog.close": {
     "defaultMessage": "बंद करें"
@@ -598,21 +520,6 @@
   },
   "hub.suggestionReview": {
     "defaultMessage": "कोड की समीक्षा करें और बदलाव सुझाएँ"
-  },
-  "huggingFaceSignInPrompt.failedToConfigure": {
-    "defaultMessage": "हगिंग फेस में साइन इन करने में विफल: {error}"
-  },
-  "huggingFaceSignInPrompt.signIn": {
-    "defaultMessage": "साइन इन करें"
-  },
-  "huggingFaceSignInPrompt.signedIn": {
-    "defaultMessage": "हगिंग फेस ने साइन इन किया"
-  },
-  "huggingFaceSignInPrompt.signingIn": {
-    "defaultMessage": "साइन इन किया जा रहा है..."
-  },
-  "huggingFaceSignInPrompt.title": {
-    "defaultMessage": "आलिंगन करता हुआ चेहरा"
   },
   "imagePreview.altText": {
     "defaultMessage": "iCodex छवि"
@@ -1070,180 +977,6 @@
   "modelSettingsButtons.switchModels": {
     "defaultMessage": "मॉडल स्विच करें"
   },
-  "modelSettingsPanel.batchSize": {
-    "defaultMessage": "बैच का आकार"
-  },
-  "modelSettingsPanel.batchSizeDescription": {
-    "defaultMessage": "शीघ्र प्रसंस्करण बैच"
-  },
-  "modelSettingsPanel.builtinChatTemplate": {
-    "defaultMessage": "अंतर्निर्मित टेम्पलेट"
-  },
-  "modelSettingsPanel.builtinChatTemplateDescription": {
-    "defaultMessage": "एक llama.cpp अंतर्निहित टेम्पलेट नाम चुनें"
-  },
-  "modelSettingsPanel.chatTemplate": {
-    "defaultMessage": "चैट टेम्पलेट"
-  },
-  "modelSettingsPanel.chatTemplateBuiltin": {
-    "defaultMessage": "अंतर्निर्मित"
-  },
-  "modelSettingsPanel.chatTemplateCustomInline": {
-    "defaultMessage": "कस्टम इनलाइन"
-  },
-  "modelSettingsPanel.chatTemplateDescription": {
-    "defaultMessage": "एम्बेडेड GGUF मेटाडेटा, llama.cpp का बिल्ट-इन टेम्पलेट, या इनलाइन Jinja इस्तेमाल करें"
-  },
-  "modelSettingsPanel.chatTemplateEmbedded": {
-    "defaultMessage": "एंबेडेड"
-  },
-  "modelSettingsPanel.contextAndGeneration": {
-    "defaultMessage": "प्रसंग एवं पीढ़ी"
-  },
-  "modelSettingsPanel.contextSize": {
-    "defaultMessage": "प्रसंग का आकार"
-  },
-  "modelSettingsPanel.contextSizeDescription": {
-    "defaultMessage": "अधिकतम संदर्भ विंडो (0 = मॉडल डिफ़ॉल्ट)"
-  },
-  "modelSettingsPanel.customChatTemplate": {
-    "defaultMessage": "कस्टम चैट टेम्पलेट"
-  },
-  "modelSettingsPanel.customChatTemplateDescription": {
-    "defaultMessage": "संपूर्ण जिंजा चैट टेम्पलेट स्रोत चिपकाएँ"
-  },
-  "modelSettingsPanel.etaLearningRate": {
-    "defaultMessage": "एटा (सीखने की दर)"
-  },
-  "modelSettingsPanel.flashAttention": {
-    "defaultMessage": "फ़्लैश ध्यान"
-  },
-  "modelSettingsPanel.flashAttentionDescription": {
-    "defaultMessage": "फ़्लैश ध्यान अनुकूलन सक्षम करें"
-  },
-  "modelSettingsPanel.frequencyPenalty": {
-    "defaultMessage": "बारंबारता दंड"
-  },
-  "modelSettingsPanel.frequencyPenaltyDescription": {
-    "defaultMessage": "0.0 = बंद"
-  },
-  "modelSettingsPanel.gpuLayers": {
-    "defaultMessage": "जीपीयू परतें"
-  },
-  "modelSettingsPanel.gpuLayersDescription": {
-    "defaultMessage": "जीपीयू पर अपलोड करने के लिए परतें"
-  },
-  "modelSettingsPanel.loadingSettings": {
-    "defaultMessage": "सेटिंग लोड हो रही है..."
-  },
-  "modelSettingsPanel.lockModelInRam": {
-    "defaultMessage": "मॉडल को RAM में लॉक करें (mlock)"
-  },
-  "modelSettingsPanel.lockModelInRamDescription": {
-    "defaultMessage": "मॉडल को डिस्क पर स्वैप होने से रोकें"
-  },
-  "modelSettingsPanel.maxOutputTokens": {
-    "defaultMessage": "अधिकतम आउटपुट टोकन"
-  },
-  "modelSettingsPanel.maxOutputTokensDescription": {
-    "defaultMessage": "जेनरेट किए गए टोकन पर सीमा"
-  },
-  "modelSettingsPanel.minP": {
-    "defaultMessage": "मिन पी"
-  },
-  "modelSettingsPanel.performance": {
-    "defaultMessage": "प्रदर्शन"
-  },
-  "modelSettingsPanel.presencePenalty": {
-    "defaultMessage": "उपस्थिति दंड"
-  },
-  "modelSettingsPanel.presencePenaltyDescription": {
-    "defaultMessage": "0.0 = बंद"
-  },
-  "modelSettingsPanel.repeatPenalty": {
-    "defaultMessage": "बार-बार जुर्माना"
-  },
-  "modelSettingsPanel.repeatPenaltyDescription": {
-    "defaultMessage": "1.0 = बंद"
-  },
-  "modelSettingsPanel.repeatWindow": {
-    "defaultMessage": "विंडो दोहराएँ"
-  },
-  "modelSettingsPanel.repeatWindowDescription": {
-    "defaultMessage": "पीछे देखने के लिए टोकन"
-  },
-  "modelSettingsPanel.repetitionPenalty": {
-    "defaultMessage": "पुनरावृत्ति दंड"
-  },
-  "modelSettingsPanel.reset": {
-    "defaultMessage": "रीसेट करें"
-  },
-  "modelSettingsPanel.resetToDefaults": {
-    "defaultMessage": "डिफ़ॉल्ट पर रीसेट करें"
-  },
-  "modelSettingsPanel.samplingStrategy": {
-    "defaultMessage": "नमूनाकरण रणनीति"
-  },
-  "modelSettingsPanel.saving": {
-    "defaultMessage": "सहेजा जा रहा है..."
-  },
-  "modelSettingsPanel.seed": {
-    "defaultMessage": "बीज"
-  },
-  "modelSettingsPanel.tauTargetEntropy": {
-    "defaultMessage": "ताऊ (लक्ष्य एन्ट्रापी)"
-  },
-  "modelSettingsPanel.temperature": {
-    "defaultMessage": "तापमान"
-  },
-  "modelSettingsPanel.threads": {
-    "defaultMessage": "धागे"
-  },
-  "modelSettingsPanel.threadsDescription": {
-    "defaultMessage": "पीढ़ी के लिए सीपीयू धागे"
-  },
-  "modelSettingsPanel.toolCalling": {
-    "defaultMessage": "टूल कॉलिंग"
-  },
-  "modelSettingsPanel.toolCallingAuto": {
-    "defaultMessage": "ऑटो"
-  },
-  "modelSettingsPanel.toolCallingDescription": {
-    "defaultMessage": "चुनें कि स्थानीय मॉडल देशी या अनुकरणीय टूल कॉलिंग का चयन कैसे करते हैं"
-  },
-  "modelSettingsPanel.toolCallingForceEmulated": {
-    "defaultMessage": "बल का अनुकरण किया गया"
-  },
-  "modelSettingsPanel.toolCallingForceNative": {
-    "defaultMessage": "बल मूलनिवासी"
-  },
-  "modelSettingsPanel.topK": {
-    "defaultMessage": "शीर्ष के"
-  },
-  "modelSettingsPanel.topP": {
-    "defaultMessage": "शीर्ष पी"
-  },
-  "modelsBottomBar.changeModel": {
-    "defaultMessage": "मॉडल बदलें"
-  },
-  "modelsBottomBar.currentModel": {
-    "defaultMessage": "वर्तमान मॉडल"
-  },
-  "modelsBottomBar.loadingModel": {
-    "defaultMessage": "मॉडल लोड हो रहा है..."
-  },
-  "modelsBottomBar.localModelSettings": {
-    "defaultMessage": "स्थानीय मॉडल Settings"
-  },
-  "modelsBottomBar.localModelSettingsTitle": {
-    "defaultMessage": "स्थानीय मॉडल Settings — {modelName}"
-  },
-  "modelsBottomBar.resolvedModel": {
-    "defaultMessage": "हल किया गया मॉडल"
-  },
-  "modelsBottomBar.selectModel": {
-    "defaultMessage": "मॉडल का चयन करें"
-  },
   "modelsSection.resetDescription": {
     "defaultMessage": "नए सिरे से शुरुआत करने के लिए अपने चयनित मॉडल और प्रदाता सेटिंग्स को साफ़ करें"
   },
@@ -1472,132 +1205,6 @@
   "providerCard.unknownProvider": {
     "defaultMessage": "अज्ञात प्रदाता"
   },
-  "providerCatalogPicker.anthropicCompatible": {
-    "defaultMessage": "Anthropic संगत"
-  },
-  "providerCatalogPicker.apiFormat": {
-    "defaultMessage": "API प्रारूप"
-  },
-  "providerCatalogPicker.cancel": {
-    "defaultMessage": "रद्द करें"
-  },
-  "providerCatalogPicker.chooseProvider": {
-    "defaultMessage": "प्रदाता चुनें"
-  },
-  "providerCatalogPicker.errorPrefix": {
-    "defaultMessage": "त्रुटि: {error}"
-  },
-  "providerCatalogPicker.loadingProviders": {
-    "defaultMessage": "प्रदाता लोड हो रहे हैं..."
-  },
-  "providerCatalogPicker.modelsAvailable": {
-    "defaultMessage": "{count} मॉडल उपलब्ध हैं"
-  },
-  "providerCatalogPicker.noProvidersAvailable": {
-    "defaultMessage": "कोई प्रदाता उपलब्ध नहीं है"
-  },
-  "providerCatalogPicker.noProvidersFound": {
-    "defaultMessage": "\"{query}\" के लिए कोई प्रदाता नहीं मिला"
-  },
-  "providerCatalogPicker.openaiCompatible": {
-    "defaultMessage": "OpenAI संगत"
-  },
-  "providerCatalogPicker.requiresEnvVar": {
-    "defaultMessage": "• {envVar} की आवश्यकता है"
-  },
-  "providerCatalogPicker.searchProviders": {
-    "defaultMessage": "प्रदाता खोजें..."
-  },
-  "providerCatalogPicker.selectFormatDescription": {
-    "defaultMessage": "एक API प्रारूप और प्रदाता चुनें। हम आपके लिए कॉन्फ़िगरेशन स्वतः भर देंगे."
-  },
-  "providerConfigForm.browserWindowOpen": {
-    "defaultMessage": "लॉगिन पूरा करने के लिए आपके लिए एक ब्राउज़र विंडो खुलेगी।"
-  },
-  "providerConfigForm.configuring": {
-    "defaultMessage": "कॉन्फ़िगर किया जा रहा है..."
-  },
-  "providerConfigForm.continue": {
-    "defaultMessage": "जारी रखें"
-  },
-  "providerConfigForm.deviceCodeFlowHint": {
-    "defaultMessage": "एक ब्राउज़र विंडो खुलेगी और सत्यापन कोड आपके क्लिपबोर्ड पर कॉपी हो जाएगा। साइन-इन पूरा करने के लिए इसे ब्राउज़र में पेस्ट करें।"
-  },
-  "providerConfigForm.noApiKey": {
-    "defaultMessage": "क्या आपके पास API कुंजी नहीं है?"
-  },
-  "providerConfigForm.signInWith": {
-    "defaultMessage": "{providerName} के साथ साइन इन करें"
-  },
-  "providerConfigForm.signingIn": {
-    "defaultMessage": "साइन इन किया जा रहा है..."
-  },
-  "providerConfigurationModal.addApiKeyDescription": {
-    "defaultMessage": "इस प्रदाता को iCodex में एकीकृत करने के लिए अपनी API कुंजी जोड़ें"
-  },
-  "providerConfigurationModal.browserWindowHint": {
-    "defaultMessage": "लॉगिन पूरा करने के लिए आपके लिए एक ब्राउज़र विंडो खुलेगी।"
-  },
-  "providerConfigurationModal.cancel": {
-    "defaultMessage": "रद्द करें"
-  },
-  "providerConfigurationModal.cannotDeleteActive": {
-    "defaultMessage": "आप इस प्रदाता को तब तक नहीं हटा सकते जब तक यह वर्तमान में उपयोग में है। कृपया पहले किसी भिन्न मॉडल पर स्विच करें."
-  },
-  "providerConfigurationModal.checkConfigAgain": {
-    "defaultMessage": "इस प्रदाता का उपयोग करने के लिए अपनी कॉन्फ़िगरेशन दोबारा जांचें।"
-  },
-  "providerConfigurationModal.close": {
-    "defaultMessage": "बंद करें"
-  },
-  "providerConfigurationModal.configureHeader": {
-    "defaultMessage": "कॉन्फ़िगर करें {providerName}"
-  },
-  "providerConfigurationModal.deleteConfigHeader": {
-    "defaultMessage": "{providerName} के लिए कॉन्फ़िगरेशन हटाएं"
-  },
-  "providerConfigurationModal.deleteConfirmation": {
-    "defaultMessage": "यह वर्तमान प्रदाता कॉन्फ़िगरेशन को स्थायी रूप से हटा देगा।"
-  },
-  "providerConfigurationModal.deviceCodeFlowHint": {
-    "defaultMessage": "एक ब्राउज़र विंडो खुलेगी और सत्यापन कोड आपके क्लिपबोर्ड पर कॉपी हो जाएगा। साइन-इन पूरा करने के लिए इसे ब्राउज़र में पेस्ट करें।"
-  },
-  "providerConfigurationModal.errorCheckingConfig": {
-    "defaultMessage": "इस प्रदाता कॉन्फ़िगरेशन की जाँच करने में त्रुटि हुई।"
-  },
-  "providerConfigurationModal.errorTitle": {
-    "defaultMessage": "त्रुटि"
-  },
-  "providerConfigurationModal.externalSetupIntro": {
-    "defaultMessage": "यह प्रदाता iCodex के बाहर कॉन्फ़िगर किया गया है। इन चरणों का पालन करें:"
-  },
-  "providerConfigurationModal.goBack": {
-    "defaultMessage": "वापस जाओ"
-  },
-  "providerConfigurationModal.huggingFaceOAuthDescription": {
-    "defaultMessage": "मैन्युअल रूप से API टोकन दर्ज किए बिना हगिंग फेस इंफ़रेंस प्रोवाइडर्स का उपयोग करने के लिए साइन इन करें।"
-  },
-  "providerConfigurationModal.oauthLoginFailed": {
-    "defaultMessage": "OAuth लॉगिन विफल: {error}"
-  },
-  "providerConfigurationModal.oauthSignInDescription": {
-    "defaultMessage": "इस प्रदाता का उपयोग करने के लिए अपने {providerName} खाते से साइन इन करें"
-  },
-  "providerConfigurationModal.parameterRequired": {
-    "defaultMessage": "{paramName} आवश्यक है"
-  },
-  "providerConfigurationModal.removeConfiguration": {
-    "defaultMessage": "कॉन्फ़िगरेशन हटाएँ"
-  },
-  "providerConfigurationModal.seeDocumentation": {
-    "defaultMessage": "अधिक विवरण के लिए <link>दस्तावेज़ीकरण</link> देखें।"
-  },
-  "providerConfigurationModal.signInWith": {
-    "defaultMessage": "{providerName} के साथ साइन इन करें"
-  },
-  "providerConfigurationModal.signingIn": {
-    "defaultMessage": "साइन इन किया जा रहा है..."
-  },
   "providerGrid.addProvider": {
     "defaultMessage": "प्रदाता जोड़ें"
   },
@@ -1612,9 +1219,6 @@
   },
   "providerGrid.editProvider": {
     "defaultMessage": "प्रदाता संपादित करें"
-  },
-  "providerGrid.fromTemplateOrManual": {
-    "defaultMessage": "टेम्प्लेट या मैन्युअल सेटअप से"
   },
   "providerGrid.noMatch": {
     "defaultMessage": "\"{query}\" से मेल खाने वाला कोई प्रदाता नहीं"
@@ -1657,30 +1261,6 @@
   },
   "providerSettings.otherProviders": {
     "defaultMessage": "अन्य प्रदाता"
-  },
-  "providerSetupActions.cancel": {
-    "defaultMessage": "रद्द करें"
-  },
-  "providerSetupActions.cannotDeleteActive": {
-    "defaultMessage": "जब तक यह वर्तमान में उपयोग में है तब तक आप {providerName} को हटा नहीं सकते। कृपया इस प्रदाता को हटाने से पहले किसी भिन्न मॉडल पर स्विच करें।"
-  },
-  "providerSetupActions.confirmDelete": {
-    "defaultMessage": "हटाने की पुष्टि करें"
-  },
-  "providerSetupActions.confirmDeleteMessage": {
-    "defaultMessage": "क्या आप वाकई {providerName} के लिए कॉन्फ़िगरेशन पैरामीटर हटाना चाहते हैं? इस कार्रवाई को वापस नहीं किया जा सकता।"
-  },
-  "providerSetupActions.deleteProvider": {
-    "defaultMessage": "प्रदाता हटाएँ"
-  },
-  "providerSetupActions.enableProvider": {
-    "defaultMessage": "प्रदाता सक्षम करें"
-  },
-  "providerSetupActions.ok": {
-    "defaultMessage": "ठीक है"
-  },
-  "providerSetupActions.submit": {
-    "defaultMessage": "सबमिट करें"
   },
   "resetProviderSection.resetButton": {
     "defaultMessage": "प्रदाता और मॉडल रीसेट करें"
@@ -2171,18 +1751,6 @@
   "terminalPanel.newTerminal": {
     "defaultMessage": "नया टर्मिनल"
   },
-  "themeSelector.dark": {
-    "defaultMessage": "अंधेरा"
-  },
-  "themeSelector.light": {
-    "defaultMessage": "रोशनी"
-  },
-  "themeSelector.system": {
-    "defaultMessage": "सिस्टम"
-  },
-  "themeSelector.theme": {
-    "defaultMessage": "थीम"
-  },
   "toolApprovalButtons.allowOnce": {
     "defaultMessage": "एक बार अनुमति दें"
   },
@@ -2305,5 +1873,11 @@
   },
   "workToolActivity.usedTools": {
     "defaultMessage": "{count,plural,one{एक टूल इस्तेमाल किया} other{# टूल इस्तेमाल किए}}"
+  },
+  "providerGrid.connectOpenAiCompatible": {
+    "defaultMessage": "OpenAI-संगत एंडपॉइंट कनेक्ट करें"
+  },
+  "providerSelector.continueWith": {
+    "defaultMessage": "{providerName} के साथ जारी रखें"
   }
 }

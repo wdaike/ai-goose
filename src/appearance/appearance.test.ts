@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
+  CODEX_THEME_PRESET,
+  DEFAULT_APPEARANCE,
   DEFAULT_CODE_FONT,
   DEFAULT_UI_FONT,
+  isLightColor,
+  matchesCodexPreset,
   parseThemeImport,
 } from './appearance';
 
@@ -39,5 +43,60 @@ describe('parseThemeImport', () => {
 
   it('throws on malformed payload JSON', () => {
     expect(() => parseThemeImport('codex-theme-v1:{oops')).toThrow();
+  });
+});
+
+describe('isLightColor', () => {
+  it('reads white and pale colours as light', () => {
+    expect(isLightColor('#ffffff')).toBe(true);
+    expect(isLightColor('#eeeeee')).toBe(true);
+  });
+
+  it('reads black and deep colours as dark', () => {
+    expect(isLightColor('#000000')).toBe(false);
+    expect(isLightColor('#212121')).toBe(false);
+  });
+
+  it('weights green far above blue', () => {
+    // Full green lands at 149.7 — just under the cutoff — while full blue reaches only 29
+    expect(isLightColor('#00ff00')).toBe(false);
+    expect(isLightColor('#20ff00')).toBe(true);
+    expect(isLightColor('#0000ff')).toBe(false);
+    expect(isLightColor('#20ff20')).toBe(true);
+  });
+
+  it('accepts a hex with or without the hash, and any case', () => {
+    expect(isLightColor('FFFFFF')).toBe(true);
+    expect(isLightColor('  #FfFfFf  ')).toBe(true);
+  });
+
+  it('falls back to light for anything it cannot parse', () => {
+    expect(isLightColor('')).toBe(true);
+    expect(isLightColor('#fff')).toBe(true);
+    expect(isLightColor('rebeccapurple')).toBe(true);
+  });
+});
+
+describe('matchesCodexPreset', () => {
+  const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+  const preset = { ...DEFAULT_APPEARANCE, themes: clone(CODEX_THEME_PRESET) };
+
+  it('recognises untouched defaults', () => {
+    expect(matchesCodexPreset(preset)).toBe(true);
+  });
+
+  it('notices a recoloured theme', () => {
+    const edited = clone(preset);
+    edited.themes.light.accent = '#ff0000';
+    expect(matchesCodexPreset(edited)).toBe(false);
+  });
+
+  it.each([
+    ['uiFont', 'Comic Sans'],
+    ['contrast', 99],
+    ['translucentSidebar', !DEFAULT_APPEARANCE.translucentSidebar],
+    ['uiFontSize', 99],
+  ] as const)('notices a changed %s', (key, value) => {
+    expect(matchesCodexPreset({ ...preset, [key]: value })).toBe(false);
   });
 });

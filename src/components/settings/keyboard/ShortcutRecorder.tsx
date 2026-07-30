@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Button } from '../../ui/button';
 import { KeyboardShortcuts } from '../../../utils/settings';
 import { getShortcutLabel, formatShortcut } from './KeyboardShortcutsSection';
+import { acceleratorFromKeyEvent, findConflictingShortcut } from '../../../utils/keyboardShortcuts';
 import { defineMessages, useIntl } from '../../../i18n';
 
 const i18n = defineMessages({
@@ -68,74 +69,13 @@ export function ShortcutRecorder({
     e.preventDefault();
     e.stopPropagation();
 
-    // Ignore modifier-only presses
-    if (['Control', 'Meta', 'Alt', 'Shift'].includes(e.key)) {
-      return;
-    }
+    const accelerator = acceleratorFromKeyEvent(e);
+    if (!accelerator) return;
 
-    const parts: string[] = [];
-
-    if (e.ctrlKey || e.metaKey) {
-      parts.push('CommandOrControl');
-    }
-    if (e.altKey) {
-      parts.push('Alt');
-    }
-    if (e.shiftKey) {
-      parts.push('Shift');
-    }
-
-    let key = e.code && e.code.startsWith('Key') ? e.code.replace('Key', '') : e.key;
-
-    const keyMap: Record<string, string> = {
-      ' ': 'Space',
-      Space: 'Space',
-      ArrowUp: 'Up',
-      ArrowDown: 'Down',
-      ArrowLeft: 'Left',
-      ArrowRight: 'Right',
-      Escape: 'Esc',
-      Delete: 'Delete',
-      Backspace: 'Backspace',
-      Tab: 'Tab',
-      Enter: 'Return',
-      Minus: '-',
-      Equal: '=',
-      BracketLeft: '[',
-      BracketRight: ']',
-      Backslash: '\\',
-      Semicolon: ';',
-      Quote: "'",
-      Comma: ',',
-      Period: '.',
-      Slash: '/',
-      Backquote: '`',
-    };
-
-    if (e.code && e.code.startsWith('Digit')) {
-      key = e.code.replace('Digit', '');
-    } else if (keyMap[key] || keyMap[e.code]) {
-      key = keyMap[key] || keyMap[e.code];
-    } else if (key.length === 1) {
-      key = key.toUpperCase();
-    }
-
-    parts.push(key);
-
-    const accelerator = parts.join('+');
     setCapturedShortcut(accelerator);
-
     if (allShortcuts && currentKey) {
-      const conflictingKey = Object.entries(allShortcuts).find(
-        ([key, shortcut]) => key !== currentKey && shortcut === accelerator
-      );
-      if (conflictingKey) {
-        setConflict(conflictingKey[0]);
-      } else {
-        setConflict(null);
-      }
+      setConflict(findConflictingShortcut(allShortcuts, currentKey, accelerator));
     }
-
     setDisplayShortcut(formatShortcut(accelerator));
     setRecording(false);
   };

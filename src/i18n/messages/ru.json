@@ -1,13 +1,4 @@
 {
-  "alertBox.autoCompactAt": {
-    "defaultMessage": "Автосжимать при"
-  },
-  "alertBox.compactNow": {
-    "defaultMessage": "Сжать сейчас"
-  },
-  "alertBox.failedToSaveThreshold": {
-    "defaultMessage": "Не удалось сохранить пороговое значение: {error}"
-  },
   "appLayout.back": {
     "defaultMessage": "Назад"
   },
@@ -113,9 +104,6 @@
   "customProviderForm.apiUrlRequired": {
     "defaultMessage": "Требуется URL API"
   },
-  "customProviderForm.attachments": {
-    "defaultMessage": "Вложения"
-  },
   "customProviderForm.authHint": {
     "defaultMessage": "Локальные LLM, такие как Ollama, обычно не требуют API-ключа."
   },
@@ -125,26 +113,11 @@
   "customProviderForm.availableModels": {
     "defaultMessage": "Доступные модели (через запятую)"
   },
-  "customProviderForm.back": {
-    "defaultMessage": "← Назад"
-  },
   "customProviderForm.cancel": {
     "defaultMessage": "Отмена"
   },
   "customProviderForm.cannotDeleteActive": {
     "defaultMessage": "Нельзя удалить этого провайдера, пока он используется. Сначала переключитесь на другую модель."
-  },
-  "customProviderForm.chooseSetup": {
-    "defaultMessage": "Выберите способ настройки провайдера."
-  },
-  "customProviderForm.clear": {
-    "defaultMessage": "Очистить"
-  },
-  "customProviderForm.configureManually": {
-    "defaultMessage": "Настроить вручную"
-  },
-  "customProviderForm.configureManuallyDesc": {
-    "defaultMessage": "Введите все данные провайдера самостоятельно"
   },
   "customProviderForm.confirmDelete": {
     "defaultMessage": "Подтвердить удаление"
@@ -173,9 +146,6 @@
   "customProviderForm.displayNameRequired": {
     "defaultMessage": "Требуется отображаемое имя"
   },
-  "customProviderForm.docs": {
-    "defaultMessage": "Документация"
-  },
   "customProviderForm.headerBothRequired": {
     "defaultMessage": "Необходимо ввести имя и заголовок"
   },
@@ -197,29 +167,14 @@
   "customProviderForm.providerType": {
     "defaultMessage": "Тип провайдера"
   },
-  "customProviderForm.reasoning": {
-    "defaultMessage": "Рассуждение"
-  },
   "customProviderForm.requiresApiKey": {
     "defaultMessage": "Этот провайдер требует API-ключ"
-  },
-  "customProviderForm.startFromTemplate": {
-    "defaultMessage": "Начать с шаблона провайдера"
-  },
-  "customProviderForm.startFromTemplateDesc": {
-    "defaultMessage": "Выберите известного провайдера, и мы автоматически заполним конфигурацию"
   },
   "customProviderForm.submitError": {
     "defaultMessage": "Не удалось сохранить провайдера. Проверьте конфигурацию и повторите попытку."
   },
-  "customProviderForm.toolCalling": {
-    "defaultMessage": "Вызов инструментов"
-  },
   "customProviderForm.updateProvider": {
     "defaultMessage": "Обновить провайдера"
-  },
-  "customProviderForm.usingTemplate": {
-    "defaultMessage": "Используется шаблон: {name}"
   },
   "customProviderForm.valuePlaceholder": {
     "defaultMessage": "Значение"
@@ -227,44 +182,11 @@
   "defaultCardButtons.configureSettings": {
     "defaultMessage": "Настроить параметры {name}"
   },
-  "defaultCardButtons.deleteSettings": {
-    "defaultMessage": "Удалить параметры {name}"
-  },
   "defaultCardButtons.editSettings": {
     "defaultMessage": "Изменить параметры {name}"
   },
   "defaultCardButtons.getStarted": {
     "defaultMessage": "Начните работу с iCodex!"
-  },
-  "defaultProviderSetupForm.apiHostLabel": {
-    "defaultMessage": "Хост API"
-  },
-  "defaultProviderSetupForm.apiHostPlaceholder": {
-    "defaultMessage": "https://api.example.com"
-  },
-  "defaultProviderSetupForm.apiKeyLabel": {
-    "defaultMessage": "API-ключ"
-  },
-  "defaultProviderSetupForm.apiKeyPlaceholder": {
-    "defaultMessage": "Ваш API-ключ"
-  },
-  "defaultProviderSetupForm.hideOptions": {
-    "defaultMessage": "Скрыть {count} параметров"
-  },
-  "defaultProviderSetupForm.loadingConfig": {
-    "defaultMessage": "Загрузка значений конфигурации..."
-  },
-  "defaultProviderSetupForm.modelsLabel": {
-    "defaultMessage": "Модели"
-  },
-  "defaultProviderSetupForm.modelsPlaceholder": {
-    "defaultMessage": "model-a, model-b"
-  },
-  "defaultProviderSetupForm.noConfigParameters": {
-    "defaultMessage": "У этого провайдера нет параметров конфигурации."
-  },
-  "defaultProviderSetupForm.showOptions": {
-    "defaultMessage": "Показать {count} параметров"
   },
   "dialog.close": {
     "defaultMessage": "Закрыть"
@@ -598,21 +520,6 @@
   },
   "hub.suggestionReview": {
     "defaultMessage": "Проверить код и предложить изменения"
-  },
-  "huggingFaceSignInPrompt.failedToConfigure": {
-    "defaultMessage": "Не удалось войти в Hugging Face: {error}"
-  },
-  "huggingFaceSignInPrompt.signIn": {
-    "defaultMessage": "Войти"
-  },
-  "huggingFaceSignInPrompt.signedIn": {
-    "defaultMessage": "Вход в Hugging Face выполнен"
-  },
-  "huggingFaceSignInPrompt.signingIn": {
-    "defaultMessage": "Выполняется вход..."
-  },
-  "huggingFaceSignInPrompt.title": {
-    "defaultMessage": "Hugging Face"
   },
   "imagePreview.altText": {
     "defaultMessage": "изображение iCodex"
@@ -1070,180 +977,6 @@
   "modelSettingsButtons.switchModels": {
     "defaultMessage": "Переключить модели"
   },
-  "modelSettingsPanel.batchSize": {
-    "defaultMessage": "Размер пакета"
-  },
-  "modelSettingsPanel.batchSizeDescription": {
-    "defaultMessage": "Пакет обработки промпта"
-  },
-  "modelSettingsPanel.builtinChatTemplate": {
-    "defaultMessage": "Встроенный шаблон"
-  },
-  "modelSettingsPanel.builtinChatTemplateDescription": {
-    "defaultMessage": "Выберите имя встроенного шаблона llama.cpp"
-  },
-  "modelSettingsPanel.chatTemplate": {
-    "defaultMessage": "Шаблон чата"
-  },
-  "modelSettingsPanel.chatTemplateBuiltin": {
-    "defaultMessage": "Встроенный"
-  },
-  "modelSettingsPanel.chatTemplateCustomInline": {
-    "defaultMessage": "Пользовательский inline"
-  },
-  "modelSettingsPanel.chatTemplateDescription": {
-    "defaultMessage": "Использовать встроенные метаданные GGUF, встроенный шаблон llama.cpp или inline-шаблон Jinja"
-  },
-  "modelSettingsPanel.chatTemplateEmbedded": {
-    "defaultMessage": "Встроенный"
-  },
-  "modelSettingsPanel.contextAndGeneration": {
-    "defaultMessage": "Контекст и генерация"
-  },
-  "modelSettingsPanel.contextSize": {
-    "defaultMessage": "Размер контекста"
-  },
-  "modelSettingsPanel.contextSizeDescription": {
-    "defaultMessage": "Максимальное контекстное окно (0 = по умолчанию модели)"
-  },
-  "modelSettingsPanel.customChatTemplate": {
-    "defaultMessage": "Пользовательский шаблон чата"
-  },
-  "modelSettingsPanel.customChatTemplateDescription": {
-    "defaultMessage": "Вставьте полный исходный код шаблона Jinja"
-  },
-  "modelSettingsPanel.etaLearningRate": {
-    "defaultMessage": "Eta (скорость обучения)"
-  },
-  "modelSettingsPanel.flashAttention": {
-    "defaultMessage": "Flash attention"
-  },
-  "modelSettingsPanel.flashAttentionDescription": {
-    "defaultMessage": "Включить оптимизацию flash attention"
-  },
-  "modelSettingsPanel.frequencyPenalty": {
-    "defaultMessage": "Штраф частоты"
-  },
-  "modelSettingsPanel.frequencyPenaltyDescription": {
-    "defaultMessage": "0.0 = выкл."
-  },
-  "modelSettingsPanel.gpuLayers": {
-    "defaultMessage": "Слои GPU"
-  },
-  "modelSettingsPanel.gpuLayersDescription": {
-    "defaultMessage": "Слои для выгрузки на GPU"
-  },
-  "modelSettingsPanel.loadingSettings": {
-    "defaultMessage": "Загрузка настроек..."
-  },
-  "modelSettingsPanel.lockModelInRam": {
-    "defaultMessage": "Закрепить модель в RAM (mlock)"
-  },
-  "modelSettingsPanel.lockModelInRamDescription": {
-    "defaultMessage": "Не допускать выгрузки модели на диск"
-  },
-  "modelSettingsPanel.maxOutputTokens": {
-    "defaultMessage": "Максимум выходных токенов"
-  },
-  "modelSettingsPanel.maxOutputTokensDescription": {
-    "defaultMessage": "Ограничение сгенерированных токенов"
-  },
-  "modelSettingsPanel.minP": {
-    "defaultMessage": "Min P"
-  },
-  "modelSettingsPanel.performance": {
-    "defaultMessage": "Производительность"
-  },
-  "modelSettingsPanel.presencePenalty": {
-    "defaultMessage": "Штраф присутствия"
-  },
-  "modelSettingsPanel.presencePenaltyDescription": {
-    "defaultMessage": "0.0 = выкл."
-  },
-  "modelSettingsPanel.repeatPenalty": {
-    "defaultMessage": "Штраф повторов"
-  },
-  "modelSettingsPanel.repeatPenaltyDescription": {
-    "defaultMessage": "1.0 = выкл."
-  },
-  "modelSettingsPanel.repeatWindow": {
-    "defaultMessage": "Окно повторов"
-  },
-  "modelSettingsPanel.repeatWindowDescription": {
-    "defaultMessage": "Количество токенов для просмотра назад"
-  },
-  "modelSettingsPanel.repetitionPenalty": {
-    "defaultMessage": "Штраф повторения"
-  },
-  "modelSettingsPanel.reset": {
-    "defaultMessage": "Сбросить"
-  },
-  "modelSettingsPanel.resetToDefaults": {
-    "defaultMessage": "Сбросить к значениям по умолчанию"
-  },
-  "modelSettingsPanel.samplingStrategy": {
-    "defaultMessage": "Стратегия сэмплирования"
-  },
-  "modelSettingsPanel.saving": {
-    "defaultMessage": "Сохранение..."
-  },
-  "modelSettingsPanel.seed": {
-    "defaultMessage": "Seed"
-  },
-  "modelSettingsPanel.tauTargetEntropy": {
-    "defaultMessage": "Tau (целевая энтропия)"
-  },
-  "modelSettingsPanel.temperature": {
-    "defaultMessage": "Температура"
-  },
-  "modelSettingsPanel.threads": {
-    "defaultMessage": "Потоки"
-  },
-  "modelSettingsPanel.threadsDescription": {
-    "defaultMessage": "Потоки CPU для генерации"
-  },
-  "modelSettingsPanel.toolCalling": {
-    "defaultMessage": "Вызов инструментов"
-  },
-  "modelSettingsPanel.toolCallingAuto": {
-    "defaultMessage": "Авто"
-  },
-  "modelSettingsPanel.toolCallingDescription": {
-    "defaultMessage": "Выберите, как локальные модели используют нативный или эмулируемый вызов инструментов"
-  },
-  "modelSettingsPanel.toolCallingForceEmulated": {
-    "defaultMessage": "Принудительно эмулируемый"
-  },
-  "modelSettingsPanel.toolCallingForceNative": {
-    "defaultMessage": "Принудительно нативный"
-  },
-  "modelSettingsPanel.topK": {
-    "defaultMessage": "Top K"
-  },
-  "modelSettingsPanel.topP": {
-    "defaultMessage": "Top P"
-  },
-  "modelsBottomBar.changeModel": {
-    "defaultMessage": "Изменить модель"
-  },
-  "modelsBottomBar.currentModel": {
-    "defaultMessage": "Текущая модель"
-  },
-  "modelsBottomBar.loadingModel": {
-    "defaultMessage": "Загрузка модели..."
-  },
-  "modelsBottomBar.localModelSettings": {
-    "defaultMessage": "Настройки локальной модели"
-  },
-  "modelsBottomBar.localModelSettingsTitle": {
-    "defaultMessage": "Настройки локальной модели — {modelName}"
-  },
-  "modelsBottomBar.resolvedModel": {
-    "defaultMessage": "Разрешенная модель"
-  },
-  "modelsBottomBar.selectModel": {
-    "defaultMessage": "Выбрать модель"
-  },
   "modelsSection.resetDescription": {
     "defaultMessage": "Очистить выбранную модель и настройки провайдера, чтобы начать заново"
   },
@@ -1472,132 +1205,6 @@
   "providerCard.unknownProvider": {
     "defaultMessage": "Неизвестный провайдер"
   },
-  "providerCatalogPicker.anthropicCompatible": {
-    "defaultMessage": "Совместимо с Anthropic"
-  },
-  "providerCatalogPicker.apiFormat": {
-    "defaultMessage": "Формат API"
-  },
-  "providerCatalogPicker.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "providerCatalogPicker.chooseProvider": {
-    "defaultMessage": "Выберите провайдера"
-  },
-  "providerCatalogPicker.errorPrefix": {
-    "defaultMessage": "Ошибка: {error}"
-  },
-  "providerCatalogPicker.loadingProviders": {
-    "defaultMessage": "Загрузка провайдеров..."
-  },
-  "providerCatalogPicker.modelsAvailable": {
-    "defaultMessage": "Доступно моделей: {count}"
-  },
-  "providerCatalogPicker.noProvidersAvailable": {
-    "defaultMessage": "Нет доступных провайдеров"
-  },
-  "providerCatalogPicker.noProvidersFound": {
-    "defaultMessage": "Провайдеры по запросу «{query}» не найдены"
-  },
-  "providerCatalogPicker.openaiCompatible": {
-    "defaultMessage": "Совместимо с OpenAI"
-  },
-  "providerCatalogPicker.requiresEnvVar": {
-    "defaultMessage": "• Требуется {envVar}"
-  },
-  "providerCatalogPicker.searchProviders": {
-    "defaultMessage": "Поиск провайдеров..."
-  },
-  "providerCatalogPicker.selectFormatDescription": {
-    "defaultMessage": "Выберите формат API и провайдера. Мы автоматически заполним конфигурацию."
-  },
-  "providerConfigForm.browserWindowOpen": {
-    "defaultMessage": "Откроется окно браузера для завершения входа."
-  },
-  "providerConfigForm.configuring": {
-    "defaultMessage": "Настройка..."
-  },
-  "providerConfigForm.continue": {
-    "defaultMessage": "Продолжить"
-  },
-  "providerConfigForm.deviceCodeFlowHint": {
-    "defaultMessage": "Откроется окно браузера, а код подтверждения будет скопирован в буфер обмена. Вставьте его в браузере, чтобы завершить вход."
-  },
-  "providerConfigForm.noApiKey": {
-    "defaultMessage": "Нет API-ключа?"
-  },
-  "providerConfigForm.signInWith": {
-    "defaultMessage": "Войти через {providerName}"
-  },
-  "providerConfigForm.signingIn": {
-    "defaultMessage": "Вход..."
-  },
-  "providerConfigurationModal.addApiKeyDescription": {
-    "defaultMessage": "Добавьте API-ключи для этого провайдера, чтобы интегрировать его в iCodex"
-  },
-  "providerConfigurationModal.browserWindowHint": {
-    "defaultMessage": "Откроется окно браузера для завершения входа."
-  },
-  "providerConfigurationModal.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "providerConfigurationModal.cannotDeleteActive": {
-    "defaultMessage": "Нельзя удалить этого провайдера, пока он используется. Сначала переключитесь на другую модель."
-  },
-  "providerConfigurationModal.checkConfigAgain": {
-    "defaultMessage": "Проверьте конфигурацию еще раз, чтобы использовать этого провайдера."
-  },
-  "providerConfigurationModal.close": {
-    "defaultMessage": "Закрыть"
-  },
-  "providerConfigurationModal.configureHeader": {
-    "defaultMessage": "Настроить {providerName}"
-  },
-  "providerConfigurationModal.deleteConfigHeader": {
-    "defaultMessage": "Удалить конфигурацию для {providerName}"
-  },
-  "providerConfigurationModal.deleteConfirmation": {
-    "defaultMessage": "Это навсегда удалит текущую конфигурацию провайдера."
-  },
-  "providerConfigurationModal.deviceCodeFlowHint": {
-    "defaultMessage": "Откроется окно браузера, а код подтверждения будет скопирован в буфер обмена. Вставьте его в браузере, чтобы завершить вход."
-  },
-  "providerConfigurationModal.errorCheckingConfig": {
-    "defaultMessage": "При проверке конфигурации этого провайдера произошла ошибка."
-  },
-  "providerConfigurationModal.errorTitle": {
-    "defaultMessage": "Ошибка"
-  },
-  "providerConfigurationModal.externalSetupIntro": {
-    "defaultMessage": "Этот провайдер настраивается вне iCodex. Выполните следующие шаги:"
-  },
-  "providerConfigurationModal.goBack": {
-    "defaultMessage": "Назад"
-  },
-  "providerConfigurationModal.huggingFaceOAuthDescription": {
-    "defaultMessage": "Войдите, чтобы использовать Hugging Face Inference Providers без ручного ввода API-токена."
-  },
-  "providerConfigurationModal.oauthLoginFailed": {
-    "defaultMessage": "Вход OAuth не удался: {error}"
-  },
-  "providerConfigurationModal.oauthSignInDescription": {
-    "defaultMessage": "Войдите в аккаунт {providerName}, чтобы использовать этого провайдера"
-  },
-  "providerConfigurationModal.parameterRequired": {
-    "defaultMessage": "Требуется {paramName}"
-  },
-  "providerConfigurationModal.removeConfiguration": {
-    "defaultMessage": "Удалить конфигурацию"
-  },
-  "providerConfigurationModal.seeDocumentation": {
-    "defaultMessage": "Подробнее см. в <link>документации</link>."
-  },
-  "providerConfigurationModal.signInWith": {
-    "defaultMessage": "Войти через {providerName}"
-  },
-  "providerConfigurationModal.signingIn": {
-    "defaultMessage": "Вход..."
-  },
   "providerGrid.addProvider": {
     "defaultMessage": "Добавить провайдера"
   },
@@ -1612,9 +1219,6 @@
   },
   "providerGrid.editProvider": {
     "defaultMessage": "Изменить провайдера"
-  },
-  "providerGrid.fromTemplateOrManual": {
-    "defaultMessage": "Из шаблона или вручную"
   },
   "providerGrid.noMatch": {
     "defaultMessage": "Нет провайдеров, соответствующих \"{query}\""
@@ -1657,30 +1261,6 @@
   },
   "providerSettings.otherProviders": {
     "defaultMessage": "Другие провайдеры"
-  },
-  "providerSetupActions.cancel": {
-    "defaultMessage": "Отмена"
-  },
-  "providerSetupActions.cannotDeleteActive": {
-    "defaultMessage": "Нельзя удалить {providerName}, пока он используется. Перед удалением провайдера переключитесь на другую модель."
-  },
-  "providerSetupActions.confirmDelete": {
-    "defaultMessage": "Подтвердить удаление"
-  },
-  "providerSetupActions.confirmDeleteMessage": {
-    "defaultMessage": "Удалить параметры конфигурации для {providerName}? Это действие нельзя отменить."
-  },
-  "providerSetupActions.deleteProvider": {
-    "defaultMessage": "Удалить провайдера"
-  },
-  "providerSetupActions.enableProvider": {
-    "defaultMessage": "Включить провайдера"
-  },
-  "providerSetupActions.ok": {
-    "defaultMessage": "ОК"
-  },
-  "providerSetupActions.submit": {
-    "defaultMessage": "Отправить"
   },
   "resetProviderSection.resetButton": {
     "defaultMessage": "Сбросить провайдера и модель"
@@ -2171,18 +1751,6 @@
   "terminalPanel.newTerminal": {
     "defaultMessage": "Новый терминал"
   },
-  "themeSelector.dark": {
-    "defaultMessage": "Темная"
-  },
-  "themeSelector.light": {
-    "defaultMessage": "Светлая"
-  },
-  "themeSelector.system": {
-    "defaultMessage": "Системная"
-  },
-  "themeSelector.theme": {
-    "defaultMessage": "Тема"
-  },
   "toolApprovalButtons.allowOnce": {
     "defaultMessage": "Разрешить один раз"
   },
@@ -2305,5 +1873,11 @@
   },
   "workToolActivity.usedTools": {
     "defaultMessage": "{count,plural,one{Использован # инструмент} few{Использовано # инструмента} other{Использовано # инструментов}}"
+  },
+  "providerGrid.connectOpenAiCompatible": {
+    "defaultMessage": "Подключить эндпоинт, совместимый с OpenAI"
+  },
+  "providerSelector.continueWith": {
+    "defaultMessage": "Продолжить с {providerName}"
   }
 }

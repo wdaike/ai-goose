@@ -2,11 +2,11 @@ import { useState, useEffect, useMemo } from 'react';
 import { acpCreateCustomProviderFromRequest, acpListProviderDetails } from '../../acp/providers';
 import type { ProviderDetails, UpdateCustomProviderRequest } from '../../types/providers';
 import { Select } from '../ui/Select';
-import ProviderConfigForm from './ProviderConfigForm';
 import LocalModelPicker from './LocalModelPicker';
 import CustomProviderForm from '../settings/providers/modal/subcomponents/forms/CustomProviderForm';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { HardDrive, Key, Plus } from 'lucide-react';
+import { Button } from '../ui/button';
 import { defineMessages, useIntl } from '../../i18n';
 import { useFeatures } from '../../contexts/FeaturesContext';
 
@@ -38,6 +38,10 @@ const i18n = defineMessages({
   addCustomProviderTitle: {
     id: 'providerSelector.addCustomProviderTitle',
     defaultMessage: 'Add Custom Provider',
+  },
+  continueWith: {
+    id: 'providerSelector.continueWith',
+    defaultMessage: 'Continue with {providerName}',
   },
 });
 
@@ -199,11 +203,14 @@ export default function ProviderSelector({
           </button>
 
           {selectedProvider && (
-            <ProviderConfigForm
-              key={selectedProvider.name}
-              provider={selectedProvider}
-              onConfigured={onConfigured}
-            />
+            <Button
+              className="w-full"
+              onClick={() => onConfigured(selectedProvider.name)}
+            >
+              {intl.formatMessage(i18n.continueWith, {
+                providerName: selectedProvider.metadata.display_name,
+              })}
+            </Button>
           )}
         </div>
       )}

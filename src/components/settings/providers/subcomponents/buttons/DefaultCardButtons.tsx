@@ -11,10 +11,6 @@ const i18n = defineMessages({
     id: 'defaultCardButtons.editSettings',
     defaultMessage: 'Edit {name} settings',
   },
-  deleteSettings: {
-    id: 'defaultCardButtons.deleteSettings',
-    defaultMessage: 'Delete {name} settings',
-  },
   getStarted: {
     id: 'defaultCardButtons.getStarted',
     defaultMessage: 'Get started with iCodex!',

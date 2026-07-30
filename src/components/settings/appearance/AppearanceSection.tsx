@@ -14,13 +14,14 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../ui/dialog';
 import {
   AppearanceSettings,
-  CODEX_THEME_PRESET,
   DEFAULT_APPEARANCE,
   DiffMarkersSetting,
   ReduceMotionSetting,
   ThemeColors,
   cloneThemePreset,
+  isLightColor,
   loadAppearance,
+  matchesCodexPreset,
   parseThemeImport,
   saveAppearance,
 } from '../../../appearance/appearance';
@@ -140,16 +141,6 @@ function Segmented<T extends string>({
       ))}
     </div>
   );
-}
-
-function isLightColor(hex: string): boolean {
-  const match = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
-  if (!match) return true;
-  const value = parseInt(match[1], 16);
-  const r = (value >> 16) & 0xff;
-  const g = (value >> 8) & 0xff;
-  const b = value & 0xff;
-  return 0.299 * r + 0.587 * g + 0.114 * b > 150;
 }
 
 function ColorPill({ value, onChange }: { value: string; onChange: (value: string) => void }) {
@@ -471,21 +462,7 @@ export default function AppearanceSection() {
     });
   };
 
-  const isCodexPreset = useMemo(
-    () =>
-      JSON.stringify(settings.themes) === JSON.stringify(CODEX_THEME_PRESET) &&
-      settings.uiFont === DEFAULT_APPEARANCE.uiFont &&
-      settings.codeFont === DEFAULT_APPEARANCE.codeFont &&
-      settings.translucentSidebar === DEFAULT_APPEARANCE.translucentSidebar &&
-      settings.contrast === DEFAULT_APPEARANCE.contrast &&
-      settings.pointerCursors === DEFAULT_APPEARANCE.pointerCursors &&
-      settings.reduceMotion === DEFAULT_APPEARANCE.reduceMotion &&
-      settings.uiFontSize === DEFAULT_APPEARANCE.uiFontSize &&
-      settings.codeFontSize === DEFAULT_APPEARANCE.codeFontSize &&
-      settings.diffMarkers === DEFAULT_APPEARANCE.diffMarkers &&
-      settings.fontSmoothing === DEFAULT_APPEARANCE.fontSmoothing,
-    [settings]
-  );
+  const isCodexPreset = useMemo(() => matchesCodexPreset(settings), [settings]);
 
   const handleCopyTheme = () => {
     navigator.clipboard.writeText(JSON.stringify(settings, null, 2));

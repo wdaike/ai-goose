@@ -29,6 +29,7 @@ import Model, {
 import { getPredefinedModelsFromEnv, shouldShowPredefinedModels } from '../predefinedModelsUtils';
 import type { ProviderDetails, ProviderType, ThinkingEffort } from '../../../../types/providers';
 import { trackModelChanged } from '../../../../utils/analytics';
+import { filterModelGroups, findPreferredModel } from '../../../../utils/modelSelection';
 
 const i18n = defineMessages({
   thinkingEffortOff: {
@@ -199,44 +200,6 @@ const i18n = defineMessages({
 });
 
 // Thinking effort options are created inside the component to support i18n.
-
-const PREFERRED_MODEL_PATTERNS = [
-  /claude-sonnet-4/i,
-  /claude-4/i,
-  /gpt-4o(?!-mini)/i,
-  /claude-3-5-sonnet/i,
-  /claude-3\.5-sonnet/i,
-  /gpt-4-turbo/i,
-  /gpt-4(?!-|o)/i,
-  /claude-3-opus/i,
-  /claude-3-sonnet/i,
-  /gemini-pro/i,
-  /llama-3/i,
-  /gpt-4o-mini/i,
-  /claude-3-haiku/i,
-  /gemini/i,
-];
-
-function findPreferredModel(
-  models: { value: string; label: string; provider: string }[]
-): string | null {
-  if (models.length === 0) return null;
-
-  const validModels = models.filter(
-    (m) => m.value !== 'custom' && m.value !== '__loading__' && !m.value.startsWith('__')
-  );
-
-  if (validModels.length === 0) return null;
-
-  for (const pattern of PREFERRED_MODEL_PATTERNS) {
-    const match = validModels.find((m) => pattern.test(m.value));
-    if (match) {
-      return match.value;
-    }
-  }
-
-  return validModels[0].value;
-}
 
 type SwitchModelModalProps = {
   sessionId: string | null;
@@ -683,16 +646,7 @@ export const SwitchModelModal = ({
       return;
     }
 
-    // Filter through the original model options to find matches
-    const matchingOptions = originalModelOptions
-      .map((group) => ({
-        options: group.options.filter(
-          (option) =>
-            option.value.toLowerCase().includes(trimmedInput.toLowerCase()) &&
-            option.value !== 'custom' // Exclude the "Use custom model" option from search
-        ),
-      }))
-      .filter((group) => group.options.length > 0);
+    const matchingOptions = filterModelGroups(originalModelOptions, trimmedInput);
 
     if (matchingOptions.length > 0) {
       // If we found matches in the existing options, show those

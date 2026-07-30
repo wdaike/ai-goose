@@ -223,3 +223,39 @@ export function initAppearance(): void {
     .matchMedia('(prefers-reduced-motion: reduce)')
     .addEventListener('change', () => applyAppearance());
 }
+
+/**
+ * Perceived-luminance test (ITU-R BT.601 weights) used to decide whether a swatch
+ * needs dark or light chrome drawn on top of it. Unparseable input reads as light so
+ * the caller falls back to the default dark-on-light styling.
+ */
+export function isLightColor(hex: string): boolean {
+  const match = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!match) return true;
+  const value = parseInt(match[1], 16);
+  const r = (value >> 16) & 0xff;
+  const g = (value >> 8) & 0xff;
+  const b = value & 0xff;
+  return 0.299 * r + 0.587 * g + 0.114 * b > 150;
+}
+
+/** True when nothing has been customised away from the shipped Codex look. */
+export function matchesCodexPreset(settings: AppearanceSettings): boolean {
+  const scalarKeys = [
+    'uiFont',
+    'codeFont',
+    'translucentSidebar',
+    'contrast',
+    'pointerCursors',
+    'reduceMotion',
+    'uiFontSize',
+    'codeFontSize',
+    'diffMarkers',
+    'fontSmoothing',
+  ] as const;
+
+  return (
+    JSON.stringify(settings.themes) === JSON.stringify(CODEX_THEME_PRESET) &&
+    scalarKeys.every((key) => settings[key] === DEFAULT_APPEARANCE[key])
+  );
+}

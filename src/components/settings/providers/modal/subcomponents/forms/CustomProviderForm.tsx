@@ -4,52 +4,22 @@ import { Select } from '../../../../../ui/Select';
 import { Button } from '../../../../../ui/button';
 import { SecureStorageNotice } from '../SecureStorageNotice';
 import type { UpdateCustomProviderRequest } from '../../../../../../types/providers';
-import type { ProviderTemplateDto } from '../../../../../../types/goose';
-import { Plus, X, Trash2, AlertTriangle, ExternalLink, Search, Settings } from 'lucide-react';
+import { Plus, X, Trash2, AlertTriangle } from 'lucide-react';
 import { cn } from '../../../../../../utils';
-import ProviderCatalogPicker from '../ProviderCatalogPicker';
 import { defineMessages, useIntl } from '../../../../../../i18n';
+import {
+  collectHeaders,
+  parseModelList,
+  validateHeader,
+  validateProviderForm,
+  type HeaderError,
+  type ProviderFieldError,
+} from '../../../../../../utils/providerForm';
 
 const i18n = defineMessages({
-  chooseSetup: {
-    id: 'customProviderForm.chooseSetup',
-    defaultMessage: "Choose how you'd like to set up your provider.",
-  },
-  startFromTemplate: {
-    id: 'customProviderForm.startFromTemplate',
-    defaultMessage: 'Start from a provider template',
-  },
-  startFromTemplateDesc: {
-    id: 'customProviderForm.startFromTemplateDesc',
-    defaultMessage: "Pick a known provider and we'll auto-fill the configuration",
-  },
-  configureManually: {
-    id: 'customProviderForm.configureManually',
-    defaultMessage: 'Configure manually',
-  },
-  configureManuallyDesc: {
-    id: 'customProviderForm.configureManuallyDesc',
-    defaultMessage: 'Enter all provider details yourself',
-  },
   cancel: {
     id: 'customProviderForm.cancel',
     defaultMessage: 'Cancel',
-  },
-  back: {
-    id: 'customProviderForm.back',
-    defaultMessage: '← Back',
-  },
-  usingTemplate: {
-    id: 'customProviderForm.usingTemplate',
-    defaultMessage: 'Using template: {name}',
-  },
-  docs: {
-    id: 'customProviderForm.docs',
-    defaultMessage: 'Docs',
-  },
-  clear: {
-    id: 'customProviderForm.clear',
-    defaultMessage: 'Clear',
   },
   providerType: {
     id: 'customProviderForm.providerType',
@@ -118,18 +88,6 @@ const i18n = defineMessages({
   modelsPlaceholder: {
     id: 'customProviderForm.modelsPlaceholder',
     defaultMessage: 'model-a, model-b, model-c',
-  },
-  toolCalling: {
-    id: 'customProviderForm.toolCalling',
-    defaultMessage: 'Tool calling',
-  },
-  reasoning: {
-    id: 'customProviderForm.reasoning',
-    defaultMessage: 'Reasoning',
-  },
-  attachments: {
-    id: 'customProviderForm.attachments',
-    defaultMessage: 'Attachments',
   },
   customHeaders: {
     id: 'customProviderForm.customHeaders',
@@ -212,7 +170,19 @@ const i18n = defineMessages({
   },
 });
 
-type Step = 'choice' | 'catalog' | 'form';
+
+const HEADER_ERROR_MESSAGES: Record<HeaderError, (typeof i18n)[keyof typeof i18n]> = {
+  bothRequired: i18n.headerBothRequired,
+  noSpaces: i18n.headerNoSpaces,
+  duplicate: i18n.headerDuplicate,
+};
+
+const FIELD_ERROR_MESSAGES: Record<ProviderFieldError, (typeof i18n)[keyof typeof i18n]> = {
+  displayNameRequired: i18n.displayNameRequired,
+  apiUrlRequired: i18n.apiUrlRequired,
+  apiKeyRequired: i18n.apiKeyRequired,
+  modelsRequired: i18n.modelsRequired,
+};
 
 interface CustomProviderFormProps {
   onSubmit: (data: UpdateCustomProviderRequest) => void | Promise<void>;
@@ -252,9 +222,6 @@ export default function CustomProviderForm({
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
-  // Template + step state
-  const [selectedTemplate, setSelectedTemplate] = useState<ProviderTemplateDto | null>(null);
-  const [step, setStep] = useState<Step>(initialData ? 'form' : 'choice');
 
   useEffect(() => {
     if (initialData) {
@@ -272,34 +239,8 @@ export default function CustomProviderForm({
         setHeaders(headerList);
       }
 
-      setStep('form');
     }
   }, [initialData]);
-
-  const handleTemplateSelect = (template: ProviderTemplateDto) => {
-    setSelectedTemplate(template);
-
-    // Prefill fields from template
-    setDisplayName(template.name);
-    setApiUrl(template.apiUrl);
-    setRequiresAuth(true);
-    setEngine('responses');
-
-    const templateModels = template.models.filter((m) => !m.deprecated).map((m) => m.id);
-    setModels(templateModels.join(', '));
-
-    setStep('form');
-  };
-
-  const handleClearTemplate = () => {
-    setSelectedTemplate(null);
-    setDisplayName('');
-    setApiUrl('');
-    setModels('');
-    setEngine('responses');
-    setRequiresAuth(false);
-    setStep('choice');
-  };
 
   const handleRequiresAuthChange = (checked: boolean) => {
     setRequiresAuth(checked);
@@ -309,27 +250,14 @@ export default function CustomProviderForm({
   };
 
   const handleAddHeader = () => {
-    const keyEmpty = !newHeaderKey.trim();
-    const valueEmpty = !newHeaderValue.trim();
-    const keyHasSpaces = newHeaderKey.includes(' ');
-    const normalizedNewKey = newHeaderKey.trim().toLowerCase();
-    const isDuplicate = headers.some((h) => h.key.trim().toLowerCase() === normalizedNewKey);
-
-    if (keyEmpty || valueEmpty) {
-      setInvalidHeaderFields({ key: keyEmpty, value: valueEmpty });
-      setHeaderValidationError(intl.formatMessage(i18n.headerBothRequired));
-      return;
-    }
-
-    if (keyHasSpaces) {
-      setInvalidHeaderFields({ key: true, value: false });
-      setHeaderValidationError(intl.formatMessage(i18n.headerNoSpaces));
-      return;
-    }
-
-    if (isDuplicate) {
-      setInvalidHeaderFields({ key: true, value: false });
-      setHeaderValidationError(intl.formatMessage(i18n.headerDuplicate));
+    const headerError = validateHeader(newHeaderKey, newHeaderValue, headers);
+    if (headerError) {
+      setInvalidHeaderFields(
+        headerError === 'bothRequired'
+          ? { key: !newHeaderKey.trim(), value: !newHeaderValue.trim() }
+          : { key: true, value: false }
+      );
+      setHeaderValidationError(intl.formatMessage(HEADER_ERROR_MESSAGES[headerError]));
       return;
     }
 
@@ -379,45 +307,32 @@ export default function CustomProviderForm({
     setSubmitError(null);
     setValidationErrors({});
 
-    const errors: Record<string, string> = {};
-    if (!displayName) errors.displayName = intl.formatMessage(i18n.displayNameRequired);
-    if (!apiUrl) errors.apiUrl = intl.formatMessage(i18n.apiUrlRequired);
-    const existingHadAuth = initialData && (initialData.requires_auth ?? true);
-    if (requiresAuth && !apiKey && !existingHadAuth)
-      errors.apiKey = intl.formatMessage(i18n.apiKeyRequired);
-    if (!models) errors.models = intl.formatMessage(i18n.modelsRequired);
+    const fieldErrors = validateProviderForm({
+      displayName,
+      apiUrl,
+      requiresAuth,
+      apiKey,
+      models,
+      hasStoredKey: Boolean(initialData && (initialData.requires_auth ?? true)),
+    });
 
-    if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
+    if (Object.keys(fieldErrors).length > 0) {
+      setValidationErrors(
+        Object.fromEntries(
+          Object.entries(fieldErrors).map(([field, code]) => [
+            field,
+            intl.formatMessage(FIELD_ERROR_MESSAGES[code!]),
+          ])
+        )
+      );
       return;
     }
 
-    const modelList = models
-      .split(',')
-      .map((m) => m.trim())
-      .filter((m) => m);
-
-    let allHeaders = [...headers];
-
-    if (newHeaderKey.trim() && newHeaderValue.trim()) {
-      const keyHasSpaces = newHeaderKey.includes(' ');
-      const normalizedPendingKey = newHeaderKey.trim().toLowerCase();
-      const isDuplicate = headers.some((h) => h.key.trim().toLowerCase() === normalizedPendingKey);
-
-      if (!keyHasSpaces && !isDuplicate) {
-        allHeaders.push({ key: newHeaderKey, value: newHeaderValue });
-      }
-    }
-
-    const headersObject = allHeaders.reduce(
-      (acc, header) => {
-        if (header.key.trim() && header.value.trim()) {
-          acc[header.key.trim()] = header.value.trim();
-        }
-        return acc;
-      },
-      {} as Record<string, string>
-    );
+    const modelList = parseModelList(models);
+    const headersObject = collectHeaders(headers, {
+      key: newHeaderKey,
+      value: newHeaderValue,
+    });
 
     try {
       await onSubmit({
@@ -429,7 +344,7 @@ export default function CustomProviderForm({
         requires_auth: requiresAuth,
         headers: headersObject,
         catalog_provider_id:
-          selectedTemplate?.providerId ?? initialData?.catalog_provider_id ?? undefined,
+          initialData?.catalog_provider_id ?? undefined,
       });
     } catch (error) {
       console.error('Failed to save custom provider:', error);
@@ -437,129 +352,10 @@ export default function CustomProviderForm({
     }
   };
 
-  // Aggregate capability badges for template models
-  const templateModelCapabilities = selectedTemplate?.models
-    .filter((m) => !m.deprecated)
-    .reduce(
-      (acc, m) => {
-        if (m.capabilities.toolCall) acc.tool_call = true;
-        if (m.capabilities.reasoning) acc.reasoning = true;
-        if (m.capabilities.attachment) acc.attachment = true;
-        return acc;
-      },
-      { tool_call: false, reasoning: false, attachment: false }
-    );
-
-  // -- Step: Choice --
-  if (step === 'choice') {
-    return (
-      <div className="mt-4 space-y-3">
-        <p className="text-sm text-textSubtle">{intl.formatMessage(i18n.chooseSetup)}</p>
-        <button
-          type="button"
-          onClick={() => setStep('catalog')}
-          className="w-full p-4 text-left border border-border rounded-lg hover:bg-surfaceHover hover:border-primary transition-colors group"
-        >
-          <div className="flex items-center gap-3">
-            <Search className="w-5 h-5 text-primary flex-shrink-0" />
-            <div>
-              <div className="font-medium text-textStandard">
-                {intl.formatMessage(i18n.startFromTemplate)}
-              </div>
-              <div className="text-sm text-textSubtle mt-0.5">
-                {intl.formatMessage(i18n.startFromTemplateDesc)}
-              </div>
-            </div>
-          </div>
-        </button>
-        <button
-          type="button"
-          onClick={() => setStep('form')}
-          className="w-full p-4 text-left border border-border rounded-lg hover:bg-surfaceHover hover:border-primary transition-colors group"
-        >
-          <div className="flex items-center gap-3">
-            <Settings className="w-5 h-5 text-textSubtle flex-shrink-0" />
-            <div>
-              <div className="font-medium text-textStandard">
-                {intl.formatMessage(i18n.configureManually)}
-              </div>
-              <div className="text-sm text-textSubtle mt-0.5">
-                {intl.formatMessage(i18n.configureManuallyDesc)}
-              </div>
-            </div>
-          </div>
-        </button>
-        <div className="flex justify-end pt-2">
-          <Button type="button" variant="outline" onClick={onCancel}>
-            {intl.formatMessage(i18n.cancel)}
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  // -- Step: Catalog picker --
-  if (step === 'catalog') {
-    return (
-      <div className="mt-4">
-        <ProviderCatalogPicker onSelect={handleTemplateSelect} onCancel={onCancel} embedded />
-        <div className="flex justify-between pt-4">
-          <Button type="button" variant="ghost" onClick={() => setStep('choice')}>
-            {intl.formatMessage(i18n.back)}
-          </Button>
-          <Button type="button" variant="outline" onClick={onCancel}>
-            {intl.formatMessage(i18n.cancel)}
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   // -- Step: Form --
   return (
     <form onSubmit={handleSubmit} className="mt-4 space-y-4">
-      {/* Template info banner */}
-      {selectedTemplate && (
-        <div className="p-3 bg-surfaceHover border border-border rounded-lg">
-          <div className="flex items-center justify-between">
-            <div className="text-sm">
-              <div className="font-medium text-textStandard">
-                {intl.formatMessage(i18n.usingTemplate, { name: selectedTemplate.name })}
-              </div>
-              <div className="text-textSubtle mt-1">{selectedTemplate.apiUrl}</div>
-            </div>
-            <div className="flex items-center gap-2">
-              {selectedTemplate.docUrl && (
-                <a
-                  href={selectedTemplate.docUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline text-sm flex items-center gap-1"
-                >
-                  {intl.formatMessage(i18n.docs)} <ExternalLink className="w-3 h-3" />
-                </a>
-              )}
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={handleClearTemplate}
-                className="text-textSubtle hover:text-textStandard"
-              >
-                {intl.formatMessage(i18n.clear)}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Back to choice (create without template only) */}
-      {!initialData && !selectedTemplate && (
-        <Button type="button" variant="ghost" size="sm" onClick={() => setStep('choice')}>
-          {intl.formatMessage(i18n.back)}
-        </Button>
-      )}
-
       {/* Provider type dropdown */}
       {isEditable && (
         <div>
@@ -679,11 +475,6 @@ export default function CustomProviderForm({
               className="flex items-center text-sm font-medium text-text-primary mb-2"
             >
               {intl.formatMessage(i18n.apiKey)}
-              {selectedTemplate?.envVar && (
-                <span className="text-textSubtle ml-1 font-normal">
-                  ({selectedTemplate.envVar})
-                </span>
-              )}
               {!initialData && <span className="text-red-500 ml-1">*</span>}
             </label>
             <Input
@@ -739,26 +530,6 @@ export default function CustomProviderForm({
             <p id="available-models-error" className="text-red-500 text-sm mt-1">
               {validationErrors.models}
             </p>
-          )}
-          {/* Capability badges when template is active */}
-          {selectedTemplate && templateModelCapabilities && (
-            <div className="flex gap-2 mt-2">
-              {templateModelCapabilities.tool_call && (
-                <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
-                  {intl.formatMessage(i18n.toolCalling)}
-                </span>
-              )}
-              {templateModelCapabilities.reasoning && (
-                <span className="text-xs px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300">
-                  {intl.formatMessage(i18n.reasoning)}
-                </span>
-              )}
-              {templateModelCapabilities.attachment && (
-                <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">
-                  {intl.formatMessage(i18n.attachments)}
-                </span>
-              )}
-            </div>
           )}
         </div>
       )}

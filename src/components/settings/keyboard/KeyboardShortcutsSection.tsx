@@ -7,6 +7,7 @@ import { ShortcutRecorder } from './ShortcutRecorder';
 import { KeyboardShortcuts, defaultKeyboardShortcuts } from '../../../utils/settings';
 import { trackSettingToggled } from '../../../utils/analytics';
 import { defineMessages, useIntl } from '../../../i18n';
+import { formatAccelerator } from '../../../utils/keyboardShortcuts';
 
 const i18n = defineMessages({
   // Shortcut labels
@@ -308,15 +309,8 @@ export const getShortcutLabel = (
   return config ? formatMessage(config.label) : key;
 };
 
-export const formatShortcut = (shortcut: string): string => {
-  const isMac = window.electron.platform === 'darwin';
-  return shortcut
-    .replace('CommandOrControl', isMac ? '⌘' : 'Ctrl')
-    .replace('Command', '⌘')
-    .replace('Control', 'Ctrl')
-    .replace('Alt', isMac ? '⌥' : 'Alt')
-    .replace('Shift', isMac ? '⇧' : 'Shift');
-};
+export const formatShortcut = (shortcut: string): string =>
+  formatAccelerator(shortcut, window.electron.platform === 'darwin');
 
 const categoryLabelMessages: Record<string, MessageDescriptor> = {
   global: i18n.categoryGlobal,

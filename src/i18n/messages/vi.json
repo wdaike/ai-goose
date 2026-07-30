@@ -1,13 +1,4 @@
 {
-  "alertBox.autoCompactAt": {
-    "defaultMessage": "Tự động nén tại"
-  },
-  "alertBox.compactNow": {
-    "defaultMessage": "Nén ngay"
-  },
-  "alertBox.failedToSaveThreshold": {
-    "defaultMessage": "Không thể lưu ngưỡng: {error}"
-  },
   "appLayout.back": {
     "defaultMessage": "Quay lại"
   },
@@ -113,9 +104,6 @@
   "customProviderForm.apiUrlRequired": {
     "defaultMessage": "URL API là bắt buộc"
   },
-  "customProviderForm.attachments": {
-    "defaultMessage": "Tệp đính kèm"
-  },
   "customProviderForm.authHint": {
     "defaultMessage": "Các LLM cục bộ như Ollama thường không yêu cầu khóa API."
   },
@@ -125,26 +113,11 @@
   "customProviderForm.availableModels": {
     "defaultMessage": "Các mô hình khả dụng (phân tách bằng dấu phẩy)"
   },
-  "customProviderForm.back": {
-    "defaultMessage": "← Quay lại"
-  },
   "customProviderForm.cancel": {
     "defaultMessage": "Hủy"
   },
   "customProviderForm.cannotDeleteActive": {
     "defaultMessage": "Bạn không thể xóa nhà cung cấp này khi nó đang được sử dụng. Vui lòng chuyển sang mô hình khác trước."
-  },
-  "customProviderForm.chooseSetup": {
-    "defaultMessage": "Chọn cách bạn muốn thiết lập nhà cung cấp của mình."
-  },
-  "customProviderForm.clear": {
-    "defaultMessage": "Xóa"
-  },
-  "customProviderForm.configureManually": {
-    "defaultMessage": "Cấu hình thủ công"
-  },
-  "customProviderForm.configureManuallyDesc": {
-    "defaultMessage": "Tự nhập tất cả thông tin chi tiết của nhà cung cấp"
   },
   "customProviderForm.confirmDelete": {
     "defaultMessage": "Xác nhận xóa"
@@ -173,9 +146,6 @@
   "customProviderForm.displayNameRequired": {
     "defaultMessage": "Tên hiển thị là bắt buộc"
   },
-  "customProviderForm.docs": {
-    "defaultMessage": "Tài liệu"
-  },
   "customProviderForm.headerBothRequired": {
     "defaultMessage": "Phải nhập cả tên và giá trị tiêu đề"
   },
@@ -197,29 +167,14 @@
   "customProviderForm.providerType": {
     "defaultMessage": "Loại nhà cung cấp"
   },
-  "customProviderForm.reasoning": {
-    "defaultMessage": "Suy luận"
-  },
   "customProviderForm.requiresApiKey": {
     "defaultMessage": "Nhà cung cấp này yêu cầu khóa API"
-  },
-  "customProviderForm.startFromTemplate": {
-    "defaultMessage": "Bắt đầu từ mẫu nhà cung cấp"
-  },
-  "customProviderForm.startFromTemplateDesc": {
-    "defaultMessage": "Chọn một nhà cung cấp đã biết và chúng tôi sẽ tự động điền cấu hình"
   },
   "customProviderForm.submitError": {
     "defaultMessage": "Không thể lưu nhà cung cấp. Vui lòng kiểm tra cấu hình của bạn và thử lại."
   },
-  "customProviderForm.toolCalling": {
-    "defaultMessage": "Gọi công cụ"
-  },
   "customProviderForm.updateProvider": {
     "defaultMessage": "Cập nhật nhà cung cấp"
-  },
-  "customProviderForm.usingTemplate": {
-    "defaultMessage": "Đang dùng mẫu: {name}"
   },
   "customProviderForm.valuePlaceholder": {
     "defaultMessage": "Giá trị"
@@ -227,44 +182,11 @@
   "defaultCardButtons.configureSettings": {
     "defaultMessage": "Cấu hình thiết lập {name}"
   },
-  "defaultCardButtons.deleteSettings": {
-    "defaultMessage": "Xóa thiết lập {name}"
-  },
   "defaultCardButtons.editSettings": {
     "defaultMessage": "Chỉnh sửa thiết lập {name}"
   },
   "defaultCardButtons.getStarted": {
     "defaultMessage": "Bắt đầu với iCodex!"
-  },
-  "defaultProviderSetupForm.apiHostLabel": {
-    "defaultMessage": "Máy chủ API"
-  },
-  "defaultProviderSetupForm.apiHostPlaceholder": {
-    "defaultMessage": "https://api.example.com"
-  },
-  "defaultProviderSetupForm.apiKeyLabel": {
-    "defaultMessage": "Khóa API"
-  },
-  "defaultProviderSetupForm.apiKeyPlaceholder": {
-    "defaultMessage": "Khóa API của bạn"
-  },
-  "defaultProviderSetupForm.hideOptions": {
-    "defaultMessage": "Ẩn {count} tùy chọn"
-  },
-  "defaultProviderSetupForm.loadingConfig": {
-    "defaultMessage": "Đang tải các giá trị cấu hình..."
-  },
-  "defaultProviderSetupForm.modelsLabel": {
-    "defaultMessage": "Mô hình"
-  },
-  "defaultProviderSetupForm.modelsPlaceholder": {
-    "defaultMessage": "model-a, model-b"
-  },
-  "defaultProviderSetupForm.noConfigParameters": {
-    "defaultMessage": "Không có tham số cấu hình cho nhà cung cấp này."
-  },
-  "defaultProviderSetupForm.showOptions": {
-    "defaultMessage": "Hiện {count} tùy chọn"
   },
   "dialog.close": {
     "defaultMessage": "Đóng"
@@ -598,21 +520,6 @@
   },
   "hub.suggestionReview": {
     "defaultMessage": "Xem xét mã và đề xuất thay đổi"
-  },
-  "huggingFaceSignInPrompt.failedToConfigure": {
-    "defaultMessage": "Không thể đăng nhập vào Hugging Face: {error}"
-  },
-  "huggingFaceSignInPrompt.signIn": {
-    "defaultMessage": "Đăng nhập"
-  },
-  "huggingFaceSignInPrompt.signedIn": {
-    "defaultMessage": "Đã đăng nhập Hugging Face"
-  },
-  "huggingFaceSignInPrompt.signingIn": {
-    "defaultMessage": "Đang đăng nhập..."
-  },
-  "huggingFaceSignInPrompt.title": {
-    "defaultMessage": "Hugging Face"
   },
   "imagePreview.altText": {
     "defaultMessage": "hình ảnh iCodex"
@@ -1070,180 +977,6 @@
   "modelSettingsButtons.switchModels": {
     "defaultMessage": "Chuyển đổi mô hình"
   },
-  "modelSettingsPanel.batchSize": {
-    "defaultMessage": "Kích thước lô"
-  },
-  "modelSettingsPanel.batchSizeDescription": {
-    "defaultMessage": "Lô xử lý lời nhắc"
-  },
-  "modelSettingsPanel.builtinChatTemplate": {
-    "defaultMessage": "Mẫu tích hợp sẵn"
-  },
-  "modelSettingsPanel.builtinChatTemplateDescription": {
-    "defaultMessage": "Chọn tên mẫu tích hợp sẵn của llama.cpp"
-  },
-  "modelSettingsPanel.chatTemplate": {
-    "defaultMessage": "Mẫu trò chuyện"
-  },
-  "modelSettingsPanel.chatTemplateBuiltin": {
-    "defaultMessage": "Tích hợp sẵn"
-  },
-  "modelSettingsPanel.chatTemplateCustomInline": {
-    "defaultMessage": "Tùy chỉnh nội tuyến"
-  },
-  "modelSettingsPanel.chatTemplateDescription": {
-    "defaultMessage": "Sử dụng siêu dữ liệu GGUF được nhúng, mẫu tích hợp sẵn của llama.cpp, hoặc Jinja nội tuyến"
-  },
-  "modelSettingsPanel.chatTemplateEmbedded": {
-    "defaultMessage": "Được nhúng"
-  },
-  "modelSettingsPanel.contextAndGeneration": {
-    "defaultMessage": "Ngữ cảnh & Sinh nội dung"
-  },
-  "modelSettingsPanel.contextSize": {
-    "defaultMessage": "Kích thước ngữ cảnh"
-  },
-  "modelSettingsPanel.contextSizeDescription": {
-    "defaultMessage": "Cửa sổ ngữ cảnh tối đa (0 = mặc định của mô hình)"
-  },
-  "modelSettingsPanel.customChatTemplate": {
-    "defaultMessage": "Mẫu trò chuyện tùy chỉnh"
-  },
-  "modelSettingsPanel.customChatTemplateDescription": {
-    "defaultMessage": "Dán toàn bộ mã nguồn mẫu trò chuyện Jinja"
-  },
-  "modelSettingsPanel.etaLearningRate": {
-    "defaultMessage": "Eta (tốc độ học)"
-  },
-  "modelSettingsPanel.flashAttention": {
-    "defaultMessage": "Flash attention"
-  },
-  "modelSettingsPanel.flashAttentionDescription": {
-    "defaultMessage": "Bật tối ưu hóa flash attention"
-  },
-  "modelSettingsPanel.frequencyPenalty": {
-    "defaultMessage": "Phạt tần suất"
-  },
-  "modelSettingsPanel.frequencyPenaltyDescription": {
-    "defaultMessage": "0.0 = tắt"
-  },
-  "modelSettingsPanel.gpuLayers": {
-    "defaultMessage": "Lớp GPU"
-  },
-  "modelSettingsPanel.gpuLayersDescription": {
-    "defaultMessage": "Số lớp chuyển sang GPU"
-  },
-  "modelSettingsPanel.loadingSettings": {
-    "defaultMessage": "Đang tải cài đặt..."
-  },
-  "modelSettingsPanel.lockModelInRam": {
-    "defaultMessage": "Khóa mô hình trong RAM (mlock)"
-  },
-  "modelSettingsPanel.lockModelInRamDescription": {
-    "defaultMessage": "Ngăn mô hình bị hoán đổi sang đĩa"
-  },
-  "modelSettingsPanel.maxOutputTokens": {
-    "defaultMessage": "Số token đầu ra tối đa"
-  },
-  "modelSettingsPanel.maxOutputTokensDescription": {
-    "defaultMessage": "Giới hạn số token được sinh ra"
-  },
-  "modelSettingsPanel.minP": {
-    "defaultMessage": "Min P"
-  },
-  "modelSettingsPanel.performance": {
-    "defaultMessage": "Hiệu suất"
-  },
-  "modelSettingsPanel.presencePenalty": {
-    "defaultMessage": "Phạt hiện diện"
-  },
-  "modelSettingsPanel.presencePenaltyDescription": {
-    "defaultMessage": "0.0 = tắt"
-  },
-  "modelSettingsPanel.repeatPenalty": {
-    "defaultMessage": "Phạt lặp lại"
-  },
-  "modelSettingsPanel.repeatPenaltyDescription": {
-    "defaultMessage": "1.0 = tắt"
-  },
-  "modelSettingsPanel.repeatWindow": {
-    "defaultMessage": "Cửa sổ lặp lại"
-  },
-  "modelSettingsPanel.repeatWindowDescription": {
-    "defaultMessage": "Số token cần xem lại"
-  },
-  "modelSettingsPanel.repetitionPenalty": {
-    "defaultMessage": "Phạt lặp lại"
-  },
-  "modelSettingsPanel.reset": {
-    "defaultMessage": "Đặt lại"
-  },
-  "modelSettingsPanel.resetToDefaults": {
-    "defaultMessage": "Đặt lại về mặc định"
-  },
-  "modelSettingsPanel.samplingStrategy": {
-    "defaultMessage": "Chiến lược lấy mẫu"
-  },
-  "modelSettingsPanel.saving": {
-    "defaultMessage": "Đang lưu..."
-  },
-  "modelSettingsPanel.seed": {
-    "defaultMessage": "Hạt giống"
-  },
-  "modelSettingsPanel.tauTargetEntropy": {
-    "defaultMessage": "Tau (entropy mục tiêu)"
-  },
-  "modelSettingsPanel.temperature": {
-    "defaultMessage": "Nhiệt độ"
-  },
-  "modelSettingsPanel.threads": {
-    "defaultMessage": "Luồng"
-  },
-  "modelSettingsPanel.threadsDescription": {
-    "defaultMessage": "Số luồng CPU dùng để sinh nội dung"
-  },
-  "modelSettingsPanel.toolCalling": {
-    "defaultMessage": "Gọi công cụ"
-  },
-  "modelSettingsPanel.toolCallingAuto": {
-    "defaultMessage": "Tự động"
-  },
-  "modelSettingsPanel.toolCallingDescription": {
-    "defaultMessage": "Chọn cách các mô hình cục bộ chọn gọi công cụ gốc hay mô phỏng"
-  },
-  "modelSettingsPanel.toolCallingForceEmulated": {
-    "defaultMessage": "Buộc mô phỏng"
-  },
-  "modelSettingsPanel.toolCallingForceNative": {
-    "defaultMessage": "Buộc dùng gốc"
-  },
-  "modelSettingsPanel.topK": {
-    "defaultMessage": "Top K"
-  },
-  "modelSettingsPanel.topP": {
-    "defaultMessage": "Top P"
-  },
-  "modelsBottomBar.changeModel": {
-    "defaultMessage": "Thay đổi mô hình"
-  },
-  "modelsBottomBar.currentModel": {
-    "defaultMessage": "Mô hình hiện tại"
-  },
-  "modelsBottomBar.loadingModel": {
-    "defaultMessage": "Đang tải mô hình..."
-  },
-  "modelsBottomBar.localModelSettings": {
-    "defaultMessage": "Cài đặt mô hình cục bộ"
-  },
-  "modelsBottomBar.localModelSettingsTitle": {
-    "defaultMessage": "Cài đặt mô hình cục bộ — {modelName}"
-  },
-  "modelsBottomBar.resolvedModel": {
-    "defaultMessage": "Mô hình đã phân giải"
-  },
-  "modelsBottomBar.selectModel": {
-    "defaultMessage": "Chọn mô hình"
-  },
   "modelsSection.resetDescription": {
     "defaultMessage": "Xóa các cài đặt mô hình và nhà cung cấp đã chọn để bắt đầu lại từ đầu"
   },
@@ -1472,132 +1205,6 @@
   "providerCard.unknownProvider": {
     "defaultMessage": "Nhà cung cấp không xác định"
   },
-  "providerCatalogPicker.anthropicCompatible": {
-    "defaultMessage": "Tương thích Anthropic"
-  },
-  "providerCatalogPicker.apiFormat": {
-    "defaultMessage": "Định dạng API"
-  },
-  "providerCatalogPicker.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "providerCatalogPicker.chooseProvider": {
-    "defaultMessage": "Chọn nhà cung cấp"
-  },
-  "providerCatalogPicker.errorPrefix": {
-    "defaultMessage": "Lỗi: {error}"
-  },
-  "providerCatalogPicker.loadingProviders": {
-    "defaultMessage": "Đang tải nhà cung cấp..."
-  },
-  "providerCatalogPicker.modelsAvailable": {
-    "defaultMessage": "{count} mô hình khả dụng"
-  },
-  "providerCatalogPicker.noProvidersAvailable": {
-    "defaultMessage": "Không có nhà cung cấp nào khả dụng"
-  },
-  "providerCatalogPicker.noProvidersFound": {
-    "defaultMessage": "Không tìm thấy nhà cung cấp nào cho \"{query}\""
-  },
-  "providerCatalogPicker.openaiCompatible": {
-    "defaultMessage": "Tương thích OpenAI"
-  },
-  "providerCatalogPicker.requiresEnvVar": {
-    "defaultMessage": "• Yêu cầu {envVar}"
-  },
-  "providerCatalogPicker.searchProviders": {
-    "defaultMessage": "Tìm kiếm nhà cung cấp..."
-  },
-  "providerCatalogPicker.selectFormatDescription": {
-    "defaultMessage": "Chọn một định dạng API và nhà cung cấp. Chúng tôi sẽ tự động điền cấu hình cho bạn."
-  },
-  "providerConfigForm.browserWindowOpen": {
-    "defaultMessage": "Một cửa sổ trình duyệt sẽ mở ra để bạn hoàn tất đăng nhập."
-  },
-  "providerConfigForm.configuring": {
-    "defaultMessage": "Đang cấu hình..."
-  },
-  "providerConfigForm.continue": {
-    "defaultMessage": "Tiếp tục"
-  },
-  "providerConfigForm.deviceCodeFlowHint": {
-    "defaultMessage": "Một cửa sổ trình duyệt sẽ mở ra và mã xác minh sẽ được sao chép vào bộ nhớ tạm của bạn. Dán mã vào trình duyệt để hoàn tất đăng nhập."
-  },
-  "providerConfigForm.noApiKey": {
-    "defaultMessage": "Bạn chưa có khóa API?"
-  },
-  "providerConfigForm.signInWith": {
-    "defaultMessage": "Đăng nhập bằng {providerName}"
-  },
-  "providerConfigForm.signingIn": {
-    "defaultMessage": "Đang đăng nhập..."
-  },
-  "providerConfigurationModal.addApiKeyDescription": {
-    "defaultMessage": "Thêm khóa API của bạn cho nhà cung cấp này để tích hợp vào iCodex"
-  },
-  "providerConfigurationModal.browserWindowHint": {
-    "defaultMessage": "Một cửa sổ trình duyệt sẽ mở ra để bạn hoàn tất đăng nhập."
-  },
-  "providerConfigurationModal.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "providerConfigurationModal.cannotDeleteActive": {
-    "defaultMessage": "Bạn không thể xóa nhà cung cấp này trong khi nó đang được sử dụng. Vui lòng chuyển sang mô hình khác trước."
-  },
-  "providerConfigurationModal.checkConfigAgain": {
-    "defaultMessage": "Kiểm tra lại cấu hình của bạn để sử dụng nhà cung cấp này."
-  },
-  "providerConfigurationModal.close": {
-    "defaultMessage": "Đóng"
-  },
-  "providerConfigurationModal.configureHeader": {
-    "defaultMessage": "Cấu hình {providerName}"
-  },
-  "providerConfigurationModal.deleteConfigHeader": {
-    "defaultMessage": "Xóa cấu hình cho {providerName}"
-  },
-  "providerConfigurationModal.deleteConfirmation": {
-    "defaultMessage": "Thao tác này sẽ xóa vĩnh viễn cấu hình nhà cung cấp hiện tại."
-  },
-  "providerConfigurationModal.deviceCodeFlowHint": {
-    "defaultMessage": "Một cửa sổ trình duyệt sẽ mở ra và mã xác minh sẽ được sao chép vào bộ nhớ tạm của bạn. Dán mã vào trình duyệt để hoàn tất đăng nhập."
-  },
-  "providerConfigurationModal.errorCheckingConfig": {
-    "defaultMessage": "Đã xảy ra lỗi khi kiểm tra cấu hình nhà cung cấp này."
-  },
-  "providerConfigurationModal.errorTitle": {
-    "defaultMessage": "Lỗi"
-  },
-  "providerConfigurationModal.externalSetupIntro": {
-    "defaultMessage": "Nhà cung cấp này được cấu hình bên ngoài iCodex. Hãy làm theo các bước sau:"
-  },
-  "providerConfigurationModal.goBack": {
-    "defaultMessage": "Quay lại"
-  },
-  "providerConfigurationModal.huggingFaceOAuthDescription": {
-    "defaultMessage": "Đăng nhập để sử dụng Hugging Face Inference Providers mà không cần nhập thủ công token API."
-  },
-  "providerConfigurationModal.oauthLoginFailed": {
-    "defaultMessage": "Đăng nhập OAuth thất bại: {error}"
-  },
-  "providerConfigurationModal.oauthSignInDescription": {
-    "defaultMessage": "Đăng nhập bằng tài khoản {providerName} của bạn để sử dụng nhà cung cấp này"
-  },
-  "providerConfigurationModal.parameterRequired": {
-    "defaultMessage": "{paramName} là bắt buộc"
-  },
-  "providerConfigurationModal.removeConfiguration": {
-    "defaultMessage": "Xóa cấu hình"
-  },
-  "providerConfigurationModal.seeDocumentation": {
-    "defaultMessage": "Xem <link>tài liệu</link> để biết thêm chi tiết."
-  },
-  "providerConfigurationModal.signInWith": {
-    "defaultMessage": "Đăng nhập bằng {providerName}"
-  },
-  "providerConfigurationModal.signingIn": {
-    "defaultMessage": "Đang đăng nhập..."
-  },
   "providerGrid.addProvider": {
     "defaultMessage": "Thêm nhà cung cấp"
   },
@@ -1612,9 +1219,6 @@
   },
   "providerGrid.editProvider": {
     "defaultMessage": "Chỉnh sửa nhà cung cấp"
-  },
-  "providerGrid.fromTemplateOrManual": {
-    "defaultMessage": "Từ mẫu hoặc thiết lập thủ công"
   },
   "providerGrid.noMatch": {
     "defaultMessage": "Không có nhà cung cấp nào khớp với \"{query}\""
@@ -1657,30 +1261,6 @@
   },
   "providerSettings.otherProviders": {
     "defaultMessage": "Nhà cung cấp khác"
-  },
-  "providerSetupActions.cancel": {
-    "defaultMessage": "Hủy"
-  },
-  "providerSetupActions.cannotDeleteActive": {
-    "defaultMessage": "Bạn không thể xóa {providerName} trong khi nó đang được sử dụng. Vui lòng chuyển sang mô hình khác trước khi xóa nhà cung cấp này."
-  },
-  "providerSetupActions.confirmDelete": {
-    "defaultMessage": "Xác nhận xóa"
-  },
-  "providerSetupActions.confirmDeleteMessage": {
-    "defaultMessage": "Bạn có chắc chắn muốn xóa các tham số cấu hình cho {providerName} không? Thao tác này không thể hoàn tác."
-  },
-  "providerSetupActions.deleteProvider": {
-    "defaultMessage": "Xóa nhà cung cấp"
-  },
-  "providerSetupActions.enableProvider": {
-    "defaultMessage": "Bật nhà cung cấp"
-  },
-  "providerSetupActions.ok": {
-    "defaultMessage": "Ok"
-  },
-  "providerSetupActions.submit": {
-    "defaultMessage": "Gửi"
   },
   "resetProviderSection.resetButton": {
     "defaultMessage": "Đặt lại nhà cung cấp và mô hình"
@@ -2171,18 +1751,6 @@
   "terminalPanel.newTerminal": {
     "defaultMessage": "Terminal mới"
   },
-  "themeSelector.dark": {
-    "defaultMessage": "Tối"
-  },
-  "themeSelector.light": {
-    "defaultMessage": "Sáng"
-  },
-  "themeSelector.system": {
-    "defaultMessage": "Hệ thống"
-  },
-  "themeSelector.theme": {
-    "defaultMessage": "Chủ đề"
-  },
   "toolApprovalButtons.allowOnce": {
     "defaultMessage": "Cho phép một lần"
   },
@@ -2305,5 +1873,11 @@
   },
   "workToolActivity.usedTools": {
     "defaultMessage": "{count,plural,other{Đã dùng # công cụ}}"
+  },
+  "providerGrid.connectOpenAiCompatible": {
+    "defaultMessage": "Kết nối endpoint tương thích OpenAI"
+  },
+  "providerSelector.continueWith": {
+    "defaultMessage": "Tiếp tục với {providerName}"
   }
 }

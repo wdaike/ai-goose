@@ -1,13 +1,4 @@
 {
-  "alertBox.autoCompactAt": {
-    "defaultMessage": "Otomatik sıkıştırma eşiği"
-  },
-  "alertBox.compactNow": {
-    "defaultMessage": "Şimdi sıkıştır"
-  },
-  "alertBox.failedToSaveThreshold": {
-    "defaultMessage": "Eşik kaydedilemedi: {error}"
-  },
   "appLayout.back": {
     "defaultMessage": "Geri"
   },
@@ -113,9 +104,6 @@
   "customProviderForm.apiUrlRequired": {
     "defaultMessage": "API URL'si gerekli"
   },
-  "customProviderForm.attachments": {
-    "defaultMessage": "Ekler"
-  },
   "customProviderForm.authHint": {
     "defaultMessage": "Ollama gibi yerel LLM'ler genellikle API anahtarı gerektirmez."
   },
@@ -125,26 +113,11 @@
   "customProviderForm.availableModels": {
     "defaultMessage": "Mevcut Modeller (virgülle ayrılmış)"
   },
-  "customProviderForm.back": {
-    "defaultMessage": "← Geri"
-  },
   "customProviderForm.cancel": {
     "defaultMessage": "İptal"
   },
   "customProviderForm.cannotDeleteActive": {
     "defaultMessage": "Bu sağlayıcıyı şu anda kullanımdayken silemezsiniz. Lütfen önce farklı bir modele geçin."
-  },
-  "customProviderForm.chooseSetup": {
-    "defaultMessage": "Sağlayıcınızı nasıl ayarlamak istediğinizi seçin."
-  },
-  "customProviderForm.clear": {
-    "defaultMessage": "Temizle"
-  },
-  "customProviderForm.configureManually": {
-    "defaultMessage": "Manuel olarak yapılandır"
-  },
-  "customProviderForm.configureManuallyDesc": {
-    "defaultMessage": "Tüm sağlayıcı ayrıntılarını kendiniz girin"
   },
   "customProviderForm.confirmDelete": {
     "defaultMessage": "Silmeyi Onayla"
@@ -173,9 +146,6 @@
   "customProviderForm.displayNameRequired": {
     "defaultMessage": "Görünen ad gerekli"
   },
-  "customProviderForm.docs": {
-    "defaultMessage": "Dokümanlar"
-  },
   "customProviderForm.headerBothRequired": {
     "defaultMessage": "Hem başlık adı hem de değer girilmelidir"
   },
@@ -197,29 +167,14 @@
   "customProviderForm.providerType": {
     "defaultMessage": "Sağlayıcı Türü"
   },
-  "customProviderForm.reasoning": {
-    "defaultMessage": "muhakeme"
-  },
   "customProviderForm.requiresApiKey": {
     "defaultMessage": "Bu sağlayıcı bir API anahtarı gerektiriyor"
-  },
-  "customProviderForm.startFromTemplate": {
-    "defaultMessage": "Sağlayıcı şablonundan başlayın"
-  },
-  "customProviderForm.startFromTemplateDesc": {
-    "defaultMessage": "Bilinen bir sağlayıcı seçin, yapılandırmayı otomatik olarak dolduralım"
   },
   "customProviderForm.submitError": {
     "defaultMessage": "Sağlayıcı kaydedilemedi. Lütfen yapılandırmanızı kontrol edip tekrar deneyin."
   },
-  "customProviderForm.toolCalling": {
-    "defaultMessage": "Takım çağırma"
-  },
   "customProviderForm.updateProvider": {
     "defaultMessage": "Sağlayıcıyı Güncelle"
-  },
-  "customProviderForm.usingTemplate": {
-    "defaultMessage": "Şablonu kullanma: {name}"
   },
   "customProviderForm.valuePlaceholder": {
     "defaultMessage": "Değer"
@@ -227,44 +182,11 @@
   "defaultCardButtons.configureSettings": {
     "defaultMessage": "{name} ayarlarını yapılandırın"
   },
-  "defaultCardButtons.deleteSettings": {
-    "defaultMessage": "{name} ayarlarını silin"
-  },
   "defaultCardButtons.editSettings": {
     "defaultMessage": "{name} ayarlarını düzenleyin"
   },
   "defaultCardButtons.getStarted": {
     "defaultMessage": "iCodex'yi kullanmaya başlayın!"
-  },
-  "defaultProviderSetupForm.apiHostLabel": {
-    "defaultMessage": "API Ana Bilgisayar"
-  },
-  "defaultProviderSetupForm.apiHostPlaceholder": {
-    "defaultMessage": "https://api.example.com"
-  },
-  "defaultProviderSetupForm.apiKeyLabel": {
-    "defaultMessage": "API Anahtarı"
-  },
-  "defaultProviderSetupForm.apiKeyPlaceholder": {
-    "defaultMessage": "API anahtarınız"
-  },
-  "defaultProviderSetupForm.hideOptions": {
-    "defaultMessage": "{count} seçeneklerini gizle"
-  },
-  "defaultProviderSetupForm.loadingConfig": {
-    "defaultMessage": "Yapılandırma değerleri yükleniyor..."
-  },
-  "defaultProviderSetupForm.modelsLabel": {
-    "defaultMessage": "Modeller"
-  },
-  "defaultProviderSetupForm.modelsPlaceholder": {
-    "defaultMessage": "model-a, model-b"
-  },
-  "defaultProviderSetupForm.noConfigParameters": {
-    "defaultMessage": "Bu sağlayıcı için yapılandırma parametresi yok."
-  },
-  "defaultProviderSetupForm.showOptions": {
-    "defaultMessage": "{count} seçeneklerini göster"
   },
   "dialog.close": {
     "defaultMessage": "Kapat"
@@ -598,21 +520,6 @@
   },
   "hub.suggestionReview": {
     "defaultMessage": "Kodu incele ve değişiklik öner"
-  },
-  "huggingFaceSignInPrompt.failedToConfigure": {
-    "defaultMessage": "Hugging Face oturumu açılamadı: {error}"
-  },
-  "huggingFaceSignInPrompt.signIn": {
-    "defaultMessage": "Oturum aç"
-  },
-  "huggingFaceSignInPrompt.signedIn": {
-    "defaultMessage": "Hugging Face oturumu açıldı"
-  },
-  "huggingFaceSignInPrompt.signingIn": {
-    "defaultMessage": "Oturum açılıyor..."
-  },
-  "huggingFaceSignInPrompt.title": {
-    "defaultMessage": "Hugging Face"
   },
   "imagePreview.altText": {
     "defaultMessage": "iCodex resmi"
@@ -1070,180 +977,6 @@
   "modelSettingsButtons.switchModels": {
     "defaultMessage": "Modelleri değiştir"
   },
-  "modelSettingsPanel.batchSize": {
-    "defaultMessage": "Parti boyutu"
-  },
-  "modelSettingsPanel.batchSizeDescription": {
-    "defaultMessage": "Hızlı işlem toplu"
-  },
-  "modelSettingsPanel.builtinChatTemplate": {
-    "defaultMessage": "Yerleşik şablon"
-  },
-  "modelSettingsPanel.builtinChatTemplateDescription": {
-    "defaultMessage": "Bir llama.cpp yerleşik şablon adı seçin"
-  },
-  "modelSettingsPanel.chatTemplate": {
-    "defaultMessage": "Sohbet şablonu"
-  },
-  "modelSettingsPanel.chatTemplateBuiltin": {
-    "defaultMessage": "Yerleşik"
-  },
-  "modelSettingsPanel.chatTemplateCustomInline": {
-    "defaultMessage": "Özel satır içi"
-  },
-  "modelSettingsPanel.chatTemplateDescription": {
-    "defaultMessage": "Gömülü GGUF meta verilerini, llama.cpp yerleşik şablonunu veya satır içi Jinja şablonunu kullan"
-  },
-  "modelSettingsPanel.chatTemplateEmbedded": {
-    "defaultMessage": "Gömülü"
-  },
-  "modelSettingsPanel.contextAndGeneration": {
-    "defaultMessage": "Bağlam ve Üretim"
-  },
-  "modelSettingsPanel.contextSize": {
-    "defaultMessage": "Bağlam boyutu"
-  },
-  "modelSettingsPanel.contextSizeDescription": {
-    "defaultMessage": "Maksimum bağlam penceresi (0 = model varsayılanı)"
-  },
-  "modelSettingsPanel.customChatTemplate": {
-    "defaultMessage": "Özel sohbet şablonu"
-  },
-  "modelSettingsPanel.customChatTemplateDescription": {
-    "defaultMessage": "Tam Jinja sohbet şablonu kaynağını yapıştır"
-  },
-  "modelSettingsPanel.etaLearningRate": {
-    "defaultMessage": "Eta (öğrenme oranı)"
-  },
-  "modelSettingsPanel.flashAttention": {
-    "defaultMessage": "Flaş dikkat"
-  },
-  "modelSettingsPanel.flashAttentionDescription": {
-    "defaultMessage": "Flaş dikkati optimizasyonunu etkinleştir"
-  },
-  "modelSettingsPanel.frequencyPenalty": {
-    "defaultMessage": "Frekans cezası"
-  },
-  "modelSettingsPanel.frequencyPenaltyDescription": {
-    "defaultMessage": "0,0 = kapalı"
-  },
-  "modelSettingsPanel.gpuLayers": {
-    "defaultMessage": "GPU katmanları"
-  },
-  "modelSettingsPanel.gpuLayersDescription": {
-    "defaultMessage": "GPU'ya aktarılacak katmanlar"
-  },
-  "modelSettingsPanel.loadingSettings": {
-    "defaultMessage": "Ayarlar yükleniyor..."
-  },
-  "modelSettingsPanel.lockModelInRam": {
-    "defaultMessage": "Modeli RAM'e kilitle (mlock)"
-  },
-  "modelSettingsPanel.lockModelInRamDescription": {
-    "defaultMessage": "Modelin diske değiştirilmesini önleyin"
-  },
-  "modelSettingsPanel.maxOutputTokens": {
-    "defaultMessage": "Maksimum çıkış jetonları"
-  },
-  "modelSettingsPanel.maxOutputTokensDescription": {
-    "defaultMessage": "Oluşturulan jetonların üst sınırı"
-  },
-  "modelSettingsPanel.minP": {
-    "defaultMessage": "Min P"
-  },
-  "modelSettingsPanel.performance": {
-    "defaultMessage": "Performans"
-  },
-  "modelSettingsPanel.presencePenalty": {
-    "defaultMessage": "Varlık cezası"
-  },
-  "modelSettingsPanel.presencePenaltyDescription": {
-    "defaultMessage": "0,0 = kapalı"
-  },
-  "modelSettingsPanel.repeatPenalty": {
-    "defaultMessage": "Cezayı tekrarla"
-  },
-  "modelSettingsPanel.repeatPenaltyDescription": {
-    "defaultMessage": "1,0 = kapalı"
-  },
-  "modelSettingsPanel.repeatWindow": {
-    "defaultMessage": "Pencereyi tekrarla"
-  },
-  "modelSettingsPanel.repeatWindowDescription": {
-    "defaultMessage": "Geriye bakılacak jetonlar"
-  },
-  "modelSettingsPanel.repetitionPenalty": {
-    "defaultMessage": "Tekrarlama Cezası"
-  },
-  "modelSettingsPanel.reset": {
-    "defaultMessage": "Sıfırla"
-  },
-  "modelSettingsPanel.resetToDefaults": {
-    "defaultMessage": "Varsayılanlara sıfırla"
-  },
-  "modelSettingsPanel.samplingStrategy": {
-    "defaultMessage": "Örnekleme Stratejisi"
-  },
-  "modelSettingsPanel.saving": {
-    "defaultMessage": "Kaydediliyor..."
-  },
-  "modelSettingsPanel.seed": {
-    "defaultMessage": "tohum"
-  },
-  "modelSettingsPanel.tauTargetEntropy": {
-    "defaultMessage": "Tau (hedef entropisi)"
-  },
-  "modelSettingsPanel.temperature": {
-    "defaultMessage": "Sıcaklık"
-  },
-  "modelSettingsPanel.threads": {
-    "defaultMessage": "Konular"
-  },
-  "modelSettingsPanel.threadsDescription": {
-    "defaultMessage": "Nesil için CPU iş parçacıkları"
-  },
-  "modelSettingsPanel.toolCalling": {
-    "defaultMessage": "Araç çağırma"
-  },
-  "modelSettingsPanel.toolCallingAuto": {
-    "defaultMessage": "Otomatik"
-  },
-  "modelSettingsPanel.toolCallingDescription": {
-    "defaultMessage": "Yerel modellerin yerel veya emüle araç çağırmayı nasıl seçeceğini belirleyin"
-  },
-  "modelSettingsPanel.toolCallingForceEmulated": {
-    "defaultMessage": "Emüle etmeye zorla"
-  },
-  "modelSettingsPanel.toolCallingForceNative": {
-    "defaultMessage": "Yereli zorla"
-  },
-  "modelSettingsPanel.topK": {
-    "defaultMessage": "En İyi K"
-  },
-  "modelSettingsPanel.topP": {
-    "defaultMessage": "Üst P"
-  },
-  "modelsBottomBar.changeModel": {
-    "defaultMessage": "Modeli Değiştir"
-  },
-  "modelsBottomBar.currentModel": {
-    "defaultMessage": "Mevcut model"
-  },
-  "modelsBottomBar.loadingModel": {
-    "defaultMessage": "Model yükleniyor..."
-  },
-  "modelsBottomBar.localModelSettings": {
-    "defaultMessage": "Yerel Model Ayarları"
-  },
-  "modelsBottomBar.localModelSettingsTitle": {
-    "defaultMessage": "Yerel Model Ayarları — {modelName}"
-  },
-  "modelsBottomBar.resolvedModel": {
-    "defaultMessage": "Çözümlenen model"
-  },
-  "modelsBottomBar.selectModel": {
-    "defaultMessage": "Modeli Seçin"
-  },
   "modelsSection.resetDescription": {
     "defaultMessage": "Yeni bir başlangıç yapmak için seçtiğiniz model ve sağlayıcı ayarlarını temizleyin"
   },
@@ -1472,132 +1205,6 @@
   "providerCard.unknownProvider": {
     "defaultMessage": "Bilinmeyen Sağlayıcı"
   },
-  "providerCatalogPicker.anthropicCompatible": {
-    "defaultMessage": "Anthropic Uyumlu"
-  },
-  "providerCatalogPicker.apiFormat": {
-    "defaultMessage": "API Biçimi"
-  },
-  "providerCatalogPicker.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "providerCatalogPicker.chooseProvider": {
-    "defaultMessage": "Sağlayıcıyı Seçin"
-  },
-  "providerCatalogPicker.errorPrefix": {
-    "defaultMessage": "Hata: {error}"
-  },
-  "providerCatalogPicker.loadingProviders": {
-    "defaultMessage": "Sağlayıcılar yükleniyor..."
-  },
-  "providerCatalogPicker.modelsAvailable": {
-    "defaultMessage": "{count} modelleri mevcut"
-  },
-  "providerCatalogPicker.noProvidersAvailable": {
-    "defaultMessage": "Sağlayıcı yok"
-  },
-  "providerCatalogPicker.noProvidersFound": {
-    "defaultMessage": "\"{query}\" için sağlayıcı bulunamadı"
-  },
-  "providerCatalogPicker.openaiCompatible": {
-    "defaultMessage": "OpenAI Uyumlu"
-  },
-  "providerCatalogPicker.requiresEnvVar": {
-    "defaultMessage": "• {envVar} gerektirir"
-  },
-  "providerCatalogPicker.searchProviders": {
-    "defaultMessage": "Sağlayıcıları arayın..."
-  },
-  "providerCatalogPicker.selectFormatDescription": {
-    "defaultMessage": "Bir API formatı ve sağlayıcı seçin. Yapılandırmayı sizin için otomatik olarak dolduracağız."
-  },
-  "providerConfigForm.browserWindowOpen": {
-    "defaultMessage": "Oturum açma işlemini tamamlamanız için bir tarayıcı penceresi açılacaktır."
-  },
-  "providerConfigForm.configuring": {
-    "defaultMessage": "Yapılandırılıyor..."
-  },
-  "providerConfigForm.continue": {
-    "defaultMessage": "Devam et"
-  },
-  "providerConfigForm.deviceCodeFlowHint": {
-    "defaultMessage": "Bir tarayıcı penceresi açılacak ve doğrulama kodu panonuza kopyalanacaktır. Oturum açmayı tamamlamak için tarayıcıya yapıştırın."
-  },
-  "providerConfigForm.noApiKey": {
-    "defaultMessage": "API anahtarınız yok mu?"
-  },
-  "providerConfigForm.signInWith": {
-    "defaultMessage": "{providerName} ile oturum açın"
-  },
-  "providerConfigForm.signingIn": {
-    "defaultMessage": "Oturum açılıyor..."
-  },
-  "providerConfigurationModal.addApiKeyDescription": {
-    "defaultMessage": "Bu sağlayıcının iCodex'a entegre olması için API anahtarlarınızı ekleyin"
-  },
-  "providerConfigurationModal.browserWindowHint": {
-    "defaultMessage": "Oturum açma işlemini tamamlamanız için bir tarayıcı penceresi açılacaktır."
-  },
-  "providerConfigurationModal.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "providerConfigurationModal.cannotDeleteActive": {
-    "defaultMessage": "Bu sağlayıcıyı şu anda kullanımdayken silemezsiniz. Lütfen önce farklı bir modele geçin."
-  },
-  "providerConfigurationModal.checkConfigAgain": {
-    "defaultMessage": "Bu sağlayıcıyı kullanmak için yapılandırmanızı tekrar kontrol edin."
-  },
-  "providerConfigurationModal.close": {
-    "defaultMessage": "Kapat"
-  },
-  "providerConfigurationModal.configureHeader": {
-    "defaultMessage": "{providerName}'yi yapılandırın"
-  },
-  "providerConfigurationModal.deleteConfigHeader": {
-    "defaultMessage": "{providerName} için yapılandırmayı sil"
-  },
-  "providerConfigurationModal.deleteConfirmation": {
-    "defaultMessage": "Bu, mevcut sağlayıcı yapılandırmasını kalıcı olarak silecektir."
-  },
-  "providerConfigurationModal.deviceCodeFlowHint": {
-    "defaultMessage": "Bir tarayıcı penceresi açılacak ve doğrulama kodu panonuza kopyalanacaktır. Oturum açmayı tamamlamak için tarayıcıya yapıştırın."
-  },
-  "providerConfigurationModal.errorCheckingConfig": {
-    "defaultMessage": "Bu sağlayıcı yapılandırması kontrol edilirken bir hata oluştu."
-  },
-  "providerConfigurationModal.errorTitle": {
-    "defaultMessage": "Hata"
-  },
-  "providerConfigurationModal.externalSetupIntro": {
-    "defaultMessage": "Bu sağlayıcı iCodex dışında yapılandırılmıştır. Şu adımları izleyin:"
-  },
-  "providerConfigurationModal.goBack": {
-    "defaultMessage": "Geri Dön"
-  },
-  "providerConfigurationModal.huggingFaceOAuthDescription": {
-    "defaultMessage": "API belirtecini elle girmeden Hugging Face Inference Providers kullanmak için oturum açın."
-  },
-  "providerConfigurationModal.oauthLoginFailed": {
-    "defaultMessage": "OAuth oturum açma işlemi başarısız oldu: {error}"
-  },
-  "providerConfigurationModal.oauthSignInDescription": {
-    "defaultMessage": "Bu sağlayıcıyı kullanmak için {providerName} hesabınızla oturum açın"
-  },
-  "providerConfigurationModal.parameterRequired": {
-    "defaultMessage": "{paramName} gereklidir"
-  },
-  "providerConfigurationModal.removeConfiguration": {
-    "defaultMessage": "Yapılandırmayı Kaldır"
-  },
-  "providerConfigurationModal.seeDocumentation": {
-    "defaultMessage": "Daha fazla ayrıntı için <link>belgelere</link> bakın."
-  },
-  "providerConfigurationModal.signInWith": {
-    "defaultMessage": "{providerName} ile oturum açın"
-  },
-  "providerConfigurationModal.signingIn": {
-    "defaultMessage": "Oturum açılıyor..."
-  },
   "providerGrid.addProvider": {
     "defaultMessage": "Sağlayıcı Ekle"
   },
@@ -1612,9 +1219,6 @@
   },
   "providerGrid.editProvider": {
     "defaultMessage": "Sağlayıcıyı Düzenle"
-  },
-  "providerGrid.fromTemplateOrManual": {
-    "defaultMessage": "Şablondan veya manuel kurulumdan"
   },
   "providerGrid.noMatch": {
     "defaultMessage": "\"{query}\" ile eşleşen sağlayıcı yok"
@@ -1657,30 +1261,6 @@
   },
   "providerSettings.otherProviders": {
     "defaultMessage": "Diğer sağlayıcılar"
-  },
-  "providerSetupActions.cancel": {
-    "defaultMessage": "İptal"
-  },
-  "providerSetupActions.cannotDeleteActive": {
-    "defaultMessage": "Şu anda kullanımdayken {providerName}'yi silemezsiniz. Bu sağlayıcıyı silmeden önce lütfen farklı bir modele geçin."
-  },
-  "providerSetupActions.confirmDelete": {
-    "defaultMessage": "Silmeyi Onayla"
-  },
-  "providerSetupActions.confirmDeleteMessage": {
-    "defaultMessage": "{providerName} için yapılandırma parametrelerini silmek istediğinizden emin misiniz? Bu eylem geri alınamaz."
-  },
-  "providerSetupActions.deleteProvider": {
-    "defaultMessage": "Sağlayıcıyı Sil"
-  },
-  "providerSetupActions.enableProvider": {
-    "defaultMessage": "Sağlayıcıyı Etkinleştir"
-  },
-  "providerSetupActions.ok": {
-    "defaultMessage": "Tamam"
-  },
-  "providerSetupActions.submit": {
-    "defaultMessage": "Gönder"
   },
   "resetProviderSection.resetButton": {
     "defaultMessage": "Sağlayıcıyı ve Modeli Sıfırla"
@@ -2171,18 +1751,6 @@
   "terminalPanel.newTerminal": {
     "defaultMessage": "Yeni terminal"
   },
-  "themeSelector.dark": {
-    "defaultMessage": "Karanlık"
-  },
-  "themeSelector.light": {
-    "defaultMessage": "Işık"
-  },
-  "themeSelector.system": {
-    "defaultMessage": "Sistem"
-  },
-  "themeSelector.theme": {
-    "defaultMessage": "Tema"
-  },
   "toolApprovalButtons.allowOnce": {
     "defaultMessage": "Bir Kez İzin Ver"
   },
@@ -2305,5 +1873,11 @@
   },
   "workToolActivity.usedTools": {
     "defaultMessage": "{count,plural,one{# araç kullanıldı} other{# araç kullanıldı}}"
+  },
+  "providerGrid.connectOpenAiCompatible": {
+    "defaultMessage": "OpenAI uyumlu bir uç nokta bağlayın"
+  },
+  "providerSelector.continueWith": {
+    "defaultMessage": "{providerName} ile devam et"
   }
 }
